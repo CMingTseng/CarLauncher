@@ -1,5 +1,7 @@
 package com.tchip.carlauncher;
 
+import com.tchip.carlauncher.adapter.BrandAdapter;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.drawable;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
 
 /**
  * Created by AlexZhou on 2015/4/10.
