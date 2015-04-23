@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-public class MetroView extends ImageView {
+public class MetroImageView extends ImageView {
 
 	private boolean onAnimation = true;
 	private int rotateDegree = 10;
@@ -32,13 +32,13 @@ public class MetroView extends ImageView {
 
 	OnViewClick onclick = null;
 
-	public MetroView(Context context) {
+	public MetroImageView(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		camera = new Camera();
 	}
 
-	public MetroView(Context context, AttributeSet attrs) {
+	public MetroImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		camera = new Camera();

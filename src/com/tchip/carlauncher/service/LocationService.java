@@ -123,10 +123,12 @@ public class LocationService extends Service {
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
+
 			cityName = location.getCity();
 			cityCode = getCityCodeByName(cityName);
 
-			if ((!cityName.equals("未定位")) && (cityCode != 123456789)) {
+			if ((cityName != null) && (!cityName.equals("未定位"))
+					&& (cityCode != 123456789)) {
 
 				editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);

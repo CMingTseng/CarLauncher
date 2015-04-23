@@ -1,6 +1,7 @@
 package com.tchip.carlauncher;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
@@ -145,47 +146,62 @@ public class MainActivity extends Activity {
 			String strWeatherOne = weatherStr.split("转")[0];
 			String strWeatherTwo = weatherStr.split("转")[1];
 			imgWeatherOne
-					.setBackgroundResource(getSingleWeatherDrawable(strWeatherOne));
+					.setBackgroundResource(getWeatherDrawable(strWeatherOne));
 			imgWeatherTwo.setVisibility(View.VISIBLE);
 			imgWeatherTwo
-					.setBackgroundResource(getSingleWeatherDrawable(strWeatherTwo));
+					.setBackgroundResource(getWeatherDrawable(strWeatherTwo));
 
 		} else {
-			imgWeatherOne
-					.setBackgroundResource(getSingleWeatherDrawable(weatherStr));
+			imgWeatherOne.setBackgroundResource(getWeatherDrawable(weatherStr));
 			imgWeatherTwo.setVisibility(View.GONE);
 		}
 	}
 
-	private int getSingleWeatherDrawable(String weather) {
+	private int getWeatherDrawable(String weather) {
 		if (weather.equals("晴")) {
-			return R.drawable.weather_00;
+			return isDay() ? (R.drawable.weather_sun)
+					: (R.drawable.weather_night);
 		} else if (weather.equals("多云")) {
-			return R.drawable.weather_01;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
-		} else if (weather.equals("晴")) {
-			return R.drawable.weather_00;
+			return isDay() ? R.drawable.weather_sun_cloud_day
+					: R.drawable.weather_sun_cloud_night;
+		} else if (weather.equals("阴")) {
+			return R.drawable.weather_cloud;
+		} else if (weather.equals("阵雨") || weather.equals("雷阵雨")
+				|| weather.equals("小雨") || weather.equals("中雨")
+				|| weather.equals("大雨") || weather.equals("暴雨")
+				|| weather.equals("大暴雨") || weather.equals("特大暴雨")
+				|| weather.equals("小到中雨") || weather.equals("中到大雨")
+				|| weather.equals("大到暴雨") || weather.equals("暴雨到大暴雨")
+				|| weather.equals("大暴雨到特大暴雨")) {
+			return R.drawable.weather_rain;
+		} else if (weather.equals("阵雪") || weather.equals("小雪")
+				|| weather.equals("中雪") || weather.equals("大雪")
+				|| weather.equals("暴雪") || weather.equals("小到中雪")
+				|| weather.equals("中到大雪") || weather.equals("大到暴雪")) {
+			return R.drawable.weather_snow;
+		} else if (weather.equals("雷阵雨伴有冰雹")) {
+			return R.drawable.weather_hail;
+		} else if (weather.equals("雨夹雪")) {
+			return R.drawable.weather_rain_snow;
+		} else if (weather.equals("雾") || weather.equals("霾")
+				|| weather.equals("浮尘")) {
+			return isDay() ? (R.drawable.weather_fog_day)
+					: (R.drawable.weather_fog_night);
+		} else if (weather.equals("冻雨")) {
+			return R.drawable.weather_sun;
+		} else if (weather.equals("沙尘暴") || weather.equals("强沙尘暴")
+				|| weather.equals("扬沙")) {
+			return R.drawable.weather_dust;
 		}
-		return R.drawable.weather_00;
+		return isDay() ? (R.drawable.weather_sun) : (R.drawable.weather_night);
+	}
+
+	private boolean isDay() {
+		Date date = new Date();
+		int hour = date.getHours();
+		if (hour > 18 || hour < 6)
+			return false;
+		return true;
 	}
 
 	@Override

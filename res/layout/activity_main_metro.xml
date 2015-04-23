@@ -152,11 +152,11 @@
 
                         <ImageView
                             android:id="@+id/imgWeatherTwo"
-                            android:visibility="gone"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginRight="8dp"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -267,7 +267,7 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <com.tchip.carlauncher.view.MetroView
+        <com.tchip.carlauncher.view.MetroImageView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
@@ -290,7 +290,7 @@
             android:orientation="horizontal"
             android:weightSum="2" >
 
-            <com.tchip.carlauncher.view.MetroView
+            <com.tchip.carlauncher.view.MetroImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
@@ -298,7 +298,7 @@
                 android:scaleType="matrix"
                 android:src="@drawable/green_light" />
 
-            <com.tchip.carlauncher.view.MetroView
+            <com.tchip.carlauncher.view.MetroImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
@@ -307,7 +307,7 @@
                 android:src="@drawable/blue_light" />
         </LinearLayout>
 
-        <com.tchip.carlauncher.view.MetroView
+        <com.tchip.carlauncher.view.MetroImageView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
