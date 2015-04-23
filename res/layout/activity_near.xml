@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:weightSum="7" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#00ccff"
+        android:layout_margin="2dp"
+        android:layout_weight="1" >
+
+   
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" >
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/icon_location" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="在周边搜索"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:weightSum="3" >
+
+        <com.tchip.carlauncher.view.MetroImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:id="@+id/imgNearOilStation"
+            android:scaleType="matrix"
+            android:src="@drawable/green_dark" />
+
+        <com.tchip.carlauncher.view.MetroImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:scaleType="matrix"
+            android:src="@drawable/blue_light" />
+
+        <com.tchip.carlauncher.view.MetroImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:scaleType="matrix"
+            android:src="@drawable/green_light" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="2dp"
+        android:background="#008888"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:id="@+id/layoutBackFromNear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" >
+
+            <ImageView
+                
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_arrow_down" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

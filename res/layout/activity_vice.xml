@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <com.tchip.carlauncher.view.MetroImageView
+            android:id="@+id/imgBackFromViceMetro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:scaleType="matrix"
+            android:src="@drawable/blue_dark_big" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           
+            android:gravity="center" >
+
+            <ImageView
+                 android:id="@+id/imgBackFromViceArrow"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/icon_arrow_left" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="9"
+        android:orientation="vertical"
+        android:weightSum="2" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="3" >
+
+            <com.tchip.carlauncher.view.MetroImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:layout_weight="2"
+                android:scaleType="matrix"
+                android:src="@drawable/blue_dark_big" />
+
+            <com.tchip.carlauncher.view.MetroImageView
+                android:id="@+id/imgNear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:scaleType="matrix"
+                android:src="@drawable/cyan_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="3" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <com.tchip.carlauncher.view.MetroImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:scaleType="matrix"
+                    android:src="@drawable/green_light" />
+
+                <com.tchip.carlauncher.view.MetroImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:scaleType="matrix"
+                    android:src="@drawable/blue_light" />
+            </LinearLayout>
+
+            <com.tchip.carlauncher.view.MetroImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:scaleType="matrix"
+                android:src="@drawable/green_dark" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

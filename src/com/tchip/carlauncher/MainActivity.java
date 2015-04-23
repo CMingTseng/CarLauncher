@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,19 +32,10 @@ public class MainActivity extends Activity {
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
 
-		setContentView(R.layout.activity_main_metro);
+		setContentView(R.layout.activity_main);
 		// startSpeak("欢迎使用天启行车记录仪");
 
 		updateLayout();
-	}
-
-	class MyOnClickListener implements View.OnClickListener {
-		@Override
-		public void onClick(View v) {
-			switch (v.getId()) {
-
-			}
-		}
 	}
 
 	private void startSpeak(String content) {
@@ -135,6 +127,49 @@ public class MainActivity extends Activity {
 					+ sharedPreferences.getString("postTime", "05:55"));
 		} else {
 			// 未获取到天气信息
+		}
+
+		// 周边
+		ImageView imgNear = (ImageView) findViewById(R.id.imgNear);
+		imgNear.setOnClickListener(new MyOnClickListener());
+
+		// 副界面
+		ImageView imgToViceMetro = (ImageView) findViewById(R.id.imgToViceMetro);
+		imgToViceMetro.setOnClickListener(new MyOnClickListener());
+		ImageView imgToViceArrow = (ImageView) findViewById(R.id.imgToViceArrow);
+		imgToViceArrow.setOnClickListener(new MyOnClickListener());
+	}
+
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			int version = Integer.valueOf(android.os.Build.VERSION.SDK);
+			switch (v.getId()) {
+			case R.id.imgNear:
+				Intent intent1 = new Intent(MainActivity.this,
+						NearActivity.class);
+				startActivity(intent1);
+				// add for animation start
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_down_out,
+							R.anim.zms_translate_down_in);
+				}
+				// add for animation end
+				break;
+			case R.id.imgToViceArrow:
+			case R.id.imgToViceMetro:
+				Intent intent2 = new Intent(MainActivity.this,
+						ViceActivity.class);
+				startActivity(intent2);
+				// add for animation start
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_left_out,
+							R.anim.zms_translate_left_in);
+				}
+				// add for animation end
+
+			}
 		}
 	}
 
