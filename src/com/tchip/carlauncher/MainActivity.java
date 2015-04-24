@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -128,15 +129,15 @@ public class MainActivity extends Activity {
 			// 未获取到天气信息
 		}
 
-		// 周边
-		ImageView imgNear = (ImageView) findViewById(R.id.imgNear);
-		imgNear.setOnClickListener(new MyOnClickListener());
+		// 多媒体
+		ImageView imgMultimedia = (ImageView) findViewById(R.id.imgMultimedia);
+		imgMultimedia.setOnClickListener(new MyOnClickListener());
 
 		// 副界面
-		ImageView imgToViceMetro = (ImageView) findViewById(R.id.imgToViceMetro);
-		imgToViceMetro.setOnClickListener(new MyOnClickListener());
-		ImageView imgToViceArrow = (ImageView) findViewById(R.id.imgToViceArrow);
-		imgToViceArrow.setOnClickListener(new MyOnClickListener());
+		ButtonFloat btnToVice = (ButtonFloat) findViewById(R.id.btnToVice);
+		btnToVice.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_right));
+		btnToVice.setOnClickListener(new MyOnClickListener());
 
 		// 蓝牙拨号
 		ImageView imgBluetooth = (ImageView) findViewById(R.id.imgBluetooth);
@@ -148,9 +149,9 @@ public class MainActivity extends Activity {
 		public void onClick(View v) {
 			int version = Integer.valueOf(android.os.Build.VERSION.SDK);
 			switch (v.getId()) {
-			case R.id.imgNear:
+			case R.id.imgMultimedia:
 				Intent intent1 = new Intent(MainActivity.this,
-						NearActivity.class);
+						MultimediaActivity.class);
 				startActivity(intent1);
 				// add for animation start
 
@@ -160,8 +161,7 @@ public class MainActivity extends Activity {
 				}
 				// add for animation end
 				break;
-			case R.id.imgToViceArrow:
-			case R.id.imgToViceMetro:
+			case R.id.btnToVice:
 				Intent intent2 = new Intent(MainActivity.this,
 						ViceActivity.class);
 				startActivity(intent2);

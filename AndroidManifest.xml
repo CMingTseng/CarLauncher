@@ -97,6 +97,9 @@
         <activity
             android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.MultimediaActivity"
+            android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
