@@ -3,62 +3,53 @@ package com.tchip.carlauncher;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-public class MultimediaActivity extends Activity {
+public class AboutActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_about);
 
-		setContentView(R.layout.activity_multimedia);
-
-		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
-		btnToMainFromMultimedia.setDrawableIcon(getResources()
-				.getDrawable(R.drawable.icon_arrow_down));
-		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
-
+		ButtonFloat btnToViceFromAbout = (ButtonFloat) findViewById(R.id.btnToViceFromAbout);
+		btnToViceFromAbout.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_up));
+		btnToViceFromAbout.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+
 			switch (v.getId()) {
-			case R.id.btnToMainFromMultimedia:
-				backToMain();
+			case R.id.btnToViceFromAbout:
+				backToVice();
 				break;
 			}
+		}
+	}
 
+	private void backToVice() {
+		finish();
+		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
+		if (version > 5) {
+			overridePendingTransition(R.anim.zms_translate_down_out,
+					R.anim.zms_translate_down_in);
 		}
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			backToMain();
+			backToVice();
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
-	}
-
-	private void backToMain() {
-		finish();
-		// add for animation start
-		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
-		if (version > 5) {
-			overridePendingTransition(R.anim.zms_translate_up_out,
-					R.anim.zms_translate_up_in);
-		}
-		// add for animation end
 	}
 
 	@Override
@@ -68,4 +59,5 @@ public class MultimediaActivity extends Activity {
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
+
 }

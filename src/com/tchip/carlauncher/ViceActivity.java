@@ -17,8 +17,6 @@ public class ViceActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_vice);
 
 		ButtonFloat btnToMainFromVice = (ButtonFloat) findViewById(R.id.btnToMainFromVice);
@@ -28,6 +26,12 @@ public class ViceActivity extends Activity {
 
 		ImageView imgNear = (ImageView) findViewById(R.id.imgNear);
 		imgNear.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgRoutePlan = (ImageView) findViewById(R.id.imgRoutePlan);
+		imgRoutePlan.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgAbout = (ImageView) findViewById(R.id.imgAbout);
+		imgAbout.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -50,6 +54,28 @@ public class ViceActivity extends Activity {
 							R.anim.zms_translate_down_in);
 				}
 				// add for animation end
+				break;
+			case R.id.imgRoutePlan:
+				Intent intent2 = new Intent(ViceActivity.this,
+						RoutePlanActivity.class);
+				startActivity(intent2);
+				// add for animation start
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_down_out,
+							R.anim.zms_translate_down_in);
+				}
+				// add for animation end
+				break;
+			case R.id.imgAbout:
+				Intent intent3 = new Intent(ViceActivity.this,
+						AboutActivity.class);
+				startActivity(intent3);
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 			}
 		}
@@ -74,6 +100,14 @@ public class ViceActivity extends Activity {
 					R.anim.zms_translate_right_in);
 		}
 		// add for animation end
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 
 }
