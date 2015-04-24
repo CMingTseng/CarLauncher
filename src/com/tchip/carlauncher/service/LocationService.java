@@ -132,6 +132,8 @@ public class LocationService extends Service {
 
 				editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);
+				editor.putString("latitude", "" + location.getLatitude());
+				editor.putString("longitude", "" + location.getLongitude());
 				new Thread(networkTask).start();
 			}
 		}

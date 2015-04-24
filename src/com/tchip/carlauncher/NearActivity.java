@@ -24,6 +24,13 @@ public class NearActivity extends Activity {
 
 		ImageView imgNearOilStation = (ImageView) findViewById(R.id.imgNearOilStation);
 		imgNearOilStation.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgNearHotel = (ImageView) findViewById(R.id.imgNearHotel);
+		imgNearHotel.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgNear4S = (ImageView) findViewById(R.id.imgNear4S);
+		imgNear4S.setOnClickListener(new MyOnClickListener());
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -37,7 +44,20 @@ public class NearActivity extends Activity {
 			case R.id.imgNearOilStation:
 				Intent intent1 = new Intent(NearActivity.this,
 						NearResultActivity.class);
+				intent1.putExtra("findType", "oil");
 				startActivity(intent1);
+				break;
+			case R.id.imgNearHotel:
+				Intent intent2 = new Intent(NearActivity.this,
+						NearResultActivity.class);
+				intent2.putExtra("findType", "hotel");
+				startActivity(intent2);
+				break;
+			case R.id.imgNear4S:
+				Intent intent3 = new Intent(NearActivity.this,
+						NearResultActivity.class);
+				intent3.putExtra("findType", "4s");
+				startActivity(intent3);
 				break;
 			}
 

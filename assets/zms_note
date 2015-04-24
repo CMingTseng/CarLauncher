@@ -1,7 +1,6 @@
 SharedPreferences-CarLauncher
 // http://www.weather.com.cn/adat/cityinfo/101050401.html
 	(Long)cityCode - 中国天气网城市代码（9位数字）
-	(String)cityName - 百度LBS获取到的城市名
 	(String)tempHigh - 当日最高温度
 	(String)tempLow - 当日最低温度
 	(String)weather - 天气（中文字段）
@@ -12,6 +11,11 @@ SharedPreferences-CarLauncher
 	(String)windDir - 风向
 	(String)windSpeed - 风速
 	(String)wetLevel - 湿度 
+	
+// 百度LBS获取数据
+	(String)cityName - 城市名
+	(String)latitude - 经度
+	(String)longitude - 纬度
 	
 	
 	

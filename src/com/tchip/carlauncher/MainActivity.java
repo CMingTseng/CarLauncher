@@ -34,7 +34,6 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.activity_main);
 		// startSpeak("欢迎使用天启行车记录仪");
-
 		updateLayout();
 	}
 
@@ -79,7 +78,7 @@ public class MainActivity extends Activity {
 			weekStr = "六";
 		}
 		TextView textWeek = (TextView) findViewById(R.id.textWeek);
-		textWeek.setText("星期" + weekStr + "·第" + weekRank + "周");
+		textWeek.setText("星期" + weekStr + " · 第" + weekRank + "周");
 		TextView textDate = (TextView) findViewById(R.id.textDate);
 		textDate.setText(yearStr + "年" + monthStr + "月" + dayStr + "日");
 		// 天气
@@ -138,6 +137,10 @@ public class MainActivity extends Activity {
 		imgToViceMetro.setOnClickListener(new MyOnClickListener());
 		ImageView imgToViceArrow = (ImageView) findViewById(R.id.imgToViceArrow);
 		imgToViceArrow.setOnClickListener(new MyOnClickListener());
+
+		// 蓝牙拨号
+		ImageView imgBluetooth = (ImageView) findViewById(R.id.imgBluetooth);
+		imgBluetooth.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -168,6 +171,11 @@ public class MainActivity extends Activity {
 							R.anim.zms_translate_left_in);
 				}
 				// add for animation end
+				break;
+			case R.id.imgBluetooth:
+				Intent intent3 = new Intent(MainActivity.this,
+						BluetoothActivity.class);
+				startActivity(intent3);
 
 			}
 		}

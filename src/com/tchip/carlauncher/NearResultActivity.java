@@ -8,11 +8,20 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.SupportMapFragment;
+import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
+import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
+import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.overlayutil.PoiOverlay;
 import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
@@ -21,6 +30,7 @@ import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
@@ -39,7 +49,13 @@ public class NearResultActivity extends FragmentActivity implements
 	 */
 	private AutoCompleteTextView keyWorldsView = null;
 	private ArrayAdapter<String> sugAdapter = null;
-	private int load_Index = 0;
+
+	private String findContent = "";
+	private double mLatitude, mLongitude;
+	private final String TYPE_OIL = "oil";
+	private final String TYPE_HOTEL = "hotel";
+	private final String TYPE_4S = "4s";
+	private LatLng mLatLng;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +64,27 @@ public class NearResultActivity extends FragmentActivity implements
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_near_result);
+
+		// 接收搜索类型
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			String findType = extras.getString("findType");
+			if (TYPE_OIL.equals(findType)) {
+				findContent = "加油站";
+			} else if (TYPE_HOTEL.equals(findType)) {
+				findContent = "酒店";
+			} else if (TYPE_4S.equals(findType)) {
+				findContent = "4S";
+			}
+		}
+
+		// 获取当前经纬度
+		mLatitude = Double.parseDouble(getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE).getString("latitude",
+				"0.00"));
+		mLongitude = Double.parseDouble(getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE).getString("longitude",
+				"0.00"));
 
 		// 初始化搜索模块，注册搜索事件监听
 		mPoiSearch = PoiSearch.newInstance();
@@ -61,24 +98,10 @@ public class NearResultActivity extends FragmentActivity implements
 		mBaiduMap = ((SupportMapFragment) (getSupportFragmentManager()
 				.findFragmentById(R.id.map))).getBaiduMap();
 
-		/**
-		 * 当输入关键字变化时，动态更新建议列表
-		 */
-		/*
-		 * keyWorldsView.addTextChangedListener(new TextWatcher() {
-		 * 
-		 * @Override public void afterTextChanged(Editable arg0) { }
-		 * 
-		 * @Override public void beforeTextChanged(CharSequence arg0, int arg1,
-		 * int arg2, int arg3) { }
-		 * 
-		 * @Override public void onTextChanged(CharSequence cs, int arg1, int
-		 * arg2, int arg3) { if (cs.length() <= 0) { return; } String city =
-		 * ((EditText) findViewById(R.id.city)).getText() .toString();
-		 * //使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新 mSuggestionSearch
-		 * .requestSuggestion((new SuggestionSearchOption())
-		 * .keyword(cs.toString()).city(city)); } });
-		 */
+		// 初始化地图位置
+		mLatLng = new LatLng(mLatitude, mLongitude);
+		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(mLatLng);
+		mBaiduMap.animateMapStatus(u);
 
 		startSearch();
 	}
@@ -111,17 +134,17 @@ public class NearResultActivity extends FragmentActivity implements
 	}
 
 	public void startSearch() {
-		EditText editCity = (EditText) findViewById(R.id.city);
-		EditText editSearchKey = (EditText) findViewById(R.id.searchkey);
-		mPoiSearch.searchInCity((new PoiCitySearchOption())
-				.city(editCity.getText().toString())
-				.keyword(editSearchKey.getText().toString())
-				.pageNum(load_Index));
-	}
+		Toast.makeText(getApplicationContext(), "正在查找" + findContent,
+				Toast.LENGTH_SHORT).show();
+		// mPoiSearch.searchInCity((new PoiCitySearchOption()).city(findCity)
+		// .keyword(findContent).pageNum(load_Index));
 
-	public void goToNextPage(View v) {
-		load_Index++;
-		startSearch();
+		PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
+		poiOption.keyword(findContent);
+		poiOption.location(mLatLng);
+		poiOption.radius(10 * 1000);
+		poiOption.pageNum(0);
+		mPoiSearch.searchNearby(poiOption);
 	}
 
 	public void onGetPoiResult(PoiResult result) {

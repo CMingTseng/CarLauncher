@@ -9,11 +9,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#00ccff"
         android:layout_margin="2dp"
-        android:layout_weight="1" >
-
-   
+        android:layout_weight="1"
+        android:background="#00ccff" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,38 +38,88 @@
         android:layout_weight="5"
         android:weightSum="3" >
 
-        <com.tchip.carlauncher.view.MetroImageView
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
-            android:layout_weight="1"
-            android:id="@+id/imgNearOilStation"
-            android:scaleType="matrix"
-            android:src="@drawable/green_dark" />
+            android:layout_weight="1" >
 
-        <com.tchip.carlauncher.view.MetroImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            android:layout_weight="1"
-            android:scaleType="matrix"
-            android:src="@drawable/blue_light" />
+            <com.tchip.carlauncher.view.MetroImageView
+                android:id="@+id/imgNearOilStation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                android:src="@drawable/green_dark" />
 
-        <com.tchip.carlauncher.view.MetroImageView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_near_oilstation" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
-            android:layout_weight="1"
-            android:scaleType="matrix"
-            android:src="@drawable/green_light" />
+            android:layout_weight="1" >
+
+            <com.tchip.carlauncher.view.MetroImageView
+                android:id="@+id/imgNearHotel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                android:src="@drawable/blue_light" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_near_hotel" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1" >
+
+            <com.tchip.carlauncher.view.MetroImageView
+                android:id="@+id/imgNear4S"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                android:src="@drawable/green_light" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_near_4s" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="2dp"
-        android:background="#008888"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="#008888" >
 
         <LinearLayout
             android:id="@+id/layoutBackFromNear"
@@ -80,7 +128,6 @@
             android:gravity="center" >
 
             <ImageView
-                
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/icon_arrow_down" />
