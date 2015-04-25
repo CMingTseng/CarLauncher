@@ -100,12 +100,6 @@
         <activity
             android:name="com.tchip.carlauncher.MultimediaActivity"
             android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.RoutePlanActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.AboutActivity"
-            android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />

@@ -28,7 +28,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-	
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
 
@@ -250,8 +251,5 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		// btnLogo.setBackgroundResource(getLogo(getBrand()));
-		
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 }

@@ -1,6 +1,5 @@
 package com.tchip.carlauncher;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -11,16 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
@@ -41,7 +37,6 @@ import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
-import com.tchip.carlauncher.view.ButtonFloat;
 
 public class NearResultActivity extends FragmentActivity implements
 		OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
@@ -57,27 +52,38 @@ public class NearResultActivity extends FragmentActivity implements
 
 	private String findContent = "";
 	private double mLatitude, mLongitude;
+	private final String TYPE_OIL = "oil";
+	private final String TYPE_HOTEL = "hotel";
+	private final String TYPE_4S = "4s";
 	private LatLng mLatLng;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_near_result);
 
-		// 接收搜索内容
+		// 接收搜索类型
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			findContent = extras.getString("findType");
+			String findType = extras.getString("findType");
+			if (TYPE_OIL.equals(findType)) {
+				findContent = "加油站";
+			} else if (TYPE_HOTEL.equals(findType)) {
+				findContent = "酒店";
+			} else if (TYPE_4S.equals(findType)) {
+				findContent = "4S";
+			}
 		}
 
 		// 获取当前经纬度
-		SharedPreferences preference = getSharedPreferences("CarLauncher",
-				getApplicationContext().MODE_PRIVATE);
-		mLatitude = Double
-				.parseDouble(preference.getString("latitude", "0.00"));
-		mLongitude = Double.parseDouble(preference.getString("longitude",
+		mLatitude = Double.parseDouble(getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE).getString("latitude",
+				"0.00"));
+		mLongitude = Double.parseDouble(getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE).getString("longitude",
 				"0.00"));
 
 		// 初始化搜索模块，注册搜索事件监听
@@ -89,19 +95,8 @@ public class NearResultActivity extends FragmentActivity implements
 		sugAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line);
 		keyWorldsView.setAdapter(sugAdapter);
-		// mBaiduMap = ((SupportMapFragment) (getSupportFragmentManager()
-		// .findFragmentById(R.id.map))).getBaiduMap();
-		MapView mMapView = (MapView) findViewById(R.id.map);
-
-		// 去掉缩放控件和百度Logo
-		int count = mMapView.getChildCount();
-		for (int i = 0; i < count; i++) {
-			View child = mMapView.getChildAt(i);
-			if (child instanceof ImageView || child instanceof ZoomControls) {
-				child.setVisibility(View.INVISIBLE);
-			}
-		}
-		mBaiduMap = mMapView.getMap();
+		mBaiduMap = ((SupportMapFragment) (getSupportFragmentManager()
+				.findFragmentById(R.id.map))).getBaiduMap();
 
 		// 初始化地图位置
 		mLatLng = new LatLng(mLatitude, mLongitude);
@@ -109,23 +104,6 @@ public class NearResultActivity extends FragmentActivity implements
 		mBaiduMap.animateMapStatus(u);
 
 		startSearch();
-
-		ButtonFloat btnToNearFromResult = (ButtonFloat) findViewById(R.id.btnToNearFromResult);
-		btnToNearFromResult.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_down));
-		btnToNearFromResult.setOnClickListener(new MyOnClickListener());
-	}
-
-	class MyOnClickListener implements View.OnClickListener {
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			switch (v.getId()) {
-			case R.id.btnToNearFromResult:
-				finish();
-				break;
-			}
-		}
 	}
 
 	@Override
@@ -164,7 +142,7 @@ public class NearResultActivity extends FragmentActivity implements
 		PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
 		poiOption.keyword(findContent);
 		poiOption.location(mLatLng);
-		poiOption.radius(15 * 1000);
+		poiOption.radius(10 * 1000);
 		poiOption.pageNum(0);
 		mPoiSearch.searchNearby(poiOption);
 	}
@@ -241,11 +219,4 @@ public class NearResultActivity extends FragmentActivity implements
 		}
 	}
 
-	@Override
-	protected void onResumeFragments() {
-		// TODO Auto-generated method stub
-		super.onResumeFragments();
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-	}
 }

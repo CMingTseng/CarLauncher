@@ -1,7 +1,5 @@
 package com.tchip.carlauncher;
 
-import com.tchip.carlauncher.view.ButtonFloat;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,13 +15,10 @@ public class MultimediaActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_multimedia);
 
-		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
-		btnToMainFromMultimedia.setDrawableIcon(getResources()
-				.getDrawable(R.drawable.icon_arrow_down));
-		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -32,9 +27,6 @@ public class MultimediaActivity extends Activity {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
-			case R.id.btnToMainFromMultimedia:
-				backToMain();
-				break;
 			}
 
 		}
@@ -59,13 +51,5 @@ public class MultimediaActivity extends Activity {
 					R.anim.zms_translate_up_in);
 		}
 		// add for animation end
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 }

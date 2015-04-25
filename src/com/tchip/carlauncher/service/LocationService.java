@@ -125,17 +125,15 @@ public class LocationService extends Service {
 		public void onReceiveLocation(BDLocation location) {
 
 			cityName = location.getCity();
+			cityCode = getCityCodeByName(cityName);
 
 			if ((cityName != null) && (!cityName.equals("未定位"))
 					&& (cityCode != 123456789)) {
-				cityCode = getCityCodeByName(cityName);
+
 				editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);
 				editor.putString("latitude", "" + location.getLatitude());
 				editor.putString("longitude", "" + location.getLongitude());
-				editor.putString("street", "" + location.getStreet());
-				editor.putString("district", "" + location.getDistrict());
-				editor.putString("addrStr", "" + location.getAddrStr());
 				new Thread(networkTask).start();
 			}
 		}
