@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -42,6 +43,9 @@ public class NearActivity extends Activity {
 
 		ImageView imgNearHospital = (ImageView) findViewById(R.id.imgNearHospital);
 		imgNearHospital.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgCustomSearch = (ImageView) findViewById(R.id.imgCustomSearch);
+		imgCustomSearch.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -88,6 +92,16 @@ public class NearActivity extends Activity {
 						NearResultActivity.class);
 				intent6.putExtra("findType", "医院");
 				startActivity(intent6);
+				break;
+			case R.id.imgCustomSearch:
+				EditText editSearchContent = (EditText) findViewById(R.id.editSearchContent);
+				String searchContent = editSearchContent.getText().toString();
+				if (searchContent != null && searchContent.length() > 0) {
+					Intent intent7 = new Intent(NearActivity.this,
+							NearResultActivity.class);
+					intent7.putExtra("findType", searchContent);
+					startActivity(intent7);
+				}
 				break;
 			}
 

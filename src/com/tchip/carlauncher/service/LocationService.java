@@ -134,6 +134,16 @@ public class LocationService extends Service {
 				editor.putString("cityName", cityName);
 				editor.putString("latitude", "" + location.getLatitude());
 				editor.putString("longitude", "" + location.getLongitude());
+				editor.putString("district", location.getDistrict());
+				editor.putString("floor", location.getFloor());
+				editor.putString("addrStr", location.getAddrStr());
+				editor.putString("street", location.getStreet());
+				editor.putString("streetNum", location.getStreetNumber());
+				editor.putFloat("speed", location.getSpeed());
+				editor.putString("altitude", "" + location.getAltitude());
+				editor.putString("lbsTime", location.getTime());
+				editor.commit();
+
 				new Thread(networkTask).start();
 			}
 		}
@@ -228,7 +238,7 @@ public class LocationService extends Service {
 						editor.putString("wetLevel", jsonObject.getString("SD"));
 						editor.commit();
 
-						stopSelf();
+						// stopSelf();
 
 					} catch (JSONException e) {
 						e.printStackTrace();

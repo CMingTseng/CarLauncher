@@ -1,6 +1,8 @@
 package com.tchip.carlauncher;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -50,6 +52,9 @@ public class RoutePlanActivity extends Activity implements
 	boolean useDefaultIcon = false;
 	private TextView popupText = null;// 泡泡view
 
+	private SharedPreferences preferences;
+	private Editor editor;
+
 	// 地图相关，使用继承MapView的MyRouteMapView目的是重写touch事件实现泡泡处理
 	// 如果不处理touch事件，则无需继承，直接使用MapView即可
 	MapView mMapView = null; // 地图View
@@ -61,6 +66,11 @@ public class RoutePlanActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_route_plan);
+
+		preferences = getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE);
+		editor = preferences.edit();
+
 		CharSequence titleLable = "路线规划功能";
 		setTitle(titleLable);
 		// 初始化地图
@@ -85,12 +95,13 @@ public class RoutePlanActivity extends Activity implements
 		mSearch = RoutePlanSearch.newInstance();
 		mSearch.setOnGetRoutePlanResultListener(this);
 
-		startSearch();
-
 		ButtonFloat btnToViceFromRoutePlan = (ButtonFloat) findViewById(R.id.btnToViceFromRoutePlan);
 		btnToViceFromRoutePlan.setDrawableIcon(getResources().getDrawable(
 				R.drawable.icon_arrow_down));
 		btnToViceFromRoutePlan.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgDestination = (ImageView) findViewById(R.id.imgDestination);
+		imgDestination.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -102,6 +113,13 @@ public class RoutePlanActivity extends Activity implements
 			case R.id.btnToViceFromRoutePlan:
 				finish();
 				break;
+			case R.id.imgDestination:
+				EditText editDestination = (EditText) findViewById(R.id.editDestination);
+				String destinationStr = editDestination.getText().toString();
+				if (destinationStr != null & destinationStr.length() > 0) {
+					startSearch(destinationStr);
+				}
+				break;
 			}
 		}
 	}
@@ -110,17 +128,19 @@ public class RoutePlanActivity extends Activity implements
 	 * 发起路线规划搜索示例
 	 * 
 	 */
-	public void startSearch() {
+	public void startSearch(String destinationStr) {
 		// 重置浏览节点的路线数据
 		route = null;
 		mBtnPre.setVisibility(View.INVISIBLE);
 		mBtnNext.setVisibility(View.INVISIBLE);
 		mBaidumap.clear();
 		// 处理搜索按钮响应
-		String routeStart = "竹苑市场";
-		String routeEnd = "读书郎";
-		PlanNode stNode = PlanNode.withCityNameAndPlaceName("中山", routeStart);
-		PlanNode enNode = PlanNode.withCityNameAndPlaceName("中山", routeEnd);
+		String routeStart = preferences.getString("addrStr", "宏宇大厦");
+		String cityName = preferences.getString("cityName", "北京");
+		PlanNode stNode = PlanNode.withCityNameAndPlaceName(cityName,
+				routeStart);
+		PlanNode enNode = PlanNode.withCityNameAndPlaceName(cityName,
+				destinationStr);
 		// 公交：TransitRoutePlanOption 步行：WalkingRoutePlanOption
 		mSearch.drivingSearch((new DrivingRoutePlanOption()).from(stNode).to(
 				enNode));
