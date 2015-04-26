@@ -273,14 +273,28 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <com.tchip.carlauncher.view.MetroImageView
-                android:id="@+id/imgMultimedia"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:scaleType="matrix"
-                android:src="@drawable/cyan_dark" />
+                android:layout_gravity="center"
+                android:layout_weight="1" >
+
+                <com.tchip.carlauncher.view.MetroImageView
+                    android:id="@+id/imgMultimedia"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:scaleType="matrix"
+                    android:src="@drawable/cyan_dark" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:padding="10dp"
+                    android:src="@drawable/icon_main_multimedia" />
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -297,21 +311,49 @@
                 android:orientation="horizontal"
                 android:weightSum="2" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    android:layout_weight="1"
-                    android:scaleType="matrix"
-                    android:src="@drawable/green_light" />
+                    android:layout_gravity="center"
+                    android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                    <com.tchip.carlauncher.view.MetroImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dp"
+                        android:scaleType="matrix"
+                        android:src="@drawable/green_light" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_main_record" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    android:layout_weight="1"
-                    android:scaleType="matrix"
-                    android:src="@drawable/blue_light" />
+                    android:layout_gravity="center"
+                    android:layout_weight="1" >
+
+                    <com.tchip.carlauncher.view.MetroImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dp"
+                        android:scaleType="matrix"
+                        android:src="@drawable/blue_light" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_main_navi" />
+                </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
@@ -327,6 +369,14 @@
                     android:scaleType="matrix"
                     android:src="@drawable/green_dark" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:padding="10dp"
+                    android:src="@drawable/icon_main_file" />
+
                 <com.tchip.carlauncher.view.ButtonFloat
                     android:id="@+id/btnToVice"
                     android:layout_width="wrap_content"
@@ -338,6 +388,5 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-
 
 </LinearLayout>
