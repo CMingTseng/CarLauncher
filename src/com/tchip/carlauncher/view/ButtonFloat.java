@@ -1,15 +1,13 @@
 package com.tchip.carlauncher.view;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.util.MaterialUtils;
+import com.tchip.carlauncher.util.MaterialUtil;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
@@ -48,8 +46,8 @@ public class ButtonFloat extends Button {
 			icon.setImageDrawable(drawableIcon);
 		}
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-				MaterialUtils.dpToPx(sizeIcon, getResources()),
-				MaterialUtils.dpToPx(sizeIcon, getResources()));
+				MaterialUtil.dpToPx(sizeIcon, getResources()),
+				MaterialUtil.dpToPx(sizeIcon, getResources()));
 		params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 		icon.setLayoutParams(params);
 		addView(icon);
@@ -57,10 +55,10 @@ public class ButtonFloat extends Button {
 	}
 
 	protected void setDefaultProperties() {
-		rippleSpeed = MaterialUtils.dpToPx(2, getResources());
-		rippleSize = MaterialUtils.dpToPx(5, getResources());
-		setMinimumWidth(MaterialUtils.dpToPx(sizeRadius * 2, getResources()));
-		setMinimumHeight(MaterialUtils.dpToPx(sizeRadius * 2, getResources()));
+		rippleSpeed = MaterialUtil.dpToPx(2, getResources());
+		rippleSize = MaterialUtil.dpToPx(5, getResources());
+		setMinimumWidth(MaterialUtil.dpToPx(sizeRadius * 2, getResources()));
+		setMinimumHeight(MaterialUtil.dpToPx(sizeRadius * 2, getResources()));
 		super.background = R.drawable.background_button_float;
 		// super.setDefaultProperties();
 	}
@@ -109,7 +107,7 @@ public class ButtonFloat extends Button {
 			@Override
 			public void run() {
 				showPosition = ViewHelper.getY(ButtonFloat.this)
-						- MaterialUtils.dpToPx(24, getResources());
+						- MaterialUtil.dpToPx(24, getResources());
 				hidePosition = ViewHelper.getY(ButtonFloat.this) + getHeight()
 						* 3;
 				if (animate) {
@@ -129,10 +127,10 @@ public class ButtonFloat extends Button {
 		super.onDraw(canvas);
 		if (x != -1) {
 			Rect src = new Rect(0, 0, getWidth(), getHeight());
-			Rect dst = new Rect(MaterialUtils.dpToPx(1, getResources()),
-					MaterialUtils.dpToPx(2, getResources()), getWidth()
-							- MaterialUtils.dpToPx(1, getResources()),
-					getHeight() - MaterialUtils.dpToPx(2, getResources()));
+			Rect dst = new Rect(MaterialUtil.dpToPx(1, getResources()),
+					MaterialUtil.dpToPx(2, getResources()), getWidth()
+							- MaterialUtil.dpToPx(1, getResources()),
+					getHeight() - MaterialUtil.dpToPx(2, getResources()));
 			canvas.drawBitmap(cropCircle(makeCircle()), src, dst, null);
 			invalidate();
 		}

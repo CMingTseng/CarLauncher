@@ -1,5 +1,10 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui;
 
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.anim;
+import com.tchip.carlauncher.R.drawable;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;

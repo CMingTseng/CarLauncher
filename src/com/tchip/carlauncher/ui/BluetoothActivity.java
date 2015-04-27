@@ -1,5 +1,7 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui;
 
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.bluetooth.CallService;
 import com.tchip.carlauncher.bluetooth.ClientSocketActivity;
 

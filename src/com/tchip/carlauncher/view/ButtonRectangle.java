@@ -1,7 +1,7 @@
 package com.tchip.carlauncher.view;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.util.MaterialUtils;
+import com.tchip.carlauncher.util.MaterialUtil;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -93,10 +93,10 @@ public class ButtonRectangle extends Button {
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-			params.setMargins(MaterialUtils.dpToPx(5, getResources()),
-					MaterialUtils.dpToPx(5, getResources()),
-					MaterialUtils.dpToPx(5, getResources()),
-					MaterialUtils.dpToPx(5, getResources()));
+			params.setMargins(MaterialUtil.dpToPx(5, getResources()),
+					MaterialUtil.dpToPx(5, getResources()),
+					MaterialUtil.dpToPx(5, getResources()),
+					MaterialUtil.dpToPx(5, getResources()));
 			textButton.setLayoutParams(params);
 			addView(textButton);
 			// FrameLayout.LayoutParams params = (LayoutParams)
@@ -110,7 +110,7 @@ public class ButtonRectangle extends Button {
 		}
 
 		rippleSpeed = attrs.getAttributeFloatValue(MATERIALDESIGNXML,
-				"rippleSpeed", MaterialUtils.dpToPx(6, getResources()));
+				"rippleSpeed", MaterialUtil.dpToPx(6, getResources()));
 	}
 
 	// /**
@@ -139,12 +139,12 @@ public class ButtonRectangle extends Button {
 		super.onDraw(canvas);
 		if (x != -1) {
 			Rect src = new Rect(0, 0, getWidth()
-					- MaterialUtils.dpToPx(6, getResources()), getHeight()
-					- MaterialUtils.dpToPx(7, getResources()));
-			Rect dst = new Rect(MaterialUtils.dpToPx(6, getResources()),
-					MaterialUtils.dpToPx(6, getResources()), getWidth()
-							- MaterialUtils.dpToPx(6, getResources()),
-					getHeight() - MaterialUtils.dpToPx(7, getResources()));
+					- MaterialUtil.dpToPx(6, getResources()), getHeight()
+					- MaterialUtil.dpToPx(7, getResources()));
+			Rect dst = new Rect(MaterialUtil.dpToPx(6, getResources()),
+					MaterialUtil.dpToPx(6, getResources()), getWidth()
+							- MaterialUtil.dpToPx(6, getResources()),
+					getHeight() - MaterialUtil.dpToPx(7, getResources()));
 			canvas.drawBitmap(makeCircle(), src, dst, null);
 			invalidate();
 		}

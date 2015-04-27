@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +29,10 @@ import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.library.UnderstanderSettings;
 import com.iflytek.sunflower.FlowerCollector;
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
+import com.tchip.carlauncher.R.string;
 
 public class ChatActivity extends Activity implements OnClickListener {
 	private static String TAG = ChatActivity.class.getSimpleName();

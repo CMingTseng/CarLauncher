@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.bean;
 
 public class Record {
 

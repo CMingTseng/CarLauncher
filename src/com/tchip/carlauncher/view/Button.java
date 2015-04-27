@@ -1,7 +1,7 @@
 package com.tchip.carlauncher.view;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.util.MaterialUtils;
+import com.tchip.carlauncher.util.MaterialUtil;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -44,8 +44,8 @@ public abstract class Button extends CustomView {
 
 	protected void setDefaultProperties() {
 		// Min size
-		setMinimumHeight(MaterialUtils.dpToPx(minHeight, getResources()));
-		setMinimumWidth(MaterialUtils.dpToPx(minWidth, getResources()));
+		setMinimumHeight(MaterialUtil.dpToPx(minHeight, getResources()));
+		setMinimumWidth(MaterialUtil.dpToPx(minWidth, getResources()));
 		// Background shape
 		setBackgroundResource(background);
 		setBackgroundColor(backgroundColor);
@@ -116,8 +116,8 @@ public abstract class Button extends CustomView {
 
 	public Bitmap makeCircle() {
 		Bitmap output = Bitmap.createBitmap(
-				getWidth() - MaterialUtils.dpToPx(6, getResources()),
-				getHeight() - MaterialUtils.dpToPx(7, getResources()),
+				getWidth() - MaterialUtil.dpToPx(6, getResources()),
+				getHeight() - MaterialUtil.dpToPx(7, getResources()),
 				Config.ARGB_8888);
 		Canvas canvas = new Canvas(output);
 		canvas.drawARGB(0, 0, 0, 0);

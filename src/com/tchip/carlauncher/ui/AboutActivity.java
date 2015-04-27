@@ -1,6 +1,14 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui;
 
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.anim;
+import com.tchip.carlauncher.R.drawable;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
+import com.tchip.carlauncher.bean.Titanic;
+import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.view.ButtonFloat;
+import com.tchip.carlauncher.view.TitanicTextView;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -20,6 +28,15 @@ public class AboutActivity extends Activity {
 		btnToViceFromAbout.setDrawableIcon(getResources().getDrawable(
 				R.drawable.icon_arrow_up));
 		btnToViceFromAbout.setOnClickListener(new MyOnClickListener());
+		
+		
+		TitanicTextView tv = (TitanicTextView) findViewById(R.id.my_text_view);
+
+        // set fancy typeface
+        tv.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+
+        // start animation
+        new Titanic().start(tv);
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

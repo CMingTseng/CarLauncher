@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -40,6 +40,10 @@ import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.drawable;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RoutePlanActivity extends Activity implements

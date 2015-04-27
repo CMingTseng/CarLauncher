@@ -66,7 +66,7 @@
             android:value="Tycks4ezX3hSXfRtu7TvCVTl" />
 
         <activity
-            android:name="com.tchip.carlauncher.Main"
+            android:name="com.tchip.carlauncher.ui.Main"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
             android:icon="@drawable/ic_launcher"
             android:label="Car Launcher"
@@ -80,16 +80,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ViceActivity"
+            android:name="com.tchip.carlauncher.ui.ViceActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.NearActivity"
+            android:name="com.tchip.carlauncher.ui.NearActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.NearResultActivity"
+            android:name="com.tchip.carlauncher.ui.NearResultActivitytActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.BluetoothActivity"
+            android:name="com.tchip.carlauncher.ui.BluetoothActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.bluetooth.ClientSocketActivity"
@@ -98,16 +98,16 @@
             android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.MultimediaActivity"
+            android:name="com.tchip.carlauncher.ui.MultimediaActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.RoutePlanActivity"
+            android:name="com.tchip.carlauncher.ui.RoutePlanActivity.RoutePlanActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.AboutActivity"
+            android:name="com.tchip.carlauncher.ui.AboutActivityboutActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ChatActivity"
+            android:name="com.tchip.carlauncher.ui.ChatActivitytActivity"
             android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />

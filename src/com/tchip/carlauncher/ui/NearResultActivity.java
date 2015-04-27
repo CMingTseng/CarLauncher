@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,6 +41,10 @@ import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.drawable;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class NearResultActivity extends FragmentActivity implements

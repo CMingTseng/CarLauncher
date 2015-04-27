@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.View;
 
-public class MaterialUtils {
+public class MaterialUtil {
 	
 	
 	/**
