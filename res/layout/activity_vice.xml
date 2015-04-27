@@ -24,7 +24,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:id="@+id/imgNear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -47,7 +47,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:id="@+id/imgRoutePlan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -78,7 +78,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="2dp"
@@ -100,9 +100,10 @@
                 android:layout_gravity="center"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/imgChat"
                     android:layout_margin="2dp"
                     android:scaleType="matrix"
                     android:src="@drawable/green_dark" />
@@ -121,7 +122,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:id="@+id/imgAbout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -144,6 +145,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:visibility="gone"
                     android:background="#1E88E5" />
             </RelativeLayout>
         </LinearLayout>

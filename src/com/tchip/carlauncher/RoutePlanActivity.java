@@ -18,6 +18,7 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapPoi;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
@@ -54,11 +55,13 @@ public class RoutePlanActivity extends Activity implements
 
 	private SharedPreferences preferences;
 	private Editor editor;
+	private double mLatitude, mLongitude;
+	private LatLng mLatLng;
 
 	// 地图相关，使用继承MapView的MyRouteMapView目的是重写touch事件实现泡泡处理
 	// 如果不处理touch事件，则无需继承，直接使用MapView即可
 	MapView mMapView = null; // 地图View
-	BaiduMap mBaidumap = null;
+	BaiduMap mBaiduMap = null;
 	// 搜索相关
 	RoutePlanSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
 
@@ -84,13 +87,23 @@ public class RoutePlanActivity extends Activity implements
 			}
 		}
 
-		mBaidumap = mMapView.getMap();
+		mBaiduMap = mMapView.getMap();
 		mBtnPre = (Button) findViewById(R.id.pre);
 		mBtnNext = (Button) findViewById(R.id.next);
 		mBtnPre.setVisibility(View.INVISIBLE);
 		mBtnNext.setVisibility(View.INVISIBLE);
 		// 地图点击事件处理
-		mBaidumap.setOnMapClickListener(this);
+		mBaiduMap.setOnMapClickListener(this);
+		// 获取当前经纬度
+		mLatitude = Double.parseDouble(preferences
+				.getString("latitude", "0.00"));
+		mLongitude = Double.parseDouble(preferences.getString("longitude",
+				"0.00"));
+		// 初始化地图位置
+		mLatLng = new LatLng(mLatitude, mLongitude);
+		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(mLatLng);
+		mBaiduMap.animateMapStatus(u);
+
 		// 初始化搜索模块，注册事件监听
 		mSearch = RoutePlanSearch.newInstance();
 		mSearch.setOnGetRoutePlanResultListener(this);
@@ -133,7 +146,7 @@ public class RoutePlanActivity extends Activity implements
 		route = null;
 		mBtnPre.setVisibility(View.INVISIBLE);
 		mBtnNext.setVisibility(View.INVISIBLE);
-		mBaidumap.clear();
+		mBaiduMap.clear();
 		// 处理搜索按钮响应
 		String routeStart = preferences.getString("addrStr", "宏宇大厦");
 		String cityName = preferences.getString("cityName", "北京");
@@ -195,13 +208,13 @@ public class RoutePlanActivity extends Activity implements
 			return;
 		}
 		// 移动节点至中心
-		mBaidumap.setMapStatus(MapStatusUpdateFactory.newLatLng(nodeLocation));
+		mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(nodeLocation));
 		// show popup
 		popupText = new TextView(RoutePlanActivity.this);
 		popupText.setBackgroundResource(R.drawable.popup);
 		popupText.setTextColor(0xFF000000);
 		popupText.setText(nodeTitle);
-		mBaidumap.showInfoWindow(new InfoWindow(popupText, nodeLocation, 0));
+		mBaiduMap.showInfoWindow(new InfoWindow(popupText, nodeLocation, 0));
 
 	}
 
@@ -247,8 +260,8 @@ public class RoutePlanActivity extends Activity implements
 			mBtnPre.setVisibility(View.VISIBLE);
 			mBtnNext.setVisibility(View.VISIBLE);
 			route = result.getRouteLines().get(0);
-			WalkingRouteOverlay overlay = new MyWalkingRouteOverlay(mBaidumap);
-			mBaidumap.setOnMarkerClickListener(overlay);
+			WalkingRouteOverlay overlay = new MyWalkingRouteOverlay(mBaiduMap);
+			mBaiduMap.setOnMarkerClickListener(overlay);
 			routeOverlay = overlay;
 			overlay.setData(result.getRouteLines().get(0));
 			overlay.addToMap();
@@ -274,8 +287,8 @@ public class RoutePlanActivity extends Activity implements
 			mBtnPre.setVisibility(View.VISIBLE);
 			mBtnNext.setVisibility(View.VISIBLE);
 			route = result.getRouteLines().get(0);
-			TransitRouteOverlay overlay = new MyTransitRouteOverlay(mBaidumap);
-			mBaidumap.setOnMarkerClickListener(overlay);
+			TransitRouteOverlay overlay = new MyTransitRouteOverlay(mBaiduMap);
+			mBaiduMap.setOnMarkerClickListener(overlay);
 			routeOverlay = overlay;
 			overlay.setData(result.getRouteLines().get(0));
 			overlay.addToMap();
@@ -299,9 +312,9 @@ public class RoutePlanActivity extends Activity implements
 			mBtnPre.setVisibility(View.VISIBLE);
 			mBtnNext.setVisibility(View.VISIBLE);
 			route = result.getRouteLines().get(0);
-			DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaidumap);
+			DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
 			routeOverlay = overlay;
-			mBaidumap.setOnMarkerClickListener(overlay);
+			mBaiduMap.setOnMarkerClickListener(overlay);
 			overlay.setData(result.getRouteLines().get(0));
 			overlay.addToMap();
 			overlay.zoomToSpan();
@@ -380,7 +393,7 @@ public class RoutePlanActivity extends Activity implements
 
 	@Override
 	public void onMapClick(LatLng point) {
-		mBaidumap.hideInfoWindow();
+		mBaiduMap.hideInfoWindow();
 	}
 
 	@Override

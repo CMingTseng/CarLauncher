@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutMain"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff"
@@ -279,7 +280,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:id="@+id/imgMultimedia"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -317,7 +318,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1" >
 
-                    <com.tchip.carlauncher.view.MetroImageView
+                    <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -339,7 +340,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1" >
 
-                    <com.tchip.carlauncher.view.MetroImageView
+                    <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -361,7 +362,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" >
 
-                <com.tchip.carlauncher.view.MetroImageView
+                <ImageView
                     android:id="@+id/imgBluetooth"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -384,7 +385,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
-                    android:background="#1E88E5" />
+                    android:background="#1E88E5"
+                    android:visibility="gone" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

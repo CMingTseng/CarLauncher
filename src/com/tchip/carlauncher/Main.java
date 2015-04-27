@@ -1,58 +1,106 @@
 package com.tchip.carlauncher;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
-import com.tchip.carlauncher.view.ButtonFloat;
+import com.tchip.carlauncher.view.MyViewPager;
+import com.tchip.carlauncher.view.MyViewPager.TransitionEffect;
+import com.tchip.carlauncher.view.MyViewPagerContainer;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.MotionEvent;
+import android.support.v4.view.PagerAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class Main extends Activity {
+	private View viewMain, viewVice;
+	private List<View> viewList;
+	private MyViewPager viewPager; // viewpager
 	private SharedPreferences sharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.main);
 
-	
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
 
-		setContentView(R.layout.activity_main);
-		// startSpeak("欢迎使用天启行车记录仪");
-		// startWeatherService();
-		updateLayout();
-		
+		LayoutInflater inflater = getLayoutInflater().from(this);
+		viewMain = inflater.inflate(R.layout.activity_main, null);
+		viewVice = inflater.inflate(R.layout.activity_vice, null);
+
+		viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
+		viewList.add(viewMain);
+		viewList.add(viewVice);
+		viewPager = (MyViewPager) findViewById(R.id.viewpager);
+		viewPager.setTransitionEffect(TransitionEffect.CubeOut);
+
+		// viewPager.setPageMargin(30);
+		viewPager.setAdapter(pagerAdapter);
+
 	}
+
+	PagerAdapter pagerAdapter = new PagerAdapter() {
+
+		@Override
+		public boolean isViewFromObject(View view, Object obj) {
+
+			if (view instanceof MyViewPagerContainer) {
+				return ((MyViewPagerContainer) view).getChildAt(0) == obj;
+			} else {
+				return view == obj;
+			}
+		}
+
+		@Override
+		public int getCount() {
+			return viewList.size();
+		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			container.removeView(viewList.get(position));
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return super.getItemPosition(object);
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			container.addView(viewList.get(position));
+			viewPager.setObjectForPosition(viewList.get(position), position); // 动画需要
+			if (position == 0)
+				updateMainLayout();
+			else
+				updateViceLayout();
+			return viewList.get(position);
+		}
+
+	};
 
 	private void startSpeak(String content) {
 		Intent intent = new Intent(this, SpeakService.class);
 		intent.putExtra("content", content);
 		startService(intent);
 	}
-	
-	private void startWeatherService(){
+
+	private void startWeatherService() {
 		Intent intent = new Intent(this, WeatherService.class);
 		startService(intent);
 	}
@@ -62,7 +110,7 @@ public class MainActivity extends Activity {
 		startService(intent);
 	}
 
-	private void updateLayout() {
+	private void updateMainLayout() {
 		startLocationService();
 
 		// 时钟信息
@@ -147,14 +195,35 @@ public class MainActivity extends Activity {
 		imgMultimedia.setOnClickListener(new MyOnClickListener());
 
 		// 副界面
-		ButtonFloat btnToVice = (ButtonFloat) findViewById(R.id.btnToVice);
-		btnToVice.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_right));
-		btnToVice.setOnClickListener(new MyOnClickListener());
+		// ButtonFloat btnToVice = (ButtonFloat) findViewById(R.id.btnToVice);
+		// btnToVice.setDrawableIcon(getResources().getDrawable(
+		// R.drawable.icon_arrow_right));
+		// btnToVice.setOnClickListener(new MyOnClickListener());
 
 		// 蓝牙拨号
 		ImageView imgBluetooth = (ImageView) findViewById(R.id.imgBluetooth);
 		imgBluetooth.setOnClickListener(new MyOnClickListener());
+	}
+
+	private void updateViceLayout() {
+		// ButtonFloat btnToMainFromVice = (ButtonFloat)
+		// findViewById(R.id.btnToMainFromVice);
+		// btnToMainFromVice.setDrawableIcon(getResources().getDrawable(
+		// R.drawable.icon_arrow_left));
+		// btnToMainFromVice.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgNear = (ImageView) findViewById(R.id.imgNear);
+		imgNear.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgRoutePlan = (ImageView) findViewById(R.id.imgRoutePlan);
+		imgRoutePlan.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgAbout = (ImageView) findViewById(R.id.imgAbout);
+		imgAbout.setOnClickListener(new MyOnClickListener());
+
+		ImageView imgChat = (ImageView) findViewById(R.id.imgChat);
+		imgChat.setOnClickListener(new MyOnClickListener());
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -163,9 +232,9 @@ public class MainActivity extends Activity {
 			int version = Integer.valueOf(android.os.Build.VERSION.SDK);
 			switch (v.getId()) {
 			case R.id.imgMultimedia:
-				Intent intent1 = new Intent(MainActivity.this,
+				Intent intent11 = new Intent(Main.this,
 						MultimediaActivity.class);
-				startActivity(intent1);
+				startActivity(intent11);
 				// add for animation start
 
 				if (version > 5) {
@@ -175,9 +244,8 @@ public class MainActivity extends Activity {
 				// add for animation end
 				break;
 			case R.id.btnToVice:
-				Intent intent2 = new Intent(MainActivity.this,
-						ViceActivity.class);
-				startActivity(intent2);
+				Intent intent12 = new Intent(Main.this, ViceActivity.class);
+				startActivity(intent12);
 				// add for animation start
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_left_out,
@@ -186,10 +254,50 @@ public class MainActivity extends Activity {
 				// add for animation end
 				break;
 			case R.id.imgBluetooth:
-				Intent intent3 = new Intent(MainActivity.this,
-						BluetoothActivity.class);
-				startActivity(intent3);
+				Intent intent13 = new Intent(Main.this, BluetoothActivity.class);
+				startActivity(intent13);
 
+				break;
+			case R.id.imgNear:
+				Intent intent21 = new Intent(Main.this, NearActivity.class);
+				startActivity(intent21);
+				// add for animation start
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_down_out,
+							R.anim.zms_translate_down_in);
+				}
+				// add for animation end
+				break;
+			case R.id.imgRoutePlan:
+				Intent intent22 = new Intent(Main.this, RoutePlanActivity.class);
+				startActivity(intent22);
+				// add for animation start
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_down_out,
+							R.anim.zms_translate_down_in);
+				}
+				// add for animation end
+				break;
+			case R.id.imgAbout:
+				Intent intent23 = new Intent(Main.this, AboutActivity.class);
+				startActivity(intent23);
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
+				break;
+			case R.id.imgChat:
+				Intent intent24 = new Intent(Main.this, ChatActivity.class);
+				startActivity(intent24);
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
+				break;
 			}
 		}
 	}
@@ -262,7 +370,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		// btnLogo.setBackgroundResource(getLogo(getBrand()));
-		
+
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}

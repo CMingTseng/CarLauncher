@@ -11,17 +11,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_margin="10dp" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="讯飞语义示例"
-            android:textSize="30sp" />
 
         <ImageButton
             android:id="@+id/image_understander_set"
+            
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
@@ -52,15 +48,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:visibility="gone"
             android:text="文本理解"
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/start_understander"
+            android:id="@+id/startListen"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="语义理解"
+            android:text="开始"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -78,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="停止录音"
+            android:visibility="gone"
             android:textSize="20sp" />
 
         <Button
@@ -86,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="取消"
+            android:visibility="gone"
             android:textSize="20sp" />
     </LinearLayout>
 

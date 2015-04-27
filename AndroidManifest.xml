@@ -66,7 +66,7 @@
             android:value="Tycks4ezX3hSXfRtu7TvCVTl" />
 
         <activity
-            android:name="com.tchip.carlauncher.MainActivity"
+            android:name="com.tchip.carlauncher.Main"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
             android:icon="@drawable/ic_launcher"
             android:label="Car Launcher"
@@ -100,16 +100,19 @@
         <activity
             android:name="com.tchip.carlauncher.MultimediaActivity"
             android:screenOrientation="landscape" />
-        
-          <activity
+        <activity
             android:name="com.tchip.carlauncher.RoutePlanActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.AboutActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ChatActivity"
+            android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
+        <service android:name="com.tchip.carlauncher.service.WeatherService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

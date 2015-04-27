@@ -33,6 +33,9 @@ public class ViceActivity extends Activity {
 		ImageView imgAbout = (ImageView) findViewById(R.id.imgAbout);
 		imgAbout.setOnClickListener(new MyOnClickListener());
 
+		ImageView imgChat = (ImageView) findViewById(R.id.imgChat);
+		imgChat.setOnClickListener(new MyOnClickListener());
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -71,6 +74,16 @@ public class ViceActivity extends Activity {
 				Intent intent3 = new Intent(ViceActivity.this,
 						AboutActivity.class);
 				startActivity(intent3);
+
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
+				break;
+			case R.id.imgChat:
+				Intent intent4 = new Intent(ViceActivity.this,
+						ChatActivity.class);
+				startActivity(intent4);
 
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_up_out,
