@@ -228,6 +228,9 @@ public class Main extends Activity {
 		ImageView imgChat = (ImageView) findViewById(R.id.imgChat);
 		imgChat.setOnClickListener(new MyOnClickListener());
 
+		ImageView imgSetting = (ImageView) findViewById(R.id.imgSetting);
+		imgSetting.setOnClickListener(new MyOnClickListener());
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -239,23 +242,18 @@ public class Main extends Activity {
 				Intent intent11 = new Intent(Main.this,
 						MultimediaActivity.class);
 				startActivity(intent11);
-				// add for animation start
-
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_down_out,
 							R.anim.zms_translate_down_in);
 				}
-				// add for animation end
 				break;
 			case R.id.btnToVice:
 				Intent intent12 = new Intent(Main.this, ViceActivity.class);
 				startActivity(intent12);
-				// add for animation start
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_left_out,
 							R.anim.zms_translate_left_in);
 				}
-				// add for animation end
 				break;
 			case R.id.imgBluetooth:
 				Intent intent13 = new Intent(Main.this, BluetoothActivity.class);
@@ -265,29 +263,22 @@ public class Main extends Activity {
 			case R.id.imgNear:
 				Intent intent21 = new Intent(Main.this, NearActivity.class);
 				startActivity(intent21);
-				// add for animation start
-
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_down_out,
 							R.anim.zms_translate_down_in);
 				}
-				// add for animation end
 				break;
 			case R.id.imgRoutePlan:
 				Intent intent22 = new Intent(Main.this, RoutePlanActivity.class);
 				startActivity(intent22);
-				// add for animation start
-
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_down_out,
 							R.anim.zms_translate_down_in);
 				}
-				// add for animation end
 				break;
 			case R.id.imgAbout:
 				Intent intent23 = new Intent(Main.this, AboutActivity.class);
 				startActivity(intent23);
-
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
@@ -296,7 +287,14 @@ public class Main extends Activity {
 			case R.id.imgChat:
 				Intent intent24 = new Intent(Main.this, ChatActivity.class);
 				startActivity(intent24);
-
+				if (version > 5) {
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
+				break;
+			case R.id.imgSetting:
+				Intent intent25 = new Intent(Main.this,SettingActivity.class);
+				startActivity(intent25);
 				if (version > 5) {
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);

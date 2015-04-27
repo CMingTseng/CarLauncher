@@ -109,6 +109,9 @@
         <activity
             android:name="com.tchip.carlauncher.ui.ChatActivitytActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.SettingActivity"
+            android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
