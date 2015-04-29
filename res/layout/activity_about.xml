@@ -7,7 +7,7 @@
     
     
     <com.tchip.carlauncher.view.TitanicTextView
-        android:id="@+id/my_text_view"
+        android:id="@+id/titanicTextView"
         android:text="T-Chip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

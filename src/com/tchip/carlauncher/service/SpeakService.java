@@ -24,30 +24,22 @@ import com.iflytek.library.TtsSettings;
 public class SpeakService extends Service {
 
 	private static String TAG = SpeakService.class.getSimpleName();
-	// 语音合成对象
-	private SpeechSynthesizer mTts;
-
-	// 默认发音人
-	private String voicer = "xiaoyan";
-
+	private SpeechSynthesizer mTts; // 语音合成对象
+	private String voicer = "xiaoyan"; // 默认发音人
 	private String[] cloudVoicersEntries;
 	private String[] cloudVoicersValue;
 
-	// 缓冲进度
-	private int mPercentForBuffering = 0;
-	// 播放进度
-	private int mPercentForPlaying = 0;
+	private int mPercentForBuffering = 0; // 缓冲进度
+	private int mPercentForPlaying = 0; // 播放进度
 
-	// 云端/本地单选按钮
-	private RadioGroup mRadioGroup;
-	// 引擎类型
-	private String mEngineType = SpeechConstant.TYPE_CLOUD;
+	private RadioGroup mRadioGroup; // 云端/本地单选按钮
+	// 引擎类型： TYPE_CLOUD TYPE_LOCAL
+	private String mEngineType = SpeechConstant.TYPE_LOCAL;
 	// 语音+安装助手类
 	ApkInstaller mInstaller;
 
 	private Toast mToast;
 	private SharedPreferences mSharedPreferences;
-
 	private String content = "你好";
 
 	@Override
@@ -75,10 +67,9 @@ public class SpeakService extends Service {
 		int code = mTts.startSpeaking(content, mTtsListener);
 		if (code != ErrorCode.SUCCESS) {
 			if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
-				// 未安装则跳转到提示安装页面
-				// mInstaller.install();
+				// 未安装则跳转到提示安装页面 mInstaller.install();
 			} else {
-				// showTip("语音合成失败,错误码: " + code);
+				// 语音合成失败,错误码:code
 			}
 		}
 
@@ -98,11 +89,12 @@ public class SpeakService extends Service {
 		public void onInit(int code) {
 			Log.d(TAG, "InitListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
-				// showTip("初始化失败,错误码：" + code);
+				// 初始化失败,错误码： code
 			} else {
 				// 初始化成功，之后可以调用startSpeaking方法
 				// 注：有的开发者在onCreate方法中创建完合成对象之后马上就调用startSpeaking进行合成，
 				// 正确的做法是将onCreate中的startSpeaking调用移至这里
+				mTts.startSpeaking(content, mTtsListener);
 			}
 		}
 	};
@@ -113,17 +105,17 @@ public class SpeakService extends Service {
 	private SynthesizerListener mTtsListener = new SynthesizerListener() {
 		@Override
 		public void onSpeakBegin() {
-			// showTip("开始播放");
+			// 开始播放
 		}
 
 		@Override
 		public void onSpeakPaused() {
-			// showTip("暂停播放");
+			// 暂停播放
 		}
 
 		@Override
 		public void onSpeakResumed() {
-			// showTip("继续播放");
+			// 继续播放
 		}
 
 		@Override
@@ -131,25 +123,20 @@ public class SpeakService extends Service {
 				String info) {
 			// 合成进度
 			mPercentForBuffering = percent;
-			// showTip(String.format(getString(R.string.tts_toast_format),
-			// mPercentForBuffering, mPercentForPlaying));
 		}
 
 		@Override
 		public void onSpeakProgress(int percent, int beginPos, int endPos) {
 			// 播放进度
 			mPercentForPlaying = percent;
-			// showTip(String.format(getString(R.string.tts_toast_format),
-			// mPercentForBuffering, mPercentForPlaying));
 		}
 
 		@Override
 		public void onCompleted(SpeechError error) {
 			if (error == null) {
-				// showTip("播放完成");
-				stopSelf();
+				// 播放完成
+				// stopSelf();
 			} else if (error != null) {
-				// showTip(error.getPlainDescription(true));
 			}
 		}
 
@@ -158,11 +145,6 @@ public class SpeakService extends Service {
 
 		}
 	};
-
-	private void showTip(final String str) {
-		mToast.setText(str);
-		mToast.show();
-	}
 
 	private void setParam() {
 		// 清空参数
@@ -173,23 +155,25 @@ public class SpeakService extends Service {
 					SpeechConstant.TYPE_CLOUD);
 			// 设置发音人
 			mTts.setParameter(SpeechConstant.VOICE_NAME, voicer);
-			// 设置语速
-			mTts.setParameter(SpeechConstant.SPEED,
-					mSharedPreferences.getString("speed_preference", "50"));
-			// 设置音调
-			mTts.setParameter(SpeechConstant.PITCH,
-					mSharedPreferences.getString("pitch_preference", "50"));
-			// 设置音量
-			mTts.setParameter(SpeechConstant.VOLUME,
-					mSharedPreferences.getString("volume_preference", "50"));
-			// 设置播放器音频流类型
-			mTts.setParameter(SpeechConstant.STREAM_TYPE,
-					mSharedPreferences.getString("stream_preference", "3"));
+
 		} else {
 			mTts.setParameter(SpeechConstant.ENGINE_TYPE,
 					SpeechConstant.TYPE_LOCAL);
 			// 设置发音人 voicer为空默认通过语音+界面指定发音人。
 			mTts.setParameter(SpeechConstant.VOICE_NAME, "");
+
 		}
+		// 设置语速
+		mTts.setParameter(SpeechConstant.SPEED,
+				mSharedPreferences.getString("speed_preference", "50"));
+		// 设置音调
+		mTts.setParameter(SpeechConstant.PITCH,
+				mSharedPreferences.getString("pitch_preference", "50"));
+		// 设置音量
+		mTts.setParameter(SpeechConstant.VOLUME,
+				mSharedPreferences.getString("volume_preference", "50"));
+		// 设置播放器音频流类型
+		mTts.setParameter(SpeechConstant.STREAM_TYPE,
+				mSharedPreferences.getString("stream_preference", "3"));
 	}
 }

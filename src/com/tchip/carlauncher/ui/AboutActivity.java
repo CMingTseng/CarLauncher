@@ -7,10 +7,12 @@ import com.tchip.carlauncher.R.id;
 import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.bean.Titanic;
 import com.tchip.carlauncher.bean.Typefaces;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.TitanicTextView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,13 +32,16 @@ public class AboutActivity extends Activity {
 		btnToViceFromAbout.setOnClickListener(new MyOnClickListener());
 		
 		
-		TitanicTextView tv = (TitanicTextView) findViewById(R.id.my_text_view);
+		TitanicTextView titanicTextView = (TitanicTextView) findViewById(R.id.titanicTextView);
+		titanicTextView.setOnClickListener(new MyOnClickListener());
 
         // set fancy typeface
-        tv.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+		titanicTextView.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 
         // start animation
-        new Titanic().start(tv);
+        new Titanic().start(titanicTextView);
+        
+        
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -47,9 +52,19 @@ public class AboutActivity extends Activity {
 			case R.id.btnToViceFromAbout:
 				backToVice();
 				break;
+			case R.id.titanicTextView:
+				startSpeak("今天天气不错,去游泳吧");
+				break;
 			}
 		}
 	}
+	
+	private void startSpeak(String content) {
+		Intent intent = new Intent(this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
+	}
+
 
 	private void backToVice() {
 		finish();

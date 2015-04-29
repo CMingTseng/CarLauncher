@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.ButtonFlat;
+import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.ButtonRectangle;
 
 import android.app.Activity;
@@ -41,7 +42,6 @@ public class RouteListActivity extends Activity {
 	private CalendarView filterDate;
 	private TextView tvNoFile;
 	private ButtonFlat btnShowAll;
-	private String mTmpPrefix = "20";
 
 	private int focusItemPos = 0;
 
@@ -58,11 +58,16 @@ public class RouteListActivity extends Activity {
 		filterDate.setOnDateChangeListener(new MyDateChangeListener());
 
 		btnShowAll = (ButtonFlat) findViewById(R.id.btnShowAll);
-		btnShowAll.setBackgroundColor(Color.parseColor("#1E88E5"));
+		btnShowAll.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
 		btnShowAll.setOnClickListener(new MyOnClickListener());
 
 		routeList = (ListView) findViewById(R.id.routeList);
 		showRouteList("20");
+
+		ButtonFloat btnToMainFromRouteList = (ButtonFloat) findViewById(R.id.btnToMainFromRouteList);
+		btnToMainFromRouteList.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_up));
+		btnToMainFromRouteList.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -73,6 +78,9 @@ public class RouteListActivity extends Activity {
 			switch (v.getId()) {
 			case R.id.btnShowAll:
 				showRouteList("20");
+				break;
+			case R.id.btnToMainFromRouteList:
+				finish();
 				break;
 			}
 		}
@@ -148,7 +156,6 @@ public class RouteListActivity extends Activity {
 				strDay = "0" + dayOfMonth;
 			strDate = year + strMonth + strDay;
 
-			mTmpPrefix = strDate;
 			showRouteList(strDate);
 
 		}

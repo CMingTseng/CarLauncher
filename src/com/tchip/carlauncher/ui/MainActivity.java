@@ -100,6 +100,7 @@ public class MainActivity extends Activity {
 	private void startSpeak(String content) {
 		Intent intent = new Intent(this, SpeakService.class);
 		intent.putExtra("content", content);
+		stopService(intent);
 		startService(intent);
 	}
 
