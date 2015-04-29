@@ -9,30 +9,56 @@
         android:layout_height="match_parent"
         android:weightSum="2" >
 
-        <CalendarView
-            android:id="@+id/filterDate"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="5dp" />
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/tvNoFile"
+            <CalendarView
+                android:id="@+id/filterDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvNoFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选定日期无轨迹"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp" />
+
+                <com.tchip.carlauncher.view.ButtonFlat
+                    android:id="@+id/btnShowAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:background="#1E88E5"
+                    android:text="显示所有" />
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/routeList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="5dp" />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

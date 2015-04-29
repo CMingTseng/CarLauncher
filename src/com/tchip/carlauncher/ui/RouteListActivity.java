@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.view.ButtonFlat;
+import com.tchip.carlauncher.view.ButtonRectangle;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,7 +27,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +40,8 @@ public class RouteListActivity extends Activity {
 	private ArrayAdapter<String> adapter;
 	private CalendarView filterDate;
 	private TextView tvNoFile;
+	private ButtonFlat btnShowAll;
+	private String mTmpPrefix = "20";
 
 	private int focusItemPos = 0;
 
@@ -46,17 +52,35 @@ public class RouteListActivity extends Activity {
 		setContentView(R.layout.activity_route_list);
 
 		tvNoFile = (TextView) findViewById(R.id.tvNoFile);
-		tvNoFile.setVisibility(View.GONE);
 
 		filterDate = (CalendarView) findViewById(R.id.filterDate);
+		filterDate.setShowWeekNumber(false);
 		filterDate.setOnDateChangeListener(new MyDateChangeListener());
+
+		btnShowAll = (ButtonFlat) findViewById(R.id.btnShowAll);
+		btnShowAll.setBackgroundColor(Color.parseColor("#1E88E5"));
+		btnShowAll.setOnClickListener(new MyOnClickListener());
 
 		routeList = (ListView) findViewById(R.id.routeList);
 		showRouteList("20");
+
+	}
+
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.btnShowAll:
+				showRouteList("20");
+				break;
+			}
+		}
 	}
 
 	private void showRouteList(String datePrefix) {
 		try {
+			tvNoFile.setVisibility(View.GONE);
 			File[] files = new File(ROUTE_PATH).listFiles();
 			final List<String> fileNameList = new ArrayList<String>();
 			for (File file : files) {
@@ -67,11 +91,16 @@ public class RouteListActivity extends Activity {
 					if (file.getName().startsWith(datePrefix))
 						fileNameList.add(file.getName());
 			}
+			routeList.setVisibility(View.VISIBLE);
+			btnShowAll.setVisibility(View.GONE);
+			tvNoFile.setVisibility(View.GONE);
 
 			if (fileNameList.isEmpty()) {
+				routeList.setVisibility(View.GONE);
+				btnShowAll.setVisibility(View.VISIBLE);
 				tvNoFile.setVisibility(View.VISIBLE);
+				tvNoFile.setText("选定日期无轨迹");
 			}
-
 			// (context, resource, textViewResourceId, objects)
 			adapter = new ArrayAdapter<String>(this, R.layout.route_list_item,
 					R.id.text, fileNameList);
@@ -97,8 +126,10 @@ public class RouteListActivity extends Activity {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			tvNoFile.setVisibility(View.VISIBLE);
-			tvNoFile.setText("无轨迹文件");
+			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
+			tvNoFile.setText("暂无轨迹文件");
+			btnShowAll.setVisibility(View.GONE);
+			routeList.setVisibility(View.GONE);
 		}
 	}
 
@@ -116,13 +147,11 @@ public class RouteListActivity extends Activity {
 			if (dayOfMonth < 10)
 				strDay = "0" + dayOfMonth;
 			strDate = year + strMonth + strDay;
-			Toast.makeText(getApplicationContext(), strDate, Toast.LENGTH_SHORT)
-					.show();
 
+			mTmpPrefix = strDate;
 			showRouteList(strDate);
 
 		}
-
 	}
 
 	@Override
