@@ -18,8 +18,6 @@ SharedPreferences-CarLauncher
 	(String)longitude - 纬度
 	
 	
-	
-	
 // 介绍：http://blog.csdn.net/qq43599939/article/details/12278641/
 // http://goodbai.com/web/UseForecastAndPMDataAPI.html
 
@@ -215,3 +213,6 @@ private int getLogo(int brand) {
 			return R.drawable.set_logo;
 		}
 	}
+	
+	 // 360天气（Unicode编码，需要解码汉字）
+http://cdn.weather.hao.360.cn/api_weather_info.php?app=hao360&_jsonp=smartloaddata101281701&code=101281701

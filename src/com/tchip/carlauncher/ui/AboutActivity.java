@@ -30,18 +30,16 @@ public class AboutActivity extends Activity {
 		btnToViceFromAbout.setDrawableIcon(getResources().getDrawable(
 				R.drawable.icon_arrow_up));
 		btnToViceFromAbout.setOnClickListener(new MyOnClickListener());
-		
-		
+
 		TitanicTextView titanicTextView = (TitanicTextView) findViewById(R.id.titanicTextView);
 		titanicTextView.setOnClickListener(new MyOnClickListener());
 
-        // set fancy typeface
+		// set fancy typeface
 		titanicTextView.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 
-        // start animation
-        new Titanic().start(titanicTextView);
-        
-        
+		// start animation
+		new Titanic().start(titanicTextView);
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -58,13 +56,12 @@ public class AboutActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private void startSpeak(String content) {
 		Intent intent = new Intent(this, SpeakService.class);
 		intent.putExtra("content", content);
 		startService(intent);
 	}
-
 
 	private void backToVice() {
 		finish();
