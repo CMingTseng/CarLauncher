@@ -130,8 +130,8 @@ public class SwipeMenuListView extends ListView {
 				mTouchView = null;
 				// return super.onTouchEvent(ev);
 				// try to cancel the touch event
-				MotionEvent cancelEvent = MotionEvent.obtain(ev);  
-				cancelEvent.setAction(MotionEvent.ACTION_CANCEL);    
+				MotionEvent cancelEvent = MotionEvent.obtain(ev);
+				cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
 				onTouchEvent(cancelEvent);
 				return true;
 			}

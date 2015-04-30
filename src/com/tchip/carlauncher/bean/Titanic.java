@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.bean;
 
 import com.tchip.carlauncher.view.TitanicTextView;
-import com.tchip.carlauncher.view.TitanicTextView.AnimationSetupCallback;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;

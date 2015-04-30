@@ -87,7 +87,8 @@ public class SwipeMenuView extends LinearLayout implements OnClickListener {
 		return onItemClickListener;
 	}
 
-	public void setOnSwipeItemClickListener(OnSwipeItemClickListener onItemClickListener) {
+	public void setOnSwipeItemClickListener(
+			OnSwipeItemClickListener onItemClickListener) {
 		this.onItemClickListener = onItemClickListener;
 	}
 

@@ -8,23 +8,14 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
 import com.tchip.carlauncher.bean.SwipeMenu;
 import com.tchip.carlauncher.bean.SwipeMenuItem;
-import com.tchip.carlauncher.util.MaterialUtil;
-import com.tchip.carlauncher.util.ViewPagerUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
-import com.tchip.carlauncher.view.ButtonRectangle;
 import com.tchip.carlauncher.view.SwipeMenuListView;
 import com.tchip.carlauncher.view.SwipeMenuListView.OnMenuItemClickListener;
 import com.tchip.carlauncher.view.SwipeMenuListView.OnSwipeListener;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -33,22 +24,13 @@ import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,9 +43,6 @@ public class RouteListActivity extends Activity {
 	private ButtonFlat btnShowAll;
 	private List<String> fileNameList;
 	private TextView tvFilterState;
-
-	// Swipe
-	private List<ApplicationInfo> mAppList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,13 +71,11 @@ public class RouteListActivity extends Activity {
 		btnToMainFromRouteList.setOnClickListener(new MyOnClickListener());
 
 		// Swipe Menu START
-
 		// step 1. create a MenuCreator
 		SwipeMenuCreator creator = new SwipeMenuCreator() {
-
 			@Override
 			public void create(SwipeMenu menu) {
-				// create "open" item
+				// 查看
 				SwipeMenuItem openItem = new SwipeMenuItem(
 						getApplicationContext());
 				openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
@@ -109,14 +86,12 @@ public class RouteListActivity extends Activity {
 				openItem.setTitleColor(Color.WHITE);
 				menu.addMenuItem(openItem);
 
-				// create "delete" item
+				// 删除
 				SwipeMenuItem deleteItem = new SwipeMenuItem(
 						getApplicationContext());
 				deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
 						0x3F, 0x25)));
 				deleteItem.setWidth(dp2px(90));
-				// deleteItem.setTitle("删除");
-				// deleteItem.setTitleColor(Color.WHITE);
 				deleteItem.setIcon(R.drawable.icon_swipe_delete);
 				menu.addMenuItem(deleteItem);
 			}
@@ -129,7 +104,6 @@ public class RouteListActivity extends Activity {
 			@Override
 			public boolean onMenuItemClick(int position, SwipeMenu menu,
 					int index) {
-				// ApplicationInfo item = mAppList.get(position);
 				switch (index) {
 				case 0:
 					// 打开
@@ -137,6 +111,8 @@ public class RouteListActivity extends Activity {
 							RouteShowActivity.class);
 					intent.putExtra("filePath", fileNameList.get(position));
 					startActivity(intent);
+					overridePendingTransition(R.anim.zms_translate_left_out,
+							R.anim.zms_translate_left_in);
 					break;
 				case 1:
 					// 删除
@@ -174,9 +150,9 @@ public class RouteListActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// Toast.makeText(getApplicationContext(), position +
-				// " long click", 0).show();
-				return false;
+				Toast.makeText(getApplicationContext(), "左滑更多选项",
+						Toast.LENGTH_SHORT).show();
+				return true;
 			}
 		});
 
@@ -240,18 +216,21 @@ public class RouteListActivity extends Activity {
 							intent.putExtra("filePath",
 									fileNameList.get(position));
 							startActivity(intent);
+							overridePendingTransition(
+									R.anim.zms_translate_left_out,
+									R.anim.zms_translate_left_in);
 						}
 					});
 
 			// 长按弹出ContextMenu
-			registerForContextMenu(routeList);
+			// registerForContextMenu(routeList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
 			tvNoFile.setText("暂无轨迹文件");
-			btnShowAll.setVisibility(View.GONE);
-			routeList.setVisibility(View.GONE);
+			btnShowAll.setVisibility(View.INVISIBLE);
+			routeList.setVisibility(View.INVISIBLE);
 		}
 	}
 

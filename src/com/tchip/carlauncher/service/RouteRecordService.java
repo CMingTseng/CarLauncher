@@ -26,8 +26,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.bean.RoutePoint;
 
@@ -64,6 +62,7 @@ public class RouteRecordService extends Service {
 				getApplicationContext().MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		editor.putBoolean("isRun", true);
+		editor.commit();
 		isDebug = isDebug();
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, false);
@@ -116,13 +115,8 @@ public class RouteRecordService extends Service {
 			if (list.size() > 0
 					&& list.get(list.size() - 1).getLat() == routeLat
 					&& (list.get(list.size() - 1).getLng() == routeLng)) {
-				if (isDebug) {
-					// Toast.makeText(getApplicationContext(),
-					// "Route not change",
-					// Toast.LENGTH_SHORT).show();
-				}
+				// 经纬度未改变
 			} else {
-				// routePoint.setId(startId++);
 				routePoint.setLng(routeLng);
 				routePoint.setLat(routeLat);
 				if (isDebug) {
@@ -245,8 +239,10 @@ public class RouteRecordService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		mLocationClient.stop();
+		savingRouteFile(); // 服务销毁时，保存轨迹点到文件
+	}
 
-		// 服务销毁时，保存轨迹点到文件
+	private void savingRouteFile() {
 		if (list.size() >= 2) {
 			String saveString = adapter.setJsonString(list);
 			writeFileSdcard(getFilePath(), saveString);
@@ -261,6 +257,7 @@ public class RouteRecordService extends Service {
 
 		// Update Running State
 		editor.putBoolean("isRun", false);
+		editor.commit();
 	}
 
 }

@@ -14,14 +14,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -38,9 +40,11 @@ import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.BaiduMap.SnapshotReadyCallback;
 import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.bean.RoutePoint;
+import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RouteShowActivity extends Activity {
 	private MapView mMapView;
@@ -48,13 +52,13 @@ public class RouteShowActivity extends Activity {
 	private InfoWindow mInfoWindow;
 	private Marker mMarkerStart;
 	private Marker mMarkerEnd;
-	private Button btnShare, btnBack;
+	private ButtonFloat btnShare, btnToRouteListFromShow;
 
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
 
-	private final String ROUTE_PATH = Environment
-			.getExternalStorageDirectory().getPath() + "/Route/";;
+	private final String ROUTE_PATH = Environment.getExternalStorageDirectory()
+			.getPath() + "/Route/";;
 	private String filePath = "";
 	private RouteAdapter routeAdapter = new RouteAdapter();
 
@@ -75,10 +79,15 @@ public class RouteShowActivity extends Activity {
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-		btnShare = (Button) findViewById(R.id.btnShare);
-		btnBack = (Button) findViewById(R.id.btnBack);
+		btnShare = (ButtonFloat) findViewById(R.id.btnShare);
+		btnShare.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_route_show_share));
 		btnShare.setOnClickListener(new MyOnClickListener());
-		btnBack.setOnClickListener(new MyOnClickListener());
+
+		btnToRouteListFromShow = (ButtonFloat) findViewById(R.id.btnToRouteListFromShow);
+		btnToRouteListFromShow.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_left));
+		btnToRouteListFromShow.setOnClickListener(new MyOnClickListener());
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -91,6 +100,15 @@ public class RouteShowActivity extends Activity {
 		}
 
 		mMapView = (MapView) findViewById(R.id.routeMap);
+
+		// 去掉缩放控件和百度Logo
+		int count = mMapView.getChildCount();
+		for (int i = 0; i < count; i++) {
+			View child = mMapView.getChildAt(i);
+			if (child instanceof ImageView || child instanceof ZoomControls) {
+				child.setVisibility(View.INVISIBLE);
+			}
+		}
 		mBaiduMap = mMapView.getMap();
 		mBaiduMap.setOnMarkerClickListener(new MyOnMarkerClickListener());
 		addRouteToMap(filePath);
@@ -135,11 +153,27 @@ public class RouteShowActivity extends Activity {
 					}
 				});
 				break;
-			case R.id.btnBack:
-				finish();
+			case R.id.btnToRouteListFromShow:
+				backToRouteList();
 				break;
 			}
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToRouteList();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToRouteList() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_right_out,
+				R.anim.zms_translate_right_in);
 	}
 
 	/**
@@ -203,6 +237,22 @@ public class RouteShowActivity extends Activity {
 			OverlayOptions ooEnd = new MarkerOptions().position(llEnd)
 					.icon(iconEnd).zIndex(9).draggable(true);
 			mMarkerEnd = (Marker) (mBaiduMap.addOverlay(ooEnd));
+
+			// 直线距离
+			double linearDistance = DistanceUtil.getDistance(llStart, llEnd);
+
+			// 轨迹距离
+			double routeDistance = 0.0;
+			for (int i = 0; i < points.size() - 1; i++) {
+				routeDistance = routeDistance
+						+ DistanceUtil.getDistance(points.get(i),
+								points.get(i + 1));
+			}
+			Toast.makeText(
+					getApplicationContext(),
+					"直线距离：" + (int) linearDistance + "米\n行驶距离："
+							+ (int) routeDistance + "米", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 

@@ -15,24 +15,22 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <Button
+    <com.tchip.carlauncher.view.ButtonFloat
         android:id="@+id/btnShare"
-        android:layout_width="42dp"
-        android:layout_height="41dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="5dip"
-        android:layout_marginTop="10dip"
-        android:background="@drawable/route_share" />
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="42dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dip"
-        android:layout_marginTop="10dip"
-        android:background="@drawable/route_back" />
+        android:layout_marginLeft="15dp"
+        android:background="#1E88E5" />
+
+    <com.tchip.carlauncher.view.ButtonFloat
+        android:id="@+id/btnToRouteListFromShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:background="#1E88E5" />
 
 </RelativeLayout>

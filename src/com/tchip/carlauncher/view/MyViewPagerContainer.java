@@ -1,7 +1,7 @@
 package com.tchip.carlauncher.view;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.util.ViewPagerUtil;
+import com.tchip.carlauncher.util.MaterialUtil;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,9 +17,9 @@ import android.widget.FrameLayout;
 public class MyViewPagerContainer extends FrameLayout implements Animatable {
 
 	private Paint mOutlinePaint;
-	
+
 	private boolean mIsRunning = false;
-    private long mStartTime;
+	private long mStartTime;
 	private float mAlpha = 1.0f;
 	private static final long ANIMATION_DURATION = 500;
 	private static final long FRAME_DURATION = 1000 / 60;
@@ -34,11 +34,14 @@ public class MyViewPagerContainer extends FrameLayout implements Animatable {
 		super(context);
 		init();
 	}
+
 	public MyViewPagerContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
-	public MyViewPagerContainer(Context context, AttributeSet attrs, int defStyle) {
+
+	public MyViewPagerContainer(Context context, AttributeSet attrs,
+			int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
@@ -46,26 +49,27 @@ public class MyViewPagerContainer extends FrameLayout implements Animatable {
 	private void init() {
 		mOutlinePaint = new Paint();
 		mOutlinePaint.setAntiAlias(true);
-		mOutlinePaint.setStrokeWidth(ViewPagerUtil.dpToPx(getResources(), 2));
+		mOutlinePaint.setStrokeWidth(MaterialUtil.dpToPx(2, getResources()));
 		mOutlinePaint.setColor(getResources().getColor(R.color.holo_blue));
 		mOutlinePaint.setStyle(Style.STROKE);
 
-		int padding = ViewPagerUtil.dpToPx(getResources(), 10);
+		int padding = MaterialUtil.dpToPx(10, getResources());
 		setPadding(padding, padding, padding, padding);
 	}
 
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
-		int offset = ViewPagerUtil.dpToPx(getResources(), 5);
+		int offset = MaterialUtil.dpToPx(5, getResources());
 		if (mOutlinePaint.getColor() != MyViewPager.sOutlineColor) {
 			mOutlinePaint.setColor(MyViewPager.sOutlineColor);
 		}
-		mOutlinePaint.setAlpha((int)(mAlpha * 255));
-		Rect rect = new Rect(offset, offset, getMeasuredWidth()-offset, getMeasuredHeight()-offset);
+		mOutlinePaint.setAlpha((int) (mAlpha * 255));
+		Rect rect = new Rect(offset, offset, getMeasuredWidth() - offset,
+				getMeasuredHeight() - offset);
 		canvas.drawRect(rect, mOutlinePaint);
 	}
-	
+
 	public void setOutlineAlpha(float alpha) {
 		mAlpha = alpha;
 	}
@@ -80,7 +84,7 @@ public class MyViewPagerContainer extends FrameLayout implements Animatable {
 		if (mIsRunning)
 			return;
 		mIsRunning = true;
-		mStartTime = AnimationUtils.currentAnimationTimeMillis();	
+		mStartTime = AnimationUtils.currentAnimationTimeMillis();
 		post(mUpdater);
 	}
 
@@ -90,23 +94,24 @@ public class MyViewPagerContainer extends FrameLayout implements Animatable {
 			return;
 		mIsRunning = false;
 	}
-	
+
 	private final Runnable mUpdater = new Runnable() {
-        @Override
-        public void run() {
-            long now = AnimationUtils.currentAnimationTimeMillis();
-            long duration = now - mStartTime;
-            if (duration >= ANIMATION_DURATION) {
-                mAlpha = 0.0f;
-                invalidate();
-                stop();
-                return;
-            } else {
-            	mAlpha = mInterpolator.getInterpolation(1 - duration / (float) ANIMATION_DURATION);
-                invalidate();
-            }
-            postDelayed(mUpdater, FRAME_DURATION);
-        }
-    };
+		@Override
+		public void run() {
+			long now = AnimationUtils.currentAnimationTimeMillis();
+			long duration = now - mStartTime;
+			if (duration >= ANIMATION_DURATION) {
+				mAlpha = 0.0f;
+				invalidate();
+				stop();
+				return;
+			} else {
+				mAlpha = mInterpolator.getInterpolation(1 - duration
+						/ (float) ANIMATION_DURATION);
+				invalidate();
+			}
+			postDelayed(mUpdater, FRAME_DURATION);
+		}
+	};
 
 }
