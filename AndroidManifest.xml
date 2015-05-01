@@ -73,7 +73,8 @@
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -113,6 +114,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.RouteShowActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.WeatherActivity"
             android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />

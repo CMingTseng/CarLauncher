@@ -51,7 +51,7 @@ public class AboutActivity extends Activity {
 				backToVice();
 				break;
 			case R.id.titanicTextView:
-				startSpeak("今天天气不错,去游泳吧");
+				startSpeak("今天天气不错，挺风和日丽的");
 				break;
 			}
 		}
