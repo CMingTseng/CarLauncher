@@ -1,142 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutMain"
+<!--  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff"
-    android:gravity="center"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="9"
-        android:orientation="vertical"
-        android:weightSum="2" >
+ 
+ <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+    </android.support.v4.view.ViewPager>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="3" >
+  <com.tchip.carlauncher.view.MyViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+    </com.tchip.carlauncher.view.MyViewPager>
+</LinearLayout>-->
 
-            <ImageView
-                android:id="@+id/imgWeather"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="2"
-                android:background="@drawable/blue_dark_big"
-                android:scaleType="matrix" >
-            </ImageView>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1" >
-
-                <ImageView
-                    android:id="@+id/imgMultimedia"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    android:scaleType="matrix"
-                    android:src="@drawable/cyan_dark" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:padding="10dp"
-                    android:src="@drawable/icon_main_multimedia" />
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="3" >
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="horizontal"
-                android:weightSum="2" >
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" >
-
-                    <ImageView
-                        android:id="@+id/imgRoute"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:scaleType="matrix"
-                        android:src="@drawable/green_light" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:padding="10dp"
-                        android:src="@drawable/icon_main_record" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" >
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:scaleType="matrix"
-                        android:src="@drawable/blue_light" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:padding="10dp"
-                        android:src="@drawable/icon_main_navi" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" >
-
-                <ImageView
-                    android:id="@+id/imgBluetooth"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    android:scaleType="matrix"
-                    android:src="@drawable/green_dark" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:padding="10dp"
-                    android:src="@drawable/icon_main_file" />
-            </RelativeLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
+<com.tchip.carlauncher.view.MyViewPager
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/viewpager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />

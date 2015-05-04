@@ -12,7 +12,6 @@ import com.tchip.carlauncher.view.MyViewPagerContainer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -30,11 +29,11 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_main);
 
 		LayoutInflater inflater = getLayoutInflater().from(this);
-		viewMain = inflater.inflate(R.layout.activity_main, null);
-		viewVice = inflater.inflate(R.layout.activity_vice, null);
+		viewMain = inflater.inflate(R.layout.activity_main_one, null);
+		viewVice = inflater.inflate(R.layout.activity_main_two, null);
 
 		viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
 		viewList.add(viewMain);
@@ -88,7 +87,6 @@ public class MainActivity extends Activity {
 	private void startSpeak(String content) {
 		Intent intent = new Intent(this, SpeakService.class);
 		intent.putExtra("content", content);
-		stopService(intent);
 		startService(intent);
 	}
 
