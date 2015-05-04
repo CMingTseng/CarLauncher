@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iflytek.library.dao.RouteDistanceDbHelper;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
 import com.tchip.carlauncher.bean.SwipeMenu;
@@ -119,6 +120,16 @@ public class RouteListActivity extends Activity {
 					File file = new File(ROUTE_PATH + adapter.getItem(position));
 					file.delete();
 					DeleteUpdateList(position);
+					try { // 若数据库存在轨迹距离信息，同步删除
+						RouteDistanceDbHelper _db = new RouteDistanceDbHelper(
+								getApplicationContext());
+						_db.deleteRouteDistanceByName(fileNameList
+								.get(position));
+					} catch (Exception e) {
+						Toast.makeText(getApplicationContext(), e.toString(),
+								Toast.LENGTH_SHORT).show();
+
+					}
 					Toast.makeText(getApplicationContext(), "轨迹已删除",
 							Toast.LENGTH_SHORT).show();
 					break;

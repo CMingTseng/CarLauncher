@@ -15,6 +15,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.baidu.mapapi.utils.DistanceUtil;
 
 import android.app.Service;
 import android.content.Intent;
@@ -254,6 +255,7 @@ public class RouteRecordService extends Service {
 			Toast.makeText(getApplicationContext(),
 					"Route point is less than 2", Toast.LENGTH_SHORT).show();
 		}
+		
 
 		// Update Running State
 		editor.putBoolean("isRun", false);

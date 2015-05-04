@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,9 +42,12 @@ import com.baidu.mapapi.map.BaiduMap.SnapshotReadyCallback;
 import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.iflytek.library.dao.RouteDistanceDbHelper;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteAdapter;
+import com.tchip.carlauncher.bean.RouteDistance;
 import com.tchip.carlauncher.bean.RoutePoint;
+import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RouteShowActivity extends Activity {
@@ -53,6 +57,7 @@ public class RouteShowActivity extends Activity {
 	private Marker mMarkerStart;
 	private Marker mMarkerEnd;
 	private ButtonFloat btnShare, btnToRouteListFromShow;
+	private ButtonFlat btnDistance;
 
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
@@ -61,6 +66,8 @@ public class RouteShowActivity extends Activity {
 			.getPath() + "/Route/";;
 	private String filePath = "";
 	private RouteAdapter routeAdapter = new RouteAdapter();
+
+	private RouteDistanceDbHelper _db;
 
 	// 初始化全局 bitmap 信息，不用时及时 recycle
 	BitmapDescriptor iconStart = BitmapDescriptorFactory
@@ -75,9 +82,7 @@ public class RouteShowActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_route_show);
 
-		// Hide Status Bar
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+		_db = new RouteDistanceDbHelper(getApplicationContext());
 
 		btnShare = (ButtonFloat) findViewById(R.id.btnShare);
 		btnShare.setDrawableIcon(getResources().getDrawable(
@@ -88,6 +93,9 @@ public class RouteShowActivity extends Activity {
 		btnToRouteListFromShow.setDrawableIcon(getResources().getDrawable(
 				R.drawable.icon_arrow_left));
 		btnToRouteListFromShow.setOnClickListener(new MyOnClickListener());
+
+		btnDistance = (ButtonFlat) findViewById(R.id.btnDistance);
+		btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -238,28 +246,39 @@ public class RouteShowActivity extends Activity {
 					.icon(iconEnd).zIndex(9).draggable(true);
 			mMarkerEnd = (Marker) (mBaiduMap.addOverlay(ooEnd));
 
-			// 直线距离
-			double linearDistance = DistanceUtil.getDistance(llStart, llEnd);
+			double linearDistance = 0.0; // 直线距离
+			double driveDistance = 0.0; // 轨迹距离
 
-			// 轨迹距离
-			double routeDistance = 0.0;
-			for (int i = 0; i < points.size() - 1; i++) {
-				routeDistance = routeDistance
-						+ DistanceUtil.getDistance(points.get(i),
-								points.get(i + 1));
+			try { // 轨迹距离信息已保存，直接读取数据库
+				RouteDistance routeDistance = _db
+						.getRouteDistanceByName(filePath);
+				linearDistance = routeDistance.getLinear();
+				driveDistance = routeDistance.getDrive();
+
+			} catch (Exception e) {
+				linearDistance = DistanceUtil.getDistance(llStart, llEnd);
+				for (int i = 0; i < points.size() - 1; i++) {
+					driveDistance = driveDistance
+							+ DistanceUtil.getDistance(points.get(i),
+									points.get(i + 1));
+				}
+				RouteDistance newRouteDistance = new RouteDistance(filePath,
+						linearDistance, driveDistance);
+				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
+			} finally {
+				btnDistance.setVisibility(View.VISIBLE);
+				btnDistance.setText("直线距离:" + (int) linearDistance + "m 行驶距离:"
+						+ (int) driveDistance + "m");
+				_db.close();
 			}
-			Toast.makeText(
-					getApplicationContext(),
-					"直线距离：" + (int) linearDistance + "米\n行驶距离："
-							+ (int) routeDistance + "米", Toast.LENGTH_SHORT)
-					.show();
+
 		}
 	}
 
 	public List<LatLng> getRoutePoints(String fileName) {
 
 		List<RoutePoint> list = readFileSdcard(ROUTE_PATH + fileName);
-		list = optimizePoints(list);
+		list = optimizeRoutePoints(list); // 优化轨迹平滑度
 
 		List<LatLng> points = new ArrayList<LatLng>(list.size());
 		for (int i = 0; i < list.size(); i++) {
@@ -277,7 +296,7 @@ public class RouteShowActivity extends Activity {
 	 * @param inPoint
 	 * @return
 	 */
-	public List<RoutePoint> optimizePoints(List<RoutePoint> inPoint) {
+	public List<RoutePoint> optimizeRoutePoints(List<RoutePoint> inPoint) {
 		int size = inPoint.size();
 		List<RoutePoint> outPoint;
 
@@ -408,6 +427,9 @@ public class RouteShowActivity extends Activity {
 		// MapView的生命周期与Activity同步，当activity恢复时需调用MapView.onResume()
 		mMapView.onResume();
 		super.onResume();
+		// Hide Status Bar
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 
 	@Override
