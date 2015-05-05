@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
+
     <!-- 画面背景色 -->
     <drawable name="layout_backgroud">#000000</drawable>
-    
+
     <!-- 分割线背景色 -->
     <drawable name="line_background">#161823</drawable>
 
     <color name="white">#FFFFFF</color>
-    
+
     <!-- 控件按下时显示的颜色 -->
     <color name="list_backgroud_color">#2fb3cb</color>
     <color name="title_color">#0f8ec5</color>
     <color name="content_color">#737373</color>
-    
-    
+
     <!-- MyViewPager -->
-     <color name="holo_blue">#FF33E5B5</color>
+    <color name="holo_blue">#FF33E5B5</color>
+
+    <!-- Material Design -->
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="primary">#009688</color>
+    <color name="primaryDark">#00796b</color>
+    <color name="accent">#eeff41</color>
+    <color name="accentLight">#F4FF81</color>
 
 </resources>
