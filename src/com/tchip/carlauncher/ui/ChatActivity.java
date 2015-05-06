@@ -4,9 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,8 +18,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.CycleInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.iflytek.cloud.ErrorCode;
@@ -30,9 +39,7 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.library.UnderstanderSettings;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.R.id;
-import com.tchip.carlauncher.R.layout;
-import com.tchip.carlauncher.R.string;
+import com.tchip.carlauncher.view.CircularProgressDrawable;
 
 public class ChatActivity extends Activity implements OnClickListener {
 	private static String TAG = ChatActivity.class.getSimpleName();
@@ -44,6 +51,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private EditText mUnderstanderText;
 
 	private SharedPreferences mSharedPreferences;
+
+	// 动画按钮
+	private ImageView ivDrawable;
+	private Animator currentAnimation;
+	private CircularProgressDrawable drawable;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,21 +77,27 @@ public class ChatActivity extends Activity implements OnClickListener {
 	 * 初始化Layout。
 	 */
 	private void initLayout() {
-		findViewById(R.id.text_understander).setOnClickListener(
-				ChatActivity.this);
-		findViewById(R.id.startListen).setOnClickListener(ChatActivity.this);
+		ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
+		findViewById(R.id.iv_drawable).setOnClickListener(ChatActivity.this);
 
 		mUnderstanderText = (EditText) findViewById(R.id.understander_text);
 
-		findViewById(R.id.understander_stop).setOnClickListener(
-				ChatActivity.this);
-		findViewById(R.id.understander_cancel).setOnClickListener(
-				ChatActivity.this);
-		findViewById(R.id.image_understander_set).setOnClickListener(
-				ChatActivity.this);
-
 		mSharedPreferences = getSharedPreferences(
 				UnderstanderSettings.PREFER_NAME, Activity.MODE_PRIVATE);
+
+		drawable = new CircularProgressDrawable.Builder()
+				.setRingWidth(
+						getResources().getDimensionPixelSize(
+								R.dimen.drawable_ring_size))
+				.setOutlineColor(
+						getResources().getColor(android.R.color.darker_gray))
+				.setRingColor(
+						getResources().getColor(
+								android.R.color.holo_green_light))
+				.setCenterColor(
+						getResources().getColor(android.R.color.holo_blue_dark))
+				.create();
+		ivDrawable.setImageDrawable(drawable);
 	}
 
 	/**
@@ -90,7 +108,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		public void onInit(int code) {
 			Log.d(TAG, "speechUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
-				showTip("初始化失败,错误码：" + code);
+				// showTip("初始化失败,错误码：" + code);
 			}
 		}
 	};
@@ -104,7 +122,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		public void onInit(int code) {
 			Log.d(TAG, "textUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
-				showTip("初始化失败,错误码：" + code);
+				// showTip("初始化失败,错误码：" + code);
 			}
 		}
 	};
@@ -113,58 +131,59 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
+
 		switch (view.getId()) {
 		// 进入参数设置页面
-		case R.id.image_understander_set:
-			Intent intent = new Intent(ChatActivity.this,
-					UnderstanderSettings.class);
-			startActivity(intent);
-			break;
+		// case R.id.image_understander_set:
+		// Intent intent = new Intent(ChatActivity.this,
+		// UnderstanderSettings.class);
+		// startActivity(intent);
+		// break;
 		// 开始文本理解
-		case R.id.text_understander:
-			mUnderstanderText.setText("");
-			String text = "明天的天气怎么样？";
-			showTip(text);
-
-			if (mTextUnderstander.isUnderstanding()) {
-				mTextUnderstander.cancel();
-				showTip("取消");
-			} else {
-				ret = mTextUnderstander.understandText(text, textListener);
-				if (ret != 0) {
-					showTip("语义理解失败,错误码:" + ret);
-				}
-			}
-			break;
+		// case R.id.text_understander:
+		// mUnderstanderText.setText("");
+		// String text = "明天的天气怎么样？";
+		// showTip(text);
+		//
+		// if (mTextUnderstander.isUnderstanding()) {
+		// mTextUnderstander.cancel();
+		// showTip("取消");
+		// } else {
+		// ret = mTextUnderstander.understandText(text, textListener);
+		// if (ret != 0) {
+		// showTip("语义理解失败,错误码:" + ret);
+		// }
+		// }
+		// break;
 		// 开始语音理解
-		case R.id.startListen:
+		case R.id.iv_drawable:
 			mUnderstanderText.setText("");
 			// 设置参数
 			setParam();
 
 			if (mSpeechUnderstander.isUnderstanding()) {// 开始前检查状态
 				mSpeechUnderstander.stopUnderstanding();
-				showTip("停止录音");
+				// 停止录音
 			} else {
 				ret = mSpeechUnderstander
 						.startUnderstanding(mRecognizerListener);
 				if (ret != 0) {
-					showTip("语义理解失败,错误码:" + ret);
+					// 语义理解失败,错误码:ret
 				} else {
 					showTip(getString(R.string.text_begin));
 				}
 			}
 			break;
 		// 停止语音理解
-		case R.id.understander_stop:
-			mSpeechUnderstander.stopUnderstanding();
-			showTip("停止语义理解");
-			break;
+		// case R.id.understander_stop:
+		// mSpeechUnderstander.stopUnderstanding();
+		// showTip("停止语义理解");
+		// break;
 		// 取消语音理解
-		case R.id.understander_cancel:
-			mSpeechUnderstander.cancel();
-			showTip("取消语义理解");
-			break;
+		// case R.id.understander_cancel:
+		// mSpeechUnderstander.cancel();
+		// showTip("取消语义理解");
+		// break;
 		default:
 			break;
 		}
@@ -197,7 +216,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 						}
 					} else {
 						Log.d(TAG, "understander result:null");
-						showTip("识别结果不正确。");
+						// 识别结果不正确
 					}
 				}
 			});
@@ -227,7 +246,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 							mUnderstanderText.setText(text);
 						}
 					} else {
-						showTip("识别结果不正确。");
+						// 识别结果不正确
 					}
 				}
 			});
@@ -235,22 +254,39 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void onVolumeChanged(int v) {
-			showTip("onVolumeChanged：" + v);
+			// showTip("onVolumeChanged：" + v);
 		}
 
 		@Override
 		public void onEndOfSpeech() {
-			showTip("onEndOfSpeech");
+			// showTip("onEndOfSpeech");
+			if (currentAnimation != null) {
+				currentAnimation.cancel();
+			}
+			// currentAnimation = prepareStyle1Animation();
+			// currentAnimation = prepareStyle2Animation();
+			// currentAnimation = prepareStyle3Animation();
+			currentAnimation = preparePulseAnimation();
+			currentAnimation.start();
+
 		}
 
 		@Override
 		public void onBeginOfSpeech() {
-			showTip("onBeginOfSpeech");
+			// showTip("onBeginOfSpeech");
+			if (currentAnimation != null) {
+				currentAnimation.cancel();
+			}
+			currentAnimation = prepareStyle1Animation();
+			// currentAnimation = prepareStyle2Animation();
+			// currentAnimation = prepareStyle3Animation();
+			// currentAnimation = preparePulseAnimation();
+			currentAnimation.start();
 		}
 
 		@Override
 		public void onError(SpeechError error) {
-			showTip("onError Code：" + error.getErrorCode());
+			// showTip("onError Code：" + error.getErrorCode());
 		}
 
 		@Override
@@ -318,6 +354,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 		FlowerCollector.onResume(ChatActivity.this);
 		FlowerCollector.onPageStart(TAG);
 		super.onResume();
+
+		// 隐藏状态栏
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 
 	@Override
@@ -326,5 +366,142 @@ public class ChatActivity extends Activity implements OnClickListener {
 		FlowerCollector.onPageEnd(TAG);
 		FlowerCollector.onPause(ChatActivity.this);
 		super.onPause();
+	}
+
+	// 以下为按钮动画
+	/**
+	 * This animation was intended to keep a pressed state of the Drawable
+	 * 
+	 * @return Animation
+	 */
+	private Animator preparePressedAnimation() {
+		Animator animation = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY,
+				drawable.getCircleScale(), 0.65f);
+		animation.setDuration(120);
+		return animation;
+	}
+
+	/**
+	 * This animation will make a pulse effect to the inner circle
+	 * 
+	 * @return Animation
+	 */
+	private Animator preparePulseAnimation() {
+		AnimatorSet animation = new AnimatorSet();
+
+		Animator firstBounce = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY,
+				drawable.getCircleScale(), 0.88f);
+		firstBounce.setDuration(300);
+		firstBounce.setInterpolator(new CycleInterpolator(1));
+		Animator secondBounce = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0.75f, 0.83f);
+		secondBounce.setDuration(300);
+		secondBounce.setInterpolator(new CycleInterpolator(1));
+		Animator thirdBounce = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0.75f, 0.80f);
+		thirdBounce.setDuration(300);
+		thirdBounce.setInterpolator(new CycleInterpolator(1));
+
+		animation.playSequentially(firstBounce, secondBounce, thirdBounce);
+		return animation;
+	}
+
+	/**
+	 * Style 1 animation will simulate a indeterminate loading while taking
+	 * advantage of the inner circle to provide a progress sense
+	 * 
+	 * @return Animation
+	 */
+	private Animator prepareStyle1Animation() {
+		AnimatorSet animation = new AnimatorSet();
+
+		final Animator indeterminateAnimation = ObjectAnimator.ofFloat(
+				drawable, CircularProgressDrawable.PROGRESS_PROPERTY, 0, 7200);
+		indeterminateAnimation.setDuration(7200);
+
+		Animator innerCircleAnimation = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0f, 0.75f);
+		innerCircleAnimation.setDuration(3600);
+		innerCircleAnimation.addListener(new AnimatorListenerAdapter() {
+			@Override
+			public void onAnimationStart(Animator animation) {
+				drawable.setIndeterminate(true);
+			}
+
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				indeterminateAnimation.end();
+				drawable.setIndeterminate(false);
+				drawable.setProgress(0);
+			}
+		});
+
+		animation.playTogether(innerCircleAnimation, indeterminateAnimation);
+		return animation;
+	}
+
+	/**
+	 * Style 2 animation will fill the outer ring while applying a color effect
+	 * from red to green
+	 * 
+	 * @return Animation
+	 */
+	private Animator prepareStyle2Animation() {
+		AnimatorSet animation = new AnimatorSet();
+
+		ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.PROGRESS_PROPERTY, 0f, 1f);
+		progressAnimation.setDuration(3600);
+		progressAnimation
+				.setInterpolator(new AccelerateDecelerateInterpolator());
+
+		ObjectAnimator colorAnimator = ObjectAnimator.ofInt(drawable,
+				CircularProgressDrawable.RING_COLOR_PROPERTY, getResources()
+						.getColor(android.R.color.holo_red_dark),
+				getResources().getColor(android.R.color.holo_green_light));
+		colorAnimator.setEvaluator(new ArgbEvaluator());
+		colorAnimator.setDuration(3600);
+
+		animation.playTogether(progressAnimation, colorAnimator);
+		return animation;
+	}
+
+	/**
+	 * Style 3 animation will turn a 3/4 animation with Anticipate/Overshoot
+	 * interpolation to a blank waiting - like state, wait for 2 seconds then
+	 * return to the original state
+	 * 
+	 * @return Animation
+	 */
+	private Animator prepareStyle3Animation() {
+		AnimatorSet animation = new AnimatorSet();
+
+		ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.PROGRESS_PROPERTY, 0.75f, 0f);
+		progressAnimation.setDuration(1200);
+		progressAnimation.setInterpolator(new AnticipateInterpolator());
+
+		Animator innerCircleAnimation = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0.75f, 0f);
+		innerCircleAnimation.setDuration(1200);
+		innerCircleAnimation.setInterpolator(new AnticipateInterpolator());
+
+		ObjectAnimator invertedProgress = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.PROGRESS_PROPERTY, 0f, 0.75f);
+		invertedProgress.setDuration(1200);
+		invertedProgress.setStartDelay(3200);
+		invertedProgress.setInterpolator(new OvershootInterpolator());
+
+		Animator invertedCircle = ObjectAnimator.ofFloat(drawable,
+				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0f, 0.75f);
+		invertedCircle.setDuration(1200);
+		invertedCircle.setStartDelay(3200);
+		invertedCircle.setInterpolator(new OvershootInterpolator());
+
+		animation.playTogether(progressAnimation, innerCircleAnimation,
+				invertedProgress, invertedCircle);
+		return animation;
 	}
 }

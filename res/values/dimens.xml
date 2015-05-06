@@ -14,6 +14,7 @@
     <!-- zms START -->
     <dimen name="date_week_size">18sp</dimen>
     <dimen name="clock_size">60sp</dimen>
+    <dimen name="drawable_ring_size">4dip</dimen>
     <!-- zms END -->
 
 </resources>
