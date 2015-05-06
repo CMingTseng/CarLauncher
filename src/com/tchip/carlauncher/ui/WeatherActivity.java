@@ -11,10 +11,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WeatherActivity extends Activity {
 	private SharedPreferences sharedPreferences;
@@ -32,6 +35,12 @@ public class WeatherActivity extends Activity {
 	}
 
 	private void initialLayout() {
+		startLocationService();
+		startWeatherService();
+		
+	}
+
+	private void initialLayoutOld() {
 		startLocationService();
 		startWeatherService();
 
