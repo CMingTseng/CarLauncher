@@ -14,8 +14,6 @@
     <!-- zms START -->
     <dimen name="date_week_size">18sp</dimen>
     <dimen name="clock_size">60sp</dimen>
-    
-    <dimen name="tab_height">48dp</dimen>
     <!-- zms END -->
 
 </resources>

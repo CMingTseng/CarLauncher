@@ -65,18 +65,18 @@ public class ChatActivity extends Activity implements OnClickListener {
 	 * 初始化Layout。
 	 */
 	private void initLayout() {
-		// findViewById(R.id.text_understander).setOnClickListener(
-		// ChatActivity.this);
+		findViewById(R.id.text_understander).setOnClickListener(
+				ChatActivity.this);
 		findViewById(R.id.startListen).setOnClickListener(ChatActivity.this);
 
 		mUnderstanderText = (EditText) findViewById(R.id.understander_text);
 
-		// findViewById(R.id.understander_stop).setOnClickListener(
-		// ChatActivity.this);
-		// findViewById(R.id.understander_cancel).setOnClickListener(
-		// ChatActivity.this);
-		// findViewById(R.id.image_understander_set).setOnClickListener(
-		// ChatActivity.this);
+		findViewById(R.id.understander_stop).setOnClickListener(
+				ChatActivity.this);
+		findViewById(R.id.understander_cancel).setOnClickListener(
+				ChatActivity.this);
+		findViewById(R.id.image_understander_set).setOnClickListener(
+				ChatActivity.this);
 
 		mSharedPreferences = getSharedPreferences(
 				UnderstanderSettings.PREFER_NAME, Activity.MODE_PRIVATE);
@@ -115,27 +115,27 @@ public class ChatActivity extends Activity implements OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 		// 进入参数设置页面
-		// case R.id.image_understander_set:
-		// Intent intent = new Intent(ChatActivity.this,
-		// UnderstanderSettings.class);
-		// startActivity(intent);
-		// break;
+		case R.id.image_understander_set:
+			Intent intent = new Intent(ChatActivity.this,
+					UnderstanderSettings.class);
+			startActivity(intent);
+			break;
 		// 开始文本理解
-		// case R.id.text_understander:
-		// mUnderstanderText.setText("");
-		// String text = "明天的天气怎么样？";
-		// showTip(text);
-		//
-		// if (mTextUnderstander.isUnderstanding()) {
-		// mTextUnderstander.cancel();
-		// showTip("取消");
-		// } else {
-		// ret = mTextUnderstander.understandText(text, textListener);
-		// if (ret != 0) {
-		// showTip("语义理解失败,错误码:" + ret);
-		// }
-		// }
-		// break;
+		case R.id.text_understander:
+			mUnderstanderText.setText("");
+			String text = "明天的天气怎么样？";
+			showTip(text);
+
+			if (mTextUnderstander.isUnderstanding()) {
+				mTextUnderstander.cancel();
+				showTip("取消");
+			} else {
+				ret = mTextUnderstander.understandText(text, textListener);
+				if (ret != 0) {
+					showTip("语义理解失败,错误码:" + ret);
+				}
+			}
+			break;
 		// 开始语音理解
 		case R.id.startListen:
 			mUnderstanderText.setText("");
@@ -156,15 +156,15 @@ public class ChatActivity extends Activity implements OnClickListener {
 			}
 			break;
 		// 停止语音理解
-		// case R.id.understander_stop:
-		// mSpeechUnderstander.stopUnderstanding();
-		// showTip("停止语义理解");
-		// break;
+		case R.id.understander_stop:
+			mSpeechUnderstander.stopUnderstanding();
+			showTip("停止语义理解");
+			break;
 		// 取消语音理解
-		// case R.id.understander_cancel:
-		// mSpeechUnderstander.cancel();
-		// showTip("取消语义理解");
-		// break;
+		case R.id.understander_cancel:
+			mSpeechUnderstander.cancel();
+			showTip("取消语义理解");
+			break;
 		default:
 			break;
 		}
