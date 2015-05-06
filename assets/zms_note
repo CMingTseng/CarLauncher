@@ -17,6 +17,12 @@ SharedPreferences-CarLauncher
 	(String)latitude - 经度
 	(String)longitude - 纬度
 	
+// 讯飞语音相关
+	(String)voiceAccent - 口音
+	(String)voiceBos - 语音前端点
+	(String)voiceEos - 语音后端点
+	(String)voiceAudioPath - 音频保存路径
+	
 	
 // 介绍：http://blog.csdn.net/qq43599939/article/details/12278641/
 // http://goodbai.com/web/UseForecastAndPMDataAPI.html

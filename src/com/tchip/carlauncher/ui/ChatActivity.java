@@ -25,6 +25,8 @@ import android.view.animation.OvershootInterpolator;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iflytek.cloud.ErrorCode;
@@ -36,6 +38,7 @@ import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.TextUnderstander;
 import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
+import com.iflytek.library.JsonParser;
 import com.iflytek.library.UnderstanderSettings;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
@@ -48,7 +51,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 	// 语义理解对象（文本到语义）。
 	private TextUnderstander mTextUnderstander;
 	private Toast mToast;
-	private EditText mUnderstanderText;
+	private EditText tvHint;
+	private TextView tvQuestion, tvAnswer;
 
 	private SharedPreferences mSharedPreferences;
 
@@ -56,6 +60,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private ImageView ivDrawable;
 	private Animator currentAnimation;
 	private CircularProgressDrawable drawable;
+
+	private ScrollView scrollArea;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,10 +86,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 		ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
 		findViewById(R.id.iv_drawable).setOnClickListener(ChatActivity.this);
 
-		mUnderstanderText = (EditText) findViewById(R.id.understander_text);
+		tvHint = (EditText) findViewById(R.id.tvHint);
 
-		mSharedPreferences = getSharedPreferences(
-				UnderstanderSettings.PREFER_NAME, Activity.MODE_PRIVATE);
+		mSharedPreferences = getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE);
 
 		drawable = new CircularProgressDrawable.Builder()
 				.setRingWidth(
@@ -98,6 +104,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 						getResources().getColor(android.R.color.holo_blue_dark))
 				.create();
 		ivDrawable.setImageDrawable(drawable);
+
+		scrollArea = (ScrollView) findViewById(R.id.scrollArea);
+		tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+		tvAnswer = (TextView) findViewById(R.id.tvAnswer);
+
 	}
 
 	/**
@@ -134,34 +145,27 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		switch (view.getId()) {
 		// 进入参数设置页面
-		// case R.id.image_understander_set:
 		// Intent intent = new Intent(ChatActivity.this,
 		// UnderstanderSettings.class);
 		// startActivity(intent);
-		// break;
 		// 开始文本理解
-		// case R.id.text_understander:
 		// mUnderstanderText.setText("");
 		// String text = "明天的天气怎么样？";
-		// showTip(text);
-		//
 		// if (mTextUnderstander.isUnderstanding()) {
 		// mTextUnderstander.cancel();
-		// showTip("取消");
 		// } else {
 		// ret = mTextUnderstander.understandText(text, textListener);
 		// if (ret != 0) {
 		// showTip("语义理解失败,错误码:" + ret);
 		// }
 		// }
-		// break;
 		// 开始语音理解
 		case R.id.iv_drawable:
-			mUnderstanderText.setText("");
+			tvHint.setText("");
 			// 设置参数
 			setParam();
 
-			if (mSpeechUnderstander.isUnderstanding()) {// 开始前检查状态
+			if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
 				mSpeechUnderstander.stopUnderstanding();
 				// 停止录音
 			} else {
@@ -203,7 +207,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 										+ result.getResultString());
 						String text = result.getResultString();
 						if (!TextUtils.isEmpty(text)) {
-							mUnderstanderText.setText(text);
+							tvHint.setText(text);
 
 							try {
 								JSONObject jsonObject;
@@ -243,7 +247,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 						// 显示
 						String text = result.getResultString();
 						if (!TextUtils.isEmpty(text)) {
-							mUnderstanderText.setText(text);
+							tvHint.setText(text);
+							String jsonAnswer = JsonParser
+									.parseGrammarResult(text);
+							tvQuestion.setText(jsonAnswer);
+							makeScrollViewDown(scrollArea);
+
 						}
 					} else {
 						// 识别结果不正确
@@ -296,6 +305,13 @@ public class ChatActivity extends Activity implements OnClickListener {
 		}
 	};
 
+	/**
+	 * 跳转ScrollView到底部
+	 */
+	private void makeScrollViewDown(ScrollView scrollView) {
+		scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -319,8 +335,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 	 * @return
 	 */
 	public void setParam() {
-		String lag = mSharedPreferences.getString(
-				"understander_language_preference", "mandarin");
+		String lag = mSharedPreferences.getString("voiceAccent", "mandarin");
 		if (lag.equals("en_us")) {
 			// 设置语言
 			mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "en_us");
@@ -332,20 +347,22 @@ public class ChatActivity extends Activity implements OnClickListener {
 		}
 		// 设置语音前端点
 		mSpeechUnderstander.setParameter(SpeechConstant.VAD_BOS,
-				mSharedPreferences.getString("understander_vadbos_preference",
-						"4000"));
+				mSharedPreferences.getString("voiceBos", "4000"));
 		// 设置语音后端点
 		mSpeechUnderstander.setParameter(SpeechConstant.VAD_EOS,
-				mSharedPreferences.getString("understander_vadeos_preference",
-						"1000"));
+				mSharedPreferences.getString("voiceEos", "1000"));
 		// 设置标点符号
 		mSpeechUnderstander.setParameter(SpeechConstant.ASR_PTT,
 				mSharedPreferences.getString("understander_punc_preference",
 						"1"));
 		// 设置音频保存路径
-		mSpeechUnderstander.setParameter(SpeechConstant.ASR_AUDIO_PATH,
-				Environment.getExternalStorageDirectory()
-						+ "/iflytek/wavaudio.pcm");
+		mSpeechUnderstander.setParameter(
+				SpeechConstant.ASR_AUDIO_PATH,
+				mSharedPreferences.getString("voiceAudioPath",
+						Environment.getExternalStorageDirectory()
+								+ "/iflytek/wavaudio.pcm")
+
+		);
 	}
 
 	@Override
@@ -368,7 +385,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		super.onPause();
 	}
 
-	// 以下为按钮动画
+	// *************************** 按钮动画 START ***************************
 	/**
 	 * This animation was intended to keep a pressed state of the Drawable
 	 * 
@@ -504,4 +521,5 @@ public class ChatActivity extends Activity implements OnClickListener {
 				invertedProgress, invertedCircle);
 		return animation;
 	}
+	// *************************** 按钮动画 END ***************************
 }
