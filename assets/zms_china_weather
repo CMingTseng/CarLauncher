@@ -1,0 +1,12 @@
+{
+    "weatherinfo": {
+        "city": "中山",
+        "cityid": "101281701",
+        "temp1": "27℃",
+        "temp2": "21℃",
+        "weather": "多云",
+        "img1": "d1.gif",
+        "img2": "n1.gif",
+        "ptime": "08:00"
+    }
+}

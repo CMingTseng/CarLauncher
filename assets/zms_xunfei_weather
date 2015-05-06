@@ -1,0 +1,119 @@
+{
+    "webPage": {
+        "header": "",
+        "url": "http://kcgz.openspeech.cn/service/iss?wuuid=50c93b03122749845a51466f9ff2971c&ver=2.0&method=webPage&uuid=201e69f8ccd0a27f5f5ea83a6134d074query"
+    },
+    "semantic": {
+        "slots": {
+            "location": {
+                "cityAddr": "中山",
+                "city": "中山市",
+                "type": "LOC_BASIC"
+            },
+            "datetime": {
+                "date": "CURRENT_DAY",
+                "type": "DT_BASIC"
+            }
+        }
+    },
+    "rc": 0,
+    "operation": "QUERY",
+    "service": "weather",
+    "data": {
+        "result": [
+            {
+                "airQuality": "未知",
+                "sourceName": "知趣天气",
+                "date": "2015-05-05",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1430755200,
+                "city": "中山",
+                "wind": "无持续风向微风",
+                "windLevel": 1,
+                "weather": "阵雨",
+                "tempRange": "31℃~26℃",
+                "province": "广东"
+            },
+            {
+                "airQuality": "优",
+                "sourceName": "知趣天气",
+                "date": "2015-05-06",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1430841600,
+                "wind": "无持续风向微风",
+                "city": "中山",
+                "humidity": "73%",
+                "windLevel": 1,
+                "weather": "阴",
+                "tempRange": "31℃~26℃",
+                "province": "广东"
+            },
+            {
+                "airQuality": "未知",
+                "sourceName": "知趣天气",
+                "date": "2015-05-07",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1430928000,
+                "city": "中山",
+                "wind": "无持续风向微风",
+                "windLevel": 1,
+                "weather": "阴",
+                "tempRange": "31℃~26℃",
+                "province": "广东"
+            },
+            {
+                "airQuality": "未知",
+                "sourceName": "知趣天气",
+                "date": "2015-05-08",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1431014400,
+                "city": "中山",
+                "wind": "无持续风向微风",
+                "windLevel": 1,
+                "weather": "阴",
+                "tempRange": "32℃~26℃",
+                "province": "广东"
+            },
+            {
+                "airQuality": "未知",
+                "sourceName": "知趣天气",
+                "date": "2015-05-09",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1431100800,
+                "city": "中山",
+                "wind": "无持续风向微风",
+                "windLevel": 1,
+                "weather": "阵雨",
+                "tempRange": "31℃~25℃",
+                "province": "广东"
+            },
+            {
+                "airQuality": "未知",
+                "sourceName": "知趣天气",
+                "date": "2015-05-10",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1431187200,
+                "city": "中山",
+                "wind": "无持续风向微风",
+                "windLevel": 1,
+                "weather": "阵雨",
+                "tempRange": "30℃~24℃",
+                "province": "广东"
+            },
+            {
+                "airQuality": "未知",
+                "sourceName": "知趣天气",
+                "date": "2015-05-11",
+                "lastUpdateTime": "2015-05-06 11:21:27",
+                "dateLong": 1431273600,
+                "city": "中山",
+                "wind": "无持续风向微风",
+                "windLevel": 1,
+                "weather": "阵雨",
+                "tempRange": "29℃~25℃",
+                "province": "广东"
+            }
+        ]
+    },
+    "text": "中山天气。"
+}

@@ -1,0 +1,10 @@
+{
+    "rc": 0,
+    "operation": "ANSWER",
+    "service": "datetime",
+    "answer": {
+        "text": "现在是2015年05月06日 星期三 14:13:34",
+        "type": "T"
+    },
+    "text": "现在几点了？"
+}

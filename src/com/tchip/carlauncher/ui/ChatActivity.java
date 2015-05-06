@@ -11,6 +11,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,10 +39,9 @@ import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.TextUnderstander;
 import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
-import com.iflytek.library.JsonParser;
-import com.iflytek.library.UnderstanderSettings;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 
 public class ChatActivity extends Activity implements OnClickListener {
@@ -77,6 +77,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 				ChatActivity.this, textUnderstanderListener);
 
 		mToast = Toast.makeText(ChatActivity.this, "", Toast.LENGTH_SHORT);
+		startSpeak("你好，我是小天，有什么可以帮您？");
+
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		public void onInit(int code) {
 			Log.d(TAG, "speechUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
-				// showTip("初始化失败,错误码：" + code);
+				// 初始化失败,错误码：code
 			}
 		}
 	};
@@ -133,7 +135,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		public void onInit(int code) {
 			Log.d(TAG, "textUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
-				// showTip("初始化失败,错误码：" + code);
+				// 初始化失败,错误码： code
 			}
 		}
 	};
@@ -156,7 +158,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 		// } else {
 		// ret = mTextUnderstander.understandText(text, textListener);
 		// if (ret != 0) {
-		// showTip("语义理解失败,错误码:" + ret);
 		// }
 		// }
 		// 开始语音理解
@@ -181,12 +182,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 		// 停止语音理解
 		// case R.id.understander_stop:
 		// mSpeechUnderstander.stopUnderstanding();
-		// showTip("停止语义理解");
 		// break;
 		// 取消语音理解
 		// case R.id.understander_cancel:
 		// mSpeechUnderstander.cancel();
-		// showTip("取消语义理解");
 		// break;
 		default:
 			break;
@@ -202,24 +201,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 				public void run() {
 					if (null != result) {
 						// 显示
-						Log.d(TAG,
-								"understander result："
-										+ result.getResultString());
-						String text = result.getResultString();
-						if (!TextUtils.isEmpty(text)) {
-							tvHint.setText(text);
-
-							try {
-								JSONObject jsonObject;
-								jsonObject = new JSONObject(text)
-										.getJSONObject("service");
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
+						// String text = result.getResultString();
+						// if (!TextUtils.isEmpty(text)) {
+						// tvHint.setText(text);
+						// }
 					} else {
-						Log.d(TAG, "understander result:null");
 						// 识别结果不正确
 					}
 				}
@@ -228,7 +214,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void onError(SpeechError error) {
-			showTip("onError Code：" + error.getErrorCode());
+			// showTip("onError Code：" + error.getErrorCode());
 
 		}
 	};
@@ -244,13 +230,61 @@ public class ChatActivity extends Activity implements OnClickListener {
 				@Override
 				public void run() {
 					if (null != result) {
+
+						tvAnswer.setText(""); // 清空回答
 						// 显示
 						String text = result.getResultString();
 						if (!TextUtils.isEmpty(text)) {
 							tvHint.setText(text);
-							String jsonAnswer = JsonParser
-									.parseGrammarResult(text);
-							tvQuestion.setText(jsonAnswer);
+
+							try {
+								JSONObject jsonObject;
+								jsonObject = new JSONObject(text);
+								String strQuestion = jsonObject
+										.getString("text");
+								tvQuestion.setText(strQuestion);
+
+								String strService = jsonObject
+										.getString("service");
+								if ("openQA".equals(strService)
+										|| "datetime".equals(strService)
+										|| "chat".equals(strService)) {
+									String strAnswer = jsonObject
+											.getJSONObject("answer").getString(
+													"text");
+									tvAnswer.setText(strAnswer);
+									startSpeak(strAnswer);
+								} else if ("baike".equals(strService)) {
+									String strAnswer = jsonObject
+											.getJSONObject("answer").getString(
+													"text");
+									tvAnswer.setText(strAnswer);
+								} else if ("weather".equals(strService)) {
+
+									JSONArray mJSONArray = jsonObject
+											.getJSONObject("data")
+											.getJSONArray("result");
+									JSONObject todayJSON = mJSONArray
+											.getJSONObject(0);
+									String tempRange = todayJSON
+											.getString("tempRange");
+									String weather = todayJSON
+											.getString("weather");
+									String city = todayJSON.getString("city");
+									String strAnswer = city + "天气：" + weather
+											+ ",温度" + tempRange;
+									tvAnswer.setText(strAnswer);
+									startSpeak(strAnswer);
+								}
+
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+
+								String strNoAnswer = "小天不知道怎么回答了";
+								tvAnswer.setText(strNoAnswer);
+								startSpeak(strNoAnswer);
+							}
 							makeScrollViewDown(scrollArea);
 
 						}
@@ -312,6 +346,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 		scrollView.fullScroll(ScrollView.FOCUS_DOWN);
 	}
 
+	private void startSpeak(String content) {
+		Intent intent = new Intent(ChatActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -358,7 +398,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		// 设置音频保存路径
 		mSpeechUnderstander.setParameter(
 				SpeechConstant.ASR_AUDIO_PATH,
-				mSharedPreferences.getString("voiceAudioPath",
+				mSharedPreferences.getString("voicePath",
 						Environment.getExternalStorageDirectory()
 								+ "/iflytek/wavaudio.pcm")
 
