@@ -1,6 +1,7 @@
 ============================================================================
 SharedPreferences-CarLauncher
-
+	----------------------------------------
+	[*Not Use] China Weather
 	(Long)cityCode		中国天气网城市代码（9位数字）
 	(String)tempHigh	当日最高温度
 	(String)tempLow		当日最低温度
@@ -10,6 +11,8 @@ SharedPreferences-CarLauncher
 	(String)windDir		风向
 	(String)windSpeed	风速
 	(String)wetLevel	湿度 
+	----------------------------------------
+	[*Using]Baidu LBS
 	(String)cityName	城市名
 	(String)latitude	经度
 	(String)longitude	纬度
@@ -17,15 +20,25 @@ SharedPreferences-CarLauncher
 	(String)voiceBos	语音前端点
 	(String)voiceEos	语音后端点
 	(String)voicePath	音频保存路径
+	----------------------------------------
+	[*Using]Xunfei Voice Weather
+	(String)postTime		天气发布时间
+	(String)day'i'weather	天气（'i'=0，1，2，3，4，5，6）
+	(String)day'i'tmpHigh	最高气温
+	(String)day'i'tmpLow	最低气温
+	(String)day'i'wind		风向和风速
+	(String)day'i'air		空气质量
+	
+	WeatherType：晴，多云，阴，阵雨
 
 ============================================================================
 讯飞语义理解类型(service)
-	openQA		问答
-	datetime	时间
-	weather		天气
+	*openQA		问答
+	*datetime	时间
+	*weather	天气
 	telephone	拨号
 	map			地图（导航）
-	baike		百科
+	*baike		百科
 	chat
 	app			应用	（打开："operation": "LAUNCH"）
 	

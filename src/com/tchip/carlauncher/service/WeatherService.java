@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.service;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,28 +28,25 @@ public class WeatherService extends Service {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		
+
 		preferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
 		editor = preferences.edit();
 
 		mTextUnderstander = TextUnderstander.createTextUnderstander(
 				getApplicationContext(), textUnderstanderListener);
-		
-		
+
 		getWeather(preferences.getString("cityName", "北京北京"));
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
-
-		
 
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -75,20 +73,31 @@ public class WeatherService extends Service {
 				if (!TextUtils.isEmpty(jsonString)) {
 					JSONObject jsonObject;
 					try {
-						jsonObject = new JSONObject(jsonString)
-								.getJSONObject("webPage");
+						jsonObject = new JSONObject(jsonString);
+						JSONArray mJSONArray = jsonObject.getJSONObject("data")
+								.getJSONArray("result");
+						for (int i = 0; i < 7; i++) {
+							JSONObject jsonDay = mJSONArray.getJSONObject(i);
+							String tempRange = jsonDay.getString("tempRange"); // 31℃~26℃
+							String tempArray[] = tempRange.split("~");
+							editor.putString("postTime",
+									jsonDay.getString("lastUpdateTime"));
 
-						editor.putString("cityAddr",
-								jsonObject.getString("cityAddr"));
-						editor.putString("lastUpdateTime",
-								jsonObject.getString("lastUpdateTime"));
-						editor.putString("wind",
-								jsonObject.getString("wind"));
-						editor.putString("windLevel",
-								jsonObject.getString("windLevel"));
-						editor.putString("tempRange",
-								jsonObject.getString("tempRange"));
-						editor.commit();
+							editor.putString("day" + i + "air",
+									jsonDay.getString("airQuality"));
+
+							editor.putString("day" + i + "weather",
+									jsonDay.getString("weather"));
+							editor.putString("day" + i + "tmpHigh",
+									tempArray[0]);
+							editor.putString("day" + i + "tmpLow", tempArray[1]);
+							editor.putString(
+									"day" + i + "wind",
+									jsonDay.getString("wind")
+											+ jsonDay.getString("windLevel"));
+
+							editor.commit();
+						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

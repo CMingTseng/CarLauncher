@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.LocationService;
+import com.tchip.carlauncher.service.WeatherService;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,10 +28,12 @@ public class WeatherActivity extends Activity {
 
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
+		initialLayout();
 	}
 
 	private void initialLayout() {
 		startLocationService();
+		startWeatherService();
 
 		// 时钟信息
 		String weekStr = String.valueOf(Calendar.getInstance().get(
@@ -64,7 +67,7 @@ public class WeatherActivity extends Activity {
 		textDate.setText(yearStr + "年" + monthStr + "月" + dayStr + "日");
 		// 天气
 		TextView textWeather = (TextView) findViewById(R.id.textWeather);
-		String weatherStr = sharedPreferences.getString("weather", "晴朗");
+		String weatherStr = sharedPreferences.getString("day0weather", "晴朗");
 		if (!weatherStr.equals("晴朗")) {
 			textWeather.setText(weatherStr);
 
@@ -84,12 +87,13 @@ public class WeatherActivity extends Activity {
 
 			// 当日最高温度
 			TextView textTempHigh = (TextView) findViewById(R.id.textTempHigh);
-			textTempHigh
-					.setText(sharedPreferences.getString("tempHigh", "25℃"));
+			textTempHigh.setText(sharedPreferences.getString("day0tmpHigh",
+					"25℃"));
 
 			// 当日最低温度
 			TextView textTempLow = (TextView) findViewById(R.id.textTempLow);
-			textTempLow.setText(sharedPreferences.getString("tempLow", "15℃"));
+			textTempLow.setText(sharedPreferences
+					.getString("day0tmpLow", "15℃"));
 
 			// 湿度
 			TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
@@ -98,8 +102,8 @@ public class WeatherActivity extends Activity {
 
 			// 风向和风速
 			TextView textWind = (TextView) findViewById(R.id.textWind);
-			textWind.setText(sharedPreferences.getString("windDir", "东北风")
-					+ sharedPreferences.getString("windSpeed", "5级"));
+			textWind.setText(sharedPreferences.getString("day0wind", "东北风5")
+					+ "级");
 
 			// 发布时间
 			TextView textUpdateTime = (TextView) findViewById(R.id.textUpdateTime);
@@ -113,6 +117,11 @@ public class WeatherActivity extends Activity {
 
 	private void startLocationService() {
 		Intent intent = new Intent(this, LocationService.class);
+		startService(intent);
+	}
+
+	private void startWeatherService() {
+		Intent intent = new Intent(this, WeatherService.class);
 		startService(intent);
 	}
 
