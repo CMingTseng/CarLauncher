@@ -41,10 +41,12 @@ public class Titanic {
                 // vertical animation
                 // maskY = 0 -> wave vertically centered
                 // repeat mode REVERSE to go back and forth
+                // Old:h/2, - h/2
+                // http://www.68idc.cn/help/buildlang/ask/20150501327999.html
                 ObjectAnimator maskYAnimator = ObjectAnimator.ofFloat(textView, "maskY", h/2, - h/2);
                 maskYAnimator.setRepeatCount(ValueAnimator.INFINITE);
                 maskYAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                maskYAnimator.setDuration(10000);
+                maskYAnimator.setDuration(5000);
                 maskYAnimator.setStartDelay(0);
 
                 // now play both animations together

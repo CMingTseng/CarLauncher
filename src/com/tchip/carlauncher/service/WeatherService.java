@@ -98,8 +98,8 @@ public class WeatherService extends Service {
 							String windDirection = jsonDay.getString("wind");
 							if ("无持续风向微风".equals(windDirection))
 								windDirection = "微风";
-							editor.putString("day" + i + "wind", windDirection
-									+ jsonDay.getString("windLevel"));
+							editor.putString("day" + i + "wind", windDirection);
+							// + jsonDay.getString("windLevel")
 							editor.putString("day" + i + "date",
 									jsonDay.getString("date"));
 
@@ -121,7 +121,6 @@ public class WeatherService extends Service {
 		@Override
 		public void onError(SpeechError error) {
 			// showTip("onError Code：" + error.getErrorCode());
-
 		}
 	};
 

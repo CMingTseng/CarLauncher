@@ -7,8 +7,11 @@ import java.util.Date;
 import java.util.Random;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.bean.Titanic;
+import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.view.TitanicTextView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -69,8 +72,13 @@ public class WeatherActivity extends Activity {
 		TextView textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textTodayWeather.setText(weatherToday);
 
-		TextView textTempHigh = (TextView) findViewById(R.id.textTempHigh);
+		TitanicTextView textTempHigh = (TitanicTextView) findViewById(R.id.textTempHigh);
 		textTempHigh.setText(sharedPreferences.getString("day0tmpHigh", "25℃"));
+		// set fancy typeface
+		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+		// start animation
+		new Titanic().start(textTempHigh);
+
 		TextView textTempLow = (TextView) findViewById(R.id.textTempLow);
 		textTempLow.setText(sharedPreferences.getString("day0tmpLow", "15℃"));
 
@@ -79,7 +87,7 @@ public class WeatherActivity extends Activity {
 				+ sharedPreferences.getString("humidity", "55.55%"));
 
 		TextView textWind = (TextView) findViewById(R.id.textWind);
-		textWind.setText(sharedPreferences.getString("day0wind", "东北风5") + "级");
+		textWind.setText(sharedPreferences.getString("day0wind", "东北风5"));
 
 		TextView textUpdateTime = (TextView) findViewById(R.id.textUpdateTime);
 		textUpdateTime.setText("发布时间 "
@@ -99,7 +107,7 @@ public class WeatherActivity extends Activity {
 		TextView day1tmpLow = (TextView) findViewById(R.id.day1tmpLow);
 		day1tmpLow.setText(sharedPreferences.getString("day1tmpLow", "25"));
 		TextView day1wind = (TextView) findViewById(R.id.day1wind);
-		day1wind.setText(sharedPreferences.getString("day1wind", "东北风5") + "级");
+		day1wind.setText(sharedPreferences.getString("day1wind", "东北风5"));
 
 		// Day 2
 		TextView day2week = (TextView) findViewById(R.id.day2week);
@@ -115,7 +123,7 @@ public class WeatherActivity extends Activity {
 		TextView day2tmpLow = (TextView) findViewById(R.id.day2tmpLow);
 		day2tmpLow.setText(sharedPreferences.getString("day2tmpLow", "25"));
 		TextView day2wind = (TextView) findViewById(R.id.day2wind);
-		day2wind.setText(sharedPreferences.getString("day2wind", "东北风5") + "级");
+		day2wind.setText(sharedPreferences.getString("day2wind", "东北风5"));
 
 		// Day 3
 		TextView day3week = (TextView) findViewById(R.id.day3week);
@@ -131,7 +139,7 @@ public class WeatherActivity extends Activity {
 		TextView day3tmpLow = (TextView) findViewById(R.id.day3tmpLow);
 		day3tmpLow.setText(sharedPreferences.getString("day3tmpLow", "25"));
 		TextView day3wind = (TextView) findViewById(R.id.day3wind);
-		day3wind.setText(sharedPreferences.getString("day3wind", "东北风5") + "级");
+		day3wind.setText(sharedPreferences.getString("day3wind", "东北风5"));
 
 		// Day 4
 		TextView day4week = (TextView) findViewById(R.id.day4week);
@@ -147,7 +155,7 @@ public class WeatherActivity extends Activity {
 		TextView day4tmpLow = (TextView) findViewById(R.id.day4tmpLow);
 		day4tmpLow.setText(sharedPreferences.getString("day4tmpLow", "25"));
 		TextView day4wind = (TextView) findViewById(R.id.day4wind);
-		day4wind.setText(sharedPreferences.getString("day4wind", "东北风5") + "级");
+		day4wind.setText(sharedPreferences.getString("day4wind", "东北风5"));
 
 		// Day 5
 		TextView day5week = (TextView) findViewById(R.id.day5week);
@@ -163,7 +171,7 @@ public class WeatherActivity extends Activity {
 		TextView day5tmpLow = (TextView) findViewById(R.id.day5tmpLow);
 		day5tmpLow.setText(sharedPreferences.getString("day5tmpLow", "25"));
 		TextView day5wind = (TextView) findViewById(R.id.day5wind);
-		day5wind.setText(sharedPreferences.getString("day5wind", "东北风5") + "级");
+		day5wind.setText(sharedPreferences.getString("day5wind", "东北风5"));
 
 		// Day 6
 		TextView day6week = (TextView) findViewById(R.id.day6week);
@@ -179,7 +187,7 @@ public class WeatherActivity extends Activity {
 		TextView day6tmpLow = (TextView) findViewById(R.id.day6tmpLow);
 		day6tmpLow.setText(sharedPreferences.getString("day6tmpLow", "25"));
 		TextView day6wind = (TextView) findViewById(R.id.day6wind);
-		day6wind.setText(sharedPreferences.getString("day6wind", "东北风5") + "级");
+		day6wind.setText(sharedPreferences.getString("day6wind", "东北风5"));
 
 	}
 
