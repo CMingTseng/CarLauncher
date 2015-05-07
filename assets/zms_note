@@ -27,7 +27,9 @@ SharedPreferences-CarLauncher
 	(String)day'i'tmpHigh	最高气温
 	(String)day'i'tmpLow	最低气温
 	(String)day'i'wind		风向和风速
-	(String)day'i'air		空气质量
+	(String)airQuality		空气质量
+	(String)day'i'date		日期（格式：2015-05-05）
+	(String)humidity		湿度
 	
 	WeatherType：晴，多云，阴，阵雨
 
@@ -43,8 +45,24 @@ SharedPreferences-CarLauncher
 	app			应用	（打开："operation": "LAUNCH"）
 	
 ============================================================================
-	
-	
+[ToDo]
+	[设置]（*默认）
+		轨迹平滑度优化（*on/off）
+		语音口音选择（英语-*普通话-粤语）
+		
+		录制视频质量（*高-中-低）
+		视频分割（3min-*5min-10min）
+		
+		整点语音报时（on/*off）
+		天气数据每日自动更新（*on/off）
+		
+	[功能]
+		语音助手>语音拨号，语音导航
+		天气预报>播报当日天气，点击播报未来几日天气
+		
+		
+		
+============================================================================	
 // 介绍：http://blog.csdn.net/qq43599939/article/details/12278641/
 // http://goodbai.com/web/UseForecastAndPMDataAPI.html
 
@@ -59,7 +77,6 @@ var weatherArr={
 "00":"晴",
 "01":"多云",
 "02":"阴",
-
 "03":"阵雨",
 "04":"雷阵雨",
 "05":"雷阵雨伴有冰雹",

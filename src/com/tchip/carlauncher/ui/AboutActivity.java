@@ -36,7 +36,6 @@ public class AboutActivity extends Activity {
 
 		// set fancy typeface
 		titanicTextView.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
-
 		// start animation
 		new Titanic().start(titanicTextView);
 

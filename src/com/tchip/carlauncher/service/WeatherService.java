@@ -83,18 +83,25 @@ public class WeatherService extends Service {
 							editor.putString("postTime",
 									jsonDay.getString("lastUpdateTime"));
 
-							editor.putString("day" + i + "air",
-									jsonDay.getString("airQuality"));
-
 							editor.putString("day" + i + "weather",
 									jsonDay.getString("weather"));
 							editor.putString("day" + i + "tmpHigh",
 									tempArray[0]);
 							editor.putString("day" + i + "tmpLow", tempArray[1]);
-							editor.putString(
-									"day" + i + "wind",
-									jsonDay.getString("wind")
-											+ jsonDay.getString("windLevel"));
+							if (i == 1) {
+								editor.putString("humidity",
+										jsonDay.getString("humidity"));
+								editor.putString("airQuality",
+										jsonDay.getString("airQuality"));
+							}
+
+							String windDirection = jsonDay.getString("wind");
+							if ("无持续风向微风".equals(windDirection))
+								windDirection = "微风";
+							editor.putString("day" + i + "wind", windDirection
+									+ jsonDay.getString("windLevel"));
+							editor.putString("day" + i + "date",
+									jsonDay.getString("date"));
 
 							editor.commit();
 						}
