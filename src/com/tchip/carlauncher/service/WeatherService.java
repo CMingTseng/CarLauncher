@@ -109,6 +109,8 @@ public class WeatherService extends Service {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						editor.putString("exception", e.toString());
+					} finally {
+						stopSelf();
 					}
 				}
 			} else {

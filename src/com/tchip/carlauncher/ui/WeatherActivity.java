@@ -11,6 +11,7 @@ import com.tchip.carlauncher.bean.Titanic;
 import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.view.TitanicTextView;
 
 import android.app.Activity;
@@ -39,10 +40,12 @@ public class WeatherActivity extends Activity {
 	}
 
 	private void initialLayout() {
-		startLocationService();
-		startWeatherService();
 
 		LinearLayout layoutWeather = (LinearLayout) findViewById(R.id.layoutWeather);
+
+		// 刷新按钮
+		ImageView imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
+		imageRefresh.setOnClickListener(new MyOnClickListener());
 
 		// 时钟信息
 		int weekToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -66,21 +69,24 @@ public class WeatherActivity extends Activity {
 
 		String weatherToday = sharedPreferences.getString("day0weather", "未知");
 		layoutWeather.setBackground(getResources().getDrawable(
-				getWeatherackground(weatherToday))); // Background
+				WeatherUtil.getWeatherBackground(weatherToday))); // Background
 		ImageView imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
-		imageTodayWeather.setImageResource(getWeatherDrawable(weatherToday));
+		imageTodayWeather.setImageResource(WeatherUtil
+				.getWeatherDrawable(weatherToday));
 		TextView textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textTodayWeather.setText(weatherToday);
 
 		TitanicTextView textTempHigh = (TitanicTextView) findViewById(R.id.textTempHigh);
 		textTempHigh.setText(sharedPreferences.getString("day0tmpHigh", "25℃"));
+
 		// set fancy typeface
 		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 		// start animation
 		new Titanic().start(textTempHigh);
 
-		TextView textTempLow = (TextView) findViewById(R.id.textTempLow);
+		TitanicTextView textTempLow = (TitanicTextView) findViewById(R.id.textTempLow);
 		textTempLow.setText(sharedPreferences.getString("day0tmpLow", "15℃"));
+		new Titanic().start(textTempLow);
 
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
 		textWetLevel.setText("湿度 "
@@ -100,8 +106,9 @@ public class WeatherActivity extends Activity {
 		day1date.setText(sharedPreferences.getString("day1date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day1image = (ImageView) findViewById(R.id.day1image);
-		day1image.setImageResource(getWeatherDrawable(sharedPreferences
-				.getString("day1weather", "未知")));
+		day1image.setImageResource(WeatherUtil
+				.getWeatherDrawable(sharedPreferences.getString("day1weather",
+						"未知")));
 		TextView day1tmpHigh = (TextView) findViewById(R.id.day1tmpHigh);
 		day1tmpHigh.setText(sharedPreferences.getString("day1tmpHigh", "35"));
 		TextView day1tmpLow = (TextView) findViewById(R.id.day1tmpLow);
@@ -116,8 +123,9 @@ public class WeatherActivity extends Activity {
 		day2date.setText(sharedPreferences.getString("day2date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day2image = (ImageView) findViewById(R.id.day2image);
-		day2image.setImageResource(getWeatherDrawable(sharedPreferences
-				.getString("day2weather", "未知")));
+		day2image.setImageResource(WeatherUtil
+				.getWeatherDrawable(sharedPreferences.getString("day2weather",
+						"未知")));
 		TextView day2tmpHigh = (TextView) findViewById(R.id.day2tmpHigh);
 		day2tmpHigh.setText(sharedPreferences.getString("day2tmpHigh", "35"));
 		TextView day2tmpLow = (TextView) findViewById(R.id.day2tmpLow);
@@ -132,8 +140,9 @@ public class WeatherActivity extends Activity {
 		day3date.setText(sharedPreferences.getString("day3date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day3image = (ImageView) findViewById(R.id.day3image);
-		day3image.setImageResource(getWeatherDrawable(sharedPreferences
-				.getString("day3weather", "未知")));
+		day3image.setImageResource(WeatherUtil
+				.getWeatherDrawable(sharedPreferences.getString("day3weather",
+						"未知")));
 		TextView day3tmpHigh = (TextView) findViewById(R.id.day3tmpHigh);
 		day3tmpHigh.setText(sharedPreferences.getString("day3tmpHigh", "35"));
 		TextView day3tmpLow = (TextView) findViewById(R.id.day3tmpLow);
@@ -148,8 +157,9 @@ public class WeatherActivity extends Activity {
 		day4date.setText(sharedPreferences.getString("day4date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day4image = (ImageView) findViewById(R.id.day4image);
-		day4image.setImageResource(getWeatherDrawable(sharedPreferences
-				.getString("day4weather", "未知")));
+		day4image.setImageResource(WeatherUtil
+				.getWeatherDrawable(sharedPreferences.getString("day4weather",
+						"未知")));
 		TextView day4tmpHigh = (TextView) findViewById(R.id.day4tmpHigh);
 		day4tmpHigh.setText(sharedPreferences.getString("day4tmpHigh", "35"));
 		TextView day4tmpLow = (TextView) findViewById(R.id.day4tmpLow);
@@ -164,8 +174,9 @@ public class WeatherActivity extends Activity {
 		day5date.setText(sharedPreferences.getString("day5date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day5image = (ImageView) findViewById(R.id.day5image);
-		day5image.setImageResource(getWeatherDrawable(sharedPreferences
-				.getString("day5weather", "未知")));
+		day5image.setImageResource(WeatherUtil
+				.getWeatherDrawable(sharedPreferences.getString("day5weather",
+						"未知")));
 		TextView day5tmpHigh = (TextView) findViewById(R.id.day5tmpHigh);
 		day5tmpHigh.setText(sharedPreferences.getString("day5tmpHigh", "35"));
 		TextView day5tmpLow = (TextView) findViewById(R.id.day5tmpLow);
@@ -180,8 +191,9 @@ public class WeatherActivity extends Activity {
 		day6date.setText(sharedPreferences.getString("day6date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day6image = (ImageView) findViewById(R.id.day6image);
-		day6image.setImageResource(getWeatherDrawable(sharedPreferences
-				.getString("day6weather", "未知")));
+		day6image.setImageResource(WeatherUtil
+				.getWeatherDrawable(sharedPreferences.getString("day6weather",
+						"未知")));
 		TextView day6tmpHigh = (TextView) findViewById(R.id.day6tmpHigh);
 		day6tmpHigh.setText(sharedPreferences.getString("day6tmpHigh", "35"));
 		TextView day6tmpLow = (TextView) findViewById(R.id.day6tmpLow);
@@ -191,51 +203,18 @@ public class WeatherActivity extends Activity {
 
 	}
 
-	private int getWeatherackground(String weather) {
-		if (weather.equals("未知")) {
-			return isDay() ? (R.drawable.icon_weather_bg_default_day)
-					: (R.drawable.icon_weather_bg_default_night);
-		} else if (weather.equals("晴")) {
-			return isDay() ? (R.drawable.icon_weather_sun_white)
-					: (R.drawable.icon_weather_bg_sun_night);
-		} else if (weather.equals("多云") || weather.equals("阴")) {
-			return isDay() ? R.drawable.icon_weather_bg_cloud_day
-					: R.drawable.icon_weather_bg_cloud_night;
-		} else if (weather.equals("阵雨") || weather.equals("雷阵雨")
-				|| weather.equals("小雨") || weather.equals("中雨")
-				|| weather.equals("大雨") || weather.equals("暴雨")
-				|| weather.equals("大暴雨") || weather.equals("特大暴雨")
-				|| weather.equals("小到中雨") || weather.equals("中到大雨")
-				|| weather.equals("大到暴雨") || weather.equals("暴雨到大暴雨")
-				|| weather.equals("大暴雨到特大暴雨")) {
-			return R.drawable.icon_weather_bg_rain;
-		} else if (weather.equals("阵雪") || weather.equals("小雪")
-				|| weather.equals("中雪") || weather.equals("大雪")
-				|| weather.equals("暴雪") || weather.equals("小到中雪")
-				|| weather.equals("中到大雪") || weather.equals("大到暴雪")) {
-			return R.drawable.icon_weather_snow_white;
-		} else if (weather.equals("雷阵雨伴有冰雹") || weather.equals("冻雨")) {
-			return R.drawable.icon_weather_hail_white;
-		} else if (weather.equals("雨夹雪")) {
-			return R.drawable.icon_weather_rain_snow_white;
-		} else if (weather.equals("雾") || weather.equals("霾")
-				|| weather.equals("浮尘") || weather.equals("沙尘暴")
-				|| weather.equals("强沙尘暴") || weather.equals("扬沙")) {
-			return isDay() ? (R.drawable.weather_fog_day)
-					: (R.drawable.weather_fog_night);
-		} else if (weather.equals("多云转雪") || weather.equals("多云转大雪")
-				|| weather.equals("雪转多云")) {
-			return R.drawable.icon_weather_snow_cloud_white;
-		} else if (weather.equals("多云转雨") || weather.equals("多云转大雨")
-				|| weather.equals("雨转多云")) {
-			return R.drawable.icon_weather_rain_cloud_white;
-		} else if (weather.equals("晴转雪") || weather.equals("晴转大雪")
-				|| weather.equals("雪转晴")) {
-			return R.drawable.icon_weather_sun_snow_white;
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.imageRefresh:
+				// new Thread
+				startLocationService();
+				startWeatherService();
+				break;
+			}
 		}
-		return isDay() ? (R.drawable.icon_weather_bg_default_day)
-				: (R.drawable.icon_weather_bg_default_night);
-
 	}
 
 	private String getWeekStr(int week) {
@@ -277,69 +256,17 @@ public class WeatherActivity extends Activity {
 		if (weatherStr.contains("转")) {
 			String strWeatherOne = weatherStr.split("转")[0];
 			String strWeatherTwo = weatherStr.split("转")[1];
-			imgWeatherOne
-					.setBackgroundResource(getWeatherDrawable(strWeatherOne));
+			imgWeatherOne.setBackgroundResource(WeatherUtil
+					.getWeatherDrawable(strWeatherOne));
 			imgWeatherTwo.setVisibility(View.VISIBLE);
-			imgWeatherTwo
-					.setBackgroundResource(getWeatherDrawable(strWeatherTwo));
+			imgWeatherTwo.setBackgroundResource(WeatherUtil
+					.getWeatherDrawable(strWeatherTwo));
 
 		} else {
-			imgWeatherOne.setBackgroundResource(getWeatherDrawable(weatherStr));
+			imgWeatherOne.setBackgroundResource(WeatherUtil
+					.getWeatherDrawable(weatherStr));
 			imgWeatherTwo.setVisibility(View.GONE);
 		}
-	}
-
-	private int getWeatherDrawable(String weather) {
-		if (weather.equals("未知")) {
-			return R.drawable.icon_weather_na;
-		} else if (weather.equals("晴")) {
-			return isDay() ? (R.drawable.icon_weather_sun_white)
-					: (R.drawable.icon_weather_moon_white);
-		} else if (weather.equals("多云") || weather.equals("阴")) {
-			return isDay() ? R.drawable.icon_weather_cloud_day_white
-					: R.drawable.icon_weather_cloud_night_white;
-		} else if (weather.equals("阵雨") || weather.equals("雷阵雨")
-				|| weather.equals("小雨") || weather.equals("中雨")
-				|| weather.equals("大雨") || weather.equals("暴雨")
-				|| weather.equals("大暴雨") || weather.equals("特大暴雨")
-				|| weather.equals("小到中雨") || weather.equals("中到大雨")
-				|| weather.equals("大到暴雨") || weather.equals("暴雨到大暴雨")
-				|| weather.equals("大暴雨到特大暴雨")) {
-			return R.drawable.icon_weather_rain_white;
-		} else if (weather.equals("阵雪") || weather.equals("小雪")
-				|| weather.equals("中雪") || weather.equals("大雪")
-				|| weather.equals("暴雪") || weather.equals("小到中雪")
-				|| weather.equals("中到大雪") || weather.equals("大到暴雪")) {
-			return R.drawable.icon_weather_snow_white;
-		} else if (weather.equals("雷阵雨伴有冰雹") || weather.equals("冻雨")) {
-			return R.drawable.icon_weather_hail_white;
-		} else if (weather.equals("雨夹雪")) {
-			return R.drawable.icon_weather_rain_snow_white;
-		} else if (weather.equals("雾") || weather.equals("霾")
-				|| weather.equals("浮尘") || weather.equals("沙尘暴")
-				|| weather.equals("强沙尘暴") || weather.equals("扬沙")) {
-			return isDay() ? (R.drawable.weather_fog_day)
-					: (R.drawable.weather_fog_night);
-		} else if (weather.equals("多云转雪") || weather.equals("多云转大雪")
-				|| weather.equals("雪转多云")) {
-			return R.drawable.icon_weather_snow_cloud_white;
-		} else if (weather.equals("多云转雨") || weather.equals("多云转大雨")
-				|| weather.equals("雨转多云")) {
-			return R.drawable.icon_weather_rain_cloud_white;
-		} else if (weather.equals("晴转雪") || weather.equals("晴转大雪")
-				|| weather.equals("雪转晴")) {
-			return R.drawable.icon_weather_sun_snow_white;
-		}
-		return isDay() ? (R.drawable.icon_weather_sun_white)
-				: (R.drawable.icon_weather_moon_white);
-	}
-
-	private boolean isDay() {
-		Date date = new Date();
-		int hour = date.getHours();
-		if (hour > 18 || hour < 6)
-			return false;
-		return true;
 	}
 
 	@Override

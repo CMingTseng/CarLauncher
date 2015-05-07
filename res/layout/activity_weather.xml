@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:layout_weight="1" >
+        android:layout_weight="5" >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -133,7 +133,7 @@
                     android:layout_weight="1"
                     android:gravity="left"
                     android:text="35°"
-                    android:textColor="#cccccc"
+                    android:textColor="#c2c2c2"
                     android:textSize="40sp" />
             </LinearLayout>
 
@@ -150,14 +150,14 @@
                     android:layout_weight="2"
                     android:src="@drawable/icon_tmp_low" />
 
-                <TextView
+                <com.tchip.carlauncher.view.TitanicTextView
                     android:id="@+id/textTempLow"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:text="15°"
-                    android:textColor="#ffffff"
+                    android:textColor="#c2c2c2"
                     android:textSize="40sp" />
             </LinearLayout>
         </LinearLayout>
@@ -187,6 +187,7 @@
 
                 <ImageView
                     android:layout_width="14sp"
+                    android:id="@+id/imageRefresh"
                     android:layout_height="14sp"
                     android:layout_margin="2dp"
                     android:layout_toLeftOf="@+id/textUpdateTime"
@@ -283,7 +284,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:layout_weight="1" >
+        android:layout_weight="4" >
 
         <LinearLayout
             android:id="@+id/layoutDay1"
@@ -307,7 +308,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="05-05"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/day1image"
@@ -368,7 +370,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="05-06"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/day2image"
@@ -429,7 +432,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="05-07"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/day3image"
@@ -490,7 +494,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="05-08"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/day4image"
@@ -551,7 +556,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="05-09"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/day5image"
@@ -612,7 +618,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="05-10"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/day6image"

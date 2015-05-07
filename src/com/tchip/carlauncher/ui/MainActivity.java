@@ -1,35 +1,50 @@
 package com.tchip.carlauncher.ui;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.view.MyViewPager;
 import com.tchip.carlauncher.view.MyViewPager.TransitionEffect;
 import com.tchip.carlauncher.view.MyViewPagerContainer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private View viewMain, viewVice;
 	private List<View> viewList;
 	private MyViewPager viewPager;
+	private SharedPreferences preferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+
+		preferences = getSharedPreferences("CarLauncher",
+				getApplicationContext().MODE_PRIVATE);
+
+		// Update Location
+		Intent intent = new Intent(this, LocationService.class);
+		startService(intent);
 
 		LayoutInflater inflater = getLayoutInflater().from(this);
 		viewMain = inflater.inflate(R.layout.activity_main_one, null);
@@ -43,6 +58,38 @@ public class MainActivity extends Activity {
 
 		viewPager.setPageMargin(10);
 		viewPager.setAdapter(pagerAdapter);
+
+		new Thread(new StartWeatherServiceThread()).start(); // 计时线程
+	}
+
+	final Handler timeHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				// Update Weather
+				Intent intentWeather = new Intent(getApplicationContext(),
+						WeatherService.class);
+				startService(intentWeather);
+			}
+			super.handleMessage(msg);
+		}
+	};
+
+	public class StartWeatherServiceThread implements Runnable {
+
+		@Override
+		public void run() {
+			// while (true) {
+			try {
+				Thread.sleep(3000);
+				Message message = new Message();
+				message.what = 1;
+				timeHandler.sendMessage(message);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// }
+		}
 	}
 
 	PagerAdapter pagerAdapter = new PagerAdapter() {
@@ -98,6 +145,8 @@ public class MainActivity extends Activity {
 	private void updateMainLayout() {
 		// 天气
 		ImageView imgWeather = (ImageView) findViewById(R.id.imgWeather);
+		imgWeather.setImageResource(WeatherUtil.getWeatherBackground(preferences
+				.getString("day0weather", "晴")));
 		imgWeather.setOnClickListener(new MyOnClickListener());
 
 		// 多媒体

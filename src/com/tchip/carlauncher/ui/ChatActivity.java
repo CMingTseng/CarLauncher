@@ -11,7 +11,10 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -42,6 +45,7 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 
 public class ChatActivity extends Activity implements OnClickListener {
@@ -77,9 +81,29 @@ public class ChatActivity extends Activity implements OnClickListener {
 				ChatActivity.this, textUnderstanderListener);
 
 		mToast = Toast.makeText(ChatActivity.this, "", Toast.LENGTH_SHORT);
+
+		// 监听屏幕熄灭与点亮
+		// final IntentFilter screenFilter = new IntentFilter();
+		// screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
+		// screenFilter.addAction(Intent.ACTION_SCREEN_ON);
+		// registerReceiver(ScreenOnOffReceiver, screenFilter);
+		
 		startSpeak("你好，我是小天，有什么可以帮您？");
 
 	}
+
+	private final BroadcastReceiver ScreenOnOffReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+			final String action = intent.getAction();
+			if (Intent.ACTION_SCREEN_ON.equals(action)) {
+				Log.e("zms", "-----------------screen is on...");
+			} else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+				Log.e("zms", "----------------- screen is off...");
+
+			}
+		}
+	};
 
 	/**
 	 * 初始化Layout。
@@ -309,7 +333,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 			// currentAnimation = prepareStyle1Animation();
 			// currentAnimation = prepareStyle2Animation();
 			// currentAnimation = prepareStyle3Animation();
-			currentAnimation = preparePulseAnimation();
+			currentAnimation = ProgressAnimationUtil
+					.preparePulseAnimation(drawable);
 			currentAnimation.start();
 
 		}
@@ -320,7 +345,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 			if (currentAnimation != null) {
 				currentAnimation.cancel();
 			}
-			currentAnimation = prepareStyle1Animation();
+			currentAnimation = ProgressAnimationUtil
+					.prepareStyle1Animation(drawable);
 			// currentAnimation = prepareStyle2Animation();
 			// currentAnimation = prepareStyle3Animation();
 			// currentAnimation = preparePulseAnimation();
@@ -425,141 +451,4 @@ public class ChatActivity extends Activity implements OnClickListener {
 		super.onPause();
 	}
 
-	// *************************** 按钮动画 START ***************************
-	/**
-	 * This animation was intended to keep a pressed state of the Drawable
-	 * 
-	 * @return Animation
-	 */
-	private Animator preparePressedAnimation() {
-		Animator animation = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY,
-				drawable.getCircleScale(), 0.65f);
-		animation.setDuration(120);
-		return animation;
-	}
-
-	/**
-	 * This animation will make a pulse effect to the inner circle
-	 * 
-	 * @return Animation
-	 */
-	private Animator preparePulseAnimation() {
-		AnimatorSet animation = new AnimatorSet();
-
-		Animator firstBounce = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY,
-				drawable.getCircleScale(), 0.88f);
-		firstBounce.setDuration(300);
-		firstBounce.setInterpolator(new CycleInterpolator(1));
-		Animator secondBounce = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0.75f, 0.83f);
-		secondBounce.setDuration(300);
-		secondBounce.setInterpolator(new CycleInterpolator(1));
-		Animator thirdBounce = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0.75f, 0.80f);
-		thirdBounce.setDuration(300);
-		thirdBounce.setInterpolator(new CycleInterpolator(1));
-
-		animation.playSequentially(firstBounce, secondBounce, thirdBounce);
-		return animation;
-	}
-
-	/**
-	 * Style 1 animation will simulate a indeterminate loading while taking
-	 * advantage of the inner circle to provide a progress sense
-	 * 
-	 * @return Animation
-	 */
-	private Animator prepareStyle1Animation() {
-		AnimatorSet animation = new AnimatorSet();
-
-		final Animator indeterminateAnimation = ObjectAnimator.ofFloat(
-				drawable, CircularProgressDrawable.PROGRESS_PROPERTY, 0, 7200);
-		indeterminateAnimation.setDuration(7200);
-
-		Animator innerCircleAnimation = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0f, 0.75f);
-		innerCircleAnimation.setDuration(3600);
-		innerCircleAnimation.addListener(new AnimatorListenerAdapter() {
-			@Override
-			public void onAnimationStart(Animator animation) {
-				drawable.setIndeterminate(true);
-			}
-
-			@Override
-			public void onAnimationEnd(Animator animation) {
-				indeterminateAnimation.end();
-				drawable.setIndeterminate(false);
-				drawable.setProgress(0);
-			}
-		});
-
-		animation.playTogether(innerCircleAnimation, indeterminateAnimation);
-		return animation;
-	}
-
-	/**
-	 * Style 2 animation will fill the outer ring while applying a color effect
-	 * from red to green
-	 * 
-	 * @return Animation
-	 */
-	private Animator prepareStyle2Animation() {
-		AnimatorSet animation = new AnimatorSet();
-
-		ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.PROGRESS_PROPERTY, 0f, 1f);
-		progressAnimation.setDuration(3600);
-		progressAnimation
-				.setInterpolator(new AccelerateDecelerateInterpolator());
-
-		ObjectAnimator colorAnimator = ObjectAnimator.ofInt(drawable,
-				CircularProgressDrawable.RING_COLOR_PROPERTY, getResources()
-						.getColor(android.R.color.holo_red_dark),
-				getResources().getColor(android.R.color.holo_green_light));
-		colorAnimator.setEvaluator(new ArgbEvaluator());
-		colorAnimator.setDuration(3600);
-
-		animation.playTogether(progressAnimation, colorAnimator);
-		return animation;
-	}
-
-	/**
-	 * Style 3 animation will turn a 3/4 animation with Anticipate/Overshoot
-	 * interpolation to a blank waiting - like state, wait for 2 seconds then
-	 * return to the original state
-	 * 
-	 * @return Animation
-	 */
-	private Animator prepareStyle3Animation() {
-		AnimatorSet animation = new AnimatorSet();
-
-		ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.PROGRESS_PROPERTY, 0.75f, 0f);
-		progressAnimation.setDuration(1200);
-		progressAnimation.setInterpolator(new AnticipateInterpolator());
-
-		Animator innerCircleAnimation = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0.75f, 0f);
-		innerCircleAnimation.setDuration(1200);
-		innerCircleAnimation.setInterpolator(new AnticipateInterpolator());
-
-		ObjectAnimator invertedProgress = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.PROGRESS_PROPERTY, 0f, 0.75f);
-		invertedProgress.setDuration(1200);
-		invertedProgress.setStartDelay(3200);
-		invertedProgress.setInterpolator(new OvershootInterpolator());
-
-		Animator invertedCircle = ObjectAnimator.ofFloat(drawable,
-				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0f, 0.75f);
-		invertedCircle.setDuration(1200);
-		invertedCircle.setStartDelay(3200);
-		invertedCircle.setInterpolator(new OvershootInterpolator());
-
-		animation.playTogether(progressAnimation, innerCircleAnimation,
-				invertedProgress, invertedCircle);
-		return animation;
-	}
-	// *************************** 按钮动画 END ***************************
 }
