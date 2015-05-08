@@ -57,6 +57,7 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 
@@ -386,10 +387,28 @@ public class ChatActivity extends Activity implements OnClickListener {
 													Intent.ACTION_CALL, uri);
 											startActivity(intent);
 										} else {
-											String strAnswer = "通讯录中未找到："
-													+ peopleName;
-											tvAnswer.setText(strAnswer);
-											startSpeak(strAnswer);
+											String phoneNumFromPinYin = getContactNumberByPinYin(PinYinUtil
+													.convertAll(peopleName));
+
+											if (phoneNumFromPinYin != null
+													& phoneNumFromPinYin.trim()
+															.length() > 0) {
+												String strAnswer = "正在打电话给："
+														+ peopleName;
+												tvAnswer.setText(strAnswer);
+												startSpeak(strAnswer);
+												Uri uri = Uri.parse("tel:"
+														+ phoneNumFromPinYin);
+												Intent intent = new Intent(
+														Intent.ACTION_CALL, uri);
+												startActivity(intent);
+
+											} else {
+												String strAnswer = "通讯录中未找到："
+														+ peopleName;
+												tvAnswer.setText(strAnswer);
+												startSpeak(strAnswer);
+											}
 										}
 									}
 
@@ -428,6 +447,24 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			}
 			return "";
+		}
+
+		public String getContactNumberByPinYin(String pinyin) {
+			Cursor c = getApplicationContext().getContentResolver().query(
+					Phone.CONTENT_URI, null, null, null, null);
+
+			// 循环输出联系人号码
+			String phoneNum;
+			while (c.moveToNext()) {
+				if (pinyin.equals(PinYinUtil.convertAll(c.getString(c
+						.getColumnIndex(Phone.DISPLAY_NAME))))) {
+					// 可以获取到电话号码
+					return c.getString(c.getColumnIndex(Phone.NUMBER));
+				}
+
+			}
+			return "";
+
 		}
 
 		private void startAppbyPackage(String packageName) {
