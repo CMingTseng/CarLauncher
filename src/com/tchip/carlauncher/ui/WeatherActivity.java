@@ -1,10 +1,6 @@
 package com.tchip.carlauncher.ui;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.bean.Titanic;
@@ -12,20 +8,26 @@ import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
+import com.tchip.carlauncher.util.WeatherUtil.WEATHER_TYPE;
 import com.tchip.carlauncher.view.TitanicTextView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class WeatherActivity extends Activity {
 	private SharedPreferences sharedPreferences;
+	private FrameLayout frameLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,27 @@ public class WeatherActivity extends Activity {
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
 		initialLayout();
+
+	}
+
+	private void showWeatherAnimation(WEATHER_TYPE type) {
+		frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
+		switch (type) {
+		case SUN:
+
+			break;
+		case CLOUD:
+			WeatherUtil.cloudAnimation(getApplicationContext(), frameLayout);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	private void initialLayout() {
 
-		LinearLayout layoutWeather = (LinearLayout) findViewById(R.id.layoutWeather);
+		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 
 		// 刷新按钮
 		ImageView imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
@@ -68,11 +86,15 @@ public class WeatherActivity extends Activity {
 		textLocation.setText(sharedPreferences.getString("cityName", "未定位"));
 
 		String weatherToday = sharedPreferences.getString("day0weather", "未知");
+
+		showWeatherAnimation(WeatherUtil.getTypeByStr(weatherToday));
+
 		layoutWeather.setBackground(getResources().getDrawable(
-				WeatherUtil.getWeatherBackground(weatherToday))); // Background
+				WeatherUtil.getWeatherBackground(WeatherUtil
+						.getTypeByStr(weatherToday)))); // Background
 		ImageView imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
 		imageTodayWeather.setImageResource(WeatherUtil
-				.getWeatherDrawable(weatherToday));
+				.getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));
 		TextView textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textTodayWeather.setText(weatherToday);
 
@@ -106,9 +128,10 @@ public class WeatherActivity extends Activity {
 		day1date.setText(sharedPreferences.getString("day1date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day1image = (ImageView) findViewById(R.id.day1image);
-		day1image.setImageResource(WeatherUtil
-				.getWeatherDrawable(sharedPreferences.getString("day1weather",
-						"未知")));
+		day1image
+				.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+						.getTypeByStr(sharedPreferences.getString(
+								"day1weather", "未知"))));
 		TextView day1tmpHigh = (TextView) findViewById(R.id.day1tmpHigh);
 		day1tmpHigh.setText(sharedPreferences.getString("day1tmpHigh", "35"));
 		TextView day1tmpLow = (TextView) findViewById(R.id.day1tmpLow);
@@ -123,9 +146,10 @@ public class WeatherActivity extends Activity {
 		day2date.setText(sharedPreferences.getString("day2date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day2image = (ImageView) findViewById(R.id.day2image);
-		day2image.setImageResource(WeatherUtil
-				.getWeatherDrawable(sharedPreferences.getString("day2weather",
-						"未知")));
+		day2image
+				.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+						.getTypeByStr(sharedPreferences.getString(
+								"day2weather", "未知"))));
 		TextView day2tmpHigh = (TextView) findViewById(R.id.day2tmpHigh);
 		day2tmpHigh.setText(sharedPreferences.getString("day2tmpHigh", "35"));
 		TextView day2tmpLow = (TextView) findViewById(R.id.day2tmpLow);
@@ -140,9 +164,10 @@ public class WeatherActivity extends Activity {
 		day3date.setText(sharedPreferences.getString("day3date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day3image = (ImageView) findViewById(R.id.day3image);
-		day3image.setImageResource(WeatherUtil
-				.getWeatherDrawable(sharedPreferences.getString("day3weather",
-						"未知")));
+		day3image
+				.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+						.getTypeByStr(sharedPreferences.getString(
+								"day3weather", "未知"))));
 		TextView day3tmpHigh = (TextView) findViewById(R.id.day3tmpHigh);
 		day3tmpHigh.setText(sharedPreferences.getString("day3tmpHigh", "35"));
 		TextView day3tmpLow = (TextView) findViewById(R.id.day3tmpLow);
@@ -157,9 +182,10 @@ public class WeatherActivity extends Activity {
 		day4date.setText(sharedPreferences.getString("day4date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day4image = (ImageView) findViewById(R.id.day4image);
-		day4image.setImageResource(WeatherUtil
-				.getWeatherDrawable(sharedPreferences.getString("day4weather",
-						"未知")));
+		day4image
+				.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+						.getTypeByStr(sharedPreferences.getString(
+								"day4weather", "未知"))));
 		TextView day4tmpHigh = (TextView) findViewById(R.id.day4tmpHigh);
 		day4tmpHigh.setText(sharedPreferences.getString("day4tmpHigh", "35"));
 		TextView day4tmpLow = (TextView) findViewById(R.id.day4tmpLow);
@@ -174,9 +200,10 @@ public class WeatherActivity extends Activity {
 		day5date.setText(sharedPreferences.getString("day5date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day5image = (ImageView) findViewById(R.id.day5image);
-		day5image.setImageResource(WeatherUtil
-				.getWeatherDrawable(sharedPreferences.getString("day5weather",
-						"未知")));
+		day5image
+				.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+						.getTypeByStr(sharedPreferences.getString(
+								"day5weather", "未知"))));
 		TextView day5tmpHigh = (TextView) findViewById(R.id.day5tmpHigh);
 		day5tmpHigh.setText(sharedPreferences.getString("day5tmpHigh", "35"));
 		TextView day5tmpLow = (TextView) findViewById(R.id.day5tmpLow);
@@ -191,9 +218,10 @@ public class WeatherActivity extends Activity {
 		day6date.setText(sharedPreferences.getString("day6date", "2015-01-01")
 				.substring(5, 10));
 		ImageView day6image = (ImageView) findViewById(R.id.day6image);
-		day6image.setImageResource(WeatherUtil
-				.getWeatherDrawable(sharedPreferences.getString("day6weather",
-						"未知")));
+		day6image
+				.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+						.getTypeByStr(sharedPreferences.getString(
+								"day6weather", "未知"))));
 		TextView day6tmpHigh = (TextView) findViewById(R.id.day6tmpHigh);
 		day6tmpHigh.setText(sharedPreferences.getString("day6tmpHigh", "35"));
 		TextView day6tmpLow = (TextView) findViewById(R.id.day6tmpLow);
@@ -250,30 +278,26 @@ public class WeatherActivity extends Activity {
 		startService(intent);
 	}
 
-	private void setWeatherLogoOld(String weatherStr) {
-		ImageView imgWeatherOne = (ImageView) findViewById(R.id.imgWeatherOne);
-		ImageView imgWeatherTwo = (ImageView) findViewById(R.id.imgWeatherTwo);
-		if (weatherStr.contains("转")) {
-			String strWeatherOne = weatherStr.split("转")[0];
-			String strWeatherTwo = weatherStr.split("转")[1];
-			imgWeatherOne.setBackgroundResource(WeatherUtil
-					.getWeatherDrawable(strWeatherOne));
-			imgWeatherTwo.setVisibility(View.VISIBLE);
-			imgWeatherTwo.setBackgroundResource(WeatherUtil
-					.getWeatherDrawable(strWeatherTwo));
-
-		} else {
-			imgWeatherOne.setBackgroundResource(WeatherUtil
-					.getWeatherDrawable(weatherStr));
-			imgWeatherTwo.setVisibility(View.GONE);
-		}
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		finish();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (KeyEvent.KEYCODE_BACK == keyCode)
+			finish();
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

@@ -145,8 +145,9 @@ public class MainActivity extends Activity {
 	private void updateMainLayout() {
 		// 天气
 		ImageView imgWeather = (ImageView) findViewById(R.id.imgWeather);
-		imgWeather.setImageResource(WeatherUtil.getWeatherBackground(preferences
-				.getString("day0weather", "晴")));
+		imgWeather.setImageResource(WeatherUtil
+				.getWeatherBackground(WeatherUtil.getTypeByStr(preferences
+						.getString("day0weather", "晴"))));
 		imgWeather.setOnClickListener(new MyOnClickListener());
 
 		// 多媒体
