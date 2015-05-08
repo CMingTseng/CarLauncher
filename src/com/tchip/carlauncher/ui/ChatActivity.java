@@ -16,14 +16,20 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.PhoneLookup;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -320,7 +326,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 									String operationStr = jsonObject
 											.getString("operation");
 									if ("LAUNCH".equals(operationStr)) {
-
 										String packageName = getAppPackageByName(appName);
 										Toast.makeText(getApplicationContext(),
 												packageName, Toast.LENGTH_SHORT)
@@ -341,6 +346,52 @@ public class ChatActivity extends Activity implements OnClickListener {
 									}
 								} else if ("telephone".equals(strService)) {
 									// 打电话给张三 "operation": "CALL"
+									String peopleName = jsonObject
+											.getJSONObject("semantic")
+											.getJSONObject("slots")
+											.getString("name");
+									String operationStr = jsonObject
+											.getString("operation");
+									if ("CALL".equals(operationStr)) {
+										String phoneNum = getContactNumberByName(peopleName);
+										String phoneCode = "";
+										try {
+											phoneCode = jsonObject
+													.getJSONObject("semantic")
+													.getJSONObject("slots")
+													.getString("code");
+										} catch (Exception e) {
+
+										}
+										if (phoneNum != null
+												& phoneNum.trim().length() > 0) {
+											String strAnswer = "正在打电话给："
+													+ peopleName;
+											tvAnswer.setText(strAnswer);
+											startSpeak(strAnswer);
+											Uri uri = Uri.parse("tel:"
+													+ phoneNum);
+											Intent intent = new Intent(
+													Intent.ACTION_CALL, uri);
+											startActivity(intent);
+										} else if (phoneCode != null
+												& phoneCode.trim().length() > 0) {
+											String strAnswer = "正在打电话给："
+													+ peopleName;
+											tvAnswer.setText(strAnswer);
+											startSpeak(strAnswer);
+											Uri uri = Uri.parse("tel:"
+													+ phoneCode);
+											Intent intent = new Intent(
+													Intent.ACTION_CALL, uri);
+											startActivity(intent);
+										} else {
+											String strAnswer = "通讯录中未找到："
+													+ peopleName;
+											tvAnswer.setText(strAnswer);
+											startSpeak(strAnswer);
+										}
+									}
 
 								}
 
@@ -362,22 +413,28 @@ public class ChatActivity extends Activity implements OnClickListener {
 			});
 		}
 
+		public String getContactNumberByName(String name) {
+			Cursor c = getApplicationContext().getContentResolver().query(
+					Phone.CONTENT_URI, null, null, null, null);
+
+			// 循环输出联系人号码
+			String phoneNum;
+			while (c.moveToNext()) {
+				if (name.equals(c.getString(c
+						.getColumnIndex(Phone.DISPLAY_NAME)))) {
+					// 可以获取到电话号码
+					return c.getString(c.getColumnIndex(Phone.NUMBER));
+				}
+
+			}
+			return "";
+		}
+
 		private void startAppbyPackage(String packageName) {
 
 			Intent intent = packageManager
 					.getLaunchIntentForPackage(packageName);
 			startActivity(intent);
-			// ComponentName componetName = new ComponentName(
-			// "com.urbwewanss.rawady.caddiescore",
-			// "com.urbwewanss.rawady.caddiescore.MainActivity");
-			// try {
-			// Intent intent = new Intent();
-			// intent.setComponent(componetName);
-			// startActivity(intent);
-			// } catch (Exception e) {
-			// Log.e("ZJ", "Component Not Found");
-			// }
-
 		}
 
 		private String getAppPackageByName(String appName) {
@@ -391,13 +448,25 @@ public class ChatActivity extends Activity implements OnClickListener {
 				// 应用名称:resolve.loadLabel(packageManager)
 				// 应用包名：resolve.activityInfo.packageName
 				// 应用启动的第一个Activity：resolve.activityInfo.name
-				if (appName
-						.equals(resolve.loadLabel(packageManager).toString())) {
+				if (UpperCaseLetter(appName).equals(
+						resolve.loadLabel(packageManager).toString())) {
 					return resolve.activityInfo.packageName.toString();
 				}
 			}
-
 			return "com.tchip.carlauncher";
+		}
+
+		public String UpperCaseLetter(String b) {
+			char letters[] = new char[b.length()];
+			for (int i = 0; i < b.length(); i++) {
+
+				char letter = b.charAt(i);
+				if (letter >= 'a' && letter <= 'z') {
+					letter = (char) (letter - 32);
+				}
+				letters[i] = letter;
+			}
+			return new String(letters);
 		}
 
 		@Override
@@ -411,9 +480,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 			if (currentAnimation != null) {
 				currentAnimation.cancel();
 			}
-			// currentAnimation = prepareStyle1Animation();
-			// currentAnimation = prepareStyle2Animation();
-			// currentAnimation = prepareStyle3Animation();
 			currentAnimation = ProgressAnimationUtil
 					.preparePulseAnimation(drawable);
 			currentAnimation.start();
@@ -428,9 +494,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 			}
 			currentAnimation = ProgressAnimationUtil
 					.prepareStyle1Animation(drawable);
-			// currentAnimation = prepareStyle2Animation();
-			// currentAnimation = prepareStyle3Animation();
-			// currentAnimation = preparePulseAnimation();
 			currentAnimation.start();
 		}
 

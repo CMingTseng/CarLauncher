@@ -38,11 +38,11 @@ SharedPreferences-CarLauncher
 	*openQA		问答
 	*datetime	时间
 	*weather	天气
-	telephone	拨号
+	*telephone	拨号
 	map			地图（导航）
 	*baike		百科
 	chat
-	app			应用	（打开："operation": "LAUNCH"）
+	*app		应用	（打开："operation": "LAUNCH"）
 	
 ============================================================================
 [ToDo]
