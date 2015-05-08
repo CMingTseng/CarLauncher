@@ -3,6 +3,8 @@ package com.tchip.carlauncher.util;
 import java.util.Date;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.FrameLayout;
 
 import com.tchip.carlauncher.R;
@@ -18,24 +20,24 @@ public class WeatherUtil {
 	 * 多云动画
 	 */
 	public static void cloudAnimation(Context context, FrameLayout flLayout) {
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+				R.drawable.weather_cloud_1);
 
 		DynamicWeatherCloudyView view1 = new DynamicWeatherCloudyView(context,
-				R.drawable.weather_cloud_1, -150, 40, 30);
-		DynamicWeatherCloudyView view2 = new DynamicWeatherCloudyView(context,
-				R.drawable.weather_cloud_2, 280, 100, 60);
-		DynamicWeatherCloudyView view3 = new DynamicWeatherCloudyView(context,
-				R.drawable.weather_cloud_3, 140, 130, 40);
-		DynamicWeatherCloudyView view4 = new DynamicWeatherCloudyView(context,
-				R.drawable.weather_cloud_4, 0, 60, 40);
-
+				bitmap, -150, 50, 30);
 		flLayout.addView(view1);
-		flLayout.addView(view2);
-		flLayout.addView(view3);
-		flLayout.addView(view4);
 		view1.move();
+
+		DynamicWeatherCloudyView view2 = new DynamicWeatherCloudyView(context,
+				bitmap, 280, 150, 60);
+		flLayout.addView(view2);
 		view2.move();
+
+		DynamicWeatherCloudyView view3 = new DynamicWeatherCloudyView(context,
+				bitmap, 140, 220, 40);
+		flLayout.addView(view3);
 		view3.move();
-		view4.move();
+
 	}
 
 	public static WEATHER_TYPE getTypeByStr(String weather) {

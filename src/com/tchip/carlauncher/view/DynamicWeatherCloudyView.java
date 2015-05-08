@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
@@ -13,7 +14,7 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 	/**
 	 * 要处理的图
 	 */
-	private Bitmap bitmap;
+	public static Bitmap bitmap;
 
 	private int left;
 	private int top;
@@ -29,17 +30,17 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 	/**
 	 * 图片是否在移动
 	 */
-	private static boolean IsRunning = true;
+	public static boolean IsRunning = true;
 
 	private Handler handler;
 
-	public DynamicWeatherCloudyView(Context context, int resource, int left,
+	public DynamicWeatherCloudyView(Context context,Bitmap bitmap, int left,
 			int top, int sleepTime) {
 		super(context);
 
 		this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
-		bitmap = BitmapFactory.decodeResource(getResources(), resource);
+		this.bitmap = bitmap;
 		this.left = left;
 		this.top = top;
 		this.sleepTime = sleepTime;
@@ -53,6 +54,7 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 
 	public void move() {
 		new Thread(this).start();
+		//new Thread(new TimeThread()).start(); // 5s后取消动画
 	}
 
 	@Override
@@ -79,5 +81,32 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 			}
 		}
 	}
-	
+
+	final Handler timeHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				IsRunning = false;
+			}
+			super.handleMessage(msg);
+		}
+	};
+
+	public class TimeThread implements Runnable {
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					Thread.sleep(5000);
+					Message message = new Message();
+					message.what = 1;
+					timeHandler.sendMessage(message);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 }

@@ -50,9 +50,13 @@ public class SpeakService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		Bundle extras = intent.getExtras();
-		if (extras != null) {
-			content = extras.getString("content");
+		try {
+			Bundle extras = intent.getExtras();
+			if (extras != null) {
+				content = extras.getString("content");
+			}
+		} catch (Exception e) {
+			//
 		}
 		// 初始化合成对象
 		mTts = SpeechSynthesizer.createSynthesizer(this, mTtsInitListener);
