@@ -1,5 +1,8 @@
 package com.tchip.carlauncher.ui;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,10 +15,13 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -67,6 +73,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	private ScrollView scrollArea;
 
+	private PackageManager packageManager;
+
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,7 +95,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		// screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		// screenFilter.addAction(Intent.ACTION_SCREEN_ON);
 		// registerReceiver(ScreenOnOffReceiver, screenFilter);
-		
+
 		startSpeak("你好，我是小天，有什么可以帮您？");
 
 	}
@@ -299,6 +307,41 @@ public class ChatActivity extends Activity implements OnClickListener {
 											+ ",温度" + tempRange;
 									tvAnswer.setText(strAnswer);
 									startSpeak(strAnswer);
+								} else if ("music".equals(strService)) {
+									// 下载邓紫棋的喜欢你
+								} else if ("map".equals(strService)) {
+									// 导航到中山市图书馆
+								} else if ("app".equals(strService)) {
+									// 打开百度地图 "operation": "LAUNCH",
+									String appName = jsonObject
+											.getJSONObject("semantic")
+											.getJSONObject("slots")
+											.getString("name");
+									String operationStr = jsonObject
+											.getString("operation");
+									if ("LAUNCH".equals(operationStr)) {
+
+										String packageName = getAppPackageByName(appName);
+										Toast.makeText(getApplicationContext(),
+												packageName, Toast.LENGTH_SHORT)
+												.show();
+										if (!"com.tchip.carlauncher"
+												.equals(packageName)) {
+											String strAnswer = "正在启动："
+													+ appName;
+											tvAnswer.setText(strAnswer);
+											startSpeak(strAnswer);
+											startAppbyPackage(packageName);
+										} else {
+											String strAnswer = "未找到应用："
+													+ appName;
+											tvAnswer.setText(strAnswer);
+											startSpeak(strAnswer);
+										}
+									}
+								} else if ("telephone".equals(strService)) {
+									// 打电话给张三 "operation": "CALL"
+
 								}
 
 							} catch (JSONException e) {
@@ -317,6 +360,44 @@ public class ChatActivity extends Activity implements OnClickListener {
 					}
 				}
 			});
+		}
+
+		private void startAppbyPackage(String packageName) {
+
+			Intent intent = packageManager
+					.getLaunchIntentForPackage(packageName);
+			startActivity(intent);
+			// ComponentName componetName = new ComponentName(
+			// "com.urbwewanss.rawady.caddiescore",
+			// "com.urbwewanss.rawady.caddiescore.MainActivity");
+			// try {
+			// Intent intent = new Intent();
+			// intent.setComponent(componetName);
+			// startActivity(intent);
+			// } catch (Exception e) {
+			// Log.e("ZJ", "Component Not Found");
+			// }
+
+		}
+
+		private String getAppPackageByName(String appName) {
+			packageManager = getApplicationContext().getPackageManager();
+			Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+			mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+			List<ResolveInfo> resovleInfos = packageManager
+					.queryIntentActivities(mainIntent, 0);
+			for (ResolveInfo resolve : resovleInfos) {
+				// 应用图标:resolve.loadIcon(packageManager)
+				// 应用名称:resolve.loadLabel(packageManager)
+				// 应用包名：resolve.activityInfo.packageName
+				// 应用启动的第一个Activity：resolve.activityInfo.name
+				if (appName
+						.equals(resolve.loadLabel(packageManager).toString())) {
+					return resolve.activityInfo.packageName.toString();
+				}
+			}
+
+			return "com.tchip.carlauncher";
 		}
 
 		@Override

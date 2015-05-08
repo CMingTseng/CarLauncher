@@ -41,6 +41,7 @@ public class WeatherActivity extends Activity {
 
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
+		
 		initialLayout();
 
 		speakWeather(0);
