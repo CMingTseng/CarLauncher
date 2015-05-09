@@ -164,4 +164,7 @@
         <item>Accordion</item>
     </string-array>
 
+    <string name="tab1_text">行车设置</string>
+    <string name="tab2_text">系统设置</string>
+
 </resources>
