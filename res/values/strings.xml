@@ -164,7 +164,9 @@
         <item>Accordion</item>
     </string-array>
 
-    <string name="tab1_text">行车设置</string>
-    <string name="tab2_text">系统设置</string>
+    <string name="tab1_text">录像</string>
+    <string name="tab2_text">语音</string>
+    <string name="tab3_text">地图</string>
+    <string name="tab4_text">系统</string>
 
 </resources>

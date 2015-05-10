@@ -8,7 +8,7 @@ import android.graphics.BitmapFactory;
 import android.widget.FrameLayout;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.view.DynamicWeatherCloudyView;
+import com.tchip.carlauncher.view.WeatherDynamicCloudyView;
 
 public class WeatherUtil {
 
@@ -23,17 +23,17 @@ public class WeatherUtil {
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.weather_cloud_1);
 
-		DynamicWeatherCloudyView view1 = new DynamicWeatherCloudyView(context,
+		WeatherDynamicCloudyView view1 = new WeatherDynamicCloudyView(context,
 				bitmap, -150, 50, 30);
 		flLayout.addView(view1);
 		view1.move();
 
-		DynamicWeatherCloudyView view2 = new DynamicWeatherCloudyView(context,
+		WeatherDynamicCloudyView view2 = new WeatherDynamicCloudyView(context,
 				bitmap, 280, 150, 60);
 		flLayout.addView(view2);
 		view2.move();
 
-		DynamicWeatherCloudyView view3 = new DynamicWeatherCloudyView(context,
+		WeatherDynamicCloudyView view3 = new WeatherDynamicCloudyView(context,
 				bitmap, 140, 220, 40);
 		flLayout.addView(view3);
 		view3.move();

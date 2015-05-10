@@ -20,7 +20,7 @@ import android.view.View;
 import com.nineoldandroids.view.ViewHelper;
 import com.tchip.carlauncher.R;
 
-public class MyViewPager extends ViewPager {
+public class TransitionViewPager extends ViewPager {
 
 	public static final String TAG = "JazzyViewPager";
 
@@ -45,11 +45,11 @@ public class MyViewPager extends ViewPager {
 		API_11 = Build.VERSION.SDK_INT >= 11;
 	}
 
-	public MyViewPager(Context context) {
+	public TransitionViewPager(Context context) {
 		this(context, null);
 	}
 
-	public MyViewPager(Context context, AttributeSet attrs) {
+	public TransitionViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setClipChildren(false);
 		// now style everything!
@@ -102,7 +102,7 @@ public class MyViewPager extends ViewPager {
 	private void wrapWithOutlines() {
 		for (int i = 0; i < getChildCount(); i++) {
 			View v = getChildAt(i);
-			if (!(v instanceof MyViewPagerContainer)) {
+			if (!(v instanceof TransitionViewPagerContainer)) {
 				removeView(v);
 				super.addView(wrapChild(v), i);
 			}
@@ -110,11 +110,11 @@ public class MyViewPager extends ViewPager {
 	}
 
 	private View wrapChild(View child) {
-		if (!mOutlineEnabled || child instanceof MyViewPagerContainer)
+		if (!mOutlineEnabled || child instanceof TransitionViewPagerContainer)
 			return child;
-		MyViewPagerContainer out = new MyViewPagerContainer(getContext());
+		TransitionViewPagerContainer out = new TransitionViewPagerContainer(getContext());
 		out.setLayoutParams(generateDefaultLayoutParams());
-		child.setLayoutParams(new MyViewPagerContainer.LayoutParams(
+		child.setLayoutParams(new TransitionViewPagerContainer.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		out.addView(child);
 		return out;
@@ -477,22 +477,22 @@ public class MyViewPager extends ViewPager {
 	}
 
 	protected void animateOutline(View left, View right) {
-		if (!(left instanceof MyViewPagerContainer))
+		if (!(left instanceof TransitionViewPagerContainer))
 			return;
 		if (mState != State.IDLE) {
 			if (left != null) {
 				manageLayer(left, true);
-				((MyViewPagerContainer) left).setOutlineAlpha(1.0f);
+				((TransitionViewPagerContainer) left).setOutlineAlpha(1.0f);
 			}
 			if (right != null) {
 				manageLayer(right, true);
-				((MyViewPagerContainer) right).setOutlineAlpha(1.0f);
+				((TransitionViewPagerContainer) right).setOutlineAlpha(1.0f);
 			}
 		} else {
 			if (left != null)
-				((MyViewPagerContainer) left).start();
+				((TransitionViewPagerContainer) left).start();
 			if (right != null)
-				((MyViewPagerContainer) right).start();
+				((TransitionViewPagerContainer) right).start();
 		}
 	}
 

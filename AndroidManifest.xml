@@ -119,6 +119,10 @@
         <activity
             android:name="com.tchip.carlauncher.ui.WeatherActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.SettingSystemBrightActivity"
+            android:theme="@android:style/Theme.Dialog"
+            android:screenOrientation="landscape" />
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />

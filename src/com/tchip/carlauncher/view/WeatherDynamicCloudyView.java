@@ -9,7 +9,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-public class DynamicWeatherCloudyView extends View implements Runnable {
+public class WeatherDynamicCloudyView extends View implements Runnable {
 
 	/**
 	 * 要处理的图
@@ -34,7 +34,7 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 
 	private Handler handler;
 
-	public DynamicWeatherCloudyView(Context context,Bitmap bitmap, int left,
+	public WeatherDynamicCloudyView(Context context,Bitmap bitmap, int left,
 			int top, int sleepTime) {
 		super(context);
 
@@ -47,7 +47,7 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 
 		handler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
-				DynamicWeatherCloudyView.this.invalidate();
+				WeatherDynamicCloudyView.this.invalidate();
 			};
 		};
 	}
@@ -67,7 +67,7 @@ public class DynamicWeatherCloudyView extends View implements Runnable {
 	@Override
 	public void run() {
 
-		while (DynamicWeatherCloudyView.IsRunning) {
+		while (WeatherDynamicCloudyView.IsRunning) {
 			if ((bitmap != null) && (left > (getWidth()))) {
 				left = -bitmap.getWidth();
 			}

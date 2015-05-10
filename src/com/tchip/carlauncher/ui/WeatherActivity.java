@@ -41,7 +41,7 @@ public class WeatherActivity extends Activity {
 
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				getApplicationContext().MODE_PRIVATE);
-		
+
 		initialLayout();
 
 		speakWeather(0);
@@ -170,7 +170,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[1] = day1weekStr + "天气：" + day1weatherStr + ","
-					+ day1tmpLowStr + "到" + day1tmpHighStr+ "," + day1windStr;
+					+ day1tmpLowStr + "到" + day1tmpHighStr + "," + day1windStr;
 		} else {
 			weatherArray[1] = "定位失败，无法获取天气信息";
 		}
@@ -441,8 +441,8 @@ public class WeatherActivity extends Activity {
 			exitWeather();
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	private void exitWeather(){
+
+	private void exitWeather() {
 		finish();
 	}
 

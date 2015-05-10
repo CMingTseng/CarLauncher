@@ -14,7 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
-public class MyViewPagerContainer extends FrameLayout implements Animatable {
+public class TransitionViewPagerContainer extends FrameLayout implements Animatable {
 
 	private Paint mOutlinePaint;
 
@@ -30,17 +30,17 @@ public class MyViewPagerContainer extends FrameLayout implements Animatable {
 		}
 	};
 
-	public MyViewPagerContainer(Context context) {
+	public TransitionViewPagerContainer(Context context) {
 		super(context);
 		init();
 	}
 
-	public MyViewPagerContainer(Context context, AttributeSet attrs) {
+	public TransitionViewPagerContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
 
-	public MyViewPagerContainer(Context context, AttributeSet attrs,
+	public TransitionViewPagerContainer(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
 		init();
@@ -61,8 +61,8 @@ public class MyViewPagerContainer extends FrameLayout implements Animatable {
 	protected void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
 		int offset = MaterialUtil.dpToPx(5, getResources());
-		if (mOutlinePaint.getColor() != MyViewPager.sOutlineColor) {
-			mOutlinePaint.setColor(MyViewPager.sOutlineColor);
+		if (mOutlinePaint.getColor() != TransitionViewPager.sOutlineColor) {
+			mOutlinePaint.setColor(TransitionViewPager.sOutlineColor);
 		}
 		mOutlinePaint.setAlpha((int) (mAlpha * 255));
 		Rect rect = new Rect(offset, offset, getMeasuredWidth() - offset,

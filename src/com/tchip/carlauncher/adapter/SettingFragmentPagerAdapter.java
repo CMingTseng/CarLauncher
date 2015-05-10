@@ -1,6 +1,9 @@
 package com.tchip.carlauncher.adapter;
 
+import java.util.ArrayList;
+
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.ui.SettingCameraFragment;
 import com.tchip.carlauncher.view.SampleFragment;
 
 import android.content.Context;
@@ -8,29 +11,33 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-	private static final String[] CONTENT = new String[] { "行车", "系统" };
+public class SettingFragmentPagerAdapter extends FragmentPagerAdapter {
 
 	private Context mContext;
+	private ArrayList<Fragment> list;
 
-	public SampleFragmentPagerAdapter(Context context, FragmentManager fm) {
+	public SettingFragmentPagerAdapter(Context context, FragmentManager fm,
+			ArrayList<Fragment> list) {
 		super(fm);
 		this.mContext = context;
+		this.list = list;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		return SampleFragment.newInstance(CONTENT[position % CONTENT.length]);
+		return list.get(position);
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return new String[] { mContext.getString(R.string.tab1_text),
-				mContext.getString(R.string.tab2_text) }[position];
+				mContext.getString(R.string.tab2_text),
+				mContext.getString(R.string.tab3_text),
+				mContext.getString(R.string.tab4_text) }[position];
 	}
 
 	@Override
 	public int getCount() {
-		return CONTENT.length;
+		return list.size();
 	}
 }

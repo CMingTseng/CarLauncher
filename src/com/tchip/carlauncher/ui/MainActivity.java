@@ -9,9 +9,9 @@ import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
-import com.tchip.carlauncher.view.MyViewPager;
-import com.tchip.carlauncher.view.MyViewPager.TransitionEffect;
-import com.tchip.carlauncher.view.MyViewPagerContainer;
+import com.tchip.carlauncher.view.TransitionViewPager;
+import com.tchip.carlauncher.view.TransitionViewPager.TransitionEffect;
+import com.tchip.carlauncher.view.TransitionViewPagerContainer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	private View viewMain, viewVice;
 	private List<View> viewList;
-	private MyViewPager viewPager;
+	private TransitionViewPager viewPager;
 	private SharedPreferences preferences;
 
 	@Override
@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
 		viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
 		viewList.add(viewMain);
 		viewList.add(viewVice);
-		viewPager = (MyViewPager) findViewById(R.id.viewpager);
+		viewPager = (TransitionViewPager) findViewById(R.id.viewpager);
 		viewPager.setTransitionEffect(TransitionEffect.CubeOut);
 
 		viewPager.setPageMargin(10);
@@ -96,8 +96,8 @@ public class MainActivity extends Activity {
 
 		@Override
 		public boolean isViewFromObject(View view, Object obj) {
-			if (view instanceof MyViewPagerContainer) {
-				return ((MyViewPagerContainer) view).getChildAt(0) == obj;
+			if (view instanceof TransitionViewPagerContainer) {
+				return ((TransitionViewPagerContainer) view).getChildAt(0) == obj;
 			} else {
 				return view == obj;
 			}
