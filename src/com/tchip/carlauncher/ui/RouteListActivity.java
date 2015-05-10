@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iflytek.library.dao.RouteDistanceDbHelper;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
 import com.tchip.carlauncher.bean.SwipeMenu;
 import com.tchip.carlauncher.bean.SwipeMenuItem;
+import com.tchip.carlauncher.dao.RouteDistanceDbHelper;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SwipeMenuListView;

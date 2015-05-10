@@ -1,4 +1,4 @@
-package com.iflytek.library.dao;
+package com.tchip.carlauncher.dao;
 
 import java.util.ArrayList;
 import java.util.List;

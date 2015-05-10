@@ -42,11 +42,11 @@ import com.baidu.mapapi.map.BaiduMap.SnapshotReadyCallback;
 import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
-import com.iflytek.library.dao.RouteDistanceDbHelper;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.bean.RouteDistance;
 import com.tchip.carlauncher.bean.RoutePoint;
+import com.tchip.carlauncher.dao.RouteDistanceDbHelper;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 
