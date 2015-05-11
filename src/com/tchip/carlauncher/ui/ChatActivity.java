@@ -8,18 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -27,17 +20,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.PhoneLookup;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.CycleInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,6 +32,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviPara;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
@@ -70,6 +66,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private Toast mToast;
 	private EditText tvHint;
 	private TextView tvQuestion, tvAnswer;
+	private String strService;
 
 	private SharedPreferences mSharedPreferences;
 
@@ -81,6 +78,14 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private ScrollView scrollArea;
 
 	private PackageManager packageManager;
+
+	// 百度地图地址转经纬度
+	private GeoCoder mEndSearch = null;
+	private LatLng mEndLatLng;
+	private double startLat = 0.0;
+	private double startLng = 0.0;
+	private double endLat = 0.0;
+	private double endLng = 0.0;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -185,20 +190,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 	public void onClick(View view) {
 
 		switch (view.getId()) {
-		// 进入参数设置页面
-		// Intent intent = new Intent(ChatActivity.this,
-		// UnderstanderSettings.class);
-		// startActivity(intent);
-		// 开始文本理解
-		// mUnderstanderText.setText("");
-		// String text = "明天的天气怎么样？";
-		// if (mTextUnderstander.isUnderstanding()) {
-		// mTextUnderstander.cancel();
-		// } else {
-		// ret = mTextUnderstander.understandText(text, textListener);
-		// if (ret != 0) {
-		// }
-		// }
+		// 进入参数设置页面 UnderstanderSettings
+
 		// 开始语音理解
 		case R.id.iv_drawable:
 			tvHint.setText("");
@@ -219,13 +212,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 			}
 			break;
 		// 停止语音理解
-		// case R.id.understander_stop:
 		// mSpeechUnderstander.stopUnderstanding();
-		// break;
+
 		// 取消语音理解
-		// case R.id.understander_cancel:
 		// mSpeechUnderstander.cancel();
-		// break;
 		default:
 			break;
 		}
@@ -283,8 +273,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 										.getString("text");
 								tvQuestion.setText(strQuestion);
 
-								String strService = jsonObject
-										.getString("service");
+								strService = jsonObject.getString("service");
 								if ("openQA".equals(strService)
 										|| "datetime".equals(strService)
 										|| "chat".equals(strService)) {
@@ -317,7 +306,33 @@ public class ChatActivity extends Activity implements OnClickListener {
 								} else if ("music".equals(strService)) {
 									// 下载邓紫棋的喜欢你
 								} else if ("map".equals(strService)) {
-									// 导航到中山市图书馆
+
+									// 导航到中山市图书馆 operation": "ROUTE"
+
+									// 目的地
+									String endPoiStr = jsonObject
+											.getJSONObject("semantic")
+											.getJSONObject("slots")
+											.getJSONObject("endLoc")
+											.getString("poi");
+									String endCityStr = jsonObject
+											.getJSONObject("semantic")
+											.getJSONObject("slots")
+											.getJSONObject("endLoc")
+											.getString("city");
+									String endAddressStr = "";
+									if ("CURRENT_CITY".equals(endCityStr))
+										endCityStr = mSharedPreferences
+												.getString("cityName", "未知");
+									mEndSearch = GeoCoder.newInstance();
+									mEndSearch
+											.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
+									mEndSearch.geocode(new GeoCodeOption()
+											.city(endCityStr)
+											.address(endPoiStr));
+
+									// TODO:Raw Location
+
 								} else if ("app".equals(strService)) {
 									// 打开百度地图 "operation": "LAUNCH",
 									String appName = jsonObject
@@ -421,6 +436,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 								String strNoAnswer = "小天不知道怎么回答了";
 								tvAnswer.setText(strNoAnswer);
 								startSpeak(strNoAnswer);
+							} finally {
+								if ("map".equals(strService)) {
+
+								}
 							}
 							makeScrollViewDown(scrollArea);
 
@@ -630,6 +649,44 @@ public class ChatActivity extends Activity implements OnClickListener {
 		FlowerCollector.onPageEnd(TAG);
 		FlowerCollector.onPause(ChatActivity.this);
 		super.onPause();
+	}
+
+	class MyOnGetGeoCoderResultListener implements OnGetGeoCoderResultListener {
+
+		@Override
+		public void onGetGeoCodeResult(GeoCodeResult result) {
+			// TODO Auto-generated method stub
+			mEndLatLng = result.getLocation();
+			if (mEndLatLng != null) {
+				// 起始点：当前位置
+				startLat = Double.parseDouble(mSharedPreferences.getString(
+						"latitude", "0.0"));
+				startLng = Double.parseDouble(mSharedPreferences.getString(
+						"longitude", "0.0"));
+				// 目的地
+				endLat = mEndLatLng.latitude;
+				endLng = mEndLatLng.longitude;
+				LatLng startLatLng = new LatLng(startLat, startLng);
+				LatLng endLatLng = new LatLng(endLat, endLng);
+				// 构建 导航参数
+				NaviPara para = new NaviPara();
+				para.startPoint = startLatLng;
+				para.startName = "从这里开始";
+				para.endPoint = endLatLng;
+				para.endName = "到这里结束";
+
+				try {
+					BaiduMapNavigation.openBaiduMapNavi(para,
+							getApplicationContext());
+				} catch (BaiduMapAppNotSupportNaviException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		@Override
+		public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+		}
 	}
 
 }

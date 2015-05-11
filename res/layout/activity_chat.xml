@@ -18,7 +18,7 @@
             android:id="@+id/scrollArea"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4" >
+            android:layout_weight="3" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -29,17 +29,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="10dp"
-                    android:text="今天天气不错！" />
+                    android:layout_margin="10dp" />
 
                 <TextView
                     android:id="@+id/tvAnswer"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tvQuestion"
                     android:layout_margin="10dp"
-                    android:text="是啊，风和日丽的。" />
+                    android:text="你好，有什么可以帮您？" />
             </RelativeLayout>
         </ScrollView>
 
@@ -49,7 +48,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:hint="@string/text_understand_hint"
-            android:paddingBottom="40dp"
+            android:layout_marginBottom="10dp"
             android:textSize="20sp" />
     </LinearLayout>
 
