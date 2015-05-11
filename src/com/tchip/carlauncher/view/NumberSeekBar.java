@@ -51,7 +51,7 @@ public class NumberSeekBar extends CustomView {
 
     // Set atributtes of XML to View
     protected void setAttributes(AttributeSet attrs) {
-        setBackgroundResource(R.drawable.background_transparent);
+        setBackgroundResource(R.drawable.background_transparent_white);
 
         // Set size of view
         setMinimumHeight(MaterialUtil.dpToPx(48, getResources()));
