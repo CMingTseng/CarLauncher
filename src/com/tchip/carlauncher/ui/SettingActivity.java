@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SettingFragmentPagerAdapter;
+import com.tchip.carlauncher.ui.SettingSystemFragment.MyOnClickListener;
+import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SettingFadeTabIndicator;
 import com.tchip.carlauncher.view.SettingFadeTabIndicator.FadingTab;
 
@@ -13,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 
@@ -28,6 +31,44 @@ public class SettingActivity extends FragmentActivity {
 		setContentView(R.layout.activity_setting);
 
 		InitViewPager();
+
+		// 返回
+		ButtonFloat btnToViceFromSetting = (ButtonFloat) findViewById(R.id.btnToViceFromSetting);
+		btnToViceFromSetting.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_up));
+		btnToViceFromSetting.setOnClickListener(new MyOnClickListener());
+	}
+
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.btnToViceFromSetting:
+				backToVice();
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private void backToVice() {
+		finish();
+		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
+		if (version > 5) {
+			overridePendingTransition(R.anim.zms_translate_down_out,
+					R.anim.zms_translate_down_in);
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToVice();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
 	}
 
 	/*

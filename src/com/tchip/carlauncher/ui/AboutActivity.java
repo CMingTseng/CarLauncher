@@ -1,10 +1,6 @@
 package com.tchip.carlauncher.ui;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.R.anim;
-import com.tchip.carlauncher.R.drawable;
-import com.tchip.carlauncher.R.id;
-import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.bean.Titanic;
 import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.service.SpeakService;

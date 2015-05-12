@@ -199,15 +199,14 @@ public class ChatActivity extends Activity implements OnClickListener {
 			setParam();
 
 			if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
-				mSpeechUnderstander.stopUnderstanding();
-				// 停止录音
+				mSpeechUnderstander.stopUnderstanding(); // 停止录音
 			} else {
 				ret = mSpeechUnderstander
 						.startUnderstanding(mRecognizerListener);
 				if (ret != 0) {
 					// 语义理解失败,错误码:ret
 				} else {
-					showTip(getString(R.string.text_begin));
+					// showTip(getString(R.string.text_begin));
 				}
 			}
 			break;

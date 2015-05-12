@@ -5,21 +5,245 @@
     android:background="#ffffff"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="system" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#cccccc" />
 
-    <Button
-        android:id="@+id/btnBrightness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Brightness" />
 
-    <Button
-        android:id="@+id/btnStartAp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start AP" />
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" >
 
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleDisplay"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="显示"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleSound"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="声音"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleWifi"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="Wi-Fi"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleBluetooth"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="蓝牙"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleApp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="应用程序"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="日期和时间"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+
+                <com.tchip.carlauncher.view.LayoutRipple
+                    android:id="@+id/layoutRippleAbout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="64dp"
+                    android:background="#FFF"
+                    android:clickable="true" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/icn_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="104dp"
+                        android:text="关于"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </com.tchip.carlauncher.view.LayoutRipple>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#cccccc" />
+            </LinearLayout>
+        </ScrollView>
 </LinearLayout>

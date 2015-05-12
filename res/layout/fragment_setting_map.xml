@@ -2,11 +2,152 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="map" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#cccccc" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <com.tchip.carlauncher.view.LayoutRipple
+                android:id="@+id/layoutRippleRouteRecord"
+                android:layout_width="fill_parent"
+                android:layout_height="64dp"
+                android:background="#FFF"
+                android:clickable="true" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="32dp"
+                    android:src="@drawable/icn_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="104dp"
+                    android:text="行车轨迹记录"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </com.tchip.carlauncher.view.LayoutRipple>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#cccccc" />
+
+            <com.tchip.carlauncher.view.LayoutRipple
+                android:id="@+id/layoutRippleRouteSmooth"
+                android:layout_width="fill_parent"
+                android:layout_height="64dp"
+                android:background="#FFF"
+                android:clickable="true" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="32dp"
+                    android:src="@drawable/icn_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="104dp"
+                    android:text="轨迹平滑度优化"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </com.tchip.carlauncher.view.LayoutRipple>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#cccccc" />
+
+            <com.tchip.carlauncher.view.LayoutRipple
+                android:id="@+id/layoutRippleRouteSpan"
+                android:layout_width="fill_parent"
+                android:layout_height="64dp"
+                android:background="#FFF"
+                android:clickable="true" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="32dp"
+                    android:src="@drawable/icn_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="104dp"
+                    android:text="轨迹绘制取样精度"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </com.tchip.carlauncher.view.LayoutRipple>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#cccccc" />
+            
+               <com.tchip.carlauncher.view.LayoutRipple
+                android:id="@+id/layoutRippleNavi"
+                android:layout_width="fill_parent"
+                android:layout_height="64dp"
+                android:background="#FFF"
+                android:clickable="true" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="32dp"
+                    android:src="@drawable/icn_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="104dp"
+                    android:text="默认导航"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </com.tchip.carlauncher.view.LayoutRipple>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#cccccc" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
