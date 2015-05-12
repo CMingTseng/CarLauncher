@@ -51,8 +51,6 @@ public class WeatherActivity extends Activity {
 		frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
 		switch (type) {
 		case SUN:
-
-			break;
 		case CLOUD:
 			WeatherUtil.cloudAnimation(getApplicationContext(), frameLayout);
 			break;
@@ -63,7 +61,7 @@ public class WeatherActivity extends Activity {
 	}
 
 	private void initialLayout() {
-		weatherArray = new String[7];
+		weatherArray = new String[6];
 
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 
@@ -316,39 +314,39 @@ public class WeatherActivity extends Activity {
 		}
 
 		// Day 6
-		TextView day6week = (TextView) findViewById(R.id.day6week);
-		String day6WeekStr = DateUtil.getWeekStrByInt(weekToday + 6);
-		day6week.setText(day6WeekStr);
-
-		TextView day6date = (TextView) findViewById(R.id.day6date);
-		day6date.setText(sharedPreferences.getString("day6date", "2015-01-01")
-				.substring(5, 10));
-
-		ImageView day6image = (ImageView) findViewById(R.id.day6image);
-		String day6WeatherStr = sharedPreferences
-				.getString("day6weather", "未知");
-		day6image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
-				.getTypeByStr(day6WeatherStr)));
-
-		TextView day6tmpHigh = (TextView) findViewById(R.id.day6tmpHigh);
-		String day6tmpHighStr = sharedPreferences
-				.getString("day6tmpHigh", "35");
-		day6tmpHigh.setText(day6tmpHighStr);
-
-		TextView day6tmpLow = (TextView) findViewById(R.id.day6tmpLow);
-		String day6tmpLowStr = sharedPreferences.getString("day6tmpLow", "25");
-		day6tmpLow.setText(day6tmpLowStr);
-
-		TextView day6wind = (TextView) findViewById(R.id.day6wind);
-		String day6windStr = sharedPreferences.getString("day6wind", "东北风5");
-		day6wind.setText(day6windStr);
-
-		if (isLocated) {
-			weatherArray[6] = day6WeekStr + "天气：" + day6WeatherStr + ","
-					+ day6tmpLowStr + "到" + day6tmpHighStr + "," + day6windStr;
-		} else {
-			weatherArray[6] = "定位失败，无法获取天气信息";
-		}
+//		TextView day6week = (TextView) findViewById(R.id.day6week);
+//		String day6WeekStr = DateUtil.getWeekStrByInt(weekToday + 6);
+//		day6week.setText(day6WeekStr);
+//
+//		TextView day6date = (TextView) findViewById(R.id.day6date);
+//		day6date.setText(sharedPreferences.getString("day6date", "2015-01-01")
+//				.substring(5, 10));
+//
+//		ImageView day6image = (ImageView) findViewById(R.id.day6image);
+//		String day6WeatherStr = sharedPreferences
+//				.getString("day6weather", "未知");
+//		day6image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
+//				.getTypeByStr(day6WeatherStr)));
+//
+//		TextView day6tmpHigh = (TextView) findViewById(R.id.day6tmpHigh);
+//		String day6tmpHighStr = sharedPreferences
+//				.getString("day6tmpHigh", "35");
+//		day6tmpHigh.setText(day6tmpHighStr);
+//
+//		TextView day6tmpLow = (TextView) findViewById(R.id.day6tmpLow);
+//		String day6tmpLowStr = sharedPreferences.getString("day6tmpLow", "25");
+//		day6tmpLow.setText(day6tmpLowStr);
+//
+//		TextView day6wind = (TextView) findViewById(R.id.day6wind);
+//		String day6windStr = sharedPreferences.getString("day6wind", "东北风5");
+//		day6wind.setText(day6windStr);
+//
+//		if (isLocated) {
+//			weatherArray[6] = day6WeekStr + "天气：" + day6WeatherStr + ","
+//					+ day6tmpLowStr + "到" + day6tmpHighStr + "," + day6windStr;
+//		} else {
+//			weatherArray[6] = "定位失败，无法获取天气信息";
+//		}
 
 		LinearLayout layoutDay1 = (LinearLayout) findViewById(R.id.layoutDay1);
 		layoutDay1.setOnClickListener(new MyOnClickListener());
@@ -365,8 +363,8 @@ public class WeatherActivity extends Activity {
 		LinearLayout layoutDay5 = (LinearLayout) findViewById(R.id.layoutDay5);
 		layoutDay5.setOnClickListener(new MyOnClickListener());
 
-		LinearLayout layoutDay6 = (LinearLayout) findViewById(R.id.layoutDay6);
-		layoutDay6.setOnClickListener(new MyOnClickListener());
+//		LinearLayout layoutDay6 = (LinearLayout) findViewById(R.id.layoutDay6);
+//		layoutDay6.setOnClickListener(new MyOnClickListener());
 
 	}
 

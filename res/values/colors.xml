@@ -18,5 +18,9 @@
     <color name="holo_blue">#FF33E5B5</color>
     <color name="text_normal">#878787</color>
     <color name="text_select">#37ab14</color>
+    
+    
+    <color name="green">#00FF00</color>
+    <color name="thumbColor">#66aaaaaa</color>
 
 </resources>

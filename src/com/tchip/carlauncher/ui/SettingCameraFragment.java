@@ -2,6 +2,7 @@ package com.tchip.carlauncher.ui;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.LayoutRipple;
+import com.tchip.carlauncher.view.MaterialDialog;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class SettingCameraFragment extends Fragment {
 
@@ -37,10 +39,10 @@ public class SettingCameraFragment extends Fragment {
 		layoutRippleVideoTime.setOnClickListener(new MyOnClickListener());
 
 		// 碰撞灵敏度
-		LayoutRipple layoutRippleSensitive = (LayoutRipple) cameraSettingView
-				.findViewById(R.id.layoutRippleSensitive);
-		iniRipple(layoutRippleSensitive);
-		layoutRippleSensitive.setOnClickListener(new MyOnClickListener());
+		LayoutRipple layoutRippleCrashSensitive = (LayoutRipple) cameraSettingView
+				.findViewById(R.id.layoutRippleCrashSensitive);
+		iniRipple(layoutRippleCrashSensitive);
+		layoutRippleCrashSensitive.setOnClickListener(new MyOnClickListener());
 
 		return cameraSettingView;
 	}
@@ -51,12 +53,34 @@ public class SettingCameraFragment extends Fragment {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutRippleVideoQuality:
+				SettingCameraVideoQualityDialog videoQulityDialog = new SettingCameraVideoQualityDialog(
+						getActivity());
+				videoQulityDialog
+						.setOnAcceptButtonClickListener(new View.OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								// Toast.makeText(getActivity(),
+								// "Click accept button", 1)
+								// .show();
+							}
+						});
+				videoQulityDialog.show();
 				break;
 			case R.id.layoutRippleVideoSize:
+				SettingCameraVideoSizeDialog videoSizeDialog = new SettingCameraVideoSizeDialog(
+						getActivity());
+				videoSizeDialog.show();
 				break;
 			case R.id.layoutRippleVideoTime:
+				SettingCameraVideoTimeDialog videoTimeDialog = new SettingCameraVideoTimeDialog(
+						getActivity());
+				videoTimeDialog.show();
 				break;
-			case R.id.layoutRippleSensitive:
+			case R.id.layoutRippleCrashSensitive:
+				SettingCameraCrashSensitive crashSensitiveDialog = new SettingCameraCrashSensitive(
+						getActivity());
+				crashSensitiveDialog.show();
 				break;
 			default:
 				break;

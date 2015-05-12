@@ -77,7 +77,8 @@ public class WeatherService extends Service {
 						JSONArray mJSONArray = jsonObject.getJSONObject("data")
 								.getJSONArray("result");
 						for (int i = 0; i < 7; i++) {
-							JSONObject jsonDay = mJSONArray.getJSONObject(i);
+							JSONObject jsonDay = mJSONArray
+									.getJSONObject(i + 1); // 跳过天气数组第一个数据
 							String tempRange = jsonDay.getString("tempRange"); // 31℃~26℃
 							String tempArray[] = tempRange.split("~");
 							editor.putString("postTime",
@@ -88,7 +89,7 @@ public class WeatherService extends Service {
 							editor.putString("day" + i + "tmpHigh",
 									tempArray[0]);
 							editor.putString("day" + i + "tmpLow", tempArray[1]);
-							if (i == 1) {
+							if (i == 0) {
 								editor.putString("humidity",
 										jsonDay.getString("humidity"));
 								editor.putString("airQuality",

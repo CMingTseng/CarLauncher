@@ -47,6 +47,14 @@ SharedPreferences-CarLauncher
 	(String)day'i'date		日期(格式：2015-05-05)
 	(String)humidity		湿度
 	
+	----------------------------------------
+	[*Using]Setting
+	(String)videoQuality	视频质量(LOW-MIDDLE-*HIGH)
+	(String)videoSize		视频尺寸(*720-1080)
+	(String)videoTime		视频长度(3-*5-10)
+	(String)crashSensitive	碰撞侦测灵敏度(LOW-*MIDDLE-HIGH)
+	
+	
 	WeatherType：晴，多云，阴，阵雨
 
 ============================================================================

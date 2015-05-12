@@ -117,7 +117,7 @@
                 android:background="#cccccc" />
 
             <com.tchip.carlauncher.view.LayoutRipple
-                android:id="@+id/layoutRippleSensitive"
+                android:id="@+id/layoutRippleCrashSensitive"
                 android:layout_width="fill_parent"
                 android:layout_height="64dp"
                 android:background="#FFF"
