@@ -305,10 +305,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 								} else if ("music".equals(strService)) {
 									// 下载邓紫棋的喜欢你
 								} else if ("map".equals(strService)) {
-
 									// 导航到中山市图书馆 operation": "ROUTE"
-
-									// 目的地
 									String endPoiStr = jsonObject
 											.getJSONObject("semantic")
 											.getJSONObject("slots")
@@ -329,8 +326,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 									mEndSearch.geocode(new GeoCodeOption()
 											.city(endCityStr)
 											.address(endPoiStr));
-
-									// TODO:Raw Location
 
 								} else if ("app".equals(strService)) {
 									// 打开百度地图 "operation": "LAUNCH",

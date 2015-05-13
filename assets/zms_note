@@ -59,6 +59,11 @@ SharedPreferences-CarLauncher
 	(boolean)voiceSpeakWeather	天气自动播报(false-*true)
 	(boolean)voiceUpdateWeather	天气数据自动更新(false-*true)
 	
+	(boolean)routeRecord	行车轨迹记录(false-*true)
+	(boolean)routeSmooth	轨迹平滑度优化(false-*true)
+	(String)routeSpan		轨迹绘制取样精度((LOW-MIDDLE-*HIGH))
+	(String)defaultNavi		默认导航(*BAIDU-GAODE)
+	
 	
 	WeatherType：晴，多云，阴，阵雨
 
