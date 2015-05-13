@@ -1,7 +1,6 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.dialog;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.SettingSystemDisplayActivity.MyRadioOnCheckedListener;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 
@@ -24,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class SettingCameraVideoQualityDialog extends android.app.Dialog {
+public class SettingVoiceUpdateWeatherDialog extends android.app.Dialog {
 
 	Context context;
 	View view;
@@ -42,17 +41,17 @@ public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 	View.OnClickListener onAcceptButtonClickListener;
 	View.OnClickListener onCancelButtonClickListener;
 
-	private RadioGroup videoQualityGroup;
-	private RadioButton videoQualityLow, videoQualityMiddle, videoQualityHigh;
+	private RadioGroup updateWeatherGroup;
+	private RadioButton updateWeatherOn, updateWeatherOff;
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
-	public SettingCameraVideoQualityDialog(Context context) {
+	public SettingVoiceUpdateWeatherDialog(Context context) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context;
 	}
 
-	public SettingCameraVideoQualityDialog(Context context, String title,
+	public SettingVoiceUpdateWeatherDialog(Context context, String title,
 			String message) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context;// init Context
@@ -64,20 +63,17 @@ public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 		sharedPreferences = context.getSharedPreferences("CarLauncher",
 				context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
-		videoQualityGroup = (RadioGroup) findViewById(R.id.videoQualityGroup);
-		videoQualityGroup
+		updateWeatherGroup = (RadioGroup) findViewById(R.id.updateWeatherGroup);
+		updateWeatherGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
-		videoQualityLow = (RadioButton) findViewById(R.id.videoQualityLow);
-		videoQualityMiddle = (RadioButton) findViewById(R.id.videoQualityMiddle);
-		videoQualityHigh = (RadioButton) findViewById(R.id.videoQualityHigh);
-		String nowQualtity = sharedPreferences
-				.getString("videoQuality", "HIGH");
-		if ("LOW".equals(nowQualtity)) {
-			videoQualityLow.setChecked(true);
-		} else if ("MIDDLE".equals(nowQualtity)) {
-			videoQualityMiddle.setChecked(true);
+		updateWeatherOn = (RadioButton) findViewById(R.id.updateWeatherOn);
+		updateWeatherOff = (RadioButton) findViewById(R.id.updateWeatherOff);
+		boolean updateWeatherConfig = sharedPreferences.getBoolean(
+				"voiceUpdateWeather", true);
+		if (!updateWeatherConfig) {
+			updateWeatherOff.setChecked(true);
 		} else {
-			videoQualityHigh.setChecked(true);
+			updateWeatherOn.setChecked(true);
 		}
 	}
 
@@ -86,16 +82,13 @@ public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			// TODO Auto-generated method stub
 			switch (group.getCheckedRadioButtonId()) {
-			case R.id.videoQualityLow:
-				editor.putString("videoQuality", "LOW");
+			case R.id.updateWeatherOff:
+				editor.putBoolean("voiceUpdateWeather", false);
 
 				break;
-			case R.id.videoQualityMiddle:
-				editor.putString("videoQuality", "MIDDLE");
-				break;
-			case R.id.videoQualityHigh:
+			case R.id.updateWeatherOn:
 			default:
-				editor.putString("videoQuality", "HIGH");
+				editor.putBoolean("voiceUpdateWeather", true);
 				break;
 			}
 			editor.commit();
@@ -116,7 +109,7 @@ public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dialog_setting_camera_video_quality);
+		setContentView(R.layout.dialog_setting_voice_update_weather);
 
 		view = (RelativeLayout) findViewById(R.id.contentDialog);
 		backView = (RelativeLayout) findViewById(R.id.dialog_rootView);
@@ -270,7 +263,7 @@ public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 				view.post(new Runnable() {
 					@Override
 					public void run() {
-						SettingCameraVideoQualityDialog.super.dismiss();
+						SettingVoiceUpdateWeatherDialog.super.dismiss();
 					}
 				});
 

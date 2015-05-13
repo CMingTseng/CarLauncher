@@ -1,7 +1,6 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.dialog;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.SettingSystemDisplayActivity.MyRadioOnCheckedListener;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 
@@ -24,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class SettingCameraVideoTimeDialog extends android.app.Dialog {
+public class SettingVoiceAccentDialog extends android.app.Dialog {
 
 	Context context;
 	View view;
@@ -42,41 +41,43 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 	View.OnClickListener onAcceptButtonClickListener;
 	View.OnClickListener onCancelButtonClickListener;
 
-	private RadioGroup videoTimeGroup;
-	private RadioButton videoTime3, videoTime5, videoTime10;
+	private RadioGroup voiceAccentGroup;
+	private RadioButton voiceAccentMandarin, voiceAccentEnglish,
+			voiceAccentCantonese;
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
-	public SettingCameraVideoTimeDialog(Context context) {
+	public SettingVoiceAccentDialog(Context context) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context;
 	}
 
-	public SettingCameraVideoTimeDialog(Context context, String title,
+	public SettingVoiceAccentDialog(Context context, String title,
 			String message) {
 		super(context, android.R.style.Theme_Translucent);
-		this.context = context; // init Context
+		this.context = context;// init Context
 		this.message = message;
 		this.title = title;
 	}
 
 	private void iniRadioGroup() {
 		sharedPreferences = context.getSharedPreferences("CarLauncher",
-				context.MODE_PRIVATE); // MODE_PRIVATE
+				context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
-		videoTimeGroup = (RadioGroup) findViewById(R.id.videoTimeGroup);
-		videoTimeGroup
+		voiceAccentGroup = (RadioGroup) findViewById(R.id.voiceAccentGroup);
+		voiceAccentGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
-		videoTime3 = (RadioButton) findViewById(R.id.videoTime3);
-		videoTime5 = (RadioButton) findViewById(R.id.videoTime5);
-		videoTime10 = (RadioButton) findViewById(R.id.videoTime10);
-		String nowTime = sharedPreferences.getString("videoTime", "5");
-		if ("3".equals(nowTime)) {
-			videoTime3.setChecked(true);
-		} else if ("10".equals(nowTime)) {
-			videoTime10.setChecked(true);
+		voiceAccentMandarin = (RadioButton) findViewById(R.id.voiceAccentMandarin);
+		voiceAccentEnglish = (RadioButton) findViewById(R.id.voiceAccentEnglish);
+		voiceAccentCantonese = (RadioButton) findViewById(R.id.voiceAccentCantonese);
+		String voiceAccentConfig = sharedPreferences.getString("voiceAccent",
+				"Mandarin");
+		if ("English".equals(voiceAccentConfig)) {
+			voiceAccentEnglish.setChecked(true);
+		} else if ("Cantonese".equals(voiceAccentConfig)) {
+			voiceAccentCantonese.setChecked(true);
 		} else {
-			videoTime5.setChecked(true);
+			voiceAccentMandarin.setChecked(true);
 		}
 	}
 
@@ -85,15 +86,15 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			// TODO Auto-generated method stub
 			switch (group.getCheckedRadioButtonId()) {
-			case R.id.videoTime3:
-				editor.putString("videoTime", "3");
+			case R.id.voiceAccentEnglish:
+				editor.putString("voiceAccent", "English");
 				break;
-			case R.id.videoTime10:
-				editor.putString("videoTime", "10");
+			case R.id.voiceAccentCantonese:
+				editor.putString("voiceAccent", "Cantonese");
 				break;
-			case R.id.videoTime5:
+			case R.id.voiceAccentMandarin:
 			default:
-				editor.putString("videoTime", "5");
+				editor.putString("voiceAccent", "Mandarin");
 				break;
 			}
 			editor.commit();
@@ -114,7 +115,7 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dialog_setting_camera_video_time);
+		setContentView(R.layout.dialog_setting_voice_accent);
 
 		view = (RelativeLayout) findViewById(R.id.contentDialog);
 		backView = (RelativeLayout) findViewById(R.id.dialog_rootView);
@@ -268,7 +269,7 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 				view.post(new Runnable() {
 					@Override
 					public void run() {
-						SettingCameraVideoTimeDialog.super.dismiss();
+						SettingVoiceAccentDialog.super.dismiss();
 					}
 				});
 

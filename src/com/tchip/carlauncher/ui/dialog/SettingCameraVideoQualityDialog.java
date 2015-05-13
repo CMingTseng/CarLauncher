@@ -1,7 +1,6 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.dialog;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.SettingSystemDisplayActivity.MyRadioOnCheckedListener;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 
@@ -24,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class SettingCameraCrashSensitive extends android.app.Dialog {
+public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 
 	Context context;
 	View view;
@@ -42,21 +41,20 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 	View.OnClickListener onAcceptButtonClickListener;
 	View.OnClickListener onCancelButtonClickListener;
 
-	private RadioGroup crashSensitiveGroup;
-	private RadioButton crashSensitiveLow, crashSensitiveMiddle,
-			crashSensitiveHigh;
+	private RadioGroup videoQualityGroup;
+	private RadioButton videoQualityLow, videoQualityMiddle, videoQualityHigh;
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
-	public SettingCameraCrashSensitive(Context context) {
+	public SettingCameraVideoQualityDialog(Context context) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context;
 	}
 
-	public SettingCameraCrashSensitive(Context context, String title,
+	public SettingCameraVideoQualityDialog(Context context, String title,
 			String message) {
 		super(context, android.R.style.Theme_Translucent);
-		this.context = context; // init Context
+		this.context = context;// init Context
 		this.message = message;
 		this.title = title;
 	}
@@ -65,20 +63,20 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 		sharedPreferences = context.getSharedPreferences("CarLauncher",
 				context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
-		crashSensitiveGroup = (RadioGroup) findViewById(R.id.crashSensitiveGroup);
-		crashSensitiveGroup
+		videoQualityGroup = (RadioGroup) findViewById(R.id.videoQualityGroup);
+		videoQualityGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
-		crashSensitiveLow = (RadioButton) findViewById(R.id.crashSensitiveLow);
-		crashSensitiveMiddle = (RadioButton) findViewById(R.id.crashSensitiveMiddle);
-		crashSensitiveHigh = (RadioButton) findViewById(R.id.crashSensitiveHigh);
-		String nowTime = sharedPreferences
-				.getString("crashSensitive", "MIDDLE");
-		if ("LOW".equals(nowTime)) {
-			crashSensitiveLow.setChecked(true);
-		} else if ("HIGH".equals(nowTime)) {
-			crashSensitiveHigh.setChecked(true);
+		videoQualityLow = (RadioButton) findViewById(R.id.videoQualityLow);
+		videoQualityMiddle = (RadioButton) findViewById(R.id.videoQualityMiddle);
+		videoQualityHigh = (RadioButton) findViewById(R.id.videoQualityHigh);
+		String nowQualtity = sharedPreferences
+				.getString("videoQuality", "HIGH");
+		if ("LOW".equals(nowQualtity)) {
+			videoQualityLow.setChecked(true);
+		} else if ("MIDDLE".equals(nowQualtity)) {
+			videoQualityMiddle.setChecked(true);
 		} else {
-			crashSensitiveMiddle.setChecked(true);
+			videoQualityHigh.setChecked(true);
 		}
 	}
 
@@ -87,15 +85,16 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			// TODO Auto-generated method stub
 			switch (group.getCheckedRadioButtonId()) {
-			case R.id.crashSensitiveLow:
-				editor.putString("crashSensitive", "LOW");
+			case R.id.videoQualityLow:
+				editor.putString("videoQuality", "LOW");
+
 				break;
-			case R.id.crashSensitiveHigh:
-				editor.putString("crashSensitive", "HIGH");
+			case R.id.videoQualityMiddle:
+				editor.putString("videoQuality", "MIDDLE");
 				break;
-			case R.id.crashSensitiveMiddle:
+			case R.id.videoQualityHigh:
 			default:
-				editor.putString("crashSensitive", "MIDDLE");
+				editor.putString("videoQuality", "HIGH");
 				break;
 			}
 			editor.commit();
@@ -116,7 +115,7 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dialog_setting_camera_crash_sensitive);
+		setContentView(R.layout.dialog_setting_camera_video_quality);
 
 		view = (RelativeLayout) findViewById(R.id.contentDialog);
 		backView = (RelativeLayout) findViewById(R.id.dialog_rootView);
@@ -270,7 +269,7 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 				view.post(new Runnable() {
 					@Override
 					public void run() {
-						SettingCameraCrashSensitive.super.dismiss();
+						SettingCameraVideoQualityDialog.super.dismiss();
 					}
 				});
 

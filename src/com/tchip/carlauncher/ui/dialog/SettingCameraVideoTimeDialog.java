@@ -1,7 +1,6 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.dialog;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.SettingSystemDisplayActivity.MyRadioOnCheckedListener;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 
@@ -24,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class SettingCameraVideoSizeDialog extends android.app.Dialog {
+public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 
 	Context context;
 	View view;
@@ -42,38 +41,41 @@ public class SettingCameraVideoSizeDialog extends android.app.Dialog {
 	View.OnClickListener onAcceptButtonClickListener;
 	View.OnClickListener onCancelButtonClickListener;
 
-	private RadioGroup videoSizeGroup;
-	private RadioButton videoSize720, videoSize1080;
+	private RadioGroup videoTimeGroup;
+	private RadioButton videoTime3, videoTime5, videoTime10;
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
-	public SettingCameraVideoSizeDialog(Context context) {
+	public SettingCameraVideoTimeDialog(Context context) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context;
 	}
 
-	public SettingCameraVideoSizeDialog(Context context, String title,
+	public SettingCameraVideoTimeDialog(Context context, String title,
 			String message) {
 		super(context, android.R.style.Theme_Translucent);
-		this.context = context;// init Context
+		this.context = context; // init Context
 		this.message = message;
 		this.title = title;
 	}
 
 	private void iniRadioGroup() {
 		sharedPreferences = context.getSharedPreferences("CarLauncher",
-				context.MODE_PRIVATE);
+				context.MODE_PRIVATE); // MODE_PRIVATE
 		editor = sharedPreferences.edit();
-		videoSizeGroup = (RadioGroup) findViewById(R.id.videoSizeGroup);
-		videoSizeGroup
+		videoTimeGroup = (RadioGroup) findViewById(R.id.videoTimeGroup);
+		videoTimeGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
-		videoSize720 = (RadioButton) findViewById(R.id.videoSize720);
-		videoSize1080 = (RadioButton) findViewById(R.id.videoSize1080);
-		String nowQualtity = sharedPreferences.getString("videoSize", "720");
-		if ("1080".equals(nowQualtity)) {
-			videoSize1080.setChecked(true);
+		videoTime3 = (RadioButton) findViewById(R.id.videoTime3);
+		videoTime5 = (RadioButton) findViewById(R.id.videoTime5);
+		videoTime10 = (RadioButton) findViewById(R.id.videoTime10);
+		String nowTime = sharedPreferences.getString("videoTime", "5");
+		if ("3".equals(nowTime)) {
+			videoTime3.setChecked(true);
+		} else if ("10".equals(nowTime)) {
+			videoTime10.setChecked(true);
 		} else {
-			videoSize720.setChecked(true);
+			videoTime5.setChecked(true);
 		}
 	}
 
@@ -82,13 +84,15 @@ public class SettingCameraVideoSizeDialog extends android.app.Dialog {
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			// TODO Auto-generated method stub
 			switch (group.getCheckedRadioButtonId()) {
-			case R.id.videoSize1080:
-				editor.putString("videoSize", "1080");
-
+			case R.id.videoTime3:
+				editor.putString("videoTime", "3");
 				break;
-			case R.id.videoSize720:
+			case R.id.videoTime10:
+				editor.putString("videoTime", "10");
+				break;
+			case R.id.videoTime5:
 			default:
-				editor.putString("videoSize", "720");
+				editor.putString("videoTime", "5");
 				break;
 			}
 			editor.commit();
@@ -109,7 +113,7 @@ public class SettingCameraVideoSizeDialog extends android.app.Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dialog_setting_camera_video_size);
+		setContentView(R.layout.dialog_setting_camera_video_time);
 
 		view = (RelativeLayout) findViewById(R.id.contentDialog);
 		backView = (RelativeLayout) findViewById(R.id.dialog_rootView);
@@ -263,7 +267,7 @@ public class SettingCameraVideoSizeDialog extends android.app.Dialog {
 				view.post(new Runnable() {
 					@Override
 					public void run() {
-						SettingCameraVideoSizeDialog.super.dismiss();
+						SettingCameraVideoTimeDialog.super.dismiss();
 					}
 				});
 

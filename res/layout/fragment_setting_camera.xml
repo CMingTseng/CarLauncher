@@ -31,16 +31,27 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginLeft="50dp"
                     android:src="@drawable/icn_button" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="104dp"
+                    android:layout_marginLeft="120dp"
                     android:text="视频质量"
                     android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textVideoQuality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="70dp"
+                    android:text="高"
+                    android:textColor="#1E88E5"
                     android:textSize="20sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
@@ -63,16 +74,27 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginLeft="50dp"
                     android:src="@drawable/icn_button" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="104dp"
+                    android:layout_marginLeft="120dp"
                     android:text="视频尺寸"
                     android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textVideoSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="70dp"
+                    android:text="720P"
+                    android:textColor="#1E88E5"
                     android:textSize="20sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
@@ -95,16 +117,27 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginLeft="50dp"
                     android:src="@drawable/icn_button" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="104dp"
+                    android:layout_marginLeft="120dp"
                     android:text="视频长度分割"
                     android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textVideoTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="70dp"
+                    android:text="5分钟"
+                    android:textColor="#1E88E5"
                     android:textSize="20sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
@@ -127,16 +160,27 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginLeft="50dp"
                     android:src="@drawable/icn_button" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="104dp"
+                    android:layout_marginLeft="120dp"
                     android:text="碰撞侦测灵敏度"
                     android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textCrashSensitive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="70dp"
+                    android:text="中"
+                    android:textColor="#1E88E5"
                     android:textSize="20sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 

@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.LayoutRipple;

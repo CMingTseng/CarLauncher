@@ -1,6 +1,7 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.ui.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.view.LayoutRipple;
 
 import android.content.Context;

@@ -54,6 +54,11 @@ SharedPreferences-CarLauncher
 	(String)videoTime		视频长度(3-*5-10)
 	(String)crashSensitive	碰撞侦测灵敏度(LOW-*MIDDLE-HIGH)
 	
+	(boolean)voiceSpeakHour	整点语音报时(*false-true)
+	(String)voiceAccent		语音口音(*Mandarin-English-Cantonese)
+	(boolean)voiceSpeakWeather	天气自动播报(false-*true)
+	(boolean)voiceUpdateWeather	天气数据自动更新(false-*true)
+	
 	
 	WeatherType：晴，多云，阴，阵雨
 
