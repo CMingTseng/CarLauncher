@@ -15,9 +15,9 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.baidu.mapapi.utils.DistanceUtil;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -59,8 +59,8 @@ public class RouteRecordService extends Service {
 		super.onCreate();
 
 		// Update Running State
-		sharedPreferences = getSharedPreferences("RouteSetting",
-				getApplicationContext().MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences("CarLauncher",
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		editor.putBoolean("isRun", true);
 		editor.commit();
@@ -255,7 +255,6 @@ public class RouteRecordService extends Service {
 			Toast.makeText(getApplicationContext(),
 					"Route point is less than 2", Toast.LENGTH_SHORT).show();
 		}
-		
 
 		// Update Running State
 		editor.putBoolean("isRun", false);

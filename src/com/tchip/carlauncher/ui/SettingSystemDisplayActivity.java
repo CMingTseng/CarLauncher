@@ -53,10 +53,6 @@ public class SettingSystemDisplayActivity extends Activity {
 		nightSwitch.setChecked(true);
 		nightSwitch.setOnCheckListener(new MySwitchOnCheckListener());
 
-		Toast.makeText(context,
-				"time:" + SettingUtil.getScreenOffTime(context),
-				Toast.LENGTH_SHORT).show();
-
 		// 屏幕关闭RadioGroup
 		iniRadioGroup();
 	}

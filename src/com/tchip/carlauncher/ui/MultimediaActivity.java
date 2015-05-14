@@ -26,8 +26,8 @@ public class MultimediaActivity extends Activity {
 		setContentView(R.layout.activity_multimedia);
 
 		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
-		btnToMainFromMultimedia.setDrawableIcon(getResources()
-				.getDrawable(R.drawable.icon_arrow_down));
+		btnToMainFromMultimedia.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_down));
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
 
 	}

@@ -68,6 +68,21 @@ SharedPreferences-CarLauncher
 	WeatherType：晴，多云，阴，阵雨
 
 ============================================================================
+	*进程间进行数据共享
+		1.在Service上写个Binder，让另外一个应用使用aidl进行使用
+		2.使用ContentProvider
+		3.两个应用都使用SharedPreference的MODE_WORLD_WRITEABLE或MODE_WORLD_READABLE（Not OK）
+		4.修改两个应用的android:sharedUserId相同，然后：
+			try {  
+	    		mContext = createPackageContext("com.tchip.carlauncher", CONTEXT_IGNORE_SECURITY);  
+			} catch (NameNotFoundException e) {  
+	    		// TODO Auto-generated catch block  
+	    		e.printStackTrace();  
+			}  
+			SharedPreferences mShare = mContext.getSharedPreferences("test_share", Context.MODE_WORLD_READABLE); 
+
+
+============================================================================
 讯飞语义理解类型(service)
 	*openQA		问答
 	*datetime	时间
@@ -80,20 +95,7 @@ SharedPreferences-CarLauncher
 	
 ============================================================================
 [ToDo]
-	[设置](*默认)
-		>语音
-			语音口音(英语-*普通话-粤语)
-			整点语音报时(on/*off)
-			天气自动播报(*on/off)
-			天气数据自动更新(*on/off)
-		>地图
-			>轨迹
-				行车轨迹记录(*on/off)
-				平滑度优化(*on/off)
-				取样精度(高-中-低)
-			>导航
-				默认导航(高德导航/百度地图)
-		
+
 	[功能]
 		
 		1.Tab与ViewPager之间分割线下端，类似豌豆荚的阴影(Material Design效果)

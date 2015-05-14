@@ -10,6 +10,7 @@ import com.tchip.carlauncher.ui.dialog.SettingVoiceUpdateWeatherDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
 
 import android.R.bool;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class SettingVoiceFragment extends Fragment {
 		layoutRippleUpdateWeather.setOnClickListener(new MyOnClickListener());
 
 		preferences = getActivity().getSharedPreferences("CarLauncher",
-				getActivity().MODE_PRIVATE);
+				Context.MODE_PRIVATE);
 		updateVoiceSpeakHourText();
 		updateVoiceAccentText();
 		updateVoiceSpeakWeatherText();

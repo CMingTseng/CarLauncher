@@ -1,16 +1,5 @@
 package com.tchip.carlauncher.service;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
-import org.apache.http.util.ByteArrayBuffer;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -18,13 +7,11 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.AssetManager;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 
 public class LocationService extends Service {
 	private LocationClient mLocationClient;
@@ -34,6 +21,7 @@ public class LocationService extends Service {
 	// private long cityCode = 123456789;
 	private SharedPreferences preferences;
 	private Editor editor;
+
 	// private final String WEATHER_PREFIX = "{\"weatherinfo\"";
 
 	@Override
@@ -48,8 +36,7 @@ public class LocationService extends Service {
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, true);
 
-		preferences = getSharedPreferences("CarLauncher",
-				getApplicationContext().MODE_PRIVATE);
+		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
 		editor = preferences.edit();
 	}
 
@@ -59,30 +46,30 @@ public class LocationService extends Service {
 	 * @param cityName
 	 * @return cityCode 城市码
 	 */
-//	private long getCityCodeByName(String cityName) {
-//		// 获取assets中测试json文本
-//		AssetManager assetManager = getAssets();
-//		String text;
-//		try {
-//			InputStream inputStream = assetManager.open("zms_city_code");
-//			byte[] buffer = new byte[inputStream.available()];
-//			inputStream.read(buffer);
-//			text = new String(buffer, "utf-8");
-//			try {
-//				JSONArray jArray = new JSONArray(text);
-//				for (int i = 0; i < jArray.length(); i++) {
-//					JSONObject item = jArray.getJSONObject(i);
-//					if (item.optString("name").equals(cityName))
-//						return item.getLong("code");
-//				}
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return cityCode;
-//	}
+	// private long getCityCodeByName(String cityName) {
+	// // 获取assets中测试json文本
+	// AssetManager assetManager = getAssets();
+	// String text;
+	// try {
+	// InputStream inputStream = assetManager.open("zms_city_code");
+	// byte[] buffer = new byte[inputStream.available()];
+	// inputStream.read(buffer);
+	// text = new String(buffer, "utf-8");
+	// try {
+	// JSONArray jArray = new JSONArray(text);
+	// for (int i = 0; i < jArray.length(); i++) {
+	// JSONObject item = jArray.getJSONObject(i);
+	// if (item.optString("name").equals(cityName))
+	// return item.getLong("code");
+	// }
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// }
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// return cityCode;
+	// }
 
 	/**
 	 * 
@@ -122,8 +109,10 @@ public class LocationService extends Service {
 			cityName = location.getCity();
 			// cityCode = getCityCodeByName(cityName);
 
-			if ((cityName != null) && (!cityName.equals("未定位"))
-					) { //&& (cityCode != 123456789)
+			if ((cityName != null) && (!cityName.equals("未定位"))) { // &&
+																	// (cityCode
+																	// !=
+																	// 123456789)
 
 				// editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);
@@ -139,111 +128,111 @@ public class LocationService extends Service {
 				editor.putString("lbsTime", location.getTime());
 				editor.commit();
 
-				//new Thread(networkTask).start();
+				// new Thread(networkTask).start();
 			}
 		}
 	}
 
-//	Handler handler = new Handler() {
-//		@Override
-//		public void handleMessage(Message msg) {
-//			super.handleMessage(msg);
-//			// Bundle data = msg.getData();
-//			// String val = data.getString("value");
-//			// // UI界面的更新等相关操作
-//			// Toast.makeText(getApplicationContext(), val, Toast.LENGTH_SHORT)
-//			// .show();
-//
-//		}
-//	};
+	// Handler handler = new Handler() {
+	// @Override
+	// public void handleMessage(Message msg) {
+	// super.handleMessage(msg);
+	// // Bundle data = msg.getData();
+	// // String val = data.getString("value");
+	// // // UI界面的更新等相关操作
+	// // Toast.makeText(getApplicationContext(), val, Toast.LENGTH_SHORT)
+	// // .show();
+	//
+	// }
+	// };
 
 	/**
 	 * 网络操作相关的子线程
 	 */
-//	Runnable networkTask = new Runnable() {
-//
-//		@Override
-//		public void run() {
-//			// TODO
-//			// 在这里进行 http request.网络请求相关操作
-//
-//			String jsonString = "get Failed";
-//			// 1. cityinfo part
-//			try {
-//
-//				URL uri = new URL("http://www.weather.com.cn/data/cityinfo/"
-//						+ cityCode + ".html");
-//				URLConnection ucon = uri.openConnection();
-//				InputStream is = ucon.getInputStream();
-//				BufferedInputStream bis = new BufferedInputStream(is);
-//				ByteArrayBuffer baf = new ByteArrayBuffer(100);
-//				int current = 0;
-//				while ((current = bis.read()) != -1) {
-//					baf.append((byte) current);
-//				}
-//				jsonString = new String(baf.toByteArray(), "utf-8");
-//
-//				if (jsonString.startsWith(WEATHER_PREFIX)) {
-//					try {
-//						JSONObject jsonObject;
-//						jsonObject = new JSONObject(jsonString)
-//								.getJSONObject("weatherinfo");
-//						editor.putString("tempHigh",
-//								jsonObject.getString("temp1"));
-//						editor.putString("tempLow",
-//								jsonObject.getString("temp2"));
-//						editor.putString("weather",
-//								jsonObject.getString("weather"));
-//						editor.putString("postTime",
-//								jsonObject.getString("ptime"));
-//						editor.commit();
-//
-//					} catch (JSONException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//
-//			} catch (Exception e) {
-//			}
-//
-//			// 2. sk part
-//			jsonString = "get Failed";
-//			try {
-//				URL uri = new URL("http://www.weather.com.cn/data/sk/"
-//						+ cityCode + ".html");
-//				URLConnection ucon = uri.openConnection();
-//				InputStream is = ucon.getInputStream();
-//				BufferedInputStream bis = new BufferedInputStream(is);
-//				ByteArrayBuffer baf = new ByteArrayBuffer(100);
-//				int current = 0;
-//				while ((current = bis.read()) != -1) {
-//					baf.append((byte) current);
-//				}
-//				jsonString = new String(baf.toByteArray(), "utf-8");
-//				if (jsonString.startsWith(WEATHER_PREFIX)) {
-//					try {
-//						JSONObject jsonObject;
-//						jsonObject = new JSONObject(jsonString)
-//								.getJSONObject("weatherinfo");
-//						editor.putString("tempNow",
-//								jsonObject.getString("temp"));
-//						editor.putString("windDir", jsonObject.getString("WD"));
-//						editor.putString("windSpeed",
-//								jsonObject.getString("WS"));
-//						editor.putString("wetLevel", jsonObject.getString("SD"));
-//						editor.commit();
-//
-//						// stopSelf();
-//
-//					} catch (JSONException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			} catch (Exception e) {
-//			}
-//
-//		}
-//	};
+	// Runnable networkTask = new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// // TODO
+	// // 在这里进行 http request.网络请求相关操作
+	//
+	// String jsonString = "get Failed";
+	// // 1. cityinfo part
+	// try {
+	//
+	// URL uri = new URL("http://www.weather.com.cn/data/cityinfo/"
+	// + cityCode + ".html");
+	// URLConnection ucon = uri.openConnection();
+	// InputStream is = ucon.getInputStream();
+	// BufferedInputStream bis = new BufferedInputStream(is);
+	// ByteArrayBuffer baf = new ByteArrayBuffer(100);
+	// int current = 0;
+	// while ((current = bis.read()) != -1) {
+	// baf.append((byte) current);
+	// }
+	// jsonString = new String(baf.toByteArray(), "utf-8");
+	//
+	// if (jsonString.startsWith(WEATHER_PREFIX)) {
+	// try {
+	// JSONObject jsonObject;
+	// jsonObject = new JSONObject(jsonString)
+	// .getJSONObject("weatherinfo");
+	// editor.putString("tempHigh",
+	// jsonObject.getString("temp1"));
+	// editor.putString("tempLow",
+	// jsonObject.getString("temp2"));
+	// editor.putString("weather",
+	// jsonObject.getString("weather"));
+	// editor.putString("postTime",
+	// jsonObject.getString("ptime"));
+	// editor.commit();
+	//
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	//
+	// } catch (Exception e) {
+	// }
+	//
+	// // 2. sk part
+	// jsonString = "get Failed";
+	// try {
+	// URL uri = new URL("http://www.weather.com.cn/data/sk/"
+	// + cityCode + ".html");
+	// URLConnection ucon = uri.openConnection();
+	// InputStream is = ucon.getInputStream();
+	// BufferedInputStream bis = new BufferedInputStream(is);
+	// ByteArrayBuffer baf = new ByteArrayBuffer(100);
+	// int current = 0;
+	// while ((current = bis.read()) != -1) {
+	// baf.append((byte) current);
+	// }
+	// jsonString = new String(baf.toByteArray(), "utf-8");
+	// if (jsonString.startsWith(WEATHER_PREFIX)) {
+	// try {
+	// JSONObject jsonObject;
+	// jsonObject = new JSONObject(jsonString)
+	// .getJSONObject("weatherinfo");
+	// editor.putString("tempNow",
+	// jsonObject.getString("temp"));
+	// editor.putString("windDir", jsonObject.getString("WD"));
+	// editor.putString("windSpeed",
+	// jsonObject.getString("WS"));
+	// editor.putString("wetLevel", jsonObject.getString("SD"));
+	// editor.commit();
+	//
+	// // stopSelf();
+	//
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// } catch (Exception e) {
+	// }
+	//
+	// }
+	// };
 
 	@Override
 	public void onDestroy() {

@@ -58,11 +58,8 @@ public class SettingActivity extends FragmentActivity {
 
 	private void backToVice() {
 		finish();
-		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
-		if (version > 5) {
-			overridePendingTransition(R.anim.zms_translate_down_out,
-					R.anim.zms_translate_down_in);
-		}
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	@Override
@@ -144,5 +141,12 @@ public class SettingActivity extends FragmentActivity {
 		super.onResume();
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		fragmentList.clear();
 	}
 }

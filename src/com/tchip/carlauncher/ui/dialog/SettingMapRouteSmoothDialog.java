@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.ui.dialog;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 
 import android.content.Context;
@@ -20,7 +19,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class SettingMapRouteSmoothDialog extends android.app.Dialog {

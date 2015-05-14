@@ -1,8 +1,6 @@
-package com.tchip.carlauncher.ui;
+package com.tchip.carlauncher.ui.dialog;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.SettingSystemDisplayActivity.MyRadioOnCheckedListener;
-import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.ButtonFlat;
 
 import android.content.Context;
@@ -21,10 +19,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class SettingCameraCrashSensitive extends android.app.Dialog {
+public class SettingCameraCrashSensitiveDialog extends android.app.Dialog {
 
 	Context context;
 	View view;
@@ -48,12 +45,12 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
-	public SettingCameraCrashSensitive(Context context) {
+	public SettingCameraCrashSensitiveDialog(Context context) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context;
 	}
 
-	public SettingCameraCrashSensitive(Context context, String title,
+	public SettingCameraCrashSensitiveDialog(Context context, String title,
 			String message) {
 		super(context, android.R.style.Theme_Translucent);
 		this.context = context; // init Context
@@ -270,7 +267,7 @@ public class SettingCameraCrashSensitive extends android.app.Dialog {
 				view.post(new Runnable() {
 					@Override
 					public void run() {
-						SettingCameraCrashSensitive.super.dismiss();
+						SettingCameraCrashSensitiveDialog.super.dismiss();
 					}
 				});
 

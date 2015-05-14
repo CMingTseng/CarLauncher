@@ -12,6 +12,7 @@ import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -34,8 +35,7 @@ public class WeatherService extends Service {
 		// TODO Auto-generated method stub
 		super.onCreate();
 
-		preferences = getSharedPreferences("CarLauncher",
-				getApplicationContext().MODE_PRIVATE);
+		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
 		editor = preferences.edit();
 
 		mTextUnderstander = TextUnderstander.createTextUnderstander(

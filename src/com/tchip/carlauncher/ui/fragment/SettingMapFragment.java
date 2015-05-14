@@ -8,6 +8,7 @@ import com.tchip.carlauncher.ui.dialog.SettingMapRouteSpanDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakHourDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -52,7 +53,7 @@ public class SettingMapFragment extends Fragment {
 		layoutRippleNavi.setOnClickListener(new MyOnClickListener());
 
 		preferences = getActivity().getSharedPreferences("CarLauncher",
-				getActivity().MODE_PRIVATE);
+				Context.MODE_PRIVATE);
 		updateRouteRecordText();
 		updateRouteSmoothText();
 		updateRouteSpanText();

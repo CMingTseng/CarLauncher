@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.http.util.EncodingUtils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -68,6 +69,7 @@ public class RouteShowActivity extends Activity {
 	private RouteAdapter routeAdapter = new RouteAdapter();
 
 	private RouteDistanceDbHelper _db;
+	private SharedPreferences sharedPreferences;
 
 	// 初始化全局 bitmap 信息，不用时及时 recycle
 	BitmapDescriptor iconStart = BitmapDescriptorFactory
@@ -83,6 +85,8 @@ public class RouteShowActivity extends Activity {
 		setContentView(R.layout.activity_route_show);
 
 		_db = new RouteDistanceDbHelper(getApplicationContext());
+		sharedPreferences = getSharedPreferences("RouteSetting",
+				Context.MODE_PRIVATE);
 
 		btnShare = (ButtonFloat) findViewById(R.id.btnShare);
 		btnShare.setDrawableIcon(getResources().getDrawable(
@@ -298,8 +302,6 @@ public class RouteShowActivity extends Activity {
 	 */
 	public List<RoutePoint> optimizeRoutePoints(List<RoutePoint> inPoint) {
 		int size = inPoint.size();
-		List<RoutePoint> outPoint;
-
 		int i;
 		if (size < 5) {
 			return inPoint;
@@ -399,8 +401,7 @@ public class RouteShowActivity extends Activity {
 	 * @return
 	 */
 	public float getZoomLevel() {
-		SharedPreferences sharedPreferences = getSharedPreferences(
-				"RouteSetting", getApplicationContext().MODE_PRIVATE);
+
 		return sharedPreferences.getFloat("zoomLevel", 19f);
 	}
 
@@ -410,8 +411,6 @@ public class RouteShowActivity extends Activity {
 	 * @return
 	 */
 	public int getOffset() {
-		SharedPreferences sharedPreferences = getSharedPreferences(
-				"RouteSetting", getApplicationContext().MODE_PRIVATE);
 		return sharedPreferences.getInt("offset", 1);
 	}
 

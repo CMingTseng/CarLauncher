@@ -1,10 +1,6 @@
 package com.tchip.carlauncher.ui;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.R.anim;
-import com.tchip.carlauncher.R.drawable;
-import com.tchip.carlauncher.R.id;
-import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
@@ -15,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class NearActivity extends Activity {
 	@Override
@@ -125,13 +120,8 @@ public class NearActivity extends Activity {
 
 	private void backToVice() {
 		finish();
-		// add for animation start
-		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
-		if (version > 5) {
-			overridePendingTransition(R.anim.zms_translate_up_out,
-					R.anim.zms_translate_up_in);
-		}
-		// add for animation end
+		overridePendingTransition(R.anim.zms_translate_up_out,
+				R.anim.zms_translate_up_in);
 	}
 
 	@Override

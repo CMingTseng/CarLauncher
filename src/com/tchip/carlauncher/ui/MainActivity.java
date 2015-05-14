@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.ui;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
@@ -14,6 +13,7 @@ import com.tchip.carlauncher.view.TransitionViewPager.TransitionEffect;
 import com.tchip.carlauncher.view.TransitionViewPagerContainer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private View viewMain, viewVice;
@@ -39,14 +38,13 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 
-		preferences = getSharedPreferences("CarLauncher",
-				getApplicationContext().MODE_PRIVATE);
+		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
 
 		// Update Location
 		Intent intent = new Intent(this, LocationService.class);
 		startService(intent);
 
-		LayoutInflater inflater = getLayoutInflater().from(this);
+		LayoutInflater inflater = LayoutInflater.from(this);
 		viewMain = inflater.inflate(R.layout.activity_main_one, null);
 		viewVice = inflater.inflate(R.layout.activity_main_two, null);
 
@@ -185,17 +183,14 @@ public class MainActivity extends Activity {
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			int version = Integer.valueOf(android.os.Build.VERSION.SDK);
 			switch (v.getId()) {
 			// Main Layout
 			case R.id.imgMultimedia:
 				Intent intent11 = new Intent(MainActivity.this,
 						MultimediaActivity.class);
 				startActivity(intent11);
-				if (version > 5) {
-					overridePendingTransition(R.anim.zms_translate_down_out,
-							R.anim.zms_translate_down_in);
-				}
+				overridePendingTransition(R.anim.zms_translate_down_out,
+						R.anim.zms_translate_down_in);
 				break;
 			case R.id.imgBluetooth:
 				Intent intent13 = new Intent(MainActivity.this,
@@ -218,46 +213,36 @@ public class MainActivity extends Activity {
 				Intent intent21 = new Intent(MainActivity.this,
 						NearActivity.class);
 				startActivity(intent21);
-				if (version > 5) {
-					overridePendingTransition(R.anim.zms_translate_down_out,
-							R.anim.zms_translate_down_in);
-				}
+				overridePendingTransition(R.anim.zms_translate_down_out,
+						R.anim.zms_translate_down_in);
 				break;
 			case R.id.imgRoutePlan:
 				Intent intent22 = new Intent(MainActivity.this,
 						RoutePlanActivity.class);
 				startActivity(intent22);
-				if (version > 5) {
-					overridePendingTransition(R.anim.zms_translate_down_out,
-							R.anim.zms_translate_down_in);
-				}
+				overridePendingTransition(R.anim.zms_translate_down_out,
+						R.anim.zms_translate_down_in);
 				break;
 			case R.id.imgAbout:
 				Intent intent23 = new Intent(MainActivity.this,
 						AboutActivity.class);
 				startActivity(intent23);
-				if (version > 5) {
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 				break;
 			case R.id.imgChat:
 				Intent intent24 = new Intent(MainActivity.this,
 						ChatActivity.class);
 				startActivity(intent24);
-				if (version > 5) {
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 				break;
 			case R.id.imgSetting:
 				Intent intent25 = new Intent(MainActivity.this,
 						SettingActivity.class);
 				startActivity(intent25);
-				if (version > 5) {
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 				break;
 			}
 		}

@@ -1,8 +1,8 @@
 package com.tchip.carlauncher.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -35,15 +35,10 @@ import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteLine;
-import com.baidu.mapapi.search.route.TransitRoutePlanOption;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteLine;
-import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.R.drawable;
-import com.tchip.carlauncher.R.id;
-import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RoutePlanActivity extends Activity implements
@@ -58,7 +53,6 @@ public class RoutePlanActivity extends Activity implements
 	private TextView popupText = null;// 泡泡view
 
 	private SharedPreferences preferences;
-	private Editor editor;
 	private double mLatitude, mLongitude;
 	private LatLng mLatLng;
 
@@ -74,9 +68,7 @@ public class RoutePlanActivity extends Activity implements
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_route_plan);
 
-		preferences = getSharedPreferences("CarLauncher",
-				getApplicationContext().MODE_PRIVATE);
-		editor = preferences.edit();
+		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
 
 		CharSequence titleLable = "路线规划功能";
 		setTitle(titleLable);

@@ -60,11 +60,8 @@ public class AboutActivity extends Activity {
 
 	private void backToVice() {
 		finish();
-		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
-		if (version > 5) {
-			overridePendingTransition(R.anim.zms_translate_down_out,
-					R.anim.zms_translate_down_in);
-		}
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	@Override

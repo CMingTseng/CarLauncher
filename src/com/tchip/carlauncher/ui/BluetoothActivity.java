@@ -1,15 +1,12 @@
 package com.tchip.carlauncher.ui;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.R.layout;
-import com.tchip.carlauncher.bluetooth.CallService;
 import com.tchip.carlauncher.bluetooth.ClientSocketActivity;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 public class BluetoothActivity extends Activity {
 

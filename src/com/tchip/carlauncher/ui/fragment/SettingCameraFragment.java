@@ -1,13 +1,14 @@
 package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.SettingCameraCrashSensitive;
+import com.tchip.carlauncher.ui.dialog.SettingCameraCrashSensitiveDialog;
 import com.tchip.carlauncher.ui.dialog.SettingCameraVideoQualityDialog;
 import com.tchip.carlauncher.ui.dialog.SettingCameraVideoSizeDialog;
 import com.tchip.carlauncher.ui.dialog.SettingCameraVideoTimeDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.MaterialDialog;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -53,7 +54,7 @@ public class SettingCameraFragment extends Fragment {
 		layoutRippleCrashSensitive.setOnClickListener(new MyOnClickListener());
 
 		preferences = getActivity().getSharedPreferences("CarLauncher",
-				getActivity().MODE_PRIVATE);
+				Context.MODE_PRIVATE);
 		updateVideoQualityText();
 		updateVideoSizeText();
 		updateVideoTimeText();
@@ -159,7 +160,7 @@ public class SettingCameraFragment extends Fragment {
 				videoTimeDialog.show();
 				break;
 			case R.id.layoutRippleCrashSensitive:
-				SettingCameraCrashSensitive crashSensitiveDialog = new SettingCameraCrashSensitive(
+				SettingCameraCrashSensitiveDialog crashSensitiveDialog = new SettingCameraCrashSensitiveDialog(
 						getActivity());
 				crashSensitiveDialog
 						.setOnAcceptButtonClickListener(new View.OnClickListener() {

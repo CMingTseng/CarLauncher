@@ -1,6 +1,7 @@
 package com.tchip.carlauncher.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,19 +27,17 @@ public class SpeakService extends Service {
 	private static String TAG = SpeakService.class.getSimpleName();
 	private SpeechSynthesizer mTts; // 语音合成对象
 	private String voicer = "xiaoyan"; // 默认发音人
-	private String[] cloudVoicersEntries;
-	private String[] cloudVoicersValue;
-
-	private int mPercentForBuffering = 0; // 缓冲进度
-	private int mPercentForPlaying = 0; // 播放进度
-
-	private RadioGroup mRadioGroup; // 云端/本地单选按钮
+	// private String[] cloudVoicersEntries;
+	// private String[] cloudVoicersValue;
+	 private int mPercentForBuffering = 0; // 缓冲进度
+	 private int mPercentForPlaying = 0; // 播放进度
+	// private RadioGroup mRadioGroup; // 云端/本地单选按钮
 	// 引擎类型： TYPE_CLOUD TYPE_LOCAL
 	private String mEngineType = SpeechConstant.TYPE_LOCAL;
 	// 语音+安装助手类
 	ApkInstaller mInstaller;
 
-	private Toast mToast;
+	// private Toast mToast;
 	private SharedPreferences mSharedPreferences;
 	private String content = "你好";
 
@@ -61,8 +60,8 @@ public class SpeakService extends Service {
 		// 初始化合成对象
 		mTts = SpeechSynthesizer.createSynthesizer(this, mTtsInitListener);
 		mSharedPreferences = getSharedPreferences(TtsSettings.PREFER_NAME,
-				MODE_PRIVATE);
-		mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+				Context.MODE_PRIVATE);
+		// mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
 		// mInstaller = new ApkInstaller(SpeakService.this);
 

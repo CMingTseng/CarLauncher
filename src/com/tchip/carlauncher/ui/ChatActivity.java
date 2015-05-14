@@ -1,6 +1,5 @@
 package com.tchip.carlauncher.ui;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -135,7 +134,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		tvHint = (EditText) findViewById(R.id.tvHint);
 
 		mSharedPreferences = getSharedPreferences("CarLauncher",
-				getApplicationContext().MODE_PRIVATE);
+				Context.MODE_PRIVATE);
 
 		drawable = new CircularProgressDrawable.Builder()
 				.setRingWidth(
@@ -316,7 +315,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 											.getJSONObject("slots")
 											.getJSONObject("endLoc")
 											.getString("city");
-									String endAddressStr = "";
 									if ("CURRENT_CITY".equals(endCityStr))
 										endCityStr = mSharedPreferences
 												.getString("cityName", "未知");
@@ -450,7 +448,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 					Phone.CONTENT_URI, null, null, null, null);
 
 			// 循环输出联系人号码
-			String phoneNum;
 			while (c.moveToNext()) {
 				if (name.equals(c.getString(c
 						.getColumnIndex(Phone.DISPLAY_NAME)))) {
@@ -467,7 +464,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 					Phone.CONTENT_URI, null, null, null, null);
 
 			// 循环输出联系人号码
-			String phoneNum;
 			while (c.moveToNext()) {
 				if (pinyin.equals(PinYinUtil.convertAll(c.getString(c
 						.getColumnIndex(Phone.DISPLAY_NAME))))) {

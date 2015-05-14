@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tchip.carlauncher"
     android:versionCode="1"
+    android:sharedUserId="com.tchip"
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
