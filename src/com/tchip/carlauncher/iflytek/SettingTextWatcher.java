@@ -1,4 +1,4 @@
-package com.iflytek.library;
+package com.tchip.carlauncher.iflytek;
 
 import java.util.regex.Pattern;
 import android.content.Context;

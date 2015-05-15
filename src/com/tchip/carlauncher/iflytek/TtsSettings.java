@@ -1,4 +1,4 @@
-package com.iflytek.library;
+package com.tchip.carlauncher.iflytek;
 
 import android.os.Bundle;
 import android.preference.EditTextPreference;

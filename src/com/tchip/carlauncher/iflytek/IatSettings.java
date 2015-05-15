@@ -1,4 +1,4 @@
-package com.iflytek.library;
+package com.tchip.carlauncher.iflytek;
 
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -10,9 +10,9 @@ import android.view.Window;
 import com.tchip.carlauncher.R;
 
 /**
- * 语义理解设置界面
+ * 听写设置界面
  */
-public class UnderstanderSettings extends PreferenceActivity implements OnPreferenceChangeListener {
+public class IatSettings extends PreferenceActivity implements OnPreferenceChangeListener {
 	
 	public static final String PREFER_NAME = "com.iflytek.setting";
 	private EditTextPreference mVadbosPreference;
@@ -23,17 +23,16 @@ public class UnderstanderSettings extends PreferenceActivity implements OnPrefer
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		getPreferenceManager().setSharedPreferencesName(PREFER_NAME);
-		addPreferencesFromResource(R.xml.understand_setting);
+		addPreferencesFromResource(R.xml.iat_setting);
 		
-		mVadbosPreference = (EditTextPreference)findPreference("understander_vadbos_preference");
-		mVadbosPreference.getEditText().addTextChangedListener(new SettingTextWatcher(UnderstanderSettings.this,mVadbosPreference,0,10000));
+		mVadbosPreference = (EditTextPreference)findPreference("iat_vadbos_preference");
+		mVadbosPreference.getEditText().addTextChangedListener(new SettingTextWatcher(IatSettings.this,mVadbosPreference,0,10000));
 		
-		mVadeosPreference = (EditTextPreference)findPreference("understander_vadeos_preference");
-		mVadeosPreference.getEditText().addTextChangedListener(new SettingTextWatcher(UnderstanderSettings.this,mVadeosPreference,0,10000));
+		mVadeosPreference = (EditTextPreference)findPreference("iat_vadeos_preference");
+		mVadeosPreference.getEditText().addTextChangedListener(new SettingTextWatcher(IatSettings.this,mVadeosPreference,0,10000));
 	}
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		return true;
 	}
 }
-

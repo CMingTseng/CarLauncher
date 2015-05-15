@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.iflytek.library;
+package com.tchip.carlauncher.iflytek;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

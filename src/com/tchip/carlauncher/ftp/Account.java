@@ -1,4 +1,3 @@
-
 package com.tchip.carlauncher.ftp;
 
 public class Account {
@@ -11,6 +10,5 @@ public class Account {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	
+
 }

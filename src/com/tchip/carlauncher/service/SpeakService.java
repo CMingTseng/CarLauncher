@@ -16,8 +16,8 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
-import com.iflytek.library.ApkInstaller;
-import com.iflytek.library.TtsSettings;
+import com.tchip.carlauncher.iflytek.ApkInstaller;
+import com.tchip.carlauncher.iflytek.TtsSettings;
 
 /**
  * Created by AlexZhou on 2015/4/21. 9:45

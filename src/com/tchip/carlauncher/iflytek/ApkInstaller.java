@@ -1,4 +1,4 @@
-package com.iflytek.library;
+package com.tchip.carlauncher.iflytek;
 
 import android.app.Activity;
 import android.app.Dialog;

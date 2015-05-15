@@ -1,4 +1,4 @@
-package com.iflytek.library;
+package com.tchip.carlauncher.iflytek;
 
 public class FinalResult extends Result {
 
