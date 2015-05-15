@@ -147,6 +147,5 @@ public class SettingActivity extends FragmentActivity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		fragmentList.clear();
 	}
 }

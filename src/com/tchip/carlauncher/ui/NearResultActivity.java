@@ -53,7 +53,8 @@ public class NearResultActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_near_result);
 
 		// 接收搜索内容
@@ -231,11 +232,12 @@ public class NearResultActivity extends FragmentActivity implements
 		}
 	}
 
-	@Override
-	protected void onResumeFragments() {
-		// TODO Auto-generated method stub
-		super.onResumeFragments();
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-	}
+	// @Override
+	// protected void onResumeFragments() {
+	// // TODO Auto-generated method stub
+	// super.onResumeFragments();
+	// View decorView = getWindow().getDecorView();
+	// decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+	// }
+
 }

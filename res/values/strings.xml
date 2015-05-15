@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_name">CarLauncher</string>
     <!-- 请替换成在语音云官网申请的appid -->
@@ -168,5 +168,17 @@
     <string name="tab2_text">语音</string>
     <string name="tab3_text">地图</string>
     <string name="tab4_text">系统</string>
+
+    <!-- FTP Remote Control -->
+    <string name="wifi_state">WiFi状态</string>
+    <string name="instruction_pre">启动后可以从电脑端远程管理手机文件</string>
+    <string name="instruction">请在“我的电脑”地址栏中输入：</string>
+    <string name="no_wifi">无WiFi网络</string>
+    <string name="no_wifi_hint">无WiFi网络,点击以查看WiFi设置</string>
+    <string name="storage_warning">外部存储不可用.</string>
+    <string name="start_server">启动服务</string>
+    <string name="stop_server">停止服务</string>
+    <string name="notif_title">远程管理服务正在运行</string>
+    <string name="notif_server_starting">远程管理服务已启动</string>
 
 </resources>

@@ -159,6 +159,10 @@ public class MainActivity extends Activity {
 		// 轨迹
 		ImageView imgRoute = (ImageView) findViewById(R.id.imgRoute);
 		imgRoute.setOnClickListener(new MyOnClickListener());
+
+		// 文件管理
+		ImageView imgFileExplorer = (ImageView) findViewById(R.id.imgFileExplorer);
+		imgFileExplorer.setOnClickListener(new MyOnClickListener());
 	}
 
 	private void updateViceLayout() {
@@ -207,6 +211,11 @@ public class MainActivity extends Activity {
 				Intent intent15 = new Intent(MainActivity.this,
 						WeatherActivity.class);
 				startActivity(intent15);
+				break;
+			case R.id.imgFileExplorer:
+				Intent intent16 = new Intent(MainActivity.this,
+						FileRemoteControlActivity.class);
+				startActivity(intent16);
 				break;
 			// Vice Layout
 			case R.id.imgNear:
