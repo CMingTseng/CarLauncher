@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.WeatherDynamicCloudyView;
+import com.tchip.carlauncher.view.WeatherDynamicRainView;
 
 public class WeatherUtil {
 
@@ -37,7 +38,30 @@ public class WeatherUtil {
 				bitmap, 140, 220, 40);
 		flLayout.addView(view3);
 		view3.move();
+	}
+	
+	
+	/**
+	 * 下雨动画
+	 */
+	public static void rainAnimation(Context context, FrameLayout flLayout) {
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+				R.drawable.weather_rain_drop);
 
+		WeatherDynamicRainView view1 = new WeatherDynamicRainView(context,
+				bitmap, -150, 50, 30);
+		flLayout.addView(view1);
+		view1.move();
+
+		WeatherDynamicRainView view2 = new WeatherDynamicRainView(context,
+				bitmap, 280, 150, 60);
+		flLayout.addView(view2);
+		view2.move();
+
+		WeatherDynamicRainView view3 = new WeatherDynamicRainView(context,
+				bitmap, 140, 220, 40);
+		flLayout.addView(view3);
+		view3.move();
 	}
 
 	public static WEATHER_TYPE getTypeByStr(String weather) {

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.LocationService;
+import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
@@ -40,15 +42,11 @@ public class MainActivity extends Activity {
 
 		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
 
-		// Update Location
-		Intent intent = new Intent(this, LocationService.class);
-		startService(intent);
-
 		LayoutInflater inflater = LayoutInflater.from(this);
 		viewMain = inflater.inflate(R.layout.activity_main_one, null);
 		viewVice = inflater.inflate(R.layout.activity_main_two, null);
 
-		viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
+		viewList = new ArrayList<View>(); // 将要分页显示的View装入数组中
 		viewList.add(viewMain);
 		viewList.add(viewVice);
 		viewPager = (TransitionViewPager) findViewById(R.id.viewpager);
@@ -57,10 +55,27 @@ public class MainActivity extends Activity {
 		viewPager.setPageMargin(10);
 		viewPager.setAdapter(pagerAdapter);
 
-		new Thread(new StartWeatherServiceThread()).start(); // 计时线程
+		iniService();
 	}
 
-	final Handler timeHandler = new Handler() {
+	private void iniService() {
+		// 位置
+		Intent intentLocation = new Intent(this, LocationService.class);
+		startService(intentLocation);
+
+		// 亮度自动调整服务
+		Intent intentBrightness = new Intent(this, BrightAdjustService.class);
+		startService(intentBrightness);
+
+		// 轨迹记录服务
+		Intent intentRoute = new Intent(this, RouteRecordService.class);
+		startService(intentRoute);
+
+		// 更新天气
+		new Thread(new WeatherUpdateThread()).start(); // 计时线程
+	}
+
+	final Handler weatherUpdateHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -73,7 +88,7 @@ public class MainActivity extends Activity {
 		}
 	};
 
-	public class StartWeatherServiceThread implements Runnable {
+	public class WeatherUpdateThread implements Runnable {
 
 		@Override
 		public void run() {
@@ -82,7 +97,7 @@ public class MainActivity extends Activity {
 				Thread.sleep(3000);
 				Message message = new Message();
 				message.what = 1;
-				timeHandler.sendMessage(message);
+				weatherUpdateHandler.sendMessage(message);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -132,11 +147,6 @@ public class MainActivity extends Activity {
 	private void startSpeak(String content) {
 		Intent intent = new Intent(this, SpeakService.class);
 		intent.putExtra("content", content);
-		startService(intent);
-	}
-
-	private void startWeatherService() {
-		Intent intent = new Intent(this, WeatherService.class);
 		startService(intent);
 	}
 

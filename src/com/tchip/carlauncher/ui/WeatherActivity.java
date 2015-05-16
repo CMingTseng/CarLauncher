@@ -51,12 +51,13 @@ public class WeatherActivity extends Activity {
 	private void showWeatherAnimation(WEATHER_TYPE type) {
 		frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
 		switch (type) {
+		case RAIN:
+			WeatherUtil.rainAnimation(getApplicationContext(), frameLayout);
+			break;
 		case SUN:
 		case CLOUD:
-			WeatherUtil.cloudAnimation(getApplicationContext(), frameLayout);
-			break;
-
 		default:
+			WeatherUtil.cloudAnimation(getApplicationContext(), frameLayout);
 			break;
 		}
 	}
@@ -109,9 +110,7 @@ public class WeatherActivity extends Activity {
 		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
 		textTempHigh.setText(day0tmpHigh);
 
-		// set fancy typeface
-		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
-		// start animation
+		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf")); // 设置字体
 		new Titanic().start(textTempHigh);
 
 		TitanicTextView textTempLow = (TitanicTextView) findViewById(R.id.textTempLow);

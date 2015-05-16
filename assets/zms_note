@@ -64,6 +64,8 @@ SharedPreferences-CarLauncher
 	(String)routeSpan		轨迹绘制取样精度((LOW-MIDDLE-*HIGH))
 	(String)defaultNavi		默认导航(*BAIDU-GAODE)
 	
+	(boolean)brightAdjust	夜间自动开启护眼模式
+	
 	
 	WeatherType：晴，多云，阴，阵雨
 
