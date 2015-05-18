@@ -54,6 +54,9 @@ public class WeatherActivity extends Activity {
 		case RAIN:
 			WeatherUtil.rainAnimation(getApplicationContext(), frameLayout);
 			break;
+		case SNOW:
+			WeatherUtil.snowAnimation(getApplicationContext(), frameLayout);
+			break;
 		case SUN:
 		case CLOUD:
 		default:
