@@ -135,6 +135,120 @@ SharedPreferences-CarLauncher
 - 城市图片 http://poster.weather.com.cn/p_files/base/101281701.jpg
 
 
+
+
+Face Detect JSON：
+============================================================================
+{
+    "face": [
+        {
+            "attribute": {
+                "age": {
+                    "range": 7,
+                    "value": 36
+                },
+                "gender": {
+                    "confidence": 95.123,
+                    "value": "Male"
+                },
+                "race": {
+                    "confidence": 99.9665,
+                    "value": "White"
+                },
+                "smiling": {
+                    "value": 89.8616
+                }
+            },
+            "face_id": "d61d826fe8351318ce1d39971903f97d",
+            "position": {
+                "center": {
+                    "x": 60.632689,
+                    "y": 28.4375
+                },
+                "eye_left": {
+                    "x": 59.553603,
+                    "y": 27.393906
+                },
+                "eye_right": {
+                    "x": 61.325659,
+                    "y": 26.581063
+                },
+                "height": 7.5,
+                "mouth_left": {
+                    "x": 60.100703,
+                    "y": 30.607094
+                },
+                "mouth_right": {
+                    "x": 61.867663,
+                    "y": 29.945312
+                },
+                "nose": {
+                    "x": 60.369596,
+                    "y": 28.595719
+                },
+                "width": 4.217926
+            },
+            "tag": ""
+        },
+        {
+            "attribute": {
+                "age": {
+                    "range": 7,
+                    "value": 21
+                },
+                "gender": {
+                    "confidence": 78.0741,
+                    "value": "Female"
+                },
+                "race": {
+                    "confidence": 57.2442,
+                    "value": "White"
+                },
+                "smiling": {
+                    "value": 15.7552
+                }
+            },
+            "face_id": "778e37e644347fd9b9e0099a6c49e68b",
+            "position": {
+                "center": {
+                    "x": 45.518453,
+                    "y": 28.125
+                },
+                "eye_left": {
+                    "x": 44.660105,
+                    "y": 26.123312
+                },
+                "eye_right": {
+                    "x": 46.51529,
+                    "y": 26.718187
+                },
+                "height": 7.5,
+                "mouth_left": {
+                    "x": 44.474165,
+                    "y": 29.766938
+                },
+                "mouth_right": {
+                    "x": 45.906327,
+                    "y": 30.318563
+                },
+                "nose": {
+                    "x": 45.734095,
+                    "y": 28.365281
+                },
+                "width": 4.217926
+            },
+            "tag": ""
+        }
+    ],
+    "img_height": 320,
+    "img_id": "2c384e5cfe4cafdfca168b8b2c210521",
+    "img_width": 569,
+    "session_id": "69fdd4833d9049558fb86aba4bc9fb0e",
+    "url": null,
+    "response_code": 200
+}
+============================================================================
+
 //定义天气类型 
 var weatherArr={
 "00":"晴",

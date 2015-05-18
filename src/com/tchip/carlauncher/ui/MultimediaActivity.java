@@ -24,19 +24,29 @@ public class MultimediaActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_multimedia);
+		initLayout();
+
+	}
+
+	private void initLayout() {
+		LinearLayout layoutImage = (LinearLayout) findViewById(R.id.layoutImage);
+		layoutImage.setOnClickListener(new MyOnClickListener());
 
 		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
 		btnToMainFromMultimedia.setDrawableIcon(getResources().getDrawable(
 				R.drawable.icon_arrow_down));
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
-
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
+			case R.id.layoutImage:
+				Intent intentFaceDetect = new Intent(getApplicationContext(),
+						FaceDetectActivity.class);
+				startActivity(intentFaceDetect);
+				break;
 			case R.id.btnToMainFromMultimedia:
 				backToMain();
 				break;
