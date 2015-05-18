@@ -7,6 +7,7 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.RouteRecordService;
+import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
@@ -71,6 +72,10 @@ public class MainActivity extends Activity {
 		Intent intentRoute = new Intent(this, RouteRecordService.class);
 		startService(intentRoute);
 
+		// 碰撞侦测服务
+		Intent intentSensor = new Intent(this, SensorWatchService.class);
+		startService(intentSensor);
+
 		// 更新天气
 		new Thread(new WeatherUpdateThread()).start(); // 计时线程
 	}
@@ -92,7 +97,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void run() {
-			// while (true) {
 			try {
 				Thread.sleep(3000);
 				Message message = new Message();
@@ -101,7 +105,6 @@ public class MainActivity extends Activity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// }
 		}
 	}
 

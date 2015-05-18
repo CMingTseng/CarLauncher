@@ -49,7 +49,7 @@
     <!-- File Explorer Extra -->
     <!--
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
     -->
     <uses-sdk
         android:minSdkVersion="19"
@@ -129,9 +129,11 @@
         <activity
             android:name="com.tchip.carlauncher.ui.SettingSystemDisplayActivity"
             android:screenOrientation="landscape" />
- 
         <activity
             android:name="com.tchip.carlauncher.ui.FileRemoteControlActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.FaceDetectActivity"
             android:screenOrientation="landscape" />
 
         <meta-data
@@ -142,6 +144,7 @@
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
         <service android:name="com.tchip.carlauncher.service.WeatherService" />
+        <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
