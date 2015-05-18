@@ -84,7 +84,6 @@ public class FaceDetectActivity extends Activity {
 
 							@Override
 							public void success(JSONObject result) {
-								// TODO Auto-generated method stub
 								Message msg = Message.obtain();
 								msg.what = MSG_SUCCESS;
 								msg.obj = result;
@@ -93,20 +92,12 @@ public class FaceDetectActivity extends Activity {
 
 							@Override
 							public void error(FaceppParseException exception) {
-								// TODO Auto-generated method stub
 								Message msg = Message.obtain();
 								msg.what = MSG_ERROR;
 								msg.obj = exception.getErrorMessage();
 								faceHandler.sendMessage(msg);
 							}
 						});
-				//
-				//
-				// textState.setText("Waiting ...");
-				//
-				// FaceppDetect faceppDetect = new FaceppDetect();
-				// faceppDetect.setDetectCallback(new MyDetectCallBack());
-				// faceppDetect.detect(bitmapPhoto);
 				break;
 
 			default:

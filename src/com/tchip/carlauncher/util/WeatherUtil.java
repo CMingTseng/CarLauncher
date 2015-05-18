@@ -39,29 +39,50 @@ public class WeatherUtil {
 		flLayout.addView(view3);
 		view3.move();
 	}
-	
-	
+
 	/**
 	 * 下雨动画
 	 */
 	public static void rainAnimation(Context context, FrameLayout flLayout) {
-		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
-				R.drawable.weather_rain_drop);
+		int rainSpanX = 200;
+		int rainSpanY = 50;
 
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+				R.drawable.weather_rain_drop_1);
 		WeatherDynamicRainView view1 = new WeatherDynamicRainView(context,
-				bitmap, -150, 50, 30);
+				bitmap, 100 + rainSpanX * 0, 50 + rainSpanY * 0, 30);
 		flLayout.addView(view1);
 		view1.move();
 
 		WeatherDynamicRainView view2 = new WeatherDynamicRainView(context,
-				bitmap, 280, 150, 60);
+				bitmap, 100 + rainSpanX * 1, 50+ rainSpanY * 1, 30);
 		flLayout.addView(view2);
 		view2.move();
 
 		WeatherDynamicRainView view3 = new WeatherDynamicRainView(context,
-				bitmap, 140, 220, 40);
+				bitmap, 100 + rainSpanX * 2, 50+ rainSpanY * 3, 30);
 		flLayout.addView(view3);
 		view3.move();
+
+		WeatherDynamicRainView view4 = new WeatherDynamicRainView(context,
+				bitmap, 100 + rainSpanX * 3, 50+ rainSpanY * 2, 30);
+		flLayout.addView(view4);
+		view4.move();
+
+		WeatherDynamicRainView view5 = new WeatherDynamicRainView(context,
+				bitmap, 100 + rainSpanX * 4, 50+ rainSpanY * 1, 30);
+		flLayout.addView(view5);
+		view5.move();
+
+		WeatherDynamicRainView view6 = new WeatherDynamicRainView(context,
+				bitmap, 100 + rainSpanX * 5, 50+ rainSpanY * 2, 30);
+		flLayout.addView(view6);
+		view6.move();
+
+		WeatherDynamicRainView view7 = new WeatherDynamicRainView(context,
+				bitmap, 100 + rainSpanX * 6, 50+ rainSpanY * 0, 30);
+		flLayout.addView(view7);
+		view7.move();
 	}
 
 	public static WEATHER_TYPE getTypeByStr(String weather) {

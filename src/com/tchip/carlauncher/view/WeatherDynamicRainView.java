@@ -23,7 +23,7 @@ public class WeatherDynamicRainView extends View implements Runnable {
 	 * 图片移动频率
 	 */
 	private int dx = 1;
-	private int dy = 1;
+	private int dy = 10;
 
 	private int sleepTime;
 
@@ -67,11 +67,11 @@ public class WeatherDynamicRainView extends View implements Runnable {
 	public void run() {
 
 		while (WeatherDynamicRainView.IsRunning) {
-			if ((bitmap != null) && (left > (getWidth()))) {
-				left = -bitmap.getWidth();
+			if ((bitmap != null) && (top > (getHeight()))) {
+				top = -bitmap.getHeight();
 			}
 			//left = left + dx;
-			top = top + dx;
+			top = top + dy;
 			handler.sendMessage(handler.obtainMessage());
 			try {
 				Thread.sleep(sleepTime);
