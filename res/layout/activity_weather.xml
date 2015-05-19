@@ -119,65 +119,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="5"
                 android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:src="@drawable/icon_tmp_high" />
-
-                    <com.tchip.carlauncher.view.TitanicTextView
-                        android:id="@+id/textTempHigh"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="35°"
-                        android:textColor="#c2c2c2"
-                        android:textSize="40sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:src="@drawable/icon_tmp_low" />
-
-                    <com.tchip.carlauncher.view.TitanicTextView
-                        android:id="@+id/textTempLow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="15°"
-                        android:textColor="#c2c2c2"
-                        android:textSize="40sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:orientation="vertical"
-                android:padding="5dp" >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -188,9 +131,10 @@
                     <TextView
                         android:id="@+id/textUpdateTime"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="5dp"
+                        android:layout_toRightOf="@+id/imageRefresh"
+                        android:gravity="center_vertical"
                         android:text="发布时间 09:30"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
@@ -198,51 +142,84 @@
                     <ImageView
                         android:id="@+id/imageRefresh"
                         android:layout_width="14sp"
-                        android:layout_height="14sp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
                         android:layout_margin="2dp"
-                        android:layout_toLeftOf="@+id/textUpdateTime"
-                        android:src="@drawable/icon_update" />
+                        android:src="@drawable/weather_post_time" />
+
+                    <ProgressBar
+                        android:id="@+id/updateProgress"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:visibility="gone"
+                        android:layout_alignParentRight="true" />
+
+                    <Button
+                        android:id="@+id/updateButton"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/weather_update_button" />
                 </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:gravity="bottom"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/icon_tmp_low" />
+
+                    <com.tchip.carlauncher.view.TitanicTextView
+                        android:id="@+id/textTempLow"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical"
+                        android:text="15°C"
+                        android:textColor="#c2c2c2"
+                        android:textSize="45sp" />
+
+                    <com.tchip.carlauncher.view.TitanicTextView
+                        android:id="@+id/textTempHigh"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="left|center_vertical"
+                        android:text="35°C"
+                        android:textColor="#c2c2c2"
+                        android:textSize="45sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal" >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="17sp"
-                            android:layout_height="match_parent"
-                            android:layout_margin="2dp"
-                            android:layout_toLeftOf="@+id/textWind"
-                            android:src="@drawable/icon_wind" />
-
-                        <TextView
-                            android:id="@+id/textWind"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="5dp"
-                            android:gravity="center_vertical"
-                            android:text="西北风5级"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="17sp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dp"
+                        android:layout_toLeftOf="@+id/textWind"
+                        android:src="@drawable/icon_wind" />
+
+                    <TextView
+                        android:id="@+id/textWind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:gravity="center_vertical"
+                        android:text="西北风5级"
+                        android:textColor="#ffffff" />
 
                     <ImageView
                         android:layout_width="17sp"
@@ -254,17 +231,10 @@
                         android:id="@+id/textAirCondation"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="15dp"
                         android:gravity="center_vertical"
                         android:text="空气质量优"
                         android:textColor="#ffffff" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal" >
 
                     <ImageView
                         android:layout_width="17sp"
@@ -612,8 +582,8 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:visibility="gone"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:visibility="gone" >
 
                 <TextView
                     android:id="@+id/day6week"

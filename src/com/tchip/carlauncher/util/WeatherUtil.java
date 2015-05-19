@@ -27,7 +27,7 @@ public class WeatherUtil {
 	public static void cloudAnimation(Context context, FrameLayout flLayout) {
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.weather_cloud_1);
-
+		flLayout.removeAllViews();
 		WeatherDynamicCloudyView view1 = new WeatherDynamicCloudyView(context,
 				bitmap, -150, 50, 30);
 		flLayout.addView(view1);
@@ -48,6 +48,7 @@ public class WeatherUtil {
 	 * 下雨动画
 	 */
 	public static void rainAnimation(Context context, FrameLayout flLayout) {
+		flLayout.removeAllViews();
 
 		DisplayMetrics dm = new DisplayMetrics();
 		WindowManager manager = (WindowManager) context
@@ -112,6 +113,7 @@ public class WeatherUtil {
 	 * 下雪动画
 	 */
 	public static void snowAnimation(Context context, FrameLayout flLayout) {
+		flLayout.removeAllViews();
 
 		DisplayMetrics dm = new DisplayMetrics();
 		WindowManager manager = (WindowManager) context
@@ -213,7 +215,7 @@ public class WeatherUtil {
 
 		switch (type) {
 		case SUN:
-			return isDay() ? (R.drawable.icon_weather_sun_white)
+			return isDay() ? (R.drawable.icon_weather_bg_sun_day)
 					: (R.drawable.icon_weather_bg_sun_night);
 		case CLOUD:
 			return isDay() ? R.drawable.icon_weather_bg_cloud_day
@@ -225,7 +227,7 @@ public class WeatherUtil {
 		case HAIL:
 			return R.drawable.icon_weather_hail_white;
 		case RAIN_SNOW:
-			return R.drawable.icon_weather_rain_snow_white;
+			return R.drawable.icon_weather_bg_rain_snow;
 		case FOG:
 			return isDay() ? (R.drawable.weather_fog_day)
 					: (R.drawable.weather_fog_night);

@@ -18,12 +18,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,6 +36,8 @@ public class WeatherActivity extends Activity {
 	private FrameLayout frameLayout;
 	private String[] weatherArray;
 	private boolean isLocated = true;
+	private ProgressBar updateProgress;
+	private Button updateButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,13 @@ public class WeatherActivity extends Activity {
 				Context.MODE_PRIVATE);
 
 		initialLayout();
+
+		// 刷新按钮和进度条
+		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
+		updateProgress.setVisibility(View.GONE);
+		updateButton = (Button) findViewById(R.id.updateButton);
+		updateButton.setVisibility(View.VISIBLE);
+		updateButton.setOnClickListener(new MyOnClickListener());
 
 		speakWeather(0);
 	}
@@ -69,10 +82,6 @@ public class WeatherActivity extends Activity {
 		weatherArray = new String[6];
 
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
-
-		// 刷新按钮
-		ImageView imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
-		imageRefresh.setOnClickListener(new MyOnClickListener());
 
 		// 时钟信息
 		int weekToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -112,10 +121,9 @@ public class WeatherActivity extends Activity {
 		TitanicTextView textTempHigh = (TitanicTextView) findViewById(R.id.textTempHigh);
 		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
 		textTempHigh.setText(day0tmpHigh);
-
-		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf")); // 设置字体
+		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 		new Titanic().start(textTempHigh);
-
+		
 		TitanicTextView textTempLow = (TitanicTextView) findViewById(R.id.textTempLow);
 		String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
 		textTempLow.setText(day0tmpLow);
@@ -316,43 +324,6 @@ public class WeatherActivity extends Activity {
 			weatherArray[5] = "定位失败，无法获取天气信息";
 		}
 
-		// Day 6
-		// TextView day6week = (TextView) findViewById(R.id.day6week);
-		// String day6WeekStr = DateUtil.getWeekStrByInt(weekToday + 6);
-		// day6week.setText(day6WeekStr);
-		//
-		// TextView day6date = (TextView) findViewById(R.id.day6date);
-		// day6date.setText(sharedPreferences.getString("day6date",
-		// "2015-01-01")
-		// .substring(5, 10));
-		//
-		// ImageView day6image = (ImageView) findViewById(R.id.day6image);
-		// String day6WeatherStr = sharedPreferences
-		// .getString("day6weather", "未知");
-		// day6image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
-		// .getTypeByStr(day6WeatherStr)));
-		//
-		// TextView day6tmpHigh = (TextView) findViewById(R.id.day6tmpHigh);
-		// String day6tmpHighStr = sharedPreferences
-		// .getString("day6tmpHigh", "35");
-		// day6tmpHigh.setText(day6tmpHighStr);
-		//
-		// TextView day6tmpLow = (TextView) findViewById(R.id.day6tmpLow);
-		// String day6tmpLowStr = sharedPreferences.getString("day6tmpLow",
-		// "25");
-		// day6tmpLow.setText(day6tmpLowStr);
-		//
-		// TextView day6wind = (TextView) findViewById(R.id.day6wind);
-		// String day6windStr = sharedPreferences.getString("day6wind", "东北风5");
-		// day6wind.setText(day6windStr);
-		//
-		// if (isLocated) {
-		// weatherArray[6] = day6WeekStr + "天气：" + day6WeatherStr + ","
-		// + day6tmpLowStr + "到" + day6tmpHighStr + "," + day6windStr;
-		// } else {
-		// weatherArray[6] = "定位失败，无法获取天气信息";
-		// }
-
 		LinearLayout layoutDay1 = (LinearLayout) findViewById(R.id.layoutDay1);
 		layoutDay1.setOnClickListener(new MyOnClickListener());
 
@@ -367,10 +338,6 @@ public class WeatherActivity extends Activity {
 
 		LinearLayout layoutDay5 = (LinearLayout) findViewById(R.id.layoutDay5);
 		layoutDay5.setOnClickListener(new MyOnClickListener());
-
-		// LinearLayout layoutDay6 = (LinearLayout)
-		// findViewById(R.id.layoutDay6);
-		// layoutDay6.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -405,14 +372,49 @@ public class WeatherActivity extends Activity {
 				speakWeather(6);
 				break;
 
-			case R.id.imageRefresh:
-				// new Thread
+			case R.id.updateButton:
 				startLocationService();
-				startWeatherService();
+				updateButton.setVisibility(View.GONE);
+				updateProgress.setVisibility(View.VISIBLE);
+				new Thread(new UpdateWeatherThread()).start();
+
 				break;
 			}
 		}
 	}
+
+	public class UpdateWeatherThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(2000);
+				startWeatherService();
+				Thread.sleep(3000);
+				Message message = new Message();
+				message.what = 1;
+				updateWeatherHandler.sendMessage(message);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	final Handler updateWeatherHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				updateButton.setVisibility(View.VISIBLE);
+				updateProgress.setVisibility(View.GONE);
+				initialLayout();
+				break;
+
+			default:
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 
 	private void startLocationService() {
 		Intent intent = new Intent(this, LocationService.class);
