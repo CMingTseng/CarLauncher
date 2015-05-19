@@ -30,7 +30,7 @@ public class SettingUtil {
 
 	public static void setScreenOffTime(Context context, int time) {
 		Settings.System.putInt(context.getContentResolver(),
-				android.provider.Settings.System.SCREEN_OFF_TIMEOUT, -1);
+				android.provider.Settings.System.SCREEN_OFF_TIMEOUT, time);
 	}
 
 	public static int getScreenOffTime(Context context) {

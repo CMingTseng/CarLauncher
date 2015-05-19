@@ -23,13 +23,13 @@
             <com.tchip.carlauncher.view.LayoutRipple
                 android:id="@+id/layoutRippleSpeakHour"
                 android:layout_width="fill_parent"
-                android:layout_height="64dp"
+                android:layout_height="100dp"
                 android:background="#FFF"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="32dp"
                     android:src="@drawable/icn_button" />
@@ -41,7 +41,7 @@
                     android:layout_marginLeft="104dp"
                     android:text="整点语音报时"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/textVoiceSpeakHour"
@@ -52,7 +52,7 @@
                     android:layout_marginRight="70dp"
                     android:text="关闭"
                     android:textColor="#1E88E5"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
             <View
@@ -66,13 +66,13 @@
             <com.tchip.carlauncher.view.LayoutRipple
                 android:id="@+id/layoutRippleVoiceAccent"
                 android:layout_width="fill_parent"
-                android:layout_height="64dp"
+                android:layout_height="100dp"
                 android:background="#FFF"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="32dp"
                     android:src="@drawable/icn_button" />
@@ -84,7 +84,7 @@
                     android:layout_marginLeft="104dp"
                     android:text="语音口音"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/textVoiceAccent"
@@ -95,7 +95,7 @@
                     android:layout_marginRight="70dp"
                     android:text="普通话"
                     android:textColor="#1E88E5"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
             <View
@@ -109,13 +109,13 @@
             <com.tchip.carlauncher.view.LayoutRipple
                 android:id="@+id/layoutRippleSpeakWeather"
                 android:layout_width="fill_parent"
-                android:layout_height="64dp"
+                android:layout_height="100dp"
                 android:background="#FFF"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="32dp"
                     android:src="@drawable/icn_button" />
@@ -127,7 +127,7 @@
                     android:layout_marginLeft="104dp"
                     android:text="天气自动播报"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/textSpeakWeather"
@@ -138,7 +138,7 @@
                     android:layout_marginRight="70dp"
                     android:text="打开"
                     android:textColor="#1E88E5"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
             <View
@@ -152,13 +152,13 @@
             <com.tchip.carlauncher.view.LayoutRipple
                 android:id="@+id/layoutRippleUpdateWeather"
                 android:layout_width="fill_parent"
-                android:layout_height="64dp"
+                android:layout_height="100dp"
                 android:background="#FFF"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="32dp"
                     android:src="@drawable/icn_button" />
@@ -170,7 +170,7 @@
                     android:layout_marginLeft="104dp"
                     android:text="天气数据自动更新"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/textUpdateWeather"
@@ -181,7 +181,7 @@
                     android:layout_marginRight="70dp"
                     android:text="打开"
                     android:textColor="#1E88E5"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
             </com.tchip.carlauncher.view.LayoutRipple>
 
             <View

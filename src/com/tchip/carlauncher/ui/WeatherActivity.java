@@ -23,6 +23,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -44,12 +45,12 @@ public class WeatherActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_weather);
 
 		sharedPreferences = getSharedPreferences("CarLauncher",
 				Context.MODE_PRIVATE);
-
-		initialLayout();
 
 		// 刷新按钮和进度条
 		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
@@ -58,7 +59,13 @@ public class WeatherActivity extends Activity {
 		updateButton.setVisibility(View.VISIBLE);
 		updateButton.setOnClickListener(new MyOnClickListener());
 
-		speakWeather(0);
+		// 数据是否自动更新
+		if (sharedPreferences.getBoolean("voiceUpdateWeather", true)) {
+			updateWeather(); // 调用initialLayout
+		} else {
+			initialLayout();
+			speakWeather(0);
+		}
 	}
 
 	private void showWeatherAnimation(WEATHER_TYPE type) {
@@ -123,7 +130,7 @@ public class WeatherActivity extends Activity {
 		textTempHigh.setText(day0tmpHigh);
 		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 		new Titanic().start(textTempHigh);
-		
+
 		TitanicTextView textTempLow = (TitanicTextView) findViewById(R.id.textTempLow);
 		String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
 		textTempLow.setText(day0tmpLow);
@@ -373,14 +380,17 @@ public class WeatherActivity extends Activity {
 				break;
 
 			case R.id.updateButton:
-				startLocationService();
-				updateButton.setVisibility(View.GONE);
-				updateProgress.setVisibility(View.VISIBLE);
-				new Thread(new UpdateWeatherThread()).start();
-
+				updateWeather();
 				break;
 			}
 		}
+	}
+
+	private void updateWeather() {
+		startLocationService();
+		updateButton.setVisibility(View.GONE);
+		updateProgress.setVisibility(View.VISIBLE);
+		new Thread(new UpdateWeatherThread()).start();
 	}
 
 	public class UpdateWeatherThread implements Runnable {
@@ -407,6 +417,7 @@ public class WeatherActivity extends Activity {
 				updateButton.setVisibility(View.VISIBLE);
 				updateProgress.setVisibility(View.GONE);
 				initialLayout();
+				speakWeather(0);
 				break;
 
 			default:
