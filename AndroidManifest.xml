@@ -4,7 +4,8 @@
     android:sharedUserId="com.tchip"
     android:versionCode="1"
     android:versionName="1.0" >
-   <!-- <supports-screens android:anyDensity="false" /> --> 
+
+  <!--  <supports-screens android:anyDensity="false" />-->  
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -50,7 +51,7 @@
     <!-- File Explorer Extra -->
     <!--
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
     -->
     <uses-sdk
         android:minSdkVersion="19"

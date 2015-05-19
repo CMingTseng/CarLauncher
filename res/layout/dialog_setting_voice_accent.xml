@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/message_scrollView"
             android:layout_marginTop="24dp"
-            android:gravity="right"
+            android:gravity="center"
             android:orientation="horizontal" >
 
             <com.tchip.carlauncher.view.ButtonFlat

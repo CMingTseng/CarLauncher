@@ -11,10 +11,28 @@
     <!-- 分割线高度 -->
     <dimen name="line_height">1dp</dimen>
 
-    <!-- zms START -->
+    <!-- zms START:ldpi -->
     <dimen name="date_week_size">18sp</dimen>
     <dimen name="clock_size">60sp</dimen>
     <dimen name="drawable_ring_size">4dip</dimen>
-    <!-- zms END -->
+    <dimen name="setting_item_height">100dp</dimen>
+    <dimen name="setting_item_image">55dp</dimen>
+    <dimen name="setting_item_text_size">30sp</dimen>
+    <dimen name="weather_text_location">23sp</dimen>
+    <dimen name="weather_text_clock">60sp</dimen>
+    <dimen name="weather_text_date">22sp</dimen>
+    <dimen name="weather_text_post_time">18sp</dimen>
+    <dimen name="weather_text_weather">30sp</dimen>
+    <dimen name="weather_button_update">35dp</dimen>
+    <dimen name="weather_text_temp_today">80sp</dimen>
+    <dimen name="weather_text_wind_today">25sp</dimen>
+    <dimen name="weather_margin_more_info">25dp</dimen>
+    <dimen name="weather_text_more_week">20sp</dimen>
+    <dimen name="weather_image_more_weather">85dp</dimen>
+    <dimen name="weather_text_more_temp">20sp</dimen>
+    <dimen name="setting_tab_image">50px</dimen>
+    <dimen name="setting_tab_text">18px</dimen>
+    <!-- below is not optimize for ldpi -->
+    <!-- zms END:ldpi -->
 
 </resources>

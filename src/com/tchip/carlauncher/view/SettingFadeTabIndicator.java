@@ -23,7 +23,8 @@ public class SettingFadeTabIndicator extends LinearLayout {
 	private PageListener pageListener = new PageListener();
 	private LinearLayout.LayoutParams tabLayoutParams;
 	private int imageSize = 24; // dp
-	private int textSize = 18; // sp
+	private int textSize = (int) getResources().getDimension(
+			R.dimen.setting_tab_text); // sp
 	private Context mContext;
 
 	public SettingFadeTabIndicator(Context context) {
@@ -123,10 +124,14 @@ public class SettingFadeTabIndicator extends LinearLayout {
 			mNormalImage.setAlpha(1.0f);
 			mSelectImage.setAlpha(0.0f);
 			// 图片大小
-			addView(mNormalImage, 0, new FrameLayout.LayoutParams(50, 50,
-					Gravity.CENTER));
-			addView(mSelectImage, 1, new FrameLayout.LayoutParams(50, 50,
-					Gravity.CENTER));
+			int imageSize = (int) getResources().getDimension(
+					R.dimen.setting_tab_image);
+			// Toast.makeText(mContext, "" + textSize,
+			// Toast.LENGTH_SHORT).show();
+			addView(mNormalImage, 0, new FrameLayout.LayoutParams(imageSize,
+					imageSize, Gravity.CENTER));
+			addView(mSelectImage, 1, new FrameLayout.LayoutParams(imageSize,
+					imageSize, Gravity.CENTER));
 		}
 
 		@Override
