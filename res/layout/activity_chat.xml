@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:hint="@string/text_understand_hint"
             android:textSize="@dimen/chat_text_hint" />
     </LinearLayout>

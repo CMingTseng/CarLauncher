@@ -8,7 +8,7 @@
     <string name="text_tts_source">text_tts_source</string>
     <string name="text_tts_source_en">text_tts_source_en</string>
     <string name="text_isr_abnf_hint">\t上传内容为：\n\t#ABNF 1.0 gb2312;\n\tlanguage zh-CN;\n\tmode voice;\n\troot $main;\n\t$main = $place1 到$place2 ;\n\t$place1 = 北京 | 武汉 | 南京 | 天津 | 东京;\n\t$place2 = 上海 | 合肥;</string>
-    <string name="text_understand_hint">\t您可以说：\t导航到深圳北站 \t打电话给老王 \t启动百度地图 \t广州天气怎么样 \t聊聊天吧</string>
+    <string name="text_understand_hint">\t您可以说：\t导航到深圳北站 \t打电话给老王 \t发短信给小张晚上一起吃饭 \t启动百度地图 \t广州天气怎么样 \t聊聊天吧</string>
     <!-- \n\n\t更多语义请登录：\n\thttp://osp.voicecloud.cn/ \n\t配置您的专属语义吧! -->
     <!-- 听写 -->
     <string name="text_begin">请开始说话…</string>

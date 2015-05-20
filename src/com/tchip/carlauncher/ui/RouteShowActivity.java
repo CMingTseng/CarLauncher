@@ -44,6 +44,7 @@ import com.baidu.mapapi.map.BaiduMap.SnapshotReadyCallback;
 import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.bean.RouteDistance;
@@ -88,7 +89,7 @@ public class RouteShowActivity extends Activity {
 		setContentView(R.layout.activity_route_show);
 
 		_db = new RouteDistanceDbHelper(getApplicationContext());
-		sharedPreferences = getSharedPreferences("RouteSetting",
+		sharedPreferences = getSharedPreferences("CarLauncher",
 				Context.MODE_PRIVATE);
 
 		btnShare = (ButtonFloat) findViewById(R.id.btnShare);
@@ -221,7 +222,6 @@ public class RouteShowActivity extends Activity {
 	 * @param path
 	 */
 	public void addRouteToMap(String path) {
-
 		// 初始化轨迹点
 		List<LatLng> points = getRoutePoints(path);
 
@@ -278,21 +278,26 @@ public class RouteShowActivity extends Activity {
 						+ (int) driveDistance + "m");
 				_db.close();
 			}
-
 		}
 	}
 
 	public List<LatLng> getRoutePoints(String fileName) {
 
 		List<RoutePoint> list = readFileSdcard(ROUTE_PATH + fileName);
-		list = optimizeRoutePoints(list); // 优化轨迹平滑度
-
+		if (sharedPreferences.getBoolean("routeSmooth", true)) {
+			list = optimizeRoutePoints(list); // 优化轨迹平滑度
+		}
 		List<LatLng> points = new ArrayList<LatLng>(list.size());
 		for (int i = 0; i < list.size(); i++) {
 			i = i + getOffset() - 1;
-			if (i < list.size())
+			if (i < list.size()) {
 				points.add(new LatLng(list.get(i).getLat(), list.get(i)
 						.getLng()));
+			} else {
+				// 越界添加最后一个轨迹点
+				points.add(new LatLng(list.get(list.size() - 1).getLat(), list
+						.get(list.size() - 1).getLng()));
+			}
 		}
 		return points;
 	}
@@ -414,7 +419,13 @@ public class RouteShowActivity extends Activity {
 	 * @return
 	 */
 	public int getOffset() {
-		return sharedPreferences.getInt("offset", 1);
+		String offsetStr = sharedPreferences.getString("routeSpan", "HIGH");
+		if ("LOW".equals(offsetStr))
+			return Constant.ROUTE_POINT_OFFSET_LOW;
+		else if ("MIDDLE".equals(offsetStr))
+			return Constant.ROUTE_POINT_OFFSET_MIDDLE;
+		else
+			return Constant.ROUTE_POINT_OFFSET_HIGH;
 	}
 
 	@Override

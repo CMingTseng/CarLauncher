@@ -104,10 +104,12 @@ SharedPreferences-CarLauncher
 	*datetime	时间
 	*weather	天气
 	*telephone	拨号
-	*map			地图（导航）
+	*map		地图（导航）
 	*baike		百科
 	*chat
 	*app		应用	(打开："operation": "LAUNCH")
+	*message	短信(发送 SEND)
+	*telephone	拨号(拨打 CALL)
 	
 ============================================================================
 [ToDo]
