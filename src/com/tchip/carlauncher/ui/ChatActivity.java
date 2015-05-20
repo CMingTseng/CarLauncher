@@ -9,9 +9,11 @@ import org.json.JSONObject;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -20,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -260,7 +263,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 				@Override
 				public void run() {
 					if (null != result) {
-
 						tvAnswer.setText(""); // 清空回答
 						// 显示
 						String text = result.getResultString();
@@ -380,22 +382,14 @@ public class ChatActivity extends Activity implements OnClickListener {
 													+ peopleName;
 											tvAnswer.setText(strAnswer);
 											startSpeak(strAnswer);
-											Uri uri = Uri.parse("tel:"
-													+ phoneNum);
-											Intent intent = new Intent(
-													Intent.ACTION_CALL, uri);
-											startActivity(intent);
+											phoneCall(phoneNum);
 										} else if (phoneCode != null
 												& phoneCode.trim().length() > 0) {
 											String strAnswer = "正在打电话给："
 													+ peopleName;
 											tvAnswer.setText(strAnswer);
 											startSpeak(strAnswer);
-											Uri uri = Uri.parse("tel:"
-													+ phoneCode);
-											Intent intent = new Intent(
-													Intent.ACTION_CALL, uri);
-											startActivity(intent);
+											phoneCall(phoneCode);
 										} else {
 											String phoneNumFromPinYin = getContactNumberByPinYin(PinYinUtil
 													.convertAll(peopleName));
@@ -407,11 +401,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 														+ peopleName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
-												Uri uri = Uri.parse("tel:"
-														+ phoneNumFromPinYin);
-												Intent intent = new Intent(
-														Intent.ACTION_CALL, uri);
-												startActivity(intent);
+												phoneCall(phoneNumFromPinYin);
 
 											} else {
 												String strAnswer = "通讯录中未找到："
@@ -421,29 +411,149 @@ public class ChatActivity extends Activity implements OnClickListener {
 											}
 										}
 									}
+								} else if ("message".equals(strService)) {
+									// 发短信给小张晚上一起吃饭。operation:SEND
+									String peopleName = jsonObject
+											.getJSONObject("semantic")
+											.getJSONObject("slots")
+											.getString("name");
 
+									String messageContent = "";
+									try {
+										messageContent = jsonObject
+												.getJSONObject("semantic")
+												.getJSONObject("slots")
+												.getString("content");
+									} catch (Exception e) {
+									}
+									String operationStr = jsonObject
+											.getString("operation");
+									if ("SEND".equals(operationStr)) {
+										if (messageContent != null
+												&& messageContent.trim()
+														.length() > 0) {
+											String phoneNum = getContactNumberByName(peopleName);
+											if (phoneNum != null
+													& phoneNum.trim().length() > 0) {
+												String strAnswer = "正在发短信给："
+														+ peopleName + "："
+														+ messageContent;
+												tvAnswer.setText(strAnswer);
+												startSpeak(strAnswer);
+												sendMessage(phoneNum,
+														messageContent);
+											} else {
+												String phoneNumFromPinYin = getContactNumberByPinYin(PinYinUtil
+														.convertAll(peopleName));
+
+												if (phoneNumFromPinYin != null
+														& phoneNumFromPinYin
+																.trim()
+																.length() > 0) {
+													String strAnswer = "正在发短信给"
+															+ peopleName + "："
+															+ messageContent;
+													tvAnswer.setText(strAnswer);
+													startSpeak(strAnswer);
+													sendMessage(
+															phoneNumFromPinYin,
+															messageContent);
+												} else {
+													String strAnswer = "通讯录中未找到："
+															+ peopleName;
+													tvAnswer.setText(strAnswer);
+													startSpeak(strAnswer);
+												}
+											}
+										} else {
+											String strAnswer = "短信内容为空。";
+											tvAnswer.setText(strAnswer);
+											startSpeak(strAnswer);
+										}
+									}
 								}
 
 							} catch (JSONException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
-
 								String strNoAnswer = "小天不知道怎么回答了";
 								tvAnswer.setText(strNoAnswer);
 								startSpeak(strNoAnswer);
 							} finally {
-								if ("map".equals(strService)) {
-
-								}
+//								if ("map".equals(strService)) {
+//								}
 							}
 							makeScrollViewDown(scrollArea);
-
 						}
 					} else {
 						// 识别结果不正确
 					}
 				}
 			});
+		}
+
+		/**
+		 * 拨打电话
+		 * 
+		 * @param phoneNumer
+		 */
+		public void phoneCall(String phoneNumer) {
+			Uri uri = Uri.parse("tel:" + phoneNumer);
+			Intent intent = new Intent(Intent.ACTION_CALL, uri);
+			startActivity(intent);
+		}
+
+		/**
+		 * 直接发送短信，不跳转到系统界面
+		 * 
+		 * @param phoneNum
+		 *            号码
+		 * @param content
+		 *            短信内容
+		 */
+		public void sendMessage(String phoneNum, String content) {
+
+			String SENT_SMS_ACTION = "SENT_SMS_ACTION";
+			Intent sentIntent = new Intent(SENT_SMS_ACTION);
+			PendingIntent sentPI = PendingIntent.getBroadcast(
+					getApplicationContext(), 0, sentIntent, 0);
+			// register the Broadcast Receivers
+			getApplicationContext().registerReceiver(new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context _context, Intent _intent) {
+					switch (getResultCode()) {
+					case Activity.RESULT_OK:
+						Toast.makeText(getApplicationContext(), "短信已发送",
+								Toast.LENGTH_SHORT).show();
+						break;
+					case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+						break;
+					case SmsManager.RESULT_ERROR_RADIO_OFF:
+						break;
+					case SmsManager.RESULT_ERROR_NULL_PDU:
+						break;
+					}
+				}
+			}, new IntentFilter(SENT_SMS_ACTION));
+
+			// 处理返回的接收状态
+			String DELIVERED_SMS_ACTION = "DELIVERED_SMS_ACTION";
+			// create the deilverIntent parameter
+			Intent deliverIntent = new Intent(DELIVERED_SMS_ACTION);
+			PendingIntent deliverPI = PendingIntent.getBroadcast(
+					getApplicationContext(), 0, deliverIntent, 0);
+			getApplicationContext().registerReceiver(new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context _context, Intent _intent) {
+					// 收信人已经成功接收
+				}
+			}, new IntentFilter(DELIVERED_SMS_ACTION));
+
+			SmsManager smsManager = SmsManager.getDefault();
+			List<String> divideContents = smsManager.divideMessage(content);
+			for (String messageText : divideContents) {
+				smsManager.sendTextMessage(phoneNum, null, messageText, sentPI,
+						deliverPI);
+			}
 		}
 
 		public String getContactNumberByName(String name) {
@@ -457,7 +567,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 					// 可以获取到电话号码
 					return c.getString(c.getColumnIndex(Phone.NUMBER));
 				}
-
 			}
 			return "";
 		}
