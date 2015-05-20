@@ -44,7 +44,14 @@
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal" >
 
-              
+               <ImageView
+                    android:id="@+id/imgVoiceSearch"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:src="@drawable/icon_vice_voice" />
 
                 <EditText
                     android:id="@+id/editSearchContent"
