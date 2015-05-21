@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-
         <com.baidu.mapapi.map.MapView
             android:id="@+id/map"
             android:layout_width="fill_parent"
@@ -72,24 +71,29 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:background="#1E88E5" />
-        
-        
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" >
 
+            <ImageView
+                android:id="@+id/imgVoice"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_vice_voice" />
+
             <EditText
                 android:id="@+id/editDestination"
                 android:layout_width="wrap_content"
-                android:textColor="#1E88E5"
                 android:layout_height="wrap_content"
-                android:hint="输入目的地" />
+                android:hint="输入目的地"
+                android:textColor="#1E88E5" />
 
             <ImageView
-                android:layout_width="30dp"
                 android:id="@+id/imgDestination"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/icon_search" />
         </LinearLayout>

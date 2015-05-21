@@ -44,12 +44,12 @@
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal" >
 
-               <ImageView
+                <ImageView
                     android:id="@+id/imgVoiceSearch"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="15dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
                     android:background="@null"
                     android:src="@drawable/icon_vice_voice" />
 
@@ -63,8 +63,8 @@
                     android:id="@+id/imgCustomSearch"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="15dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
                     android:background="@null"
                     android:src="@drawable/icon_arrow_right_round" />
             </LinearLayout>
