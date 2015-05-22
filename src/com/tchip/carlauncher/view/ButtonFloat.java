@@ -33,6 +33,7 @@ public class ButtonFloat extends Button {
 
 	float showPosition;
 	float hidePosition;
+	public boolean animate = true;
 
 	public ButtonFloat(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -99,9 +100,9 @@ public class ButtonFloat extends Button {
 				"iconDrawable", -1);
 		if (iconResource != -1)
 			drawableIcon = getResources().getDrawable(iconResource);
-//		final boolean animate = attrs.getAttributeBooleanValue(
-//				MATERIALDESIGNXML, "animate", false);
-		final boolean animate = true;
+		// final boolean animate = attrs.getAttributeBooleanValue(
+		// MATERIALDESIGNXML, "animate", false);
+		// final boolean animate = true;
 		post(new Runnable() {
 
 			@Override
@@ -155,6 +156,10 @@ public class ButtonFloat extends Button {
 		} catch (NoSuchMethodError e) {
 			icon.setBackgroundDrawable(drawableIcon);
 		}
+	}
+
+	public void hasAnimation(boolean hasAnimation) {
+		animate = hasAnimation;
 	}
 
 	public Bitmap cropCircle(Bitmap bitmap) {

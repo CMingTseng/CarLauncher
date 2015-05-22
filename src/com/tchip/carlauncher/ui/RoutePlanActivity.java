@@ -15,8 +15,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -65,10 +68,18 @@ import com.baidu.mapapi.search.route.TransitRouteLine;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechUnderstander;
+import com.iflytek.cloud.SpeechUnderstanderListener;
+import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.ChatActivity.MyOnGetGeoCoderResultListener;
+import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RoutePlanActivity extends Activity implements
@@ -84,6 +95,7 @@ public class RoutePlanActivity extends Activity implements
 	private SharedPreferences preferences;
 	private double startLatitude, startLongitude, endLatitude, endLongitude;
 	private LatLng startLatLng, endLatLng;
+	private boolean isShowCamera, isShowTrafficLight;
 
 	// 百度地图地址转经纬度
 	private GeoCoder mEndSearch = null;
@@ -95,10 +107,18 @@ public class RoutePlanActivity extends Activity implements
 	RoutePlanSearch mSearch = null;
 
 	private EditText editDestination;
+	private ImageView imgVoice;
 
 	// 初始化全局 bitmap 信息，不用时及时 recycle
 	BitmapDescriptor iconCamera = BitmapDescriptorFactory
 			.fromResource(R.drawable.icon_map_speed_camera);
+	BitmapDescriptor iconLight = BitmapDescriptorFactory
+			.fromResource(R.drawable.icon_route_traffic_light);
+
+	private AudioRecordDialog audioRecordDialog;
+
+	// 语义理解对象（语音到语义）。
+	private SpeechUnderstander mSpeechUnderstander;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,6 +127,7 @@ public class RoutePlanActivity extends Activity implements
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_route_plan);
 
+		audioRecordDialog = new AudioRecordDialog(RoutePlanActivity.this);
 		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
 
 		iniLayout();
@@ -150,9 +171,21 @@ public class RoutePlanActivity extends Activity implements
 				R.drawable.icon_arrow_down));
 		btnToViceFromRoutePlan.setOnClickListener(new MyOnClickListener());
 
+		// 语音按钮
+		ButtonFloat btnVoice = (ButtonFloat) findViewById(R.id.btnVoice);
+		btnVoice.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_route_microphone));
+		btnVoice.hasAnimation(false);
+		btnVoice.setOnClickListener(new MyOnClickListener());
+
+		// 搜索按钮
+		ButtonFloat btnSearch = (ButtonFloat) findViewById(R.id.btnSearch);
+		btnSearch.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_route_search));
+		btnSearch.hasAnimation(false);
+		btnSearch.setOnClickListener(new MyOnClickListener());
+
 		editDestination = (EditText) findViewById(R.id.editDestination);
-		ImageView imgDestination = (ImageView) findViewById(R.id.imgDestination);
-		imgDestination.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -164,11 +197,14 @@ public class RoutePlanActivity extends Activity implements
 			case R.id.btnToViceFromRoutePlan:
 				finish();
 				break;
-			case R.id.imgDestination:
+			case R.id.btnSearch:
 				String destinationStr = editDestination.getText().toString();
 				if (destinationStr != null & destinationStr.length() > 0) {
 					startSearch(destinationStr);
 				}
+				break;
+			case R.id.btnVoice:
+				startVoiceUnderstand();
 				break;
 			}
 		}
@@ -269,15 +305,6 @@ public class RoutePlanActivity extends Activity implements
 					.getLocation();
 			nodeTitle = ((DrivingRouteLine.DrivingStep) step).getInstructions();
 		}
-		// else if (step instanceof WalkingRouteLine.WalkingStep) {
-		// nodeLocation = ((WalkingRouteLine.WalkingStep) step).getEntrace()
-		// .getLocation();
-		// nodeTitle = ((WalkingRouteLine.WalkingStep) step).getInstructions();
-		// } else if (step instanceof TransitRouteLine.TransitStep) {
-		// nodeLocation = ((TransitRouteLine.TransitStep) step).getEntrace()
-		// .getLocation();
-		// nodeTitle = ((TransitRouteLine.TransitStep) step).getInstructions();
-		// }
 
 		if (nodeLocation == null || nodeTitle == null) {
 			return;
@@ -347,8 +374,8 @@ public class RoutePlanActivity extends Activity implements
 		}
 		if (result.error == SearchResult.ERRORNO.NO_ERROR) {
 			nodeIndex = -1;
-			mBtnPre.setVisibility(View.VISIBLE);
-			mBtnNext.setVisibility(View.VISIBLE);
+			// mBtnPre.setVisibility(View.VISIBLE);
+			// mBtnNext.setVisibility(View.VISIBLE);
 			route = result.getRouteLines().get(0);
 			DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
 			routeOverlay = overlay;
@@ -489,6 +516,21 @@ public class RoutePlanActivity extends Activity implements
 					try {
 						lightArray = resultObject.getJSONArray("trafficLight");
 						int lightCount = lightArray.length();
+						for (int i = 0; i < lightCount; i++) {
+							JSONObject lightObject = lightArray
+									.getJSONObject(i);
+							double lightLng = lightObject.getJSONObject(
+									"location").getDouble("lng");
+							double lightLat = lightObject.getJSONObject(
+									"location").getDouble("lat");
+							// 绘制红绿灯Maker
+							LatLng lightLatLng = new LatLng(lightLat, lightLng);
+							OverlayOptions ooLight = new MarkerOptions()
+									.position(lightLatLng).icon(iconLight)
+									.zIndex(9).draggable(true);
+							Marker lightMaker = (Marker) (mBaiduMap
+									.addOverlay(ooLight));
+						}
 					} catch (JSONException e) {
 
 					}
@@ -571,7 +613,144 @@ public class RoutePlanActivity extends Activity implements
 		mSearch.destroy();
 		mMapView.onDestroy();
 		iconCamera.recycle();
+		iconLight.recycle();
 		super.onDestroy();
 	}
+
+	// ==========================
+	int ret = 0;// 函数调用返回值
+
+	public void startVoiceUnderstand() {
+		// 初始化对象
+		mSpeechUnderstander = SpeechUnderstander.createUnderstander(
+				RoutePlanActivity.this, speechUnderstanderListener);
+		setParam();
+
+		if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
+			mSpeechUnderstander.stopUnderstanding(); // 停止录音
+		} else {
+			ret = mSpeechUnderstander.startUnderstanding(mRecognizerListener);
+			if (ret != 0) {
+				// 语义理解失败,错误码:ret
+			} else {
+				// showTip(getString(R.string.text_begin));
+			}
+		}
+	}
+
+	/**
+	 * 初始化监听器（语音到语义）。
+	 */
+	private InitListener speechUnderstanderListener = new InitListener() {
+		@Override
+		public void onInit(int code) {
+			if (code != ErrorCode.SUCCESS) {
+				// 初始化失败,错误码：code
+			}
+		}
+	};
+
+	/**
+	 * 参数设置
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public void setParam() {
+		String lag = preferences.getString("voiceAccent", "mandarin");
+		if (lag.equals("en_us")) {
+			// 设置语言
+			mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "en_us");
+		} else {
+			// 设置语言
+			mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+			// 设置语言区域
+			mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, lag);
+		}
+		// 设置语音前端点
+		mSpeechUnderstander.setParameter(SpeechConstant.VAD_BOS,
+				preferences.getString("voiceBos", "4000"));
+		// 设置语音后端点
+		mSpeechUnderstander.setParameter(SpeechConstant.VAD_EOS,
+				preferences.getString("voiceEos", "1000"));
+		// 设置标点符号
+		mSpeechUnderstander.setParameter(SpeechConstant.ASR_PTT,
+				preferences.getString("understander_punc_preference", "1"));
+		// 设置音频保存路径
+		mSpeechUnderstander.setParameter(
+				SpeechConstant.ASR_AUDIO_PATH,
+				preferences.getString("voicePath",
+						Environment.getExternalStorageDirectory()
+								+ "/iflytek/wavaudio.pcm"));
+	}
+
+	/**
+	 * 识别回调。
+	 */
+	private SpeechUnderstanderListener mRecognizerListener = new SpeechUnderstanderListener() {
+
+		@Override
+		public void onResult(final UnderstanderResult result) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (null != result) {
+						// 显示
+						String text = result.getResultString();
+
+						try {
+							JSONObject jsonObject;
+							jsonObject = new JSONObject(text);
+							String strContent = jsonObject.getString("text");
+							if (!TextUtils.isEmpty(text)) {
+								editDestination.setText(strContent);
+								startSearch(strContent);
+								// Intent intent1 = new Intent(
+								// RoutePlanActivity.this,
+								// NearResultActivity.class);
+								// intent1.putExtra("findType", strContent);
+								// startActivity(intent1);
+							}
+						} catch (JSONException e) {
+
+						}
+					} else {
+						// 识别结果不正确
+					}
+				}
+			});
+		}
+
+		@Override
+		public void onVolumeChanged(int v) {
+			Log.e("ZMS", "VOLUME:" + v);
+			audioRecordDialog.updateVolumeLevel(v);
+
+		}
+
+		@Override
+		public void onEndOfSpeech() {
+			// showTip("onEndOfSpeech");
+			audioRecordDialog.dismissDialog();
+
+		}
+
+		@Override
+		public void onBeginOfSpeech() {
+			// showTip("onBeginOfSpeech");
+			audioRecordDialog.showDialog();
+		}
+
+		@Override
+		public void onError(SpeechError error) {
+			// showTip("onError Code：" + error.getErrorCode());
+		}
+
+		@Override
+		public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
+			// TODO Auto-generated method stub
+
+		}
+	};
 
 }

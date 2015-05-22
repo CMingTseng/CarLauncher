@@ -56,8 +56,10 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.ui.RoutePlanActivity.MyOnClickListener;
 import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
+import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 
 public class ChatActivity extends Activity implements OnClickListener {
@@ -113,8 +115,25 @@ public class ChatActivity extends Activity implements OnClickListener {
 		// screenFilter.addAction(Intent.ACTION_SCREEN_ON);
 		// registerReceiver(ScreenOnOffReceiver, screenFilter);
 
-		startSpeak("你好，我是小天，有什么可以帮您？");
+		startSpeak("你好，有什么可以帮您？");
 
+		ButtonFloat btnToMultimedia = (ButtonFloat) findViewById(R.id.btnToMultimedia);
+		btnToMultimedia.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_down));
+		btnToMultimedia.setOnClickListener(new MyOnClickListener());
+	}
+
+	class MyOnClickListener implements View.OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.btnToMultimedia:
+				finish();
+				break;
+			}
+		}
 	}
 
 	private final BroadcastReceiver ScreenOnOffReceiver = new BroadcastReceiver() {
@@ -479,8 +498,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 								tvAnswer.setText(strNoAnswer);
 								startSpeak(strNoAnswer);
 							} finally {
-//								if ("map".equals(strService)) {
-//								}
+								// if ("map".equals(strService)) {
+								// }
 							}
 							makeScrollViewDown(scrollArea);
 						}

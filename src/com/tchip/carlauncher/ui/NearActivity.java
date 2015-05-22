@@ -1,13 +1,8 @@
 package com.tchip.carlauncher.ui;
 
-import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.baidu.mapapi.search.geocode.GeoCodeOption;
-import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
@@ -16,25 +11,15 @@ import com.iflytek.cloud.SpeechUnderstander;
 import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.ChatActivity.MyOnGetGeoCoderResultListener;
-import com.tchip.carlauncher.util.PinYinUtil;
-import com.tchip.carlauncher.util.ProgressAnimationUtil;
+import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,7 +28,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class NearActivity extends Activity {
 
@@ -52,6 +36,7 @@ public class NearActivity extends Activity {
 	private ImageView imgVoiceSearch;
 	private SharedPreferences mSharedPreferences;
 	private EditText editSearchContent;
+	private AudioRecordDialog audioRecordDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +47,8 @@ public class NearActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_near);
+
+		audioRecordDialog = new AudioRecordDialog(NearActivity.this);
 
 		mSharedPreferences = getSharedPreferences("CarLauncher",
 				Context.MODE_PRIVATE);
@@ -160,12 +147,10 @@ public class NearActivity extends Activity {
 	}
 
 	int ret = 0;// 函数调用返回值
-
 	public void startVoiceUnderstand() {
 		// 初始化对象
 		mSpeechUnderstander = SpeechUnderstander.createUnderstander(
 				NearActivity.this, speechUnderstanderListener);
-
 		setParam();
 
 		if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
@@ -264,18 +249,22 @@ public class NearActivity extends Activity {
 
 		@Override
 		public void onVolumeChanged(int v) {
-			// showTip("onVolumeChanged：" + v);
+			Log.e("ZMS", "VOLUME:" + v);
+			audioRecordDialog.updateVolumeLevel(v);
+
 		}
 
 		@Override
 		public void onEndOfSpeech() {
 			// showTip("onEndOfSpeech");
+			audioRecordDialog.dismissDialog();
 
 		}
 
 		@Override
 		public void onBeginOfSpeech() {
 			// showTip("onBeginOfSpeech");
+			audioRecordDialog.showDialog();
 		}
 
 		@Override

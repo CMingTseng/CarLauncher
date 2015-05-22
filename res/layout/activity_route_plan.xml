@@ -36,6 +36,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -51,7 +52,8 @@
                 android:layout_marginLeft="2dip"
                 android:layout_marginRight="2dip"
                 android:layout_weight="1.0"
-                android:onClick="nodeClick" />
+                android:onClick="nodeClick"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/next"
@@ -60,7 +62,8 @@
                 android:layout_marginLeft="2dip"
                 android:layout_marginRight="2dip"
                 android:layout_weight="1.0"
-                android:onClick="nodeClick" />
+                android:onClick="nodeClick"
+                android:visibility="gone" />
         </LinearLayout>
 
         <com.tchip.carlauncher.view.ButtonFloat
@@ -72,31 +75,53 @@
             android:layout_marginRight="15dp"
             android:background="#1E88E5" />
 
-        <LinearLayout
+        <com.tchip.carlauncher.view.ButtonFloat
+            android:id="@+id/btnVoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" >
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="15dp"
+            android:background="#1E88E5" >
+        </com.tchip.carlauncher.view.ButtonFloat>
 
-            <ImageView
-                android:id="@+id/imgVoice"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/icon_vice_voice" />
+        <LinearLayout
+            android:id="@+id/layoutSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/btnVoice"
+            android:background="@drawable/shape_route_plan_search_bg"
+            android:gravity="center_vertical"
+            android:paddingBottom="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="2dp" >
 
             <EditText
                 android:id="@+id/editDestination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="输入目的地"
-                android:textColor="#1E88E5" />
-
-            <ImageView
-                android:id="@+id/imgDestination"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/icon_search" />
+                android:maxEms="8"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textCursorDrawable="@null" />
         </LinearLayout>
+
+        <com.tchip.carlauncher.view.ButtonFloat
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/layoutSearch"
+            android:background="#1E88E5" >
+        </com.tchip.carlauncher.view.ButtonFloat>
     </RelativeLayout>
 
 </LinearLayout>

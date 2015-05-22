@@ -36,6 +36,7 @@ import com.facepp.http.PostParameters;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.FaceDetectUtil;
+import com.tchip.carlauncher.view.ButtonFloat;
 
 public class FaceDetectActivity extends Activity {
 
@@ -44,7 +45,7 @@ public class FaceDetectActivity extends Activity {
 
 	private ImageView imagePhoto = null;
 	private Bitmap bitmapPhoto = null;
-	private Button buttonDetect = null;
+	private ButtonFloat buttonDetect, btnShare;
 	private TextView textState = null;
 	private View frameWait;
 
@@ -54,17 +55,31 @@ public class FaceDetectActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(R.layout.activity_face_detect);
 
-		Button btnGetImage = (Button) this.findViewById(R.id.btnGetImage);
+		ButtonFloat btnGetImage = (ButtonFloat) this
+				.findViewById(R.id.btnGetImage);
+		btnGetImage.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_face_add_image));
+		btnGetImage.hasAnimation(false);
 		btnGetImage.setOnClickListener(new MyOnClickListener());
+
+		btnShare = (ButtonFloat) this.findViewById(R.id.btnShare);
+		btnShare.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_face_share));
+		btnShare.hasAnimation(false);
+		btnShare.setOnClickListener(new MyOnClickListener());
 
 		frameWait = findViewById(R.id.frameWait);
 
 		textState = (TextView) this.findViewById(R.id.textState);
 
-		buttonDetect = (Button) this.findViewById(R.id.buttonDetect);
+		buttonDetect = (ButtonFloat) this.findViewById(R.id.buttonDetect);
 		buttonDetect.setVisibility(View.INVISIBLE);
+		buttonDetect.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_face_smile));
+		buttonDetect.hasAnimation(false);
 		buttonDetect.setOnClickListener(new MyOnClickListener());
 
 		imagePhoto = (ImageView) this.findViewById(R.id.imagePhoto);
@@ -123,6 +138,7 @@ public class FaceDetectActivity extends Activity {
 				Log.e(TAG, rst.toString());
 				prepareBitmap(rst);
 				imagePhoto.setImageBitmap(bitmapPhoto);
+				btnShare.setVisibility(View.VISIBLE);
 				break;
 			case MSG_ERROR:
 				frameWait.setVisibility(View.GONE);
