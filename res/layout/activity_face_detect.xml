@@ -19,23 +19,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/buttonDetect"
-        android:layout_toLeftOf="@+id/buttonDetect"
+        android:layout_alignTop="@+id/btnDetect"
+        android:layout_toLeftOf="@+id/btnDetect"
         android:gravity="center_vertical|center_horizontal"
         android:text="state"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/frameWait"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:visibility="gone" >
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+        android:clickable="true" >
 
         <TextView
             android:id="@+id/textAge"
@@ -44,6 +39,7 @@
             android:background="@drawable/face_detect_hint"
             android:drawableLeft="@drawable/face_detect_male"
             android:gravity="center"
+            android:minEms="2"
             android:text="123"
             android:textColor="#ffff00ff"
             android:textSize="22sp"
@@ -69,7 +65,7 @@
         android:background="#1E88E5" />
 
     <com.tchip.carlauncher.view.ButtonFloat
-        android:id="@+id/buttonDetect"
+        android:id="@+id/btnDetect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -77,15 +73,83 @@
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/btnGetImage"
         android:background="#1E88E5" />
-    <com.tchip.carlauncher.view.ButtonFloat
+
+    <com.tchip.carlauncher.view.ButtonFloat
         android:id="@+id/btnShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="5dp"
-        android:visibility="gone"
-        android:layout_toRightOf="@id/buttonDetect"
-        android:background="#1E88E5" />
+        android:layout_toRightOf="@id/btnDetect"
+        android:background="#1E88E5"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imageHintArrow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnGetImage"
+        android:layout_alignLeft="@id/btnGetImage"
+        android:layout_alignRight="@id/btnGetImage"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/icon_face_hint_arrow" />
+
+    <ImageView
+        android:id="@+id/imageHintArrow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnGetImage"
+        android:layout_alignLeft="@id/btnDetect"
+        android:layout_alignRight="@id/btnDetect"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/icon_face_hint_arrow" />
+
+    <ImageView
+        android:id="@+id/imageHintArrow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnShare"
+        android:layout_alignLeft="@id/btnShare"
+        android:layout_alignRight="@id/btnShare"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/icon_face_hint_arrow" />
+
+    <TextView
+        android:id="@+id/textHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageHintArrow1"
+        android:layout_alignLeft="@id/btnGetImage"
+        android:layout_alignRight="@id/btnShare"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/shape_route_plan_search_bg"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="从图库中选取一张图片"
+        android:textColor="#ffffff" />
+
+    <ProgressBar
+        android:id="@+id/detectProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/layoutGuide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="人脸检测"
+            android:gravity="center"
+            android:textColor="#1E88E5"
+            android:textSize="25sp" />
+    </LinearLayout>
 
 </RelativeLayout>
