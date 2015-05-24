@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -46,12 +47,13 @@ public class FaceDetectActivity extends Activity {
 
 	private ImageView imagePhoto = null;
 	private Bitmap bitmapPhoto = null;
-	private ButtonFloat btnDetect, btnShare;
+	private ButtonFloat btnDetect, btnShare, btnToMultimedia;
 	private TextView textState, textAge;
 	private View frameWait;
 	private TextView textHint;
 	private ImageView imageHintArrow1, imageHintArrow2, imageHintArrow3;
 	private ProgressBar detectProgress;
+	private LinearLayout layoutGuide;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,12 @@ public class FaceDetectActivity extends Activity {
 
 		textAge = (TextView) frameWait.findViewById(R.id.textAge);
 		detectProgress = (ProgressBar) findViewById(R.id.detectProgress);
+
+		btnToMultimedia = (ButtonFloat) findViewById(R.id.btnToMultimedia);
+		btnToMultimedia.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_down));
+		btnToMultimedia.setOnClickListener(new MyOnClickListener());
+		layoutGuide = (LinearLayout) findViewById(R.id.layoutGuide);
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -110,6 +118,7 @@ public class FaceDetectActivity extends Activity {
 				Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 				photoPickerIntent.setType("image/*");
 				startActivityForResult(photoPickerIntent, PICTURE_CHOOSE);
+				layoutGuide.setVisibility(View.GONE);
 				break;
 			case R.id.btnDetect:
 				// frameWait.setVisibility(View.VISIBLE);
@@ -134,6 +143,9 @@ public class FaceDetectActivity extends Activity {
 								faceHandler.sendMessage(msg);
 							}
 						});
+				break;
+			case R.id.btnToMultimedia:
+				backToMultimedia();
 				break;
 
 			default:
@@ -189,6 +201,11 @@ public class FaceDetectActivity extends Activity {
 		textAge.setVisibility(View.INVISIBLE);
 		textAge.destroyDrawingCache();
 		return bitmap;
+	}
+
+	public void backToMultimedia() {
+		finish();
+
 	}
 
 	protected void prepareBitmap(JSONObject rst) {

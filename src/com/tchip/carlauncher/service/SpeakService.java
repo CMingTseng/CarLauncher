@@ -29,8 +29,8 @@ public class SpeakService extends Service {
 	private String voicer = "xiaoyan"; // 默认发音人
 	// private String[] cloudVoicersEntries;
 	// private String[] cloudVoicersValue;
-	 private int mPercentForBuffering = 0; // 缓冲进度
-	 private int mPercentForPlaying = 0; // 播放进度
+	private int mPercentForBuffering = 0; // 缓冲进度
+	private int mPercentForPlaying = 0; // 播放进度
 	// private RadioGroup mRadioGroup; // 云端/本地单选按钮
 	// 引擎类型： TYPE_CLOUD TYPE_LOCAL
 	private String mEngineType = SpeechConstant.TYPE_LOCAL;
@@ -39,11 +39,17 @@ public class SpeakService extends Service {
 
 	// private Toast mToast;
 	private SharedPreferences mSharedPreferences;
-	private String content = "你好";
+	private String content = "";
+
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
+	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
 	}
 
 	@Override
@@ -67,21 +73,15 @@ public class SpeakService extends Service {
 
 		// 设置参数
 		setParam();
-		int code = mTts.startSpeaking(content, mTtsListener);
-		if (code != ErrorCode.SUCCESS) {
-			if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
-				// 未安装则跳转到提示安装页面 mInstaller.install();
-			} else {
-				// 语音合成失败,错误码:code
+			int code = mTts.startSpeaking(content, mTtsListener);
+			if (code != ErrorCode.SUCCESS) {
+				if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
+					// 未安装则跳转到提示安装页面 mInstaller.install();
+				} else {
+					// 语音合成失败,错误码:code
+				}
 			}
-		}
-
 		return super.onStartCommand(intent, flags, startId);
-	}
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
 	}
 
 	/**
@@ -138,7 +138,8 @@ public class SpeakService extends Service {
 		public void onCompleted(SpeechError error) {
 			if (error == null) {
 				// 播放完成
-				// stopSelf();
+				content = "";
+				stopSelf();
 			} else if (error != null) {
 			}
 		}

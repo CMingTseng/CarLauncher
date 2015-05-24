@@ -124,7 +124,6 @@ SharedPreferences-CarLauncher
 		7.使用ContentProvider取代SharedPreferences，向其他应用提供数据接口
 		8.天气预报界面设置手动刷新按钮；考虑无网络链接或者未定位时情况（使用Handler或AsyncTask更新界面）
 		9.FM
-		11.平滑度优化，RouteShowActivity中进行开关读取
 		12.选择口音时，要跳转到讯飞+界面，或者利用讯飞的接口（如果存在）
 		13.完善系统设置的必要选项，如存储，恢复出厂设置。
 		
@@ -135,7 +134,6 @@ SharedPreferences-CarLauncher
 		4.蓝牙读取手机通讯录
 		5.测速测距（里程，瞬时速度，平均速度，油耗）
 		6.电子狗
-		7.实时路况
 		8.精简系统非必要应用
 		
 	[Bug List]
