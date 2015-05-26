@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.dao;
+package com.tchip.carlauncher.model;
 
 import java.util.ArrayList;
 import java.util.List;

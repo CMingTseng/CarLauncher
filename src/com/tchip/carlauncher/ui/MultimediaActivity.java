@@ -34,6 +34,10 @@ public class MultimediaActivity extends Activity {
 	private void initLayout() {
 		LinearLayout layoutImage = (LinearLayout) findViewById(R.id.layoutImage);
 		layoutImage.setOnClickListener(new MyOnClickListener());
+		
+		// 音乐
+		LinearLayout layoutMusic = (LinearLayout) findViewById(R.id.layoutMusic);
+		layoutMusic.setOnClickListener(new MyOnClickListener());
 
 		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
 		btnToMainFromMultimedia.setDrawableIcon(getResources().getDrawable(
@@ -52,6 +56,11 @@ public class MultimediaActivity extends Activity {
 				break;
 			case R.id.btnToMainFromMultimedia:
 				backToMain();
+				break;
+			case R.id.layoutMusic:
+				Intent intentMusic = new Intent(getApplicationContext(),
+						MusicMainContentActivity.class);
+				startActivity(intentMusic);
 				break;
 			}
 

@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.dao;
+package com.tchip.carlauncher.model;
 
 import com.tchip.carlauncher.service.NetworkChangeService;
 

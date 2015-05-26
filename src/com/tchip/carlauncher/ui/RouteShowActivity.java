@@ -49,7 +49,7 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.bean.RouteDistance;
 import com.tchip.carlauncher.bean.RoutePoint;
-import com.tchip.carlauncher.dao.RouteDistanceDbHelper;
+import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 

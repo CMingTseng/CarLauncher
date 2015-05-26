@@ -8,7 +8,7 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
 import com.tchip.carlauncher.bean.SwipeMenu;
 import com.tchip.carlauncher.bean.SwipeMenuItem;
-import com.tchip.carlauncher.dao.RouteDistanceDbHelper;
+import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SwipeMenuListView;

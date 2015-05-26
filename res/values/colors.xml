@@ -18,12 +18,9 @@
     <color name="holo_blue">#FF33E5B5</color>
     <color name="text_normal">#878787</color>
     <color name="text_select">#37ab14</color>
-    
-    
     <color name="green">#00FF00</color>
     <color name="thumbColor">#66aaaaaa</color>
-	
-	    <color name="yellow">#FFF000</color>
+    <color name="yellow">#FFF000</color>
     <color name="gray">#A6A6A0</color>
     <color name="orange">#ff9900</color>
     <color name="deepcolor">#faaa5f</color>
@@ -37,5 +34,21 @@
 
     <color name="remote_connect_text">#FFe78018</color>
     <color name="remote_disconnect_text">#FF901821</color>
+    <color name="black">#000000</color>
+    <color name="trans_white">#afffffff</color>
+    <color name="blue">#0000ff</color>
+    <color name="divider_color">#6fffffff</color>
+    <color name="bottom_color">#00000000</color>
+    <color name="top_color">#01589e</color>
+    <color name="holo_blue_light">#ff33b5e5</color>
+    <color name="holo_blue_light2">#aa33b5e5</color>
+    <color name="transparent">#00000000</color>
+    <color name="half_transparent">#3f000000</color>
+    <color name="grey_white">#fff0f0f0</color>
+    <color name="grey_dark_light">#55666666</color>
+    <color name="grey_dark">#ff454545</color>
+    <color name="holo_blue_dark">#ff0099cc</color>
+    <color name="holo_orange_dark">#ffff8800</color>
+    <color name="dialog_text_hint">#ffb0b0b0</color>
 
 </resources>

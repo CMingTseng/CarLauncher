@@ -46,13 +46,13 @@
             android:layout_weight="1" >
 
             <com.tchip.carlauncher.view.MetroImageView
-                android:id="@+id/imgNearOilStation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="matrix"
                 android:src="@drawable/green_dark" />
 
             <LinearLayout
+                android:id="@+id/layoutMusic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center" >
@@ -71,7 +71,6 @@
             android:layout_weight="1" >
 
             <com.tchip.carlauncher.view.MetroImageView
-                android:id="@+id/imgNearHotel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="matrix"
@@ -96,16 +95,15 @@
             android:layout_weight="1" >
 
             <com.tchip.carlauncher.view.MetroImageView
-                android:id="@+id/imgNear4S"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="matrix"
                 android:src="@drawable/green_light" />
 
             <LinearLayout
+                android:id="@+id/layoutImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/layoutImage"
                 android:gravity="center" >
 
                 <ImageView
@@ -113,17 +111,16 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_multimedia_image" />
             </LinearLayout>
-             <com.tchip.carlauncher.view.ButtonFloat
-                    android:id="@+id/btnToMainFromMultimedia"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:background="#1E88E5" />
+
+            <com.tchip.carlauncher.view.ButtonFloat
+                android:id="@+id/btnToMainFromMultimedia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:background="#1E88E5" />
         </RelativeLayout>
     </LinearLayout>
-    
-    
 
 </LinearLayout>

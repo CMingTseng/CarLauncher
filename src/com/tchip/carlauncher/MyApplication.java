@@ -1,11 +1,20 @@
 package com.tchip.carlauncher;
 
+import java.io.File;
+
 import android.app.Application;
+import android.os.Environment;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
+import com.tchip.carlauncher.service.MusicServiceManager;
 
 public class MyApplication extends Application {
+	// Music
+	public static boolean mIsSleepClockSetting = false;
+	public static MusicServiceManager mServiceManager = null;
+	private static String rootPath = "/mymusic";
+	public static String lrcPath = "/lrc";
 
 	@Override
 	public void onCreate() {
@@ -18,5 +27,23 @@ public class MyApplication extends Application {
 		super.onCreate();
 		// 百度地图SDK初始化
 		SDKInitializer.initialize(getApplicationContext());
+		
+		// Music
+		mServiceManager = new MusicServiceManager(this);
+		initPath();
+	}
+	
+	private void initPath() {
+		String ROOT = "";
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			ROOT = Environment.getExternalStorageDirectory().getPath();
+		}
+		rootPath = ROOT + rootPath;
+		lrcPath = rootPath + lrcPath;
+		File lrcFile = new File(lrcPath);
+		if (lrcFile.exists()) {
+			lrcFile.mkdirs();
+		}
 	}
 }
