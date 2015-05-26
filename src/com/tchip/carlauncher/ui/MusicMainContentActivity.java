@@ -189,7 +189,7 @@ public class MusicMainContentActivity extends FragmentActivity implements
 					|| action.equals("android.intent.action.MEDIA_SHARED")) {
 				finish();
 				Toast.makeText(MusicMainContentActivity.this,
-						"SD卡以外拔出，本地数据没法初始化!", Toast.LENGTH_SHORT).show();
+						"SD卡拔出，本地数据未初始化!", Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -198,7 +198,7 @@ public class MusicMainContentActivity extends FragmentActivity implements
 
 		if (MyApplication.mIsSleepClockSetting) {
 			cancleSleepClock();
-			Toast.makeText(getApplicationContext(), "已取睡眠模式！",
+			Toast.makeText(getApplicationContext(), "已取消睡眠模式！",
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -298,8 +298,8 @@ public class MusicMainContentActivity extends FragmentActivity implements
 		// unregisterReceiver(mAlarmReceiver);
 		// MyApplication.mServiceManager.exit();
 		// MyApplication.mServiceManager = null;
-		 MusicUtils.clearCache();
-		cancleSleepClock();
+		// MusicUtils.clearCache();
+		// cancleSleepClock();
 		// System.exit(0); // 退出应用
 	}
 

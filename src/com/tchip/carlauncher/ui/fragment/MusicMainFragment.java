@@ -106,6 +106,19 @@ public class MusicMainFragment extends Fragment implements Constant,
 		IntentFilter filter = new IntentFilter(BROADCAST_NAME);
 		filter.addAction(BROADCAST_NAME);
 		getActivity().registerReceiver(mPlayBroadcast, filter);
+		
+		// 更新音乐数目
+		refreshNum(); 
+		
+		// 更新按钮状态
+		if (mServiceManager != null) {
+			int state = mServiceManager.getPlayState();
+			if (state == Constant.MPS_PLAYING) {
+				mServiceManager.rePlay();
+			}else if(state == Constant.MPS_PAUSE){
+				mServiceManager.pause();
+			}
+		}
 
 		return view;
 	}
