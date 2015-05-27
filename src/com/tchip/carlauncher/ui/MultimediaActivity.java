@@ -34,7 +34,7 @@ public class MultimediaActivity extends Activity {
 	private void initLayout() {
 		LinearLayout layoutImage = (LinearLayout) findViewById(R.id.layoutImage);
 		layoutImage.setOnClickListener(new MyOnClickListener());
-		
+
 		// 音乐
 		LinearLayout layoutMusic = (LinearLayout) findViewById(R.id.layoutMusic);
 		layoutMusic.setOnClickListener(new MyOnClickListener());
@@ -79,13 +79,8 @@ public class MultimediaActivity extends Activity {
 
 	private void backToMain() {
 		finish();
-		// add for animation start
-		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
-		if (version > 5) {
-			overridePendingTransition(R.anim.zms_translate_up_out,
-					R.anim.zms_translate_up_in);
-		}
-		// add for animation end
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	@Override

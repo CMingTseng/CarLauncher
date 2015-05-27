@@ -1,28 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
- 
- <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" >
-    </android.support.v4.view.ViewPager>
+    <SurfaceView
+        android:id="@+id/surfaceCamera"
+        android:layout_width="506px"
+        android:layout_height="285px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#e74b3c" />
 
-  <com.tchip.carlauncher.view.MyViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" >
-    </com.tchip.carlauncher.view.MyViewPager>
-</LinearLayout>-->
+    <RelativeLayout
+        android:id="@+id/layoutWeather"
+        android:layout_width="348px"
+        android:layout_height="285px"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/surfaceCamera"
+        android:background="#2f2f37"
+        android:orientation="vertical" >
 
-<com.tchip.carlauncher.view.TransitionViewPager
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/viewpager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+        <TextClock
+            android:id="@+id/textClock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:format12Hour="hh:mm"
+            android:textColor="#ffe1c5"
+            android:textSize="60sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textClock"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2015年5月5日"
+                android:textColor="#ffe1c5"
+                android:textSize="@dimen/weather_text_date" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/textWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="星期五"
+                android:textColor="#ffe1c5"
+                android:textSize="@dimen/weather_text_date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_location" >
+            </ImageView>
+
+            <TextView
+                android:id="@+id/textLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="北京市"
+                android:textColor="#ffffff" >
+            </TextView>
+
+            <ImageView
+                android:id="@+id/imageTodayWeather"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_weather_sun_white" />
+
+            <TextView
+                android:id="@+id/textTodayWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="晴"
+                android:textColor="#ffffff" />
+
+            <com.tchip.carlauncher.view.TitanicTextView
+                android:id="@+id/textTempLow"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="15°C"
+                android:textColor="#c2c2c2" />
+
+            <com.tchip.carlauncher.view.TitanicTextView
+                android:id="@+id/textTempHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="35°C"
+                android:textColor="#c2c2c2" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="195px"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/surfaceCamera" >
+
+        <LinearLayout
+            android:id="@+id/layoutBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageMultimedia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/tmp_icon" />
+
+            <ImageView
+                android:id="@+id/imageFileExplore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/tmp_icon" />
+
+            <ImageView
+                android:id="@+id/imageRouteTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tmp_icon" />
+
+            <ImageView
+                android:id="@+id/imageNearSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tmp_icon" />
+
+            <ImageView
+                android:id="@+id/imageVoiceChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tmp_icon" />
+
+            <ImageView
+                android:id="@+id/imageRoutePlan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tmp_icon" />
+
+            <ImageView
+                android:id="@+id/imageSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tmp_icon" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</RelativeLayout>
