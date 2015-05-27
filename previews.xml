@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<previews>
+
+    <preview
+        name="5.1-800x480"
+        activity="com.tchip.carlauncher.ui.SettingCameraFragment"
+        config="layout-ldltr-sw480dp-w800dp-h480dp-large-long-land-notnight-mdpi-finger-keyssoft-nokeys-navhidden-nonav-800x480-v21"
+        device="5.1&quot; WVGA"
+        devicestate="Landscape"
+        target="Android 5.0.1"
+        theme="@android:style/Theme.Holo" >
+    </preview>
+
+</previews>

@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -168,7 +169,7 @@ public class RoutePlanActivity extends Activity implements
 
 		ButtonFloat btnToViceFromRoutePlan = (ButtonFloat) findViewById(R.id.btnToViceFromRoutePlan);
 		btnToViceFromRoutePlan.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_down));
+				R.drawable.icon_arrow_up));
 		btnToViceFromRoutePlan.setOnClickListener(new MyOnClickListener());
 
 		// 语音按钮
@@ -195,7 +196,7 @@ public class RoutePlanActivity extends Activity implements
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnToViceFromRoutePlan:
-				finish();
+				backToVice();
 				break;
 			case R.id.btnSearch:
 				String destinationStr = editDestination.getText().toString();
@@ -208,6 +209,22 @@ public class RoutePlanActivity extends Activity implements
 				break;
 			}
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToVice();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToVice() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	/**

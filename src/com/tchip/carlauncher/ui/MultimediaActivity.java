@@ -41,7 +41,7 @@ public class MultimediaActivity extends Activity {
 
 		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
 		btnToMainFromMultimedia.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_down));
+				R.drawable.icon_arrow_up));
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
 	}
 

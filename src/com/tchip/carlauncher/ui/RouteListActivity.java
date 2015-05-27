@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -184,7 +185,7 @@ public class RouteListActivity extends Activity {
 				tvFilterState.setText("轨迹未筛选");
 				break;
 			case R.id.btnToMainFromRouteList:
-				finish();
+				backToMain();
 				break;
 			}
 		}
@@ -324,6 +325,23 @@ public class RouteListActivity extends Activity {
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToMain();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToMain() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
+	}
+	
 
 	// Swipe Menu START
 

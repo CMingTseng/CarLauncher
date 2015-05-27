@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.bean.Titanic;
+import com.tchip.carlauncher.bean.Typefaces;
 // import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 public class WeatherActivity extends Activity {
@@ -92,20 +94,16 @@ public class WeatherActivity extends Activity {
 
 		// 时钟信息
 		int weekToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-		String weekRank = String.valueOf(Calendar.getInstance().get(
-				Calendar.WEEK_OF_YEAR));
-		String yearStr = String.valueOf(Calendar.getInstance().get(
-				Calendar.YEAR));
-		String monthStr = String.valueOf((Calendar.getInstance().get(
-				Calendar.MONTH) + 1));
-		String dayStr = String.valueOf(Calendar.getInstance().get(
-				Calendar.DAY_OF_MONTH));
-		TextView textWeek = (TextView) findViewById(R.id.textWeek);
-		textWeek.setText("第" + weekRank + "周 · "
-				+ DateUtil.getWeekStrByInt(weekToday));
-		TextView textDate = (TextView) findViewById(R.id.textDate);
-		textDate.setText(yearStr + "年" + monthStr + "月" + dayStr + "日");
 
+		TextClock textClock = (TextClock) findViewById(R.id.textClock);
+		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
+		TextClock textDate = (TextClock) findViewById(R.id.textDate);
+
+		textClock.setTypeface(Typefaces.get(this, "Font-Roboto-Light.ttf"));
+		textDate.setTypeface(Typefaces
+				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+		textWeek.setTypeface(Typefaces
+				.get(this, "Font-Droid-Sans-Fallback.ttf"));
 		// Day 0 (Today) Weather and Time, Location Info
 
 		TextView textLocation = (TextView) findViewById(R.id.textLocation);
@@ -461,8 +459,8 @@ public class WeatherActivity extends Activity {
 
 	private void exitWeather() {
 		finish();
-		overridePendingTransition(R.anim.zms_translate_up_out,
-				R.anim.zms_translate_up_in);
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 }

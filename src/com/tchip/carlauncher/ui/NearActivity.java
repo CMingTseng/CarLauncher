@@ -56,7 +56,7 @@ public class NearActivity extends Activity {
 
 		ButtonFloat btnToViceFromNear = (ButtonFloat) findViewById(R.id.btnToViceFromNear);
 		btnToViceFromNear.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_down));
+				R.drawable.icon_arrow_up));
 		btnToViceFromNear.setOnClickListener(new MyOnClickListener());
 
 		ImageView imgNearOilStation = (ImageView) findViewById(R.id.imgNearOilStation);
@@ -291,8 +291,8 @@ public class NearActivity extends Activity {
 
 	private void backToVice() {
 		finish();
-		overridePendingTransition(R.anim.zms_translate_up_out,
-				R.anim.zms_translate_up_in);
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	@Override

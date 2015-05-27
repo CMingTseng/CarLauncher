@@ -1,6 +1,7 @@
 package com.tchip.carlauncher.ui;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.ui.MainActivityOld.MyOnClickListener;
 
 import android.app.Activity;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 
 public class MainActivity extends Activity {
 
@@ -44,6 +46,16 @@ public class MainActivity extends Activity {
 		// 天气预报
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
+		TextClock textClock = (TextClock) findViewById(R.id.textClock);
+		textClock.setTypeface(Typefaces.get(this, "Font-Roboto-Thin.ttf"));
+
+		TextClock textDate = (TextClock) findViewById(R.id.textDate);
+		textDate.setTypeface(Typefaces
+				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+
+		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
+		textWeek.setTypeface(Typefaces
+				.get(this, "Font-Droid-Sans-Fallback.ttf"));
 
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);

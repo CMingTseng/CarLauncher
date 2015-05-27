@@ -9,6 +9,8 @@ import com.tchip.carlauncher.ftp.Globals;
 import com.tchip.carlauncher.ftp.MyLog;
 import com.tchip.carlauncher.ftp.UiUpdater;
 import com.tchip.carlauncher.service.FTPServerService;
+import com.tchip.carlauncher.ui.MultimediaActivity.MyOnClickListener;
+import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -26,6 +28,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -68,7 +71,7 @@ public class FileRemoteControlActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.file_server_control_activity);
-		//setTitle("远程管理");
+		// setTitle("远程管理");
 
 		// Set the application-wide context global, if not already set
 		Context myContext = Globals.getContext();
@@ -98,6 +101,39 @@ public class FileRemoteControlActivity extends Activity {
 						startActivity(intent);
 					}
 				});
+
+		// 返回
+		ButtonFloat btnToFileFromFileRemote = (ButtonFloat) findViewById(R.id.btnToFileFromFileRemote);
+		btnToFileFromFileRemote.setDrawableIcon(getResources().getDrawable(
+				R.drawable.icon_arrow_up));
+		btnToFileFromFileRemote.setOnClickListener(new MyOnClickListener());
+	}
+
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.btnToFileFromFileRemote:
+				backToFile();
+				break;
+			}
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToFile();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToFile() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	/**
@@ -121,7 +157,7 @@ public class FileRemoteControlActivity extends Activity {
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(wifiReceiver, filter);
-		
+
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}

@@ -48,7 +48,7 @@
                         android:gravity="center_vertical"
                         android:text="北京市"
                         android:textColor="#ffffff"
-                        android:textSize="@dimen/weather_text_location" >
+                        android:textSize="14sp" >
                     </TextView>
                 </LinearLayout>
 
@@ -57,32 +57,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:format12Hour="hh:mm"
+                    android:format12Hour="HH:mm"
                     android:gravity="center"
                     android:textColor="#ffffff"
-                    android:textSize="@dimen/weather_text_clock" />
+                    android:textSize="60sp" />
 
-                <TextView
+                <TextClock
                     android:id="@+id/textDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
+                    android:format12Hour="yyyy年MM月dd日"
                     android:gravity="center"
-                    android:text="2015年5月5日"
                     android:textColor="#ffffff"
-                    android:textSize="@dimen/weather_text_date" >
-                </TextView>
+                    android:textSize="20sp" />
 
-                <TextView
+                <TextClock
                     android:id="@+id/textWeek"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="2"
+                    android:format12Hour="EEEE"
                     android:gravity="center"
-                    android:text="星期五，第15周"
                     android:textColor="#ffffff"
-                    android:textSize="@dimen/weather_text_date" />
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <View
@@ -116,7 +115,7 @@
                     android:gravity="center"
                     android:text="晴"
                     android:textColor="#ffffff"
-                    android:textSize="@dimen/weather_text_weather" />
+                    android:textSize="35sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -159,8 +158,8 @@
 
                     <Button
                         android:id="@+id/updateButton"
-                        android:layout_width="@dimen/weather_button_update"
-                        android:layout_height="@dimen/weather_button_update"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/weather_update_button" />
                 </RelativeLayout>
@@ -186,7 +185,7 @@
                         android:gravity="center_vertical"
                         android:text="15°C"
                         android:textColor="#c2c2c2"
-                        android:textSize="@dimen/weather_text_temp_today" />
+                        android:textSize="80sp" />
 
                     <com.tchip.carlauncher.view.TitanicTextView
                         android:id="@+id/textTempHigh"
@@ -196,7 +195,7 @@
                         android:gravity="left|center_vertical"
                         android:text="35°C"
                         android:textColor="#c2c2c2"
-                        android:textSize="@dimen/weather_text_temp_today" />
+                        android:textSize="80sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -208,9 +207,10 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_width="@dimen/weather_text_wind_today"
+                        android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
+                        android:padding="1dp"
                         android:layout_toLeftOf="@+id/textWind"
                         android:src="@drawable/icon_wind" />
 
@@ -223,7 +223,7 @@
                         android:gravity="center_vertical"
                         android:text="西北风5级"
                         android:textColor="#ffffff"
-                        android:textSize="@dimen/weather_text_wind_today" />
+                        android:textSize="25sp" />
 
                     <ImageView
                         android:layout_width="@dimen/weather_text_wind_today"
@@ -239,12 +239,13 @@
                         android:gravity="center_vertical"
                         android:text="空气质量优"
                         android:textColor="#ffffff"
-                        android:textSize="@dimen/weather_text_wind_today" />
+                        android:textSize="25sp" />
 
                     <ImageView
-                        android:layout_width="@dimen/weather_text_wind_today"
+                        android:layout_width="25dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
+                        android:padding="1dp"
                         android:src="@drawable/icon_hygrometer" />
 
                     <TextView
@@ -254,7 +255,7 @@
                         android:gravity="center_vertical"
                         android:text="湿度55%"
                         android:textColor="#ffffff"
-                        android:textSize="@dimen/weather_text_wind_today" />
+                        android:textSize="25sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

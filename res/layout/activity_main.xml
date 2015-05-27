@@ -30,9 +30,9 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:format12Hour="hh:mm"
+            android:format12Hour="HH:mm"
             android:textColor="#ffe1c5"
-            android:textSize="60sp" />
+            android:textSize="85sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,33 +42,30 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
-            <TextView
+            <TextClock
                 android:id="@+id/textDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="2015年5月5日"
+                android:format12Hour="yyyy年MM月dd日"
                 android:textColor="#ffe1c5"
-                android:textSize="@dimen/weather_text_date" >
-            </TextView>
+                android:textSize="28sp" />
 
-            <TextView
+            <TextClock
                 android:id="@+id/textWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:text="星期五"
+                android:format12Hour="EEEE"
                 android:textColor="#ffe1c5"
-                android:textSize="@dimen/weather_text_date" />
+                android:textSize="28sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
             android:orientation="horizontal" >
 
             <ImageView

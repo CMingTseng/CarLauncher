@@ -25,6 +25,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -119,7 +120,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		ButtonFloat btnToMultimedia = (ButtonFloat) findViewById(R.id.btnToMultimedia);
 		btnToMultimedia.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_down));
+				R.drawable.icon_arrow_up));
 		btnToMultimedia.setOnClickListener(new MyOnClickListener());
 	}
 
@@ -130,10 +131,26 @@ public class ChatActivity extends Activity implements OnClickListener {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnToMultimedia:
-				finish();
+				backToMain();
 				break;
 			}
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToMain();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToMain() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	private final BroadcastReceiver ScreenOnOffReceiver = new BroadcastReceiver() {

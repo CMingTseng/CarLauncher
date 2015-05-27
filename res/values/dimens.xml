@@ -39,11 +39,13 @@
     <dimen name="weather_text_temp_today">105sp</dimen>
     <dimen name="weather_text_wind_today">32sp</dimen>
     <dimen name="weather_margin_more_info">32dp</dimen>
-    <dimen name="weather_text_more_week">28sp</dimen>
-    <dimen name="weather_image_more_weather">112dp</dimen>
-    <dimen name="weather_text_more_temp">28sp</dimen>
+    <dimen name="weather_text_more_week">22sp</dimen>
+    <dimen name="weather_image_more_weather">75dp</dimen>
+    <dimen name="weather_text_more_temp">20sp</dimen>
     <dimen name="setting_tab_image">67px</dimen>
     <dimen name="setting_tab_text">24px</dimen>
+    
+    <dimen name="chat_text_hint">30sp</dimen>
     <!-- below is not optimize for mdpi -->
     <!-- zms END:mdpi -->
 
