@@ -27,9 +27,11 @@
     <dimen name="date_week_size">24sp</dimen>
     <dimen name="clock_size">80sp</dimen>
     <dimen name="drawable_ring_size">5dip</dimen>
-    <dimen name="setting_item_height">120dp</dimen>
-    <dimen name="setting_item_image">72dp</dimen>
-    <dimen name="setting_item_text_size">40sp</dimen>
+    <dimen name="setting_item_height">90dp</dimen>
+    <dimen name="setting_item_image">55dp</dimen>
+    <dimen name="setting_item_image_margin_left">60dp</dimen>
+    <dimen name="setting_item_text_size">35sp</dimen>
+    <dimen name="setting_item_text_margin_left">150dp</dimen>
     <dimen name="weather_text_location">32sp</dimen>
     <dimen name="weather_text_clock">80sp</dimen>
     <dimen name="weather_text_date">28sp</dimen>
