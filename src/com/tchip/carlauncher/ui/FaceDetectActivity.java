@@ -228,7 +228,7 @@ public class FaceDetectActivity extends Activity {
 			btnShare.setVisibility(View.VISIBLE);
 			detectProgress.setVisibility(View.GONE);
 			if (faceCount > 0) {
-				textHint.setText("识别出" + faceCount + "个脸部，分享给好友");
+				textHint.setText("识别出" + faceCount + "个脸部，分享照片");
 				imageHintArrow1.setVisibility(View.INVISIBLE);
 				imageHintArrow2.setVisibility(View.INVISIBLE);
 				imageHintArrow3.setVisibility(View.VISIBLE);
@@ -289,7 +289,7 @@ public class FaceDetectActivity extends Activity {
 							y - h / 2 - ageBitmap.getHeight(), null);
 				}
 			} else {
-				textHint.setText("未识别到脸部，换张照片试试");
+				textHint.setText("未识别到脸部，换张照片");
 				imageHintArrow1.setVisibility(View.VISIBLE);
 				imageHintArrow2.setVisibility(View.INVISIBLE);
 				imageHintArrow3.setVisibility(View.INVISIBLE);

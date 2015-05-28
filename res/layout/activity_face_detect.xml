@@ -42,7 +42,7 @@
             android:minEms="2"
             android:text="123"
             android:textColor="#ffff00ff"
-            android:textSize="22sp"
+            android:textSize="25sp"
             android:visibility="invisible" />
     </FrameLayout>
 
