@@ -111,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:gravity="center"
                     android:text="晴"
                     android:textColor="#ffffff"
@@ -172,30 +172,28 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:src="@drawable/icon_tmp_low" />
 
                     <com.tchip.carlauncher.view.TitanicTextView
-                        android:id="@+id/textTempLow"
-                        android:layout_width="0dp"
+                        android:id="@+id/textTempRange"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="15°C"
+                        android:text="15-35"
                         android:textColor="#c2c2c2"
                         android:textSize="80sp" />
 
-                    <com.tchip.carlauncher.view.TitanicTextView
-                        android:id="@+id/textTempHigh"
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="left|center_vertical"
-                        android:text="35°C"
-                        android:textColor="#c2c2c2"
-                        android:textSize="80sp" />
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:text="℃"
+                        android:textColor="#ffffff"
+                        android:textSize="50sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -207,11 +205,11 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_width="30dp"
+                        android:layout_width="@dimen/weather_more_info_image_size"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
-                        android:padding="1dp"
                         android:layout_toLeftOf="@+id/textWind"
+                        android:padding="1dp"
                         android:src="@drawable/icon_wind" />
 
                     <TextView
@@ -223,7 +221,7 @@
                         android:gravity="center_vertical"
                         android:text="西北风5级"
                         android:textColor="#ffffff"
-                        android:textSize="25sp" />
+                        android:textSize="@dimen/weather_more_info_text_size" />
 
                     <ImageView
                         android:layout_width="@dimen/weather_text_wind_today"
@@ -239,10 +237,10 @@
                         android:gravity="center_vertical"
                         android:text="空气质量优"
                         android:textColor="#ffffff"
-                        android:textSize="25sp" />
+                        android:textSize="@dimen/weather_more_info_text_size" />
 
                     <ImageView
-                        android:layout_width="25dp"
+                        android:layout_width="@dimen/weather_more_info_image_size"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
                         android:padding="1dp"
@@ -255,7 +253,7 @@
                         android:gravity="center_vertical"
                         android:text="湿度55%"
                         android:textColor="#ffffff"
-                        android:textSize="25sp" />
+                        android:textSize="@dimen/weather_more_info_text_size" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -42,6 +42,18 @@ public class SettingSystemFragment extends Fragment {
 		iniRipple(layoutRippleBluetooth);
 		layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
 
+		// 位置信息
+		LayoutRipple layoutRippleLocation = (LayoutRipple) systemSettingView
+				.findViewById(R.id.layoutRippleLocation);
+		iniRipple(layoutRippleLocation);
+		layoutRippleLocation.setOnClickListener(new MyOnClickListener());
+
+		// 存储
+		LayoutRipple layoutRippleStorage = (LayoutRipple) systemSettingView
+				.findViewById(R.id.layoutRippleStorage);
+		iniRipple(layoutRippleStorage);
+		layoutRippleStorage.setOnClickListener(new MyOnClickListener());
+
 		// 日期
 		LayoutRipple layoutRippleDate = (LayoutRipple) systemSettingView
 				.findViewById(R.id.layoutRippleDate);
@@ -53,6 +65,12 @@ public class SettingSystemFragment extends Fragment {
 				.findViewById(R.id.layoutRippleSound);
 		iniRipple(layoutRippleSound);
 		layoutRippleSound.setOnClickListener(new MyOnClickListener());
+
+		// 恢复出厂设置
+		LayoutRipple layoutRippleReset = (LayoutRipple) systemSettingView
+				.findViewById(R.id.layoutRippleReset);
+		iniRipple(layoutRippleReset);
+		layoutRippleReset.setOnClickListener(new MyOnClickListener());
 
 		// 关于
 		LayoutRipple layoutRippleAbout = (LayoutRipple) systemSettingView
@@ -83,7 +101,7 @@ public class SettingSystemFragment extends Fragment {
 				// SETTINGS 设置主界面
 				// WIRELESS_SETTINGS 更多网络
 				// WIFI_DISPLAY_SETTINGS
-				// LOCALE_SETTINGS
+				// LOCALE_SETTINGS 语言设置
 				// INPUT_METHOD_SETTINGS
 				// INPUT_METHOD_SUBTYPE_SETTINGS
 				// USER_DICTIONARY_SETTINGS
@@ -93,7 +111,6 @@ public class SettingSystemFragment extends Fragment {
 				// APPLICATION_SETTINGS
 				// MANAGE_ALL_APPLICATIONS_SETTINGS
 				// MANAGE_PACKAGE_STORAGE
-				// LOCATION_SOURCE_SETTINGS
 				// PRIVACY_SETTINGS
 				// BACKUP_AND_RESET_SETTINGS
 				// ACCESSIBILITY_SETTINGS
@@ -106,7 +123,6 @@ public class SettingSystemFragment extends Fragment {
 				// USER_SETTINGS
 				// SIM_MANAGEMENT_ACTIVITY
 				// SIM_LIST_ENTRANCE_ACTIVITY
-
 				// PICK_WIFI_NETWORK
 
 				startActivity(new Intent(
@@ -116,6 +132,14 @@ public class SettingSystemFragment extends Fragment {
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
 				break;
+			case R.id.layoutRippleLocation:
+				startActivity(new Intent(
+						android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+				break;
+			case R.id.layoutRippleStorage:
+				startActivity(new Intent(
+						android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
+				break;
 			case R.id.layoutRippleDate:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_DATE_SETTINGS));
@@ -123,6 +147,10 @@ public class SettingSystemFragment extends Fragment {
 			case R.id.layoutRippleSound:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_SOUND_SETTINGS));
+				break;
+			case R.id.layoutRippleReset:
+				startActivity(new Intent(
+						"android.settings.BACKUP_AND_RESET_SETTINGS"));
 				break;
 			case R.id.layoutRippleAbout:
 				startActivity(new Intent(

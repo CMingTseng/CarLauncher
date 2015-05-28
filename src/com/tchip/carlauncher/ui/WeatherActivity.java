@@ -123,16 +123,14 @@ public class WeatherActivity extends Activity {
 		TextView textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textTodayWeather.setText(weatherToday);
 
-		TitanicTextView textTempHigh = (TitanicTextView) findViewById(R.id.textTempHigh);
-		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
-		textTempHigh.setText(day0tmpHigh);
-		// textTempHigh.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
-		new Titanic().start(textTempHigh);
-
-		TitanicTextView textTempLow = (TitanicTextView) findViewById(R.id.textTempLow);
+		TitanicTextView textTempRange = (TitanicTextView) findViewById(R.id.textTempRange);
 		String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
-		textTempLow.setText(day0tmpLow);
-		new Titanic().start(textTempLow);
+		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
+		day0tmpLow = day0tmpLow.split("℃")[0];
+		day0tmpHigh = day0tmpHigh.split("℃")[0];
+		textTempRange.setText(day0tmpLow+"~"+day0tmpHigh);
+		textTempRange.setTypeface(Typefaces.get(this,"Font-Roboto-Light.ttf"));
+		new Titanic().start(textTempRange);
 
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
 		textWetLevel.setText("湿度 "
