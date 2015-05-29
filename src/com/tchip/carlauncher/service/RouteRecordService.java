@@ -27,13 +27,13 @@ import android.os.IBinder;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.model.RoutePoint;
 
 public class RouteRecordService extends Service {
 	private LocationClient mLocationClient;
-	private final String ROUTE_PATH = Environment.getExternalStorageDirectory()
-			.getPath() + "/Route/";
+	private final String ROUTE_PATH = Constant.ROUTE_TRACK_PATH;
 	private String startTime = "";
 	private String stopTime = "";
 
@@ -59,7 +59,7 @@ public class RouteRecordService extends Service {
 		super.onCreate();
 
 		// Update Running State
-		sharedPreferences = getSharedPreferences("CarLauncher",
+		sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		editor.putBoolean("isRun", true);

@@ -10,7 +10,7 @@
         android:layout_height="270px"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="#e74b3c" />
+        android:background="@drawable/tmp_icon_camera" />
 
     <RelativeLayout
         android:id="@+id/layoutWeather"
@@ -129,6 +129,11 @@
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
             android:orientation="horizontal" >
+
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/mainMapView"
+                android:layout_width="480px"
+                android:layout_height="210px" />
 
             <ImageView
                 android:id="@+id/imageMultimedia"

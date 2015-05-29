@@ -66,8 +66,7 @@ public class RouteShowActivity extends Activity {
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
 
-	private final String ROUTE_PATH = Environment.getExternalStorageDirectory()
-			.getPath() + "/Route/";;
+	private final String ROUTE_PATH = Constant.ROUTE_TRACK_PATH;
 	private String filePath = "";
 	private RouteAdapter routeAdapter = new RouteAdapter();
 
@@ -104,7 +103,8 @@ public class RouteShowActivity extends Activity {
 		btnToRouteListFromShow.setOnClickListener(new MyOnClickListener());
 
 		btnDistance = (TextView) findViewById(R.id.btnDistance);
-		//btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
+		// btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); //
+		// TextColor
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {

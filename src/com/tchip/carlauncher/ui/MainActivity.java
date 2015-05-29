@@ -1,11 +1,18 @@
 package com.tchip.carlauncher.ui;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
+import com.baidu.mapapi.map.MapView;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.ui.MainActivityOld.MyOnClickListener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.SurfaceView;
@@ -17,11 +24,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.ZoomControls;
 
 public class MainActivity extends Activity {
+	
+	private LocationClient mLocationClient;
 
 	private SurfaceView surfaceCamera;
 	private boolean isSurfaceLarge = false;
+	private MapView mainMapView;
+	
+	private int scanSpan = 1000; // 采集轨迹点间隔(ms)
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +68,18 @@ public class MainActivity extends Activity {
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
 		textWeek.setTypeface(Typefaces
 				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+
+		// 定位地图
+		mainMapView = (MapView) findViewById(R.id.mainMapView);
+		// 去掉缩放控件和百度Logo
+		int count = mainMapView.getChildCount();
+		for (int i = 0; i < count; i++) {
+			View child = mainMapView.getChildAt(i);
+			if (child instanceof ImageView || child instanceof ZoomControls) {
+				child.setVisibility(View.INVISIBLE);
+			}
+		}
+		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, true);
 
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
@@ -170,18 +195,73 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
+	
+	
+	
+	
+	class MyLocationListener implements BDLocationListener {
 
-	private View insertImage(Integer id) {
-		LinearLayout layout = new LinearLayout(getApplicationContext());
-		layout.setLayoutParams(new LayoutParams(320, 320));
-		layout.setGravity(Gravity.CENTER);
+		@Override
+		public void onReceiveLocation(BDLocation location) {
 
-		ImageView imageView = new ImageView(getApplicationContext());
-		imageView.setLayoutParams(new LayoutParams(300, 300));
-		imageView.setBackgroundResource(id);
+			//cityName = location.getCity();
 
-		layout.addView(imageView);
-		return layout;
+				// editor.putLong("cityCode", cityCode);
+
+				// new Thread(networkTask).start();
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @param tempMode
+	 *            LocationMode.Hight_Accuracy-高精度
+	 *            LocationMode.Battery_Saving-低功耗
+	 *            LocationMode.Device_Sensors-仅设备
+	 * @param tempCoor
+	 *            gcj02-国测局加密经纬度坐标 bd09ll-百度加密经纬度坐标 bd09-百度加密墨卡托坐标
+	 * @param frequence
+	 *            MIN_SCAN_SPAN = 1000; MIN_SCAN_SPAN_NETWORK = 3000;
+	 * @param isNeedAddress
+	 *            是否需要地址
+	 */
+	private void InitLocation(LocationMode tempMode, String tempCoor,
+			int frequence, boolean isNeedAddress) {
+
+		mLocationClient = new LocationClient(this.getApplicationContext());
+		mLocationClient.registerLocationListener(new MyLocationListener());
+		// mGeofenceClient = new GeofenceClient(getApplicationContext());
+
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(tempMode);
+		option.setCoorType(tempCoor);
+		option.setScanSpan(frequence);
+		option.setIsNeedAddress(isNeedAddress);
+		mLocationClient.setLocOption(option);
+
+		mLocationClient.start();
+	}
+
+
+//	private View insertImage(Integer id) {
+//		LinearLayout layout = new LinearLayout(getApplicationContext());
+//		layout.setLayoutParams(new LayoutParams(320, 320));
+//		layout.setGravity(Gravity.CENTER);
+//
+//		ImageView imageView = new ImageView(getApplicationContext());
+//		imageView.setLayoutParams(new LayoutParams(300, 300));
+//		imageView.setBackgroundResource(id);
+//
+//		layout.addView(imageView);
+//		return layout;
+//	}
+
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mLocationClient.stop();
 	}
 
 }
