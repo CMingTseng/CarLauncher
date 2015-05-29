@@ -28,7 +28,7 @@ import android.os.Message;
 import android.widget.Toast;
 
 import com.tchip.carlauncher.adapter.RouteAdapter;
-import com.tchip.carlauncher.bean.RoutePoint;
+import com.tchip.carlauncher.model.RoutePoint;
 
 public class RouteRecordService extends Service {
 	private LocationClient mLocationClient;
@@ -216,7 +216,7 @@ public class RouteRecordService extends Service {
 	 */
 	private String getFilePath() {
 		stopTime = getTimeStr();
-		String format = ".json";
+		String format = ".art"; // ART: Auto Route Track
 		if (isDebug)
 			format = ".txt";
 		return ROUTE_PATH + startTime + "-" + stopTime + format;

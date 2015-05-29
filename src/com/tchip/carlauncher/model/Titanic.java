@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.bean;
+package com.tchip.carlauncher.model;
 
 import com.tchip.carlauncher.view.TitanicTextView;
 

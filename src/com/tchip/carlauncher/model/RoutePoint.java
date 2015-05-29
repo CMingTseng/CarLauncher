@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.bean;
+package com.tchip.carlauncher.model;
 
 public class RoutePoint {
 	private double lng; // longitude 经度

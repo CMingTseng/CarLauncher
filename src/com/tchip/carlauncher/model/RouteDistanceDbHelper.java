@@ -3,7 +3,6 @@ package com.tchip.carlauncher.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tchip.carlauncher.bean.RouteDistance;
 
 import android.content.ContentValues;
 import android.content.Context;

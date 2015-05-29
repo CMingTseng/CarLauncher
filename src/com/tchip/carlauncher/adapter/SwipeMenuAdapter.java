@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
+import com.tchip.carlauncher.model.SwipeMenu;
+import com.tchip.carlauncher.model.SwipeMenuItem;
 import com.tchip.carlauncher.view.SwipeMenuListView.OnMenuItemClickListener;
 import com.tchip.carlauncher.view.SwipeMenuView.OnSwipeItemClickListener;
-import com.tchip.carlauncher.bean.SwipeMenu;
-import com.tchip.carlauncher.bean.SwipeMenuItem;
 import com.tchip.carlauncher.view.SwipeMenuLayout;
 import com.tchip.carlauncher.view.SwipeMenuListView;
 import com.tchip.carlauncher.view.SwipeMenuView;

@@ -1,7 +1,7 @@
 package com.tchip.carlauncher.ui;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.bean.Typefaces;
+import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.ui.MainActivityOld.MyOnClickListener;
 
 import android.app.Activity;

@@ -22,8 +22,8 @@ public class ButtonFlat extends Button {
 	}
 
 	protected void setDefaultProperties() {
-		minHeight = 36;
-		minWidth = 88;
+		minHeight = 48;
+		minWidth = 100;
 		rippleSize = 3;
 		// Min size
 		setMinimumHeight(MaterialUtil.dpToPx(minHeight, getResources()));
@@ -46,6 +46,7 @@ public class ButtonFlat extends Button {
 			textButton = new TextView(getContext());
 			textButton.setText(text.toUpperCase());
 			textButton.setTextColor(backgroundColor);
+			textButton.setTextSize(MaterialUtil.dpToPx(18, getResources())); // zms
 			textButton.setTypeface(null, Typeface.BOLD);
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);

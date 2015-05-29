@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.adapter.RouteListAdapter;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
-import com.tchip.carlauncher.bean.SwipeMenu;
-import com.tchip.carlauncher.bean.SwipeMenuItem;
 import com.tchip.carlauncher.model.RouteDistanceDbHelper;
+import com.tchip.carlauncher.model.RouteList;
+import com.tchip.carlauncher.model.SwipeMenu;
+import com.tchip.carlauncher.model.SwipeMenuItem;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SwipeMenuListView;
@@ -29,23 +31,28 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class RouteListActivity extends Activity {
 	private SwipeMenuListView routeList;
 	private final String ROUTE_PATH = "/sdcard/Route/";
-	private ArrayAdapter<String> adapter;
+	// private ArrayAdapter<String> adapter;
 	private CalendarView filterDate;
 	private TextView tvNoFile;
 	private ButtonFlat btnShowAll;
 	private List<String> fileNameList;
 	private TextView tvFilterState;
+	private ArrayList<RouteList> routeArray;
+	private RouteListAdapter routeAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +90,25 @@ public class RouteListActivity extends Activity {
 				// 查看
 				SwipeMenuItem openItem = new SwipeMenuItem(
 						getApplicationContext());
-				openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-						0xCE)));
+				// openItem.setBackground(new ColorDrawable(Color.rgb(0xC9,
+				// 0xC9,
+				// 0xCE)));
+				openItem.setBackground(new ColorDrawable(Color.rgb(0x1E, 0x88,
+						0xE5)));
 				openItem.setWidth(dp2px(90));
 				openItem.setTitle("查看");
-				openItem.setTitleSize(18);
+				openItem.setTitleSize(25);
 				openItem.setTitleColor(Color.WHITE);
 				menu.addMenuItem(openItem);
+
+				// 删除
+				// SwipeMenuItem deleteItem = new SwipeMenuItem(
+				// getApplicationContext());
+				// deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+				// 0x3F, 0x25)));
+				// deleteItem.setWidth(dp2px(90));
+				// deleteItem.setIcon(R.drawable.icon_swipe_delete);
+				// menu.addMenuItem(deleteItem);
 
 				// 删除
 				SwipeMenuItem deleteItem = new SwipeMenuItem(
@@ -97,7 +116,9 @@ public class RouteListActivity extends Activity {
 				deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
 						0x3F, 0x25)));
 				deleteItem.setWidth(dp2px(90));
-				deleteItem.setIcon(R.drawable.icon_swipe_delete);
+				deleteItem.setTitle("删除");
+				deleteItem.setTitleSize(25);
+				deleteItem.setTitleColor(Color.WHITE);
 				menu.addMenuItem(deleteItem);
 			}
 		};
@@ -121,7 +142,11 @@ public class RouteListActivity extends Activity {
 					break;
 				case 1:
 					// 删除
-					File file = new File(ROUTE_PATH + adapter.getItem(position));
+					// TODO
+					// File file = new File(ROUTE_PATH
+					// + routeAdapter.getItem(position));
+					File file = new File(ROUTE_PATH
+							+ fileNameList.get(position));
 					file.delete();
 					DeleteUpdateList(position);
 					try { // 若数据库存在轨迹距离信息，同步删除
@@ -148,6 +173,9 @@ public class RouteListActivity extends Activity {
 			@Override
 			public void onSwipeStart(int position) {
 				// swipe start
+
+				// 若正在播放左滑动画，取消之
+				hideSlideLeftArrow();
 			}
 
 			@Override
@@ -159,7 +187,7 @@ public class RouteListActivity extends Activity {
 		// other setting
 		// listView.setCloseInterpolator(new BounceInterpolator());
 
-		// test item long click
+		// 长按提示左滑
 		routeList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -167,18 +195,35 @@ public class RouteListActivity extends Activity {
 					int position, long id) {
 				Toast.makeText(getApplicationContext(), "左滑更多选项",
 						Toast.LENGTH_SHORT).show();
+				showSlideLeftArrow();
 				return true;
 			}
 		});
 
 		// Swipe Menu END
+	}
 
+	private Animation slideLeftAnimation;
+	private ImageView imageSlideLeft;
+
+	private void showSlideLeftArrow() {
+		slideLeftAnimation = AnimationUtils.loadAnimation(
+				RouteListActivity.this, R.anim.route_list_slide_left);
+		imageSlideLeft = (ImageView) findViewById(R.id.imageSlideLeft);
+
+		imageSlideLeft.setVisibility(View.VISIBLE);
+		imageSlideLeft.startAnimation(slideLeftAnimation);
+	}
+
+	private void hideSlideLeftArrow() {
+		imageSlideLeft = (ImageView) findViewById(R.id.imageSlideLeft);
+		imageSlideLeft.clearAnimation();
+		imageSlideLeft.setVisibility(View.GONE);
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnShowAll:
 				showRouteList("20");
@@ -196,14 +241,25 @@ public class RouteListActivity extends Activity {
 			tvNoFile.setVisibility(View.GONE);
 			File[] files = new File(ROUTE_PATH).listFiles();
 			fileNameList = new ArrayList<String>();
+			routeArray = new ArrayList<RouteList>();
 			for (File file : files) {
 				String fileName = file.getName();
 				String format = fileName.substring(
 						fileName.lastIndexOf('.') + 1, fileName.length());
-				if (format.equals("txt") || format.equals("json"))
-					if (file.getName().startsWith(datePrefix))
+				if (format.equals("txt") || format.equals("json")
+						|| format.equals("art"))
+					if (file.getName().startsWith(datePrefix)) {
+						// TODO
 						fileNameList.add(file.getName());
+						RouteList routeList = new RouteList(fileName.substring(
+								0, fileName.lastIndexOf('-')),
+								fileName.substring(
+										fileName.lastIndexOf('-') + 1,
+										fileName.lastIndexOf('.')));
+						routeArray.add(routeList);
+					}
 			}
+
 			routeList.setVisibility(View.VISIBLE);
 			btnShowAll.setVisibility(View.INVISIBLE);
 			tvNoFile.setVisibility(View.INVISIBLE);
@@ -215,9 +271,13 @@ public class RouteListActivity extends Activity {
 				tvNoFile.setText("选定日期无轨迹");
 			}
 			// (context, resource, textViewResourceId, objects)
-			adapter = new ArrayAdapter<String>(this, R.layout.route_list_item,
-					R.id.text, fileNameList);
-			routeList.setAdapter(adapter);
+			// adapter = new ArrayAdapter<String>(this,
+			// R.layout.route_list_item,
+			// R.id.textStartTime, fileNameList);
+
+			routeAdapter = new RouteListAdapter(getApplicationContext(),
+					routeArray);
+			routeList.setAdapter(routeAdapter);
 
 			// 单击监听
 			routeList
@@ -225,6 +285,8 @@ public class RouteListActivity extends Activity {
 						public void onItemClick(
 								android.widget.AdapterView<?> parent,
 								android.view.View view, int position, long id) {
+							// 若正在播放左滑动画，取消之
+							hideSlideLeftArrow();
 							// focusItemPos = position;
 							Intent intent = new Intent(RouteListActivity.this,
 									RouteShowActivity.class);
@@ -243,7 +305,7 @@ public class RouteListActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
-			tvNoFile.setText("暂无轨迹文件");
+			tvNoFile.setText("暂无轨迹文件" + e);
 			btnShowAll.setVisibility(View.INVISIBLE);
 			routeList.setVisibility(View.INVISIBLE);
 		}
@@ -291,7 +353,7 @@ public class RouteListActivity extends Activity {
 		case 0:
 			// 删除
 			File file = new File(ROUTE_PATH
-					+ adapter.getItem(menuInfo.position));
+					+ routeAdapter.getItem(menuInfo.position));
 			file.delete();
 			DeleteUpdateList(menuInfo.position);
 			return true;
@@ -302,7 +364,7 @@ public class RouteListActivity extends Activity {
 			// intent.addCategory("android.intent.category.DEFAULT");
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			Uri uri = Uri.fromFile(new File(ROUTE_PATH
-					+ adapter.getItem(menuInfo.position)));
+					+ routeAdapter.getItem(menuInfo.position)));
 			intent.setDataAndType(uri, "text/plain");
 			startActivity(intent);
 			return true;
@@ -316,7 +378,8 @@ public class RouteListActivity extends Activity {
 	 * @param position
 	 */
 	private void DeleteUpdateList(int position) {
-		adapter.remove(adapter.getItem(position));
+		// TODO
+		routeAdapter.remove(routeAdapter.getItem(position));
 	}
 
 	@Override
@@ -325,10 +388,9 @@ public class RouteListActivity extends Activity {
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			backToMain();
 			return true;
@@ -341,7 +403,6 @@ public class RouteListActivity extends Activity {
 		overridePendingTransition(R.anim.zms_translate_down_out,
 				R.anim.zms_translate_down_in);
 	}
-	
 
 	// Swipe Menu START
 

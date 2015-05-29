@@ -25,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
@@ -47,9 +48,9 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteAdapter;
-import com.tchip.carlauncher.bean.RouteDistance;
-import com.tchip.carlauncher.bean.RoutePoint;
+import com.tchip.carlauncher.model.RouteDistance;
 import com.tchip.carlauncher.model.RouteDistanceDbHelper;
+import com.tchip.carlauncher.model.RoutePoint;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 
@@ -60,7 +61,7 @@ public class RouteShowActivity extends Activity {
 	private Marker mMarkerStart;
 	private Marker mMarkerEnd;
 	private ButtonFloat btnShare, btnToRouteListFromShow;
-	private ButtonFlat btnDistance;
+	private TextView btnDistance;
 
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
@@ -102,8 +103,8 @@ public class RouteShowActivity extends Activity {
 				R.drawable.icon_arrow_left));
 		btnToRouteListFromShow.setOnClickListener(new MyOnClickListener());
 
-		btnDistance = (ButtonFlat) findViewById(R.id.btnDistance);
-		btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
+		btnDistance = (TextView) findViewById(R.id.btnDistance);
+		//btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {

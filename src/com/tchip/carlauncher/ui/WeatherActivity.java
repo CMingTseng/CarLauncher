@@ -3,8 +3,8 @@ package com.tchip.carlauncher.ui;
 import java.util.Calendar;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.bean.Titanic;
-import com.tchip.carlauncher.bean.Typefaces;
+import com.tchip.carlauncher.model.Titanic;
+import com.tchip.carlauncher.model.Typefaces;
 // import com.tchip.carlauncher.bean.Typefaces;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;

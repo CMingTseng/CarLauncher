@@ -2,7 +2,7 @@ package com.tchip.carlauncher.view;
 
 import com.tchip.carlauncher.adapter.SwipeMenuAdapter;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
-import com.tchip.carlauncher.bean.SwipeMenu;
+import com.tchip.carlauncher.model.SwipeMenu;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tchip.carlauncher.bean.RoutePoint;
+import com.tchip.carlauncher.model.RoutePoint;
 
 public class RouteAdapter {
 	Gson gson = new Gson();

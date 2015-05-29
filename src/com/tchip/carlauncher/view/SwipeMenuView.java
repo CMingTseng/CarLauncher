@@ -2,8 +2,8 @@ package com.tchip.carlauncher.view;
 
 import java.util.List;
 
-import com.tchip.carlauncher.bean.SwipeMenu;
-import com.tchip.carlauncher.bean.SwipeMenuItem;
+import com.tchip.carlauncher.model.SwipeMenu;
+import com.tchip.carlauncher.model.SwipeMenuItem;
 
 import android.text.TextUtils;
 import android.view.Gravity;
