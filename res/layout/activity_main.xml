@@ -6,16 +6,16 @@
 
     <SurfaceView
         android:id="@+id/surfaceCamera"
-        android:layout_width="506px"
-        android:layout_height="285px"
+        android:layout_width="480px"
+        android:layout_height="270px"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="#e74b3c" />
 
     <RelativeLayout
         android:id="@+id/layoutWeather"
-        android:layout_width="348px"
-        android:layout_height="285px"
+        android:layout_width="374px"
+        android:layout_height="270px"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/surfaceCamera"
@@ -117,7 +117,7 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="195px"
+        android:layout_height="210px"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/surfaceCamera" >
 
