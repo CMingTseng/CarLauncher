@@ -130,10 +130,20 @@
             android:layout_marginTop="2dp"
             android:orientation="horizontal" >
 
-            <com.baidu.mapapi.map.MapView
-                android:id="@+id/mainMapView"
+            <RelativeLayout
                 android:layout_width="480px"
-                android:layout_height="210px" />
+                android:layout_height="210px" >
+
+                <com.baidu.mapapi.map.MapView
+                    android:id="@+id/mainMapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:id="@+id/mapHideView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/imageMultimedia"

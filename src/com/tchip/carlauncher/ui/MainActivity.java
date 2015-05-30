@@ -4,11 +4,18 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.location.LocationClientOption.LocationMode;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
+import com.baidu.mapapi.model.LatLng;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
-import com.tchip.carlauncher.ui.MainActivityOld.MyOnClickListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,16 +31,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 public class MainActivity extends Activity {
-	
+
 	private LocationClient mLocationClient;
 
 	private SurfaceView surfaceCamera;
 	private boolean isSurfaceLarge = false;
 	private MapView mainMapView;
-	
+	private BaiduMap baiduMap;
+	private com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode;
+	boolean isFirstLoc = true;// 是否首次定位
+
 	private int scanSpan = 1000; // 采集轨迹点间隔(ms)
 
 	@Override
@@ -79,7 +90,24 @@ public class MainActivity extends Activity {
 				child.setVisibility(View.INVISIBLE);
 			}
 		}
-		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, true);
+		baiduMap = mainMapView.getMap();
+		// 开启定位图层
+		baiduMap.setMyLocationEnabled(true);
+		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+				.fromResource(R.drawable.icon_arrow_up);
+		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
+		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.COMPASS;
+		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+				currentMode, true, null));
+		InitLocation(
+				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+				"bd09ll", scanSpan, true);
+		// 设置地图缩放级别 0-19：数值越大，比例尺单位越小
+		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
+		baiduMap.animateMapStatus(msu);
+		
+		View mapHideView = findViewById(R.id.mapHideView);
+		mapHideView.setOnClickListener(new MyOnClickListener());
 
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
@@ -138,6 +166,10 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_down_out,
 						R.anim.zms_translate_down_in);
 				break;
+			case R.id.mapHideView:
+				Toast.makeText(getApplicationContext(), "启动地图",
+						Toast.LENGTH_SHORT).show();
+				break;
 			case R.id.imageMultimedia:
 				Intent intentMultimedia = new Intent(MainActivity.this,
 						MultimediaActivity.class);
@@ -195,24 +227,33 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-	
-	
-	
-	
+
 	class MyLocationListener implements BDLocationListener {
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
+			// map view 销毁后不在处理新接收的位置
+			if (location == null || mainMapView == null)
+				return;
+			MyLocationData locData = new MyLocationData.Builder()
+					.accuracy(location.getRadius())
+					// 此处设置开发者获取到的方向信息，顺时针0-360
+					.direction(100).latitude(location.getLatitude())
+					.longitude(location.getLongitude()).build();
+			baiduMap.setMyLocationData(locData);
+			if (isFirstLoc) {
+				isFirstLoc = false;
+				LatLng ll = new LatLng(location.getLatitude(),
+						location.getLongitude());
+				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+				baiduMap.animateMapStatus(u);
+			}
+		}
 
-			//cityName = location.getCity();
-
-				// editor.putLong("cityCode", cityCode);
-
-				// new Thread(networkTask).start();
+		public void onReceivePoi(BDLocation poiLocation) {
 		}
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param tempMode
@@ -226,8 +267,9 @@ public class MainActivity extends Activity {
 	 * @param isNeedAddress
 	 *            是否需要地址
 	 */
-	private void InitLocation(LocationMode tempMode, String tempCoor,
-			int frequence, boolean isNeedAddress) {
+	private void InitLocation(
+			com.baidu.location.LocationClientOption.LocationMode tempMode,
+			String tempCoor, int frequence, boolean isNeedAddress) {
 
 		mLocationClient = new LocationClient(this.getApplicationContext());
 		mLocationClient.registerLocationListener(new MyLocationListener());
@@ -237,31 +279,33 @@ public class MainActivity extends Activity {
 		option.setLocationMode(tempMode);
 		option.setCoorType(tempCoor);
 		option.setScanSpan(frequence);
+		option.setOpenGps(true);// 打开gps
 		option.setIsNeedAddress(isNeedAddress);
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
 	}
 
-
-//	private View insertImage(Integer id) {
-//		LinearLayout layout = new LinearLayout(getApplicationContext());
-//		layout.setLayoutParams(new LayoutParams(320, 320));
-//		layout.setGravity(Gravity.CENTER);
-//
-//		ImageView imageView = new ImageView(getApplicationContext());
-//		imageView.setLayoutParams(new LayoutParams(300, 300));
-//		imageView.setBackgroundResource(id);
-//
-//		layout.addView(imageView);
-//		return layout;
-//	}
-
-	
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		mLocationClient.stop();
+	protected void onPause() {
+		mainMapView.onPause();
+		super.onPause();
 	}
 
+	@Override
+	protected void onResume() {
+		mainMapView.onResume();
+		super.onResume();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// 退出时销毁定位
+		mLocationClient.stop();
+		// 关闭定位图层
+		baiduMap.setMyLocationEnabled(false);
+		mainMapView.onDestroy();
+		mainMapView = null;
+		super.onDestroy();
+	}
 }
