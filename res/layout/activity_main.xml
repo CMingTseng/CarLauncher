@@ -6,16 +6,16 @@
 
     <SurfaceView
         android:id="@+id/surfaceCamera"
-        android:layout_width="480px"
-        android:layout_height="270px"
+        android:layout_width="480dp"
+        android:layout_height="270dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/tmp_icon_camera" />
 
     <RelativeLayout
         android:id="@+id/layoutWeather"
-        android:layout_width="374px"
-        android:layout_height="270px"
+        android:layout_width="374dp"
+        android:layout_height="270dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/surfaceCamera"
@@ -28,18 +28,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="40dp"
             android:format12Hour="HH:mm"
             android:textColor="#ffe1c5"
-            android:textSize="85sp" />
+            android:textSize="70sp" />
 
         <LinearLayout
+            android:id="@+id/layoutDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textClock"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="35dp"
             android:orientation="horizontal" >
 
             <TextClock
@@ -59,43 +59,64 @@
                 android:textColor="#ffe1c5"
                 android:textSize="15sp" />
         </LinearLayout>
-        
-          <LinearLayout
+
+        <TextView
+            android:id="@+id/textTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/layoutTemp"
-             android:layout_alignParentBottom="true"
-              android:layout_marginBottom="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="35dp"
+            android:layout_marginRight="50dp"
+            android:text="15~25°C"
+            android:textColor="#ffffff"
+            android:textSize="25sp" />
+
+        <ProgressBar
+            android:id="@+id/updateProgress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/textTemp"
+            android:layout_alignTop="@id/textTemp"
+            android:layout_marginRight="2dp"
+            android:layout_toLeftOf="@id/textTemp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/textTemp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
             android:orientation="horizontal" >
 
-            <com.tchip.carlauncher.view.TitanicTextView
-                android:id="@+id/textTempLow"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="15°C"
-                android:textColor="#c2c2c2" />
+            <ImageView
+                android:id="@+id/imageTodayWeather"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_weather_sun_white" />
 
-            <com.tchip.carlauncher.view.TitanicTextView
-                android:id="@+id/textTempHigh"
+            <TextView
+                android:id="@+id/textTodayWeather"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="left|center_vertical"
-                android:text="35°C"
-                android:textColor="#c2c2c2" />
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="未知"
+                android:textColor="#ffffff"
+                android:textSize="22sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/layoutTemp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_above="@id/textTemp"
+            android:layout_marginLeft="35dp"
             android:orientation="horizontal" >
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:layout_gravity="center"
                 android:src="@drawable/icon_location" >
             </ImageView>
 
@@ -104,32 +125,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="北京市"
-                android:textColor="#ffffff" >
+                android:text="未定位"
+                android:textColor="#ffffff"
+                android:textSize="22sp" >
             </TextView>
-
-            <ImageView
-                android:id="@+id/imageTodayWeather"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/icon_weather_sun_white" />
-
-            <TextView
-                android:id="@+id/textTodayWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="晴"
-                android:textColor="#ffffff" />
         </LinearLayout>
-
-      
     </RelativeLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
         android:layout_width="match_parent"
-        android:layout_height="210px"
+        android:layout_height="210dp"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/surfaceCamera" >
 
@@ -143,8 +149,8 @@
             android:orientation="horizontal" >
 
             <RelativeLayout
-                android:layout_width="480px"
-                android:layout_height="210px" >
+                android:layout_width="480dp"
+                android:layout_height="210dp" >
 
                 <com.baidu.mapapi.map.MapView
                     android:id="@+id/mainMapView"
@@ -159,68 +165,68 @@
 
             <ImageView
                 android:id="@+id/imageMultimedia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_marginRight="2dp"
                 android:src="@drawable/tmp_icon" />
 
             <ImageView
                 android:id="@+id/imageFileExplore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_marginRight="2dp"
                 android:src="@drawable/tmp_icon" />
 
             <ImageView
                 android:id="@+id/imageRouteTrack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:src="@drawable/tmp_icon" />
 
             <ImageView
                 android:id="@+id/imageNearSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:src="@drawable/tmp_icon" />
 
             <ImageView
                 android:id="@+id/imageVoiceChat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:src="@drawable/tmp_icon" />
 
             <ImageView
                 android:id="@+id/imageRoutePlan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:src="@drawable/tmp_icon" />
 
             <ImageView
                 android:id="@+id/imageSetting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:src="@drawable/tmp_icon" />
         </LinearLayout>
     </HorizontalScrollView>
 
     <ImageView
         android:id="@+id/smallVideoRecord"
-        android:layout_width="70px"
-        android:layout_height="70px"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignBottom="@+id/surfaceCamera"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="10px"
-        android:layout_marginLeft="205px"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="205dp"
         android:background="@drawable/tmp_small_record" />
 
     <ImageView
         android:id="@+id/smallVideoLock"
-        android:layout_width="50px"
-        android:layout_height="50px"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignBottom="@+id/surfaceCamera"
         android:layout_alignRight="@+id/surfaceCamera"
-        android:layout_marginBottom="10px"
-        android:layout_marginRight="30px"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="30dp"
         android:background="@drawable/tmp_small_lock" />
 
     <RelativeLayout
@@ -230,60 +236,60 @@
 
         <ImageView
             android:id="@+id/largeVideoSize"
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="15px"
-            android:layout_marginTop="35px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/tmp_large_video_size" />
 
         <ImageView
             android:id="@+id/largeVideoTime"
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15px"
+            android:layout_marginLeft="15dp"
             android:background="@drawable/tmp_large_video_time" />
 
         <ImageView
             android:id="@+id/largeVideoLock"
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="35px"
-            android:layout_marginLeft="15px"
+            android:layout_marginBottom="35dp"
+            android:layout_marginLeft="15dp"
             android:background="@drawable/tmp_large_video_lock" />
 
         <ImageView
             android:id="@+id/largeVideoFile"
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="15px"
-            android:layout_marginTop="35px"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/tmp_large_video_file" />
 
         <ImageView
             android:id="@+id/largeVideoRecord"
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15px"
+            android:layout_marginRight="15dp"
             android:background="@drawable/tmp_small_record" />
 
         <ImageView
             android:id="@+id/largeVideoCamera"
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="35px"
-            android:layout_marginRight="15px"
+            android:layout_marginBottom="35dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/tmp_large_video_camera" />
     </RelativeLayout>
 

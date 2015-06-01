@@ -10,6 +10,7 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.TextUnderstander;
 import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
+import com.tchip.carlauncher.Constant;
 
 import android.app.Service;
 import android.content.Context;
@@ -35,13 +36,14 @@ public class WeatherService extends Service {
 		// TODO Auto-generated method stub
 		super.onCreate();
 
-		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
+		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 
 		mTextUnderstander = TextUnderstander.createTextUnderstander(
 				getApplicationContext(), textUnderstanderListener);
 
-		getWeather(preferences.getString("cityName", "北京北京"));
+		getWeather(preferences.getString("cityName", "未定位"));
 	}
 
 	@Override

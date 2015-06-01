@@ -14,13 +14,21 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.model.LatLng;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
+import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.ui.WeatherActivity.UpdateWeatherThread;
+import com.tchip.carlauncher.util.WeatherUtil;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.View;
@@ -29,13 +37,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
 public class MainActivity extends Activity {
 
+	private SharedPreferences sharedPreferences;
 	private LocationClient mLocationClient;
 
 	private SurfaceView surfaceCamera;
@@ -49,6 +60,10 @@ public class MainActivity extends Activity {
 
 	private ImageView smallVideoRecord, smallVideoLock;
 	private RelativeLayout layoutLargeButton;
+	private TextView textTemp, textLocation, textTodayWeather;
+	private ImageView imageTodayWeather;
+
+	private ProgressBar updateProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +73,9 @@ public class MainActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
+
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		initialLayout();
 		initialCameraButton();
 	}
@@ -70,7 +88,7 @@ public class MainActivity extends Activity {
 		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 		surfaceCamera.setOnClickListener(new MyOnClickListener());
 
-		// 天气预报
+		// 天气预报和时钟
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
@@ -83,6 +101,16 @@ public class MainActivity extends Activity {
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
 		textWeek.setTypeface(Typefaces
 				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+
+		textTemp = (TextView) findViewById(R.id.textTemp);
+		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
+		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
+		textLocation = (TextView) findViewById(R.id.textLocation);
+		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
+		updateLocationAndWeather();
+		// 更新天气与位置信息
+		updateProgress.setVisibility(View.VISIBLE);
+		new Thread(new UpdateWeatherThread()).start();
 
 		// 定位地图
 		mainMapView = (MapView) findViewById(R.id.mainMapView);
@@ -97,8 +125,11 @@ public class MainActivity extends Activity {
 		baiduMap = mainMapView.getMap();
 		// 开启定位图层
 		baiduMap.setMyLocationEnabled(true);
+
+		// 自定义Maker
 		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
 				.fromResource(R.drawable.icon_arrow_up);
+
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
 		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.COMPASS;
 		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
@@ -208,6 +239,53 @@ public class MainActivity extends Activity {
 		return isSurfaceLarge;
 	}
 
+	/**
+	 * 更新位置和天气
+	 */
+	private void updateLocationAndWeather() {
+		textLocation.setText(sharedPreferences.getString("cityName", "未定位"));
+		String weatherToday = sharedPreferences.getString("day0weather", "未知");
+		textTodayWeather.setText(weatherToday);
+		imageTodayWeather.setImageResource(WeatherUtil
+				.getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));
+		String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
+		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
+		day0tmpLow = day0tmpLow.split("℃")[0];
+		textTemp.setText(day0tmpLow + "~" + day0tmpHigh);
+	}
+
+	public class UpdateWeatherThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(2000);
+				startWeatherService();
+				Thread.sleep(3000);
+				Message message = new Message();
+				message.what = 1;
+				updateWeatherHandler.sendMessage(message);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	final Handler updateWeatherHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				updateProgress.setVisibility(View.GONE);
+				updateLocationAndWeather();
+				break;
+
+			default:
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
+
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -222,8 +300,8 @@ public class MainActivity extends Activity {
 					isSurfaceLarge = true;
 					updateButtonState(true);
 				} else {
-					int widthSmall = 506;
-					int heightSmall = 285;
+					int widthSmall = 480;
+					int heightSmall = 270;
 					surfaceCamera
 							.setLayoutParams(new RelativeLayout.LayoutParams(
 									widthSmall, heightSmall));
@@ -371,6 +449,14 @@ public class MainActivity extends Activity {
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
+	}
+
+	/**
+	 * 更新天气
+	 */
+	private void startWeatherService() {
+		Intent intent = new Intent(this, WeatherService.class);
+		startService(intent);
 	}
 
 	@Override

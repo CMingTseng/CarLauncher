@@ -2,6 +2,7 @@ package com.tchip.carlauncher.ui;
 
 import java.util.Calendar;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Titanic;
 import com.tchip.carlauncher.model.Typefaces;
@@ -44,15 +45,14 @@ public class WeatherActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_weather);
 
-		sharedPreferences = getSharedPreferences("CarLauncher",
-				Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
 		// 刷新按钮和进度条
 		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
@@ -128,8 +128,8 @@ public class WeatherActivity extends Activity {
 		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
 		day0tmpLow = day0tmpLow.split("℃")[0];
 		day0tmpHigh = day0tmpHigh.split("℃")[0];
-		textTempRange.setText(day0tmpLow+"~"+day0tmpHigh);
-		textTempRange.setTypeface(Typefaces.get(this,"Font-Roboto-Light.ttf"));
+		textTempRange.setText(day0tmpLow + "~" + day0tmpHigh);
+		textTempRange.setTypeface(Typefaces.get(this, "Font-Roboto-Light.ttf"));
 		new Titanic().start(textTempRange);
 
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
@@ -353,7 +353,6 @@ public class WeatherActivity extends Activity {
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 
 			case R.id.layoutDay1:
@@ -442,14 +441,12 @@ public class WeatherActivity extends Activity {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 		exitWeather();
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (KeyEvent.KEYCODE_BACK == keyCode)
 			exitWeather();
 		return super.onKeyDown(keyCode, event);

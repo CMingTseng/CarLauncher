@@ -36,7 +36,7 @@ public interface Constant {
 			.getExternalStorageDirectory().getPath() + "/Route/";
 
 	/**
-	 * SharedPreferences名称：CarLauncher
+	 * SharedPreferences名称
 	 */
 	public static final String SHARED_PREFERENCES_NAME = "CarLauncher";
 
