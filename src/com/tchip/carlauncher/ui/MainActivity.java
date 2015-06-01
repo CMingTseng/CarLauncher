@@ -47,6 +47,9 @@ public class MainActivity extends Activity {
 
 	private int scanSpan = 1000; // 采集轨迹点间隔(ms)
 
+	private ImageView smallVideoRecord, smallVideoLock;
+	private RelativeLayout layoutLargeButton;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -56,6 +59,7 @@ public class MainActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
 		initialLayout();
+		initialCameraButton();
 	}
 
 	/**
@@ -105,7 +109,7 @@ public class MainActivity extends Activity {
 		// 设置地图缩放级别 0-19：数值越大，比例尺单位越小
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
 		baiduMap.animateMapStatus(msu);
-		
+
 		View mapHideView = findViewById(R.id.mapHideView);
 		mapHideView.setOnClickListener(new MyOnClickListener());
 
@@ -136,6 +140,72 @@ public class MainActivity extends Activity {
 		// 设置
 		ImageView imageSetting = (ImageView) findViewById(R.id.imageSetting);
 		imageSetting.setOnClickListener(new MyOnClickListener());
+
+	}
+
+	/**
+	 * 初始化录像按钮
+	 */
+	private void initialCameraButton() {
+		// ********** 小视图 **********
+		// 录制
+		smallVideoRecord = (ImageView) findViewById(R.id.smallVideoRecord);
+		smallVideoRecord.setOnClickListener(new MyOnClickListener());
+
+		// 锁定
+		smallVideoLock = (ImageView) findViewById(R.id.smallVideoLock);
+		smallVideoLock.setOnClickListener(new MyOnClickListener());
+
+		// ********** 大视图 **********
+		layoutLargeButton = (RelativeLayout) findViewById(R.id.layoutLargeButton);
+
+		// 视频尺寸
+		ImageView largeVideoSize = (ImageView) findViewById(R.id.largeVideoSize);
+		largeVideoSize.setOnClickListener(new MyOnClickListener());
+
+		// 视频分段长度
+		ImageView largeVideoTime = (ImageView) findViewById(R.id.largeVideoTime);
+		largeVideoTime.setOnClickListener(new MyOnClickListener());
+
+		// 锁定
+		ImageView largeVideoLock = (ImageView) findViewById(R.id.largeVideoLock);
+		largeVideoLock.setOnClickListener(new MyOnClickListener());
+
+		// 视频文件
+		ImageView largeVideoFile = (ImageView) findViewById(R.id.largeVideoFile);
+		largeVideoFile.setOnClickListener(new MyOnClickListener());
+
+		// 录制
+		ImageView largeVideoRecord = (ImageView) findViewById(R.id.largeVideoRecord);
+		largeVideoRecord.setOnClickListener(new MyOnClickListener());
+
+		// 拍照
+		ImageView largeVideoCamera = (ImageView) findViewById(R.id.largeVideoCamera);
+		largeVideoCamera.setOnClickListener(new MyOnClickListener());
+
+		updateButtonState(isSurfaceLarge());
+	}
+
+	/**
+	 * 更新录像按钮状态
+	 * 
+	 * @param isSurfaceLarge
+	 */
+	private void updateButtonState(boolean isSurfaceLarge) {
+		if (isSurfaceLarge) {
+			smallVideoRecord.setVisibility(View.GONE);
+			smallVideoLock.setVisibility(View.GONE);
+			layoutLargeButton.setVisibility(View.VISIBLE);
+		} else {
+			smallVideoRecord.setVisibility(View.VISIBLE);
+			smallVideoLock.setVisibility(View.VISIBLE);
+			layoutLargeButton.setVisibility(View.GONE);
+		}
+
+	}
+
+	private boolean isSurfaceLarge() {
+		return isSurfaceLarge;
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -150,6 +220,7 @@ public class MainActivity extends Activity {
 							.setLayoutParams(new RelativeLayout.LayoutParams(
 									widthFull, heightFull));
 					isSurfaceLarge = true;
+					updateButtonState(true);
 				} else {
 					int widthSmall = 506;
 					int heightSmall = 285;
@@ -157,8 +228,24 @@ public class MainActivity extends Activity {
 							.setLayoutParams(new RelativeLayout.LayoutParams(
 									widthSmall, heightSmall));
 					isSurfaceLarge = false;
+					updateButtonState(false);
 				}
 				break;
+			case R.id.smallVideoRecord:
+			case R.id.largeVideoRecord:
+				break;
+			case R.id.smallVideoLock:
+			case R.id.largeVideoLock:
+				break;
+			case R.id.largeVideoSize:
+				break;
+			case R.id.largeVideoTime:
+				break;
+			case R.id.largeVideoFile:
+				break;
+			case R.id.largeVideoCamera:
+				break;
+
 			case R.id.layoutWeather:
 				Intent intentWeather = new Intent(MainActivity.this,
 						WeatherActivity.class);

@@ -46,7 +46,7 @@
                 android:id="@+id/textDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:format12Hour="yyyy年MM月dd日"
+                android:format12Hour="MM月dd日"
                 android:textColor="#ffe1c5"
                 android:textSize="15sp" />
 
@@ -59,11 +59,36 @@
                 android:textColor="#ffe1c5"
                 android:textSize="15sp" />
         </LinearLayout>
+        
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutTemp"
+             android:layout_alignParentBottom="true"
+              android:layout_marginBottom="10dp"
+            android:orientation="horizontal" >
+
+            <com.tchip.carlauncher.view.TitanicTextView
+                android:id="@+id/textTempLow"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="15°C"
+                android:textColor="#c2c2c2" />
+
+            <com.tchip.carlauncher.view.TitanicTextView
+                android:id="@+id/textTempHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="35°C"
+                android:textColor="#c2c2c2" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/layoutTemp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
             android:orientation="horizontal" >
@@ -96,26 +121,13 @@
                 android:gravity="center"
                 android:text="晴"
                 android:textColor="#ffffff" />
-
-            <com.tchip.carlauncher.view.TitanicTextView
-                android:id="@+id/textTempLow"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="15°C"
-                android:textColor="#c2c2c2" />
-
-            <com.tchip.carlauncher.view.TitanicTextView
-                android:id="@+id/textTempHigh"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="left|center_vertical"
-                android:text="35°C"
-                android:textColor="#c2c2c2" />
         </LinearLayout>
+
+      
     </RelativeLayout>
 
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
         android:layout_width="match_parent"
         android:layout_height="210px"
         android:layout_alignParentBottom="true"
@@ -190,5 +202,89 @@
                 android:src="@drawable/tmp_icon" />
         </LinearLayout>
     </HorizontalScrollView>
+
+    <ImageView
+        android:id="@+id/smallVideoRecord"
+        android:layout_width="70px"
+        android:layout_height="70px"
+        android:layout_alignBottom="@+id/surfaceCamera"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10px"
+        android:layout_marginLeft="205px"
+        android:background="@drawable/tmp_small_record" />
+
+    <ImageView
+        android:id="@+id/smallVideoLock"
+        android:layout_width="50px"
+        android:layout_height="50px"
+        android:layout_alignBottom="@+id/surfaceCamera"
+        android:layout_alignRight="@+id/surfaceCamera"
+        android:layout_marginBottom="10px"
+        android:layout_marginRight="30px"
+        android:background="@drawable/tmp_small_lock" />
+
+    <RelativeLayout
+        android:id="@+id/layoutLargeButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/largeVideoSize"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15px"
+            android:layout_marginTop="35px"
+            android:background="@drawable/tmp_large_video_size" />
+
+        <ImageView
+            android:id="@+id/largeVideoTime"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15px"
+            android:background="@drawable/tmp_large_video_time" />
+
+        <ImageView
+            android:id="@+id/largeVideoLock"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="35px"
+            android:layout_marginLeft="15px"
+            android:background="@drawable/tmp_large_video_lock" />
+
+        <ImageView
+            android:id="@+id/largeVideoFile"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="35px"
+            android:background="@drawable/tmp_large_video_file" />
+
+        <ImageView
+            android:id="@+id/largeVideoRecord"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15px"
+            android:background="@drawable/tmp_small_record" />
+
+        <ImageView
+            android:id="@+id/largeVideoCamera"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="35px"
+            android:layout_marginRight="15px"
+            android:background="@drawable/tmp_large_video_camera" />
+    </RelativeLayout>
 
 </RelativeLayout>
