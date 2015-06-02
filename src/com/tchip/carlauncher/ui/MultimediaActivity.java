@@ -8,6 +8,7 @@ import com.tchip.carlauncher.R.layout;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -32,17 +33,27 @@ public class MultimediaActivity extends Activity {
 	}
 
 	private void initLayout() {
+		// 图片
 		LinearLayout layoutImage = (LinearLayout) findViewById(R.id.layoutImage);
 		layoutImage.setOnClickListener(new MyOnClickListener());
+		
+		// 人脸检测
+		LinearLayout layoutFaceDetect = (LinearLayout) findViewById(R.id.layoutFaceDetect);
+		layoutFaceDetect.setOnClickListener(new MyOnClickListener());
 
 		// 音乐
 		LinearLayout layoutMusic = (LinearLayout) findViewById(R.id.layoutMusic);
 		layoutMusic.setOnClickListener(new MyOnClickListener());
 
+		// 视频
+		LinearLayout layoutVideo = (LinearLayout) findViewById(R.id.layoutVideo);
+		layoutVideo.setOnClickListener(new MyOnClickListener());
+
 		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
 		btnToMainFromMultimedia.setDrawableIcon(getResources().getDrawable(
 				R.drawable.icon_arrow_up));
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -50,17 +61,33 @@ public class MultimediaActivity extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutImage:
+				ComponentName componentImage = new ComponentName(
+						"com.android.gallery3d",
+						"com.android.gallery3d.app.GalleryActivity");
+				Intent intentImage = new Intent();
+				intentImage.setComponent(componentImage);
+				startActivity(intentImage);
+				break;
+			case R.id.layoutFaceDetect:
 				Intent intentFaceDetect = new Intent(getApplicationContext(),
 						FaceDetectActivity.class);
 				startActivity(intentFaceDetect);
-				break;
-			case R.id.btnToMainFromMultimedia:
-				backToMain();
 				break;
 			case R.id.layoutMusic:
 				Intent intentMusic = new Intent(getApplicationContext(),
 						MusicMainContentActivity.class);
 				startActivity(intentMusic);
+				break;
+			case R.id.layoutVideo:
+				ComponentName componentVideo = new ComponentName(
+						"com.mediatek.videoplayer",
+						"com.mediatek.videoplayer.MovieListActivity");
+				Intent intentVideo = new Intent();
+				intentVideo.setComponent(componentVideo);
+				startActivity(intentVideo);
+				break;
+			case R.id.btnToMainFromMultimedia:
+				backToMain();
 				break;
 			}
 
