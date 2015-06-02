@@ -51,4 +51,8 @@
     <color name="holo_orange_dark">#ffff8800</color>
     <color name="dialog_text_hint">#ffb0b0b0</color>
 
+    <!-- Traffic Stats 流量 -->
+    <color name="toast_bg">#c01b1b1b</color>
+    <color name="toast_text">#f7dcaf</color>
+
 </resources>

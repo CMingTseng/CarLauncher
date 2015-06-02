@@ -7,6 +7,7 @@
 
     <!-- <supports-screens android:anyDensity="false" /> -->
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -51,8 +52,7 @@
     <!-- File Explorer Extra -->
     <!--
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
-    -->
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />    -->
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
@@ -89,10 +89,10 @@
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity>
         -->
         <activity
-            android:name="com.tchip.carlauncher.ui.MainActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MainActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
             android:icon="@drawable/ic_launcher"
             android:label="Car Launcher"
@@ -106,13 +106,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ui.NearActivity"
+            android:name="com.tchip.carlauncher.ui.activity.NearActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.NearResultActivity"
+            android:name="com.tchip.carlauncher.ui.activity.NearResultActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.BluetoothActivity"
+            android:name="com.tchip.carlauncher.ui.activity.BluetoothActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.bluetooth.ClientSocketActivity"
@@ -121,37 +121,37 @@
             android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.MultimediaActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MultimediaActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.RoutePlanActivity"
+            android:name="com.tchip.carlauncher.ui.activity.RoutePlanActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.AboutActivity"
+            android:name="com.tchip.carlauncher.ui.activity.AboutActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.ChatActivity"
+            android:name="com.tchip.carlauncher.ui.activity.ChatActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.SettingActivity"
+            android:name="com.tchip.carlauncher.ui.activity.SettingActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.RouteListActivity"
+            android:name="com.tchip.carlauncher.ui.activity.RouteListActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.RouteShowActivity"
+            android:name="com.tchip.carlauncher.ui.activity.RouteShowActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.WeatherActivity"
+            android:name="com.tchip.carlauncher.ui.activity.WeatherActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.SettingSystemDisplayActivity"
+            android:name="com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.FileRemoteControlActivity"
+            android:name="com.tchip.carlauncher.ui.activity.FileRemoteControlActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.FaceDetectActivity"
+            android:name="com.tchip.carlauncher.ui.activity.FaceDetectActivity"
             android:screenOrientation="landscape" />
 
         <meta-data
@@ -175,35 +175,35 @@
         <!-- Music -->
 
         <activity
-            android:name="com.tchip.carlauncher.ui.MusicMainContentActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MusicMainContentActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ui.MusicMenuBackgroundActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MusicMenuBackgroundActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ui.MusicMenuScanActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MusicMenuScanActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ui.MusicMenuSettingActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MusicMenuSettingActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ui.MusicPlayQueueActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MusicPlayQueueActivity"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.ui.MusicListSearchActivity"
+            android:name="com.tchip.carlauncher.ui.activity.MusicListSearchActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden" >
@@ -214,6 +214,29 @@
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
             </intent-filter>
         </service>
+        
+        <!-- Traffic Stats 流量 -->
+         <activity
+            android:name="com.tchip.carlauncher.ui.activity.TrafficStatActivity"
+            android:label="@string/app_name" />
+        
+        
+         <activity android:name="com.tchip.carlauncher.ui.activity.TrafficAllAppActivity"
+                android:label="流量明细"/>
+        <activity android:name="com.tchip.carlauncher.ui.activity.TrafficSettingActivity"
+                android:label="设置"/>
+        <activity android:name="com.tchip.carlauncher.ui.activity.TrafficChartActivity"
+                android:label="应用详情"/>
+
+        <receiver android:name="com.tchip.carlauncher.model.TrafficBootReceiver"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.tchip.carlauncher.service.TrafficFetchService"/>
+        <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService"/>
     </application>
 
 </manifest>

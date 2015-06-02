@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/cur_type"
+        style="@style/Text_1"
+        android:text="@string/cur_type" />
+
+    <TextView
+        android:id="@+id/cur_interval"
+        style="@style/Text_1"
+        android:text="@string/cur_interval" />
+
+    <TextView
+        android:id="@+id/has_permission"
+        style="@style/Text_1"
+        android:text="@string/has_permission" />
+
+    <TextView
+        style="@style/Text_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="数据流量" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/total_mobile"
+                style="@style/Text_1"
+                android:text="0KB" />
+
+            <TextView
+                style="@style/Text_1"
+                android:layout_marginTop="5dp"
+                android:text="本月使用" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/day_mobile"
+                style="@style/Text_1"
+                android:text="0KB" />
+
+            <TextView
+                style="@style/Text_1"
+                android:layout_marginTop="5dp"
+                android:text="今日使用" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        style="@style/Text_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Wi-Fi流量" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/total_wifi"
+                style="@style/Text_1"
+                android:text="0KB" />
+
+            <TextView
+                style="@style/Text_1"
+                android:layout_marginTop="5dp"
+                android:text="本月使用" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/day_wifi"
+                style="@style/Text_1"
+                android:text="0KB" />
+
+            <TextView
+                style="@style/Text_1"
+                android:layout_marginTop="5dp"
+                android:text="今日使用" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onViewClick"
+            android:text="设置" />
+
+        <Button
+            android:id="@+id/allapp_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onViewClick"
+            android:text="明细" />
+    </LinearLayout>
+
+</LinearLayout>

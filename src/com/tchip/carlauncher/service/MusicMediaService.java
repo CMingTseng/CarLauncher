@@ -22,7 +22,7 @@ import com.tchip.carlauncher.model.MusicInfo;
 import com.tchip.carlauncher.model.MusicSPStorage;
 import com.tchip.carlauncher.model.MusicShakeDetector;
 import com.tchip.carlauncher.model.MusicShakeDetector.OnShakeListener;
-import com.tchip.carlauncher.ui.MusicMainContentActivity;
+import com.tchip.carlauncher.ui.activity.MusicMainContentActivity;
 
 /**
  * 后台Service 控制歌曲的播放 控制顶部Notification的显示

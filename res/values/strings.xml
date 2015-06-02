@@ -180,5 +180,18 @@
     <string name="stop_server">停止服务</string>
     <string name="notif_title">远程管理服务正在运行</string>
     <string name="notif_server_starting">远程管理服务已启动</string>
+    
+    <!-- Traffic Stats -->
+    <string name="cur_type">当前正在使用：%1$s</string>
+    <string name="unknown">未知</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="invalid_network">未连接网络</string>
+    <string name="_3g_above">高速网络（3G、4G）</string>
+    <string name="_2g">普通网络（GPRS）</string>
+    <string name="wap">wap</string>
+    <string name="cur_interval">更新间隔时间：%1$s秒</string>
+    <string name="has_permission">请确保程序拥有开机启动权限\n(如果没有权限程序无法正常工作)</string>
+    <string name="rate_per_sec">%1$s/s</string>
+    <string name="float_tips">(请确认开启“桌面悬浮窗”权限，\n悬浮窗口才会显示)</string>
 
 </resources>

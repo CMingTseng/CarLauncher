@@ -9,16 +9,15 @@
     <RelativeLayout
         android:id="@+id/contentDialog"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/dialog_background"
-        android:padding="24dp" >
+        android:background="@drawable/dialog_background" >
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+             android:layout_margin="20dp"
             android:text="行车轨迹记录"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#000" />
@@ -76,8 +75,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/message_scrollView"
-            android:layout_marginTop="24dp"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
             android:orientation="horizontal" >
 
@@ -93,7 +91,7 @@
                 android:id="@+id/button_accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#1E88E5"
+                android:background="#1E88E5" android:layout_margin="20dp"
                 android:text="确认" />
         </LinearLayout>
     </RelativeLayout>
