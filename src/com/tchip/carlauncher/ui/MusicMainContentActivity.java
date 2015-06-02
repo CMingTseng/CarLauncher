@@ -50,7 +50,7 @@ public class MusicMainContentActivity extends FragmentActivity implements
 
 	private Handler mHandler;
 	private MusicInfoDao mMusicDao;
-	private MusicSplashScreen mSplashScreen;
+	// private MusicSplashScreen mSplashScreen;
 	private int mScreenWidth;
 
 	public interface OnBackListener {

@@ -9,7 +9,6 @@ import com.tchip.carlauncher.ftp.Globals;
 import com.tchip.carlauncher.ftp.MyLog;
 import com.tchip.carlauncher.ftp.UiUpdater;
 import com.tchip.carlauncher.service.FTPServerService;
-import com.tchip.carlauncher.ui.MultimediaActivity.MyOnClickListener;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;

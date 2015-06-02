@@ -2,6 +2,7 @@ package com.tchip.carlauncher.service;
 
 import java.util.Date;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.util.SettingUtil;
 
 import android.app.Service;
@@ -62,7 +63,7 @@ public class BrightAdjustService extends Service {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				preferences = getSharedPreferences("RouteSetting",
+				preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 						getApplicationContext().MODE_PRIVATE);
 				boolean brightAdjust = preferences.getBoolean("brightAdjust",
 						false);

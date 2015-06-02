@@ -15,7 +15,6 @@ import android.view.WindowManager;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.fragment.MusicLeftFragment;
-import com.tchip.carlauncher.ui.fragment.MusicMenuBackgroundFragment;
 import com.tchip.carlauncher.ui.fragment.MusicMenuSettingFragment;
 import com.tchip.carlauncher.ui.fragment.MusicRightFragment;
 

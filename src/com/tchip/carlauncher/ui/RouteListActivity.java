@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.RouteListAdapter;
 import com.tchip.carlauncher.adapter.SwipeMenuCreator;
@@ -36,7 +37,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,7 +44,7 @@ import android.widget.Toast;
 
 public class RouteListActivity extends Activity {
 	private SwipeMenuListView routeList;
-	private final String ROUTE_PATH = "/sdcard/Route/";
+	private final String ROUTE_PATH = Constant.ROUTE_TRACK_PATH;
 	// private ArrayAdapter<String> adapter;
 	private CalendarView filterDate;
 	private TextView tvNoFile;

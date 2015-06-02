@@ -57,7 +57,6 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.ui.RoutePlanActivity.MyOnClickListener;
 import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.carlauncher.view.ButtonFloat;

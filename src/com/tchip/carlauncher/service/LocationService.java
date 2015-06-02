@@ -5,6 +5,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.tchip.carlauncher.Constant;
 
 import android.app.Service;
 import android.content.Context;
@@ -36,7 +37,8 @@ public class LocationService extends Service {
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, true);
 
-		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
+		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 	}
 

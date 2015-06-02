@@ -3,7 +3,6 @@ package com.tchip.carlauncher.util;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.view.Window;

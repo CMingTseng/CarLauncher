@@ -28,7 +28,6 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.aidl.IMediaService;
 import com.tchip.carlauncher.model.MusicInfo;
-import com.tchip.carlauncher.service.MusicServiceManager;
 import com.tchip.carlauncher.util.MusicUtils;
 
 /**

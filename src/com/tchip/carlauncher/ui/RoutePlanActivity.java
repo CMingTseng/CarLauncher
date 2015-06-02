@@ -28,7 +28,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -42,12 +41,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
-import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
-import com.baidu.mapapi.navi.BaiduMapNavigation;
-import com.baidu.mapapi.navi.NaviPara;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.overlayutil.OverlayManager;
 import com.baidu.mapapi.overlayutil.TransitRouteOverlay;
@@ -65,9 +59,7 @@ import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
-import com.baidu.mapapi.search.route.TransitRouteLine;
 import com.baidu.mapapi.search.route.TransitRouteResult;
-import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -79,7 +71,6 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.ui.ChatActivity.MyOnGetGeoCoderResultListener;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.carlauncher.view.ButtonFloat;
 
@@ -96,7 +87,6 @@ public class RoutePlanActivity extends Activity implements
 	private SharedPreferences preferences;
 	private double startLatitude, startLongitude, endLatitude, endLongitude;
 	private LatLng startLatLng, endLatLng;
-	private boolean isShowCamera, isShowTrafficLight;
 
 	// 百度地图地址转经纬度
 	private GeoCoder mEndSearch = null;
@@ -240,7 +230,7 @@ public class RoutePlanActivity extends Activity implements
 		// 处理搜索按钮响应
 		// String routeStart = preferences.getString("street",
 		// "紫竹横街")+preferences.getString("streetNum", "");
-		String cityName = preferences.getString("cityName", "中山");
+		// String cityName = preferences.getString("cityName", "中山");
 		// PlanNode stNode = PlanNode.withCityNameAndPlaceName(cityName,
 		// routeStart);
 
