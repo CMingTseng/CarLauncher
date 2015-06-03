@@ -4,10 +4,10 @@ import java.io.File;
 import java.net.InetAddress;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.library.ftp.Defaults;
-import com.tchip.carlauncher.library.ftp.Globals;
-import com.tchip.carlauncher.library.ftp.MyLog;
-import com.tchip.carlauncher.library.ftp.UiUpdater;
+import com.tchip.carlauncher.lib.ftp.Defaults;
+import com.tchip.carlauncher.lib.ftp.Globals;
+import com.tchip.carlauncher.lib.ftp.MyLog;
+import com.tchip.carlauncher.lib.ftp.UiUpdater;
 import com.tchip.carlauncher.service.FTPServerService;
 import com.tchip.carlauncher.view.ButtonFloat;
 

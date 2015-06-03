@@ -25,14 +25,14 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.library.ftp.Defaults;
-import com.tchip.carlauncher.library.ftp.Globals;
-import com.tchip.carlauncher.library.ftp.MyLog;
-import com.tchip.carlauncher.library.ftp.ProxyConnector;
-import com.tchip.carlauncher.library.ftp.SessionThread;
-import com.tchip.carlauncher.library.ftp.TcpListener;
-import com.tchip.carlauncher.library.ftp.UiUpdater;
-import com.tchip.carlauncher.library.ftp.Util;
+import com.tchip.carlauncher.lib.ftp.Defaults;
+import com.tchip.carlauncher.lib.ftp.Globals;
+import com.tchip.carlauncher.lib.ftp.MyLog;
+import com.tchip.carlauncher.lib.ftp.ProxyConnector;
+import com.tchip.carlauncher.lib.ftp.SessionThread;
+import com.tchip.carlauncher.lib.ftp.TcpListener;
+import com.tchip.carlauncher.lib.ftp.UiUpdater;
+import com.tchip.carlauncher.lib.ftp.Util;
 import com.tchip.carlauncher.ui.activity.FileRemoteControlActivity;
 
 public class FTPServerService extends Service implements Runnable {

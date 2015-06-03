@@ -3,10 +3,11 @@ package com.tchip.carlauncher.view;
 
 import android.content.Context;
 import android.widget.TextView;
-import com.tchip.carlauncher.library.chart.MarkerView;
-import com.tchip.carlauncher.library.chart.CandleEntry;
-import com.tchip.carlauncher.library.chart.Entry;
-import com.tchip.carlauncher.library.chart.Utils;
+
+import com.tchip.carlauncher.lib.chart.CandleEntry;
+import com.tchip.carlauncher.lib.chart.Entry;
+import com.tchip.carlauncher.lib.chart.MarkerView;
+import com.tchip.carlauncher.lib.chart.Utils;
 import com.tchip.carlauncher.R;
 
 /**

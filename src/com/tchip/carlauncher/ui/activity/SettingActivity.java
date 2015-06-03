@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SettingFragmentPagerAdapter;
-import com.tchip.carlauncher.ui.activity.fragment.SettingCameraFragment;
-import com.tchip.carlauncher.ui.activity.fragment.SettingMapFragment;
-import com.tchip.carlauncher.ui.activity.fragment.SettingSystemFragment;
-import com.tchip.carlauncher.ui.activity.fragment.SettingVoiceFragment;
+import com.tchip.carlauncher.ui.fragment.SettingCameraFragment;
+import com.tchip.carlauncher.ui.fragment.SettingMapFragment;
+import com.tchip.carlauncher.ui.fragment.SettingSystemFragment;
+import com.tchip.carlauncher.ui.fragment.SettingVoiceFragment;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SettingFadeTabIndicator;
 import com.tchip.carlauncher.view.SettingFadeTabIndicator.FadingTab;

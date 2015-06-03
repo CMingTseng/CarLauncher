@@ -20,7 +20,7 @@ import com.tchip.carlauncher.model.MusicIQueryFinished;
 import com.tchip.carlauncher.model.MusicInfo;
 import com.tchip.carlauncher.model.MusicInfoDao;
 import com.tchip.carlauncher.service.MusicServiceManager;
-import com.tchip.carlauncher.ui.activity.manager.MusicSlidingDrawerManager;
+import com.tchip.carlauncher.ui.manager.MusicSlidingDrawerManager;
 import com.tchip.carlauncher.util.MusicStringHelper;
 import com.tchip.carlauncher.util.MusicUtils;
 
