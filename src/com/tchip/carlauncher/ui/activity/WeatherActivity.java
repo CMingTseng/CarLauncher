@@ -117,7 +117,7 @@ public class WeatherActivity extends Activity {
 		layoutWeather.setBackground(getResources().getDrawable(
 				WeatherUtil.getWeatherBackground(WeatherUtil
 						.getTypeByStr(weatherToday)))); // Background
-		
+
 		ImageView imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
 		imageTodayWeather.setImageResource(WeatherUtil
 				.getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));

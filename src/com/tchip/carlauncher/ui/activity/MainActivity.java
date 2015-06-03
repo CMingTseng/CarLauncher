@@ -16,6 +16,10 @@ import com.baidu.mapapi.model.LatLng;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
+import com.tchip.carlauncher.service.BrightAdjustService;
+import com.tchip.carlauncher.service.LocationService;
+import com.tchip.carlauncher.service.RouteRecordService;
+import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
 
@@ -71,6 +75,29 @@ public class MainActivity extends Activity {
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		initialLayout();
 		initialCameraButton();
+		initialService();
+	}
+
+	/**
+	 * 初始化服务
+	 */
+	private void initialService() {
+		// 位置
+		Intent intentLocation = new Intent(this, LocationService.class);
+		startService(intentLocation);
+
+		// 亮度自动调整服务
+		Intent intentBrightness = new Intent(this, BrightAdjustService.class);
+		startService(intentBrightness);
+
+		// 轨迹记录服务
+		Intent intentRoute = new Intent(this, RouteRecordService.class);
+		startService(intentRoute);
+
+		// 碰撞侦测服务
+		Intent intentSensor = new Intent(this, SensorWatchService.class);
+		startService(intentSensor);
+
 	}
 
 	/**
