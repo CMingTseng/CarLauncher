@@ -61,11 +61,11 @@ public class WeatherActivity extends Activity {
 		updateButton.setVisibility(View.VISIBLE);
 		updateButton.setOnClickListener(new MyOnClickListener());
 
+		initialLayout();
 		// 数据是否自动更新
 		if (sharedPreferences.getBoolean("voiceUpdateWeather", true)) {
-			updateWeather(); // 调用initialLayout
+			updateWeather(); // 会再次调用initialLayout
 		} else {
-			initialLayout();
 			speakWeather(0);
 		}
 	}
@@ -90,8 +90,6 @@ public class WeatherActivity extends Activity {
 	private void initialLayout() {
 		weatherArray = new String[6];
 
-		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
-
 		// 时钟信息
 		int weekToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
@@ -114,9 +112,12 @@ public class WeatherActivity extends Activity {
 
 		showWeatherAnimation(WeatherUtil.getTypeByStr(weatherToday));
 
+		// 背景
+		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setBackground(getResources().getDrawable(
 				WeatherUtil.getWeatherBackground(WeatherUtil
 						.getTypeByStr(weatherToday)))); // Background
+		
 		ImageView imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
 		imageTodayWeather.setImageResource(WeatherUtil
 				.getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));

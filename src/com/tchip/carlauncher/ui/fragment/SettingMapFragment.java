@@ -2,6 +2,8 @@ package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.ui.activity.MainActivity;
+import com.tchip.carlauncher.ui.activity.OfflineBaiduMapActivity;
 import com.tchip.carlauncher.ui.dialog.SettingMapNavigationDialog;
 import com.tchip.carlauncher.ui.dialog.SettingMapRouteRecordDialog;
 import com.tchip.carlauncher.ui.dialog.SettingMapRouteSmoothDialog;
@@ -10,6 +12,7 @@ import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakHourDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +32,18 @@ public class SettingMapFragment extends Fragment {
 		// TODO Auto-generated method stub
 		mapSettingView = inflater.inflate(R.layout.fragment_setting_map,
 				container, false);
+		// 离线地图管理
+		LayoutRipple layoutRippleOfflineMap = (LayoutRipple) mapSettingView
+				.findViewById(R.id.layoutRippleOfflineMap);
+		iniRipple(layoutRippleOfflineMap);
+		layoutRippleOfflineMap.setOnClickListener(new MyOnClickListener());
+
+		// 默认导航
+		LayoutRipple layoutRippleNavi = (LayoutRipple) mapSettingView
+				.findViewById(R.id.layoutRippleNavi);
+		iniRipple(layoutRippleNavi);
+		layoutRippleNavi.setOnClickListener(new MyOnClickListener());
+
 		// 行车轨迹记录
 		LayoutRipple layoutRippleRouteRecord = (LayoutRipple) mapSettingView
 				.findViewById(R.id.layoutRippleRouteRecord);
@@ -47,14 +62,8 @@ public class SettingMapFragment extends Fragment {
 		iniRipple(layoutRippleRouteSpan);
 		layoutRippleRouteSpan.setOnClickListener(new MyOnClickListener());
 
-		// 默认导航
-		LayoutRipple layoutRippleNavi = (LayoutRipple) mapSettingView
-				.findViewById(R.id.layoutRippleNavi);
-		iniRipple(layoutRippleNavi);
-		layoutRippleNavi.setOnClickListener(new MyOnClickListener());
-
-		preferences = getActivity().getSharedPreferences("CarLauncher",
-				Context.MODE_PRIVATE);
+		preferences = getActivity().getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		updateRouteRecordText();
 		updateRouteSmoothText();
 		updateRouteSpanText();
@@ -115,6 +124,24 @@ public class SettingMapFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.layoutRippleOfflineMap:
+				Intent intentOffline = new Intent(getActivity(),
+						OfflineBaiduMapActivity.class);
+				startActivity(intentOffline);
+				break;
+			case R.id.layoutRippleNavi:
+				SettingMapNavigationDialog mapNavigationDialog = new SettingMapNavigationDialog(
+						getActivity());
+				mapNavigationDialog
+						.setOnAcceptButtonClickListener(new View.OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								updateNavigationText();
+							}
+						});
+				mapNavigationDialog.show();
+				break;
 			case R.id.layoutRippleRouteRecord:
 				SettingMapRouteRecordDialog mapRecordRouteDialog = new SettingMapRouteRecordDialog(
 						getActivity());
@@ -153,19 +180,6 @@ public class SettingMapFragment extends Fragment {
 							}
 						});
 				mapRecordSpanDialog.show();
-				break;
-			case R.id.layoutRippleNavi:
-				SettingMapNavigationDialog mapNavigationDialog = new SettingMapNavigationDialog(
-						getActivity());
-				mapNavigationDialog
-						.setOnAcceptButtonClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								updateNavigationText();
-							}
-						});
-				mapNavigationDialog.show();
 				break;
 			default:
 				break;

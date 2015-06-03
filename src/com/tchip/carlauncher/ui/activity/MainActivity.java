@@ -61,7 +61,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -326,7 +325,8 @@ public class MainActivity extends Activity {
 						R.anim.zms_translate_down_in);
 				break;
 			case R.id.mapHideView:
-				Toast.makeText(getApplicationContext(), "启动地图",
+				// TODO:启动导航
+				Toast.makeText(getApplicationContext(), "ToDo启动导航",
 						Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.imageMultimedia:
