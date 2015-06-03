@@ -9,13 +9,13 @@ import com.tchip.carlauncher.service.TrafficFetchService;
 import com.tchip.carlauncher.util.TrafficUtils;
 
 public class TrafficBootReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-                TrafficDbManager.getInstance(context).setTrafficTotal(0L);
-                /**
-                 * 定时更新流量
-                 */
-                TrafficUtils.startRepeatingService(context, TrafficUtils.INTERVAL, TrafficFetchService.class, "");
-                Log.i("TAG", "流量助手：开机初始化完成");
-        }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		TrafficDbManager.getInstance(context).setTrafficTotal(0L);
+		/**
+		 * 定时更新流量
+		 */
+		TrafficUtils.startRepeatingService(context, TrafficUtils.INTERVAL,
+				TrafficFetchService.class, "");
+	}
 }

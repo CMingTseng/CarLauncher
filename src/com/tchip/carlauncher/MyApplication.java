@@ -7,7 +7,10 @@ import android.os.Environment;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
+import com.tchip.carlauncher.model.TrafficDbManager;
 import com.tchip.carlauncher.service.MusicServiceManager;
+import com.tchip.carlauncher.service.TrafficFetchService;
+import com.tchip.carlauncher.util.TrafficUtils;
 
 public class MyApplication extends Application {
 	// Music
@@ -27,12 +30,17 @@ public class MyApplication extends Application {
 		super.onCreate();
 		// 百度地图SDK初始化
 		SDKInitializer.initialize(getApplicationContext());
-		
+
 		// Music
 		mServiceManager = new MusicServiceManager(this);
 		initPath();
+
+		// 流量
+		TrafficDbManager.getInstance(MyApplication.this).setTrafficTotal(0L);
+		TrafficUtils.startRepeatingService(MyApplication.this,
+				TrafficUtils.INTERVAL, TrafficFetchService.class, "");
 	}
-	
+
 	private void initPath() {
 		String ROOT = "";
 		if (Environment.getExternalStorageState().equals(

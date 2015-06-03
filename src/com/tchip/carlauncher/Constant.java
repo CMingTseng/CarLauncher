@@ -68,6 +68,7 @@ public interface Constant {
 
 	public static final String PLAY_STATE_NAME = "PLAY_STATE_NAME";
 	public static final String PLAY_MUSIC_INDEX = "PLAY_MUSIC_INDEX";
+
 	// 歌手和专辑列表点击都会进入MyMusic 此时要传递参数表明是从哪里进入的
 	public static final String FROM = "from";
 	public static final int START_FROM_ARTIST = 1;
@@ -82,5 +83,10 @@ public interface Constant {
 
 	public static final int MENU_BACKGROUND = 9;
 	// ========== Music END ==========
+
+	/**
+	 * 设置条目点击波纹速度
+	 */
+	public static final int SETTING_ITEM_RIPPLE_SPEED = 80;
 
 }

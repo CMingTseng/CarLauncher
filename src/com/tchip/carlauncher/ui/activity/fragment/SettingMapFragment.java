@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.ui.activity.fragment;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.dialog.SettingMapNavigationDialog;
 import com.tchip.carlauncher.ui.activity.dialog.SettingMapRouteRecordDialog;
@@ -185,7 +186,7 @@ public class SettingMapFragment extends Fragment {
 				// layoutRipple.setyRippleOrigin(ViewHelper.getY(v)
 				// + v.getHeight() / 2);
 				layoutRipple.setRippleColor(Color.parseColor("#1E88E5"));
-				layoutRipple.setRippleSpeed(50);
+				layoutRipple.setRippleSpeed(Constant.SETTING_ITEM_RIPPLE_SPEED);
 			}
 		});
 	}

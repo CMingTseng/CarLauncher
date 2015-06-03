@@ -1,6 +1,7 @@
 package com.tchip.carlauncher.ui.activity.fragment;
 
 import com.baidu.platform.comapi.map.p;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.dialog.SettingCameraVideoQualityDialog;
 import com.tchip.carlauncher.ui.activity.dialog.SettingVoiceAccentDialog;
@@ -190,7 +191,7 @@ public class SettingVoiceFragment extends Fragment {
 				// layoutRipple.setyRippleOrigin(ViewHelper.getY(v)
 				// + v.getHeight() / 2);
 				layoutRipple.setRippleColor(Color.parseColor("#1E88E5"));
-				layoutRipple.setRippleSpeed(50);
+				layoutRipple.setRippleSpeed(Constant.SETTING_ITEM_RIPPLE_SPEED);
 			}
 		});
 	}

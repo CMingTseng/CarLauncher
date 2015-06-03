@@ -52,7 +52,8 @@
     <!-- File Explorer Extra -->
     <!--
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.DELETE_PACKAGES" />    -->
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    -->
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
@@ -89,7 +90,7 @@
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity>
         -->
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MainActivity"
@@ -214,29 +215,27 @@
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
             </intent-filter>
         </service>
-        
+
         <!-- Traffic Stats 流量 -->
-         <activity
+        <activity
             android:name="com.tchip.carlauncher.ui.activity.TrafficStatActivity"
+            android:screenOrientation="landscape"
             android:label="@string/app_name" />
-        
-        
-         <activity android:name="com.tchip.carlauncher.ui.activity.TrafficAllAppActivity"
-                android:label="流量明细"/>
-        <activity android:name="com.tchip.carlauncher.ui.activity.TrafficSettingActivity"
-                android:label="设置"/>
-        <activity android:name="com.tchip.carlauncher.ui.activity.TrafficChartActivity"
-                android:label="应用详情"/>
-
-        <receiver android:name="com.tchip.carlauncher.model.TrafficBootReceiver"
-                  android:exported="true">
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.TrafficChartActivity"
+            android:screenOrientation="landscape"
+            android:label="应用详情" />
+        <!-- 
+        <receiver
+            android:name="com.tchip.carlauncher.model.TrafficBootReceiver"
+            android:exported="true" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
+        </receiver> -->
 
-        <service android:name="com.tchip.carlauncher.service.TrafficFetchService"/>
-        <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService"/>
+        <service android:name="com.tchip.carlauncher.service.TrafficFetchService" />
+        <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
     </application>
 
 </manifest>

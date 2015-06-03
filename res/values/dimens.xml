@@ -7,17 +7,18 @@
     <dimen name="pading_">7dp</dimen>
     <dimen name="btn_size">28sp</dimen>
     <dimen name="txt_size">24sp</dimen>
-	
-	<!--Music-->
-    
-    <dimen name="slidingmenu_offset">120dp</dimen><!-- 60dp -->
-    <dimen name="shadow_width">20dp</dimen><!-- 15dp -->
-    
+
+    <!-- Music -->
+
+    <dimen name="slidingmenu_offset">120dp</dimen>
+ <!-- 60dp -->
+    <dimen name="shadow_width">20dp</dimen>
+ <!-- 15dp -->
+
     <dimen name="playqueue_dialog_marginright">0dp</dimen>
     <dimen name="playqueue_dialog_marginbottom">80dp</dimen>
     <dimen name="playqueue_dialog_width">325dp</dimen>
     <dimen name="playqueue_dialog_height">510dp</dimen>
-    
     <dimen name="title_text_sp">24sp</dimen>
 
     <!-- 分割线高度 -->
@@ -41,15 +42,18 @@
     <dimen name="weather_text_temp_today">105sp</dimen>
     <dimen name="weather_text_wind_today">32sp</dimen>
     <dimen name="weather_margin_more_info">20dp</dimen>
-     <dimen name="weather_more_info_image_size">25dp</dimen>
-     <dimen name="weather_more_info_text_size">20sp</dimen>
+    <dimen name="weather_more_info_image_size">25dp</dimen>
+    <dimen name="weather_more_info_text_size">20sp</dimen>
     <dimen name="weather_text_more_week">20sp</dimen>
     <dimen name="weather_image_more_weather">70dp</dimen>
     <dimen name="weather_text_more_temp">20sp</dimen>
     <dimen name="setting_tab_image">50px</dimen>
     <dimen name="setting_tab_text">20px</dimen>
-    
     <dimen name="chat_text_hint">30sp</dimen>
+    <!-- System Setting Brightness -->
+    <dimen name="setting_system_bright_text_size">20sp</dimen>
+    <dimen name="setting_system_bright_item_height">80dp</dimen>
+    <dimen name="setting_system_bright_radio_margin">10dp</dimen>
     <!-- below is not optimize for mdpi -->
     <!-- zms END:mdpi -->
 

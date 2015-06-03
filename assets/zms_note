@@ -120,30 +120,25 @@ SharedPreferences-CarLauncher
 	
 ============================================================================
 [ToDo]
-
 	[功能]
-		2.设置>关于，在MediaTek 4.4.2中无法使用，需要解决，或者自写
-		5.语音助手播放音乐
-		6.导航：高德接口
-		7.使用ContentProvider取代SharedPreferences，向其他应用提供数据接口
-		8.天气预报界面设置手动刷新按钮；考虑无网络链接或者未定位时情况（使用Handler或AsyncTask更新界面）
-		9.FM
-		12.选择口音时，要跳转到讯飞+界面，或者利用讯飞的接口（如果存在）
-		13.完善系统设置的必要选项，如存储，恢复出厂设置。
+		* 语音助手播放音乐
+		* 导航：高德接口
+		* FM
+		* 选择口音时，要跳转到讯飞+界面，或者利用讯飞的接口（如果存在）
+		* 离线地图
 		
 	[后续]
-		1.微信硬件
-		2.文件共享到手机
-		3.无线热点AP（固定密码）
-		4.蓝牙读取手机通讯录
-		5.测速测距（里程，瞬时速度，平均速度，油耗）
-		6.电子狗
-		8.精简系统非必要应用
+		* 微信硬件
+		* 文件共享到手机
+		* 无线热点AP（固定密码）
+		* 蓝牙读取手机通讯录
+		* 测速测距（里程，瞬时速度，平均速度，油耗）
+		* 电子狗
+		* 精简系统非必要应用
 		
 	[Bug List]
 		- 天气界面设置背景概率性OOM:后期调整图片尺寸
 			
-		
 ============================================================================	
 // 介绍：http://blog.csdn.net/qq43599939/article/details/12278641/
 // http://goodbai.com/web/UseForecastAndPMDataAPI.html
@@ -152,8 +147,6 @@ SharedPreferences-CarLauncher
 + 简洁信息 http://www.weather.com.cn/data/sk/101010100.html
 + 简洁信息 http://www.weather.com.cn/data/cityinfo/101010100.html
 - 城市图片 http://poster.weather.com.cn/p_files/base/101281701.jpg
-
-
 
 
 Face Detect JSON：
@@ -319,7 +312,7 @@ var flArr={
 };
 
 
-
+============================================================================
 
 private int getLogo(int brand) {
 		switch (brand) {
