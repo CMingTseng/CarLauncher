@@ -53,7 +53,7 @@ public class TrafficChartActivity extends Activity {
                 }
 
                 mChart = (LineChart) findViewById(R.id.chart1);
-                mChart.setNoDataTextDescription("未加载数�?");
+                mChart.setNoDataTextDescription("未加载数");
         }
 
         private void initChart() {
@@ -93,7 +93,7 @@ public class TrafficChartActivity extends Activity {
                 }
 
                 // create a dataset and give it a type
-                LineDataSet set1 = new LineDataSet(yVals, DATA_SIZE + "天流量情况（单位：MB�?");
+                LineDataSet set1 = new LineDataSet(yVals, DATA_SIZE + "天流量情况（单位：MB）");
                 // set1.setFillAlpha(110);
                 // set1.setFillColor(Color.RED);
 
