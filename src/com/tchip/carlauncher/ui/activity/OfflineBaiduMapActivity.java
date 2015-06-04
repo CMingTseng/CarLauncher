@@ -28,6 +28,7 @@ import com.tchip.carlauncher.R;
 /**
  * 安装后搜索仍需联网，但会节约达90%的流量
  * 
+ * 低分屏：L 高分屏：H 854x480 5' 属于低分屏
  */
 public class OfflineBaiduMapActivity extends Activity implements
 		MKOfflineMapListener {
