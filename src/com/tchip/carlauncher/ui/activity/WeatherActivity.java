@@ -147,7 +147,7 @@ public class WeatherActivity extends Activity {
 
 		if (!"未定位".equals(cityName)) {
 			weatherArray[0] = cityName + "今日天气:" + weatherToday + ","
-					+ day0tmpLow + "到" + day0tmpHigh + "," + day0windStr;
+					+ day0tmpLow + "到" + day0tmpHigh + "℃," + day0windStr;
 			isLocated = true;
 		} else {
 			weatherArray[0] = "定位失败，无法获取天气信息";
@@ -183,7 +183,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[1] = day1weekStr + "天气：" + day1weatherStr + ","
-					+ day1tmpLowStr + "到" + day1tmpHighStr + "," + day1windStr;
+					+ day1tmpLowStr.split("℃")[0] + "到" + day1tmpHighStr + "," + day1windStr;
 		} else {
 			weatherArray[1] = "定位失败，无法获取天气信息";
 		}
@@ -218,7 +218,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[2] = day2WeekStr + "天气：" + day2WeatherStr + ","
-					+ day2tmpLowStr + "到" + day2tmpHighStr + "," + day2windStr;
+					+ day2tmpLowStr.split("℃")[0] + "到" + day2tmpHighStr + "," + day2windStr;
 		} else {
 			weatherArray[2] = "定位失败，无法获取天气信息";
 		}
@@ -253,7 +253,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[3] = day3WeekStr + "天气：" + day3WeatherStr + ","
-					+ day3tmpLowStr + "到" + day3tmpHighStr + "," + day3windStr;
+					+ day3tmpLowStr.split("℃")[0] + "到" + day3tmpHighStr + "," + day3windStr;
 		} else {
 			weatherArray[3] = "定位失败，无法获取天气信息";
 		}
@@ -288,7 +288,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[4] = day4WeekStr + "天气：" + day4WeatherStr + ","
-					+ day4tmpLowStr + "到" + day4tmpHighStr + "," + day4windStr;
+					+ day4tmpLowStr.split("℃")[0] + "到" + day4tmpHighStr + "," + day4windStr;
 		} else {
 			weatherArray[4] = "定位失败，无法获取天气信息";
 		}
@@ -323,7 +323,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[5] = day5WeekStr + "天气：" + day5WeatherStr + ","
-					+ day5tmpLowStr + "到" + day5tmpHighStr + "," + day5windStr;
+					+ day5tmpLowStr.split("℃")[0] + "到" + day5tmpHighStr + "," + day5windStr;
 		} else {
 			weatherArray[5] = "定位失败，无法获取天气信息";
 		}

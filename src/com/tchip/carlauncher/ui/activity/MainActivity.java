@@ -12,6 +12,9 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.offline.MKOLUpdateElement;
+import com.baidu.mapapi.map.offline.MKOfflineMap;
+import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
@@ -34,6 +37,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
@@ -104,6 +108,53 @@ public class MainActivity extends Activity {
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
 
+		importOfflineMapFromSDCard();
+	}
+
+	private MKOfflineMap mOffline = null;
+
+	/**
+	 * 导入离线地图包
+	 */
+	public void importOfflineMapFromSDCard() {
+		mOffline = new MKOfflineMap();
+		mOffline.init(new MyMKOfflineMapListener());
+		int num = mOffline.importOfflineData();
+		String msg = "";
+		if (num == 0) {
+			// 没有导入离线包，这可能是离线包放置位置不正确，或离线包已经导入过
+		} else {
+			// "成功导入 num个离线包
+		}
+	}
+
+	class MyMKOfflineMapListener implements MKOfflineMapListener {
+
+		@Override
+		public void onGetOfflineMapState(int type, int state) {
+			switch (type) {
+			case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
+				MKOLUpdateElement update = mOffline.getUpdateInfo(state);
+				// 处理下载进度更新提示
+				if (update != null) {
+					// stateView.setText(String.format("%s : %d%%",
+					// update.cityName,
+					// update.ratio));
+					// updateView();
+				}
+				break;
+			case MKOfflineMap.TYPE_NEW_OFFLINE:
+				// 有新离线地图安装
+				Log.d("OfflineDemo",
+						String.format("add offlinemap num:%d", state));
+				break;
+			case MKOfflineMap.TYPE_VER_UPDATE:
+				// 版本更新提示
+				// MKOLUpdateElement e = mOffline.getUpdateInfo(state);
+
+				break;
+			}
+		}
 	}
 
 	/**
@@ -136,7 +187,7 @@ public class MainActivity extends Activity {
 
 		// WiFi状态信息
 		imageWifiLevel = (ImageView) findViewById(R.id.imageWifiLevel);
-		
+
 		wifiIntentFilter = new IntentFilter();
 		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		updateWiFiState();
@@ -292,7 +343,7 @@ public class MainActivity extends Activity {
 	 * 更新WiF状态
 	 */
 	private void updateWiFiState() {
-		
+
 		int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 				.getConnectionInfo().getRssi();// Math.abs()
 		imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
@@ -458,7 +509,7 @@ public class MainActivity extends Activity {
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
 				baiduMap.animateMapStatus(u);
 			}
-			
+
 			// 更新WiFi状态图标
 			updateWiFiState();
 		}
