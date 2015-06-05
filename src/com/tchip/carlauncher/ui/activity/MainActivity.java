@@ -22,11 +22,15 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
+import com.tchip.carlauncher.util.WiFiUtil;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,7 +58,7 @@ public class MainActivity extends Activity {
 	private com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode;
 	boolean isFirstLoc = true;// 是否首次定位
 
-	private int scanSpan = 1000; // 采集轨迹点间隔(ms)
+	private int scanSpan = 1000; // 轨迹点采集间隔(ms)
 
 	private ImageView smallVideoRecord, smallVideoLock;
 	private RelativeLayout layoutLargeButton;
@@ -62,6 +66,8 @@ public class MainActivity extends Activity {
 	private ImageView imageTodayWeather;
 
 	private ProgressBar updateProgress;
+	private ImageView imageWifiLevel; // WiFi状态图标跑
+	private IntentFilter wifiIntentFilter; // WiFi状态监听器
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +114,7 @@ public class MainActivity extends Activity {
 		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 		surfaceCamera.setOnClickListener(new MyOnClickListener());
 
-		// 天气预报和时钟
+		// 天气预报和时钟,状态图标
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
@@ -127,8 +133,16 @@ public class MainActivity extends Activity {
 		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textLocation = (TextView) findViewById(R.id.textLocation);
 		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
-		updateLocationAndWeather();
+
+		// WiFi状态信息
+		imageWifiLevel = (ImageView) findViewById(R.id.imageWifiLevel);
+		
+		wifiIntentFilter = new IntentFilter();
+		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		updateWiFiState();
+
 		// 更新天气与位置信息
+		updateLocationAndWeather();
 		updateProgress.setVisibility(View.VISIBLE);
 		new Thread(new UpdateWeatherThread()).start();
 
@@ -157,7 +171,7 @@ public class MainActivity extends Activity {
 		InitLocation(
 				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
 				"bd09ll", scanSpan, true);
-		// 设置地图缩放级别 0-19：数值越大，比例尺单位越小
+		// 设置地图放大级别 0-19
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
 		baiduMap.animateMapStatus(msu);
 
@@ -272,6 +286,16 @@ public class MainActivity extends Activity {
 		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
 		day0tmpLow = day0tmpLow.split("℃")[0];
 		textTemp.setText(day0tmpLow + "~" + day0tmpHigh);
+	}
+
+	/**
+	 * 更新WiF状态
+	 */
+	private void updateWiFiState() {
+		
+		int level = ((WifiManager) getSystemService(WIFI_SERVICE))
+				.getConnectionInfo().getRssi();// Math.abs()
+		imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
 	}
 
 	public class UpdateWeatherThread implements Runnable {
@@ -434,6 +458,9 @@ public class MainActivity extends Activity {
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
 				baiduMap.animateMapStatus(u);
 			}
+			
+			// 更新WiFi状态图标
+			updateWiFiState();
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -473,6 +500,40 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * WiFi状态Receiver
+	 */
+	private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int wifi_state = intent.getIntExtra("wifi_state", 0);
+			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
+					.getConnectionInfo().getRssi();// Math.abs()
+			switch (wifi_state) {
+			case WifiManager.WIFI_STATE_DISABLING:
+				imageWifiLevel.setImageResource(WiFiUtil
+						.getImageBySignal(level));
+				break;
+			case WifiManager.WIFI_STATE_DISABLED:
+				imageWifiLevel.setImageResource(WiFiUtil
+						.getImageBySignal(level));
+				break;
+			case WifiManager.WIFI_STATE_ENABLING:
+				imageWifiLevel.setImageResource(WiFiUtil
+						.getImageBySignal(level));
+				break;
+			case WifiManager.WIFI_STATE_ENABLED:
+				imageWifiLevel.setImageResource(WiFiUtil
+						.getImageBySignal(level));
+				break;
+			case WifiManager.WIFI_STATE_UNKNOWN:
+				imageWifiLevel.setImageResource(WiFiUtil
+						.getImageBySignal(level));
+				break;
+			}
+		}
+	};
+
+	/**
 	 * 更新天气
 	 */
 	private void startWeatherService() {
@@ -489,6 +550,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		mainMapView.onResume();
+
+		// 注册wifi消息处理器
+		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
 		super.onResume();
 	}
 
@@ -500,6 +564,8 @@ public class MainActivity extends Activity {
 		baiduMap.setMyLocationEnabled(false);
 		mainMapView.onDestroy();
 		mainMapView = null;
+		// 取消注册wifi消息处理器
+		unregisterReceiver(wifiIntentReceiver);
 		super.onDestroy();
 	}
 }
