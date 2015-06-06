@@ -120,7 +120,6 @@ public class MainActivity extends Activity {
 		mOffline = new MKOfflineMap();
 		mOffline.init(new MyMKOfflineMapListener());
 		int num = mOffline.importOfflineData();
-		String msg = "";
 		if (num == 0) {
 			// 没有导入离线包，这可能是离线包放置位置不正确，或离线包已经导入过
 		} else {
@@ -145,13 +144,10 @@ public class MainActivity extends Activity {
 				break;
 			case MKOfflineMap.TYPE_NEW_OFFLINE:
 				// 有新离线地图安装
-				Log.d("OfflineDemo",
-						String.format("add offlinemap num:%d", state));
 				break;
 			case MKOfflineMap.TYPE_VER_UPDATE:
 				// 版本更新提示
 				// MKOLUpdateElement e = mOffline.getUpdateInfo(state);
-
 				break;
 			}
 		}
