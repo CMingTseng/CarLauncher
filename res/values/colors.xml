@@ -54,10 +54,10 @@
     <!-- Traffic Stats 流量 -->
     <color name="toast_bg">#c01b1b1b</color>
     <color name="toast_text">#f7dcaf</color>
-    
+
     <!-- File Manager -->
-     <color name="accent_color">#FF8800</color>
-    <color name="accent_color_light">#FFBB33</color>
+    <color name="accent_color">#1E88E5</color>
+    <color name="accent_color_light">#7cb9ee</color>
     <color name="color_window_background">#E5E5E5</color>
 
 </resources>

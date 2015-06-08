@@ -56,8 +56,8 @@
     <dimen name="setting_system_bright_radio_margin">10dp</dimen>
    <!-- File Manager -->
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="list_icon_size">64dp</dimen>
-    <dimen name="list_item_padding">12dp</dimen>
+    <dimen name="list_icon_size">50dp</dimen>
+    <dimen name="list_item_padding">5dp</dimen>
     <dimen name="nav_drawer_width">260dp</dimen>
     <dimen name="clipboard_drawer_width">@dimen/nav_drawer_width</dimen>
     <dimen name="card_content_height">200dp</dimen>

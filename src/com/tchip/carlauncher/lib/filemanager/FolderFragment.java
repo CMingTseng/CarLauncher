@@ -37,6 +37,7 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.Clipboard.FileAction;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager.FolderAlreadyFavouriteException;
@@ -102,10 +103,10 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 		}
 	}
 
-	FileManagerApplication getApplication() {
+	MyApplication getApplication() {
 		if (getActivity() == null)
 			return null;
-		return (FileManagerApplication) getActivity().getApplication();
+		return (MyApplication) getActivity().getApplication();
 	}
 
 	AppPreferences getPreferences() {
@@ -165,7 +166,8 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.file_fragment_list, container, false);
+		View view = inflater.inflate(R.layout.file_fragment_list, container,
+				false);
 		this.listView = (AbsListView) view.findViewById(android.R.id.list);
 
 		if (Build.VERSION.SDK_INT >= 19) // Build.VERSION_CODES.KITKAT
@@ -788,8 +790,8 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		setActionbarVisibility(true);
 		getActivity().getMenuInflater().inflate(R.menu.file_action_file, menu);
-		getActivity().getMenuInflater()
-				.inflate(R.menu.file_action_file_single, menu);
+		getActivity().getMenuInflater().inflate(R.menu.file_action_file_single,
+				menu);
 
 		MenuItem shareMenuItem = menu.findItem(R.id.action_share);
 		shareActionProvider = (ShareActionProvider) shareMenuItem

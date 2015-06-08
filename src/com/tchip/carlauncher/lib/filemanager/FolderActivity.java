@@ -22,10 +22,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.Clipboard.ClipboardListener;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager.FavouritesListener;
 import com.tchip.carlauncher.lib.filemanager.NavDrawerAdapter.NavDrawerItem;
+import com.tchip.carlauncher.ui.activity.FileRemoteControlActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 
 	}
 
-	private static final String LOG_TAG = "Main Activity";
+	private static final String LOG_TAG = "FolderActivity";
 
 	public static final String EXTRA_DIR = FolderFragment.EXTRA_DIR;
 
@@ -64,7 +66,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	@Override
 	protected void onDestroy() {
 		Clipboard.getInstance().removeListener(this);
-		FileManagerApplication application = (FileManagerApplication) getApplication();
+		MyApplication application = (MyApplication) getApplication();
 		application.getFavouritesManager().removeFavouritesListener(this);
 		super.onDestroy();
 	}
@@ -76,7 +78,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	@Override
 	protected void onPause() {
 		if (lastFolder != null) {
-			FileManagerApplication application = (FileManagerApplication) getApplication();
+			MyApplication application = (MyApplication) getApplication();
 			application.getAppPreferences().setStartFolder(lastFolder)
 					.saveChanges(getApplicationContext());
 			Log.d(LOG_TAG, "Saved last folder " + lastFolder.toString());
@@ -101,18 +103,17 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		if (Build.VERSION.SDK_INT < 19)// Build.VERSION_CODES.KITKAT
 			return;
 
-		// if (translucent) {
-		// getWindow().setFlags(
-		// WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-		// WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-		// } else {
-		// WindowManager.LayoutParams params = getWindow().getAttributes();
-		// params.flags &=
-		// (~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-		// getWindow().setAttributes(params);
-		// getWindow().clearFlags(
-		// WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-		// }
+		if (translucent) {
+			getWindow().setFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		} else {
+			WindowManager.LayoutParams params = getWindow().getAttributes();
+			params.flags &= (~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			getWindow().setAttributes(params);
+			getWindow().clearFlags(
+					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+		}
 	}
 
 	private void setupDrawers() {
@@ -147,7 +148,8 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 			}
 		};
 		drawerLayout.setDrawerListener(actionBarDrawerToggle);
-		drawerLayout.setDrawerShadow(R.drawable.file_drawer_shadow, Gravity.START);
+		drawerLayout.setDrawerShadow(R.drawable.file_drawer_shadow,
+				Gravity.START);
 		drawerLayout.setFocusableInTouchMode(false);
 		// drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.END);
 
@@ -169,7 +171,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	}
 
 	void setupNavDrawer() {
-		FileManagerApplication application = (FileManagerApplication) getApplication();
+		MyApplication application = (MyApplication) getApplication();
 
 		// add listview header to push items below the actionbar
 		ListView navListView = (ListView) findViewById(R.id.listNavigation);
@@ -226,9 +228,9 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		if (actionBarDrawerToggle.onOptionsItemSelected(item))
 			return true;
 		switch (item.getItemId()) {
-		case R.id.menu_about:
+		case R.id.menu_ftp:
 			startActivity(new Intent(getApplicationContext(),
-					AboutActivity.class));
+					FileRemoteControlActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -304,7 +306,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		else {
 			drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
 					Gravity.END);
-			FileManagerApplication application = (FileManagerApplication) getApplication();
+			MyApplication application = (MyApplication) getApplication();
 			if (clipboardListView != null) {
 				ClipboardFileAdapter clipboardFileAdapter = new ClipboardFileAdapter(
 						this, clipboard, application.getFileIconResolver());

@@ -18,6 +18,7 @@ import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.lib.filemanager.FolderActivity;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.LocationService;
@@ -450,7 +451,7 @@ public class MainActivity extends Activity {
 				break;
 			case R.id.imageFileExplore:
 				Intent intentFileExplore = new Intent(MainActivity.this,
-						FileRemoteControlActivity.class);
+						FolderActivity.class);
 				startActivity(intentFileExplore);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);

@@ -5,7 +5,7 @@
         android:id="@+id/action_rename"
         android:icon="@drawable/file_ic_rename"
         android:orderInCategory="4"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/rename"
         android:visible="true"/>
 
