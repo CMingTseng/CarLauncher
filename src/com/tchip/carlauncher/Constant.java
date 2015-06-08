@@ -88,5 +88,10 @@ public interface Constant {
 	 * 设置条目点击波纹速度
 	 */
 	public static final int SETTING_ITEM_RIPPLE_SPEED = 80;
+	
+	/**
+	 * 字体目录
+	 */
+	public static final String FONT_PATH = "fonts/";
 
 }

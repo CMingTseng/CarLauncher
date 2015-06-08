@@ -24,19 +24,16 @@ public class BrightAdjustService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
 		return super.onStartCommand(intent, flags, startId);
 	}
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
 
 		new Thread(new RouteRecordThread()).start();
@@ -63,7 +60,8 @@ public class BrightAdjustService extends Service {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+				preferences = getSharedPreferences(
+						Constant.SHARED_PREFERENCES_NAME,
 						getApplicationContext().MODE_PRIVATE);
 				boolean brightAdjust = preferences.getBoolean("brightAdjust",
 						false);

@@ -93,8 +93,27 @@ public class SettingSystemDisplayActivity extends Activity {
 	class MyRadioOnCheckedListener implements OnCheckedChangeListener {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			// TODO Auto-generated method stub
+			switch (checkedId) {
+			case R.id.screenOff1min:
+				SettingUtil.setScreenOffTime(context, 60000);
+				break;
+			case R.id.screenOff2min:
+				SettingUtil.setScreenOffTime(context, 120000);
+				break;
+			case R.id.screenOff5min:
+				SettingUtil.setScreenOffTime(context, 300000);
+				break;
+			case R.id.screenOff10min:
+				SettingUtil.setScreenOffTime(context, 600000);
+				break;
+			case R.id.screenOffNone:
+				// 240小时
+				SettingUtil.setScreenOffTime(context, 864000000);
+				break;
 
+			default:
+				break;
+			}
 		}
 	}
 

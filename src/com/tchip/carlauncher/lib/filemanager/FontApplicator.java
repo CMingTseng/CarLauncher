@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.lib.filemanager.ViewTraverser.ForeachAction;
 
 /**
@@ -19,7 +20,8 @@ public class FontApplicator {
 	}
 
 	public FontApplicator(Context context, String fontName) {
-		this(Typeface.createFromAsset(context.getAssets(), "fonts/" + fontName));
+		this(Typeface.createFromAsset(context.getAssets(), Constant.FONT_PATH
+				+ fontName));
 	}
 
 	public FontApplicator(AssetManager assets, String assetFontName) {

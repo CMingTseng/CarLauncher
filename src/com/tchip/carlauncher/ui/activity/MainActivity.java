@@ -166,15 +166,16 @@ public class MainActivity extends Activity {
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
-		textClock.setTypeface(Typefaces.get(this, "Font-Roboto-Thin.ttf"));
+		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Roboto-Thin.ttf"));
 
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
-		textDate.setTypeface(Typefaces
-				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+		textDate.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Droid-Sans-Fallback.ttf"));
 
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
-		textWeek.setTypeface(Typefaces
-				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+		textWeek.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Droid-Sans-Fallback.ttf"));
 
 		textTemp = (TextView) findViewById(R.id.textTemp);
 		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);

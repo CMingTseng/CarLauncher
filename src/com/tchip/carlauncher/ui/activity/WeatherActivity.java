@@ -97,11 +97,12 @@ public class WeatherActivity extends Activity {
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
 
-		textClock.setTypeface(Typefaces.get(this, "Font-Roboto-Light.ttf"));
-		textDate.setTypeface(Typefaces
-				.get(this, "Font-Droid-Sans-Fallback.ttf"));
-		textWeek.setTypeface(Typefaces
-				.get(this, "Font-Droid-Sans-Fallback.ttf"));
+		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Roboto-Light.ttf"));
+		textDate.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Droid-Sans-Fallback.ttf"));
+		textWeek.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Droid-Sans-Fallback.ttf"));
 		// Day 0 (Today) Weather and Time, Location Info
 
 		TextView textLocation = (TextView) findViewById(R.id.textLocation);
@@ -130,7 +131,8 @@ public class WeatherActivity extends Activity {
 		day0tmpLow = day0tmpLow.split("℃")[0];
 		day0tmpHigh = day0tmpHigh.split("℃")[0];
 		textTempRange.setText(day0tmpLow + "~" + day0tmpHigh);
-		textTempRange.setTypeface(Typefaces.get(this, "Font-Roboto-Light.ttf"));
+		textTempRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Roboto-Light.ttf"));
 		new Titanic().start(textTempRange);
 
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
@@ -183,7 +185,8 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[1] = day1weekStr + "天气：" + day1weatherStr + ","
-					+ day1tmpLowStr.split("℃")[0] + "到" + day1tmpHighStr + "," + day1windStr;
+					+ day1tmpLowStr.split("℃")[0] + "到" + day1tmpHighStr + ","
+					+ day1windStr;
 		} else {
 			weatherArray[1] = "定位失败，无法获取天气信息";
 		}
@@ -218,7 +221,8 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[2] = day2WeekStr + "天气：" + day2WeatherStr + ","
-					+ day2tmpLowStr.split("℃")[0] + "到" + day2tmpHighStr + "," + day2windStr;
+					+ day2tmpLowStr.split("℃")[0] + "到" + day2tmpHighStr + ","
+					+ day2windStr;
 		} else {
 			weatherArray[2] = "定位失败，无法获取天气信息";
 		}
@@ -253,7 +257,8 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[3] = day3WeekStr + "天气：" + day3WeatherStr + ","
-					+ day3tmpLowStr.split("℃")[0] + "到" + day3tmpHighStr + "," + day3windStr;
+					+ day3tmpLowStr.split("℃")[0] + "到" + day3tmpHighStr + ","
+					+ day3windStr;
 		} else {
 			weatherArray[3] = "定位失败，无法获取天气信息";
 		}
@@ -288,7 +293,8 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[4] = day4WeekStr + "天气：" + day4WeatherStr + ","
-					+ day4tmpLowStr.split("℃")[0] + "到" + day4tmpHighStr + "," + day4windStr;
+					+ day4tmpLowStr.split("℃")[0] + "到" + day4tmpHighStr + ","
+					+ day4windStr;
 		} else {
 			weatherArray[4] = "定位失败，无法获取天气信息";
 		}
@@ -323,7 +329,8 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[5] = day5WeekStr + "天气：" + day5WeatherStr + ","
-					+ day5tmpLowStr.split("℃")[0] + "到" + day5tmpHighStr + "," + day5windStr;
+					+ day5tmpLowStr.split("℃")[0] + "到" + day5tmpHighStr + ","
+					+ day5windStr;
 		} else {
 			weatherArray[5] = "定位失败，无法获取天气信息";
 		}

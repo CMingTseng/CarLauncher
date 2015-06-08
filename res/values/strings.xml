@@ -207,11 +207,11 @@
     <string name="select_all">全选</string>
     <string name="rename">重命名</string>
     <string name="share">分享</string>
-    <string name="_d_files_deleted">以删除 %d 个文件</string>
+    <string name="_d_files_deleted">已删除 %d 个文件</string>
     <string name="add_to_homescreen">创建快捷方式</string>
     <string name="add_to_homescreen_multiple">创建快捷方式</string>
     <string name="shortcut_created">快捷方式已创建</string>
-    <string name="root">Root</string>
+    <string name="root">根目录</string>
     <string name="cut">剪切</string>
     <string name="paste_here">粘贴到此</string>
     <string name="objects_cut_to_clipboard">已剪切到剪贴板</string>
