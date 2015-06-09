@@ -7,6 +7,7 @@ import com.tchip.carlauncher.ui.activity.TrafficChartActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
 import com.tchip.carlauncher.view.LayoutRipple;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class SettingSystemFragment extends Fragment {
 	private View systemSettingView;
@@ -74,6 +76,12 @@ public class SettingSystemFragment extends Fragment {
 				.findViewById(R.id.layoutRippleSound);
 		iniRipple(layoutRippleSound);
 		layoutRippleSound.setOnClickListener(new MyOnClickListener());
+
+		// FM
+		LayoutRipple layoutRippleFm = (LayoutRipple) systemSettingView
+				.findViewById(R.id.layoutRippleFm);
+		iniRipple(layoutRippleFm);
+		layoutRippleFm.setOnClickListener(new MyOnClickListener());
 
 		// 恢复出厂设置
 		LayoutRipple layoutRippleReset = (LayoutRipple) systemSettingView
@@ -161,6 +169,9 @@ public class SettingSystemFragment extends Fragment {
 			case R.id.layoutRippleSound:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_SOUND_SETTINGS));
+				break;
+			case R.id.layoutRippleFm:
+				startActivity(new Intent("android.settings.FM_SETTINGS"));
 				break;
 			case R.id.layoutRippleReset:
 				startActivity(new Intent(

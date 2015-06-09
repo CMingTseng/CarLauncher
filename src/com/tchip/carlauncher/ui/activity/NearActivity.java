@@ -40,7 +40,6 @@ public class NearActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -88,7 +87,6 @@ public class NearActivity extends Activity {
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnToViceFromNear:
 				backToVice();
@@ -147,6 +145,7 @@ public class NearActivity extends Activity {
 	}
 
 	int ret = 0;// 函数调用返回值
+
 	public void startVoiceUnderstand() {
 		// 初始化对象
 		mSpeechUnderstander = SpeechUnderstander.createUnderstander(
@@ -281,7 +280,6 @@ public class NearActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			backToVice();
 			return true;
@@ -297,7 +295,6 @@ public class NearActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);

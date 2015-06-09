@@ -53,6 +53,15 @@
                     android:background="@null"
                     android:src="@drawable/icon_vice_voice" />
 
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" >
+
+                    <requestFocus />
+                </LinearLayout>
+
                 <EditText
                     android:id="@+id/editSearchContent"
                     android:layout_width="wrap_content"
