@@ -88,7 +88,7 @@ public class MusicUIManager implements Constant, OnBackListener {
 
 		// 如果第一次进来 SharedPreference中没有数据
 		if (TextUtils.isEmpty(mDefaultBgPath)) {
-			mSp.savePath("004.jpg");
+			mSp.savePath("001.jpg");
 		}
 	}
 
@@ -117,7 +117,7 @@ public class MusicUIManager implements Constant, OnBackListener {
 		AssetManager am = mActivity.getAssets();
 		Bitmap bitmap = null;
 		try {
-			InputStream is = am.open("bkgs/" + path);
+			InputStream is = am.open(Constant.MUSIC_IMAGE_PATH + "/" + path);
 			bitmap = BitmapFactory.decodeStream(is);
 			is.close();
 		} catch (IOException e) {

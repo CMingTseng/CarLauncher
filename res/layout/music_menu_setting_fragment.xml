@@ -11,7 +11,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dip"
+            android:layout_height="60dip"
             android:background="@color/holo_blue_light"
             android:orientation="horizontal" >
 
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="设置"
+                android:text="音乐设置"
                 android:textColor="@color/white"
                 android:textSize="@dimen/title_text_sp" />
         </RelativeLayout>
@@ -42,7 +42,8 @@
             android:layout_marginTop="8.0dip"
             android:text="摇晃手机"
             android:textColor="#ff808080"
-            android:textSize="14.0sp" />
+            android:textSize="14.0sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -50,7 +51,8 @@
             android:layout_marginLeft="10dip"
             android:layout_marginRight="10dip"
             android:background="@drawable/music_menu_setting_stroke"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <CheckedTextView
                 android:id="@+id/shake_change_song"
@@ -155,7 +157,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dip"
             android:background="@drawable/music_menu_setting_stroke"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <LinearLayout
                 android:id="@+id/setting_advice_layout"
@@ -172,7 +175,7 @@
                     android:layout_weight="1"
                     android:text="我要提意见"
                     android:textColor="#ff404040"
-                  android:textSize="16.0sp" />
+                    android:textSize="16.0sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"

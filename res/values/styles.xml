@@ -71,12 +71,12 @@
     </style>
 
     <style name="SlidingMenu.TextView.ItemTitle" parent="@android:style/Widget.TextView">
-        <item name="android:textSize">18.0sp</item>
+        <item name="android:textSize">20.0sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@drawable/music_list_selector</item>
         <item name="android:paddingLeft">15.0dip</item>
-        <item name="android:layout_height">50.0dip</item>
+        <item name="android:layout_height">60.0dip</item>
         <item name="android:drawablePadding">15.0dip</item>
     </style>
 

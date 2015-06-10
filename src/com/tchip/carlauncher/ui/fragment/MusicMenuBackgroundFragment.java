@@ -62,11 +62,12 @@ public class MusicMenuBackgroundFragment extends Fragment implements
 	private void getData() {
 		AssetManager am = getActivity().getAssets();
 		try {
-			String[] drawableList = am.list("bkgs");
+			String[] drawableList = am.list(Constant.MUSIC_IMAGE_PATH);
 			mBgList = new ArrayList<BgEntity>();
 			for (String path : drawableList) {
 				BgEntity bg = new BgEntity();
-				InputStream is = am.open("bkgs/" + path);
+				InputStream is = am
+						.open(Constant.MUSIC_IMAGE_PATH + "/" + path);
 				Bitmap bitmap = BitmapFactory.decodeStream(is);
 				bg.path = path;
 				bg.bitmap = bitmap;
@@ -159,15 +160,15 @@ public class MusicMenuBackgroundFragment extends Fragment implements
 		intent.putExtra("path", path);
 		getActivity().sendBroadcast(intent);
 
-		((MusicMenuBackgroundActivity) getActivity()).mViewPager.setCurrentItem(0,
-				true);
+		((MusicMenuBackgroundActivity) getActivity()).mViewPager
+				.setCurrentItem(0, true);
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v == mBackBtn) {
-			((MusicMenuBackgroundActivity) getActivity()).mViewPager.setCurrentItem(
-					0, true);
+			((MusicMenuBackgroundActivity) getActivity()).mViewPager
+					.setCurrentItem(0, true);
 		}
 	}
 }

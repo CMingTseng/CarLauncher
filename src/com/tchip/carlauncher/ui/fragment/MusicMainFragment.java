@@ -82,6 +82,12 @@ public class MusicMainFragment extends Fragment implements Constant,
 		View view = inflater.inflate(R.layout.music_frame_main1, container,
 				false);
 		mGridView = (GridView) view.findViewById(R.id.gridview);
+
+		// 返回到多媒体界面
+		ImageView imageBackToMedia = (ImageView) view
+				.findViewById(R.id.imageBackToMedia);
+		imageBackToMedia.setOnClickListener(new MyOnClickListener());
+
 		mAdapter = new MyGridViewAdapter();
 
 		mMainLayout = (RelativeLayout) view.findViewById(R.id.main_layout);
@@ -106,16 +112,16 @@ public class MusicMainFragment extends Fragment implements Constant,
 		IntentFilter filter = new IntentFilter(BROADCAST_NAME);
 		filter.addAction(BROADCAST_NAME);
 		getActivity().registerReceiver(mPlayBroadcast, filter);
-		
+
 		// 更新音乐数目
-		refreshNum(); 
-		
+		refreshNum();
+
 		// 更新按钮状态
 		if (mServiceManager != null) {
 			int state = mServiceManager.getPlayState();
 			if (state == Constant.MPS_PLAYING) {
 				mServiceManager.rePlay();
-			}else if(state == Constant.MPS_PAUSE){
+			} else if (state == Constant.MPS_PAUSE) {
 				mServiceManager.pause();
 			}
 		}
@@ -123,12 +129,27 @@ public class MusicMainFragment extends Fragment implements Constant,
 		return view;
 	}
 
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.imageBackToMedia:
+				getActivity().finish();
+				break;
+
+			default:
+				break;
+			}
+
+		}
+	}
+
 	private class MyGridViewAdapter extends BaseAdapter {
 
 		private int[] drawable = new int[] { R.drawable.icon_local_music,
 				R.drawable.icon_favorites, R.drawable.icon_folder_plus,
 				R.drawable.icon_artist_plus, R.drawable.icon_album_plus };
-		private String[] name = new String[] { "我的音乐", "我的最爱", "文件夹", "歌手",
+		private String[] name = new String[] { "我的音乐", "我的收藏", "文件夹", "歌手",
 				"专辑" };
 		private int musicNum = 0, artistNum = 0, albumNum = 0, folderNum = 0,
 				favoriteNum = 0;
@@ -137,7 +158,7 @@ public class MusicMainFragment extends Fragment implements Constant,
 		public int getCount() {
 			return 5;
 		}
-
+		
 		@Override
 		public Object getItem(int arg0) {
 			return null;

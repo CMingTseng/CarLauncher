@@ -93,5 +93,10 @@ public interface Constant {
 	 * 字体目录
 	 */
 	public static final String FONT_PATH = "fonts/";
+	
+	/**
+	 * 音乐背景图片目录
+	 */
+	public static final String MUSIC_IMAGE_PATH = "MusicBackground";
 
 }

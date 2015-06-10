@@ -7,33 +7,42 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@color/half_transparent"
-        android:gravity="center"
         android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/imageBackToMedia"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/icon_arrow_left" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我的音乐"
+            android:layout_centerInParent="true"
             android:textColor="@color/white"
             android:textSize="@dimen/title_text_sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottomLayout"
         android:layout_width="fill_parent"
-        android:layout_height="64dip"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:background="@color/bottom_color" >
 
         <ImageView
             android:id="@+id/headicon_iv"
-            android:layout_width="64dip"
-            android:layout_height="64dip"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/img_album_background" />
 
         <ImageButton
@@ -42,17 +51,17 @@
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_margin="4.0dip"
+            android:layout_margin="4.0dp"
             android:background="@drawable/music_selector_music_btn"
-            android:padding="6.0dip"
+            android:padding="6.0dp"
             android:src="@drawable/icon_menu_point" />
 
         <View
             android:id="@+id/split"
-            android:layout_width="1.5dip"
-            android:layout_height="64dip"
-            android:layout_marginLeft="6.0dip"
-            android:layout_marginRight="6.0dip"
+            android:layout_width="1.5dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="6.0dp"
+            android:layout_marginRight="6.0dp"
             android:layout_toLeftOf="@id/btn_menu2"
             android:background="#6a5e8a" />
 
@@ -63,7 +72,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/split"
             android:background="@drawable/music_selector_music_btn"
-            android:padding="6.0dip"
+            android:padding="6.0dp"
             android:src="@drawable/icon_next_normal" />
 
         <FrameLayout
@@ -71,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12.0dip"
+            android:layout_marginRight="12.0dp"
             android:layout_toLeftOf="@id/btn_playNext2" >
 
             <ImageButton
@@ -79,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@drawable/music_selector_music_btn"
-                android:padding="6.0dip"
+                android:padding="6.0dp"
                 android:src="@drawable/icon_pause_normal"
                 android:visibility="gone" />
 
@@ -88,14 +97,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@drawable/music_selector_music_btn"
-                android:padding="6.0dip"
+                android:padding="6.0dp"
                 android:src="@drawable/icon_play_normal" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="6.0dip"
+            android:layout_margin="6.0dp"
             android:layout_toLeftOf="@id/playLayout"
             android:layout_toRightOf="@id/headicon_iv"
             android:orientation="vertical" >
@@ -160,20 +169,21 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/bottomLayout"
         android:max="100"
-        android:maxHeight="2.0dip"
-        android:minHeight="2.0dip"
+        android:maxHeight="2.0dp"
+        android:minHeight="2.0dp"
         android:progressDrawable="@drawable/music_playback_seekbar2" />
 
     <GridView
         android:id="@+id/gridview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/playback_seekbar2"
+        android:layout_above="@id/bottomLayout"
         android:layout_below="@id/top_layout"
-        android:layout_margin="8.0dip"
-        android:horizontalSpacing="6.0dip"
+        android:layout_margin="8.0dp"
+        android:layout_centerVertical="true"
+        android:horizontalSpacing="6.0dp"
         android:numColumns="3"
-        android:verticalSpacing="6.0dip" />
+        android:verticalSpacing="6.0dp" />
 
     <com.tchip.carlauncher.view.MusicMySlidingDrawer
         android:id="@+id/slidingDrawer"

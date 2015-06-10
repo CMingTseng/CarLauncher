@@ -25,7 +25,7 @@ public class TrafficDbManager {
 	private static HashMap<String, TrafficDbManager> dbList;
 
 	public enum TrafficDate {
-		DAY, MONTH, SEC // �?
+		DAY, MONTH, SEC
 	}
 
 	private DbUtils trafficDbUtils;
@@ -162,7 +162,6 @@ public class TrafficDbManager {
 
 	/**
 	 * @param time
-	 *            �?0�? 当天 �? 当月 �? TrafficUtils.INTERVAL秒之�?
 	 */
 	public long getTraffic(int uid, TrafficDate date, int time) {
 		switch (date) {
@@ -276,7 +275,7 @@ public class TrafficDbManager {
 		if (time == 0) {
 			time = TrafficUtils.INTERVAL;
 		}
-		time++; // 为防止误差，多加�?�?
+		time++; // 为防止误差，多加
 		long curTime = TrafficUtils.currentTime();
 		long preTime = curTime - time * 1000; // 转成毫秒
 
@@ -323,7 +322,7 @@ public class TrafficDbManager {
 	}
 
 	/**
-	 * 得到某一天之间的时间�?
+	 * 得到某一天之间的时间
 	 * 
 	 * @return 返回Long[2]数组，下�?0为当�?1日，下标1为下�?1�?
 	 */
@@ -404,7 +403,7 @@ public class TrafficDbManager {
 		calendar.setTimeInMillis(timestamp);
 		calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 		dateDepart[0] = calendar.get(Calendar.YEAR);
-		dateDepart[1] = calendar.get(Calendar.MONTH);// �?月为0
+		dateDepart[1] = calendar.get(Calendar.MONTH);// 1月为0
 		dateDepart[2] = calendar.get(Calendar.DAY_OF_MONTH);
 		dateDepart[3] = calendar.get(Calendar.HOUR_OF_DAY);
 		dateDepart[4] = calendar.get(Calendar.MINUTE);
