@@ -39,10 +39,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -73,6 +75,11 @@ public class MainActivity extends Activity {
 	private ProgressBar updateProgress;
 	private ImageView imageWifiLevel; // WiFi状态图标跑
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
+
+	private ImageView imageShadowRight, imageShadowLeft;
+	private RelativeLayout layoutMap, layoutSetting;
+
+	private HorizontalScrollView hsvMain;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -255,6 +262,44 @@ public class MainActivity extends Activity {
 		ImageView imageSetting = (ImageView) findViewById(R.id.imageSetting);
 		imageSetting.setOnClickListener(new MyOnClickListener());
 
+		// HorizontalScrollView，左右两侧阴影
+		imageShadowLeft = (ImageView) findViewById(R.id.imageShadowLeft);
+		imageShadowRight = (ImageView) findViewById(R.id.imageShadowRight);
+
+		layoutMap = (RelativeLayout) findViewById(R.id.layoutMap);
+		layoutSetting = (RelativeLayout) findViewById(R.id.layoutSetting);
+		hsvMain = (HorizontalScrollView) findViewById(R.id.hsvMain);
+
+		hsvMain.setOnTouchListener(new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_MOVE:
+					View childFirst = ((HorizontalScrollView) v).getChildAt(0);
+
+					// 右侧阴影
+					if (v.getScrollX() + v.getWidth() + 20 >= childFirst
+							.getMeasuredWidth()) {
+						imageShadowRight.setVisibility(View.INVISIBLE);
+					} else {
+						imageShadowRight.setVisibility(View.VISIBLE);
+					}
+					// 左侧阴影
+					if (v.getScrollX() >= 20) {
+						imageShadowLeft.setVisibility(View.VISIBLE);
+					} else {
+						imageShadowLeft.setVisibility(View.INVISIBLE);
+					}
+					break;
+				default:
+					break;
+
+				}
+				return false;
+			}
+		});
+
 	}
 
 	/**
@@ -391,6 +436,11 @@ public class MainActivity extends Activity {
 							.setLayoutParams(new RelativeLayout.LayoutParams(
 									widthFull, heightFull));
 					isSurfaceLarge = true;
+
+					// 更新HorizontalScrollView阴影
+					imageShadowLeft.setVisibility(View.GONE);
+					imageShadowRight.setVisibility(View.GONE);
+					
 					updateButtonState(true);
 				} else {
 					int widthSmall = 480;
@@ -399,6 +449,12 @@ public class MainActivity extends Activity {
 							.setLayoutParams(new RelativeLayout.LayoutParams(
 									widthSmall, heightSmall));
 					isSurfaceLarge = false;
+
+					// 更新HorizontalScrollView阴影
+					hsvMain.scrollTo(0, 0);
+					imageShadowLeft.setVisibility(View.GONE);
+					imageShadowRight.setVisibility(View.VISIBLE);
+
 					updateButtonState(false);
 				}
 				break;

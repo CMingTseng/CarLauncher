@@ -102,9 +102,9 @@ public class RoutePlanActivity extends Activity implements
 
 	// 初始化全局 bitmap 信息，不用时及时 recycle
 	BitmapDescriptor iconCamera = BitmapDescriptorFactory
-			.fromResource(R.drawable.icon_map_speed_camera);
+			.fromResource(R.drawable.ui_route_speed_camera);
 	BitmapDescriptor iconLight = BitmapDescriptorFactory
-			.fromResource(R.drawable.icon_route_traffic_light);
+			.fromResource(R.drawable.ui_route_traffic_light);
 
 	private AudioRecordDialog audioRecordDialog;
 

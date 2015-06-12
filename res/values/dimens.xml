@@ -61,5 +61,9 @@
     <dimen name="clipboard_drawer_width">@dimen/nav_drawer_width</dimen>
     <dimen name="card_content_height">200dp</dimen>
     <dimen name="min_tile_width">200dp</dimen>
+    <!-- Main Activity -->
+    <dimen name="ui_main_hsv_text_size">23sp</dimen>
+    <dimen name="ui_main_hsv_text_margin_bottom">18dp</dimen>
+    <dimen name="ui_main_hsv_item_size">200dp</dimen>
 
 </resources>
