@@ -36,13 +36,13 @@
             android:id="@+id/textAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/face_detect_hint"
-            android:drawableLeft="@drawable/face_detect_male"
+            android:background="@drawable/ui_face_result_frame"
+            android:drawableLeft="@drawable/ui_face_sex_male"
             android:gravity="center"
             android:minEms="2"
             android:text="123"
             android:textColor="#ffff00ff"
-            android:textSize="25sp"
+            android:textSize="30sp"
             android:visibility="invisible" />
     </FrameLayout>
 
@@ -55,16 +55,16 @@
         android:layout_marginRight="15dp"
         android:background="#1E88E5" />
 
-    <com.tchip.carlauncher.view.ButtonFloat
+    <Button
         android:id="@+id/btnGetImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="15dp"
-        android:background="#1E88E5" />
+        android:background="@drawable/ui_face_add_image" />
 
-    <com.tchip.carlauncher.view.ButtonFloat
+    <Button
         android:id="@+id/btnDetect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,9 +72,9 @@
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/btnGetImage"
-        android:background="#1E88E5" />
+        android:background="@drawable/ui_face_detect" />
 
-    <com.tchip.carlauncher.view.ButtonFloat
+    <Button
         android:id="@+id/btnShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/btnDetect"
-        android:background="#1E88E5"
+        android:background="@drawable/ui_face_share"
         android:visibility="invisible" />
 
     <ImageView

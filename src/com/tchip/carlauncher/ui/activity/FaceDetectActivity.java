@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -40,7 +41,8 @@ public class FaceDetectActivity extends Activity {
 
 	private ImageView imagePhoto = null;
 	private Bitmap bitmapPhoto = null;
-	private ButtonFloat btnDetect, btnShare, btnToMultimedia;
+	private Button btnDetect, btnShare;
+	private ButtonFloat btnToMultimedia;
 	private TextView textState, textAge;
 	private View frameWait;
 	private TextView textHint;
@@ -57,27 +59,18 @@ public class FaceDetectActivity extends Activity {
 
 		setContentView(R.layout.activity_face_detect);
 
-		ButtonFloat btnGetImage = (ButtonFloat) findViewById(R.id.btnGetImage);
-		btnGetImage.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_face_add_image));
-		btnGetImage.hasAnimation(false);
+		Button btnGetImage = (Button) findViewById(R.id.btnGetImage);
 		btnGetImage.setOnClickListener(new MyOnClickListener());
 
-		btnShare = (ButtonFloat) findViewById(R.id.btnShare);
-		btnShare.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_face_share));
-		btnShare.hasAnimation(false);
+		btnShare = (Button) findViewById(R.id.btnShare);
 		btnShare.setOnClickListener(new MyOnClickListener());
 
 		frameWait = findViewById(R.id.frameWait);
 
 		textState = (TextView) findViewById(R.id.textState);
 
-		btnDetect = (ButtonFloat) findViewById(R.id.btnDetect);
+		btnDetect = (Button) findViewById(R.id.btnDetect);
 		btnDetect.setVisibility(View.INVISIBLE);
-		btnDetect.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_face_smile));
-		btnDetect.hasAnimation(false);
 		btnDetect.setOnClickListener(new MyOnClickListener());
 
 		imagePhoto = (ImageView) findViewById(R.id.imagePhoto);
@@ -180,13 +173,13 @@ public class FaceDetectActivity extends Activity {
 		textAge.setVisibility(View.VISIBLE);
 		textAge.setText("" + age);
 		if (isMale) {
-			textAge.setTextColor(0xff1E88E5);
+			textAge.setTextColor(0xff00479d);
 			textAge.setCompoundDrawablesWithIntrinsicBounds(getResources()
-					.getDrawable(R.drawable.face_detect_male), null, null, null);
+					.getDrawable(R.drawable.ui_face_sex_male), null, null, null);
 		} else {
-			textAge.setTextColor(0xffff00ff);
+			textAge.setTextColor(0xffeb6877);
 			textAge.setCompoundDrawablesWithIntrinsicBounds(getResources()
-					.getDrawable(R.drawable.face_detect_female), null, null,
+					.getDrawable(R.drawable.ui_face_sex_female), null, null,
 					null);
 		}
 		textAge.setDrawingCacheEnabled(true);

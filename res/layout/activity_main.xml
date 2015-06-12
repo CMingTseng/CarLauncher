@@ -241,7 +241,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:text="路径规划"
+                    android:text="行车轨迹"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
