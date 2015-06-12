@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 	private ImageView imageTodayWeather;
 
 	private ProgressBar updateProgress;
-	private ImageView imageWifiLevel; // WiFi状态图标跑
+	private ImageView imageWifiLevel; // WiFi状态图标
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
 
 	private ImageView imageShadowRight, imageShadowLeft;
