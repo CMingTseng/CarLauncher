@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -70,14 +71,14 @@ public class ChatActivity extends Activity implements OnClickListener {
 	// 语义理解对象（文本到语义）。
 	private TextUnderstander mTextUnderstander;
 	private Toast mToast;
-	private EditText tvHint;
+	private TextView tvHint;
 	private TextView tvQuestion, tvAnswer;
 	private String strService;
 
 	private SharedPreferences mSharedPreferences;
 
-	// 动画按钮
-	private ImageView ivDrawable;
+	private ImageView imageAnim; // 动画按钮
+	private ImageView imageVoice; // 语音按钮
 	private Animator currentAnimation;
 	private CircularProgressDrawable drawable;
 
@@ -118,28 +119,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		startSpeak("你好，有什么可以帮您？");
 
-		ButtonFloat btnToMultimedia = (ButtonFloat) findViewById(R.id.btnToMultimedia);
-		btnToMultimedia.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_up));
-		btnToMultimedia.setOnClickListener(new MyOnClickListener());
-	}
-
-	class MyOnClickListener implements View.OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			switch (v.getId()) {
-			case R.id.btnToMultimedia:
-				backToMain();
-				break;
-			}
-		}
+		Button btnToMultimedia = (Button) findViewById(R.id.btnToMultimedia);
+		btnToMultimedia.setOnClickListener(this);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			backToMain();
 			return true;
@@ -170,32 +155,33 @@ public class ChatActivity extends Activity implements OnClickListener {
 	 * 初始化Layout。
 	 */
 	private void initLayout() {
-		ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
-		findViewById(R.id.iv_drawable).setOnClickListener(ChatActivity.this);
+		imageAnim = (ImageView) findViewById(R.id.imageAnim);
+		imageAnim.setOnClickListener(ChatActivity.this);
 
-		tvHint = (EditText) findViewById(R.id.tvHint);
+		tvHint = (TextView) findViewById(R.id.tvHint);
 
-		mSharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
-				Context.MODE_PRIVATE);
+		mSharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
 		drawable = new CircularProgressDrawable.Builder()
 				.setRingWidth(
 						getResources().getDimensionPixelSize(
 								R.dimen.drawable_ring_size))
-				.setOutlineColor(
-						getResources().getColor(android.R.color.darker_gray))
+				.setOutlineColor(getResources().getColor(R.color.white))
 				.setRingColor(
-						getResources().getColor(
-								android.R.color.holo_green_light))
+						getResources().getColor(R.color.ui_chat_voice_orange))
 				.setCenterColor(
-						getResources().getColor(android.R.color.holo_blue_dark))
+						getResources().getColor(R.color.ui_chat_voice_orange))
 				.create();
-		ivDrawable.setImageDrawable(drawable);
+		imageAnim.setImageDrawable(drawable);
+		imageAnim.setVisibility(View.INVISIBLE); // 隐藏动画
+
+		imageVoice = (ImageView) findViewById(R.id.imageVoice);
+		imageVoice.setOnClickListener(this);
 
 		scrollArea = (ScrollView) findViewById(R.id.scrollArea);
 		tvQuestion = (TextView) findViewById(R.id.tvQuestion);
 		tvAnswer = (TextView) findViewById(R.id.tvAnswer);
-
 	}
 
 	/**
@@ -231,10 +217,15 @@ public class ChatActivity extends Activity implements OnClickListener {
 	public void onClick(View view) {
 
 		switch (view.getId()) {
+		case R.id.btnToMultimedia:
+			backToMain();
+			break;
+
 		// 进入参数设置页面 UnderstanderSettings
 
 		// 开始语音理解
-		case R.id.iv_drawable:
+		case R.id.imageVoice:
+		case R.id.imageAnim:
 			tvHint.setText("");
 			// 设置参数
 			setParam();
@@ -678,11 +669,18 @@ public class ChatActivity extends Activity implements OnClickListener {
 					.preparePulseAnimation(drawable);
 			currentAnimation.start();
 
+			// 显示语音按钮，隐藏动画按钮
+			imageVoice.setVisibility(View.VISIBLE);
+			imageAnim.setVisibility(View.INVISIBLE);
+
 		}
 
 		@Override
 		public void onBeginOfSpeech() {
-			// showTip("onBeginOfSpeech");
+			// 隐藏语音按钮，显示动画按钮
+			imageVoice.setVisibility(View.INVISIBLE);
+			imageAnim.setVisibility(View.VISIBLE);
+
 			if (currentAnimation != null) {
 				currentAnimation.cancel();
 			}
@@ -698,7 +696,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-			// TODO Auto-generated method stub
 
 		}
 	};
@@ -793,7 +790,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void onGetGeoCodeResult(GeoCodeResult result) {
-			// TODO Auto-generated method stub
 			mEndLatLng = result.getLocation();
 			if (mEndLatLng != null) {
 				// 起始点：当前位置

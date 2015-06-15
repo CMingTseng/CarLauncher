@@ -59,5 +59,8 @@
     <color name="accent_color">#1E88E5</color>
     <color name="accent_color_light">#7cb9ee</color>
     <color name="color_window_background">#E5E5E5</color>
+    
+    <!-- Chat Activity -->
+    <color name="ui_chat_voice_orange">#ffa500</color>
 
 </resources>
