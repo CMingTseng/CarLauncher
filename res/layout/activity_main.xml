@@ -186,28 +186,6 @@
                 android:layout_marginRight="5dp" >
 
                 <ImageView
-                    android:id="@+id/imageMultimedia"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/tmp_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:text="多媒体"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
-
-                <ImageView
                     android:id="@+id/imageFileExplore"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -220,28 +198,6 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:text="文件管理"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
-
-                <ImageView
-                    android:id="@+id/imageRouteTrack"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/tmp_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:text="行车轨迹"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -274,10 +230,54 @@
                 android:layout_marginRight="5dp" >
 
                 <ImageView
+                    android:id="@+id/imageRouteTrack"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_route_track" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:text="行车轨迹"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
+                    android:id="@+id/imageRoutePlan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_route_plan" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:text="路径规划"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
                     android:id="@+id/imageVoiceChat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/tmp_icon" />
+                    android:src="@drawable/ui_main_voice_chat" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -296,10 +296,10 @@
                 android:layout_marginRight="5dp" >
 
                 <ImageView
-                    android:id="@+id/imageRoutePlan"
+                    android:id="@+id/imageMultimedia"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/tmp_icon" />
+                    android:src="@drawable/ui_main_multimedia" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -307,7 +307,51 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:text="路径规划"
+                    android:text="多媒体"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
+                    android:id="@+id/imageMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_message" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:text="短信"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
+                    android:id="@+id/imageDialer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_dialer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:text="电话"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -321,7 +365,7 @@
                     android:id="@+id/imageSetting"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/tmp_icon" />
+                    android:src="@drawable/ui_main_setting" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -369,7 +413,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="35dp"
-            android:background="@drawable/tmp_large_video_size" />
+            android:background="@drawable/ui_camera_video_size_720" />
 
         <ImageView
             android:id="@+id/largeVideoTime"
@@ -378,7 +422,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/tmp_large_video_time" />
+            android:background="@drawable/ui_camera_video_time_3" />
 
         <ImageView
             android:id="@+id/largeVideoLock"
@@ -388,7 +432,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="35dp"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/ui_main_video_unlock" />
+            android:background="@drawable/ui_camera_video_lock" />
 
         <ImageView
             android:id="@+id/largeVideoFile"
@@ -398,7 +442,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="15dp"
             android:layout_marginTop="35dp"
-            android:background="@drawable/tmp_large_video_file" />
+            android:background="@drawable/ui_camera_image" />
 
         <ImageView
             android:id="@+id/largeVideoRecord"
@@ -417,7 +461,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="35dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/tmp_large_video_camera" />
+            android:background="@drawable/ui_camera_shoot" />
     </RelativeLayout>
 
     <ImageView

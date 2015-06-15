@@ -16,6 +16,9 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviPara;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.FolderActivity;
@@ -30,6 +33,7 @@ import com.tchip.carlauncher.util.WiFiUtil;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -258,6 +262,14 @@ public class MainActivity extends Activity {
 		ImageView imageRoutePlan = (ImageView) findViewById(R.id.imageRoutePlan);
 		imageRoutePlan.setOnClickListener(new MyOnClickListener());
 
+		// 拨号
+		ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
+		imageDialer.setOnClickListener(new MyOnClickListener());
+
+		// 短信
+		ImageView imageMessage = (ImageView) findViewById(R.id.imageMessage);
+		imageMessage.setOnClickListener(new MyOnClickListener());
+
 		// 设置
 		ImageView imageSetting = (ImageView) findViewById(R.id.imageSetting);
 		imageSetting.setOnClickListener(new MyOnClickListener());
@@ -440,7 +452,7 @@ public class MainActivity extends Activity {
 					// 更新HorizontalScrollView阴影
 					imageShadowLeft.setVisibility(View.GONE);
 					imageShadowRight.setVisibility(View.GONE);
-					
+
 					updateButtonState(true);
 				} else {
 					int widthSmall = 480;
@@ -481,9 +493,21 @@ public class MainActivity extends Activity {
 						R.anim.zms_translate_down_in);
 				break;
 			case R.id.mapHideView:
-				// TODO:启动导航
-				Toast.makeText(getApplicationContext(), "ToDo启动导航",
-						Toast.LENGTH_SHORT).show();
+				// TODO:启动导航com.baidu.BaiduMap/com.baidu.baidumaps.WelcomeScreen
+				
+				
+				try {
+					Toast.makeText(getApplicationContext(), "启动导航ING",
+							Toast.LENGTH_SHORT).show();
+					NaviPara para = new NaviPara();
+					para.startName = "从这里开始";
+					para.endName = "到这里结束";
+					BaiduMapNavigation.openBaiduMapNavi(para, getApplicationContext());
+				} catch (BaiduMapAppNotSupportNaviException e) {
+					Toast.makeText(getApplicationContext(), "启动导航ERR",
+							Toast.LENGTH_SHORT).show();
+					e.printStackTrace();
+				}
 				break;
 			case R.id.imageMultimedia:
 				Intent intentMultimedia = new Intent(MainActivity.this,
@@ -527,6 +551,19 @@ public class MainActivity extends Activity {
 				startActivity(intentVoiceChat);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
+				break;
+
+			case R.id.imageDialer:
+				ComponentName componentDialer = new ComponentName(
+						"com.android.dialer",
+						"com.android.dialer.DialtactsActivity");
+				Intent intentDialer = new Intent();
+				intentDialer.setComponent(componentDialer);
+				startActivity(intentDialer);
+				break;
+
+			case R.id.imageMessage:
+				// TODO:启动短信
 				break;
 
 			case R.id.imageSetting:
