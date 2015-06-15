@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
@@ -31,6 +32,7 @@ import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.ButtonFloat;
 
@@ -67,8 +69,8 @@ public class NearResultActivity extends FragmentActivity implements
 		}
 
 		// 获取当前经纬度
-		SharedPreferences preference = getSharedPreferences("CarLauncher",
-				Context.MODE_PRIVATE);
+		SharedPreferences preference = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		mLatitude = Double
 				.parseDouble(preference.getString("latitude", "0.00"));
 		mLongitude = Double.parseDouble(preference.getString("longitude",
@@ -104,9 +106,7 @@ public class NearResultActivity extends FragmentActivity implements
 
 		startSearch();
 
-		ButtonFloat btnToNearFromResult = (ButtonFloat) findViewById(R.id.btnToNearFromResult);
-		btnToNearFromResult.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_down));
+		Button btnToNearFromResult = (Button) findViewById(R.id.btnToNearFromResult);
 		btnToNearFromResult.setOnClickListener(new MyOnClickListener());
 	}
 

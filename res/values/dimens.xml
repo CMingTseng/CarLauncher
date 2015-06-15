@@ -68,5 +68,10 @@
     
     <!-- Multimedia Activity -->
     <dimen name="ui_media_text_item_size">45sp</dimen>
+    
+    <!-- Near Search Activity -->
+    <dimen name="ui_near_item_height">185dp</dimen>
+    <dimen name="ui_near_item_width">278dp</dimen>
+    <dimen name="ui_near_item_text_size">30sp</dimen>
 
 </resources>

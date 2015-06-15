@@ -55,6 +55,7 @@ import com.iflytek.cloud.TextUnderstander;
 import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.PinYinUtil;
@@ -174,7 +175,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		tvHint = (EditText) findViewById(R.id.tvHint);
 
-		mSharedPreferences = getSharedPreferences("CarLauncher",
+		mSharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
 
 		drawable = new CircularProgressDrawable.Builder()

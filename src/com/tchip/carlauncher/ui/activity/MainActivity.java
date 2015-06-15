@@ -470,18 +470,33 @@ public class MainActivity extends Activity {
 					updateButtonState(false);
 				}
 				break;
+
 			case R.id.smallVideoRecord:
 			case R.id.largeVideoRecord:
 				break;
+
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
 				break;
+
 			case R.id.largeVideoSize:
 				break;
 			case R.id.largeVideoTime:
 				break;
+
 			case R.id.largeVideoFile:
+				try {
+					ComponentName componentMap = new ComponentName(
+							"com.android.gallery3d",
+							"com.android.gallery3d.app.GalleryActivity");
+					Intent intentMap = new Intent();
+					intentMap.setComponent(componentMap);
+					startActivity(intentMap);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
+
 			case R.id.largeVideoCamera:
 				break;
 
@@ -492,23 +507,20 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_down_out,
 						R.anim.zms_translate_down_in);
 				break;
+
 			case R.id.mapHideView:
-				// TODO:启动导航com.baidu.BaiduMap/com.baidu.baidumaps.WelcomeScreen
-				
-				
 				try {
-					Toast.makeText(getApplicationContext(), "启动导航ING",
-							Toast.LENGTH_SHORT).show();
-					NaviPara para = new NaviPara();
-					para.startName = "从这里开始";
-					para.endName = "到这里结束";
-					BaiduMapNavigation.openBaiduMapNavi(para, getApplicationContext());
-				} catch (BaiduMapAppNotSupportNaviException e) {
-					Toast.makeText(getApplicationContext(), "启动导航ERR",
-							Toast.LENGTH_SHORT).show();
+					ComponentName componentMap = new ComponentName(
+							"com.baidu.BaiduMap",
+							"com.baidu.baidumaps.WelcomeScreen");
+					Intent intentMap = new Intent();
+					intentMap.setComponent(componentMap);
+					startActivity(intentMap);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
+
 			case R.id.imageMultimedia:
 				Intent intentMultimedia = new Intent(MainActivity.this,
 						MultimediaActivity.class);
@@ -554,16 +566,30 @@ public class MainActivity extends Activity {
 				break;
 
 			case R.id.imageDialer:
-				ComponentName componentDialer = new ComponentName(
-						"com.android.dialer",
-						"com.android.dialer.DialtactsActivity");
-				Intent intentDialer = new Intent();
-				intentDialer.setComponent(componentDialer);
-				startActivity(intentDialer);
+				try {
+					ComponentName componentDialer = new ComponentName(
+							"com.android.dialer",
+							"com.android.dialer.DialtactsActivity");
+					Intent intentDialer = new Intent();
+					intentDialer.setComponent(componentDialer);
+					startActivity(intentDialer);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.imageMessage:
 				// TODO:启动短信
+				try {
+					ComponentName componentMessage = new ComponentName(
+							"com.android.mms",
+							"com.android.mms.ui.BootActivity");
+					Intent intentMessage = new Intent();
+					intentMessage.setComponent(componentMessage);
+					startActivity(intentMessage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.imageSetting:

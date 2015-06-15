@@ -10,6 +10,7 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechUnderstander;
 import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.carlauncher.view.ButtonFloat;
@@ -26,8 +27,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class NearActivity extends Activity {
 
@@ -49,35 +52,33 @@ public class NearActivity extends Activity {
 
 		audioRecordDialog = new AudioRecordDialog(NearActivity.this);
 
-		mSharedPreferences = getSharedPreferences("CarLauncher",
+		mSharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
 		editSearchContent = (EditText) findViewById(R.id.editSearchContent);
 
-		ButtonFloat btnToViceFromNear = (ButtonFloat) findViewById(R.id.btnToViceFromNear);
-		btnToViceFromNear.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_up));
+		Button btnToViceFromNear = (Button) findViewById(R.id.btnToViceFromNear);
 		btnToViceFromNear.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgNearOilStation = (ImageView) findViewById(R.id.imgNearOilStation);
-		imgNearOilStation.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutNearOilStation = (RelativeLayout) findViewById(R.id.layoutNearOilStation);
+		layoutNearOilStation.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgNearHotel = (ImageView) findViewById(R.id.imgNearHotel);
-		imgNearHotel.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutNearParking = (RelativeLayout) findViewById(R.id.layoutNearParking);
+		layoutNearParking.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgNear4S = (ImageView) findViewById(R.id.imgNear4S);
-		imgNear4S.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutNear4s = (RelativeLayout) findViewById(R.id.layoutNear4s);
+		layoutNear4s.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgNearMarket = (ImageView) findViewById(R.id.imgNearMarket);
-		imgNearMarket.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutNearBank = (RelativeLayout) findViewById(R.id.layoutNearBank);
+		layoutNearBank.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgNearBank = (ImageView) findViewById(R.id.imgNearBank);
-		imgNearBank.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutShop = (RelativeLayout) findViewById(R.id.layoutShop);
+		layoutShop.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgNearHospital = (ImageView) findViewById(R.id.imgNearHospital);
-		imgNearHospital.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutNearHotel = (RelativeLayout) findViewById(R.id.layoutNearHotel);
+		layoutNearHotel.setOnClickListener(new MyOnClickListener());
 
-		ImageView imgCustomSearch = (ImageView) findViewById(R.id.imgCustomSearch);
-		imgCustomSearch.setOnClickListener(new MyOnClickListener());
+		Button btnCustomSearch = (Button) findViewById(R.id.btnCustomSearch);
+		btnCustomSearch.setOnClickListener(new MyOnClickListener());
 
 		ImageView imgVoiceSearch = (ImageView) findViewById(R.id.imgVoiceSearch);
 		imgVoiceSearch.setOnClickListener(new MyOnClickListener());
@@ -91,46 +92,46 @@ public class NearActivity extends Activity {
 			case R.id.btnToViceFromNear:
 				backToVice();
 				break;
-			case R.id.imgNearOilStation:
+			case R.id.layoutNearOilStation:
 				Intent intent1 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent1.putExtra("findType", "加油站");
 				startActivity(intent1);
 				break;
-			case R.id.imgNearHotel:
+			case R.id.layoutNearParking:
 				Intent intent2 = new Intent(NearActivity.this,
 						NearResultActivity.class);
-				intent2.putExtra("findType", "酒店");
+				intent2.putExtra("findType", "停车场");
 				startActivity(intent2);
 				break;
-			case R.id.imgNear4S:
+			case R.id.layoutNear4s:
 				Intent intent3 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent3.putExtra("findType", "4S");
 				startActivity(intent3);
 				break;
-			case R.id.imgNearMarket:
+			case R.id.layoutNearBank:
 				Intent intent4 = new Intent(NearActivity.this,
 						NearResultActivity.class);
-				intent4.putExtra("findType", "超市");
+				intent4.putExtra("findType", "ATM");
 				startActivity(intent4);
 				break;
-			case R.id.imgNearBank:
+			case R.id.layoutShop:
 				Intent intent5 = new Intent(NearActivity.this,
 						NearResultActivity.class);
-				intent5.putExtra("findType", "ATM");
+				intent5.putExtra("findType", "超市");
 				startActivity(intent5);
 				break;
-			case R.id.imgNearHospital:
+			case R.id.layoutNearHotel:
 				Intent intent6 = new Intent(NearActivity.this,
 						NearResultActivity.class);
-				intent6.putExtra("findType", "医院");
+				intent6.putExtra("findType", "酒店");
 				startActivity(intent6);
 				break;
 			case R.id.imgVoiceSearch:
 				startVoiceUnderstand();
 				break;
-			case R.id.imgCustomSearch:
+			case R.id.btnCustomSearch:
 				String searchContent = editSearchContent.getText().toString();
 				if (searchContent != null && searchContent.length() > 0) {
 					Intent intent7 = new Intent(NearActivity.this,
