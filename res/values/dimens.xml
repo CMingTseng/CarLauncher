@@ -65,5 +65,8 @@
     <dimen name="ui_main_hsv_text_size">23sp</dimen>
     <dimen name="ui_main_hsv_text_margin_bottom">18dp</dimen>
     <dimen name="ui_main_hsv_item_size">200dp</dimen>
+    
+    <!-- Multimedia Activity -->
+    <dimen name="ui_media_text_item_size">45sp</dimen>
 
 </resources>

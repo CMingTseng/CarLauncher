@@ -2,36 +2,185 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical"
-    android:weightSum="7" >
+    android:background="#000000"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="2dp"
-        android:layout_weight="1"
-        android:background="#00ccff" >
+        android:layout_height="90dp"
+        android:layout_margin="4dp" >
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="#000000" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="#ffa400" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center" >
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@id/btnSearch"
+            android:layout_toRightOf="@id/btnBack"
+            android:background="#383838" >
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:paddingBottom="5dp"
-                android:src="@drawable/icon_multimedia" />
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <requestFocus />
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ui_media_search_frame"
+                android:hint="搜索媒体文件"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:textColor="#dddddd"
+                android:textColorHint="#cccccc"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="377dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="561dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/layoutMusic"
+                android:layout_width="match_parent"
+                android:layout_height="186dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/ui_media_music" >
+
+                <RelativeLayout
+                    android:id="@+id/layoutMusicAlbum"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <ImageView
+                        android:id="@+id/imageShadowAlbum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ui_media_music_shadow_album" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutMusicRecent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <ImageView
+                        android:id="@+id/imageShadowRecent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ui_media_music_shadow_recent" />
+
+                    <TextView
+                        android:id="@+id/textRecent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:maxEms="12"
+                        android:singleLine="true"
+                        android:text="Nothing&apos;s Gonna Change My Love For You"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/textRecentHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/textRecent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="5dp"
+                        android:text="最近播放"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:text="音乐"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_media_text_item_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutImage"
+                android:layout_width="match_parent"
+                android:layout_height="186dp"
+                android:background="@drawable/ui_media_image" >
+
+                <ImageView
+                    android:id="@+id/imageShadowImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/ui_media_image_shadow" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:text="图片"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_media_text_item_size" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutVideo"
+            android:layout_width="278dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ui_media_video" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="多媒体"
-                android:textColor="#ffffff" />
-        </LinearLayout>
-    </RelativeLayout>
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="视频"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/ui_media_text_item_size" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,74 +191,17 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="2dp"
             android:layout_weight="1" >
 
             <LinearLayout
-                android:id="@+id/layoutMusic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/green_dark"
-                android:gravity="center" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_multimedia_audio" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            android:layout_weight="1" >
-
-            <LinearLayout
-                android:id="@+id/layoutVideo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/blue_light"
-                android:gravity="center" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_multimedia_video" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            android:layout_weight="1" >
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <LinearLayout
-                    android:id="@+id/layoutImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="4"
-                    android:background="@drawable/blue_dark"
-                    android:gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="vertical" >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_multimedia_image" />
-                </LinearLayout>
+                android:orientation="vertical" >
 
                 <LinearLayout
                     android:id="@+id/layoutFaceDetect"
                     android:layout_width="match_parent"
-                     android:layout_height="0dp"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="@drawable/green_light"
                     android:gravity="center"
@@ -121,15 +213,6 @@
                         android:src="@drawable/icon_face_smile" />
                 </LinearLayout>
             </LinearLayout>
-
-            <com.tchip.carlauncher.view.ButtonFloat
-                android:id="@+id/btnToMainFromMultimedia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:background="#1E88E5" />
         </RelativeLayout>
     </LinearLayout>
 

@@ -11,12 +11,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class MultimediaActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -28,26 +29,28 @@ public class MultimediaActivity extends Activity {
 
 	private void initLayout() {
 		// 图片
-		LinearLayout layoutImage = (LinearLayout) findViewById(R.id.layoutImage);
+		RelativeLayout layoutImage = (RelativeLayout) findViewById(R.id.layoutImage);
 		layoutImage.setOnClickListener(new MyOnClickListener());
-		
+
 		// 人脸检测
 		LinearLayout layoutFaceDetect = (LinearLayout) findViewById(R.id.layoutFaceDetect);
 		layoutFaceDetect.setOnClickListener(new MyOnClickListener());
 
 		// 音乐
-		LinearLayout layoutMusic = (LinearLayout) findViewById(R.id.layoutMusic);
+		RelativeLayout layoutMusic = (RelativeLayout) findViewById(R.id.layoutMusic);
 		layoutMusic.setOnClickListener(new MyOnClickListener());
 
 		// 视频
-		LinearLayout layoutVideo = (LinearLayout) findViewById(R.id.layoutVideo);
+		RelativeLayout layoutVideo = (RelativeLayout) findViewById(R.id.layoutVideo);
 		layoutVideo.setOnClickListener(new MyOnClickListener());
 
-		ButtonFloat btnToMainFromMultimedia = (ButtonFloat) findViewById(R.id.btnToMainFromMultimedia);
-		btnToMainFromMultimedia.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_up));
+		// 返回
+		Button btnToMainFromMultimedia = (Button) findViewById(R.id.btnBack);
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
 
+		// 搜索
+		Button btnSearch = (Button) findViewById(R.id.btnSearch);
+		btnSearch.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -80,8 +83,10 @@ public class MultimediaActivity extends Activity {
 				intentVideo.setComponent(componentVideo);
 				startActivity(intentVideo);
 				break;
-			case R.id.btnToMainFromMultimedia:
+			case R.id.btnBack:
 				backToMain();
+				break;
+			case R.id.btnSearch:
 				break;
 			}
 
@@ -90,7 +95,6 @@ public class MultimediaActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			backToMain();
 			return true;
