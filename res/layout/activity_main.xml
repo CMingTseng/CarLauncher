@@ -80,6 +80,7 @@
             android:layout_alignBottom="@id/textTemp"
             android:layout_alignTop="@id/textTemp"
             android:layout_marginRight="2dp"
+            android:visibility="gone"
             android:layout_toLeftOf="@id/textTemp" />
 
         <LinearLayout

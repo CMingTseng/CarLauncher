@@ -38,6 +38,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -133,9 +134,9 @@ public class MainActivity extends Activity {
 		mOffline.init(new MyMKOfflineMapListener());
 		int num = mOffline.importOfflineData();
 		if (num == 0) {
-			// 没有导入离线包，这可能是离线包放置位置不正确，或离线包已经导入过
+			// 没有导入离线包，可能是离线包放置位置不正确，或离线包已经导入过
 		} else {
-			// "成功导入 num个离线包
+			// "成功导入 num 个离线包
 		}
 	}
 
@@ -203,8 +204,7 @@ public class MainActivity extends Activity {
 
 		// 更新天气与位置信息
 		updateLocationAndWeather();
-		updateProgress.setVisibility(View.VISIBLE);
-		new Thread(new UpdateWeatherThread()).start();
+		// updateProgress.setVisibility(View.VISIBLE);
 
 		// 定位地图
 		mainMapView = (MapView) findViewById(R.id.mainMapView);
@@ -312,6 +312,8 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		// 更新界面线程
+		new Thread(new UpdateLayoutThread()).start();
 	}
 
 	/**
@@ -404,28 +406,32 @@ public class MainActivity extends Activity {
 		imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
 	}
 
-	public class UpdateWeatherThread implements Runnable {
+	public class UpdateLayoutThread implements Runnable {
 
 		@Override
 		public void run() {
-			try {
-				Thread.sleep(2000);
-				startWeatherService();
-				Thread.sleep(3000);
-				Message message = new Message();
-				message.what = 1;
-				updateWeatherHandler.sendMessage(message);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			while (true) {
+				try {
+					Thread.sleep(3000);
+					Message message = new Message();
+					message.what = 1;
+					updateLayoutHandler.sendMessage(message);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
-	final Handler updateWeatherHandler = new Handler() {
+	final Handler updateLayoutHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-				updateProgress.setVisibility(View.GONE);
+				// updateProgress.setVisibility(View.GONE);
+				// 更新WiFi状态图标
+				updateWiFiState();
+
+				// 更新位置和天气信息
 				updateLocationAndWeather();
 				break;
 
@@ -528,6 +534,7 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;
+
 			case R.id.imageRouteTrack:
 				Intent intentRouteTrack = new Intent(MainActivity.this,
 						RouteListActivity.class);
@@ -535,6 +542,7 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;
+
 			case R.id.imageRoutePlan:
 				Intent intentRoutePlan = new Intent(MainActivity.this,
 						RoutePlanActivity.class);
@@ -542,6 +550,7 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;
+
 			case R.id.imageFileExplore:
 				Intent intentFileExplore = new Intent(MainActivity.this,
 						FolderActivity.class);
@@ -549,6 +558,7 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;
+
 			case R.id.imageNearSearch:
 				Intent intentNearSearch = new Intent(MainActivity.this,
 						NearActivity.class);
@@ -579,7 +589,6 @@ public class MainActivity extends Activity {
 				break;
 
 			case R.id.imageMessage:
-				// TODO:启动短信
 				try {
 					ComponentName componentMessage = new ComponentName(
 							"com.android.mms",
@@ -625,10 +634,18 @@ public class MainActivity extends Activity {
 						location.getLongitude());
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
 				baiduMap.animateMapStatus(u);
+				// 更新天气
+				startWeatherService();
 			}
 
-			// 更新WiFi状态图标
-			updateWiFiState();
+			// 城市名发生变化，需要更新位置和天气
+			if (!sharedPreferences.getString("cityName", "未定位").equals(
+					location.getCity())) {
+				startWeatherService();
+				Editor editor = sharedPreferences.edit();
+				editor.putString("cityName", location.getCity());
+				editor.commit();
+			}
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
