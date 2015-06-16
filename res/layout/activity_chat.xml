@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#ffffff"
     android:layout_height="match_parent" >
 
     <RelativeLayout
@@ -24,65 +25,72 @@
             android:src="@drawable/ui_near_arrow_back" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="345dp"
-        android:orientation="vertical" >
+    <RelativeLayout
+        android:id="@+id/layoutButton"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" >
 
-        <ScrollView
-            android:id="@+id/scrollArea"
+        <ImageView
+            android:id="@+id/imageAnim"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3" >
+            android:layout_height="match_parent"
+            android:padding="12dip" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+        <ImageView
+            android:id="@+id/imageVoice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@id/imageAnim"
+            android:layout_alignRight="@id/imageAnim"
+            android:layout_margin="12dp"
+            android:background="@drawable/ui_chat_voice" />
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tvQuestion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="10dp" />
-
-                <TextView
-                    android:id="@+id/tvAnswer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/tvQuestion"
-                    android:layout_margin="10dp"
-                    android:text="你好，有什么可以帮您？" />
-
-                <TextView
-                    android:id="@+id/tvHint"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/text_understand_hint"
-                    android:textSize="@dimen/chat_text_hint" />
-            </RelativeLayout>
-        </ScrollView>
+    <ScrollView
+        android:id="@+id/scrollArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/layoutButton"
+        android:layout_below="@id/layoutBack" >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="135dp" >
+            android:layout_height="wrap_content" >
 
-            <ImageView
-                android:id="@+id/imageAnim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="12dip" />
+            <TextView
+                android:id="@+id/tvQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/ui_chat_dialog_orange"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/ui_chat_speak_text_size"
+                android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/imageVoice"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvAnswer"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignLeft="@id/imageAnim"
-                android:layout_alignRight="@id/imageAnim"
-                android:src="@drawable/ui_chat_voice" />
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/tvQuestion"
+                android:layout_margin="10dp"
+                android:background="@drawable/ui_chat_dialog_white"
+                android:text="你好，有什么可以帮您？"
+                android:textColor="#000000"
+                android:textSize="@dimen/ui_chat_speak_text_size" />
+
+            <TextView
+                android:id="@+id/tvHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/text_understand_hint"
+                android:textSize="@dimen/chat_text_hint"
+                android:visibility="gone" />
         </RelativeLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

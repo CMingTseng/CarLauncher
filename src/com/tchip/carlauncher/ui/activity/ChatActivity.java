@@ -33,6 +33,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +94,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private double startLng = 0.0;
 	private double endLat = 0.0;
 	private double endLng = 0.0;
+
+	private RelativeLayout layoutBack;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -181,7 +184,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		scrollArea = (ScrollView) findViewById(R.id.scrollArea);
 		tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+		tvQuestion.setVisibility(View.GONE);
 		tvAnswer = (TextView) findViewById(R.id.tvAnswer);
+
+		// 返回
+		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
+		layoutBack.setOnClickListener(this);
 	}
 
 	/**
@@ -218,10 +226,9 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		switch (view.getId()) {
 		case R.id.btnToMultimedia:
+		case R.id.layoutBack:
 			backToMain();
 			break;
-
-		// 进入参数设置页面 UnderstanderSettings
 
 		// 开始语音理解
 		case R.id.imageVoice:
@@ -247,6 +254,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		// 取消语音理解
 		// mSpeechUnderstander.cancel();
+
 		default:
 			break;
 		}
@@ -301,6 +309,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 								jsonObject = new JSONObject(text);
 								String strQuestion = jsonObject
 										.getString("text");
+								tvQuestion.setVisibility(View.VISIBLE);
 								tvQuestion.setText(strQuestion);
 
 								strService = jsonObject.getString("service");
