@@ -30,20 +30,20 @@
                 android:src="@drawable/ui_near_arrow_back" />
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="90dp"
-            android:layout_height="match_parent"
+        <ImageView
+            android:id="@+id/imageSearch"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/ui_near_search" />
+            android:src="@drawable/ui_media_face_smile" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:layout_toLeftOf="@id/btnSearch"
+            android:layout_toLeftOf="@id/imageSearch"
             android:layout_toRightOf="@id/layoutBack"
             android:background="#383838" >
 
@@ -56,13 +56,14 @@
                 <requestFocus />
             </LinearLayout>
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ui_media_search_frame"
-                android:hint="搜索媒体文件"
+                android:hint="多媒体"
                 android:paddingLeft="20dp"
                 android:singleLine="true"
+                android:gravity="center_vertical"
                 android:textColor="#dddddd"
                 android:textColorHint="#cccccc"
                 android:textSize="24sp" />
@@ -199,33 +200,6 @@
         android:layout_height="0dp"
         android:layout_weight="6"
         android:weightSum="3" >
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:id="@+id/layoutFaceDetect"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/green_light"
-                    android:gravity="center"
-                    android:orientation="vertical" >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_face_smile" />
-                </LinearLayout>
-            </LinearLayout>
-        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

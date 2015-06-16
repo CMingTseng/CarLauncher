@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -33,8 +34,8 @@ public class MultimediaActivity extends Activity {
 		layoutImage.setOnClickListener(new MyOnClickListener());
 
 		// 人脸检测
-		LinearLayout layoutFaceDetect = (LinearLayout) findViewById(R.id.layoutFaceDetect);
-		layoutFaceDetect.setOnClickListener(new MyOnClickListener());
+		ImageView imageSearch = (ImageView) findViewById(R.id.imageSearch);
+		imageSearch.setOnClickListener(new MyOnClickListener());
 
 		// 音乐
 		RelativeLayout layoutMusic = (RelativeLayout) findViewById(R.id.layoutMusic);
@@ -49,8 +50,8 @@ public class MultimediaActivity extends Activity {
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
 
 		// 搜索
-		Button btnSearch = (Button) findViewById(R.id.btnSearch);
-		btnSearch.setOnClickListener(new MyOnClickListener());
+		// Button btnSearch = (Button) findViewById(R.id.btnSearch);
+		// btnSearch.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -65,16 +66,19 @@ public class MultimediaActivity extends Activity {
 				intentImage.setComponent(componentImage);
 				startActivity(intentImage);
 				break;
-			case R.id.layoutFaceDetect:
+
+			case R.id.imageSearch:
 				Intent intentFaceDetect = new Intent(getApplicationContext(),
 						FaceDetectActivity.class);
 				startActivity(intentFaceDetect);
 				break;
+
 			case R.id.layoutMusic:
 				Intent intentMusic = new Intent(getApplicationContext(),
 						MusicMainContentActivity.class);
 				startActivity(intentMusic);
 				break;
+
 			case R.id.layoutVideo:
 				ComponentName componentVideo = new ComponentName(
 						"com.mediatek.videoplayer",
@@ -83,10 +87,9 @@ public class MultimediaActivity extends Activity {
 				intentVideo.setComponent(componentVideo);
 				startActivity(intentVideo);
 				break;
+
 			case R.id.btnBack:
 				backToMain();
-				break;
-			case R.id.btnSearch:
 				break;
 			}
 
