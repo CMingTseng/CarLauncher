@@ -14,6 +14,82 @@
             android:layout_height="fill_parent"
             android:clickable="true" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_margin="5dp" >
+
+            <RelativeLayout
+                android:id="@+id/layoutBack"
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true" >
+
+                <Button
+                    android:id="@+id/btnToViceFromRoutePlan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#88000000" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ui_near_arrow_back" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutInput"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/btnCustomSearch"
+                android:layout_toRightOf="@id/layoutBack"
+                android:background="#88000000"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" >
+
+                    <requestFocus />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editDestination"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:hint="输入目的地"
+                    android:maxEms="8"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#ffffff"
+                    android:textCursorDrawable="@null"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageVoice"
+                    android:layout_width="36dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ui_near_search_voice" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_toRightOf="@id/layoutInput"
+                android:background="@drawable/ui_near_search" />
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,70 +141,6 @@
                 android:onClick="nodeClick"
                 android:visibility="gone" />
         </LinearLayout>
-
-        <com.tchip.carlauncher.view.ButtonFloat
-            android:id="@+id/btnToViceFromRoutePlan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:background="#1E88E5" />
-
-        <com.tchip.carlauncher.view.ButtonFloat
-            android:id="@+id/btnVoice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="15dp"
-            android:background="#1E88E5" >
-        </com.tchip.carlauncher.view.ButtonFloat>
-
-        <LinearLayout
-            android:id="@+id/layoutSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="54dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/btnVoice"
-            android:background="@drawable/shape_route_plan_search_bg"
-            android:gravity="center_vertical"
-            android:paddingBottom="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="2dp" >
-               <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true" >
-                    <requestFocus />
-                </LinearLayout>
-
-            <EditText
-                android:id="@+id/editDestination"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="输入目的地"
-                android:maxEms="8"
-                android:singleLine="true"
-                android:textColor="#ffffff"
-                android:textColorHint="#ffffff"
-                android:textCursorDrawable="@null" />
-        </LinearLayout>
-
-        <com.tchip.carlauncher.view.ButtonFloat
-            android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/layoutSearch"
-            android:background="#1E88E5" >
-        </com.tchip.carlauncher.view.ButtonFloat>
     </RelativeLayout>
 
 </LinearLayout>

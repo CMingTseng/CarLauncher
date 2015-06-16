@@ -72,7 +72,6 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.view.AudioRecordDialog;
-import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RoutePlanActivity extends Activity implements
 		BaiduMap.OnMapClickListener, OnGetRoutePlanResultListener {
@@ -119,7 +118,8 @@ public class RoutePlanActivity extends Activity implements
 		setContentView(R.layout.activity_route_plan);
 
 		audioRecordDialog = new AudioRecordDialog(RoutePlanActivity.this);
-		preferences = getSharedPreferences("CarLauncher", Context.MODE_PRIVATE);
+		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+				Context.MODE_PRIVATE);
 
 		iniLayout();
 	}
@@ -157,33 +157,23 @@ public class RoutePlanActivity extends Activity implements
 		mSearch = RoutePlanSearch.newInstance();
 		mSearch.setOnGetRoutePlanResultListener(this);
 
-		ButtonFloat btnToViceFromRoutePlan = (ButtonFloat) findViewById(R.id.btnToViceFromRoutePlan);
-		btnToViceFromRoutePlan.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_up));
+		Button btnToViceFromRoutePlan = (Button) findViewById(R.id.btnToViceFromRoutePlan);
 		btnToViceFromRoutePlan.setOnClickListener(new MyOnClickListener());
 
 		// 语音按钮
-		ButtonFloat btnVoice = (ButtonFloat) findViewById(R.id.btnVoice);
-		btnVoice.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_route_microphone));
-		btnVoice.hasAnimation(false);
+		ImageView btnVoice = (ImageView) findViewById(R.id.imageVoice);
 		btnVoice.setOnClickListener(new MyOnClickListener());
 
 		// 搜索按钮
-		ButtonFloat btnSearch = (ButtonFloat) findViewById(R.id.btnSearch);
-		btnSearch.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_route_search));
-		btnSearch.hasAnimation(false);
+		Button btnSearch = (Button) findViewById(R.id.btnSearch);
 		btnSearch.setOnClickListener(new MyOnClickListener());
 
 		editDestination = (EditText) findViewById(R.id.editDestination);
-
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnToViceFromRoutePlan:
 				backToVice();
@@ -194,7 +184,7 @@ public class RoutePlanActivity extends Activity implements
 					startSearch(destinationStr);
 				}
 				break;
-			case R.id.btnVoice:
+			case R.id.imageVoice:
 				startVoiceUnderstand();
 				break;
 			}
@@ -203,7 +193,6 @@ public class RoutePlanActivity extends Activity implements
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			backToVice();
 			return true;
@@ -250,7 +239,6 @@ public class RoutePlanActivity extends Activity implements
 
 		@Override
 		public void onGetGeoCodeResult(GeoCodeResult result) {
-			// TODO Auto-generated method stub
 			endLatLng = result.getLocation();
 			if (endLatLng != null) {
 				// 目的地经纬度
@@ -566,7 +554,6 @@ public class RoutePlanActivity extends Activity implements
 
 		@Override
 		public void run() {
-			// TODO
 			// 在这里进行 http request.网络请求相关操作
 
 			String jsonString = "get Failed";
@@ -755,7 +742,6 @@ public class RoutePlanActivity extends Activity implements
 
 		@Override
 		public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-			// TODO Auto-generated method stub
 
 		}
 	};
