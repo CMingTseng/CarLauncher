@@ -22,6 +22,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,6 +36,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -64,8 +68,11 @@ import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
+import com.tchip.carlauncher.view.ResideMenu;
+import com.tchip.carlauncher.view.ResideMenuInfo;
+import com.tchip.carlauncher.view.ResideMenuItem;
 
-public class ChatActivity extends Activity implements OnClickListener {
+public class ChatActivity extends FragmentActivity implements OnClickListener {
 	private static String TAG = ChatActivity.class.getSimpleName();
 	// 语义理解对象（语音到语义）。
 	private SpeechUnderstander mSpeechUnderstander;
@@ -95,7 +102,20 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private double endLat = 0.0;
 	private double endLng = 0.0;
 
-	private RelativeLayout layoutBack;
+	private RelativeLayout layoutBack; // 返回
+	private LinearLayout layoutHelp; // 帮助
+
+	// 左侧帮助侧边栏
+	private ResideMenu resideMenu;
+
+	private ResideMenuItem itemHuiyuan;
+	private ResideMenuItem itemQianbao;
+	private ResideMenuItem itemZhuangban;
+	private ResideMenuItem itemShoucang;
+	private ResideMenuItem itemXiangce;
+	private ResideMenuItem itemFile;
+
+	private boolean isResideMenuClose = false;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +144,27 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		Button btnToMultimedia = (Button) findViewById(R.id.btnToMultimedia);
 		btnToMultimedia.setOnClickListener(this);
+	}
+
+	/**
+	 * 侧边栏打开关闭监听
+	 */
+	private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
+		@Override
+		public void openMenu() {
+			isResideMenuClose = false;
+			layoutHelp.setVisibility(View.GONE);
+		}
+
+		@Override
+		public void closeMenu() {
+			isResideMenuClose = true;
+			layoutHelp.setVisibility(View.VISIBLE);
+		}
+	};
+
+	public ResideMenu getResideMenu() {
+		return resideMenu;
 	}
 
 	@Override
@@ -190,6 +231,28 @@ public class ChatActivity extends Activity implements OnClickListener {
 		// 返回
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(this);
+
+		// 帮助侧边栏
+		layoutHelp = (LinearLayout) findViewById(R.id.layoutHelp);
+		layoutHelp.setOnClickListener(this);
+
+		Button btnHelp = (Button) findViewById(R.id.btnHelp);
+		btnHelp.setOnClickListener(this);
+		// attach to current activity;
+		resideMenu = new ResideMenu(this);
+		resideMenu.setBackground(R.color.grey_dark_light);
+		resideMenu.attachToActivity(this);
+		resideMenu.setMenuListener(menuListener);
+		// valid scale factor is between 0.0f and 1.0f. leftmenu'width is
+		// 150dip.
+		resideMenu.setScaleValue(0.6f);
+		// 禁止使用右侧菜单
+		resideMenu.setDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+
+		// 创建侧边栏内容条目
+		// itemHuiyuan = new ResideMenuItem(this,
+		// R.drawable.ui_chat_hint__navi,"导航");
+		// resideMenu.addMenuItem(itemHuiyuan, ResideMenu.DIRECTION_LEFT);
 	}
 
 	/**
@@ -254,7 +317,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		// 取消语音理解
 		// mSpeechUnderstander.cancel();
-
+		case R.id.layoutHelp:
+		case R.id.btnHelp:
+			resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
+			break;
 		default:
 			break;
 		}
@@ -376,9 +442,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 											.getString("operation");
 									if ("LAUNCH".equals(operationStr)) {
 										String packageName = getAppPackageByName(appName);
-										Toast.makeText(getApplicationContext(),
-												packageName, Toast.LENGTH_SHORT)
-												.show();
 										if (!"com.tchip.carlauncher"
 												.equals(packageName)) {
 											String strAnswer = "正在启动："
