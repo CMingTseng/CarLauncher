@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#333333" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -21,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:singleLine="true"
-                android:text="@string/wifi_state" />
+                android:text="@string/wifi_state"
+                android:textColor="#ffffff" />
 
             <TextView
                 android:id="@+id/wifi_state"
@@ -31,14 +33,15 @@
                 android:layout_gravity="center_horizontal"
                 android:padding="5px"
                 android:singleLine="true"
-                android:text="@string/wifi_state" />
+                android:text="@string/wifi_state"
+                android:textColor="#ffffff" />
 
             <ImageView
                 android:id="@+id/wifi_state_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/file_wifi_state4" />
+                android:src="@drawable/ui_file_remote_hint" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15px"
-                android:background="@drawable/file_ipaddress_bg"
+                android:background="@drawable/ui_file_remote_start"
                 android:gravity="center"
                 android:minWidth="150px"
                 android:paddingLeft="15px"
@@ -87,7 +90,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20px"
                 android:layout_marginTop="20px"
-                android:background="@drawable/file_btn_bottom_last"
+                android:background="@drawable/ui_file_remote_start"
                 android:gravity="center" >
 
                 <TextView
