@@ -56,7 +56,7 @@ public class WeatherActivity extends Activity {
 
 		// 刷新按钮和进度条
 		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
-		updateProgress.setVisibility(View.GONE);
+		updateProgress.setVisibility(View.INVISIBLE);
 		updateButton = (Button) findViewById(R.id.updateButton);
 		updateButton.setVisibility(View.VISIBLE);
 		updateButton.setOnClickListener(new MyOnClickListener());
@@ -391,7 +391,7 @@ public class WeatherActivity extends Activity {
 
 	private void updateWeather() {
 		startLocationService();
-		updateButton.setVisibility(View.GONE);
+		updateButton.setVisibility(View.INVISIBLE);
 		updateProgress.setVisibility(View.VISIBLE);
 		new Thread(new UpdateWeatherThread()).start();
 	}
@@ -418,7 +418,7 @@ public class WeatherActivity extends Activity {
 			switch (msg.what) {
 			case 1:
 				updateButton.setVisibility(View.VISIBLE);
-				updateProgress.setVisibility(View.GONE);
+				updateProgress.setVisibility(View.INVISIBLE);
 				initialLayout();
 				speakWeather(0);
 				break;
