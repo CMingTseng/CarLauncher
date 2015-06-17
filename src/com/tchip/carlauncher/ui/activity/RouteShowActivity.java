@@ -51,8 +51,6 @@ import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.model.RouteDistance;
 import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.model.RoutePoint;
-import com.tchip.carlauncher.view.ButtonFlat;
-import com.tchip.carlauncher.view.ButtonFloat;
 
 public class RouteShowActivity extends Activity {
 	private MapView mMapView;
@@ -60,8 +58,8 @@ public class RouteShowActivity extends Activity {
 	private InfoWindow mInfoWindow;
 	private Marker mMarkerStart;
 	private Marker mMarkerEnd;
-	private ButtonFloat btnShare, btnToRouteListFromShow;
-	private TextView btnDistance;
+	private Button btnShare, btnToRouteListFromShow;
+	private TextView textDistance;
 
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
@@ -89,20 +87,16 @@ public class RouteShowActivity extends Activity {
 		setContentView(R.layout.activity_route_show);
 
 		_db = new RouteDistanceDbHelper(getApplicationContext());
-		sharedPreferences = getSharedPreferences("CarLauncher",
-				Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
-		btnShare = (ButtonFloat) findViewById(R.id.btnShare);
-		btnShare.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_route_show_share));
+		btnShare = (Button) findViewById(R.id.btnShare);
 		btnShare.setOnClickListener(new MyOnClickListener());
 
-		btnToRouteListFromShow = (ButtonFloat) findViewById(R.id.btnToRouteListFromShow);
-		btnToRouteListFromShow.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_left));
+		btnToRouteListFromShow = (Button) findViewById(R.id.btnToRouteListFromShow);
 		btnToRouteListFromShow.setOnClickListener(new MyOnClickListener());
 
-		btnDistance = (TextView) findViewById(R.id.btnDistance);
+		textDistance = (TextView) findViewById(R.id.textDistance);
 		// btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); //
 		// TextColor
 
@@ -274,8 +268,8 @@ public class RouteShowActivity extends Activity {
 						linearDistance, driveDistance);
 				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
 			} finally {
-				btnDistance.setVisibility(View.VISIBLE);
-				btnDistance.setText("直线距离:" + (int) linearDistance + "m 行驶距离:"
+				textDistance.setVisibility(View.VISIBLE);
+				textDistance.setText("直线距离:" + (int) linearDistance + "m 行驶距离:"
 						+ (int) driveDistance + "m");
 				_db.close();
 			}

@@ -71,7 +71,11 @@ public class TrafficDbManager {
 		DbUtils.DaoConfig config = new DbUtils.DaoConfig(ctx);
 		config.setDbName("kaikaiassistant.db");
 		config.setDbVersion(1);
-		trafficDbUtils = DbUtils.create(config);
+		try {
+			trafficDbUtils = DbUtils.create(config);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Context getContext() {

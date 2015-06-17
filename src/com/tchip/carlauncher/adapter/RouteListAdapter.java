@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RouteListAdapter extends BaseAdapter {
@@ -44,6 +45,7 @@ public class RouteListAdapter extends BaseAdapter {
 	class MyViewHolder {
 		TextView textStartTime;
 		TextView textEndTime;
+		LinearLayout layoutMain;
 	}
 
 	@Override
@@ -58,6 +60,8 @@ public class RouteListAdapter extends BaseAdapter {
 					.findViewById(R.id.textStartTime);
 			viewHolder.textEndTime = (TextView) convertView
 					.findViewById(R.id.textEndTime);
+			viewHolder.layoutMain = (LinearLayout) convertView
+					.findViewById(R.id.layoutMain);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (MyViewHolder) convertView.getTag();
@@ -66,6 +70,13 @@ public class RouteListAdapter extends BaseAdapter {
 				+ convertStringToDate(routeArray.get(position).getTimeStart()));
 		viewHolder.textEndTime.setText("结束："
 				+ convertStringToDate(routeArray.get(position).getTimeEnd()));
+		if ((position % 2) == 0) {
+			viewHolder.layoutMain
+					.setBackgroundResource(R.drawable.ui_route_track_list_bg_light);
+		} else {
+			viewHolder.layoutMain
+					.setBackgroundResource(R.drawable.ui_route_track_list_bg_dark);
+		}
 
 		return convertView;
 	}

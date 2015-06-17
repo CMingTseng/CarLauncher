@@ -1,93 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="#ffffff" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layoutLeft"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
-        android:weightSum="5" >
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:weightSum="9"
-            android:orientation="vertical" >
-
-            <CalendarView
-                android:id="@+id/filterDate"
-                android:layout_width="match_parent"
-                android:layout_weight="8"
-                android:layout_height="0dp"
-                android:padding="5dp" />
-            <TextView
-                android:layout_weight="1"
-                android:text="轨迹未筛选"
-                android:id="@+id/tvFilterState"
-                android:gravity="center"
-                android:textColor="#1E88E5"
-                android:layout_width="match_parent"
-                android:layout_height="0dp" />
-        </LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical" >
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center" >
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#00a0e9" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tvNoFile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="选定日期无轨迹"
-                    android:textColor="#1E88E5"
-                    android:textSize="27sp" />
-
-                <com.tchip.carlauncher.view.ButtonFlat
-                    android:id="@+id/btnShowAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="#1E88E5"
-                    android:text="显示所有" />
-            </LinearLayout>
-
-            <com.tchip.carlauncher.view.SwipeMenuListView
-                android:id="@+id/routeList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp" />
-
-            <com.tchip.carlauncher.view.ButtonFloat
+            <Button
                 android:id="@+id/btnToMainFromRouteList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:background="#1E88E5" />
-            
-            <ImageView
-                android:layout_alignParentRight="true"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/ui_near_arrow_back" />
+
+            <TextView
+                android:id="@+id/tvFilterState"
                 android:layout_width="wrap_content"
-                android:id="@+id/imageSlideLeft"
-                android:layout_marginRight="3dp"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_route_list_slide_left" />
+                android:layout_centerInParent="true"
+                android:text="轨迹未筛选"
+                android:textColor="#ffffff"
+                android:textSize="22sp" />
         </RelativeLayout>
+
+        <CalendarView
+            android:id="@+id/filterDate"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:padding="5dp" />
     </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/layoutRight"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/layoutLeft"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tvNoFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选定日期无轨迹"
+                android:textColor="#1E88E5"
+                android:textSize="27sp" />
+
+            <com.tchip.carlauncher.view.ButtonFlat
+                android:id="@+id/btnShowAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#1E88E5"
+                android:text="显示所有" />
+        </LinearLayout>
+
+        <com.tchip.carlauncher.view.SwipeMenuListView
+            android:id="@+id/routeList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/imageSlideLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:src="@drawable/icon_route_list_slide_left"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="46dp"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/layoutLeft"
+        android:src="@drawable/ui_route_track_shadow_vertical" />
+
+</RelativeLayout>

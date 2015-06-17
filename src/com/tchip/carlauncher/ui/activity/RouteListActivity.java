@@ -37,6 +37,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -77,9 +78,7 @@ public class RouteListActivity extends Activity {
 		showRouteList("20");
 		tvFilterState.setText("轨迹未筛选");
 
-		ButtonFloat btnToMainFromRouteList = (ButtonFloat) findViewById(R.id.btnToMainFromRouteList);
-		btnToMainFromRouteList.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_up));
+		Button btnToMainFromRouteList = (Button) findViewById(R.id.btnToMainFromRouteList);
 		btnToMainFromRouteList.setOnClickListener(new MyOnClickListener());
 
 		// Swipe Menu START
@@ -142,7 +141,6 @@ public class RouteListActivity extends Activity {
 					break;
 				case 1:
 					// 删除
-					// TODO
 					// File file = new File(ROUTE_PATH
 					// + routeAdapter.getItem(position));
 					File file = new File(ROUTE_PATH
@@ -249,7 +247,6 @@ public class RouteListActivity extends Activity {
 				if (format.equals("txt") || format.equals("json")
 						|| format.equals("art"))
 					if (file.getName().startsWith(datePrefix)) {
-						// TODO
 						fileNameList.add(file.getName());
 						RouteList routeList = new RouteList(fileName.substring(
 								0, fileName.lastIndexOf('-')),
@@ -378,7 +375,6 @@ public class RouteListActivity extends Activity {
 	 * @param position
 	 */
 	private void DeleteUpdateList(int position) {
-		// TODO
 		routeAdapter.remove(routeAdapter.getItem(position));
 	}
 
