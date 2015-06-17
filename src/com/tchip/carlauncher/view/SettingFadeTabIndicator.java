@@ -22,7 +22,7 @@ public class SettingFadeTabIndicator extends LinearLayout {
 	private ViewPager mViewPager;
 	private PageListener pageListener = new PageListener();
 	private LinearLayout.LayoutParams tabLayoutParams;
-	private int imageSize = 24; // dp
+	private int imageSize = 24; // zj:set in dimens.xml
 	private int textSize = (int) getResources().getDimension(
 			R.dimen.setting_tab_text); // sp
 	private Context mContext;
@@ -48,8 +48,8 @@ public class SettingFadeTabIndicator extends LinearLayout {
 
 	private void init() {
 		setOrientation(LinearLayout.HORIZONTAL);
-		setPadding(0, 8, 0, 8);
-		setBackgroundResource(R.drawable.bg_tabs);
+		setPadding(0, 0, 0, 0); // left, top, right, bottom
+		setBackgroundResource(R.color.setting_tab_off);
 		tabLayoutParams = new LinearLayout.LayoutParams(0,
 				LayoutParams.MATCH_PARENT, 1.0f);
 		imageSize = (int) TypedValue.applyDimension(
@@ -138,6 +138,8 @@ public class SettingFadeTabIndicator extends LinearLayout {
 		public void setSelected(boolean selected) {
 			super.setSelected(selected);
 			setAlpha(selected ? 1.0f : 0.0f);
+			setBackgroundResource(selected ? R.color.setting_tab_on
+					: R.color.setting_tab_off);
 		}
 
 		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -183,6 +185,8 @@ public class SettingFadeTabIndicator extends LinearLayout {
 		public void setSelected(boolean selected) {
 			super.setSelected(selected);
 			setAlpha(selected ? 1.0f : 0.0f);
+			setBackgroundResource(selected ? R.color.setting_tab_on
+					: R.color.setting_tab_off);
 		}
 
 		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -245,6 +249,8 @@ public class SettingFadeTabIndicator extends LinearLayout {
 				((TabView) getChildAt(position + 1)).getFadingTextView()
 						.setAlpha(positionOffset);
 			}
+
+			tabSelect(position); // ZJ:左右滑动要更新
 		}
 
 		@Override

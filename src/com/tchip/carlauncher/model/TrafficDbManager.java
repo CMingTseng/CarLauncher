@@ -86,7 +86,7 @@ public class TrafficDbManager {
 		List<TrafficTotalModel> datas = null;
 		try {
 			datas = trafficDbUtils.findAll(TrafficTotalModel.class);
-		} catch (DbException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if (datas == null || datas.size() == 0) {
@@ -106,7 +106,6 @@ public class TrafficDbManager {
 	}
 
 	/**
-	 * 设置�?有流�?
 	 * 
 	 * @param type
 	 * @param data
@@ -270,7 +269,7 @@ public class TrafficDbManager {
 	}
 
 	/**
-	 * 得到time秒之前与当前时间之间的时间戳，time�?0则为TrafficUtils.INTERVAL�?
+	 * 得到time秒之前与当前时间之间的时间戳，time 0则为TrafficUtils.INTERVAL
 	 * 
 	 * @param time
 	 * @return
@@ -288,8 +287,6 @@ public class TrafficDbManager {
 
 	/**
 	 * 得到某一月份之间的时间戳
-	 * 
-	 * @return 返回Long[2]数组，下�?0为当�?1日，下标1为下�?1�?
 	 */
 	private long[] convertMonthTimestamp(int month) {
 		if (month > 12) {
@@ -327,10 +324,7 @@ public class TrafficDbManager {
 
 	/**
 	 * 得到某一天之间的时间
-	 * 
-	 * @return 返回Long[2]数组，下�?0为当�?1日，下标1为下�?1�?
 	 */
-
 	private long[] convertDayTimestamp(int day, long time) {
 		long[] datas = new long[2];
 		int[] dateDeparts = getDateDepart(time);
@@ -374,9 +368,6 @@ public class TrafficDbManager {
 		}
 	}
 
-	/**
-	 * 求出给定的时间在当月�?1日和下个�?1日之间的时间�? 返回Long[2]数组，下�?0为当�?1日，下标1为下�?1�?
-	 */
 	private long[] timeInMonth(long time) {
 		long[] datas = new long[2];
 		int[] dateDeparts = getDateDepart(time);

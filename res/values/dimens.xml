@@ -27,11 +27,6 @@
     <dimen name="date_week_size">24sp</dimen>
     <dimen name="clock_size">80sp</dimen>
     <dimen name="drawable_ring_size">5dip</dimen>
-    <dimen name="setting_item_height">90dp</dimen>
-    <dimen name="setting_item_image">55dp</dimen>
-    <dimen name="setting_item_image_margin_left">60dp</dimen>
-    <dimen name="setting_item_text_size">32sp</dimen>
-    <dimen name="setting_item_text_margin_left">150dp</dimen>
     <dimen name="weather_text_location">32sp</dimen>
     <dimen name="weather_text_clock">80sp</dimen>
     <dimen name="weather_text_date">28sp</dimen>
@@ -46,8 +41,6 @@
     <dimen name="weather_text_more_week">20sp</dimen>
     <dimen name="weather_image_more_weather">70dp</dimen>
     <dimen name="weather_text_more_temp">20sp</dimen>
-    <dimen name="setting_tab_image">50px</dimen>
-    <dimen name="setting_tab_text">20px</dimen>
     <dimen name="chat_text_hint">30sp</dimen>
     <!-- System Setting Brightness -->
     <dimen name="setting_system_bright_text_size">20sp</dimen>
@@ -65,16 +58,27 @@
     <dimen name="ui_main_hsv_text_size">23sp</dimen>
     <dimen name="ui_main_hsv_text_margin_bottom">18dp</dimen>
     <dimen name="ui_main_hsv_item_size">200dp</dimen>
-    
+
     <!-- Multimedia Activity -->
     <dimen name="ui_media_text_item_size">45sp</dimen>
-    
+
     <!-- Near Search Activity -->
     <dimen name="ui_near_item_height">185dp</dimen>
     <dimen name="ui_near_item_width">278dp</dimen>
     <dimen name="ui_near_item_text_size">30sp</dimen>
-    
+
     <!-- Chat Activity -->
     <dimen name="ui_chat_speak_text_size">22sp</dimen>
+
+    <!-- Setting Activity -->
+    <dimen name="setting_item_height">65dp</dimen>
+    <dimen name="setting_item_image_height">40dp</dimen>
+    <dimen name="setting_item_image_margin_left">60dp</dimen>
+    <dimen name="setting_item_title_text_size">22sp</dimen>
+    <dimen name="setting_item_content_text_size">20sp</dimen>
+    <dimen name="setting_item_text_margin_left">150dp</dimen>
+    <dimen name="setting_item_content_marign_right">70dp</dimen>
+    <dimen name="setting_tab_image">70px</dimen>
+    <dimen name="setting_tab_text">25px</dimen>
 
 </resources>

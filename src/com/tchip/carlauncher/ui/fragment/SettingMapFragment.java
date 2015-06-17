@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SettingMapFragment extends Fragment {
@@ -29,37 +30,31 @@ public class SettingMapFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		mapSettingView = inflater.inflate(R.layout.fragment_setting_map,
 				container, false);
 		// 离线地图管理
-		LayoutRipple layoutRippleOfflineMap = (LayoutRipple) mapSettingView
+		RelativeLayout layoutRippleOfflineMap = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleOfflineMap);
-		iniRipple(layoutRippleOfflineMap);
 		layoutRippleOfflineMap.setOnClickListener(new MyOnClickListener());
 
 		// 默认导航
-		LayoutRipple layoutRippleNavi = (LayoutRipple) mapSettingView
+		RelativeLayout layoutRippleNavi = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleNavi);
-		iniRipple(layoutRippleNavi);
 		layoutRippleNavi.setOnClickListener(new MyOnClickListener());
 
 		// 行车轨迹记录
-		LayoutRipple layoutRippleRouteRecord = (LayoutRipple) mapSettingView
+		RelativeLayout layoutRippleRouteRecord = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleRouteRecord);
-		iniRipple(layoutRippleRouteRecord);
 		layoutRippleRouteRecord.setOnClickListener(new MyOnClickListener());
 
 		// 轨迹平滑度优化
-		LayoutRipple layoutRippleRouteSmooth = (LayoutRipple) mapSettingView
+		RelativeLayout layoutRippleRouteSmooth = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleRouteSmooth);
-		iniRipple(layoutRippleRouteSmooth);
 		layoutRippleRouteSmooth.setOnClickListener(new MyOnClickListener());
 
 		// 轨迹绘制取样精度
-		LayoutRipple layoutRippleRouteSpan = (LayoutRipple) mapSettingView
+		RelativeLayout layoutRippleRouteSpan = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleRouteSpan);
-		iniRipple(layoutRippleRouteSpan);
 		layoutRippleRouteSpan.setOnClickListener(new MyOnClickListener());
 
 		preferences = getActivity().getSharedPreferences(

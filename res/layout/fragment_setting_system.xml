@@ -2,14 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#000000"
     android:orientation="vertical" >
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="#cccccc" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -20,19 +14,24 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#000000" />
+
+            <RelativeLayout
                 android:id="@+id/layoutRippleDisplay"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_display" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -40,31 +39,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="显示"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleSound"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_sound" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -72,30 +68,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="声音"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
-             <com.tchip.carlauncher.view.LayoutRipple
+                android:layout_height="2dp"
+                android:background="#000000" />
+
+            <RelativeLayout
                 android:id="@+id/layoutRippleFm"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_fm" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,32 +97,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="FM"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
-            
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleWifi"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_wifi" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,31 +126,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="Wi-Fi"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
-            
-             <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#000000" />
+
+            <RelativeLayout
                 android:id="@+id/layoutRippleTraffic"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_app" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -168,31 +155,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="流量"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleBluetooth"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_bluetooth" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,31 +184,29 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="蓝牙"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleLocation"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
+                android:visibility="gone"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ic_launcher" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -232,31 +214,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="位置信息"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleStorage"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_storage" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -264,31 +243,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="存储"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleApp"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_app" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -296,31 +272,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="应用程序"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleDate"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_date" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -328,31 +301,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="日期和时间"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleReset"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_reset" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -360,31 +330,28 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="恢复出厂设置"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:layout_height="2dp"
+                android:background="#000000" />
 
-            <com.tchip.carlauncher.view.LayoutRipple
+            <RelativeLayout
                 android:id="@+id/layoutRippleAbout"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="#FFF"
+                android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
-                    android:layout_width="@dimen/setting_item_image"
-                    android:layout_height="@dimen/setting_item_image"
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/icn_button" />
+                    android:src="@drawable/ui_setting_system_about" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -392,17 +359,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
                     android:text="关于"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/setting_item_text_size" />
-            </com.tchip.carlauncher.view.LayoutRipple>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -16,8 +16,6 @@
 
     <!-- MyViewPager -->
     <color name="holo_blue">#FF33E5B5</color>
-    <color name="text_normal">#878787</color>
-    <color name="text_select">#37ab14</color>
     <color name="green">#00FF00</color>
     <color name="thumbColor">#66aaaaaa</color>
     <color name="yellow">#FFF000</color>
@@ -59,8 +57,16 @@
     <color name="accent_color">#1E88E5</color>
     <color name="accent_color_light">#7cb9ee</color>
     <color name="color_window_background">#E5E5E5</color>
-    
+
     <!-- Chat Activity -->
     <color name="ui_chat_voice_orange">#ffa500</color>
+
+    <!-- Setting Activity -->
+    <color name="setting_item_title_color">#b6b6b6</color>
+    <color name="setting_tab_on">#ec6100</color>
+    <color name="setting_tab_off">#262626</color>
+    <color name="setting_tab_text_off">#878787</color>
+    <color name="setting_tab_text_on">#ffffff</color>
+    <color name="setting_tab_bg">#000000</color>
 
 </resources>

@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,31 +28,26 @@ public class SettingCameraFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		cameraSettingView = inflater.inflate(R.layout.fragment_setting_camera,
 				container, false);
 		// 视频质量
-		LayoutRipple layoutRippleVideoQuality = (LayoutRipple) cameraSettingView
+		RelativeLayout layoutRippleVideoQuality = (RelativeLayout) cameraSettingView
 				.findViewById(R.id.layoutRippleVideoQuality);
-		iniRipple(layoutRippleVideoQuality);
 		layoutRippleVideoQuality.setOnClickListener(new MyOnClickListener());
 
 		// 视频尺寸
-		LayoutRipple layoutRippleVideoSize = (LayoutRipple) cameraSettingView
+		RelativeLayout layoutRippleVideoSize = (RelativeLayout) cameraSettingView
 				.findViewById(R.id.layoutRippleVideoSize);
-		iniRipple(layoutRippleVideoSize);
 		layoutRippleVideoSize.setOnClickListener(new MyOnClickListener());
 
 		// 视频长度
-		LayoutRipple layoutRippleVideoTime = (LayoutRipple) cameraSettingView
+		RelativeLayout layoutRippleVideoTime = (RelativeLayout) cameraSettingView
 				.findViewById(R.id.layoutRippleVideoTime);
-		iniRipple(layoutRippleVideoTime);
 		layoutRippleVideoTime.setOnClickListener(new MyOnClickListener());
 
 		// 碰撞灵敏度
-		LayoutRipple layoutRippleCrashSensitive = (LayoutRipple) cameraSettingView
+		RelativeLayout layoutRippleCrashSensitive = (RelativeLayout) cameraSettingView
 				.findViewById(R.id.layoutRippleCrashSensitive);
-		iniRipple(layoutRippleCrashSensitive);
 		layoutRippleCrashSensitive.setOnClickListener(new MyOnClickListener());
 
 		preferences = getActivity().getSharedPreferences("CarLauncher",

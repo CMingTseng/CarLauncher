@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class SettingActivity extends FragmentActivity {
 	private SettingFadeTabIndicator settingFadeTabIndicator;
@@ -39,16 +40,13 @@ public class SettingActivity extends FragmentActivity {
 		InitViewPager();
 
 		// 返回
-		ButtonFloat btnToViceFromSetting = (ButtonFloat) findViewById(R.id.btnToViceFromSetting);
-		btnToViceFromSetting.setDrawableIcon(getResources().getDrawable(
-				R.drawable.icon_arrow_up));
+		RelativeLayout btnToViceFromSetting = (RelativeLayout) findViewById(R.id.btnToViceFromSetting);
 		btnToViceFromSetting.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnToViceFromSetting:
 				backToVice();
@@ -113,34 +111,33 @@ public class SettingActivity extends FragmentActivity {
 
 		@Override
 		public int getTabNormalIconResId(int position) {
-			return new int[] { R.drawable.icon_tab_setting_camera_off,
-					R.drawable.icon_tab_setting_voice_off,
-					R.drawable.icon_tab_setting_map_off,
-					R.drawable.icon_tab_setting_system_off }[position];
+			return new int[] { R.drawable.ui_setting_tab_camera_off,
+					R.drawable.ui_setting_tab_voice_off,
+					R.drawable.ui_setting_tab_map_off,
+					R.drawable.ui_setting_tab_system_off }[position];
 		}
 
 		@Override
 		public int getTabSelectIconResId(int position) {
-			return new int[] { R.drawable.icon_tab_setting_camera_on,
-					R.drawable.icon_tab_setting_voice_on,
-					R.drawable.icon_tab_setting_map_on,
-					R.drawable.icon_tab_setting_system_on }[position];
+			return new int[] { R.drawable.ui_setting_tab_camera_on,
+					R.drawable.ui_setting_tab_voice_on,
+					R.drawable.ui_setting_tab_map_on,
+					R.drawable.ui_setting_tab_system_on }[position];
 		}
 
 		@Override
 		public int getTabNormalTextColorResId(int position) {
-			return R.color.text_normal;
+			return R.color.setting_tab_text_off;
 		}
 
 		@Override
 		public int getTabSelectTextColorResId(int position) {
-			return R.color.text_select;
+			return R.color.setting_tab_text_on;
 		}
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -148,7 +145,6 @@ public class SettingActivity extends FragmentActivity {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 	}
 }

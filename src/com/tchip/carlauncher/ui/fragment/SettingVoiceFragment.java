@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SettingVoiceFragment extends Fragment {
@@ -32,27 +33,23 @@ public class SettingVoiceFragment extends Fragment {
 		voiceSettingView = inflater.inflate(R.layout.fragment_setting_voice,
 				container, false);
 		// 整点报时
-		LayoutRipple layoutRippleSpeakHour = (LayoutRipple) voiceSettingView
+		RelativeLayout layoutRippleSpeakHour = (RelativeLayout) voiceSettingView
 				.findViewById(R.id.layoutRippleSpeakHour);
-		iniRipple(layoutRippleSpeakHour);
 		layoutRippleSpeakHour.setOnClickListener(new MyOnClickListener());
 
 		// 语音口音
-		LayoutRipple layoutRippleVoiceAccent = (LayoutRipple) voiceSettingView
+		RelativeLayout layoutRippleVoiceAccent = (RelativeLayout) voiceSettingView
 				.findViewById(R.id.layoutRippleVoiceAccent);
-		iniRipple(layoutRippleVoiceAccent);
 		layoutRippleVoiceAccent.setOnClickListener(new MyOnClickListener());
 
 		// 天气自动播报
-		LayoutRipple layoutRippleSpeakWeather = (LayoutRipple) voiceSettingView
+		RelativeLayout layoutRippleSpeakWeather = (RelativeLayout) voiceSettingView
 				.findViewById(R.id.layoutRippleSpeakWeather);
-		iniRipple(layoutRippleSpeakWeather);
 		layoutRippleSpeakWeather.setOnClickListener(new MyOnClickListener());
 
 		// 天气数据自动更新
-		LayoutRipple layoutRippleUpdateWeather = (LayoutRipple) voiceSettingView
+		RelativeLayout layoutRippleUpdateWeather = (RelativeLayout) voiceSettingView
 				.findViewById(R.id.layoutRippleUpdateWeather);
-		iniRipple(layoutRippleUpdateWeather);
 		layoutRippleUpdateWeather.setOnClickListener(new MyOnClickListener());
 
 		preferences = getActivity().getSharedPreferences("CarLauncher",

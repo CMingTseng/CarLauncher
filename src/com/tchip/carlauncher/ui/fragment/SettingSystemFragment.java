@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class SettingSystemFragment extends Fragment {
@@ -30,75 +31,63 @@ public class SettingSystemFragment extends Fragment {
 		context = getActivity();
 
 		// 亮度设置
-		LayoutRipple layoutRippleDisplay = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleDisplay = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleDisplay);
-		iniRipple(layoutRippleDisplay);
 		layoutRippleDisplay.setOnClickListener(new MyOnClickListener());
 
 		// Wi-Fi
-		LayoutRipple layoutRippleWifi = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleWifi = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleWifi);
-		iniRipple(layoutRippleWifi);
 		layoutRippleWifi.setOnClickListener(new MyOnClickListener());
 
 		// 流量
-		LayoutRipple layoutRippleTraffic = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleTraffic = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleTraffic);
-		iniRipple(layoutRippleTraffic);
 		layoutRippleTraffic.setOnClickListener(new MyOnClickListener());
 
 		// 蓝牙
-		LayoutRipple layoutRippleBluetooth = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleBluetooth = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleBluetooth);
-		iniRipple(layoutRippleBluetooth);
 		layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
 
 		// 位置信息
-		LayoutRipple layoutRippleLocation = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleLocation = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleLocation);
-		iniRipple(layoutRippleLocation);
 		layoutRippleLocation.setOnClickListener(new MyOnClickListener());
 
 		// 存储
-		LayoutRipple layoutRippleStorage = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleStorage = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleStorage);
-		iniRipple(layoutRippleStorage);
 		layoutRippleStorage.setOnClickListener(new MyOnClickListener());
 
 		// 日期
-		LayoutRipple layoutRippleDate = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleDate = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleDate);
-		iniRipple(layoutRippleDate);
 		layoutRippleDate.setOnClickListener(new MyOnClickListener());
 
 		// 声音
-		LayoutRipple layoutRippleSound = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleSound = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleSound);
-		iniRipple(layoutRippleSound);
 		layoutRippleSound.setOnClickListener(new MyOnClickListener());
 
 		// FM
-		LayoutRipple layoutRippleFm = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleFm = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleFm);
-		iniRipple(layoutRippleFm);
 		layoutRippleFm.setOnClickListener(new MyOnClickListener());
 
 		// 恢复出厂设置
-		LayoutRipple layoutRippleReset = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleReset = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleReset);
-		iniRipple(layoutRippleReset);
 		layoutRippleReset.setOnClickListener(new MyOnClickListener());
 
 		// 关于
-		LayoutRipple layoutRippleAbout = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleAbout = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleAbout);
-		iniRipple(layoutRippleAbout);
 		layoutRippleAbout.setOnClickListener(new MyOnClickListener());
 
 		// 应用
-		LayoutRipple layoutRippleApp = (LayoutRipple) systemSettingView
+		RelativeLayout layoutRippleApp = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleApp);
-		iniRipple(layoutRippleApp);
 		layoutRippleApp.setOnClickListener(new MyOnClickListener());
 
 		return systemSettingView;
