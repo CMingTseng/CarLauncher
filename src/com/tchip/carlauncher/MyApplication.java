@@ -3,7 +3,9 @@ package com.tchip.carlauncher;
 import java.io.File;
 
 import android.app.Application;
+import android.hardware.Camera;
 import android.os.Environment;
+import android.view.SurfaceHolder;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
@@ -82,4 +84,8 @@ public class MyApplication extends Application {
 			fileIconResolver = new FileIconResolver(getApplicationContext());
 		return fileIconResolver;
 	}
+	
+	// Video Record
+	public static boolean isVideoReording = false;
+	
 }

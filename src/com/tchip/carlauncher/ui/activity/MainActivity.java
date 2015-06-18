@@ -20,6 +20,7 @@ import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
 import com.baidu.mapapi.navi.NaviPara;
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.FolderActivity;
 import com.tchip.carlauncher.model.Typefaces;
@@ -98,6 +99,33 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView largeVideoSize, largeVideoTime, largeVideoLock,
 			largeVideoFile, largeVideoRecord, largeVideoCamera;
 	private SurfaceHolder mHolder;
+	private TachographRecorder mMyRecorder;
+	private Camera mCamera;
+	private static final int STATE_RESOLUTION_720P = 0;
+	private static final int STATE_RESOLUTION_1080P = 1;
+	private static final int STATE_RECORD_STARTED = 0;
+	private static final int STATE_RECORD_STOPPED = 1;
+	private static final int STATE_INTERVAL_3MIN = 0;
+	private static final int STATE_INTERVAL_5MIN = 1;
+	private static final int STATE_SECONDARY_ENABLE = 0;
+	private static final int STATE_SECONDARY_DISABLE = 1;
+
+	private static final int STATE_PATH_ZERO = 0;
+	private static final int STATE_PATH_ONE = 1;
+	private static final int STATE_PATH_TWO = 2;
+	private static final int STATE_OVERLAP_ZERO = 0;
+	private static final int STATE_OVERLAP_FIVE = 1;
+
+	private static final String PATH_ZERO = "/mnt/sdcard";
+	private static final String PATH_ONE = "/mnt/sdcard/path_one";
+	private static final String PATH_TWO = "/mnt/sdcard/path_two";
+
+	private int mResolutionState;
+	private int mRecordState;
+	private int mIntervalState;
+	private int mPathState;
+	private int mSecondaryState;
+	private int mOverlapState;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -382,7 +410,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 更新录像按钮状态
+	 * 更新录像大小按钮显示状态
 	 * 
 	 * @param isSurfaceLarge
 	 */
@@ -506,10 +534,12 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (mRecordState == STATE_RECORD_STOPPED) {
 					if (startRecorder() == 0) {
 						mRecordState = STATE_RECORD_STARTED;
+						MyApplication.isVideoReording = true;
 					}
 				} else if (mRecordState == STATE_RECORD_STARTED) {
 					if (stopRecorder() == 0) {
 						mRecordState = STATE_RECORD_STOPPED;
+						MyApplication.isVideoReording = false;
 					}
 				}
 				setupRecordViews();
@@ -517,6 +547,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
+				// TODO:视频文件加锁
 				break;
 
 			case R.id.largeVideoSize:
@@ -837,42 +868,18 @@ public class MainActivity extends Activity implements TachographCallback,
 	protected void onDestroy() {
 		// 退出时销毁定位
 		mLocationClient.stop();
+
 		// 关闭定位图层
 		baiduMap.setMyLocationEnabled(false);
 		mainMapView.onDestroy();
 		mainMapView = null;
+
 		// 取消注册wifi消息处理器
 		unregisterReceiver(wifiIntentReceiver);
 		super.onDestroy();
 	}
 
 	// *********** Record ***********
-
-	private static final int STATE_RESOLUTION_720P = 0;
-	private static final int STATE_RESOLUTION_1080P = 1;
-	private static final int STATE_RECORD_STARTED = 0;
-	private static final int STATE_RECORD_STOPPED = 1;
-	private static final int STATE_INTERVAL_3MIN = 0;
-	private static final int STATE_INTERVAL_5MIN = 1;
-	private static final int STATE_SECONDARY_ENABLE = 0;
-	private static final int STATE_SECONDARY_DISABLE = 1;
-
-	private static final int STATE_PATH_ZERO = 0;
-	private static final int STATE_PATH_ONE = 1;
-	private static final int STATE_PATH_TWO = 2;
-	private static final int STATE_OVERLAP_ZERO = 0;
-	private static final int STATE_OVERLAP_FIVE = 1;
-
-	private static final String PATH_ZERO = "/mnt/sdcard";
-	private static final String PATH_ONE = "/mnt/sdcard/path_one";
-	private static final String PATH_TWO = "/mnt/sdcard/path_two";
-
-	private int mResolutionState;
-	private int mRecordState;
-	private int mIntervalState;
-	private int mPathState;
-	private int mSecondaryState;
-	private int mOverlapState;
 
 	private void setupRecordDefaults() {
 		mResolutionState = STATE_RESOLUTION_720P;
@@ -897,8 +904,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (mRecordState == STATE_RECORD_STOPPED) {
 			largeVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_record));
+			smallVideoRecord.setBackground(getResources().getDrawable(
+					R.drawable.ui_main_video_record));
 		} else if (mRecordState == STATE_RECORD_STARTED) {
 			largeVideoRecord.setBackground(getResources().getDrawable(
+					R.drawable.ui_main_video_pause));
+			smallVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_pause));
 		}
 
@@ -942,22 +953,44 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+
 		mHolder = holder;
-		setup();
-		// TODO
-		Toast.makeText(this, "surfaceCreated", Toast.LENGTH_SHORT).show();
+		if (!MyApplication.isVideoReording) {
+			setup();
+			// TODO
+			Toast.makeText(this, "surfaceCreated:setup()", Toast.LENGTH_SHORT)
+					.show();
+		} else { // 正在录像中，回到主界面
+
+			try {
+				// mCamera = Camera.open(0);
+				// mCamera.lock();
+				mCamera.stopPreview();
+//				mCamera.setPreviewDisplay(null);
+				
+				mCamera.setPreviewDisplay(mHolder);
+				mCamera.startPreview();
+				// mCamera.unlock();
+				
+				surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
+				surfaceCamera.setOnClickListener(new MyOnClickListener());
+				surfaceCamera.getHolder().addCallback(this);
+			} catch (Exception e) {
+				Toast.makeText(this, "surfaceCreated:Camera.openErr",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		release();
+		if (!MyApplication.isVideoReording) {
+			release();
+			// TODO
+			Toast.makeText(this, "surfaceDestroyed", Toast.LENGTH_SHORT).show();
+		}
 		mHolder = null;
-		// TODO
-		Toast.makeText(this, "surfaceDestroyed", Toast.LENGTH_SHORT).show();
 	}
-
-	private TachographRecorder mMyRecorder;
-	private Camera mCamera;
 
 	private boolean openCamera() {
 		if (mCamera != null) {
@@ -993,6 +1026,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int startRecorder() {
 		if (mMyRecorder != null) {
+			// TODO
+			Toast.makeText(this, "startRecorder", Toast.LENGTH_SHORT).show();
 			return mMyRecorder.start();
 		}
 		return -1;
@@ -1000,6 +1035,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int stopRecorder() {
 		if (mMyRecorder != null) {
+			// TODO
+			Toast.makeText(this, "stopRecorder", Toast.LENGTH_SHORT).show();
 			return mMyRecorder.stop();
 		}
 		return -1;
@@ -1096,6 +1133,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void releaseRecorder() {
 		if (mMyRecorder != null) {
+			// TODO
+			Toast.makeText(this, "releaseRecorder", Toast.LENGTH_SHORT).show();
+
 			mMyRecorder.close();
 			mMyRecorder.release();
 			mMyRecorder = null;
@@ -1104,12 +1144,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	public void onError(int err) {
+		// TODO
 		Toast.makeText(this, "Error : " + err, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void onFileSave(int type, String path) {
-		Toast.makeText(this, "Save " + path, Toast.LENGTH_SHORT).show();
+		// TODO
+		Toast.makeText(this, "Save ：" + path, Toast.LENGTH_SHORT).show();
 	}
 
 	public void setup() {
