@@ -10,8 +10,7 @@
         android:layout_width="480dp"
         android:layout_height="270dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="#ff9276" />
+        android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:id="@+id/layoutWeather"
@@ -80,8 +79,8 @@
             android:layout_alignBottom="@id/textTemp"
             android:layout_alignTop="@id/textTemp"
             android:layout_marginRight="2dp"
-            android:visibility="gone"
-            android:layout_toLeftOf="@id/textTemp" />
+            android:layout_toLeftOf="@id/textTemp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -400,6 +399,27 @@
         android:layout_marginBottom="10dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/ui_main_video_unlock" />
+
+    <ImageView
+        android:id="@+id/smallVideoCamera"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/surfaceCamera"
+        android:layout_alignLeft="@+id/surfaceCamera"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/ui_camera_shoot" />
+
+    <TextView
+        android:id="@+id/textRecordTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="00:00:00"
+        android:textColor="#ff0000"
+        android:textSize="18sp" />
 
     <RelativeLayout
         android:id="@+id/layoutLargeButton"

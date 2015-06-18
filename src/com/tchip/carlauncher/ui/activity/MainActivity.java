@@ -30,6 +30,8 @@ import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WiFiUtil;
+import com.tchip.tachograph.TachographCallback;
+import com.tchip.tachograph.TachographRecorder;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -39,16 +41,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.hardware.Camera;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.SurfaceHolder.Callback;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -58,7 +65,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TachographCallback,
+		Callback {
 
 	private SharedPreferences sharedPreferences;
 	private LocationClient mLocationClient;
@@ -72,7 +80,7 @@ public class MainActivity extends Activity {
 
 	private int scanSpan = 1000; // 轨迹点采集间隔(ms)
 
-	private ImageView smallVideoRecord, smallVideoLock;
+	private ImageView smallVideoRecord, smallVideoLock, smallVideoCamera;
 	private RelativeLayout layoutLargeButton;
 	private TextView textTemp, textLocation, textTodayWeather;
 	private ImageView imageTodayWeather;
@@ -85,6 +93,11 @@ public class MainActivity extends Activity {
 	private RelativeLayout layoutMap, layoutSetting;
 
 	private HorizontalScrollView hsvMain;
+
+	// Record
+	private ImageView largeVideoSize, largeVideoTime, largeVideoLock,
+			largeVideoFile, largeVideoRecord, largeVideoCamera;
+	private SurfaceHolder mHolder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +112,10 @@ public class MainActivity extends Activity {
 		initialLayout();
 		initialCameraButton();
 		initialService();
+
+		// 录像
+		setupRecordDefaults();
+		setupRecordViews();
 	}
 
 	/**
@@ -173,6 +190,7 @@ public class MainActivity extends Activity {
 		// 录像窗口
 		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 		surfaceCamera.setOnClickListener(new MyOnClickListener());
+		surfaceCamera.getHolder().addCallback(this);
 
 		// 天气预报和时钟,状态图标
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
@@ -329,31 +347,35 @@ public class MainActivity extends Activity {
 		smallVideoLock = (ImageView) findViewById(R.id.smallVideoLock);
 		smallVideoLock.setOnClickListener(new MyOnClickListener());
 
+		// 拍照
+		smallVideoCamera = (ImageView) findViewById(R.id.smallVideoCamera);
+		smallVideoCamera.setOnClickListener(new MyOnClickListener());
+
 		// ********** 大视图 **********
 		layoutLargeButton = (RelativeLayout) findViewById(R.id.layoutLargeButton);
 
 		// 视频尺寸
-		ImageView largeVideoSize = (ImageView) findViewById(R.id.largeVideoSize);
+		largeVideoSize = (ImageView) findViewById(R.id.largeVideoSize);
 		largeVideoSize.setOnClickListener(new MyOnClickListener());
 
 		// 视频分段长度
-		ImageView largeVideoTime = (ImageView) findViewById(R.id.largeVideoTime);
+		largeVideoTime = (ImageView) findViewById(R.id.largeVideoTime);
 		largeVideoTime.setOnClickListener(new MyOnClickListener());
 
 		// 锁定
-		ImageView largeVideoLock = (ImageView) findViewById(R.id.largeVideoLock);
+		largeVideoLock = (ImageView) findViewById(R.id.largeVideoLock);
 		largeVideoLock.setOnClickListener(new MyOnClickListener());
 
 		// 视频文件
-		ImageView largeVideoFile = (ImageView) findViewById(R.id.largeVideoFile);
+		largeVideoFile = (ImageView) findViewById(R.id.largeVideoFile);
 		largeVideoFile.setOnClickListener(new MyOnClickListener());
 
 		// 录制
-		ImageView largeVideoRecord = (ImageView) findViewById(R.id.largeVideoRecord);
+		largeVideoRecord = (ImageView) findViewById(R.id.largeVideoRecord);
 		largeVideoRecord.setOnClickListener(new MyOnClickListener());
 
 		// 拍照
-		ImageView largeVideoCamera = (ImageView) findViewById(R.id.largeVideoCamera);
+		largeVideoCamera = (ImageView) findViewById(R.id.largeVideoCamera);
 		largeVideoCamera.setOnClickListener(new MyOnClickListener());
 
 		updateButtonState(isSurfaceLarge());
@@ -366,13 +388,15 @@ public class MainActivity extends Activity {
 	 */
 	private void updateButtonState(boolean isSurfaceLarge) {
 		if (isSurfaceLarge) {
-			smallVideoRecord.setVisibility(View.GONE);
-			smallVideoLock.setVisibility(View.GONE);
+			smallVideoRecord.setVisibility(View.INVISIBLE);
+			smallVideoLock.setVisibility(View.INVISIBLE);
+			smallVideoCamera.setVisibility(View.INVISIBLE);
 			layoutLargeButton.setVisibility(View.VISIBLE);
 		} else {
 			smallVideoRecord.setVisibility(View.VISIBLE);
 			smallVideoLock.setVisibility(View.VISIBLE);
-			layoutLargeButton.setVisibility(View.GONE);
+			smallVideoCamera.setVisibility(View.VISIBLE);
+			layoutLargeButton.setVisibility(View.INVISIBLE);
 		}
 
 	}
@@ -479,6 +503,16 @@ public class MainActivity extends Activity {
 
 			case R.id.smallVideoRecord:
 			case R.id.largeVideoRecord:
+				if (mRecordState == STATE_RECORD_STOPPED) {
+					if (startRecorder() == 0) {
+						mRecordState = STATE_RECORD_STARTED;
+					}
+				} else if (mRecordState == STATE_RECORD_STARTED) {
+					if (stopRecorder() == 0) {
+						mRecordState = STATE_RECORD_STOPPED;
+					}
+				}
+				setupRecordViews();
 				break;
 
 			case R.id.smallVideoLock:
@@ -486,8 +520,26 @@ public class MainActivity extends Activity {
 				break;
 
 			case R.id.largeVideoSize:
+				if (mResolutionState == STATE_RESOLUTION_1080P) {
+					setResolution(STATE_RESOLUTION_720P);
+					mRecordState = STATE_RECORD_STOPPED;
+				} else if (mResolutionState == STATE_RESOLUTION_720P) {
+					setResolution(STATE_RESOLUTION_1080P);
+					mRecordState = STATE_RECORD_STOPPED;
+				}
+				setupRecordViews();
 				break;
 			case R.id.largeVideoTime:
+				if (mIntervalState == STATE_INTERVAL_3MIN) {
+					if (setInterval(5 * 60) == 0) {
+						mIntervalState = STATE_INTERVAL_5MIN;
+					}
+				} else if (mIntervalState == STATE_INTERVAL_5MIN) {
+					if (setInterval(3 * 60) == 0) {
+						mIntervalState = STATE_INTERVAL_3MIN;
+					}
+				}
+				setupRecordViews();
 				break;
 
 			case R.id.largeVideoFile:
@@ -503,7 +555,9 @@ public class MainActivity extends Activity {
 				}
 				break;
 
+			case R.id.smallVideoCamera:
 			case R.id.largeVideoCamera:
+				takePhoto();
 				break;
 
 			case R.id.layoutWeather:
@@ -608,6 +662,44 @@ public class MainActivity extends Activity {
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;
+
+			// case R.id.btn_path:
+			// if (mPathState == STATE_PATH_ZERO) {
+			// if (setDirectory(PATH_ONE) == 0) {
+			// mPathState = STATE_PATH_ONE;
+			// }
+			// } else if (mPathState == STATE_PATH_ONE) {
+			// if (setDirectory(PATH_TWO) == 0) {
+			// mPathState = STATE_PATH_TWO;
+			// }
+			// } else if (mPathState == STATE_PATH_TWO) {
+			// if (setDirectory(PATH_ZERO) == 0) {
+			// mPathState = STATE_PATH_ZERO;
+			// }
+			// }
+			// setupRecordViews();
+			// case R.id.btn_secondary:
+			// if (mSecondaryState == STATE_SECONDARY_ENABLE) {
+			// if (setSecondary(STATE_SECONDARY_DISABLE) == 0) {
+			// mSecondaryState = STATE_SECONDARY_DISABLE;
+			// }
+			// } else if (mSecondaryState == STATE_SECONDARY_DISABLE) {
+			// if (setSecondary(STATE_SECONDARY_ENABLE) == 0) {
+			// mSecondaryState = STATE_SECONDARY_ENABLE;
+			// }
+			// }
+			// setupRecordViews();
+			// case R.id.btn_overlap:
+			// if (mOverlapState == STATE_OVERLAP_ZERO) {
+			// if (setOverlap(5) == 0) {
+			// mOverlapState = STATE_OVERLAP_FIVE;
+			// }
+			// } else if (mOverlapState == STATE_OVERLAP_FIVE) {
+			// if (setOverlap(0) == 0) {
+			// mOverlapState = STATE_OVERLAP_ZERO;
+			// }
+			// }
+			// setupRecordViews();
 
 			default:
 				break;
@@ -752,6 +844,284 @@ public class MainActivity extends Activity {
 		// 取消注册wifi消息处理器
 		unregisterReceiver(wifiIntentReceiver);
 		super.onDestroy();
+	}
+
+	// *********** Record ***********
+
+	private static final int STATE_RESOLUTION_720P = 0;
+	private static final int STATE_RESOLUTION_1080P = 1;
+	private static final int STATE_RECORD_STARTED = 0;
+	private static final int STATE_RECORD_STOPPED = 1;
+	private static final int STATE_INTERVAL_3MIN = 0;
+	private static final int STATE_INTERVAL_5MIN = 1;
+	private static final int STATE_SECONDARY_ENABLE = 0;
+	private static final int STATE_SECONDARY_DISABLE = 1;
+
+	private static final int STATE_PATH_ZERO = 0;
+	private static final int STATE_PATH_ONE = 1;
+	private static final int STATE_PATH_TWO = 2;
+	private static final int STATE_OVERLAP_ZERO = 0;
+	private static final int STATE_OVERLAP_FIVE = 1;
+
+	private static final String PATH_ZERO = "/mnt/sdcard";
+	private static final String PATH_ONE = "/mnt/sdcard/path_one";
+	private static final String PATH_TWO = "/mnt/sdcard/path_two";
+
+	private int mResolutionState;
+	private int mRecordState;
+	private int mIntervalState;
+	private int mPathState;
+	private int mSecondaryState;
+	private int mOverlapState;
+
+	private void setupRecordDefaults() {
+		mResolutionState = STATE_RESOLUTION_720P;
+		mRecordState = STATE_RECORD_STOPPED;
+		mIntervalState = STATE_INTERVAL_3MIN;
+		mPathState = STATE_PATH_ZERO;
+		mSecondaryState = STATE_SECONDARY_DISABLE;
+		mOverlapState = STATE_OVERLAP_FIVE;
+	}
+
+	private void setupRecordViews() {
+		// 视频分辨率
+		if (mResolutionState == STATE_RESOLUTION_720P) {
+			largeVideoSize.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_size_720));
+		} else if (mResolutionState == STATE_RESOLUTION_1080P) {
+			largeVideoSize.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_size_1080));
+		}
+
+		// 录像按钮
+		if (mRecordState == STATE_RECORD_STOPPED) {
+			largeVideoRecord.setBackground(getResources().getDrawable(
+					R.drawable.ui_main_video_record));
+		} else if (mRecordState == STATE_RECORD_STARTED) {
+			largeVideoRecord.setBackground(getResources().getDrawable(
+					R.drawable.ui_main_video_pause));
+		}
+
+		// 视频分段
+		if (mIntervalState == STATE_INTERVAL_3MIN) {
+			largeVideoTime.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_time_3));
+		} else if (mIntervalState == STATE_INTERVAL_5MIN) {
+			largeVideoTime.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_time_5));
+		}
+
+		// 路径
+		// if (mPathState == STATE_PATH_ZERO) {
+		// mPathBtn.setText(R.string.path_zero);
+		// } else if (mPathState == STATE_PATH_ONE) {
+		// mPathBtn.setText(R.string.path_one);
+		// } else if (mPathState == STATE_PATH_TWO) {
+		// mPathBtn.setText(R.string.path_two);
+		// }
+
+		// if (mSecondaryState == STATE_SECONDARY_DISABLE) {
+		// mSecondaryBtn.setText(R.string.secondary_disable);
+		// } else if (mSecondaryState == STATE_SECONDARY_ENABLE) {
+		// mSecondaryBtn.setText(R.string.secondary_enable);
+		// }
+
+		// if (mOverlapState == STATE_OVERLAP_ZERO) {
+		// mOverlapBtn.setText(R.string.nooverlap);
+		// } else if (mOverlapState == STATE_OVERLAP_FIVE) {
+		// mOverlapBtn.setText(R.string.overlap_5s);
+		// }
+
+	}
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
+		mHolder = holder;
+	}
+
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		mHolder = holder;
+		setup();
+		// TODO
+		Toast.makeText(this, "surfaceCreated", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		release();
+		mHolder = null;
+		// TODO
+		Toast.makeText(this, "surfaceDestroyed", Toast.LENGTH_SHORT).show();
+	}
+
+	private TachographRecorder mMyRecorder;
+	private Camera mCamera;
+
+	private boolean openCamera() {
+		if (mCamera != null) {
+			closeCamera();
+		}
+		try {
+			mCamera = Camera.open(0);
+			mCamera.lock();
+			mCamera.setPreviewDisplay(mHolder);
+			mCamera.startPreview();
+			mCamera.unlock();
+			return true;
+		} catch (Exception ex) {
+			closeCamera();
+			return false;
+		}
+	}
+
+	private boolean closeCamera() {
+		if (mCamera == null)
+			return true;
+		try {
+			mCamera.stopPreview();
+			mCamera.setPreviewDisplay(null);
+			mCamera.release();
+			mCamera = null;
+			return true;
+		} catch (Exception ex) {
+			mCamera = null;
+			return false;
+		}
+	}
+
+	public int startRecorder() {
+		if (mMyRecorder != null) {
+			return mMyRecorder.start();
+		}
+		return -1;
+	}
+
+	public int stopRecorder() {
+		if (mMyRecorder != null) {
+			return mMyRecorder.stop();
+		}
+		return -1;
+	}
+
+	public int setInterval(int seconds) {
+		if (mMyRecorder != null) {
+			return mMyRecorder.setVideoSeconds(seconds);
+		}
+		return -1;
+	}
+
+	public int setOverlap(int seconds) {
+		if (mMyRecorder != null) {
+			return mMyRecorder.setVideoOverlap(seconds);
+		}
+		return -1;
+	}
+
+	public int takePhoto() {
+		if (mMyRecorder != null) {
+			return mMyRecorder.takePicture();
+		}
+		return -1;
+	}
+
+	public int setDirectory(String dir) {
+		if (mMyRecorder != null) {
+			return mMyRecorder.setDirectory(dir);
+		}
+		return -1;
+	}
+
+	public int setResolution(int state) {
+		if (state != mResolutionState) {
+			mResolutionState = state;
+			release();
+			if (openCamera()) {
+				setupRecorder();
+			}
+		}
+		return -1;
+	}
+
+	public int setSecondary(int state) {
+		if (state == STATE_SECONDARY_DISABLE) {
+			if (mMyRecorder != null) {
+				return mMyRecorder.setSecondaryVideoEnable(false);
+			}
+		} else if (state == STATE_SECONDARY_ENABLE) {
+			if (mMyRecorder != null) {
+				mMyRecorder.setSecondaryVideoSize(320, 240);
+				mMyRecorder.setSecondaryVideoFrameRate(30);
+				mMyRecorder.setSecondaryVideoBiteRate(120000);
+				return mMyRecorder.setSecondaryVideoEnable(true);
+			}
+		}
+		return -1;
+	}
+
+	private void setupRecorder() {
+		releaseRecorder();
+		mMyRecorder = new TachographRecorder();
+		mMyRecorder.setTachographCallback(this);
+		mMyRecorder.setCamera(mCamera);
+		mMyRecorder.setClientName(this.getPackageName());
+		if (mResolutionState == STATE_RESOLUTION_1080P) {
+			mMyRecorder.setVideoSize(1920, 1080);
+			mMyRecorder.setVideoFrameRate(30);
+			mMyRecorder.setVideoBiteRate(8500000);
+		} else {
+			mMyRecorder.setVideoSize(1280, 720);
+			mMyRecorder.setVideoFrameRate(30);
+			mMyRecorder.setVideoBiteRate(3500000);
+		}
+		if (mSecondaryState == STATE_SECONDARY_ENABLE) {
+			mMyRecorder.setSecondaryVideoEnable(true);
+			mMyRecorder.setSecondaryVideoSize(320, 240);
+			mMyRecorder.setSecondaryVideoFrameRate(30);
+			mMyRecorder.setSecondaryVideoBiteRate(120000);
+		} else {
+			mMyRecorder.setSecondaryVideoEnable(false);
+		}
+		if (mIntervalState == STATE_INTERVAL_5MIN) {
+			mMyRecorder.setVideoSeconds(5 * 60);
+		} else {
+			mMyRecorder.setVideoSeconds(3 * 60);
+		}
+		if (mOverlapState == STATE_OVERLAP_FIVE) {
+			mMyRecorder.setVideoOverlap(5);
+		}
+		mMyRecorder.prepare();
+	}
+
+	private void releaseRecorder() {
+		if (mMyRecorder != null) {
+			mMyRecorder.close();
+			mMyRecorder.release();
+			mMyRecorder = null;
+		}
+	}
+
+	@Override
+	public void onError(int err) {
+		Toast.makeText(this, "Error : " + err, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onFileSave(int type, String path) {
+		Toast.makeText(this, "Save " + path, Toast.LENGTH_SHORT).show();
+	}
+
+	public void setup() {
+		release();
+		if (openCamera()) {
+			setupRecorder();
+		}
+	}
+
+	public void release() {
+		releaseRecorder();
+		closeCamera();
 	}
 
 }
