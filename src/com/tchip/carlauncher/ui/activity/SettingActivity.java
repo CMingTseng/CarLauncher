@@ -2,8 +2,10 @@ package com.tchip.carlauncher.ui.activity;
 
 import java.util.ArrayList;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SettingFragmentPagerAdapter;
+import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.ui.fragment.SettingCameraFragment;
 import com.tchip.carlauncher.ui.fragment.SettingMapFragment;
 import com.tchip.carlauncher.ui.fragment.SettingSystemFragment;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 
 public class SettingActivity extends FragmentActivity {
 	private SettingFadeTabIndicator settingFadeTabIndicator;
@@ -42,6 +45,11 @@ public class SettingActivity extends FragmentActivity {
 		// 返回
 		RelativeLayout btnToViceFromSetting = (RelativeLayout) findViewById(R.id.btnToViceFromSetting);
 		btnToViceFromSetting.setOnClickListener(new MyOnClickListener());
+		
+		// 时钟
+		TextClock textClock = (TextClock)findViewById(R.id.textClock);
+		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

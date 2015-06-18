@@ -90,6 +90,12 @@ public class WeatherActivity extends Activity {
 	private void initialLayout() {
 		weatherArray = new String[6];
 
+		// 返回
+		RelativeLayout layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
+		layoutBack.setOnClickListener(new MyOnClickListener());
+		Button btnToMainFromWeather = (Button) findViewById(R.id.btnToMainFromWeather);
+		btnToMainFromWeather.setOnClickListener(new MyOnClickListener());
+
 		// 时钟信息
 		int weekToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
@@ -98,7 +104,7 @@ public class WeatherActivity extends Activity {
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
 
 		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
-				+ "Font-Roboto-Light.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		textDate.setTypeface(Typefaces.get(this, Constant.FONT_PATH
 				+ "Font-Droid-Sans-Fallback.ttf"));
 		textWeek.setTypeface(Typefaces.get(this, Constant.FONT_PATH
@@ -132,7 +138,7 @@ public class WeatherActivity extends Activity {
 		day0tmpHigh = day0tmpHigh.split("℃")[0];
 		textTempRange.setText(day0tmpLow + "~" + day0tmpHigh);
 		textTempRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
-				+ "Font-Roboto-Light.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		new Titanic().start(textTempRange);
 
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
@@ -144,8 +150,10 @@ public class WeatherActivity extends Activity {
 		textWind.setText(day0windStr);
 
 		TextView textUpdateTime = (TextView) findViewById(R.id.textUpdateTime);
-		textUpdateTime.setText("发布时间 "
-				+ sharedPreferences.getString("postTime", "05:55"));
+		textUpdateTime
+				.setText("发布时间 "
+						+ sharedPreferences.getString("postTime", "05:55")
+								.split(" ")[1]);
 
 		if (!"未定位".equals(cityName)) {
 			weatherArray[0] = cityName + "今日天气:" + weatherToday + ","
@@ -167,17 +175,21 @@ public class WeatherActivity extends Activity {
 		ImageView day1image = (ImageView) findViewById(R.id.day1image);
 		String day1weatherStr = sharedPreferences
 				.getString("day1weather", "未知");
+		TextView day1weather = (TextView) findViewById(R.id.day1weather);
+		day1weather.setText(day1weatherStr);
 		day1image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day1weatherStr)));
 
-		TextView day1tmpHigh = (TextView) findViewById(R.id.day1tmpHigh);
+		TextView day1tmpRange = (TextView) findViewById(R.id.day1tmpRange);
 		String day1tmpHighStr = sharedPreferences
 				.getString("day1tmpHigh", "35");
-		day1tmpHigh.setText(day1tmpHighStr);
-
-		TextView day1tmpLow = (TextView) findViewById(R.id.day1tmpLow);
-		String day1tmpLowStr = sharedPreferences.getString("day1tmpLow", "25");
-		day1tmpLow.setText(day1tmpLowStr);
+		String day1tmpLowStr = sharedPreferences.getString("day1tmpLow", "25")
+				.split("℃")[0];
+		day1tmpRange.setText(day1tmpLowStr+"~"+day1tmpHighStr);
+		day1tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
+		
+		
 
 		TextView day1wind = (TextView) findViewById(R.id.day1wind);
 		String day1windStr = sharedPreferences.getString("day1wind", "东北风5");
@@ -366,18 +378,22 @@ public class WeatherActivity extends Activity {
 			case R.id.layoutDay1:
 				speakWeather(1);
 				break;
+
 			case R.id.layoutDay2:
 				speakWeather(2);
 				break;
+
 			case R.id.layoutDay3:
 				speakWeather(3);
 				break;
+
 			case R.id.layoutDay4:
 				speakWeather(4);
 				break;
 			case R.id.layoutDay5:
 				speakWeather(5);
 				break;
+
 			case R.id.layoutDay6:
 				speakWeather(6);
 				break;
@@ -385,8 +401,17 @@ public class WeatherActivity extends Activity {
 			case R.id.updateButton:
 				updateWeather();
 				break;
+
+			case R.id.layoutBack:
+			case R.id.btnToMainFromWeather:
+				backToMain();
+				break;
 			}
 		}
+	}
+
+	private void backToMain() {
+		finish();
 	}
 
 	private void updateWeather() {

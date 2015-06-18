@@ -179,7 +179,7 @@ public class MainActivity extends Activity {
 		layoutWeather.setOnClickListener(new MyOnClickListener());
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
 		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
-				+ "Font-Roboto-Thin.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
 		textDate.setTypeface(Typefaces.get(this, Constant.FONT_PATH
@@ -753,4 +753,5 @@ public class MainActivity extends Activity {
 		unregisterReceiver(wifiIntentReceiver);
 		super.onDestroy();
 	}
+
 }

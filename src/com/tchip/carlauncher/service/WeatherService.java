@@ -46,7 +46,6 @@ public class WeatherService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
 
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -107,7 +106,6 @@ public class WeatherService extends Service {
 							editor.commit();
 						}
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						editor.putString("exception", e.toString());
 					} finally {
