@@ -228,6 +228,12 @@
             android:label="@string/app_name"
             android:theme="@style/AppTranslucentTheme" >
         </activity>
+          <receiver android:name="com.tchip.carlauncher.model.PowerStateChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
