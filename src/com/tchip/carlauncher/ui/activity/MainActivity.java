@@ -961,17 +961,16 @@ public class MainActivity extends Activity implements TachographCallback,
 			Toast.makeText(this, "surfaceCreated:setup()", Toast.LENGTH_SHORT)
 					.show();
 		} else { // 正在录像中，回到主界面
-
 			try {
 				// mCamera = Camera.open(0);
 				// mCamera.lock();
-				mCamera.stopPreview();
-//				mCamera.setPreviewDisplay(null);
-				
+				// mCamera.stopPreview();
+				// mCamera.setPreviewDisplay(null);
+
 				mCamera.setPreviewDisplay(mHolder);
 				mCamera.startPreview();
 				// mCamera.unlock();
-				
+
 				surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 				surfaceCamera.setOnClickListener(new MyOnClickListener());
 				surfaceCamera.getHolder().addCallback(this);

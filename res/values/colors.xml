@@ -68,5 +68,8 @@
     <color name="setting_tab_text_off">#878787</color>
     <color name="setting_tab_text_on">#ffffff</color>
     <color name="setting_tab_bg">#000000</color>
+    
+    <!-- Weather Activity -->
+    <color name="ui_weather_line_bg">#cccccc</color>
 
 </resources>

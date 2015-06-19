@@ -185,11 +185,9 @@ public class WeatherActivity extends Activity {
 				.getString("day1tmpHigh", "35");
 		String day1tmpLowStr = sharedPreferences.getString("day1tmpLow", "25")
 				.split("℃")[0];
-		day1tmpRange.setText(day1tmpLowStr+"~"+day1tmpHighStr);
+		day1tmpRange.setText(day1tmpLowStr + "~" + day1tmpHighStr);
 		day1tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-		
-		
 
 		TextView day1wind = (TextView) findViewById(R.id.day1wind);
 		String day1windStr = sharedPreferences.getString("day1wind", "东北风5");
@@ -197,8 +195,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[1] = day1weekStr + "天气：" + day1weatherStr + ","
-					+ day1tmpLowStr.split("℃")[0] + "到" + day1tmpHighStr + ","
-					+ day1windStr;
+					+ day1tmpLowStr + "~" + day1tmpHighStr + "," + day1windStr;
 		} else {
 			weatherArray[1] = "定位失败，无法获取天气信息";
 		}
@@ -218,14 +215,14 @@ public class WeatherActivity extends Activity {
 		day2image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day2WeatherStr)));
 
-		TextView day2tmpHigh = (TextView) findViewById(R.id.day2tmpHigh);
+		TextView day2tmpRange = (TextView) findViewById(R.id.day2tmpRange);
 		String day2tmpHighStr = sharedPreferences
 				.getString("day2tmpHigh", "35");
-		day2tmpHigh.setText(day2tmpHighStr);
-
-		TextView day2tmpLow = (TextView) findViewById(R.id.day2tmpLow);
-		String day2tmpLowStr = sharedPreferences.getString("day2tmpLow", "25");
-		day2tmpLow.setText(day2tmpLowStr);
+		String day2tmpLowStr = sharedPreferences.getString("day2tmpLow", "25")
+				.split("℃")[0];
+		day2tmpRange.setText(day2tmpLowStr + "~" + day2tmpHighStr);
+		day2tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day2wind = (TextView) findViewById(R.id.day2wind);
 		String day2windStr = sharedPreferences.getString("day2wind", "东北风5");
@@ -233,8 +230,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[2] = day2WeekStr + "天气：" + day2WeatherStr + ","
-					+ day2tmpLowStr.split("℃")[0] + "到" + day2tmpHighStr + ","
-					+ day2windStr;
+					+ day2tmpLowStr + "~" + day2tmpHighStr + "," + day2windStr;
 		} else {
 			weatherArray[2] = "定位失败，无法获取天气信息";
 		}
@@ -254,14 +250,14 @@ public class WeatherActivity extends Activity {
 		day3image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day3WeatherStr)));
 
-		TextView day3tmpHigh = (TextView) findViewById(R.id.day3tmpHigh);
+		TextView day3tmpRange = (TextView) findViewById(R.id.day3tmpRange);
 		String day3tmpHighStr = sharedPreferences
 				.getString("day3tmpHigh", "35");
-		day3tmpHigh.setText(day3tmpHighStr);
-
-		TextView day3tmpLow = (TextView) findViewById(R.id.day3tmpLow);
-		String day3tmpLowStr = sharedPreferences.getString("day3tmpLow", "25");
-		day3tmpLow.setText(day3tmpLowStr);
+		String day3tmpLowStr = sharedPreferences.getString("day3tmpLow", "25")
+				.split("℃")[0];
+		day3tmpRange.setText(day3tmpLowStr + "~" + day3tmpHighStr);
+		day3tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day3wind = (TextView) findViewById(R.id.day3wind);
 		String day3windStr = sharedPreferences.getString("day3wind", "东北风5");
@@ -269,8 +265,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[3] = day3WeekStr + "天气：" + day3WeatherStr + ","
-					+ day3tmpLowStr.split("℃")[0] + "到" + day3tmpHighStr + ","
-					+ day3windStr;
+					+ day3tmpLowStr + "~" + day3tmpHighStr + "," + day3windStr;
 		} else {
 			weatherArray[3] = "定位失败，无法获取天气信息";
 		}
@@ -290,14 +285,14 @@ public class WeatherActivity extends Activity {
 		day4image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day4WeatherStr)));
 
-		TextView day4tmpHigh = (TextView) findViewById(R.id.day4tmpHigh);
+		TextView day4tmpRange = (TextView) findViewById(R.id.day4tmpRange);
 		String day4tmpHighStr = sharedPreferences
 				.getString("day4tmpHigh", "35");
-		day4tmpHigh.setText(day4tmpHighStr);
-
-		TextView day4tmpLow = (TextView) findViewById(R.id.day4tmpLow);
-		String day4tmpLowStr = sharedPreferences.getString("day4tmpLow", "25");
-		day4tmpLow.setText(day4tmpLowStr);
+		String day4tmpLowStr = sharedPreferences.getString("day4tmpLow", "25")
+				.split("℃")[0];
+		day4tmpRange.setText(day4tmpLowStr + "~" + day4tmpHighStr);
+		day4tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day4wind = (TextView) findViewById(R.id.day4wind);
 		String day4windStr = sharedPreferences.getString("day4wind", "东北风5");
@@ -305,8 +300,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[4] = day4WeekStr + "天气：" + day4WeatherStr + ","
-					+ day4tmpLowStr.split("℃")[0] + "到" + day4tmpHighStr + ","
-					+ day4windStr;
+					+ day4tmpLowStr + "~" + day4tmpHighStr + "," + day4windStr;
 		} else {
 			weatherArray[4] = "定位失败，无法获取天气信息";
 		}
@@ -326,14 +320,14 @@ public class WeatherActivity extends Activity {
 		day5image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day5WeatherStr)));
 
-		TextView day5tmpHigh = (TextView) findViewById(R.id.day5tmpHigh);
+		TextView day5tmpRange = (TextView) findViewById(R.id.day5tmpRange);
 		String day5tmpHighStr = sharedPreferences
 				.getString("day5tmpHigh", "35");
-		day5tmpHigh.setText(day5tmpHighStr);
-
-		TextView day5tmpLow = (TextView) findViewById(R.id.day5tmpLow);
-		String day5tmpLowStr = sharedPreferences.getString("day5tmpLow", "25");
-		day5tmpLow.setText(day5tmpLowStr);
+		String day5tmpLowStr = sharedPreferences.getString("day5tmpLow", "25")
+				.split("℃")[0];
+		day5tmpRange.setText(day5tmpLowStr + "~" + day5tmpHighStr);
+		day5tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day5wind = (TextView) findViewById(R.id.day5wind);
 		String day5windStr = sharedPreferences.getString("day5wind", "东北风5");
@@ -341,8 +335,7 @@ public class WeatherActivity extends Activity {
 
 		if (isLocated) {
 			weatherArray[5] = day5WeekStr + "天气：" + day5WeatherStr + ","
-					+ day5tmpLowStr.split("℃")[0] + "到" + day5tmpHighStr + ","
-					+ day5windStr;
+					+ day5tmpLowStr + "~" + day5tmpHighStr + "," + day5windStr;
 		} else {
 			weatherArray[5] = "定位失败，无法获取天气信息";
 		}
