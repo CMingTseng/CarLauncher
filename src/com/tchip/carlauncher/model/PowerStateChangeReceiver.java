@@ -39,6 +39,9 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 				.getAction())) {
 			// String strHintConnect = "";
 			// Toast.makeText(context, "CONNECTED", Toast.LENGTH_SHORT).show();
+			// 停止轨迹记录服务，保存轨迹
+			Intent intentRoute = new Intent(context, RouteRecordService.class);
+			context.startService(intentRoute);
 		} else if ("android.intent.action.ACTION_POWER_DISCONNECTED"
 				.equals(intent.getAction())) {
 			String strHintDisconnect = "已断开电源，正在保存数据。";

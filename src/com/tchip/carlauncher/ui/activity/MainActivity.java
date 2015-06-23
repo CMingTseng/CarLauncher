@@ -555,6 +555,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
 				// TODO:视频文件加锁
+
+				// TEST
+				Intent intentRoute = new Intent(getApplicationContext(),
+						RouteRecordService.class);
+				stopService(intentRoute);
 				break;
 
 			case R.id.largeVideoSize:
@@ -878,11 +883,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
-		
+
 		// 更新录像界面按钮状态
 		refreshRecordButton();
 		setupRecordViews();
-		
+
 		super.onResume();
 	}
 

@@ -50,7 +50,6 @@ public class RouteRecordService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -64,7 +63,7 @@ public class RouteRecordService extends Service {
 		editor = sharedPreferences.edit();
 		editor.putBoolean("isRun", true);
 		editor.commit();
-		isDebug = isDebug();
+		isDebug = true;//isDebug();
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, false);
 		// 初始化路径
