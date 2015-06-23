@@ -59,8 +59,8 @@ public class SettingCameraVideoQualityDialog extends android.app.Dialog {
 	}
 
 	private void iniRadioGroup() {
-		sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
-				Context.MODE_PRIVATE);
+		sharedPreferences = context.getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		videoQualityGroup = (RadioGroup) findViewById(R.id.videoQualityGroup);
 		videoQualityGroup

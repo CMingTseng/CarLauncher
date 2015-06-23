@@ -50,8 +50,8 @@ public class SettingCameraFragment extends Fragment {
 				.findViewById(R.id.layoutRippleCrashSensitive);
 		layoutRippleCrashSensitive.setOnClickListener(new MyOnClickListener());
 
-		preferences = getActivity().getSharedPreferences("CarLauncher",
-				Context.MODE_PRIVATE);
+		preferences = getActivity().getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		updateVideoQualityText();
 		updateVideoSizeText();
 		updateVideoTimeText();

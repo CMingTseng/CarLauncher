@@ -59,6 +59,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
@@ -70,6 +71,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		Callback {
 
 	private SharedPreferences sharedPreferences;
+	private Editor editor;
+
 	private LocationClient mLocationClient;
 
 	private SurfaceView surfaceCamera;
@@ -137,6 +140,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		editor = sharedPreferences.edit();
 		initialLayout();
 		initialCameraButton();
 		initialService();
@@ -240,6 +244,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textLocation = (TextView) findViewById(R.id.textLocation);
 		updateProgress = (ProgressBar) findViewById(R.id.updateProgress);
+
+		LinearLayout layoutWiFi = (LinearLayout) findViewById(R.id.layoutWiFi);
+		layoutWiFi.setOnClickListener(new MyOnClickListener());
 
 		// WiFi状态信息
 		imageWifiLevel = (ImageView) findViewById(R.id.imageWifiLevel);
@@ -553,23 +560,29 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoSize:
 				if (mResolutionState == STATE_RESOLUTION_1080P) {
 					setResolution(STATE_RESOLUTION_720P);
+					editor.putString("videoSize", "720");
 					mRecordState = STATE_RECORD_STOPPED;
 				} else if (mResolutionState == STATE_RESOLUTION_720P) {
 					setResolution(STATE_RESOLUTION_1080P);
+					editor.putString("videoSize", "1080");
 					mRecordState = STATE_RECORD_STOPPED;
 				}
+				editor.commit();
 				setupRecordViews();
 				break;
 			case R.id.largeVideoTime:
 				if (mIntervalState == STATE_INTERVAL_3MIN) {
 					if (setInterval(5 * 60) == 0) {
 						mIntervalState = STATE_INTERVAL_5MIN;
+						editor.putString("videoTime", "5");
 					}
 				} else if (mIntervalState == STATE_INTERVAL_5MIN) {
 					if (setInterval(3 * 60) == 0) {
 						mIntervalState = STATE_INTERVAL_3MIN;
+						editor.putString("videoTime", "3");
 					}
 				}
+				editor.commit();
 				setupRecordViews();
 				break;
 
@@ -692,6 +705,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				startActivity(intentSetting);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
+				break;
+			case R.id.layoutWiFi:
+				startActivity(new Intent(
+						android.provider.Settings.ACTION_WIFI_SETTINGS));
 				break;
 
 			// case R.id.btn_path:
@@ -861,6 +878,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
+		
+		// 更新录像界面按钮状态
+		refreshRecordButton();
+		setupRecordViews();
+		
 		super.onResume();
 	}
 
@@ -881,13 +903,35 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	// *********** Record ***********
 
+	/**
+	 * 设置录制初始值
+	 */
 	private void setupRecordDefaults() {
-		mResolutionState = STATE_RESOLUTION_720P;
+		refreshRecordButton();
+
 		mRecordState = STATE_RECORD_STOPPED;
-		mIntervalState = STATE_INTERVAL_3MIN;
+
 		mPathState = STATE_PATH_ZERO;
 		mSecondaryState = STATE_SECONDARY_DISABLE;
 		mOverlapState = STATE_OVERLAP_FIVE;
+	}
+
+	private void refreshRecordButton() {
+		// 视频尺寸
+		String videoSizeStr = sharedPreferences.getString("videoSize", "720");
+		if ("1080".equals(videoSizeStr)) {
+			mResolutionState = STATE_RESOLUTION_1080P;
+		} else {
+			mResolutionState = STATE_RESOLUTION_720P;
+		}
+
+		// 视频分段
+		String videoTimeStr = sharedPreferences.getString("videoTime", "5");
+		if ("3".equals(videoTimeStr)) {
+			mIntervalState = STATE_INTERVAL_3MIN;
+		} else {
+			mIntervalState = STATE_INTERVAL_5MIN;
+		}
 	}
 
 	private void setupRecordViews() {
@@ -975,6 +1019,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				surfaceCamera.setOnClickListener(new MyOnClickListener());
 				surfaceCamera.getHolder().addCallback(this);
 			} catch (Exception e) {
+				// TODO
 				Toast.makeText(this, "surfaceCreated:Camera.openErr",
 						Toast.LENGTH_SHORT).show();
 			}
@@ -985,8 +1030,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		if (!MyApplication.isVideoReording) {
 			release();
-			// TODO
-			Toast.makeText(this, "surfaceDestroyed", Toast.LENGTH_SHORT).show();
 		}
 		mHolder = null;
 	}

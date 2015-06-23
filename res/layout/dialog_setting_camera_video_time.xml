@@ -66,6 +66,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="10分钟"
+                        android:visibility="gone"
                         android:textColor="#1E88E5" />
                 </RadioGroup>
 

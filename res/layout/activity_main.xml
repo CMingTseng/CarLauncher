@@ -138,6 +138,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="5dp"
+            android:id="@+id/layoutWiFi"
             android:orientation="horizontal" >
 
             <ImageView

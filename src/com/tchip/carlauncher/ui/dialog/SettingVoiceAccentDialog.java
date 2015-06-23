@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.ui.dialog;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.ButtonFlat;
 
@@ -59,8 +60,8 @@ public class SettingVoiceAccentDialog extends android.app.Dialog {
 	}
 
 	private void iniRadioGroup() {
-		sharedPreferences = context.getSharedPreferences("CarLauncher",
-				context.MODE_PRIVATE);
+		sharedPreferences = context.getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		voiceAccentGroup = (RadioGroup) findViewById(R.id.voiceAccentGroup);
 		voiceAccentGroup

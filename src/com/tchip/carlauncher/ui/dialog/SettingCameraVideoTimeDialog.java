@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.ui.dialog;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.ButtonFlat;
 
@@ -40,7 +41,7 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 	View.OnClickListener onCancelButtonClickListener;
 
 	private RadioGroup videoTimeGroup;
-	private RadioButton videoTime3, videoTime5, videoTime10;
+	private RadioButton videoTime3, videoTime5;// , videoTime10;
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
@@ -58,21 +59,23 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 	}
 
 	private void iniRadioGroup() {
-		sharedPreferences = context.getSharedPreferences("CarLauncher",
-				context.MODE_PRIVATE); // MODE_PRIVATE
+		sharedPreferences = context.getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		videoTimeGroup = (RadioGroup) findViewById(R.id.videoTimeGroup);
 		videoTimeGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
 		videoTime3 = (RadioButton) findViewById(R.id.videoTime3);
 		videoTime5 = (RadioButton) findViewById(R.id.videoTime5);
-		videoTime10 = (RadioButton) findViewById(R.id.videoTime10);
+		// videoTime10 = (RadioButton) findViewById(R.id.videoTime10);
 		String nowTime = sharedPreferences.getString("videoTime", "5");
 		if ("3".equals(nowTime)) {
 			videoTime3.setChecked(true);
-		} else if ("10".equals(nowTime)) {
-			videoTime10.setChecked(true);
-		} else {
+		}
+		// else if ("10".equals(nowTime)) {
+		// videoTime10.setChecked(true);
+		// }
+		else {
 			videoTime5.setChecked(true);
 		}
 	}
@@ -85,9 +88,9 @@ public class SettingCameraVideoTimeDialog extends android.app.Dialog {
 			case R.id.videoTime3:
 				editor.putString("videoTime", "3");
 				break;
-			case R.id.videoTime10:
-				editor.putString("videoTime", "10");
-				break;
+			// case R.id.videoTime10:
+			// editor.putString("videoTime", "10");
+			// break;
 			case R.id.videoTime5:
 			default:
 				editor.putString("videoTime", "5");
