@@ -1,19 +1,26 @@
 package com.tchip.carlauncher.ui.activity;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.MaterialSwitch;
 import com.tchip.carlauncher.view.NumberSeekBar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextClock;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class SettingSystemDisplayActivity extends Activity {
@@ -24,16 +31,31 @@ public class SettingSystemDisplayActivity extends Activity {
 	private RadioButton screenOff1min, screenOff2min, screenOff5min,
 			screenOff10min, screenOffNone;
 
+	private SharedPreferences sharedPreferences;
+	private Editor editor;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_setting_system_display);
-		setTitle("显示设置");
 
 		context = getApplicationContext();
+
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		editor = sharedPreferences.edit();
+
+		// 返回
+		RelativeLayout layoutToSettingFromBright = (RelativeLayout) findViewById(R.id.layoutToSettingFromBright);
+		layoutToSettingFromBright.setOnClickListener(new MyOnClickListener());
+
+		// 时钟
+		TextClock textClock = (TextClock) findViewById(R.id.textClock);
+		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		// 亮度SeekBar
 		int color = Color.parseColor("#1E88E5");
@@ -54,11 +76,28 @@ public class SettingSystemDisplayActivity extends Activity {
 
 		// 夜晚亮度自动降低Switch
 		nightSwitch = (MaterialSwitch) findViewById(R.id.nightSwitch);
-		nightSwitch.setChecked(true);
+		nightSwitch.setChecked(sharedPreferences.getBoolean("brightAdjust",
+				false));
 		nightSwitch.setOnCheckListener(new MySwitchOnCheckListener());
 
 		// 屏幕关闭RadioGroup
 		iniRadioGroup();
+	}
+
+	class MyOnClickListener implements View.OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.layoutToSettingFromBright:
+				finish();
+				break;
+
+			default:
+				break;
+			}
+		}
+
 	}
 
 	private void iniRadioGroup() {
@@ -121,8 +160,8 @@ public class SettingSystemDisplayActivity extends Activity {
 
 		@Override
 		public void onCheck(boolean check) {
-			Toast.makeText(context, "isCheck:" + check, Toast.LENGTH_SHORT)
-					.show();
+			editor.putBoolean("brightAdjust", check);
+			editor.commit();
 		}
 	}
 
