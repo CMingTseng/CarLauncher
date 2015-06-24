@@ -110,9 +110,13 @@ public class WeatherActivity extends Activity {
 		textWeek.setTypeface(Typefaces.get(this, Constant.FONT_PATH
 				+ "Font-Droid-Sans-Fallback.ttf"));
 		// Day 0 (Today) Weather and Time, Location Info
-
+		String cityName = "";
+		if ("未定位".equals(sharedPreferences.getString("cityName", "未定位"))) {
+			cityName = sharedPreferences.getString("cityNameRealButOld", "未定位");
+		} else {
+			cityName = sharedPreferences.getString("cityName", "未定位");
+		}
 		TextView textLocation = (TextView) findViewById(R.id.textLocation);
-		String cityName = sharedPreferences.getString("cityName", "未定位");
 		textLocation.setText(cityName);
 
 		String weatherToday = sharedPreferences.getString("day0weather", "未知");
@@ -152,7 +156,7 @@ public class WeatherActivity extends Activity {
 		TextView textUpdateTime = (TextView) findViewById(R.id.textUpdateTime);
 		textUpdateTime
 				.setText("发布时间 "
-						+ sharedPreferences.getString("postTime", "05:55")
+						+ sharedPreferences.getString("postTime", "2015 05:55")
 								.split(" ")[1]);
 
 		if (!"未定位".equals(cityName)) {

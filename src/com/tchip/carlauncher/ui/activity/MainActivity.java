@@ -291,6 +291,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		View mapHideView = findViewById(R.id.mapHideView);
 		mapHideView.setOnClickListener(new MyOnClickListener());
 
+		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
+		imageNavi.setOnClickListener(new MyOnClickListener());
+
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
 		imageMultimedia.setOnClickListener(new MyOnClickListener());
@@ -444,7 +447,27 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 更新位置和天气
 	 */
 	private void updateLocationAndWeather() {
-		textLocation.setText(sharedPreferences.getString("cityName", "未定位"));
+
+		if ("未定位".equals(sharedPreferences.getString("cityName", "未定位"))) {
+			String cityName = sharedPreferences.getString("cityNameRealButOld",
+					"未定位");
+			if ("未定位".equals(cityName)) {
+				String addrStr = sharedPreferences.getString("addrStr", "未定位");
+				if (addrStr.contains("省") && addrStr.contains("市")) {
+					cityName = addrStr.split("省")[1].split("市")[0];
+				} else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
+					cityName = addrStr.split("市")[0];
+				} else {
+					cityName = addrStr;
+				}
+			}
+			editor.putString("cityNameRealButOld", cityName);
+			textLocation.setText(cityName);
+		} else {
+			textLocation
+					.setText(sharedPreferences.getString("cityName", "未定位"));
+		}
+
 		String weatherToday = sharedPreferences.getString("day0weather", "未知");
 		textTodayWeather.setText(weatherToday);
 		imageTodayWeather.setImageResource(WeatherUtil
@@ -618,6 +641,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.mapHideView:
+			case R.id.imageNavi:
 				try {
 					ComponentName componentMap = new ComponentName(
 							"com.baidu.BaiduMap",
@@ -716,44 +740,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						android.provider.Settings.ACTION_WIFI_SETTINGS));
 				break;
 
-			// case R.id.btn_path:
-			// if (mPathState == STATE_PATH_ZERO) {
-			// if (setDirectory(PATH_ONE) == 0) {
-			// mPathState = STATE_PATH_ONE;
-			// }
-			// } else if (mPathState == STATE_PATH_ONE) {
-			// if (setDirectory(PATH_TWO) == 0) {
-			// mPathState = STATE_PATH_TWO;
-			// }
-			// } else if (mPathState == STATE_PATH_TWO) {
-			// if (setDirectory(PATH_ZERO) == 0) {
-			// mPathState = STATE_PATH_ZERO;
-			// }
-			// }
-			// setupRecordViews();
-			// case R.id.btn_secondary:
-			// if (mSecondaryState == STATE_SECONDARY_ENABLE) {
-			// if (setSecondary(STATE_SECONDARY_DISABLE) == 0) {
-			// mSecondaryState = STATE_SECONDARY_DISABLE;
-			// }
-			// } else if (mSecondaryState == STATE_SECONDARY_DISABLE) {
-			// if (setSecondary(STATE_SECONDARY_ENABLE) == 0) {
-			// mSecondaryState = STATE_SECONDARY_ENABLE;
-			// }
-			// }
-			// setupRecordViews();
-			// case R.id.btn_overlap:
-			// if (mOverlapState == STATE_OVERLAP_ZERO) {
-			// if (setOverlap(5) == 0) {
-			// mOverlapState = STATE_OVERLAP_FIVE;
-			// }
-			// } else if (mOverlapState == STATE_OVERLAP_FIVE) {
-			// if (setOverlap(0) == 0) {
-			// mOverlapState = STATE_OVERLAP_ZERO;
-			// }
-			// }
-			// setupRecordViews();
-
 			default:
 				break;
 			}
@@ -783,13 +769,42 @@ public class MainActivity extends Activity implements TachographCallback,
 				startWeatherService();
 			}
 
+			// 存储非“未定位”的城市信息
+			if (!"未定位".equals(location.getCity())) {
+				editor.putString("cityNameRealButOld", location.getCity());
+			}
+
 			// 城市名发生变化，需要更新位置和天气
 			if (!sharedPreferences.getString("cityName", "未定位").equals(
 					location.getCity())) {
 				startWeatherService();
 				Editor editor = sharedPreferences.edit();
 				editor.putString("cityName", location.getCity());
+
 				editor.commit();
+			}
+
+			String cityName = location.getCity();
+			// cityCode = getCityCodeByName(cityName);
+
+			if ((cityName != null) && (!cityName.equals("未定位"))) {
+
+				// editor.putLong("cityCode", cityCode);
+				editor.putString("cityName", cityName);
+				editor.putString("cityNameRealButOld", cityName);
+				editor.putString("latitude", "" + location.getLatitude());
+				editor.putString("longitude", "" + location.getLongitude());
+				editor.putString("district", location.getDistrict());
+				editor.putString("floor", location.getFloor());
+				editor.putString("addrStr", location.getAddrStr());
+				editor.putString("street", location.getStreet());
+				editor.putString("streetNum", location.getStreetNumber());
+				editor.putFloat("speed", location.getSpeed());
+				editor.putString("altitude", "" + location.getAltitude());
+				editor.putString("lbsTime", location.getTime());
+				editor.commit();
+
+				// new Thread(networkTask).start();
 			}
 		}
 

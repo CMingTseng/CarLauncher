@@ -147,7 +147,7 @@
                     android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/ui_setting_system_app" />
+                    android:src="@drawable/ui_setting_system_traffic" />
 
                 <TextView
                     android:layout_width="wrap_content"

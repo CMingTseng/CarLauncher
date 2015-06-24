@@ -106,7 +106,6 @@ public class WeatherUtil {
 				bitmap, 100 + rainSpanX * 8, 50 + rainSpanY * 2, 20);
 		flLayout.addView(view9);
 		view9.move();
-
 	}
 
 	/**
@@ -211,8 +210,13 @@ public class WeatherUtil {
 			return WEATHER_TYPE.SUN;
 	}
 
+	/**
+	 * 天气界面背景图片
+	 * 
+	 * @param type
+	 * @return
+	 */
 	public static int getWeatherBackground(WEATHER_TYPE type) {
-
 		switch (type) {
 		case SUN:
 			return isDay() ? (R.drawable.icon_weather_bg_sun_day)
@@ -222,10 +226,9 @@ public class WeatherUtil {
 					: R.drawable.icon_weather_bg_cloud_night;
 		case RAIN:
 			return R.drawable.icon_weather_bg_rain;
+		case HAIL:
 		case SNOW:
 			return R.drawable.icon_weather_bg_snow;
-		case HAIL:
-			return R.drawable.icon_weather_hail_white;
 		case RAIN_SNOW:
 			return R.drawable.icon_weather_bg_rain_snow;
 		case FOG:
@@ -237,31 +240,41 @@ public class WeatherUtil {
 		}
 	}
 
+	/**
+	 * 天气大图标
+	 * 
+	 * @param type
+	 * @return
+	 */
 	public static int getWeatherDrawable(WEATHER_TYPE type) {
 
 		switch (type) {
 		case SUN:
-			return isDay() ? (R.drawable.icon_weather_sun_white)
-					: (R.drawable.icon_weather_moon_white);
+			return isDay() ? (R.drawable.ui_weather_sun_day)
+					: (R.drawable.ui_weather_sun_night);
 		case CLOUD:
-			return isDay() ? R.drawable.icon_weather_cloud_day_white
-					: R.drawable.icon_weather_cloud_night_white;
+			return R.drawable.ui_weather_cloud;
 		case RAIN:
-			return R.drawable.icon_weather_rain_white;
+			return R.drawable.ui_weather_rain;
 		case SNOW:
-			return R.drawable.icon_weather_snow_white;
+			return R.drawable.ui_weather_snow;
 		case HAIL:
-			return R.drawable.icon_weather_hail_white;
+			return R.drawable.ui_weather_hail;
 		case RAIN_SNOW:
-			return R.drawable.icon_weather_rain_snow_white;
+			return R.drawable.ui_weather_rain_snow;
 		case FOG:
-			return isDay() ? (R.drawable.weather_fog_day)
-					: (R.drawable.weather_fog_night);
+			return R.drawable.ui_weather_fog;
 		default:
-			return R.drawable.icon_weather_na;
+			return isDay() ? (R.drawable.icon_weather_bg_default_day)
+					: (R.drawable.icon_weather_bg_default_night);
 		}
 	}
 
+	/**
+	 * 是否是白天
+	 * 
+	 * @return
+	 */
 	public static boolean isDay() {
 		Date date = new Date();
 		int hour = date.getHours();

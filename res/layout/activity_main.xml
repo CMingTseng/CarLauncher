@@ -95,7 +95,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/icon_weather_sun_white" />
+                android:src="@drawable/ui_weather_sun_day_small" />
 
             <TextView
                 android:id="@+id/textTodayWeather"
@@ -133,12 +133,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutWiFi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="5dp"
-            android:id="@+id/layoutWiFi"
             android:orientation="horizontal" >
 
             <ImageView
@@ -172,12 +172,21 @@
 
                 <com.baidu.mapapi.map.MapView
                     android:id="@+id/mainMapView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true" />
+
+                <ImageView
+                    android:id="@+id/imageNavi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ui_main_nav" />
 
                 <View
                     android:id="@+id/mapHideView"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
+                     android:layout_alignParentLeft="true"
                     android:layout_height="match_parent" />
             </RelativeLayout>
 

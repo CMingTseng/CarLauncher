@@ -154,7 +154,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:src="@drawable/icon_weather_sun_white" />
+                android:src="@drawable/ui_weather_sun_day" />
 
             <RelativeLayout
                 android:layout_width="650dp"
@@ -316,7 +316,7 @@
                     android:id="@+id/day1image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/weather_image_more_weather"
-                    android:src="@drawable/icon_weather_sun_white" />
+                    android:src="@drawable/ui_weather_sun_day" />
 
                 <TextView
                     android:id="@+id/day1tmpRange"
@@ -384,7 +384,7 @@
                     android:id="@+id/day2image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/weather_image_more_weather"
-                    android:src="@drawable/icon_weather_sun_white" />
+                    android:src="@drawable/ui_weather_sun_day" />
 
                 <TextView
                     android:id="@+id/day2tmpRange"
@@ -452,7 +452,7 @@
                     android:id="@+id/day3image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/weather_image_more_weather"
-                    android:src="@drawable/icon_weather_sun_white" />
+                    android:src="@drawable/ui_weather_sun_day" />
 
                 <TextView
                     android:id="@+id/day3tmpRange"
@@ -520,7 +520,7 @@
                     android:id="@+id/day4image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/weather_image_more_weather"
-                    android:src="@drawable/icon_weather_sun_white" />
+                    android:src="@drawable/ui_weather_sun_day" />
 
                 <TextView
                     android:id="@+id/day4tmpRange"
@@ -588,7 +588,7 @@
                     android:id="@+id/day5image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/weather_image_more_weather"
-                    android:src="@drawable/icon_weather_sun_white" />
+                    android:src="@drawable/ui_weather_sun_day" />
 
                 <TextView
                     android:id="@+id/day5tmpRange"
@@ -651,7 +651,7 @@
                     android:id="@+id/day6image"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:src="@drawable/icon_weather_sun_white" />
+                    android:src="@drawable/ui_weather_sun_day" />
 
                 <TextView
                     android:id="@+id/day6tmpHigh"

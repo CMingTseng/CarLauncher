@@ -111,13 +111,11 @@ public class LocationService extends Service {
 			cityName = location.getCity();
 			// cityCode = getCityCodeByName(cityName);
 
-			if ((cityName != null) && (!cityName.equals("未定位"))) { // &&
-																	// (cityCode
-																	// !=
-																	// 123456789)
+			if ((cityName != null) && (!cityName.equals("未定位"))) { 
 
 				// editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);
+				editor.putString("cityNameRealButOld", cityName);
 				editor.putString("latitude", "" + location.getLatitude());
 				editor.putString("longitude", "" + location.getLongitude());
 				editor.putString("district", location.getDistrict());
