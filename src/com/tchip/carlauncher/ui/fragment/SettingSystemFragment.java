@@ -40,7 +40,7 @@ public class SettingSystemFragment extends Fragment {
 				.findViewById(R.id.layoutRippleWifi);
 		layoutRippleWifi.setOnClickListener(new MyOnClickListener());
 
-		// 流量
+		// 流量(GONE)
 		RelativeLayout layoutRippleTraffic = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleTraffic);
 		layoutRippleTraffic.setOnClickListener(new MyOnClickListener());
@@ -80,12 +80,12 @@ public class SettingSystemFragment extends Fragment {
 				.findViewById(R.id.layoutRippleReset);
 		layoutRippleReset.setOnClickListener(new MyOnClickListener());
 
-		// 关于
+		// 关于(GONE)
 		RelativeLayout layoutRippleAbout = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleAbout);
 		layoutRippleAbout.setOnClickListener(new MyOnClickListener());
 
-		// 应用
+		// 应用(GONE)
 		RelativeLayout layoutRippleApp = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleApp);
 		layoutRippleApp.setOnClickListener(new MyOnClickListener());
