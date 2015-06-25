@@ -3,11 +3,10 @@ package com.tchip.carlauncher.ui.fragment;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
-import com.tchip.carlauncher.ui.activity.TrafficChartActivity;
+import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
 import com.tchip.carlauncher.view.LayoutRipple;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class SettingSystemFragment extends Fragment {
 	private View systemSettingView;
@@ -55,7 +53,7 @@ public class SettingSystemFragment extends Fragment {
 				.findViewById(R.id.layoutRippleLocation);
 		layoutRippleLocation.setOnClickListener(new MyOnClickListener());
 
-		// 存储
+		// 存储(GONE)
 		RelativeLayout layoutRippleStorage = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleStorage);
 		layoutRippleStorage.setOnClickListener(new MyOnClickListener());
@@ -99,9 +97,9 @@ public class SettingSystemFragment extends Fragment {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutRippleDisplay:
-				Intent intent = new Intent(context,
+				Intent intentDisplay = new Intent(context,
 						SettingSystemDisplayActivity.class);
-				startActivity(intent);
+				startActivity(intentDisplay);
 				break;
 			case R.id.layoutRippleWifi:
 				// SETTINGS 设置主界面
@@ -156,8 +154,11 @@ public class SettingSystemFragment extends Fragment {
 						android.provider.Settings.ACTION_DATE_SETTINGS));
 				break;
 			case R.id.layoutRippleSound:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_SOUND_SETTINGS));
+				// startActivity(new Intent(
+				// android.provider.Settings.ACTION_SOUND_SETTINGS));
+				Intent intentVolume = new Intent(context,
+						SettingSystemVolumeActivity.class);
+				startActivity(intentVolume);
 				break;
 			case R.id.layoutRippleFm:
 				startActivity(new Intent("android.settings.FM_SETTINGS"));

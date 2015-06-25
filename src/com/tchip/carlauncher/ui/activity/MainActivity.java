@@ -278,7 +278,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				.fromResource(R.drawable.icon_arrow_up);
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
-		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.COMPASS;
+		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
 		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
 				currentMode, true, null));
 		InitLocation(
