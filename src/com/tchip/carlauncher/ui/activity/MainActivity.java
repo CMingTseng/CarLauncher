@@ -509,12 +509,28 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-				// updateProgress.setVisibility(View.GONE);
 				// 更新WiFi状态图标
 				updateWiFiState();
 
 				// 更新位置和天气信息
 				updateLocationAndWeather();
+
+				// 电源断开保存视频
+				if (MyApplication.isVideoReording
+						&& (!MyApplication.isPowerConnect)) {
+					mRecordState = STATE_RECORD_STOPPED;
+					MyApplication.isVideoReording = false;
+					setupRecordViews();
+				}
+
+				// 连接电源自动录像
+				if ((!MyApplication.isVideoReording)
+						&& sharedPreferences.getBoolean("autoRecord", true)
+						&& MyApplication.isPowerConnect) {
+					mRecordState = STATE_RECORD_STARTED;
+					MyApplication.isVideoReording = true;
+					setupRecordViews();
+				}
 				break;
 
 			default:
