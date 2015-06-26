@@ -8,15 +8,19 @@ import com.tchip.carlauncher.ui.dialog.SettingCameraVideoSizeDialog;
 import com.tchip.carlauncher.ui.dialog.SettingCameraVideoTimeDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.MaterialDialog;
+import com.tchip.carlauncher.view.SwitchButton;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,16 +28,30 @@ import android.widget.Toast;
 public class SettingCameraFragment extends Fragment {
 	private View cameraSettingView;
 	private SharedPreferences preferences;
+	private Editor editor;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		cameraSettingView = inflater.inflate(R.layout.fragment_setting_camera,
 				container, false);
-		// 视频质量
-		RelativeLayout layoutRippleVideoQuality = (RelativeLayout) cameraSettingView
-				.findViewById(R.id.layoutRippleVideoQuality);
-		layoutRippleVideoQuality.setOnClickListener(new MyOnClickListener());
+
+		preferences = getActivity().getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		editor = preferences.edit();
+
+		// 开机自动录像
+		SwitchButton switchAutoRecord = (SwitchButton) cameraSettingView
+				.findViewById(R.id.switchAutoRecord);
+		switchAutoRecord
+				.setChecked(preferences.getBoolean("autoRecord", false));
+		switchAutoRecord.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				editor.putBoolean("autoRecord", isChecked);
+			}
+		});
 
 		// 视频尺寸
 		RelativeLayout layoutRippleVideoSize = (RelativeLayout) cameraSettingView
@@ -50,8 +68,11 @@ public class SettingCameraFragment extends Fragment {
 				.findViewById(R.id.layoutRippleCrashSensitive);
 		layoutRippleCrashSensitive.setOnClickListener(new MyOnClickListener());
 
-		preferences = getActivity().getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		// 视频质量
+		RelativeLayout layoutRippleVideoQuality = (RelativeLayout) cameraSettingView
+				.findViewById(R.id.layoutRippleVideoQuality);
+		layoutRippleVideoQuality.setOnClickListener(new MyOnClickListener());
+
 		updateVideoQualityText();
 		updateVideoSizeText();
 		updateVideoTimeText();

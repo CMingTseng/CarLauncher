@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.model;
 
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SpeakService;
 
@@ -39,11 +40,13 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 				.getAction())) {
 			// String strHintConnect = "";
 			// Toast.makeText(context, "CONNECTED", Toast.LENGTH_SHORT).show();
+			MyApplication.isPowerConnect = true;
 			// 停止轨迹记录服务，保存轨迹
 			Intent intentRoute = new Intent(context, RouteRecordService.class);
 			context.startService(intentRoute);
 		} else if ("android.intent.action.ACTION_POWER_DISCONNECTED"
 				.equals(intent.getAction())) {
+			MyApplication.isPowerConnect = false;
 			String strHintDisconnect = "已断开电源，正在保存数据。";
 			Toast.makeText(context, strHintDisconnect, Toast.LENGTH_SHORT)
 					.show();

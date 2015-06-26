@@ -1,41 +1,64 @@
 package com.tchip.carlauncher.ui.fragment;
 
-import com.baidu.platform.comapi.map.p;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.dialog.SettingCameraVideoQualityDialog;
+import com.tchip.carlauncher.ui.activity.WeatherActivity.UpdateWeatherThread;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceAccentDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakHourDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakWeatherDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceUpdateWeatherDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
+import com.tchip.carlauncher.view.SwitchButton;
 
-import android.R.bool;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SettingVoiceFragment extends Fragment {
 	private View voiceSettingView;
 	private SharedPreferences preferences;
+	private Editor editor;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		voiceSettingView = inflater.inflate(R.layout.fragment_setting_voice,
 				container, false);
+
+		preferences = getActivity().getSharedPreferences("CarLauncher",
+				Context.MODE_PRIVATE);
+		editor = preferences.edit();
+
 		// 整点报时
-		RelativeLayout layoutRippleSpeakHour = (RelativeLayout) voiceSettingView
-				.findViewById(R.id.layoutRippleSpeakHour);
-		layoutRippleSpeakHour.setOnClickListener(new MyOnClickListener());
+		// RelativeLayout layoutRippleSpeakHour = (RelativeLayout)
+		// voiceSettingView
+		// .findViewById(R.id.layoutRippleSpeakHour);
+		// layoutRippleSpeakHour.setOnClickListener(new MyOnClickListener());
+
+		SwitchButton switchSpeakHour = (SwitchButton) voiceSettingView
+				.findViewById(R.id.switchSpeakHour);
+		switchSpeakHour.setChecked(preferences.getBoolean("voiceSpeakHour",
+				false));
+		switchSpeakHour
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						editor.putBoolean("voiceSpeakHour", isChecked);
+						updateVoiceSpeakHourText();
+					}
+				});
 
 		// 语音口音
 		RelativeLayout layoutRippleVoiceAccent = (RelativeLayout) voiceSettingView
@@ -43,17 +66,47 @@ public class SettingVoiceFragment extends Fragment {
 		layoutRippleVoiceAccent.setOnClickListener(new MyOnClickListener());
 
 		// 天气自动播报
-		RelativeLayout layoutRippleSpeakWeather = (RelativeLayout) voiceSettingView
-				.findViewById(R.id.layoutRippleSpeakWeather);
-		layoutRippleSpeakWeather.setOnClickListener(new MyOnClickListener());
+		// RelativeLayout layoutRippleSpeakWeather = (RelativeLayout)
+		// voiceSettingView
+		// .findViewById(R.id.layoutRippleSpeakWeather);
+		// layoutRippleSpeakWeather.setOnClickListener(new MyOnClickListener());
+
+		SwitchButton switchSpeakWeather = (SwitchButton) voiceSettingView
+				.findViewById(R.id.switchSpeakWeather);
+		switchSpeakWeather.setChecked(preferences.getBoolean(
+				"voiceSpeakWeather", true));
+		switchSpeakWeather
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						editor.putBoolean("voiceSpeakWeather", isChecked);
+						updateVoiceSpeakHourText();
+					}
+				});
 
 		// 天气数据自动更新
-		RelativeLayout layoutRippleUpdateWeather = (RelativeLayout) voiceSettingView
-				.findViewById(R.id.layoutRippleUpdateWeather);
-		layoutRippleUpdateWeather.setOnClickListener(new MyOnClickListener());
+		// RelativeLayout layoutRippleUpdateWeather = (RelativeLayout)
+		// voiceSettingView
+		// .findViewById(R.id.layoutRippleUpdateWeather);
+		// layoutRippleUpdateWeather.setOnClickListener(new
+		// MyOnClickListener());
+		SwitchButton switchUpdateWeather = (SwitchButton) voiceSettingView
+				.findViewById(R.id.switchUpdateWeather);
+		switchUpdateWeather.setChecked(preferences.getBoolean(
+				"voiceUpdateWeather", true));
+		switchUpdateWeather
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-		preferences = getActivity().getSharedPreferences("CarLauncher",
-				Context.MODE_PRIVATE);
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						editor.putBoolean("voiceUpdateWeather", isChecked);
+						updateVoiceUpdateWeatherText();
+					}
+				});
+
 		updateVoiceSpeakHourText();
 		updateVoiceAccentText();
 		updateVoiceSpeakWeatherText();
@@ -117,19 +170,20 @@ public class SettingVoiceFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.layoutRippleSpeakHour:
-				SettingVoiceSpeakHourDialog voiceSpeakHourDialog = new SettingVoiceSpeakHourDialog(
-						getActivity());
-				voiceSpeakHourDialog
-						.setOnAcceptButtonClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								updateVoiceSpeakHourText();
-							}
-						});
-				voiceSpeakHourDialog.show();
-				break;
+			// case R.id.layoutRippleSpeakHour:
+			// SettingVoiceSpeakHourDialog voiceSpeakHourDialog = new
+			// SettingVoiceSpeakHourDialog(
+			// getActivity());
+			// voiceSpeakHourDialog
+			// .setOnAcceptButtonClickListener(new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// updateVoiceSpeakHourText();
+			// }
+			// });
+			// voiceSpeakHourDialog.show();
+			// break;
 			case R.id.layoutRippleVoiceAccent:
 				SettingVoiceAccentDialog voiceAccentDialog = new SettingVoiceAccentDialog(
 						getActivity());
@@ -143,32 +197,34 @@ public class SettingVoiceFragment extends Fragment {
 						});
 				voiceAccentDialog.show();
 				break;
-			case R.id.layoutRippleSpeakWeather:
-				SettingVoiceSpeakWeatherDialog voiceSpeakWeatherDialog = new SettingVoiceSpeakWeatherDialog(
-						getActivity());
-				voiceSpeakWeatherDialog
-						.setOnAcceptButtonClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								updateVoiceSpeakWeatherText();
-							}
-						});
-				voiceSpeakWeatherDialog.show();
-				break;
-			case R.id.layoutRippleUpdateWeather:
-				SettingVoiceUpdateWeatherDialog voiceUpdateWeatherDialog = new SettingVoiceUpdateWeatherDialog(
-						getActivity());
-				voiceUpdateWeatherDialog
-						.setOnAcceptButtonClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								updateVoiceUpdateWeatherText();
-							}
-						});
-				voiceUpdateWeatherDialog.show();
-				break;
+			// case R.id.layoutRippleSpeakWeather:
+			// SettingVoiceSpeakWeatherDialog voiceSpeakWeatherDialog = new
+			// SettingVoiceSpeakWeatherDialog(
+			// getActivity());
+			// voiceSpeakWeatherDialog
+			// .setOnAcceptButtonClickListener(new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// updateVoiceSpeakWeatherText();
+			// }
+			// });
+			// voiceSpeakWeatherDialog.show();
+			// break;
+			// case R.id.layoutRippleUpdateWeather:
+			// SettingVoiceUpdateWeatherDialog voiceUpdateWeatherDialog = new
+			// SettingVoiceUpdateWeatherDialog(
+			// getActivity());
+			// voiceUpdateWeatherDialog
+			// .setOnAcceptButtonClickListener(new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// updateVoiceUpdateWeatherText();
+			// }
+			// });
+			// voiceUpdateWeatherDialog.show();
+			// break;
 			default:
 				break;
 			}

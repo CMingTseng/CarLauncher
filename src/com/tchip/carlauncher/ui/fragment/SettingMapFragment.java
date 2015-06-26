@@ -10,28 +10,37 @@ import com.tchip.carlauncher.ui.dialog.SettingMapRouteSmoothDialog;
 import com.tchip.carlauncher.ui.dialog.SettingMapRouteSpanDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakHourDialog;
 import com.tchip.carlauncher.view.LayoutRipple;
+import com.tchip.carlauncher.view.SwitchButton;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SettingMapFragment extends Fragment {
 	private View mapSettingView;
 	private SharedPreferences preferences;
+	private Editor editor;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mapSettingView = inflater.inflate(R.layout.fragment_setting_map,
 				container, false);
+		preferences = getActivity().getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		editor = preferences.edit();
+
 		// 离线地图管理
 		RelativeLayout layoutRippleOfflineMap = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleOfflineMap);
@@ -43,22 +52,50 @@ public class SettingMapFragment extends Fragment {
 		layoutRippleNavi.setOnClickListener(new MyOnClickListener());
 
 		// 行车轨迹记录
-		RelativeLayout layoutRippleRouteRecord = (RelativeLayout) mapSettingView
-				.findViewById(R.id.layoutRippleRouteRecord);
-		layoutRippleRouteRecord.setOnClickListener(new MyOnClickListener());
+		// RelativeLayout layoutRippleRouteRecord = (RelativeLayout)
+		// mapSettingView
+		// .findViewById(R.id.layoutRippleRouteRecord);
+		// layoutRippleRouteRecord.setOnClickListener(new MyOnClickListener());
+
+		SwitchButton switchRouteRecord = (SwitchButton) mapSettingView
+				.findViewById(R.id.switchRouteRecord);
+		switchRouteRecord.setChecked(preferences
+				.getBoolean("routeRecord", true));
+		switchRouteRecord
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						editor.putBoolean("routeRecord", isChecked);
+						updateRouteRecordText();
+					}
+				});
 
 		// 轨迹平滑度优化
-		RelativeLayout layoutRippleRouteSmooth = (RelativeLayout) mapSettingView
-				.findViewById(R.id.layoutRippleRouteSmooth);
-		layoutRippleRouteSmooth.setOnClickListener(new MyOnClickListener());
+		// RelativeLayout layoutRippleRouteSmooth = (RelativeLayout)
+		// mapSettingView
+		// .findViewById(R.id.layoutRippleRouteSmooth);
+		// layoutRippleRouteSmooth.setOnClickListener(new MyOnClickListener());
+		SwitchButton switchRouteSmooth = (SwitchButton) mapSettingView
+				.findViewById(R.id.switchRouteSmooth);
+		switchRouteSmooth.setChecked(preferences
+				.getBoolean("routeSmooth", true));
+		switchRouteSmooth
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						editor.putBoolean("routeSmooth", isChecked);
+						updateRouteSmoothText();
+					}
+				});
 
 		// 轨迹绘制取样精度
 		RelativeLayout layoutRippleRouteSpan = (RelativeLayout) mapSettingView
 				.findViewById(R.id.layoutRippleRouteSpan);
 		layoutRippleRouteSpan.setOnClickListener(new MyOnClickListener());
 
-		preferences = getActivity().getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		updateRouteRecordText();
 		updateRouteSmoothText();
 		updateRouteSpanText();
@@ -137,32 +174,34 @@ public class SettingMapFragment extends Fragment {
 						});
 				mapNavigationDialog.show();
 				break;
-			case R.id.layoutRippleRouteRecord:
-				SettingMapRouteRecordDialog mapRecordRouteDialog = new SettingMapRouteRecordDialog(
-						getActivity());
-				mapRecordRouteDialog
-						.setOnAcceptButtonClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								updateRouteRecordText();
-							}
-						});
-				mapRecordRouteDialog.show();
-				break;
-			case R.id.layoutRippleRouteSmooth:
-				SettingMapRouteSmoothDialog mapRecordSmoothDialog = new SettingMapRouteSmoothDialog(
-						getActivity());
-				mapRecordSmoothDialog
-						.setOnAcceptButtonClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								updateRouteSmoothText();
-							}
-						});
-				mapRecordSmoothDialog.show();
-				break;
+			// case R.id.layoutRippleRouteRecord:
+			// SettingMapRouteRecordDialog mapRecordRouteDialog = new
+			// SettingMapRouteRecordDialog(
+			// getActivity());
+			// mapRecordRouteDialog
+			// .setOnAcceptButtonClickListener(new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// updateRouteRecordText();
+			// }
+			// });
+			// mapRecordRouteDialog.show();
+			// break;
+			// case R.id.layoutRippleRouteSmooth:
+			// SettingMapRouteSmoothDialog mapRecordSmoothDialog = new
+			// SettingMapRouteSmoothDialog(
+			// getActivity());
+			// mapRecordSmoothDialog
+			// .setOnAcceptButtonClickListener(new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// updateRouteSmoothText();
+			// }
+			// });
+			// mapRecordSmoothDialog.show();
+			// break;
 			case R.id.layoutRippleRouteSpan:
 				SettingMapRouteSpanDialog mapRecordSpanDialog = new SettingMapRouteSpanDialog(
 						getActivity());

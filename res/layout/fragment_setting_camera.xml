@@ -18,8 +18,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="#000000" />
-            <RelativeLayout
-                android:id="@+id/layoutRippleVideoQuality"
+
+            <RelativeLayout
+                android:id="@+id/layoutVideoAutoRecord"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
@@ -30,25 +31,32 @@
                     android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/ui_setting_camera_video_quality" />
+                    android:src="@drawable/ui_setting_camera_auto_record" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="视频质量"
+                    android:text="开机自动录像"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 
-                <TextView
-                    android:id="@+id/textVideoQuality"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchAutoRecord"
+                    style="@style/SwitchButtonStyle"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
-                    android:text="高"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right" />
+
+                <TextView
+                    android:id="@+id/textVideoAutoRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/switchAutoRecord"
+                    android:text="关闭"
+                    android:layout_marginRight="10dp"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
             </RelativeLayout>
@@ -172,13 +180,14 @@
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
             </RelativeLayout>
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="#000000" />
 
             <RelativeLayout
-                android:id="@+id/layoutVideoAutoRecord"
+                android:id="@+id/layoutRippleVideoQuality"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
@@ -189,25 +198,25 @@
                     android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
-                    android:src="@drawable/ui_setting_camera_auto_record" />
+                    android:src="@drawable/ui_setting_camera_video_quality" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="开机自动录像"
+                    android:text="视频质量"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 
                 <TextView
-                    android:id="@+id/textVideoAutoRecord"
+                    android:id="@+id/textVideoQuality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/setting_item_content_marign_right"
-                    android:text="关"
+                    android:text="高"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
             </RelativeLayout>

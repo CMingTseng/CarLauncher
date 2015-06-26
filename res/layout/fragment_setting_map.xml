@@ -122,14 +122,22 @@
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 
+                
+                <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchRouteRecord"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right" />
+
                 <TextView
                     android:id="@+id/textRouteRecord"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
+                    android:layout_toLeftOf="@id/switchRouteRecord"
                     android:text="打开"
+                    android:layout_marginRight="10dp"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
             </RelativeLayout>
@@ -161,15 +169,22 @@
                     android:text="轨迹平滑度优化"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
+                
+                 <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchRouteSmooth"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right" />
 
                 <TextView
                     android:id="@+id/textRouteSmooth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
+                    android:layout_toLeftOf="@id/switchRouteSmooth"
                     android:text="打开"
+                    android:layout_marginRight="10dp"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
             </RelativeLayout>

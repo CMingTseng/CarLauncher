@@ -42,13 +42,20 @@
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 
+                <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchSpeakHour"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right" />
+
                 <TextView
                     android:id="@+id/textVoiceSpeakHour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/switchSpeakHour"
                     android:text="关闭"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
@@ -122,13 +129,20 @@
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 
+                <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchSpeakWeather"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right" />
+
                 <TextView
                     android:id="@+id/textSpeakWeather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/switchSpeakWeather"
                     android:text="打开"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />
@@ -162,13 +176,20 @@
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 
+                <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchUpdateWeather"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right" />
+
                 <TextView
                     android:id="@+id/textUpdateWeather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/switchUpdateWeather"
                     android:text="打开"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_content_text_size" />

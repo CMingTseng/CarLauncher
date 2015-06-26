@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources  xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -135,14 +136,13 @@
         <item name="android:windowBackground">@color/color_window_background</item>
         <item name="android:fastScrollThumbDrawable">@drawable/file_fast_scroll_handle</item>
         <item name="android:fastScrollTrackDrawable">@drawable/fast_scroll_track</item>
-    </style>
+    </style>
     -->
 
 
     <!-- Theme for translucent system bars -->
     <style name="AppTranslucentTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowActionBarOverlay">true</item>
-       
     </style>
 
     <style name="overflowMenuStyle" parent="@android:style/Widget.Holo.PopupMenu">
@@ -157,6 +157,29 @@
 
     <style name="CustomActionBarSizeTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarSize">80dp</item>
+    </style>
+
+    <!-- Switch Button -->
+    <style name="MD">
+        <item name="animationVelocity">6</item>
+        <item name="insetBottom">16dp</item>
+        <item name="insetTop">16dp</item>
+        <item name="insetLeft">16dp</item>
+        <item name="insetRight">16dp</item>
+        <item name="measureFactor">1.4</item>
+        <item name="offDrawable">@drawable/md_back_off</item>
+        <item name="onDrawable">@drawable/md_back_on</item>
+        <item name="thumbDrawable">@drawable/md_thumb</item>
+        <item name="thumb_margin">-17dp</item>
+    </style>
+    
+       <style name="SwitchButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
 </resources>
