@@ -134,7 +134,7 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleFm);
 		layoutRippleFm.setOnClickListener(new MyOnClickListener());
 
-		// 恢复出厂设置
+		// 恢复出厂设置(GONE)
 		RelativeLayout layoutRippleReset = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleReset);
 		layoutRippleReset.setOnClickListener(new MyOnClickListener());

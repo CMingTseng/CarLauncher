@@ -402,6 +402,7 @@
             <RelativeLayout
                 android:id="@+id/layoutRippleReset"
                 android:layout_width="fill_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true" >
@@ -425,6 +426,7 @@
 
             <View
                 android:layout_width="fill_parent"
+                android:visibility="gone"
                 android:layout_height="2dp"
                 android:background="#000000" />
 
