@@ -7,6 +7,7 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.SettingFragmentPagerAdapter;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.ui.fragment.SettingCameraFragment;
+import com.tchip.carlauncher.ui.fragment.SettingFragment;
 import com.tchip.carlauncher.ui.fragment.SettingMapFragment;
 import com.tchip.carlauncher.ui.fragment.SettingSystemFragment;
 import com.tchip.carlauncher.ui.fragment.SettingVoiceFragment;
@@ -89,17 +90,21 @@ public class SettingActivity extends FragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
 
 		fragmentList = new ArrayList<Fragment>();
-		Fragment settingDriveFragment = new SettingCameraFragment();
-		fragmentList.add(settingDriveFragment);
-
-		Fragment settingVoiceFragment = new SettingVoiceFragment();
-		fragmentList.add(settingVoiceFragment);
-
-		Fragment settingMapFragment = new SettingMapFragment();
-		fragmentList.add(settingMapFragment);
-
-		Fragment settingSystemFragment = new SettingSystemFragment();
-		fragmentList.add(settingSystemFragment);
+		
+		Fragment settingFragment = new SettingFragment();
+		fragmentList.add(settingFragment);
+		
+//		Fragment settingDriveFragment = new SettingCameraFragment();
+//		fragmentList.add(settingDriveFragment);
+//
+//		Fragment settingVoiceFragment = new SettingVoiceFragment();
+//		fragmentList.add(settingVoiceFragment);
+//
+//		Fragment settingMapFragment = new SettingMapFragment();
+//		fragmentList.add(settingMapFragment);
+//
+//		Fragment settingSystemFragment = new SettingSystemFragment();
+//		fragmentList.add(settingSystemFragment);
 
 		// 给ViewPager设置适配器
 		viewPager.setAdapter(new FadeTabFragmentPagerAdapter(this,

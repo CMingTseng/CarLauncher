@@ -524,13 +524,14 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				// 连接电源自动录像
-				if ((!MyApplication.isVideoReording)
-						&& sharedPreferences.getBoolean("autoRecord", true)
-						&& MyApplication.isPowerConnect) {
-					mRecordState = STATE_RECORD_STARTED;
-					MyApplication.isVideoReording = true;
-					setupRecordViews();
-				}
+//				if (MyApplication.isFirstLaunch && (!MyApplication.isVideoReording)
+//						&& sharedPreferences.getBoolean("autoRecord", true)
+//						&& MyApplication.isPowerConnect) {
+//					mRecordState = STATE_RECORD_STARTED;
+//					MyApplication.isVideoReording = true;
+//					MyApplication.isFirstLaunch = false;
+//					setupRecordViews();
+//				}
 				break;
 
 			default:

@@ -45,13 +45,16 @@ public class SettingCameraFragment extends Fragment {
 				.findViewById(R.id.switchAutoRecord);
 		switchAutoRecord
 				.setChecked(preferences.getBoolean("autoRecord", false));
-		switchAutoRecord.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				editor.putBoolean("autoRecord", isChecked);
-			}
-		});
+		switchAutoRecord
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						editor.putBoolean("autoRecord", isChecked);
+						editor.commit();
+					}
+				});
 
 		// 视频尺寸
 		RelativeLayout layoutRippleVideoSize = (RelativeLayout) cameraSettingView
@@ -151,6 +154,7 @@ public class SettingCameraFragment extends Fragment {
 						});
 				videoQulityDialog.show();
 				break;
+
 			case R.id.layoutRippleVideoSize:
 				SettingCameraVideoSizeDialog videoSizeDialog = new SettingCameraVideoSizeDialog(
 						getActivity());
@@ -164,6 +168,7 @@ public class SettingCameraFragment extends Fragment {
 						});
 				videoSizeDialog.show();
 				break;
+
 			case R.id.layoutRippleVideoTime:
 				SettingCameraVideoTimeDialog videoTimeDialog = new SettingCameraVideoTimeDialog(
 						getActivity());
@@ -177,6 +182,7 @@ public class SettingCameraFragment extends Fragment {
 						});
 				videoTimeDialog.show();
 				break;
+
 			case R.id.layoutRippleCrashSensitive:
 				SettingCameraCrashSensitiveDialog crashSensitiveDialog = new SettingCameraCrashSensitiveDialog(
 						getActivity());
@@ -190,6 +196,7 @@ public class SettingCameraFragment extends Fragment {
 						});
 				crashSensitiveDialog.show();
 				break;
+
 			default:
 				break;
 			}

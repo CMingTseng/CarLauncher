@@ -88,5 +88,5 @@ public class MyApplication extends Application {
 	// Video Record
 	public static boolean isVideoReording = false;
 	public static boolean isPowerConnect = true;
-	
+	public static boolean isFirstLaunch = true;
 }

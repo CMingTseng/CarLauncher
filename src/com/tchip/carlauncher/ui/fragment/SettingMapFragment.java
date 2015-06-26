@@ -67,6 +67,7 @@ public class SettingMapFragment extends Fragment {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						editor.putBoolean("routeRecord", isChecked);
+						editor.commit();
 						updateRouteRecordText();
 					}
 				});
@@ -87,6 +88,7 @@ public class SettingMapFragment extends Fragment {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						editor.putBoolean("routeSmooth", isChecked);
+						editor.commit();
 						updateRouteSmoothText();
 					}
 				});

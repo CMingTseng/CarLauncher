@@ -56,6 +56,7 @@ public class SettingVoiceFragment extends Fragment {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						editor.putBoolean("voiceSpeakHour", isChecked);
+						editor.commit();
 						updateVoiceSpeakHourText();
 					}
 				});
@@ -82,6 +83,7 @@ public class SettingVoiceFragment extends Fragment {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						editor.putBoolean("voiceSpeakWeather", isChecked);
+						editor.commit();
 						updateVoiceSpeakHourText();
 					}
 				});
@@ -103,6 +105,7 @@ public class SettingVoiceFragment extends Fragment {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						editor.putBoolean("voiceUpdateWeather", isChecked);
+						editor.commit();
 						updateVoiceUpdateWeatherText();
 					}
 				});
