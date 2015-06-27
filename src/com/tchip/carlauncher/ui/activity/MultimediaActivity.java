@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.ui.activity;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -13,7 +12,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class MultimediaActivity extends Activity {

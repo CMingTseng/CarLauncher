@@ -1,5 +1,10 @@
 package com.tchip.carlauncher.ui.activity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +19,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,9 +33,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facepp.error.FaceppParseException;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.FaceDetectUtil;
 import com.tchip.carlauncher.view.ButtonFloat;
@@ -130,11 +138,55 @@ public class FaceDetectActivity extends Activity {
 			case R.id.layoutBack:
 				backToMultimedia();
 				break;
+			case R.id.btnShare:
+				RelativeLayout layoutNotShareArea = (RelativeLayout) findViewById(R.id.layoutNotShareArea);
+				layoutNotShareArea.setVisibility(View.INVISIBLE);
+
+				RelativeLayout layoutFaceDetect = (RelativeLayout) findViewById(R.id.layoutFaceDetect);
+				Bitmap shareBitmap = createViewBitmap(layoutFaceDetect);
+				File file = new File(Constant.ROUTE_TRACK_PATH
+						+ "face_detect_share" + ".png");
+				FileOutputStream out;
+				try {
+					out = new FileOutputStream(file);
+					if (shareBitmap.compress(Bitmap.CompressFormat.PNG, 100,
+							out)) {
+						out.flush();
+						out.close();
+					}
+					Intent intent = new Intent(Intent.ACTION_SEND);
+					Uri uri = Uri.fromFile(file);
+					intent.setType("image/png");
+					intent.putExtra(Intent.EXTRA_STREAM, uri);
+					intent.putExtra(Intent.EXTRA_TITLE, "分享图片到");
+					Intent chooserIntent = Intent.createChooser(intent, "分享图片");
+					if (chooserIntent == null) {
+						return;
+					}
+					try {
+						startActivity(chooserIntent);
+					} catch (android.content.ActivityNotFoundException ex) {
+					}
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				layoutNotShareArea.setVisibility(View.VISIBLE);
+				break;
 
 			default:
 				break;
 			}
 		}
+	}
+
+	public Bitmap createViewBitmap(View v) {
+		Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(),
+				Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		v.draw(canvas);
+		return bitmap;
 	}
 
 	private static final int MSG_SUCCESS = 0x111;
