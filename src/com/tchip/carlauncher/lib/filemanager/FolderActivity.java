@@ -43,7 +43,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	public static final String EXTRA_DIR = FolderFragment.EXTRA_DIR;
 
 	DrawerLayout drawerLayout;
-	ActionBarDrawerToggle actionBarDrawerToggle;
+	//ActionBarDrawerToggle actionBarDrawerToggle;
 	File lastFolder = null;
 	private FontApplicator fontApplicator;
 
@@ -120,43 +120,44 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 
 	private void setupDrawers() {
 		this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				R.drawable.file_ic_drawer, R.string.open_drawer,
-				R.string.close_drawer) {
-			boolean actionBarShown = false;
-
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
-				setActionbarVisible(true);
-				invalidateOptionsMenu();
-			}
-
-			@Override
-			public void onDrawerClosed(View drawerView) {
-				actionBarShown = false;
-				super.onDrawerClosed(drawerView);
-				invalidateOptionsMenu();
-			}
-
-			@Override
-			public void onDrawerSlide(View drawerView, float slideOffset) {
-				super.onDrawerSlide(drawerView, slideOffset);
-				if (slideOffset > 0 && actionBarShown == false) {
-					actionBarShown = true;
-					setActionbarVisible(true);
-				} else if (slideOffset <= 0)
-					actionBarShown = false;
-			}
-		};
-		drawerLayout.setDrawerListener(actionBarDrawerToggle);
-		drawerLayout.setDrawerShadow(R.drawable.file_drawer_shadow,
-				Gravity.START);
-		drawerLayout.setFocusableInTouchMode(false);
+//		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+//				R.drawable.file_ic_drawer, R.string.open_drawer,
+//				R.string.close_drawer) {
+//			boolean actionBarShown = false;
+//
+//			@Override
+//			public void onDrawerOpened(View drawerView) {
+//				super.onDrawerOpened(drawerView);
+//				setActionbarVisible(true);
+//				invalidateOptionsMenu();
+//			}
+//
+//			@Override
+//			public void onDrawerClosed(View drawerView) {
+//				actionBarShown = false;
+//				super.onDrawerClosed(drawerView);
+//				invalidateOptionsMenu();
+//			}
+//
+//			@Override
+//			public void onDrawerSlide(View drawerView, float slideOffset) {
+//				super.onDrawerSlide(drawerView, slideOffset);
+//				if (slideOffset > 0 && actionBarShown == false) {
+//					actionBarShown = true;
+//					setActionbarVisible(true);
+//				} else if (slideOffset <= 0)
+//					actionBarShown = false;
+//			}
+//		};
+//		drawerLayout.setDrawerListener(actionBarDrawerToggle);
+//		drawerLayout.setDrawerShadow(R.drawable.file_drawer_shadow,
+//				Gravity.START);
+//		drawerLayout.setFocusableInTouchMode(false);
 		// drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.END);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		setupNavDrawer();
 		setupClipboardDrawer();
@@ -203,7 +204,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		actionBarDrawerToggle.syncState();
+		//actionBarDrawerToggle.syncState();
 
 		if (getFragmentManager().findFragmentById(R.id.fragment) == null) {
 			FolderFragment folderFragment = new FolderFragment();
@@ -222,18 +223,21 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		actionBarDrawerToggle.onConfigurationChanged(newConfig);
+		//actionBarDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (actionBarDrawerToggle.onOptionsItemSelected(item))
-			return true;
+//		if (actionBarDrawerToggle.onOptionsItemSelected(item))
+//			return true;
 		switch (item.getItemId()) {
 		case R.id.menu_ftp:
 			startActivity(new Intent(getApplicationContext(),
 					FileRemoteControlActivity.class));
 			return true;
+		case android.R.id.home:
+			finish();     
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

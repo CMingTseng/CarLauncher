@@ -2,6 +2,7 @@ package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.bluetooth.DiscoveryActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
@@ -162,58 +163,43 @@ public class SettingFragment extends Fragment {
 						SettingSystemDisplayActivity.class);
 				startActivity(intentDisplay);
 				break;
-			case R.id.layoutRippleWifi:
-				// SETTINGS 设置主界面
-				// WIRELESS_SETTINGS 更多网络
-				// WIFI_DISPLAY_SETTINGS
-				// LOCALE_SETTINGS 语言设置
-				// INPUT_METHOD_SETTINGS
-				// INPUT_METHOD_SUBTYPE_SETTINGS
-				// USER_DICTIONARY_SETTINGS
-				// DISPLAY_SETTINGS
-				// SAFETY
-				// SECURITY_SETTINGS
-				// APPLICATION_SETTINGS
-				// MANAGE_ALL_APPLICATIONS_SETTINGS
-				// MANAGE_PACKAGE_STORAGE
-				// PRIVACY_SETTINGS
-				// BACKUP_AND_RESET_SETTINGS
-				// ACCESSIBILITY_SETTINGS
-				// QUICK_LAUNCH_SETTINGS
-				// APPLICATION_DEVELOPMENT_SETTINGS
-				// STORAGE_USB_SETTINGS
-				// POWER_USAGE_SUMMARY
-				// ACCOUNT_SYNC_SETTINGS
-				// SYNC_SETTINGS
-				// USER_SETTINGS
-				// SIM_MANAGEMENT_ACTIVITY
-				// SIM_LIST_ENTRANCE_ACTIVITY
-				// PICK_WIFI_NETWORK
 
+			case R.id.layoutRippleWifi:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_WIFI_SETTINGS));
+				// startActivity(new
+				// Intent("android.net.wifi.PICK_WIFI_NETWORK"));
 				break;
+
 			case R.id.layoutRippleTraffic:
 				Intent intentTraffic = new Intent(context,
 						TrafficStatActivity.class);
 				startActivity(intentTraffic);
 				break;
+
 			case R.id.layoutRippleBluetooth:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
+				// Intent intentBluetooth = new Intent(context,
+				// DiscoveryActivity.class);
+				// startActivity(intentBluetooth);
 				break;
+
 			case R.id.layoutRippleLocation:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 				break;
+
 			case R.id.layoutRippleStorage:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
 				break;
+
 			case R.id.layoutRippleDate:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_DATE_SETTINGS));
 				break;
+
 			case R.id.layoutRippleSound:
 				// startActivity(new Intent(
 				// android.provider.Settings.ACTION_SOUND_SETTINGS));
@@ -221,21 +207,26 @@ public class SettingFragment extends Fragment {
 						SettingSystemVolumeActivity.class);
 				startActivity(intentVolume);
 				break;
+
 			case R.id.layoutRippleFm:
 				startActivity(new Intent("android.settings.FM_SETTINGS"));
 				break;
+
 			case R.id.layoutRippleReset:
 				startActivity(new Intent(
 						"android.settings.BACKUP_AND_RESET_SETTINGS"));
 				break;
+
 			case R.id.layoutRippleAbout:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS));
 				break;
+
 			case R.id.layoutRippleApp:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
 				break;
+
 			default:
 				break;
 			}

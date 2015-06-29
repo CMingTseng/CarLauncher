@@ -697,10 +697,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageFileExplore:
-//				Intent intentFileExplore = new Intent(MainActivity.this,
-//						FolderActivity.class);
 				Intent intentFileExplore = new Intent(MainActivity.this,
-						VideoListActivity.class);
+						FolderActivity.class);
+//				Intent intentFileExplore = new Intent(MainActivity.this,
+//						VideoListActivity.class);
 				startActivity(intentFileExplore);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);

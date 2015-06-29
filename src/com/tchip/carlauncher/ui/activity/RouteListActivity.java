@@ -302,7 +302,7 @@ public class RouteListActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
-			tvNoFile.setText("暂无轨迹文件" + e);
+			tvNoFile.setText("暂无轨迹文件");
 			btnShowAll.setVisibility(View.INVISIBLE);
 			routeList.setVisibility(View.INVISIBLE);
 		}

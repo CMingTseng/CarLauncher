@@ -1,37 +1,32 @@
-[ToDo List 2015-06-25]
+[ToDo List 2015-06-29]
 录像>
-	录像时，操作卡顿。
+	录像时，占用资源过高。
 	录像开始后，主界面预览区域显示录制时间。
 	集成循环录像，文件加锁。
 	
 设置>
-	[X]对话框风格修改。
-	[√]开关，由对话框转化成Switch开关。
-	[X]离线地图管理界面。
-	[X]恢复出厂设置界面。
-	日期和时间界面。
+	日期和时间。
 	FM
 	蓝牙
 	Wi-Fi
 	
 文件管理>
-	顶部返回。
+	[√]顶部返回。
 	
 多媒体>
 	图库顶部增加返回。
-	[√]视频顶部增加返回。
-	[√]音乐播放器风格统一。
+	视频播放界面风格。
 	入口界面显示最近播放音乐，图库图片。
 	
 系统>
-	[√]关闭：自动确定日期和时间，自动确定时区。
-	开机动画。
+	开机图片，动画。
+	设置应用为默认Launcher.
 	
 其他>
-	无网络连接时，各个依赖网络模块的提示(讯飞，百度地图界面，人脸识别界面)
-	[√]检测到电源断开时，做保存轨迹和保存录像处理
+	无网络连接时，各个依赖网络模块的提示(讯飞，地图界面，天气，人脸识别界面)
 	所有界面返回按钮点击效果
-	[√]人脸识别分享照片
+	初次打开应用引导
+
 	
 	
 
@@ -207,7 +202,37 @@ SharedPreferences-CarLauncher
 	[Bug List]
 		- 天气界面设置背景概率性OOM:后期调整图片尺寸
 			
-============================================================================	
+============================================================================
+
+// SETTINGS 设置主界面
+				// WIRELESS_SETTINGS 更多网络
+				// WIFI_DISPLAY_SETTINGS
+				// LOCALE_SETTINGS 语言设置
+				// INPUT_METHOD_SETTINGS
+				// INPUT_METHOD_SUBTYPE_SETTINGS
+				// USER_DICTIONARY_SETTINGS
+				// DISPLAY_SETTINGS
+				// SAFETY
+				// SECURITY_SETTINGS
+				// APPLICATION_SETTINGS
+				// MANAGE_ALL_APPLICATIONS_SETTINGS
+				// MANAGE_PACKAGE_STORAGE
+				// PRIVACY_SETTINGS
+				// BACKUP_AND_RESET_SETTINGS
+				// ACCESSIBILITY_SETTINGS
+				// QUICK_LAUNCH_SETTINGS
+				// APPLICATION_DEVELOPMENT_SETTINGS
+				// STORAGE_USB_SETTINGS
+				// POWER_USAGE_SUMMARY
+				// ACCOUNT_SYNC_SETTINGS
+				// SYNC_SETTINGS
+				// USER_SETTINGS
+				// SIM_MANAGEMENT_ACTIVITY
+				// SIM_LIST_ENTRANCE_ACTIVITY
+				// PICK_WIFI_NETWORK
+				
+============================================================================
+					
 // 介绍：http://blog.csdn.net/qq43599939/article/details/12278641/
 // http://goodbai.com/web/UseForecastAndPMDataAPI.html
 
