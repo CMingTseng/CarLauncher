@@ -615,6 +615,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.commit();
 				setupRecordViews();
 				break;
+				
 			case R.id.largeVideoTime:
 				if (mIntervalState == STATE_INTERVAL_3MIN) {
 					if (setInterval(5 * 60) == 0) {
@@ -696,8 +697,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageFileExplore:
+//				Intent intentFileExplore = new Intent(MainActivity.this,
+//						FolderActivity.class);
 				Intent intentFileExplore = new Intent(MainActivity.this,
-						FolderActivity.class);
+						VideoListActivity.class);
 				startActivity(intentFileExplore);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
@@ -802,7 +805,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 
 			String cityName = location.getCity();
-			// cityCode = getCityCodeByName(cityName);
 
 			if ((cityName != null) && (!cityName.equals("未定位"))) {
 

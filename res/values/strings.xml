@@ -242,5 +242,23 @@
     <string name="add_favourite">添加收藏</string>
     <string name="file_info">文件信息</string>
     <string name="mime_type_s">文件类型: %s</string>
+    
+    <!-- 循环录像和文件加锁 -->
+    <string name="back">返回</string>
+    
+    <string name="del_title">删除提示</string>
+    <string name="del_msg">是否要删除该视频吗？\n提示：删除后该视频不可恢复！</string>
+    <string name="del_msg_nodel">是否要删除该碰撞视频吗？\n提示：删除后该视频不可恢复！</string>
+    
+    <string name="del_success">删除成功</string>
+    <string name="del_fail">删除失败</string>
+    
+    <string name="choose_file_ctrl">请选择对视频文件的操作</string>
+    <string name="cancle">取消</string>
+    <string name="dlg_keep_save">保存至存档</string>
+    
+    <string name="normal_video">正常视频</string>
+	<string name="urgent_video">紧急视频</string>
+	<string name="keep_save_video">存档视频</string>
 
 </resources>

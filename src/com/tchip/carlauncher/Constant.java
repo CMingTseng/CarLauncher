@@ -1,5 +1,7 @@
 package com.tchip.carlauncher;
 
+import java.io.File;
+
 import android.os.Environment;
 
 public interface Constant {
@@ -98,5 +100,33 @@ public interface Constant {
 	 * 音乐背景图片目录
 	 */
 	public static final String MUSIC_IMAGE_PATH = "MusicBackground";
+	
+	// 循环录像和加锁相关
+	public static final class RESOLUTION
+	{
+		public static final int res1080P = 1;
+		public static final int res720P = 2;
+	}
+	public static final class SAVE_TIME
+	{
+		public static final int time_3min = 1;
+		public static final int time_5min = 2;
+	}
+	public static final class SENSITIVITY
+	{
+		public static final int sen_high = 1;
+		public static final int sen_mid = 2;
+		public static final int sen_low = 3;
+	}
+	
+	public static final class EROOTPATH
+	{
+		public static final String ROOTPATH= "/mnt/sdcard"+ File.separator + "tachograph" + File.separator;
+		public static final String TEMPVIDEOPATH = ROOTPATH;// + "TempVieo" + File.separator;
+		public static final String URGENVIDEOPATH = ROOTPATH + "UrgentVieo" + File.separator;
+		public static final String SAVEPATH = ROOTPATH + "SaveVieo" + File.separator;
+		public static final String PHOTOPATH = ROOTPATH + "Photo" + File.separator;
+	}
+	
 
 }
