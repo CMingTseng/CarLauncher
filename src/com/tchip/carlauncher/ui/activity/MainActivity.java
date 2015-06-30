@@ -524,14 +524,15 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				// 连接电源自动录像
-//				if (MyApplication.isFirstLaunch && (!MyApplication.isVideoReording)
-//						&& sharedPreferences.getBoolean("autoRecord", true)
-//						&& MyApplication.isPowerConnect) {
-//					mRecordState = STATE_RECORD_STARTED;
-//					MyApplication.isVideoReording = true;
-//					MyApplication.isFirstLaunch = false;
-//					setupRecordViews();
-//				}
+				// if (MyApplication.isFirstLaunch &&
+				// (!MyApplication.isVideoReording)
+				// && sharedPreferences.getBoolean("autoRecord", true)
+				// && MyApplication.isPowerConnect) {
+				// mRecordState = STATE_RECORD_STARTED;
+				// MyApplication.isVideoReording = true;
+				// MyApplication.isFirstLaunch = false;
+				// setupRecordViews();
+				// }
 				break;
 
 			default:
@@ -615,7 +616,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.commit();
 				setupRecordViews();
 				break;
-				
+
 			case R.id.largeVideoTime:
 				if (mIntervalState == STATE_INTERVAL_3MIN) {
 					if (setInterval(5 * 60) == 0) {
@@ -699,8 +700,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageFileExplore:
 				Intent intentFileExplore = new Intent(MainActivity.this,
 						FolderActivity.class);
-//				Intent intentFileExplore = new Intent(MainActivity.this,
-//						VideoListActivity.class);
+				// Intent intentFileExplore = new Intent(MainActivity.this,
+				// VideoListActivity.class);
 				startActivity(intentFileExplore);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
@@ -774,7 +775,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (location == null || mainMapView == null)
 				return;
 			MyLocationData locData = new MyLocationData.Builder()
-					.accuracy(location.getRadius())
+					.accuracy(0)
+					// accuracy设为0去掉蓝色精度圈，RAW:.accuracy(location.getRadius())
 					// 此处设置开发者获取到的方向信息，顺时针0-360
 					.direction(100).latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
@@ -857,7 +859,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		option.setCoorType(tempCoor);
 		option.setScanSpan(frequence);
 		option.setOpenGps(true);// 打开gps
-		option.setIsNeedAddress(isNeedAddress);
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
