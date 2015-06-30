@@ -64,8 +64,10 @@ import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
+import com.tchip.carlauncher.util.XunFeiErrorCodeUtil;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 import com.tchip.carlauncher.view.ResideMenu;
@@ -107,13 +109,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 	// 左侧帮助侧边栏
 	private ResideMenu resideMenu;
-
-	private ResideMenuItem itemHuiyuan;
-	private ResideMenuItem itemQianbao;
-	private ResideMenuItem itemZhuangban;
-	private ResideMenuItem itemShoucang;
-	private ResideMenuItem itemXiangce;
-	private ResideMenuItem itemFile;
 
 	private boolean isResideMenuClose = false;
 
@@ -264,6 +259,11 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 			Log.d(TAG, "speechUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码：code
+				String errorContent = XunFeiErrorCodeUtil
+						.getErrorDescription(code);
+				Toast.makeText(getApplicationContext(), errorContent,
+						Toast.LENGTH_SHORT).show();
+
 			}
 		}
 	};
@@ -278,6 +278,10 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 			Log.d(TAG, "textUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码： code
+				String errorContent = XunFeiErrorCodeUtil
+						.getErrorDescription(code);
+				Toast.makeText(getApplicationContext(), errorContent,
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -296,19 +300,27 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		// 开始语音理解
 		case R.id.imageVoice:
 		case R.id.imageAnim:
-			tvHint.setText("");
-			// 设置参数
-			setParam();
-
-			if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
-				mSpeechUnderstander.stopUnderstanding(); // 停止录音
+			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+				String strNoNetwork = "无网络链接";
+				tvAnswer.setText(strNoNetwork);
+				startSpeak(strNoNetwork);
+				Toast.makeText(getApplicationContext(), strNoNetwork,
+						Toast.LENGTH_SHORT).show();
 			} else {
-				ret = mSpeechUnderstander
-						.startUnderstanding(mRecognizerListener);
-				if (ret != 0) {
-					// 语义理解失败,错误码:ret
+				tvHint.setText("");
+				// 设置参数
+				setParam();
+
+				if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
+					mSpeechUnderstander.stopUnderstanding(); // 停止录音
 				} else {
-					// showTip(getString(R.string.text_begin));
+					ret = mSpeechUnderstander
+							.startUnderstanding(mRecognizerListener);
+					if (ret != 0) {
+						// 语义理解失败,错误码:ret
+					} else {
+						// showTip(getString(R.string.text_begin));
+					}
 				}
 			}
 			break;
@@ -349,6 +361,9 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		@Override
 		public void onError(SpeechError error) {
 			// showTip("onError Code：" + error.getErrorCode());
+			// 初始化失败,错误码： code
+			Toast.makeText(getApplicationContext(),
+					error.getErrorDescription(), Toast.LENGTH_SHORT).show();
 
 		}
 	};
@@ -744,7 +759,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 			// 显示语音按钮，隐藏动画按钮
 			imageVoice.setVisibility(View.VISIBLE);
 			imageAnim.setVisibility(View.INVISIBLE);
-
 		}
 
 		@Override
@@ -764,6 +778,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		@Override
 		public void onError(SpeechError error) {
 			// showTip("onError Code：" + error.getErrorCode());
+			Toast.makeText(getApplicationContext(),
+					error.getErrorDescription(), Toast.LENGTH_SHORT).show();
 		}
 
 		@Override

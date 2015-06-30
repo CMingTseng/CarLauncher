@@ -12,6 +12,8 @@ import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.carlauncher.view.ButtonFloat;
 
@@ -31,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class NearActivity extends Activity {
 
@@ -52,8 +55,8 @@ public class NearActivity extends Activity {
 
 		audioRecordDialog = new AudioRecordDialog(NearActivity.this);
 
-		mSharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
-				Context.MODE_PRIVATE);
+		mSharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editSearchContent = (EditText) findViewById(R.id.editSearchContent);
 
 		Button btnToViceFromNear = (Button) findViewById(R.id.btnToViceFromNear);
@@ -92,45 +95,57 @@ public class NearActivity extends Activity {
 			case R.id.btnToViceFromNear:
 				backToVice();
 				break;
+
 			case R.id.layoutNearOilStation:
 				Intent intent1 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent1.putExtra("findType", "加油站");
 				startActivity(intent1);
 				break;
+
 			case R.id.layoutNearParking:
 				Intent intent2 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent2.putExtra("findType", "停车场");
 				startActivity(intent2);
 				break;
+
 			case R.id.layoutNear4s:
 				Intent intent3 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent3.putExtra("findType", "4S");
 				startActivity(intent3);
 				break;
+
 			case R.id.layoutNearBank:
 				Intent intent4 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent4.putExtra("findType", "ATM");
 				startActivity(intent4);
 				break;
+
 			case R.id.layoutShop:
 				Intent intent5 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent5.putExtra("findType", "超市");
 				startActivity(intent5);
 				break;
+
 			case R.id.layoutNearHotel:
 				Intent intent6 = new Intent(NearActivity.this,
 						NearResultActivity.class);
 				intent6.putExtra("findType", "酒店");
 				startActivity(intent6);
 				break;
+
 			case R.id.imgVoiceSearch:
-				startVoiceUnderstand();
+				if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+					NetworkUtil.noNetworkHint(getApplicationContext());
+				} else {
+					startVoiceUnderstand();
+				}
 				break;
+
 			case R.id.btnCustomSearch:
 				String searchContent = editSearchContent.getText().toString();
 				if (searchContent != null && searchContent.length() > 0) {
@@ -286,6 +301,12 @@ public class NearActivity extends Activity {
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
+	}
+
+	private void startSpeak(String content) {
+		Intent intent = new Intent(NearActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
 	}
 
 	private void backToVice() {

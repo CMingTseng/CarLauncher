@@ -71,6 +71,7 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
 public class RoutePlanActivity extends Activity implements
@@ -211,24 +212,28 @@ public class RoutePlanActivity extends Activity implements
 	 * 
 	 */
 	public void startSearch(String destinationStr) {
-		// 重置浏览节点的路线数据
-		route = null;
-		mBtnPre.setVisibility(View.INVISIBLE);
-		mBtnNext.setVisibility(View.INVISIBLE);
-		mBaiduMap.clear();
-		// 处理搜索按钮响应
-		// String routeStart = preferences.getString("street",
-		// "紫竹横街")+preferences.getString("streetNum", "");
-		// String cityName = preferences.getString("cityName", "中山");
-		// PlanNode stNode = PlanNode.withCityNameAndPlaceName(cityName,
-		// routeStart);
+		if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+			NetworkUtil.noNetworkHint(getApplicationContext());
+		} else {
+			// 重置浏览节点的路线数据
+			route = null;
+			mBtnPre.setVisibility(View.INVISIBLE);
+			mBtnNext.setVisibility(View.INVISIBLE);
+			mBaiduMap.clear();
+			// 处理搜索按钮响应
+			// String routeStart = preferences.getString("street",
+			// "紫竹横街")+preferences.getString("streetNum", "");
+			// String cityName = preferences.getString("cityName", "中山");
+			// PlanNode stNode = PlanNode.withCityNameAndPlaceName(cityName,
+			// routeStart);
 
-		//
-		mEndSearch = GeoCoder.newInstance();
-		mEndSearch
-				.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
-		mEndSearch
-				.geocode(new GeoCodeOption().city("").address(destinationStr));
+			//
+			mEndSearch = GeoCoder.newInstance();
+			mEndSearch
+					.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
+			mEndSearch.geocode(new GeoCodeOption().city("").address(
+					destinationStr));
+		}
 
 	}
 
@@ -615,19 +620,24 @@ public class RoutePlanActivity extends Activity implements
 	int ret = 0;// 函数调用返回值
 
 	public void startVoiceUnderstand() {
-		// 初始化对象
-		mSpeechUnderstander = SpeechUnderstander.createUnderstander(
-				RoutePlanActivity.this, speechUnderstanderListener);
-		setParam();
-
-		if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
-			mSpeechUnderstander.stopUnderstanding(); // 停止录音
+		if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+			NetworkUtil.noNetworkHint(getApplicationContext());
 		} else {
-			ret = mSpeechUnderstander.startUnderstanding(mRecognizerListener);
-			if (ret != 0) {
-				// 语义理解失败,错误码:ret
+			// 初始化对象
+			mSpeechUnderstander = SpeechUnderstander.createUnderstander(
+					RoutePlanActivity.this, speechUnderstanderListener);
+			setParam();
+
+			if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
+				mSpeechUnderstander.stopUnderstanding(); // 停止录音
 			} else {
-				// showTip(getString(R.string.text_begin));
+				ret = mSpeechUnderstander
+						.startUnderstanding(mRecognizerListener);
+				if (ret != 0) {
+					// 语义理解失败,错误码:ret
+				} else {
+					// showTip(getString(R.string.text_begin));
+				}
 			}
 		}
 	}

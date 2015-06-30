@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class MultimediaActivity extends Activity {
@@ -32,7 +33,7 @@ public class MultimediaActivity extends Activity {
 		layoutImage.setOnClickListener(new MyOnClickListener());
 
 		// 人脸检测
-		ImageView imageSearch = (ImageView) findViewById(R.id.imageSearch);
+		RelativeLayout imageSearch = (RelativeLayout) findViewById(R.id.layoutFace);
 		imageSearch.setOnClickListener(new MyOnClickListener());
 
 		// 音乐
@@ -65,7 +66,7 @@ public class MultimediaActivity extends Activity {
 				startActivity(intentImage);
 				break;
 
-			case R.id.imageSearch:
+			case R.id.layoutFace:
 				Intent intentFaceDetect = new Intent(getApplicationContext(),
 						FaceDetectActivity.class);
 				startActivity(intentFaceDetect);

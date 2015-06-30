@@ -39,7 +39,9 @@ import android.widget.TextView;
 import com.facepp.error.FaceppParseException;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.FaceDetectUtil;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class FaceDetectActivity extends Activity {
@@ -112,28 +114,32 @@ public class FaceDetectActivity extends Activity {
 				layoutGuide.setVisibility(View.GONE);
 				break;
 			case R.id.btnDetect:
-				// frameWait.setVisibility(View.VISIBLE);
-				detectProgress.setVisibility(View.VISIBLE);
-				// textAge.setVisibility(View.INVISIBLE);
-				FaceDetectUtil.detect(bitmapPhoto,
-						new FaceDetectUtil.FaceCallBack() {
+				if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+					NetworkUtil.noNetworkHint(getApplicationContext());
+				} else {
+					// frameWait.setVisibility(View.VISIBLE);
+					detectProgress.setVisibility(View.VISIBLE);
+					// textAge.setVisibility(View.INVISIBLE);
+					FaceDetectUtil.detect(bitmapPhoto,
+							new FaceDetectUtil.FaceCallBack() {
 
-							@Override
-							public void success(JSONObject result) {
-								Message msg = Message.obtain();
-								msg.what = MSG_SUCCESS;
-								msg.obj = result;
-								faceHandler.sendMessage(msg);
-							}
+								@Override
+								public void success(JSONObject result) {
+									Message msg = Message.obtain();
+									msg.what = MSG_SUCCESS;
+									msg.obj = result;
+									faceHandler.sendMessage(msg);
+								}
 
-							@Override
-							public void error(FaceppParseException exception) {
-								Message msg = Message.obtain();
-								msg.what = MSG_ERROR;
-								msg.obj = exception.getErrorMessage();
-								faceHandler.sendMessage(msg);
-							}
-						});
+								@Override
+								public void error(FaceppParseException exception) {
+									Message msg = Message.obtain();
+									msg.what = MSG_ERROR;
+									msg.obj = exception.getErrorMessage();
+									faceHandler.sendMessage(msg);
+								}
+							});
+				}
 				break;
 			case R.id.layoutBack:
 				backToMultimedia();
@@ -324,7 +330,9 @@ public class FaceDetectActivity extends Activity {
 							y - h / 2 - ageBitmap.getHeight(), null);
 				}
 			} else {
-				textHint.setText("未识别到脸部，换张照片");
+				String strNoFace = "未识别到脸部，换张照片试试";
+				textHint.setText(strNoFace);
+				startSpeak(strNoFace);
 				imageHintArrow1.setVisibility(View.VISIBLE);
 				imageHintArrow2.setVisibility(View.INVISIBLE);
 				imageHintArrow3.setVisibility(View.INVISIBLE);
@@ -343,6 +351,12 @@ public class FaceDetectActivity extends Activity {
 				}
 			});
 		}
+	}
+
+	private void startSpeak(String content) {
+		Intent intent = new Intent(FaceDetectActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
 	}
 
 	@Override
@@ -387,24 +401,24 @@ public class FaceDetectActivity extends Activity {
 		}
 	}
 
-	private class FaceppDetect {
-		DetectCallback callback = null;
-
-		public void setDetectCallback(DetectCallback detectCallback) {
-			callback = detectCallback;
-		}
-
-		public void detect(final Bitmap image) {
-
-			new Thread(new Runnable() {
-
-				public void run() {
-					// zj: old position
-
-				}
-			}).start();
-		}
-	}
+//	private class FaceppDetect {
+//		DetectCallback callback = null;
+//
+//		public void setDetectCallback(DetectCallback detectCallback) {
+//			callback = detectCallback;
+//		}
+//
+//		public void detect(final Bitmap image) {
+//
+//			new Thread(new Runnable() {
+//
+//				public void run() {
+//					// zj: old position
+//
+//				}
+//			}).start();
+//		}
+//	}
 
 	interface DetectCallback {
 		void detectResult(JSONObject rst);

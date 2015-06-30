@@ -11,6 +11,7 @@ import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.DateUtil;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WeatherUtil.WEATHER_TYPE;
 import com.tchip.carlauncher.view.TitanicTextView;
@@ -62,11 +63,16 @@ public class WeatherActivity extends Activity {
 		updateButton.setOnClickListener(new MyOnClickListener());
 
 		initialLayout();
-		// 数据是否自动更新
-		if (sharedPreferences.getBoolean("voiceUpdateWeather", true)) {
-			updateWeather(); // 会再次调用initialLayout
+
+		if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+			NetworkUtil.noNetworkHint(getApplicationContext());
 		} else {
-			speakWeather(0);
+			// 数据是否自动更新
+			if (sharedPreferences.getBoolean("voiceUpdateWeather", true)) {
+				updateWeather(); // 会再次调用initialLayout
+			} else {
+				speakWeather(0);
+			}
 		}
 	}
 
@@ -154,10 +160,9 @@ public class WeatherActivity extends Activity {
 		textWind.setText(day0windStr);
 
 		TextView textUpdateTime = (TextView) findViewById(R.id.textUpdateTime);
-		textUpdateTime
-				.setText("发布时间 "
-						+ sharedPreferences.getString("postTime", "2015 05:55")
-								.split(" ")[1]);
+		textUpdateTime.setText("发布时间 "
+				+ sharedPreferences.getString("postTime", "2015 05:55").split(
+						" ")[1]);
 
 		if (!"未定位".equals(cityName)) {
 			weatherArray[0] = cityName + "今日天气:" + weatherToday + ","
@@ -412,10 +417,14 @@ public class WeatherActivity extends Activity {
 	}
 
 	private void updateWeather() {
-		startLocationService();
-		updateButton.setVisibility(View.INVISIBLE);
-		updateProgress.setVisibility(View.VISIBLE);
-		new Thread(new UpdateWeatherThread()).start();
+		if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+			NetworkUtil.noNetworkHint(getApplicationContext());
+		} else {
+			startLocationService();
+			updateButton.setVisibility(View.INVISIBLE);
+			updateProgress.setVisibility(View.VISIBLE);
+			new Thread(new UpdateWeatherThread()).start();
+		}
 	}
 
 	public class UpdateWeatherThread implements Runnable {

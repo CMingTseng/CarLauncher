@@ -65,7 +65,7 @@
                     android:layout_height="match_parent"
                     android:hint="输入目的地"
                     android:maxEms="8"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:singleLine="true"
                     android:textColor="#ffffff"
                     android:textColorHint="#ffffff"

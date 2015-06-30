@@ -12,6 +12,7 @@ import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.model.RouteList;
 import com.tchip.carlauncher.model.SwipeMenu;
 import com.tchip.carlauncher.model.SwipeMenuItem;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SwipeMenuListView;
@@ -302,7 +303,9 @@ public class RouteListActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
-			tvNoFile.setText("暂无轨迹文件");
+			String strNoRouteFile = "暂无轨迹文件";
+			tvNoFile.setText(strNoRouteFile);
+			startSpeak(strNoRouteFile);
 			btnShowAll.setVisibility(View.INVISIBLE);
 			routeList.setVisibility(View.INVISIBLE);
 		}
@@ -392,6 +395,12 @@ public class RouteListActivity extends Activity {
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
+	}
+
+	private void startSpeak(String content) {
+		Intent intent = new Intent(RouteListActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
 	}
 
 	private void backToMain() {

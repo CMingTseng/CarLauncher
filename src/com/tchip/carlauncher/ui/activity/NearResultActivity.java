@@ -34,6 +34,7 @@ import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.ButtonFloat;
 
 public class NearResultActivity extends FragmentActivity implements
@@ -150,17 +151,22 @@ public class NearResultActivity extends FragmentActivity implements
 	}
 
 	public void startSearch() {
-		Toast.makeText(getApplicationContext(), "正在查找" + findContent,
-				Toast.LENGTH_SHORT).show();
-		// mPoiSearch.searchInCity((new PoiCitySearchOption()).city(findCity)
-		// .keyword(findContent).pageNum(load_Index));
+		if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
+			NetworkUtil.noNetworkHint(getApplicationContext());
+		} else {
+			Toast.makeText(getApplicationContext(), "正在查找" + findContent,
+					Toast.LENGTH_SHORT).show();
+			// mPoiSearch.searchInCity((new
+			// PoiCitySearchOption()).city(findCity)
+			// .keyword(findContent).pageNum(load_Index));
 
-		PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
-		poiOption.keyword(findContent);
-		poiOption.location(mLatLng);
-		poiOption.radius(15 * 1000);
-		poiOption.pageNum(0);
-		mPoiSearch.searchNearby(poiOption);
+			PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
+			poiOption.keyword(findContent);
+			poiOption.location(mLatLng);
+			poiOption.radius(15 * 1000);
+			poiOption.pageNum(0);
+			mPoiSearch.searchNearby(poiOption);
+		}
 	}
 
 	public void onGetPoiResult(PoiResult result) {
