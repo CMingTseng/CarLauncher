@@ -2,7 +2,9 @@ package com.tchip.carlauncher.ui.manager;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.MusicInfo;
 import com.tchip.carlauncher.service.MusicServiceManager;
@@ -128,7 +131,8 @@ public class MusicMyUIManager implements OnClickListener, Constant {
 
 		mMusicNameTv.setText(music.musicName);
 		mArtistTv.setText(music.artist);
-
+		
+		MyApplication.nowPlayMusic =music.artist+"-"+ music.musicName;
 		Bitmap bitmap = MusicUtils.getCachedArtwork(mActivity, music.albumId,
 				mDefaultAlbumIcon);
 

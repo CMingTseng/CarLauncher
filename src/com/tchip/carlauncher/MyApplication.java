@@ -3,6 +3,8 @@ package com.tchip.carlauncher;
 import java.io.File;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.view.SurfaceHolder;
@@ -23,6 +25,7 @@ public class MyApplication extends Application {
 	public static MusicServiceManager mServiceManager = null;
 	private static String rootPath = "/mymusic";
 	public static String lrcPath = "/lrc";
+	public static String nowPlayMusic = "";
 
 	@Override
 	public void onCreate() {
@@ -33,6 +36,7 @@ public class MyApplication extends Application {
 		SpeechUtility.createUtility(MyApplication.this, "appid="
 				+ Constant.XUNFEI_APP_ID);
 		super.onCreate();
+
 		// 百度地图SDK初始化
 		SDKInitializer.initialize(getApplicationContext());
 
@@ -84,9 +88,15 @@ public class MyApplication extends Application {
 			fileIconResolver = new FileIconResolver(getApplicationContext());
 		return fileIconResolver;
 	}
-	
+
 	// Video Record
 	public static boolean isVideoReording = false;
 	public static boolean isPowerConnect = true;
 	public static boolean isFirstLaunch = true;
+
+	// Recent Play Music
+	public void savePlayList(String nowPlayMusic) {
+		SharedPreferences preferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+	}
 }

@@ -110,6 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
+                        android:visibility="gone"
                         android:src="@drawable/ui_media_music_shadow_album" />
                 </RelativeLayout>
 
@@ -133,12 +134,12 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_marginBottom="3dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="10dp"
                         android:maxEms="12"
                         android:singleLine="true"
                         android:text="Nothing&apos;s Gonna Change My Love For You"
                         android:textColor="#ffffff"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textRecentHint"
@@ -146,8 +147,9 @@
                         android:layout_height="wrap_content"
                         android:layout_above="@id/textRecent"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="5dp"
-                        android:text="最近播放"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:text="正在播放"
                         android:textColor="#ffffff"
                         android:textSize="18sp" />
                 </RelativeLayout>

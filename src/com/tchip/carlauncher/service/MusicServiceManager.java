@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.aidl.IMediaService;
 import com.tchip.carlauncher.model.MusicIOnServiceConnectComplete;
 import com.tchip.carlauncher.model.MusicInfo;
