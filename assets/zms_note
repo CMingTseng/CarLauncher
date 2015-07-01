@@ -158,6 +158,10 @@ SharedPreferences-CarLauncher
 	[*Using]Music
 	(String)rencentMusicList		最近（或正在）播放
 	
+	----------------------------------------
+	[*Using]Video Record
+	(String)sdcardPath		SD卡路径(如：/mnt/sdcard/)
+	
 	WeatherType：晴，多云，阴，阵雨
 
 ============================================================================

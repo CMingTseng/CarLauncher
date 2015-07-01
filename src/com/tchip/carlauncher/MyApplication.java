@@ -93,6 +93,7 @@ public class MyApplication extends Application {
 	public static boolean isVideoReording = false;
 	public static boolean isPowerConnect = true;
 	public static boolean isFirstLaunch = true;
+	public static boolean isVideoLock = false;
 
 	// Recent Play Music
 	public void savePlayList(String nowPlayMusic) {

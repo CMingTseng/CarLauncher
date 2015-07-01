@@ -38,9 +38,29 @@ public interface Constant {
 			.getExternalStorageDirectory().getPath() + "/Route/";
 
 	/**
+	 * 字体目录
+	 */
+	public static final String FONT_PATH = "fonts/";
+
+	/**
+	 * 音乐背景图片目录
+	 */
+	public static final String MUSIC_IMAGE_PATH = "MusicBackground";
+
+	/**
 	 * SharedPreferences名称
 	 */
 	public static final String SHARED_PREFERENCES_NAME = "CarLauncher";
+
+	/**
+	 * 循环录像保留空间(单位：字节B)
+	 */
+	public static final long SD_MIN_FREE_STORAGE = 500 * 1024 * 1024; // 500M
+
+	/**
+	 * 循环录像最大占用空间百分比
+	 */
+	public static final float SD_MIN_FREE_PERCENT = 0.1f; // 10%
 
 	// ========== Music START ==========
 	public static final String BROADCAST_NAME = "com.tchip.carlauncher.music.broadcast";
@@ -90,43 +110,35 @@ public interface Constant {
 	 * 设置条目点击波纹速度
 	 */
 	public static final int SETTING_ITEM_RIPPLE_SPEED = 80;
-	
-	/**
-	 * 字体目录
-	 */
-	public static final String FONT_PATH = "fonts/";
-	
-	/**
-	 * 音乐背景图片目录
-	 */
-	public static final String MUSIC_IMAGE_PATH = "MusicBackground";
-	
+
 	// 循环录像和加锁相关
-	public static final class RESOLUTION
-	{
+	public static final class RESOLUTION {
 		public static final int res1080P = 1;
 		public static final int res720P = 2;
 	}
-	public static final class SAVE_TIME
-	{
+
+	public static final class SAVE_TIME {
 		public static final int time_3min = 1;
 		public static final int time_5min = 2;
 	}
-	public static final class SENSITIVITY
-	{
+
+	public static final class SENSITIVITY {
 		public static final int sen_high = 1;
 		public static final int sen_mid = 2;
 		public static final int sen_low = 3;
 	}
-	
-	public static final class EROOTPATH
-	{
-		public static final String ROOTPATH= "/mnt/sdcard"+ File.separator + "tachograph" + File.separator;
-		public static final String TEMPVIDEOPATH = ROOTPATH;// + "TempVieo" + File.separator;
-		public static final String URGENVIDEOPATH = ROOTPATH + "UrgentVieo" + File.separator;
-		public static final String SAVEPATH = ROOTPATH + "SaveVieo" + File.separator;
-		public static final String PHOTOPATH = ROOTPATH + "Photo" + File.separator;
+
+	public static final class EROOTPATH {
+		public static final String ROOTPATH = "/mnt/sdcard" + File.separator
+				+ "tachograph" + File.separator;
+		public static final String TEMPVIDEOPATH = ROOTPATH;// + "TempVieo" +
+															// File.separator;
+		public static final String URGENVIDEOPATH = ROOTPATH + "UrgentVieo"
+				+ File.separator;
+		public static final String SAVEPATH = ROOTPATH + "SaveVieo"
+				+ File.separator;
+		public static final String PHOTOPATH = ROOTPATH + "Photo"
+				+ File.separator;
 	}
-	
 
 }

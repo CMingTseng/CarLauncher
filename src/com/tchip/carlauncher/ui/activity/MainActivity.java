@@ -1,5 +1,7 @@
 package com.tchip.carlauncher.ui.activity;
 
+import java.io.File;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -23,12 +25,15 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.FolderActivity;
+import com.tchip.carlauncher.model.DriveVideo;
+import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WiFiUtil;
 import com.tchip.tachograph.TachographCallback;
@@ -72,6 +77,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
+
+	private DriveVideoDbHelper videoDb;
 
 	private LocationClient mLocationClient;
 
@@ -141,6 +148,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
+
+		videoDb = new DriveVideoDbHelper(getApplicationContext());
+
 		initialLayout();
 		initialCameraButton();
 		initialService();
@@ -595,12 +605,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
-				// TODO:视频文件加锁
-
-				// TEST
-				Intent intentRoute = new Intent(getApplicationContext(),
-						RouteRecordService.class);
-				stopService(intentRoute);
+				if (!MyApplication.isVideoLock) {
+					MyApplication.isVideoLock = true;
+				} else {
+					MyApplication.isVideoLock = false;
+				}
+				setupRecordViews();
 				break;
 
 			case R.id.largeVideoSize:
@@ -756,6 +766,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;
+
 			case R.id.layoutWiFi:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_WIFI_SETTINGS));
@@ -954,6 +965,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		mPathState = STATE_PATH_ZERO;
 		mSecondaryState = STATE_SECONDARY_DISABLE;
 		mOverlapState = STATE_OVERLAP_FIVE;
+
 	}
 
 	private void refreshRecordButton() {
@@ -1004,6 +1016,19 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else if (mIntervalState == STATE_INTERVAL_5MIN) {
 			largeVideoTime.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_time_5));
+		}
+
+		// 视频加锁
+		if (MyApplication.isVideoLock) {
+			smallVideoLock.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_lock));
+			largeVideoLock.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_lock));
+		} else {
+			smallVideoLock.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_unlock));
+			largeVideoLock.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_unlock));
 		}
 
 		// 路径
@@ -1106,10 +1131,48 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 删除最旧视频
+	 */
+	private boolean deleteOldestUnlockVideo() {
+		try {
+			String sdcardPath = sharedPreferences.getString("sdcardPath",
+					"/mnt/sdcard/");
+			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
+			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
+			while (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
+				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
+				// 删除视频文件
+				String oldesUnlockVideoName = videoDb
+						.getVideNameById(oldestUnlockVideoId);
+
+				File f = new File(sdcardPath + "tachograph/"
+						+ oldesUnlockVideoName.split("_")[0] + File.separator
+						+ oldesUnlockVideoName);
+				if (f.exists()) {
+					f.delete();
+					Toast.makeText(getApplicationContext(),
+							"Delete:" + f.getName(), Toast.LENGTH_SHORT).show();
+				}
+
+				// 删除数据库记录
+				videoDb.deleteDriveVideoById(oldestUnlockVideoId);
+			}
+			return true;
+		} catch (Exception e) {
+			/*
+			 * 异常原因：1.所有未加锁文件都已删除，空间还是不足 2.文件由用户手动删除
+			 */
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
 	public int startRecorder() {
+
 		if (mMyRecorder != null) {
-			// TODO
-			Toast.makeText(this, "startRecorder", Toast.LENGTH_SHORT).show();
+			deleteOldestUnlockVideo();
 			return mMyRecorder.start();
 		}
 		return -1;
@@ -1232,8 +1295,31 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	public void onFileSave(int type, String path) {
-		// TODO
-		Toast.makeText(this, "Save ：" + path, Toast.LENGTH_SHORT).show();
+		/**
+		 * [Type] 0-图片 1-视频
+		 * 
+		 * [Path] 视频：/mnt/sdcard/tachograph/2015-07-01/2015-07-01_105536.mp4
+		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
+		 */
+		if (type == 1) {
+			String videoName = path.split("/")[5];
+			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
+			editor.commit();
+			int videoResolution = 720;
+			int videoLock = 0;
+
+			if (mResolutionState == STATE_RESOLUTION_1080P) {
+				videoResolution = 1080;
+			}
+			if (MyApplication.isVideoLock) {
+				videoLock = 1;
+				MyApplication.isVideoLock = false; // 还原
+				setupRecordViews(); // 更新录制按钮状态
+			}
+			DriveVideo driveVideo = new DriveVideo(videoName, videoLock,
+					videoResolution);
+			videoDb.addDriveVideo(driveVideo);
+		}
 	}
 
 	public void setup() {
