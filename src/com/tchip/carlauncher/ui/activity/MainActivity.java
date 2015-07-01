@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private ImageView smallVideoRecord, smallVideoLock, smallVideoCamera;
 	private RelativeLayout layoutLargeButton;
-	private TextView textTemp, textLocation, textTodayWeather;
+	private TextView textTemp, textLocation, textTodayWeather, textRecordTime;
 	private ImageView imageTodayWeather;
 
 	private ProgressBar updateProgress;
@@ -233,6 +233,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 		surfaceCamera.setOnClickListener(new MyOnClickListener());
 		surfaceCamera.getHolder().addCallback(this);
+
+		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
 
 		// 天气预报和时钟,状态图标
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
@@ -487,6 +489,60 @@ public class MainActivity extends Activity implements TachographCallback,
 		day0tmpLow = day0tmpLow.split("℃")[0];
 		textTemp.setText(day0tmpLow + "~" + day0tmpHigh);
 	}
+
+	private int secondCount = -1;
+
+	public class updateRecordTimeThread implements Runnable {
+
+		@Override
+		public void run() {
+			do {
+				try {
+					Thread.sleep(1000);
+					Message message = new Message();
+					message.what = 1;
+					updateRecordTimeHandler.sendMessage(message);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			} while (MyApplication.isVideoReording);
+		}
+	}
+
+	final Handler updateRecordTimeHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				secondCount++;
+				String strTime = "";
+				if (secondCount < 10) {
+					strTime = "00:0" + secondCount;
+				} else if (secondCount < 60) {
+					strTime = "00:" + secondCount;
+				} else if (secondCount < 600) {
+					int minutes = secondCount / 60;
+					int seconds = secondCount % 60;
+					if (seconds < 10)
+						strTime = "0" + minutes + ":0" + seconds;
+					else
+						strTime = "0" + minutes + ":" + seconds;
+				} else {
+					int minutes = secondCount / 60;
+					int seconds = secondCount % 60;
+					if (seconds < 10)
+						strTime = minutes + ":0" + seconds;
+					else
+						strTime = minutes + ":" + seconds;
+				}
+				textRecordTime.setText(strTime);
+
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	/**
 	 * 更新WiF状态
@@ -1166,13 +1222,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 	public int startRecorder() {
 
 		if (mMyRecorder != null) {
 			deleteOldestUnlockVideo();
+			textRecordTime.setVisibility(View.VISIBLE);
+			new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
 			return mMyRecorder.start();
 		}
 		return -1;
@@ -1181,6 +1238,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	public int stopRecorder() {
 		if (mMyRecorder != null) {
 			// TODO
+			secondCount = -1; // 录制时间秒钟复位
+			textRecordTime.setText("00:00");
+			textRecordTime.setVisibility(View.INVISIBLE);
 			Toast.makeText(this, "stopRecorder", Toast.LENGTH_SHORT).show();
 			return mMyRecorder.stop();
 		}

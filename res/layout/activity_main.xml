@@ -430,6 +430,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="00:00:00"
+        android:visibility="gone"
         android:textColor="#ff0000"
         android:textSize="18sp" />
 
