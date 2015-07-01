@@ -1,8 +1,8 @@
-package com.tchip.carlauncher.controller;
+package com.tchip.carlauncher.model;
 
 import android.hardware.Camera;
 
-public interface IRecorderControl {
+public interface LZSIRecorderControl {
 	
 	/**
 	 * setup

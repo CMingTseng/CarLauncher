@@ -1,9 +1,8 @@
-package com.tchip.carlauncher.controller;
+package com.tchip.carlauncher.model;
 
 import java.util.Date;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.dao.VideoTableManager;
 import com.tchip.tachograph.TachographCallback;
 
 import android.content.Context;
@@ -12,19 +11,19 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
 
-public class EDriveController implements IRecorderControl, TachographCallback {
+public class LZSDriveController implements LZSIRecorderControl, TachographCallback {
 	private static final String TAG = "EDriveController";
-	private EDriveRecorder mEDriveRecorder;
+	private LZSDriveRecorder mEDriveRecorder;
 	private Context mContext;
 	private Camera mCamera;
 	private SurfaceHolder mHolder;
-	private VideoTableManager mVideoTableManager;
+	private LZSVideoTableManager mVideoTableManager;
 	private Long tempBtime;
 
-	public EDriveController(Context context, SurfaceHolder h) {
+	public LZSDriveController(Context context, SurfaceHolder h) {
 		mContext = context;
 		mHolder = h;
-		mVideoTableManager = new VideoTableManager(mContext);
+		mVideoTableManager = new LZSVideoTableManager(mContext);
 	}
 
 	@Override
@@ -159,7 +158,7 @@ public class EDriveController implements IRecorderControl, TachographCallback {
 
 	private void setupLowRecorder() {
 		releaseRecorder();
-		mEDriveRecorder = new EDriveRecorder();
+		mEDriveRecorder = new LZSDriveRecorder();
 		mEDriveRecorder.setTachographCallback(this);
 		mEDriveRecorder.setCamera(mCamera);
 		// mEDriveRecorder.setPreviewSurface(mHolder.getSurface());
@@ -172,7 +171,7 @@ public class EDriveController implements IRecorderControl, TachographCallback {
 
 	private void setupHighRecorder() {
 		releaseRecorder();
-		mEDriveRecorder = new EDriveRecorder();
+		mEDriveRecorder = new LZSDriveRecorder();
 		mEDriveRecorder.setTachographCallback(this);
 		mEDriveRecorder.setCamera(mCamera);
 		// mEDriveRecorder.setPreviewSurface(mHolder.getSurface());

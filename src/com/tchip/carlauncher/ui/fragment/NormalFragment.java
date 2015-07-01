@@ -10,8 +10,8 @@ import java.util.List;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.dao.VideoTableDao;
-import com.tchip.carlauncher.model.VideoTable;
+import com.tchip.carlauncher.model.LZSVideoTable;
+import com.tchip.carlauncher.model.LZSVideoTableDao;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -49,7 +49,7 @@ public class NormalFragment extends Fragment {
 	private List<String> folderList;
 	private List<String> fileList;
 
-	private VideoTableDao mVideoTableDao;
+	private LZSVideoTableDao mVideoTableDao;
 	private ActionBar actionBar;
 
 	private boolean IsFolder = true;
@@ -70,7 +70,7 @@ public class NormalFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mContext = this.getActivity();
-		mVideoTableDao = new VideoTableDao(mContext);
+		mVideoTableDao = new LZSVideoTableDao(mContext);
 		actionBar = getActivity().getActionBar();
 
 		View normalView = inflater.inflate(R.layout.fragment_normal, container,
@@ -184,7 +184,7 @@ public class NormalFragment extends Fragment {
 	private void fileLongClickDialog(final String filePath,
 			final boolean isFolder) {
 		Log.v("lzs", "=====>long_filepath:" + filePath);
-		VideoTable videoTable = mVideoTableDao.selectOneByPath(filePath);
+		LZSVideoTable videoTable = mVideoTableDao.selectOneByPath(filePath);
 
 		LayoutInflater inflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

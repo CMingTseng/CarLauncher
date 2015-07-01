@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.dao;
+package com.tchip.carlauncher.model;
 
 import java.io.File;
 import java.text.ParseException;
@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.model.VideoTable;
 
 
 import android.content.ContentValues;
@@ -15,15 +14,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class VideoTableDao {
+public class LZSVideoTableDao {
 
-	private EDatabaseHelper mDatabaseHelper;
+	private LZSDatabaseHelper mDatabaseHelper;
 	// private SQLiteDatabase dbRead, dbWrite;
 
 	private static String TABLE_NAME = "video";
 
-	public VideoTableDao(Context context) {
-		mDatabaseHelper = new EDatabaseHelper(context);
+	public LZSVideoTableDao(Context context) {
+		mDatabaseHelper = new LZSDatabaseHelper(context);
 	}
 
 	public void addVideo(String name, String path_withoutname, long btime,
@@ -36,7 +35,7 @@ public class VideoTableDao {
 		String eTimeString = sDateFormat.format(new Date(etime));
 		Integer eTimeInteger = (int) (etime / 1000);
 
-		VideoTable videoTable = new VideoTable();
+		LZSVideoTable videoTable = new LZSVideoTable();
 		videoTable.setName(name);
 		videoTable.setPath(path_withoutname + name);
 		videoTable.setPath_withoutname(path_withoutname);
@@ -58,7 +57,7 @@ public class VideoTableDao {
 		addVideo(videoTable);
 	}
 
-	public void addVideo(VideoTable videoTable) {
+	public void addVideo(LZSVideoTable videoTable) {
 		SQLiteDatabase dbWrite = mDatabaseHelper.getWritableDatabase();
 		ContentValues cv = new ContentValues();
 		cv.put("name", videoTable.getName());
@@ -101,14 +100,14 @@ public class VideoTableDao {
 		return cursor;
 	}
 
-	public VideoTable secectNormalFirst() {
+	public LZSVideoTable secectNormalFirst() {
 		SQLiteDatabase dbRead = mDatabaseHelper.getReadableDatabase();
 		Cursor cursor = dbRead.rawQuery(
 				"SELECT * FROM video WHERE protect=? and keep_save=?",
 				new String[] { "0", "0" });
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			VideoTable videoTable = new VideoTable();
+			LZSVideoTable videoTable = new LZSVideoTable();
 			videoTable.setId(cursor.getInt(cursor.getColumnIndex("_id")));
 			videoTable.setName(cursor.getString(cursor.getColumnIndex("name")));
 			videoTable.setPath(cursor.getString(cursor.getColumnIndex("path")));
@@ -152,13 +151,13 @@ public class VideoTableDao {
 		}
 	}
 
-	public VideoTable selectOneByPath(String path) {
+	public LZSVideoTable selectOneByPath(String path) {
 		SQLiteDatabase dbRead = mDatabaseHelper.getReadableDatabase();
 		Cursor cursor = dbRead.rawQuery("SELECT * FROM video WHERE path=?",
 				new String[] { path });
 		if (cursor.getCount() > 0) {
 			cursor.moveToNext();
-			VideoTable videoTable = new VideoTable();
+			LZSVideoTable videoTable = new LZSVideoTable();
 			videoTable.setName(cursor.getString(cursor.getColumnIndex("name")));
 			videoTable.setPath_thumbnail(cursor.getString(cursor
 					.getColumnIndex("path_thumbnail")));

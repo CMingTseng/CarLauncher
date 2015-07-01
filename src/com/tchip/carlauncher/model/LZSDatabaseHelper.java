@@ -1,16 +1,16 @@
-package com.tchip.carlauncher.dao;
+package com.tchip.carlauncher.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class EDatabaseHelper extends SQLiteOpenHelper {
+public class LZSDatabaseHelper extends SQLiteOpenHelper {
 	
 	private static final String DB_NAME = "edrivecorder.db";
 	private static final int VERSION = 1;
 
-	public EDatabaseHelper(Context context) {
+	public LZSDatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
 	}
 

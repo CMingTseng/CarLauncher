@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.dao.VideoTableDao;
+import com.tchip.carlauncher.model.LZSVideoTableDao;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -28,7 +28,7 @@ import android.widget.SimpleAdapter;
 public class UrgentFragment extends Fragment {
 
 	private Context mContext;
-	private VideoTableDao mVideoTableDao;
+	private LZSVideoTableDao mVideoTableDao;
 	private ListView mListView;
 	private List<String> fileList;
 
@@ -42,7 +42,7 @@ public class UrgentFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mContext = this.getActivity();
-		mVideoTableDao = new VideoTableDao(mContext);
+		mVideoTableDao = new LZSVideoTableDao(mContext);
 
 		View urgentView = inflater.inflate(R.layout.fragment_urgent, container,
 				false);

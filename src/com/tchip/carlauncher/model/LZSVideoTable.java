@@ -5,7 +5,7 @@ import java.util.Date;
 
 
 
-public class VideoTable {
+public class LZSVideoTable {
 	private Integer id;
 	private String name;
 	private String path;
@@ -22,13 +22,13 @@ public class VideoTable {
 	private Integer etime_unix;
 	
 	
-	public VideoTable()
+	public LZSVideoTable()
 	{
 	}
 	
 	
 	
-	public VideoTable(String name, String path,
+	public LZSVideoTable(String name, String path,
 			String path_withoutname, Integer protect, Integer keep_save,
 			String resolution, String file_size, String duration,
 			String path_thumbnail, String btime, Integer btime_unix,
@@ -41,7 +41,7 @@ public class VideoTable {
 	
 
 
-	public VideoTable(Integer id, String name, String path,
+	public LZSVideoTable(Integer id, String name, String path,
 			String path_withoutname, Integer protect, Integer keep_save,
 			String resolution, String file_size, String duration,
 			String path_thumbnail, String btime, Integer btime_unix,

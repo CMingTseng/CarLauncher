@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.controller;
+package com.tchip.carlauncher.model;
 
 
 import android.content.Context;
@@ -6,11 +6,11 @@ import android.hardware.Camera;
 import android.util.Log;
 import android.widget.Toast;
 
-public class RecorderControl implements IRecorderControl{
+public class LZSRecorderControl implements LZSIRecorderControl{
 	public Context mContext;
 	
 	
-	public RecorderControl(Context context) {
+	public LZSRecorderControl(Context context) {
 		super();
 		mContext = context;
 	}

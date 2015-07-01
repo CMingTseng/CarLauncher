@@ -3,7 +3,7 @@ package com.tchip.carlauncher.util;
 import android.os.StatFs;
 
 
-public class SdcardUtil {
+public class LZSSdcardUtil {
 	
 	/** 
      * 获得SD卡总大小 

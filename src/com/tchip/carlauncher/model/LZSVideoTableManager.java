@@ -1,25 +1,24 @@
-package com.tchip.carlauncher.dao;
+package com.tchip.carlauncher.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.tchip.carlauncher.model.VideoTable;
 
 import android.content.Context;
 
 
-public class VideoTableManager {
+public class LZSVideoTableManager {
 	private Context mContext;
-	private VideoTableDao mVideoTableDao;
+	private LZSVideoTableDao mVideoTableDao;
 
-	public VideoTableManager(Context context) {
+	public LZSVideoTableManager(Context context) {
 		this.mContext = context;
-		mVideoTableDao = new VideoTableDao(mContext);
+		mVideoTableDao = new LZSVideoTableDao(mContext);
 	}
 	
 	public void addVideo(String path,long btime,  long etime)
 	{
-		VideoTable videoTable = new VideoTable();
+		LZSVideoTable videoTable = new LZSVideoTable();
 		String[] strarray = path.split("\\/");
 		String videoName = strarray[strarray.length - 1];
 		String pathWithoutName = path.replace(videoName, "");

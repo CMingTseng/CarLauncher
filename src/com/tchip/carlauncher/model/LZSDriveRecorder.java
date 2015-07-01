@@ -1,14 +1,14 @@
-package com.tchip.carlauncher.controller;
+package com.tchip.carlauncher.model;
 
 import com.tchip.tachograph.TachographRecorder;
 
 import android.util.Log;
 
-public class EDriveRecorder extends TachographRecorder {
+public class LZSDriveRecorder extends TachographRecorder {
 
 	private static final String TAG = "EDriveRecorder";
 
-	public EDriveRecorder() {
+	public LZSDriveRecorder() {
 		// TODO Auto-generated constructor stub
 	}
 

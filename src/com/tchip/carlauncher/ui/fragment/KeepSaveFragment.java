@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.dao.VideoTableDao;
+import com.tchip.carlauncher.model.LZSVideoTableDao;
 
 
 import android.app.AlertDialog;
@@ -29,7 +29,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class KeepSaveFragment extends Fragment {
 	
 	private Context mContext;
-	private VideoTableDao mVideoTableDao;
+	private LZSVideoTableDao mVideoTableDao;
 	private ListView mListView;
 	private List<String> fileList;
 	
@@ -43,7 +43,7 @@ public class KeepSaveFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mContext = this.getActivity();
-		mVideoTableDao = new VideoTableDao(mContext);
+		mVideoTableDao = new LZSVideoTableDao(mContext);
 		
 		View keepSaveView = inflater.inflate(R.layout.fragment_keepsave, container, false);
 		mListView = (ListView) keepSaveView.findViewById(R.id.lv_keepsave);
