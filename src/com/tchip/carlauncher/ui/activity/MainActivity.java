@@ -32,6 +32,7 @@ import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.StorageUtil;
@@ -384,6 +385,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新界面线程
 		new Thread(new UpdateLayoutThread()).start();
 	}
+	
+	private void startSpeak(String content) {
+		Intent intent = new Intent(MainActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
+	}
 
 	/**
 	 * 初始化录像按钮
@@ -644,8 +651,10 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoLock:
 				if (!MyApplication.isVideoLock) {
 					MyApplication.isVideoLock = true;
+					startSpeak("视频加锁");
 				} else {
 					MyApplication.isVideoLock = false;
+					startSpeak("视频解锁");
 				}
 				setupRecordViews();
 				break;
@@ -655,10 +664,12 @@ public class MainActivity extends Activity implements TachographCallback,
 					setResolution(STATE_RESOLUTION_720P);
 					editor.putString("videoSize", "720");
 					mRecordState = STATE_RECORD_STOPPED;
+					startSpeak("分辨率七二零P");
 				} else if (mResolutionState == STATE_RESOLUTION_720P) {
 					setResolution(STATE_RESOLUTION_1080P);
 					editor.putString("videoSize", "1080");
 					mRecordState = STATE_RECORD_STOPPED;
+					startSpeak("分辨率一零八零P");
 				}
 				editor.commit();
 				setupRecordViews();
@@ -669,11 +680,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (setInterval(5 * 60) == 0) {
 						mIntervalState = STATE_INTERVAL_5MIN;
 						editor.putString("videoTime", "5");
+						startSpeak("视频分段五分钟");
 					}
 				} else if (mIntervalState == STATE_INTERVAL_5MIN) {
 					if (setInterval(3 * 60) == 0) {
 						mIntervalState = STATE_INTERVAL_3MIN;
 						editor.putString("videoTime", "3");
+						startSpeak("视频分段三分钟");
 					}
 				}
 				editor.commit();
@@ -1103,9 +1116,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		mHolder = holder;
 		if (!MyApplication.isVideoReording) {
 			setup();
-			// TODO
-			Toast.makeText(this, "surfaceCreated:setup()", Toast.LENGTH_SHORT)
-					.show();
 		} else { // 正在录像中，回到主界面
 			try {
 				// mCamera = Camera.open(0);
@@ -1121,9 +1131,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				surfaceCamera.setOnClickListener(new MyOnClickListener());
 				surfaceCamera.getHolder().addCallback(this);
 			} catch (Exception e) {
-				// TODO
-				Toast.makeText(this, "surfaceCreated:Camera.openErr",
-						Toast.LENGTH_SHORT).show();
+				Log.e(Constant.TAG, "Back to main when record, Err:" + e);
 			}
 		}
 	}
@@ -1180,20 +1188,22 @@ public class MainActivity extends Activity implements TachographCallback,
 			while (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
 				// 删除视频文件
-				String oldesUnlockVideoName = videoDb
-						.getVideNameById(oldestUnlockVideoId);
+				if (oldestUnlockVideoId != -1) {
+					String oldestUnlockVideoName = videoDb
+							.getVideNameById(oldestUnlockVideoId);
+					File f = new File(sdcardPath + "tachograph/"
+							+ oldestUnlockVideoName.split("_")[0]
+							+ File.separator + oldestUnlockVideoName);
+					if (f.exists() && f.isFile()) {
+						f.delete();
+						Log.d(Constant.TAG, "Delete Old Video:" + f.getName());
+					}
 
-				File f = new File(sdcardPath + "tachograph/"
-						+ oldesUnlockVideoName.split("_")[0] + File.separator
-						+ oldesUnlockVideoName);
-				if (f.exists()) {
-					f.delete();
-					Toast.makeText(getApplicationContext(),
-							"Delete:" + f.getName(), Toast.LENGTH_SHORT).show();
+					// 删除数据库记录
+					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
+					// 更新剩余空间
+					sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 				}
-
-				// 删除数据库记录
-				videoDb.deleteDriveVideoById(oldestUnlockVideoId);
 			}
 			return true;
 		} catch (Exception e) {
@@ -1211,6 +1221,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			deleteOldestUnlockVideo();
 			textRecordTime.setVisibility(View.VISIBLE);
 			new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+			Log.d(Constant.TAG, "Record Start");
 			return mMyRecorder.start();
 		}
 		return -1;
@@ -1218,11 +1229,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int stopRecorder() {
 		if (mMyRecorder != null) {
-			// TODO
 			secondCount = -1; // 录制时间秒钟复位
 			textRecordTime.setText("00:00");
 			textRecordTime.setVisibility(View.INVISIBLE);
-			Toast.makeText(this, "stopRecorder", Toast.LENGTH_SHORT).show();
+			Log.d(Constant.TAG, "Record Stop");
 			return mMyRecorder.stop();
 		}
 		return -1;
@@ -1319,19 +1329,17 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void releaseRecorder() {
 		if (mMyRecorder != null) {
-			// TODO
-			Toast.makeText(this, "releaseRecorder", Toast.LENGTH_SHORT).show();
-
 			mMyRecorder.close();
 			mMyRecorder.release();
 			mMyRecorder = null;
+
+			Log.d(Constant.TAG, "Record Release");
 		}
 	}
 
 	@Override
 	public void onError(int err) {
-		// TODO
-		Toast.makeText(this, "Error : " + err, Toast.LENGTH_SHORT).show();
+		Log.e(Constant.TAG, "Error : " + err);
 	}
 
 	@Override
@@ -1342,6 +1350,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		 * [Path] 视频：/mnt/sdcard/tachograph/2015-07-01/2015-07-01_105536.mp4
 		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
 		 */
+		deleteOldestUnlockVideo();
 		if (type == 1) {
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
@@ -1361,6 +1370,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					videoResolution);
 			videoDb.addDriveVideo(driveVideo);
 		}
+		Log.d(Constant.TAG, "File Save, Type=" + type);
 	}
 
 	public void setup() {
