@@ -33,6 +33,7 @@ import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WiFiUtil;
@@ -514,28 +515,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (msg.what) {
 			case 1:
 				secondCount++;
-				String strTime = "";
-				if (secondCount < 10) {
-					strTime = "00:0" + secondCount;
-				} else if (secondCount < 60) {
-					strTime = "00:" + secondCount;
-				} else if (secondCount < 600) {
-					int minutes = secondCount / 60;
-					int seconds = secondCount % 60;
-					if (seconds < 10)
-						strTime = "0" + minutes + ":0" + seconds;
-					else
-						strTime = "0" + minutes + ":" + seconds;
-				} else {
-					int minutes = secondCount / 60;
-					int seconds = secondCount % 60;
-					if (seconds < 10)
-						strTime = minutes + ":0" + seconds;
-					else
-						strTime = minutes + ":" + seconds;
-				}
-				textRecordTime.setText(strTime);
-
+				textRecordTime.setText(DateUtil
+						.getFormatTimeBySecond(secondCount));
 				break;
 
 			default:
