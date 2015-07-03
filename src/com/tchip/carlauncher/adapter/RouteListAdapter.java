@@ -28,7 +28,6 @@ public class RouteListAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return routeArray.size();
 	}
 
@@ -84,10 +83,14 @@ public class RouteListAdapter extends BaseAdapter {
 	private String convertStringToDate(String str) {
 		// in: 20150401_135625
 		// out: 2015年4月1日 13:56:25
-		String date = "";
-		date = str.substring(0, 4) + "年" + str.substring(4, 6) + "月"
-				+ str.substring(6, 8) + "日 " + str.substring(9, 11) + ":"
-				+ str.substring(11, 13) + ":" + str.substring(13, 15);
+		String date = str;
+		try {
+			date = str.substring(0, 4) + "年" + str.substring(4, 6) + "月"
+					+ str.substring(6, 8) + "日 " + str.substring(9, 11) + ":"
+					+ str.substring(11, 13) + ":" + str.substring(13, 15);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return date;
 	}

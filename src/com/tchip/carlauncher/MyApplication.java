@@ -3,11 +3,7 @@ package com.tchip.carlauncher;
 import java.io.File;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.hardware.Camera;
 import android.os.Environment;
-import android.view.SurfaceHolder;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
@@ -96,8 +92,8 @@ public class MyApplication extends Application {
 	public static boolean isVideoLock = false;
 
 	// Recent Play Music
-	public void savePlayList(String nowPlayMusic) {
-		SharedPreferences preferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-	}
+	// public void savePlayList(String nowPlayMusic) {
+	// SharedPreferences preferences = getSharedPreferences(
+	// Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+	// }
 }
