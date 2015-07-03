@@ -78,6 +78,9 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="69c7e8fa468bf56893a7630e703dea11" />
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="com.tchip.carlauncher.fileexplorer.SearchActivity" />
 
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MainActivity"
@@ -154,24 +157,6 @@
             android:name="com.tchip.carlauncher.ui.activity.OfflineBaiduMapShowActivity"
             android:screenOrientation="landscape" />
 
-        <meta-data
-            android:name="android.app.default_searchable"
-            android:value="com.tchip.carlauncher.fileexplorer.SearchActivity" />
-
-        <service android:name="com.tchip.carlauncher.service.FTPServerService" />
-        <service android:name="com.tchip.carlauncher.service.SpeakService" />
-        <service android:name="com.tchip.carlauncher.service.LocationService" />
-        <service android:name="com.tchip.carlauncher.service.WeatherService" />
-        <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" >
-            <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2" >
-                </action>
-            </intent-filter>
-        </service>
         <!-- Music -->
 
         <activity
@@ -209,12 +194,6 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
 
-        <service android:name="com.tchip.carlauncher.service.MusicMediaService" >
-            <intent-filter>
-                <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
-            </intent-filter>
-        </service>
-
         <!-- Traffic Stats 流量 -->
         <activity
             android:name="com.tchip.carlauncher.ui.activity.TrafficStatActivity"
@@ -224,16 +203,17 @@
             android:name="com.tchip.carlauncher.ui.activity.TrafficChartActivity"
             android:label="应用详情"
             android:screenOrientation="landscape" />
-
-        <service android:name="com.tchip.carlauncher.service.TrafficFetchService" />
-        <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
+        <!-- WiFi 列表 -->
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.WifiListActivity"
+            android:screenOrientation="landscape" />
 
         <!-- File Manager -->
         <activity
             android:name="com.tchip.carlauncher.lib.filemanager.FolderActivity"
             android:label="@string/app_name"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:theme="@style/AppTranslucentTheme" >
+            android:theme="@style/AppTranslucentTheme"
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
 
         <receiver android:name="com.tchip.carlauncher.model.PowerStateChangeReceiver" >
@@ -242,6 +222,28 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
+
+        <service android:name="com.tchip.carlauncher.service.FTPServerService" />
+        <service android:name="com.tchip.carlauncher.service.SpeakService" />
+        <service android:name="com.tchip.carlauncher.service.LocationService" />
+        <service android:name="com.tchip.carlauncher.service.WeatherService" />
+        <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
+        <service android:name="com.tchip.carlauncher.service.TrafficFetchService" />
+        <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.2" >
+                </action>
+            </intent-filter>
+        </service>
+        <service android:name="com.tchip.carlauncher.service.MusicMediaService" >
+            <intent-filter>
+                <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

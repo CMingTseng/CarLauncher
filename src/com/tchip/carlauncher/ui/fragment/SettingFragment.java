@@ -6,6 +6,7 @@ import com.tchip.carlauncher.bluetooth.DiscoveryActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
+import com.tchip.carlauncher.ui.activity.WifiListActivity;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.SwitchButton;
 
@@ -165,10 +166,11 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleWifi:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_WIFI_SETTINGS));
-				// startActivity(new
-				// Intent("android.net.wifi.PICK_WIFI_NETWORK"));
+//				startActivity(new Intent(
+//						android.provider.Settings.ACTION_WIFI_SETTINGS));
+				Intent intentWifi = new Intent(context,
+						WifiListActivity.class);
+				startActivity(intentWifi);
 				break;
 
 			case R.id.layoutRippleTraffic:
