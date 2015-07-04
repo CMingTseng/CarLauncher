@@ -8,10 +8,16 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.util.Log;
 
 public class WifiAdmin {
-	// 定义一个WifiManager对象
+	/**
+	 * 定义一个WifiManager对象,提供Wifi管理的各种主要API，主要包含wifi的扫描、建立连接、配置信息等
+	 */
 	private WifiManager mWifiManager;
+
+	private List<WifiConfiguration> wifiConfigList;// WIFIConfiguration描述WIFI的链接信息，包括SSID、SSID隐藏、password等的设置
+
 	// 定义一个WifiInfo对象
 	private WifiInfo mWifiInfo;
 	// 扫描出的网络连接列表
@@ -20,10 +26,15 @@ public class WifiAdmin {
 	private List<WifiConfiguration> mWifiConfigurations;
 	WifiLock mWifiLock;
 
+	public static final int TYPE_NO_PASSWD = 0x11;
+	public static final int TYPE_WEP = 0x12;
+	public static final int TYPE_WPA = 0x13;
+
 	public WifiAdmin(Context context) {
-		// 取得WifiManager对象
+		// 获得WifiManager对象
 		mWifiManager = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
+
 		// 取得WifiInfo对象
 		mWifiInfo = mWifiManager.getConnectionInfo();
 	}
@@ -84,7 +95,7 @@ public class WifiAdmin {
 	 * 
 	 * @return
 	 */
-	public List<WifiConfiguration> getConfiguration() {
+	public List<WifiConfiguration> getWiFiConfiguration() {
 		return mWifiConfigurations;
 	}
 
@@ -170,9 +181,77 @@ public class WifiAdmin {
 	 * 
 	 * @param configuration
 	 */
-	public void addNetWork(WifiConfiguration configuration) {
+	public void addNetwork(WifiConfiguration configuration) {
 		int wcgId = mWifiManager.addNetwork(configuration);
 		mWifiManager.enableNetwork(wcgId, true);
+	}
+
+	public WifiConfiguration createWifiInfo(String SSID, String Password,
+			int Type) {
+		WifiConfiguration config = new WifiConfiguration();
+		config.allowedAuthAlgorithms.clear();
+		config.allowedGroupCiphers.clear();
+		config.allowedKeyManagement.clear();
+		config.allowedPairwiseCiphers.clear();
+		config.allowedProtocols.clear();
+		config.SSID = "\"" + SSID + "\"";
+
+		WifiConfiguration tempConfig = this.isExsits(SSID);
+		if (tempConfig != null) {
+			mWifiManager.removeNetwork(tempConfig.networkId);
+		}
+
+		if (Type == 1) // WIFICIPHER_NOPASS
+		{
+			config.wepKeys[0] = "";
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+			config.wepTxKeyIndex = 0;
+		}
+		if (Type == 2) // WIFICIPHER_WEP
+		{
+			config.hiddenSSID = true;
+			config.wepKeys[0] = "\"" + Password + "\"";
+			config.allowedAuthAlgorithms
+					.set(WifiConfiguration.AuthAlgorithm.SHARED);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+			config.allowedGroupCiphers
+					.set(WifiConfiguration.GroupCipher.WEP104);
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+			config.wepTxKeyIndex = 0;
+		}
+		if (Type == 3) // WIFICIPHER_WPA
+		{
+			config.preSharedKey = "\"" + Password + "\"";
+			config.hiddenSSID = true;
+			config.allowedAuthAlgorithms
+					.set(WifiConfiguration.AuthAlgorithm.OPEN);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+			config.allowedPairwiseCiphers
+					.set(WifiConfiguration.PairwiseCipher.TKIP);
+			// config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+			config.allowedPairwiseCiphers
+					.set(WifiConfiguration.PairwiseCipher.CCMP);
+			config.status = WifiConfiguration.Status.ENABLED;
+		}
+		return config;
+	}
+
+	private WifiConfiguration isExsits(String ssid) {
+		WifiConfiguration config = new WifiConfiguration();
+
+		if (mWifiList.size() > 0) {
+			for (int i = 0; i < mWifiList.size(); i++) {
+				if (mWifiList.get(i).SSID.equals(ssid)) {
+
+					config = mWifiConfigurations.get(i);
+				}
+			}
+		}
+		return config;
 	}
 
 	/**
@@ -183,5 +262,84 @@ public class WifiAdmin {
 	public void disConnectionWifi(int netId) {
 		mWifiManager.disableNetwork(netId);
 		mWifiManager.disconnect();
+	}
+
+	// ============
+	/**
+	 * 连接指定Id的WIFI
+	 * 
+	 * @param wifiId
+	 * @return
+	 */
+	public boolean ConnectWifi(int wifiId) {
+		for (int i = 0; i < wifiConfigList.size(); i++) {
+			WifiConfiguration wifi = wifiConfigList.get(i);
+			if (wifi.networkId == wifiId) {
+				while (!(mWifiManager.enableNetwork(wifiId, true))) {// 激活该Id，建立连接
+					Log.i("ConnectWifi",
+							String.valueOf(wifiConfigList.get(wifiId).status));// status:0--已经连接，1--不可连接，2--可以连接
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 得到Wifi配置好的信息
+	 */
+	public void getConfiguration() {
+		wifiConfigList = mWifiManager.getConfiguredNetworks();// 得到配置好的网络信息
+		for (int i = 0; i < wifiConfigList.size(); i++) {
+			Log.i("getConfiguration", wifiConfigList.get(i).SSID);
+			Log.i("getConfiguration",
+					String.valueOf(wifiConfigList.get(i).networkId));
+		}
+	}
+
+	/**
+	 * 判定指定WIFI是否已经配置好,依据WIFI的地址BSSID,返回NetId
+	 * 
+	 * @param SSID
+	 * @return
+	 */
+	public int IsConfiguration(String SSID) {
+		Log.i("IsConfiguration", String.valueOf(wifiConfigList.size()));
+		for (int i = 0; i < wifiConfigList.size(); i++) {
+			Log.i(wifiConfigList.get(i).SSID,
+					String.valueOf(wifiConfigList.get(i).networkId));
+			if (wifiConfigList.get(i).SSID.equals(SSID)) {// 地址相同
+				return wifiConfigList.get(i).networkId;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * 添加指定WIFI的配置信息,原列表不存在此SSID
+	 * 
+	 * @param wifiList
+	 * @param ssid
+	 * @param pwd
+	 * @return
+	 */
+	public int AddWifiConfig(List<ScanResult> wifiList, String ssid, String pwd) {
+		int wifiId = -1;
+		for (int i = 0; i < wifiList.size(); i++) {
+			ScanResult wifi = wifiList.get(i);
+			if (wifi.SSID.equals(ssid)) {
+				Log.i("AddWifiConfig", "equals");
+				WifiConfiguration wifiCong = new WifiConfiguration();
+				wifiCong.SSID = "\"" + wifi.SSID + "\"";// \"转义字符，代表"
+				wifiCong.preSharedKey = "\"" + pwd + "\"";// WPA-PSK密码
+				wifiCong.hiddenSSID = false;
+				wifiCong.status = WifiConfiguration.Status.ENABLED;
+				wifiId = mWifiManager.addNetwork(wifiCong);// 将配置好的特定WIFI密码信息添加,添加完成后默认是不激活状态，成功返回ID，否则为-1
+				if (wifiId != -1) {
+					return wifiId;
+				}
+			}
+		}
+		return wifiId;
 	}
 }

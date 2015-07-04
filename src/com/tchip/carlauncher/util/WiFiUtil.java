@@ -1,5 +1,8 @@
 package com.tchip.carlauncher.util;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
+
 import com.tchip.carlauncher.R;
 
 public class WiFiUtil {
@@ -50,6 +53,14 @@ public class WiFiUtil {
 			float outputRange = (numLevels - 1);
 			return (int) ((float) (rssi - MIN_RSSI) * outputRange / inputRange);
 		}
+	}
+
+	public static String getConnectWifiBssid(Context context) {
+		WifiManager wifiManager = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		android.net.wifi.WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		return wifiInfo.getBSSID();
+		// return wifiInfo.getSSID();
 	}
 
 }

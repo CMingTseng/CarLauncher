@@ -20,6 +20,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 
 	private LayoutInflater layoutInflater;
 	private Context context;
+	private String nowWifiBssid;
 
 	public WiFiInfoAdapter(Context context, ArrayList<WifiInfo> wifiArray) {
 		super();
@@ -27,6 +28,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		this.wifiArray = wifiArray;
 		layoutInflater = LayoutInflater.from(context);
 		wifiArray = new ArrayList<WifiInfo>();
+		nowWifiBssid = WiFiUtil.getConnectWifiBssid(context);
 	}
 
 	@Override
@@ -48,6 +50,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		ImageView imageSignal;
 		TextView textName;
 		TextView textState;
+		TextView textSafety;
 	}
 
 	@Override
@@ -57,31 +60,52 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		if (convertView == null) {
 			viewHolder = new MyViewHolder();
 			convertView = layoutInflater.inflate(R.layout.wifi_list_item, null);
+
 			viewHolder.imageSignal = (ImageView) convertView
 					.findViewById(R.id.imageSignal);
 			viewHolder.textName = (TextView) convertView
 					.findViewById(R.id.textName);
 			viewHolder.textState = (TextView) convertView
 					.findViewById(R.id.textState);
+			viewHolder.textSafety = (TextView) convertView
+					.findViewById(R.id.textSafety);
+
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (MyViewHolder) convertView.getTag();
 		}
-		// TODO:Signal Level
+
+		// WiFi Signal Level
 		int level = wifiArray.get(position).getSignal();
-		viewHolder.imageSignal.setImageResource(WiFiUtil.getImageBySignal(level));
-		
+		viewHolder.imageSignal.setImageResource(WiFiUtil
+				.getImageBySignal(level));
+
 		String wifiName = wifiArray.get(position).getName();
 		viewHolder.textName.setText(wifiName);
-		
-		// TODO:State
-		//if(wifiName!= null && wifiName.equals()){}
-		//viewHolder.textState.setText(wifiArray.get(position).getAuthType());
-		
+
+		// Wifi State & AuthType
+		String wifiBssid = wifiArray.get(position).getMacAddress();
+		String wifiAuth = wifiArray.get(position).getAuthType();
+
+		if (wifiBssid != null && wifiBssid.trim().length() > 0
+				&& wifiBssid.equals(nowWifiBssid)) {
+			viewHolder.textState.setText("已连接");
+		} else {
+			viewHolder.textState.setText("");
+		}
+
+		if (wifiAuth != null && wifiAuth.trim().length() > 0) {
+			if ("[ESS]".equals(wifiAuth) || "[WPS][ESS]".equals(wifiAuth)) {
+				viewHolder.textSafety.setText("开放");
+			} else {
+				viewHolder.textSafety.setText("安全");
+			}
+		} else {
+			viewHolder.textSafety.setText("");
+		}
 
 		return convertView;
 	}
-
 
 	public void remove(Object item) {
 		wifiArray.remove(item);
