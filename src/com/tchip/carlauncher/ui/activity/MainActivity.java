@@ -818,8 +818,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.layoutWiFi:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_WIFI_SETTINGS));
+//				startActivity(new Intent(
+//						android.provider.Settings.ACTION_WIFI_SETTINGS));
+				Intent intentWiFi = new Intent(MainActivity.this,
+						WifiListActivity.class);
+				startActivity(intentWiFi);
 				break;
 
 			default:
