@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class WifiListActivity extends Activity {
 
@@ -188,7 +189,12 @@ public class WifiListActivity extends Activity {
 							+ list.get(position).SSID + "\"");
 					if (wifiItemId != -1) {
 						if (wiFiAdmin.ConnectWifi(wifiItemId)) {
-							// 连接指定WIFI
+							// 连接已保存密码的WiFi
+							Toast.makeText(getApplicationContext(), "正在连接",
+									Toast.LENGTH_SHORT).show();
+							updateButton.setVisibility(View.INVISIBLE);
+							updateProgress.setVisibility(View.VISIBLE);
+							new Thread(new refreshWifiThread()).start();
 						}
 					} else {
 						// 没有配置好信息，配置

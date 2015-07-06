@@ -11,6 +11,7 @@ import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.SwitchButton;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -198,8 +199,15 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleDate:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_DATE_SETTINGS));
+//				startActivity(new Intent(
+//						android.provider.Settings.ACTION_DATE_SETTINGS));
+				
+				ComponentName componentImage = new ComponentName(
+						"com.mediatek.oobe",
+						"com.mediatek.oobe.basic.MainActivity");
+				Intent intentImage = new Intent();
+				intentImage.setComponent(componentImage);
+				startActivity(intentImage);
 				break;
 
 			case R.id.layoutRippleSound:

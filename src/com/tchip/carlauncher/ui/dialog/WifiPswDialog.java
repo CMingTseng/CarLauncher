@@ -16,24 +16,23 @@ public class WifiPswDialog extends Dialog {
 	private OnCustomDialogListener customDialogListener;
 
 	public WifiPswDialog(Context context, OnCustomDialogListener customListener) {
-		// OnCancelListener cancelListener) {
 		super(context);
-		// TODO Auto-generated constructor stub
 		customDialogListener = customListener;
 
 	}
 
-	// 定义dialog的回调事件
+	/**
+	 * 定义dialog的回调事件
+	 */
 	public interface OnCustomDialogListener {
 		void back(String str);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wifi_config_dialog);
-		setTitle("请输入密码");
+		setTitle("输入密码");
 		pswEdit = (EditText) findViewById(R.id.wifiDialogPsw);
 		cancelButton = (Button) findViewById(R.id.wifiDialogCancel);
 		okButton = (Button) findViewById(R.id.wifiDialogCertain);
@@ -46,7 +45,6 @@ public class WifiPswDialog extends Dialog {
 
 		@Override
 		public void onClick(View view) {
-			// TODO Auto-generated method stub
 			if (view.getId() == R.id.wifiDialogCancel) {
 				pswEdit = null;
 				customDialogListener.back(null);

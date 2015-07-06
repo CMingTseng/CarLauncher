@@ -16,14 +16,18 @@ public class WifiAdmin {
 	 */
 	private WifiManager mWifiManager;
 
-	private List<WifiConfiguration> wifiConfigList;// WIFIConfiguration描述WIFI的链接信息，包括SSID、SSID隐藏、password等的设置
+	// WIFIConfiguration描述WIFI的链接信息，包括SSID、SSID隐藏、password等的设置
+	private List<WifiConfiguration> wifiConfigList;
 
 	// 定义一个WifiInfo对象
 	private WifiInfo mWifiInfo;
+	
 	// 扫描出的网络连接列表
 	private List<ScanResult> mWifiList;
+	
 	// 网络连接列表
 	private List<WifiConfiguration> mWifiConfigurations;
+	
 	WifiLock mWifiLock;
 
 	public static final int TYPE_NO_PASSWD = 0x11;
