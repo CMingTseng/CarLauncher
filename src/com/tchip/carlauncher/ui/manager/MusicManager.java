@@ -120,7 +120,7 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 			mMainLayout.setBackgroundDrawable(new BitmapDrawable(mActivity
 					.getResources(), bitmap));
 		} else {
-			mMainLayout.setBackgroundResource(R.drawable.bg);
+			//mMainLayout.setBackgroundResource(R.drawable.bg);
 		}
 	}
 

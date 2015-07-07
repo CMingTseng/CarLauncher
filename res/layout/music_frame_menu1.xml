@@ -69,9 +69,12 @@
                 style="@style/SlidingMenu.TextView.ItemTitle"
                 android:layout_width="fill_parent"
                 android:drawableLeft="@drawable/icon_change_background"
-                android:text="更换背景" />
+                android:text="更换背景"
+                android:visibility="gone" />
 
-            <View style="@style/SlidingMenu.View.SplitLine" />
+            <View
+                style="@style/SlidingMenu.View.SplitLine"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txt_sleep"

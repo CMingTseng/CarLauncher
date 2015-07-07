@@ -3,7 +3,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
+    android:background="#000000"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -11,7 +11,7 @@
         android:id="@+id/top_layout"
         android:layout_width="fill_parent"
         android:layout_height="90dp"
-        android:background="@color/half_transparent"
+         android:background="@drawable/ui_setting_top_bar_bg"
         android:orientation="vertical" >
 
         <ImageView
@@ -36,8 +36,7 @@
         android:id="@+id/bottomLayout"
         android:layout_width="fill_parent"
         android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bottom_color" >
+        android:layout_alignParentBottom="true"  android:background="@drawable/ui_setting_top_bar_bg" >
 
         <ImageView
             android:id="@+id/headicon_iv"
@@ -58,12 +57,12 @@
 
         <View
             android:id="@+id/split"
-            android:layout_width="1.5dp"
+            android:layout_width="3dp"
             android:layout_height="80dp"
             android:layout_marginLeft="6.0dp"
             android:layout_marginRight="6.0dp"
             android:layout_toLeftOf="@id/btn_menu2"
-            android:background="#6a5e8a" />
+            android:background="#000000" />
 
         <ImageButton
             android:id="@+id/btn_playNext2"

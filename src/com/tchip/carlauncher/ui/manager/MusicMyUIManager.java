@@ -67,7 +67,7 @@ public class MusicMyUIManager implements OnClickListener, Constant {
 
 	private void initView() {
 		mSearchBtn = (ImageButton) findViewById(R.id.searchBtn);
-		mBackBtn = (ImageButton) findViewById(R.id.backBtn);
+		mBackBtn = (ImageButton) findViewById(R.id.imageBack);
 		mMusicNameTv = (MusicAlwaysMarqueeTextView) findViewById(R.id.musicname_tv2);
 		mArtistTv = (MusicAlwaysMarqueeTextView) findViewById(R.id.artist_tv2);
 		mPositionTv = (TextView) findViewById(R.id.position_tv2);
@@ -171,7 +171,7 @@ public class MusicMyUIManager implements OnClickListener, Constant {
 			mActivity.startActivity(new Intent(mActivity,
 					MusicListSearchActivity.class));
 			break;
-		case R.id.backBtn:
+		case R.id.imageBack:
 			// MainContentActivity.mSlidingMenu.showMenu();
 			// mActivity.onBackPressed();
 			mUIManager.setCurrentItem();
