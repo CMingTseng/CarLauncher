@@ -15,35 +15,36 @@
         android:layout_height="63dp" >
 
         <ImageView
-            android:id="@+id/imageSignal"
+            android:id="@+id/imageType"
             android:layout_width="@dimen/setting_item_image_height"
             android:layout_height="@dimen/setting_item_image_height"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="40dp"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ui_setting_system_bluetooth" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/imageSignal"
+            android:layout_toRightOf="@id/imageType"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="tchip-Z"
+                android:text="Galaxy Note"
                 android:textColor="#ffffff" />
 
             <TextView
-                android:id="@+id/textSafety"
+                android:id="@+id/textAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="安全"
+                android:layout_below="@id/textName"
+                android:text="00:11:22:AA:BB:CC"
                 android:textColor="@color/setting_item_title_color" />
         </LinearLayout>
 
@@ -54,7 +55,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="80dp"
-            android:text="已连接"
+            android:text="已配对"
             android:textColor="@color/setting_item_title_color"
             android:textSize="16sp" />
     </RelativeLayout>

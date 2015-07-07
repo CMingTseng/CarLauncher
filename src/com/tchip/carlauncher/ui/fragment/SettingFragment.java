@@ -2,7 +2,7 @@ package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.bluetooth.DiscoveryActivity;
+import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
@@ -34,6 +34,8 @@ public class SettingFragment extends Fragment {
 	private Editor editor;
 	private BluetoothAdapter bluetoothAdapter;
 	private WifiManager wifiManager;
+
+	private SwitchButton switchWifi, switchBluetooth;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +73,7 @@ public class SettingFragment extends Fragment {
 		RelativeLayout layoutRippleWifi = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleWifi);
 		layoutRippleWifi.setOnClickListener(new MyOnClickListener());
-		SwitchButton switchWifi = (SwitchButton) systemSettingView
+		switchWifi = (SwitchButton) systemSettingView
 				.findViewById(R.id.switchWifi);
 		wifiManager = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
@@ -95,7 +97,7 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleBluetooth);
 		layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
 
-		SwitchButton switchBluetooth = (SwitchButton) systemSettingView
+		switchBluetooth = (SwitchButton) systemSettingView
 				.findViewById(R.id.switchBluetooth);
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
@@ -167,10 +169,9 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleWifi:
-//				startActivity(new Intent(
-//						android.provider.Settings.ACTION_WIFI_SETTINGS));
-				Intent intentWifi = new Intent(context,
-						WifiListActivity.class);
+				// startActivity(new Intent(
+				// android.provider.Settings.ACTION_WIFI_SETTINGS));
+				Intent intentWifi = new Intent(context, WifiListActivity.class);
 				startActivity(intentWifi);
 				break;
 
@@ -181,11 +182,11 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleBluetooth:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
-				// Intent intentBluetooth = new Intent(context,
-				// DiscoveryActivity.class);
-				// startActivity(intentBluetooth);
+				// startActivity(new Intent(
+				// android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
+				Intent intentBluetooth = new Intent(context,
+						BluetoothListActivity.class);
+				startActivity(intentBluetooth);
 				break;
 
 			case R.id.layoutRippleLocation:
@@ -199,9 +200,9 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleDate:
-//				startActivity(new Intent(
-//						android.provider.Settings.ACTION_DATE_SETTINGS));
-				
+				// startActivity(new Intent(
+				// android.provider.Settings.ACTION_DATE_SETTINGS));
+
 				ComponentName componentImage = new ComponentName(
 						"com.mediatek.oobe",
 						"com.mediatek.oobe.basic.MainActivity");
@@ -259,6 +260,14 @@ public class SettingFragment extends Fragment {
 				layoutRipple.setRippleSpeed(Constant.SETTING_ITEM_RIPPLE_SPEED);
 			}
 		});
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		// TODO:应该启动新线程
+		switchWifi.setChecked(wifiManager.isWifiEnabled());
+		switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
 	}
 
 }

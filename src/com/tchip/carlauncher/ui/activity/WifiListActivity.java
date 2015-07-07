@@ -60,7 +60,11 @@ public class WifiListActivity extends Activity {
 		wiFiAdmin = new WifiAdmin(WifiListActivity.this);
 		initLayout();
 
-		getAllNetWorkList();
+		if (wifiManager.isWifiEnabled()) {
+			getAllNetWorkList();
+		}else{
+			// TODO:提示打开WiFi
+		}
 	}
 
 	public void initLayout() {

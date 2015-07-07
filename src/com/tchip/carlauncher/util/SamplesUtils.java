@@ -1,4 +1,4 @@
-package com.tchip.carlauncher.bluetooth;
+package com.tchip.carlauncher.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;

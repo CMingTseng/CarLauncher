@@ -208,6 +208,11 @@
             android:name="com.tchip.carlauncher.ui.activity.WifiListActivity"
             android:screenOrientation="landscape" />
 
+        <!-- 蓝牙列表 -->
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.BluetoothListActivity"
+            android:screenOrientation="landscape" />
+
         <!-- File Manager -->
         <activity
             android:name="com.tchip.carlauncher.lib.filemanager.FolderActivity"
