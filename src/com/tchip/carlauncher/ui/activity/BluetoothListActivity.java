@@ -1,7 +1,10 @@
 package com.tchip.carlauncher.ui.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.BluetoothInfoAdapter;
@@ -13,6 +16,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -178,6 +182,20 @@ public class BluetoothListActivity extends Activity {
 		}
 	}
 
+	/**
+	 * 连接蓝牙设备
+	 * 
+	 * @param device
+	 * @throws IOException
+	 */
+	private void connect(BluetoothDevice device) throws IOException {
+		// 固定的UUID
+		final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
+		UUID uuid = UUID.fromString(SPP_UUID);
+		BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuid);
+		socket.connect();
+	}
+
 	final Handler refreshBluetoothHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -215,6 +233,19 @@ public class BluetoothListActivity extends Activity {
 	 * 显示列表
 	 */
 	protected void showDevices() {
+		// 已配对蓝牙
+		// BluetoothAdapter bluetoothAdapter =
+		// BluetoothAdapter.getDefaultAdapter();
+		// Set<BluetoothDevice> pairDevices =
+		// bluetoothAdapter.getBondedDevices();
+		// for(int i=0; i<pairDevices.size(); i++)
+		// {
+		// BluetoothDevice device = (BluetoothDevice)
+		// pairDevices.iterator().next();
+		// System.out.println(device.getName());
+		// }
+
+		// 周围设备
 		bluetoothArray = new ArrayList<BluetoothInfo>();
 
 		for (int i = 0, size = _devices.size(); i < size; ++i) {

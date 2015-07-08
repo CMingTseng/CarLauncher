@@ -254,6 +254,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				+ "Font-Droid-Sans-Fallback.ttf"));
 
 		textTemp = (TextView) findViewById(R.id.textTemp);
+		textTemp.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				+ "Font-Droid-Sans-Fallback.ttf"));
+		
 		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
 		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textLocation = (TextView) findViewById(R.id.textLocation);

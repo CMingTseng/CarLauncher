@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#595959"
     android:orientation="vertical" >
 
     <SurfaceView
@@ -26,13 +26,14 @@
             android:id="@+id/textClock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="top"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="35dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:format12Hour="HH:mm"
             android:textColor="#ffe1c5"
-            android:textSize="70sp" />
+            android:textSize="75sp" />
 
         <LinearLayout
             android:id="@+id/layoutDate"
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:format12Hour="MM月dd日"
                 android:textColor="#ffe1c5"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <TextClock
                 android:id="@+id/textWeek"
@@ -57,7 +58,7 @@
                 android:layout_marginLeft="10dp"
                 android:format12Hour="EEEE"
                 android:textColor="#ffe1c5"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <TextView
@@ -65,10 +66,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
             android:layout_marginBottom="35dp"
-            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="230dp"
             android:text="15~25°C"
+            android:singleLine="true"
             android:textColor="#ffffff"
             android:textSize="25sp" />
 
@@ -86,8 +88,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/textTemp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="230dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -103,14 +105,17 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="未知"
+                android:layout_marginLeft="10dp"
                 android:textColor="#ffffff"
-                android:textSize="22sp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/textTemp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="35dp"
             android:layout_marginLeft="35dp"
             android:orientation="horizontal" >
 
@@ -118,18 +123,17 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ui_main_weather_location" >
-            </ImageView>
+                android:src="@drawable/ui_main_weather_location" />
 
             <TextView
                 android:id="@+id/textLocation"
+                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="未定位"
                 android:textColor="#ffffff"
-                android:textSize="22sp" >
-            </TextView>
+                android:textSize="22sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -186,8 +190,21 @@
                 <View
                     android:id="@+id/mapHideView"
                     android:layout_width="300dp"
-                     android:layout_alignParentLeft="true"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="导航"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -207,6 +224,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="文件管理"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -229,6 +248,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="周边搜索"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -251,6 +272,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="行车轨迹"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -273,6 +296,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="路径规划"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -295,6 +320,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="语音助手"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -317,6 +344,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="多媒体"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -325,8 +354,8 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:visibility="gone"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="5dp"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/imageMessage"
@@ -340,6 +369,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="短信"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -348,8 +379,8 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:visibility="gone"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="5dp"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/imageDialer"
@@ -363,6 +394,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="电话"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -385,6 +418,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
                     android:text="设置"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
@@ -430,9 +465,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="00:00:00"
-        android:visibility="gone"
         android:textColor="#ff0000"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/layoutLargeButton"
