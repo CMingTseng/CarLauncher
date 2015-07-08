@@ -21,7 +21,7 @@
                 android:id="@+id/btnToViceFromNear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#000000" />
+                android:background="@drawable/ui_back_arrow_bg_black" />
 
             <ImageView
                 android:layout_width="wrap_content"

@@ -30,7 +30,7 @@
                     android:id="@+id/btnToViceFromRoutePlan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#88000000" />
+                    android:background="@drawable/ui_back_arrow_bg_transparent" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -76,8 +76,8 @@
                     android:id="@+id/imageVoice"
                     android:layout_width="36dp"
                     android:layout_height="32dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="15dp"
                     android:src="@drawable/ui_near_search_voice" />
             </LinearLayout>

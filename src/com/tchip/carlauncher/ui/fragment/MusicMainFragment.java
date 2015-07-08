@@ -84,9 +84,9 @@ public class MusicMainFragment extends Fragment implements Constant,
 		mGridView = (GridView) view.findViewById(R.id.gridview);
 
 		// 返回到多媒体界面
-		ImageView imageBackToMedia = (ImageView) view
-				.findViewById(R.id.imageBackToMedia);
-		imageBackToMedia.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutBackArrow = (RelativeLayout) view
+				.findViewById(R.id.layoutBackArrow);
+		layoutBackArrow.setOnClickListener(new MyOnClickListener());
 
 		mAdapter = new MyGridViewAdapter();
 
@@ -133,7 +133,7 @@ public class MusicMainFragment extends Fragment implements Constant,
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.imageBackToMedia:
+			case R.id.layoutBackArrow:
 				getActivity().finish();
 				break;
 

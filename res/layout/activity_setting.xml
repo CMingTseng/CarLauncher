@@ -16,6 +16,7 @@
         <RelativeLayout
             android:id="@+id/btnToViceFromSetting"
             android:layout_width="90dp"
+            android:background="@drawable/ui_back_arrow_bg_grey"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" >

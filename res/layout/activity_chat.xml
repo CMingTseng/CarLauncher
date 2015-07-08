@@ -16,7 +16,7 @@
             android:id="@+id/btnToMultimedia"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80000000" />
+            android:background="@drawable/ui_back_arrow_bg_transparent" />
 
         <ImageView
             android:layout_width="wrap_content"

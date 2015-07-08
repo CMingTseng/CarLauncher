@@ -62,6 +62,7 @@
         android:label="Car Launcher"
         android:hardwareAccelerated="true"
         android:theme="@android:style/Theme.Holo.Light" >
+        <!-- android:largeHeap="true" -->
 
         <!-- 讯飞语音 -->
         <meta-data
