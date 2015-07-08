@@ -50,6 +50,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -256,7 +257,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		textTemp = (TextView) findViewById(R.id.textTemp);
 		textTemp.setTypeface(Typefaces.get(this, Constant.FONT_PATH
 				+ "Font-Droid-Sans-Fallback.ttf"));
-		
+
 		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
 		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
 		textLocation = (TextView) findViewById(R.id.textLocation);
@@ -388,7 +389,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新界面线程
 		new Thread(new UpdateLayoutThread()).start();
 	}
-	
+
 	private void startSpeak(String content) {
 		Intent intent = new Intent(MainActivity.this, SpeakService.class);
 		intent.putExtra("content", content);
@@ -821,8 +822,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.layoutWiFi:
-//				startActivity(new Intent(
-//						android.provider.Settings.ACTION_WIFI_SETTINGS));
+				// startActivity(new Intent(
+				// android.provider.Settings.ACTION_WIFI_SETTINGS));
 				Intent intentWiFi = new Intent(MainActivity.this,
 						WifiListActivity.class);
 				startActivity(intentWiFi);
@@ -1375,7 +1376,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			DriveVideo driveVideo = new DriveVideo(videoName, videoLock,
 					videoResolution);
 			videoDb.addDriveVideo(driveVideo);
+		} else {
+			Toast.makeText(getApplicationContext(), "照片已保存", Toast.LENGTH_SHORT)
+					.show();
 		}
+
+		// 更新Media Database
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+				Uri.parse("file://" + path)));
 		Log.d(Constant.TAG, "File Save, Type=" + type);
 	}
 
