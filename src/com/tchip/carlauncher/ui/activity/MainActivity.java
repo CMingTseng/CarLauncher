@@ -34,6 +34,7 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
@@ -648,6 +649,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApplication.isVideoReording = false;
 					}
 				}
+				AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 				setupRecordViews();
 				break;
 
@@ -713,6 +715,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.smallVideoCamera:
 			case R.id.largeVideoCamera:
 				takePhoto();
+				AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 				break;
 
 			case R.id.layoutWeather:
