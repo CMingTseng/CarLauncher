@@ -60,6 +60,7 @@
         android:name="com.tchip.carlauncher.MyApplication"
         android:icon="@drawable/ic_launcher"
         android:label="Car Launcher"
+        android:hardwareAccelerated="true"
         android:theme="@android:style/Theme.Holo.Light" >
 
         <!-- 讯飞语音 -->
@@ -87,6 +88,7 @@
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
             android:icon="@drawable/ic_launcher"
             android:label="Car Launcher"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
