@@ -5,7 +5,13 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="19" />
+
     <!-- <supports-screens android:anyDensity="false" /> -->
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -52,17 +58,14 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.NFC" />
 
-    <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="19" />
-
     <application
         android:name="com.tchip.carlauncher.MyApplication"
         android:icon="@drawable/ic_launcher"
         android:label="Car Launcher"
-        android:hardwareAccelerated="true"
         android:theme="@android:style/Theme.Holo.Light" >
-        <!-- android:largeHeap="true" -->
+
+        <!-- android:largeHeap="true" android:hardwareAccelerated="true" -->
+
 
         <!-- 讯飞语音 -->
         <meta-data

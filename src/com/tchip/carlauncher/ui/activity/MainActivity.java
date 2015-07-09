@@ -649,7 +649,8 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApplication.isVideoReording = false;
 					}
 				}
-				AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+				AudioPlayUtil.playAudio(getApplicationContext(),
+						FILE_TYPE_VIDEO);
 				setupRecordViews();
 				break;
 
@@ -715,7 +716,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.smallVideoCamera:
 			case R.id.largeVideoCamera:
 				takePhoto();
-				AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
+				AudioPlayUtil.playAudio(getApplicationContext(),
+						FILE_TYPE_IMAGE);
 				break;
 
 			case R.id.layoutWeather:
@@ -1010,6 +1012,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 取消注册wifi消息处理器
 		unregisterReceiver(wifiIntentReceiver);
 		super.onDestroy();
+
+		// 录像区域
+		release();
 	}
 
 	// *********** Record ***********
@@ -1117,41 +1122,56 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		mHolder = holder;
+		// mHolder = holder;
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 
-		mHolder = holder;
-		if (!MyApplication.isVideoReording) {
+		if (mCamera == null) {
+			mHolder = holder;
 			setup();
-		} else { // 正在录像中，回到主界面
+		} else {
 			try {
-				// mCamera = Camera.open(0);
-				// mCamera.lock();
-				// mCamera.stopPreview();
-				// mCamera.setPreviewDisplay(null);
-
+				mCamera.lock();
 				mCamera.setPreviewDisplay(mHolder);
 				mCamera.startPreview();
-				// mCamera.unlock();
-
-				surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
-				surfaceCamera.setOnClickListener(new MyOnClickListener());
-				surfaceCamera.getHolder().addCallback(this);
+				mCamera.unlock();
 			} catch (Exception e) {
-				Log.e(Constant.TAG, "Back to main when record, Err:" + e);
+				// e.printStackTrace();
 			}
+
 		}
+
+		// mHolder = holder;
+		// if (!MyApplication.isVideoReording) {
+		// setup();
+		// } else { // 正在录像中，回到主界面
+		// try {
+		// // mCamera = Camera.open(0);
+		// // mCamera.lock();
+		// // mCamera.stopPreview();
+		// // mCamera.setPreviewDisplay(null);
+		//
+		// mCamera.setPreviewDisplay(mHolder);
+		// mCamera.startPreview();
+		// // mCamera.unlock();
+		//
+		// surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
+		// surfaceCamera.setOnClickListener(new MyOnClickListener());
+		// surfaceCamera.getHolder().addCallback(this);
+		// } catch (Exception e) {
+		// Log.e(Constant.TAG, "Back to main when record, Err:" + e);
+		// }
+		// }
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		if (!MyApplication.isVideoReording) {
-			release();
-		}
-		mHolder = null;
+//		if (!MyApplication.isVideoReording) {
+//			release();
+//		}
+//		mHolder = null;
 	}
 
 	private boolean openCamera() {
@@ -1175,9 +1195,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (mCamera == null)
 			return true;
 		try {
+			mCamera.lock();
 			mCamera.stopPreview();
 			mCamera.setPreviewDisplay(null);
 			mCamera.release();
+			mCamera.unlock();
 			mCamera = null;
 			return true;
 		} catch (Exception ex) {
@@ -1275,6 +1297,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		return -1;
 	}
+	
+	private int setMute(boolean mute){
+		if(mMyRecorder!=null){
+			return mMyRecorder.setMute(mute);
+		}
+		return -1;
+	}
 
 	public int setResolution(int state) {
 		if (state != mResolutionState) {
@@ -1338,11 +1367,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void releaseRecorder() {
-		if (mMyRecorder != null) {
+		if(mMyRecorder!=null){
+			mMyRecorder.stop();
 			mMyRecorder.close();
 			mMyRecorder.release();
-			mMyRecorder = null;
-
+			mMyRecorder=null;
 			Log.d(Constant.TAG, "Record Release");
 		}
 	}
