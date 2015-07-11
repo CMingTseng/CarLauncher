@@ -26,12 +26,12 @@
             android:id="@+id/textClock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="35dp"
             android:layout_marginTop="20dp"
             android:format12Hour="HH:mm"
+            android:gravity="top"
             android:textColor="#ffe1c5"
             android:textSize="75sp" />
 
@@ -66,11 +66,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="35dp"
             android:layout_alignParentLeft="true"
+            android:layout_marginBottom="35dp"
             android:layout_marginLeft="230dp"
-            android:text="15~25°C"
             android:singleLine="true"
+            android:text="15~25°C"
             android:textColor="#ffffff"
             android:textSize="25sp" />
 
@@ -103,9 +103,9 @@
                 android:id="@+id/textTodayWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:text="未知"
-                android:layout_marginLeft="10dp"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </LinearLayout>
@@ -127,9 +127,9 @@
 
             <TextView
                 android:id="@+id/textLocation"
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="未定位"
                 android:textColor="#ffffff"

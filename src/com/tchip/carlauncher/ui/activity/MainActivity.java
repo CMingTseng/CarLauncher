@@ -793,16 +793,21 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageDialer:
-				try {
-					ComponentName componentDialer = new ComponentName(
-							"com.android.dialer",
-							"com.android.dialer.DialtactsActivity");
-					Intent intentDialer = new Intent();
-					intentDialer.setComponent(componentDialer);
-					startActivity(intentDialer);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				// try {
+				// ComponentName componentDialer = new ComponentName(
+				// "com.android.dialer",
+				// "com.android.dialer.DialtactsActivity");
+				// Intent intentDialer = new Intent();
+				// intentDialer.setComponent(componentDialer);
+				// startActivity(intentDialer);
+				// } catch (Exception e) {
+				// e.printStackTrace();
+				// }
+				Intent intentBTDialer = new Intent(MainActivity.this,
+						BluetoothDialerActivity.class);
+				startActivity(intentBTDialer);
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 				break;
 
 			case R.id.imageMessage:
@@ -1168,10 +1173,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-//		if (!MyApplication.isVideoReording) {
-//			release();
-//		}
-//		mHolder = null;
+		// if (!MyApplication.isVideoReording) {
+		// release();
+		// }
+		// mHolder = null;
 	}
 
 	private boolean openCamera() {
@@ -1297,9 +1302,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		return -1;
 	}
-	
-	private int setMute(boolean mute){
-		if(mMyRecorder!=null){
+
+	private int setMute(boolean mute) {
+		if (mMyRecorder != null) {
 			return mMyRecorder.setMute(mute);
 		}
 		return -1;
@@ -1367,11 +1372,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void releaseRecorder() {
-		if(mMyRecorder!=null){
+		if (mMyRecorder != null) {
 			mMyRecorder.stop();
 			mMyRecorder.close();
 			mMyRecorder.release();
-			mMyRecorder=null;
+			mMyRecorder = null;
 			Log.d(Constant.TAG, "Record Release");
 		}
 	}

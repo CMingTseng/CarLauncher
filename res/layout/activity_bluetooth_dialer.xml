@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:gravity="center"
-        android:hint="请输入你要拨打的号码"
+        android:hint="请输入号码"
         android:selectAllOnFocus="true"
         android:textSize="20sp" />
 
@@ -19,12 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/textNumber"
         android:gravity="center"
-        android:text="dial"
+        android:text="拨号"
         android:textSize="20sp" />
+
 
     <ListView
         android:id="@+id/listContact"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textNumber" />
 
 </RelativeLayout>
