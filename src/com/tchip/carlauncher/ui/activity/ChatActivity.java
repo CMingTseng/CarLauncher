@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -456,19 +457,38 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 									String operationStr = jsonObject
 											.getString("operation");
 									if ("LAUNCH".equals(operationStr)) {
-										String packageName = getAppPackageByName(appName);
-										if (!"com.tchip.carlauncher"
-												.equals(packageName)) {
-											String strAnswer = "正在启动："
-													+ appName;
-											tvAnswer.setText(strAnswer);
-											startSpeak(strAnswer);
-											startAppbyPackage(packageName);
+										// 百度导航
+										if ("百度导航".equals(appName)) {
+											try {
+												String strAnswer = "正在打开"
+														+ appName;
+												tvAnswer.setText(strAnswer);
+
+												ComponentName componentMap = new ComponentName(
+														"com.baidu.navi.hd",
+														"com.baidu.navi.NaviActivity");
+												Intent intentMap = new Intent();
+												intentMap
+														.setComponent(componentMap);
+												startActivity(intentMap);
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
 										} else {
-											String strAnswer = "未找到应用："
-													+ appName;
-											tvAnswer.setText(strAnswer);
-											startSpeak(strAnswer);
+											String packageName = getAppPackageByName(appName);
+											if (!"com.tchip.carlauncher"
+													.equals(packageName)) {
+												String strAnswer = "正在启动："
+														+ appName;
+												tvAnswer.setText(strAnswer);
+												startSpeak(strAnswer);
+												startAppbyPackage(packageName);
+											} else {
+												String strAnswer = "未找到应用："
+														+ appName;
+												tvAnswer.setText(strAnswer);
+												startSpeak(strAnswer);
+											}
 										}
 									}
 								} else if ("telephone".equals(strService)) {
