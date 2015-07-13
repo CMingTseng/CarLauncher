@@ -15,10 +15,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -51,6 +49,7 @@ import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.model.RouteDistance;
 import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.model.RoutePoint;
+import com.tchip.carlauncher.model.Typefaces;
 
 public class RouteShowActivity extends Activity {
 	private MapView mMapView;
@@ -79,7 +78,6 @@ public class RouteShowActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -97,8 +95,8 @@ public class RouteShowActivity extends Activity {
 		btnToRouteListFromShow.setOnClickListener(new MyOnClickListener());
 
 		textDistance = (TextView) findViewById(R.id.textDistance);
-		// btnDistance.setBackgroundColor(Color.parseColor("#ffffff")); //
 		// TextColor
+		// btnDistance.setBackgroundColor(Color.parseColor("#ffffff"));
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -269,8 +267,10 @@ public class RouteShowActivity extends Activity {
 				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
 			} finally {
 				textDistance.setVisibility(View.VISIBLE);
-				textDistance.setText("直线距离:" + (int) linearDistance + "m 行驶距离:"
-						+ (int) driveDistance + "m");
+				textDistance.setText("直线距离:" + (int) linearDistance
+						+ "米  行驶距离:" + (int) driveDistance + "米");
+				textDistance.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+						+ "Font-Helvetica-Neue-LT-Pro.otf"));
 				_db.close();
 			}
 		}

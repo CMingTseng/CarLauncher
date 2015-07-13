@@ -553,7 +553,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(5000);
 					Message message = new Message();
 					message.what = 1;
 					updateLayoutHandler.sendMessage(message);
