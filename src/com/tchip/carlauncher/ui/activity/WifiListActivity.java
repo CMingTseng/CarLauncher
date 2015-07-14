@@ -14,6 +14,8 @@ import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -49,6 +51,9 @@ public class WifiListActivity extends Activity {
 	private ScanResult mScanResult;
 	private StringBuffer sb = new StringBuffer();
 
+	private SharedPreferences sharedPreferences;
+	private Editor editor;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,12 +62,16 @@ public class WifiListActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_wifi_list);
 
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		editor = sharedPreferences.edit();
+
 		wiFiAdmin = new WifiAdmin(WifiListActivity.this);
 		initLayout();
 
 		if (wifiManager.isWifiEnabled()) {
 			getAllNetWorkList();
-		}else{
+		} else {
 			// TODO:提示打开WiFi
 		}
 	}
@@ -217,6 +226,15 @@ public class WifiListActivity extends Activity {
 												wiFiAdmin.getConfiguration();// 添加了配置信息，要重新得到配置信息
 												if (wiFiAdmin
 														.ConnectWifi(netId)) {
+													// 保存最后连接的wifi信息
+													editor.putString(
+															"wifiName",
+															wifiItemSSID);
+													editor.putString(
+															"wifiPass",
+															wifiPassword);
+													editor.commit();
+
 													// 连接成功，刷新UI
 													updateProgress
 															.setVisibility(View.VISIBLE);

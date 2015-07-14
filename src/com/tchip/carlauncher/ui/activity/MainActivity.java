@@ -1,6 +1,7 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
+import java.util.List;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -34,11 +35,16 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.ui.activity.WifiListActivity.refreshWifiThread;
+import com.tchip.carlauncher.ui.dialog.WifiPswDialog;
+import com.tchip.carlauncher.ui.dialog.WifiPswDialog.OnCustomDialogListener;
 import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.DateUtil;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WiFiUtil;
+import com.tchip.carlauncher.util.WifiAdmin;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -52,6 +58,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.hardware.Camera;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -169,6 +176,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 初始化服务
 	 */
 	private void initialService() {
+		// WiFi连接
+		connectWifi();
+
 		// 位置
 		Intent intentLocation = new Intent(this, LocationService.class);
 		startService(intentLocation);
@@ -186,6 +196,43 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intentSensor);
 
 		importOfflineMapFromSDCard();
+	}
+
+	private void connectWifi() {
+		try {
+			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			String strErr = "SuiYueJingHao&AlexZhou";
+			String wifiName = sharedPreferences.getString("wifiName", strErr);
+			String wifiPass = sharedPreferences.getString("wifiPass", strErr);
+			if (wifiManager.isWifiEnabled() && (!strErr.equals(wifiName))
+					&& wifiName.trim().length() > 0 && wifiName != null) {
+				// 连接WiFi
+				WifiAdmin wiFiAdmin = new WifiAdmin(MainActivity.this);
+				wiFiAdmin.startScan();
+				List<ScanResult> list = wiFiAdmin.getWifiList();
+
+				int wifiItemId = wiFiAdmin.IsConfiguration("\"" + wifiName
+						+ "\"");
+				if (wifiItemId != -1) {
+					if (wiFiAdmin.ConnectWifi(wifiItemId)) {
+					}
+				} else {
+					int netId = wiFiAdmin.AddWifiConfig(list, wifiName,
+							wifiPass);
+					if (netId != -1) {
+						wiFiAdmin.getConfiguration();// 添加了配置信息，要重新得到配置信息
+						if (wiFiAdmin.ConnectWifi(netId)) {
+						}
+					} else {
+						// 网络连接错误
+					}
+				}
+			}
+			Log.v(Constant.TAG, "wifiName:" + wifiName + " - wifiPass:"
+					+ wifiPass);
+		} catch (Exception e) {
+			Log.e(Constant.TAG, e.toString());
+		}
 	}
 
 	private MKOfflineMap mOffline = null;
