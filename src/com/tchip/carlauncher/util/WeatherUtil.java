@@ -17,6 +17,8 @@ import com.tchip.carlauncher.view.WeatherDynamicRainView;
 
 public class WeatherUtil {
 
+	public static boolean fancyBackground = false;
+
 	public static enum WEATHER_TYPE {
 		CLOUD, SUN, RAIN, SNOW, FOG, RAIN_SNOW, HAIL
 	}
@@ -217,26 +219,30 @@ public class WeatherUtil {
 	 * @return
 	 */
 	public static int getWeatherBackground(WEATHER_TYPE type) {
-		switch (type) {
-		case SUN:
-			return isDay() ? (R.drawable.icon_weather_bg_sun_day)
-					: (R.drawable.icon_weather_bg_sun_night);
-		case CLOUD:
-			return isDay() ? R.drawable.icon_weather_bg_cloud_day
-					: R.drawable.icon_weather_bg_cloud_night;
-		case RAIN:
-			return R.drawable.icon_weather_bg_rain;
-		case HAIL:
-		case SNOW:
-			return R.drawable.icon_weather_bg_snow;
-		case RAIN_SNOW:
-			return R.drawable.icon_weather_bg_rain_snow;
-		case FOG:
-			return isDay() ? (R.drawable.weather_fog_day)
-					: (R.drawable.weather_fog_night);
-		default:
-			return isDay() ? (R.drawable.icon_weather_bg_default_day)
-					: (R.drawable.icon_weather_bg_default_night);
+		if (!fancyBackground) {
+			return R.drawable.ui_weather_bg;
+		} else {
+			switch (type) {
+			case SUN:
+				return isDay() ? (R.drawable.icon_weather_bg_sun_day)
+						: (R.drawable.icon_weather_bg_sun_night);
+			case CLOUD:
+				return isDay() ? R.drawable.icon_weather_bg_cloud_day
+						: R.drawable.icon_weather_bg_cloud_night;
+			case RAIN:
+				return R.drawable.icon_weather_bg_rain;
+			case HAIL:
+			case SNOW:
+				return R.drawable.icon_weather_bg_snow;
+			case RAIN_SNOW:
+				return R.drawable.icon_weather_bg_rain_snow;
+			case FOG:
+				return isDay() ? (R.drawable.weather_fog_day)
+						: (R.drawable.weather_fog_night);
+			default:
+				return isDay() ? (R.drawable.icon_weather_bg_default_day)
+						: (R.drawable.icon_weather_bg_default_night);
+			}
 		}
 	}
 

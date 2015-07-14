@@ -134,7 +134,7 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleSound);
 		layoutRippleSound.setOnClickListener(new MyOnClickListener());
 
-		// FM
+		// FM(GONE)
 		RelativeLayout layoutRippleFm = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleFm);
 		layoutRippleFm.setOnClickListener(new MyOnClickListener());
@@ -204,8 +204,8 @@ public class SettingFragment extends Fragment {
 				// android.provider.Settings.ACTION_DATE_SETTINGS));
 
 				ComponentName componentImage = new ComponentName(
-						"com.mediatek.oobe",
-						"com.mediatek.oobe.basic.MainActivity");
+						"com.android.settings",
+						"com.android.settings.Settings");
 				Intent intentImage = new Intent();
 				intentImage.setComponent(componentImage);
 				startActivity(intentImage);

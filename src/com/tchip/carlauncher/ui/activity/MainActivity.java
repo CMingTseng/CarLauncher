@@ -57,6 +57,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -732,8 +733,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageNavi:
 				try {
 					ComponentName componentMap = new ComponentName(
-							"com.baidu.navi.hd",
-							"com.baidu.navi.NaviActivity");
+							"com.baidu.navi.hd", "com.baidu.navi.NaviActivity");
 					Intent intentMap = new Intent();
 					intentMap.setComponent(componentMap);
 					startActivity(intentMap);
@@ -1434,6 +1434,15 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void release() {
 		releaseRecorder();
 		closeCamera();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// Do Nothing
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
 	}
 
 }

@@ -305,7 +305,7 @@ public class RouteListActivity extends Activity {
 			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
 			String strNoRouteFile = "暂无轨迹文件";
 			tvNoFile.setText(strNoRouteFile);
-			startSpeak(strNoRouteFile);
+			//startSpeak(strNoRouteFile);
 			btnShowAll.setVisibility(View.INVISIBLE);
 			routeList.setVisibility(View.INVISIBLE);
 		}

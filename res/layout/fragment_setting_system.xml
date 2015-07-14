@@ -195,9 +195,11 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
+                android:visibility="gone"
                 android:background="#000000" />
 
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/layoutRippleFm"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
