@@ -30,6 +30,7 @@ import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.service.BrightAdjustService;
+import com.tchip.carlauncher.service.ConnectWifiService;
 import com.tchip.carlauncher.service.LocationService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
@@ -177,7 +178,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void initialService() {
 		// WiFi连接
-		connectWifi();
+		Intent intentWiFi = new Intent(this, ConnectWifiService.class);
+		startService(intentWiFi);
 
 		// 位置
 		Intent intentLocation = new Intent(this, LocationService.class);
@@ -196,43 +198,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intentSensor);
 
 		importOfflineMapFromSDCard();
-	}
-
-	private void connectWifi() {
-		try {
-			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			String strErr = "SuiYueJingHao&AlexZhou";
-			String wifiName = sharedPreferences.getString("wifiName", strErr);
-			String wifiPass = sharedPreferences.getString("wifiPass", strErr);
-			if (wifiManager.isWifiEnabled() && (!strErr.equals(wifiName))
-					&& wifiName.trim().length() > 0 && wifiName != null) {
-				// 连接WiFi
-				WifiAdmin wiFiAdmin = new WifiAdmin(MainActivity.this);
-				wiFiAdmin.startScan();
-				List<ScanResult> list = wiFiAdmin.getWifiList();
-
-				int wifiItemId = wiFiAdmin.IsConfiguration("\"" + wifiName
-						+ "\"");
-				if (wifiItemId != -1) {
-					if (wiFiAdmin.ConnectWifi(wifiItemId)) {
-					}
-				} else {
-					int netId = wiFiAdmin.AddWifiConfig(list, wifiName,
-							wifiPass);
-					if (netId != -1) {
-						wiFiAdmin.getConfiguration();// 添加了配置信息，要重新得到配置信息
-						if (wiFiAdmin.ConnectWifi(netId)) {
-						}
-					} else {
-						// 网络连接错误
-					}
-				}
-			}
-			Log.v(Constant.TAG, "wifiName:" + wifiName + " - wifiPass:"
-					+ wifiPass);
-		} catch (Exception e) {
-			Log.e(Constant.TAG, e.toString());
-		}
 	}
 
 	private MKOfflineMap mOffline = null;
@@ -718,6 +683,12 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoSize:
+				// 切换分辨率录像停止，需要重置时间
+				MyApplication.isVideoReording = false;
+				secondCount = -1; // 录制时间秒钟复位
+				textRecordTime.setText("00:00:00");
+				textRecordTime.setVisibility(View.INVISIBLE);
+
 				if (mResolutionState == STATE_RESOLUTION_1080P) {
 					setResolution(STATE_RESOLUTION_720P);
 					editor.putString("videoSize", "720");

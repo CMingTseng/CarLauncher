@@ -258,6 +258,7 @@
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
             </intent-filter>
         </service>
+        <service android:name="com.tchip.carlauncher.service.ConnectWifiService" />
     </application>
 
 </manifest>
