@@ -120,28 +120,42 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	// Record
 	private ImageView largeVideoSize, largeVideoTime, largeVideoLock,
-			largeVideoFile, largeVideoRecord, largeVideoCamera;
+			largeVideoMute, largeVideoRecord, largeVideoCamera;
 	private SurfaceHolder mHolder;
 	private TachographRecorder mMyRecorder;
 	private Camera mCamera;
+
+	// 分辨率
 	private static final int STATE_RESOLUTION_720P = 0;
 	private static final int STATE_RESOLUTION_1080P = 1;
+
+	// 录像状态
 	private static final int STATE_RECORD_STARTED = 0;
 	private static final int STATE_RECORD_STOPPED = 1;
+
+	// 视频分段
 	private static final int STATE_INTERVAL_3MIN = 0;
 	private static final int STATE_INTERVAL_5MIN = 1;
+
+	// 第二视图
 	private static final int STATE_SECONDARY_ENABLE = 0;
 	private static final int STATE_SECONDARY_DISABLE = 1;
 
+	// 路径
 	private static final int STATE_PATH_ZERO = 0;
 	private static final int STATE_PATH_ONE = 1;
 	private static final int STATE_PATH_TWO = 2;
-	private static final int STATE_OVERLAP_ZERO = 0;
-	private static final int STATE_OVERLAP_FIVE = 1;
-
 	private static final String PATH_ZERO = "/mnt/sdcard";
 	private static final String PATH_ONE = "/mnt/sdcard/path_one";
 	private static final String PATH_TWO = "/mnt/sdcard/path_two";
+
+	// 重叠
+	private static final int STATE_OVERLAP_ZERO = 0;
+	private static final int STATE_OVERLAP_FIVE = 1;
+
+	// 静音
+	private static final int STATE_MUTE = 0;
+	private static final int STATE_UNMUTE = 1;
 
 	private int mResolutionState;
 	private int mRecordState;
@@ -149,6 +163,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private int mPathState;
 	private int mSecondaryState;
 	private int mOverlapState;
+	private int mMuteState; // 静音
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -442,9 +457,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		largeVideoLock = (ImageView) findViewById(R.id.largeVideoLock);
 		largeVideoLock.setOnClickListener(new MyOnClickListener());
 
-		// 视频文件
-		largeVideoFile = (ImageView) findViewById(R.id.largeVideoFile);
-		largeVideoFile.setOnClickListener(new MyOnClickListener());
+		// 静音
+		largeVideoMute = (ImageView) findViewById(R.id.largeVideoMute);
+		largeVideoMute.setOnClickListener(new MyOnClickListener());
 
 		// 录制
 		largeVideoRecord = (ImageView) findViewById(R.id.largeVideoRecord);
@@ -569,7 +584,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(3000);
 					Message message = new Message();
 					message.what = 1;
 					updateLayoutHandler.sendMessage(message);
@@ -593,9 +608,14 @@ public class MainActivity extends Activity implements TachographCallback,
 				// 电源断开保存视频
 				if (MyApplication.isVideoReording
 						&& (!MyApplication.isPowerConnect)) {
-					mRecordState = STATE_RECORD_STOPPED;
-					MyApplication.isVideoReording = false;
-					setupRecordViews();
+					if (stopRecorder() == 0) {
+						secondCount = -1; // 录制时间秒钟复位
+						textRecordTime.setText("00:00:00");
+						textRecordTime.setVisibility(View.INVISIBLE);
+						mRecordState = STATE_RECORD_STOPPED;
+						MyApplication.isVideoReording = false;
+						setupRecordViews();
+					}
 				}
 
 				// 连接电源自动录像
@@ -722,17 +742,19 @@ public class MainActivity extends Activity implements TachographCallback,
 				setupRecordViews();
 				break;
 
-			case R.id.largeVideoFile:
-				try {
-					ComponentName componentMap = new ComponentName(
-							"com.android.gallery3d",
-							"com.android.gallery3d.app.GalleryActivity");
-					Intent intentMap = new Intent();
-					intentMap.setComponent(componentMap);
-					startActivity(intentMap);
-				} catch (Exception e) {
-					e.printStackTrace();
+			case R.id.largeVideoMute:
+				if (mMuteState == STATE_MUTE) {
+					if (setMute(false) == 0) {
+						mMuteState = STATE_UNMUTE;
+						startSpeak("录音");
+					}
+				} else if (mMuteState == STATE_UNMUTE) {
+					if (setMute(true) == 0) {
+						mMuteState = STATE_MUTE;
+						startSpeak("静音");
+					}
 				}
+				setupRecordViews();
 				break;
 
 			case R.id.smallVideoCamera:
@@ -870,7 +892,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
-			// map view 销毁后不在处理新接收的位置
+			// MapView 销毁后不在处理新接收的位置
 			if (location == null || mainMapView == null)
 				return;
 			MyLocationData locData = new MyLocationData.Builder()
@@ -1057,6 +1079,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		mSecondaryState = STATE_SECONDARY_DISABLE;
 		mOverlapState = STATE_OVERLAP_FIVE;
 
+		mMuteState = STATE_UNMUTE;
+
 	}
 
 	private void refreshRecordButton() {
@@ -1120,6 +1144,16 @@ public class MainActivity extends Activity implements TachographCallback,
 					R.drawable.ui_camera_video_unlock));
 			largeVideoLock.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_unlock));
+		}
+
+		// 静音
+		if (mMuteState == STATE_MUTE) {
+			// TODO:更新图片
+			largeVideoMute.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_mute_off));
+		} else if (mMuteState == STATE_UNMUTE) {
+			largeVideoMute.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_mute_off));
 		}
 
 		// 路径

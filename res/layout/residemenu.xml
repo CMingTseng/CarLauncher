@@ -91,7 +91,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="打开百度导航"
+                        android:text="导航到深圳北站"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
