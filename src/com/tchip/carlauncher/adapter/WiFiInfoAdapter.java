@@ -108,6 +108,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		if (wifiName == "NVRAM WARNING:Err=0x10"
 				|| wifiBssid.equals("00:00:00:00:00:00")) {
 			wifiArray.remove(position);
+			notifyDataSetChanged();
 		}
 
 		return convertView;

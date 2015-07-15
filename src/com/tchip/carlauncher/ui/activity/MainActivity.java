@@ -776,7 +776,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageNavi:
 				try {
 					ComponentName componentMap = new ComponentName(
-							"com.baidu.navi.hd", "com.baidu.navi.NaviActivity");
+							"com.baidu.BaiduMap",
+							"com.baidu.baidumaps.WelcomeScreen");
 					Intent intentMap = new Intent();
 					intentMap.setComponent(componentMap);
 					startActivity(intentMap);
