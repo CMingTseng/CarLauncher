@@ -104,6 +104,12 @@ public class WiFiInfoAdapter extends BaseAdapter {
 			viewHolder.textSafety.setText("");
 		}
 
+		// 剔除 'NVRAM WARNING:Err=0x10' 的情况
+		if (wifiName == "NVRAM WARNING:Err=0x10"
+				|| wifiBssid.equals("00:00:00:00:00:00")) {
+			wifiArray.remove(position);
+		}
+
 		return convertView;
 	}
 
