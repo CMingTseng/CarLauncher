@@ -557,16 +557,19 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void run() {
-			do {
-				try {
-					Thread.sleep(1000);
-					Message message = new Message();
-					message.what = 1;
-					updateRecordTimeHandler.sendMessage(message);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			} while (MyApplication.isVideoReording);
+			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
+			synchronized (updateRecordTimeHandler) {
+				do {
+					try {
+						Thread.sleep(1000);
+						Message message = new Message();
+						message.what = 1;
+						updateRecordTimeHandler.sendMessage(message);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				} while (MyApplication.isVideoReording);
+			}
 		}
 	}
 
@@ -1314,7 +1317,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	public int stopRecorder() {
 		if (mMyRecorder != null) {
 			secondCount = -1; // 录制时间秒钟复位
-			textRecordTime.setText("00:00");
+			textRecordTime.setText("00:00:00");
 			textRecordTime.setVisibility(View.INVISIBLE);
 			Log.d(Constant.TAG, "Record Stop");
 			return mMyRecorder.stop();
