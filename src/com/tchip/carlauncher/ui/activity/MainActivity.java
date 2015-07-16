@@ -40,6 +40,7 @@ import com.tchip.carlauncher.ui.activity.WifiListActivity.refreshWifiThread;
 import com.tchip.carlauncher.ui.dialog.WifiPswDialog;
 import com.tchip.carlauncher.ui.dialog.WifiPswDialog.OnCustomDialogListener;
 import com.tchip.carlauncher.util.AudioPlayUtil;
+import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.StorageUtil;
@@ -694,87 +695,97 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoRecord:
 			case R.id.largeVideoRecord:
-				if (mRecordState == STATE_RECORD_STOPPED) {
-					if (startRecorder() == 0) {
-						mRecordState = STATE_RECORD_STARTED;
-						MyApplication.isVideoReording = true;
+				if (!ClickUtil.isQuickClick()) {
+					if (mRecordState == STATE_RECORD_STOPPED) {
+						if (startRecorder() == 0) {
+							mRecordState = STATE_RECORD_STARTED;
+							MyApplication.isVideoReording = true;
+						}
+					} else if (mRecordState == STATE_RECORD_STARTED) {
+						if (stopRecorder() == 0) {
+							mRecordState = STATE_RECORD_STOPPED;
+							MyApplication.isVideoReording = false;
+						}
 					}
-				} else if (mRecordState == STATE_RECORD_STARTED) {
-					if (stopRecorder() == 0) {
-						mRecordState = STATE_RECORD_STOPPED;
-						MyApplication.isVideoReording = false;
-					}
+					AudioPlayUtil.playAudio(getApplicationContext(),
+							FILE_TYPE_VIDEO);
+					setupRecordViews();
 				}
-				AudioPlayUtil.playAudio(getApplicationContext(),
-						FILE_TYPE_VIDEO);
-				setupRecordViews();
 				break;
 
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
-				if (!MyApplication.isVideoLock) {
-					MyApplication.isVideoLock = true;
-					startSpeak("视频加锁");
-				} else {
-					MyApplication.isVideoLock = false;
-					startSpeak("视频解锁");
+				if (!ClickUtil.isQuickClick()) {
+					if (!MyApplication.isVideoLock) {
+						MyApplication.isVideoLock = true;
+						startSpeak("视频加锁");
+					} else {
+						MyApplication.isVideoLock = false;
+						startSpeak("视频解锁");
+					}
+					setupRecordViews();
 				}
-				setupRecordViews();
 				break;
 
 			case R.id.largeVideoSize:
-				// 切换分辨率录像停止，需要重置时间
-				MyApplication.isVideoReording = false;
-				secondCount = -1; // 录制时间秒钟复位
-				textRecordTime.setText("00:00:00");
-				textRecordTime.setVisibility(View.INVISIBLE);
+				if (!ClickUtil.isQuickClick()) {
+					// 切换分辨率录像停止，需要重置时间
+					MyApplication.isVideoReording = false;
+					secondCount = -1; // 录制时间秒钟复位
+					textRecordTime.setText("00:00:00");
+					textRecordTime.setVisibility(View.INVISIBLE);
 
-				if (mResolutionState == STATE_RESOLUTION_1080P) {
-					setResolution(STATE_RESOLUTION_720P);
-					editor.putString("videoSize", "720");
-					mRecordState = STATE_RECORD_STOPPED;
-					startSpeak("分辨率七二零P");
-				} else if (mResolutionState == STATE_RESOLUTION_720P) {
-					setResolution(STATE_RESOLUTION_1080P);
-					editor.putString("videoSize", "1080");
-					mRecordState = STATE_RECORD_STOPPED;
-					startSpeak("分辨率一零八零P");
+					if (mResolutionState == STATE_RESOLUTION_1080P) {
+						setResolution(STATE_RESOLUTION_720P);
+						editor.putString("videoSize", "720");
+						mRecordState = STATE_RECORD_STOPPED;
+						startSpeak("分辨率七二零P");
+					} else if (mResolutionState == STATE_RESOLUTION_720P) {
+						setResolution(STATE_RESOLUTION_1080P);
+						editor.putString("videoSize", "1080");
+						mRecordState = STATE_RECORD_STOPPED;
+						startSpeak("分辨率一零八零P");
+					}
+					editor.commit();
+					setupRecordViews();
 				}
-				editor.commit();
-				setupRecordViews();
 				break;
 
 			case R.id.largeVideoTime:
-				if (mIntervalState == STATE_INTERVAL_3MIN) {
-					if (setInterval(5 * 60) == 0) {
-						mIntervalState = STATE_INTERVAL_5MIN;
-						editor.putString("videoTime", "5");
-						startSpeak("视频分段五分钟");
+				if (!ClickUtil.isQuickClick()) {
+					if (mIntervalState == STATE_INTERVAL_3MIN) {
+						if (setInterval(5 * 60) == 0) {
+							mIntervalState = STATE_INTERVAL_5MIN;
+							editor.putString("videoTime", "5");
+							startSpeak("视频分段五分钟");
+						}
+					} else if (mIntervalState == STATE_INTERVAL_5MIN) {
+						if (setInterval(3 * 60) == 0) {
+							mIntervalState = STATE_INTERVAL_3MIN;
+							editor.putString("videoTime", "3");
+							startSpeak("视频分段三分钟");
+						}
 					}
-				} else if (mIntervalState == STATE_INTERVAL_5MIN) {
-					if (setInterval(3 * 60) == 0) {
-						mIntervalState = STATE_INTERVAL_3MIN;
-						editor.putString("videoTime", "3");
-						startSpeak("视频分段三分钟");
-					}
+					editor.commit();
+					setupRecordViews();
 				}
-				editor.commit();
-				setupRecordViews();
 				break;
 
 			case R.id.largeVideoMute:
-				if (mMuteState == STATE_MUTE) {
-					if (setMute(false) == 0) {
-						mMuteState = STATE_UNMUTE;
-						startSpeak("录音");
+				if (!ClickUtil.isQuickClick()) {
+					if (mMuteState == STATE_MUTE) {
+						if (setMute(false) == 0) {
+							mMuteState = STATE_UNMUTE;
+							startSpeak("录音");
+						}
+					} else if (mMuteState == STATE_UNMUTE) {
+						if (setMute(true) == 0) {
+							mMuteState = STATE_MUTE;
+							startSpeak("静音");
+						}
 					}
-				} else if (mMuteState == STATE_UNMUTE) {
-					if (setMute(true) == 0) {
-						mMuteState = STATE_MUTE;
-						startSpeak("静音");
-					}
+					setupRecordViews();
 				}
-				setupRecordViews();
 				break;
 
 			case R.id.smallVideoCamera:
@@ -1549,7 +1560,20 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// Do Nothing
+			// 如果视频全屏预览开启，返回关闭
+			if (isSurfaceLarge()) {
+				int widthSmall = 480;
+				int heightSmall = 270;
+				surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
+						widthSmall, heightSmall));
+				isSurfaceLarge = false;
+				// 更新HorizontalScrollView阴影
+				hsvMain.scrollTo(0, 0);
+				imageShadowLeft.setVisibility(View.GONE);
+				imageShadowRight.setVisibility(View.VISIBLE);
+
+				updateButtonState(false);
+			}
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
