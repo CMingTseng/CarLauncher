@@ -43,20 +43,22 @@ public class BrightAdjustService extends Service {
 
 		@Override
 		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(SCAN_SPAN);
-					Message message = new Message();
-					message.what = 1;
-					recordHandler.sendMessage(message);
-				} catch (Exception e) {
-					e.printStackTrace();
+			synchronized (brightHandler) {
+				while (true) {
+					try {
+						Thread.sleep(SCAN_SPAN);
+						Message message = new Message();
+						message.what = 1;
+						brightHandler.sendMessage(message);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
 	}
 
-	final Handler recordHandler = new Handler() {
+	final Handler brightHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -70,6 +72,9 @@ public class BrightAdjustService extends Service {
 					if (hourNow > HOUR_DAY_END || hourNow < HOUR_DAY_START) { // 夜间
 						SettingUtil.setBrightness(getApplicationContext(),
 								BRIGHT_NIGHT);
+					} else { // 日间
+						SettingUtil.setBrightness(getApplicationContext(),
+								BRIGHT_DAY);
 					}
 				}
 			}

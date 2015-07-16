@@ -15,8 +15,10 @@ public class WiFiUtil {
 
 		int wifiLevel = calculateSignalLevel(signal, RSSI_LEVELS);
 		switch (wifiLevel) {
-		case 0:
+		case -1:
 			return R.drawable.ic_qs_wifi_no_network;
+		case 0:
+			return R.drawable.ic_qs_wifi_full_1;
 		case 1:
 			return R.drawable.ic_qs_wifi_full_2;
 		case 2:
@@ -27,7 +29,7 @@ public class WiFiUtil {
 			return R.drawable.ic_qs_wifi_full_4;
 
 		default:
-			return R.drawable.ic_qs_wifi_full_1;
+			return R.drawable.ic_qs_wifi_no_network;
 		}
 
 	}

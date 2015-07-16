@@ -58,6 +58,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.hardware.Camera;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -192,10 +194,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 初始化服务
 	 */
 	private void initialService() {
-		// WiFi连接
-		Intent intentWiFi = new Intent(this, ConnectWifiService.class);
-		startService(intentWiFi);
-
 		// 位置
 		Intent intentLocation = new Intent(this, LocationService.class);
 		startService(intentLocation);
@@ -572,10 +570,17 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 更新WiF状态
 	 */
 	private void updateWiFiState() {
-
-		int level = ((WifiManager) getSystemService(WIFI_SERVICE))
-				.getConnectionInfo().getRssi();// Math.abs()
-		imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
+			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
+					.getConnectionInfo().getRssi();// Math.abs()
+			imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
+		} else {
+			imageWifiLevel.setImageResource(R.drawable.ic_qs_wifi_no_network);
+		}
 	}
 
 	public class UpdateLayoutThread implements Runnable {
@@ -601,6 +606,21 @@ public class MainActivity extends Activity implements TachographCallback,
 			case 1:
 				// 更新WiFi状态图标
 				updateWiFiState();
+
+				// 连接WiFi
+				WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+				ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+				NetworkInfo mWifi = connManager
+						.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				if (wifiManager.isWifiEnabled()
+						&& (!mWifi.isConnectedOrConnecting())) {
+					Intent intentWiFi = new Intent(getApplicationContext(),
+							ConnectWifiService.class);
+					startService(intentWiFi);
+					Log.v(Constant.TAG, "Start Connect Wifi...");
+				} else {
+					Log.v(Constant.TAG, "Wifi is Connected or disable");
+				}
 
 				// 更新位置和天气信息
 				updateLocationAndWeather();
@@ -1149,12 +1169,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 静音
 		if (mMuteState == STATE_MUTE) {
-			// TODO:更新图片
 			largeVideoMute.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_mute_off));
+					R.drawable.ui_camera_video_sound_off));
 		} else if (mMuteState == STATE_UNMUTE) {
 			largeVideoMute.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_mute_off));
+					R.drawable.ui_camera_video_sound_on));
 		}
 
 		// 路径
@@ -1280,7 +1299,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
 			while (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
-				// 删除视频文件
+				// 删除较旧未加锁视频文件
 				if (oldestUnlockVideoId != -1) {
 					String oldestUnlockVideoName = videoDb
 							.getVideNameById(oldestUnlockVideoId);
@@ -1289,19 +1308,44 @@ public class MainActivity extends Activity implements TachographCallback,
 							+ File.separator + oldestUnlockVideoName);
 					if (f.exists() && f.isFile()) {
 						f.delete();
-						Log.d(Constant.TAG, "Delete Old Video:" + f.getName());
+						if (Constant.isDebug) {
+							Log.d(Constant.TAG,
+									"Delete Old Unlock Video:" + f.getName());
+						}
 					}
 
 					// 删除数据库记录
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
-					// 更新剩余空间
-					sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
+
+				} else {
+					// 提示用户清理空间，删除较旧的视频（加锁）
+					String strStorageFull = "空间不足，将清理加锁视频";
+					startSpeak(strStorageFull);
+					Toast.makeText(getApplicationContext(), strStorageFull,
+							Toast.LENGTH_SHORT).show();
+					int oldestVideoId = videoDb.getOldestVideoId();
+					String oldestVideoName = videoDb
+							.getVideNameById(oldestVideoId);
+					File f = new File(sdcardPath + "tachograph/"
+							+ oldestVideoName.split("_")[0] + File.separator
+							+ oldestVideoName);
+					if (f.exists() && f.isFile()) {
+						f.delete();
+						if (Constant.isDebug) {
+							Log.d(Constant.TAG,
+									"Delete Old Lock Video:" + f.getName());
+						}
+					}
+					// 删除数据库记录
+					videoDb.deleteDriveVideoById(oldestVideoId);
 				}
+				// 更新剩余空间
+				sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			}
 			return true;
 		} catch (Exception e) {
 			/*
-			 * 异常原因：1.所有未加锁文件都已删除，空间还是不足 2.文件由用户手动删除
+			 * 异常原因：1.文件由用户手动删除
 			 */
 			e.printStackTrace();
 			return false;
@@ -1314,7 +1358,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			deleteOldestUnlockVideo();
 			textRecordTime.setVisibility(View.VISIBLE);
 			new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
-			Log.d(Constant.TAG, "Record Start");
+			if (Constant.isDebug) {
+				Log.d(Constant.TAG, "Record Start");
+			}
 			return mMyRecorder.start();
 		}
 		return -1;
@@ -1325,7 +1371,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			secondCount = -1; // 录制时间秒钟复位
 			textRecordTime.setText("00:00:00");
 			textRecordTime.setVisibility(View.INVISIBLE);
-			Log.d(Constant.TAG, "Record Stop");
+			if (Constant.isDebug) {
+				Log.d(Constant.TAG, "Record Stop");
+			}
 			return mMyRecorder.stop();
 		}
 		return -1;
@@ -1433,13 +1481,17 @@ public class MainActivity extends Activity implements TachographCallback,
 			mMyRecorder.close();
 			mMyRecorder.release();
 			mMyRecorder = null;
-			Log.d(Constant.TAG, "Record Release");
+			if (Constant.isDebug) {
+				Log.d(Constant.TAG, "Record Release");
+			}
 		}
 	}
 
 	@Override
 	public void onError(int err) {
-		Log.e(Constant.TAG, "Error : " + err);
+		if (Constant.isDebug) {
+			Log.e(Constant.TAG, "Error : " + err);
+		}
 	}
 
 	@Override
@@ -1477,7 +1529,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新Media Database
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
 				Uri.parse("file://" + path)));
-		Log.d(Constant.TAG, "File Save, Type=" + type);
+		if (Constant.isDebug) {
+			Log.d(Constant.TAG, "File Save, Type=" + type);
+		}
 	}
 
 	public void setup() {

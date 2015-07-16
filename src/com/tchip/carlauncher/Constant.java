@@ -5,6 +5,11 @@ import java.io.File;
 import android.os.Environment;
 
 public interface Constant {
+	/**
+	 * Debug：打印Log
+	 */
+	public static boolean isDebug = true;
+
 	// FACE++ SDK
 	public static final String FACE_API_KEY = "543e743fa43f0550c2977995f3ff2222";
 	public static final String FACE_API_SECRET = "IEpqaPm-wa-eznyZfKhvwW8rEGgzLxRk";
@@ -20,7 +25,7 @@ public interface Constant {
 	 * 日志Tag
 	 */
 	public static final String TAG = "ZMS";
-	
+
 	/**
 	 * 轨迹绘制取样精度：每1个点取1个
 	 */

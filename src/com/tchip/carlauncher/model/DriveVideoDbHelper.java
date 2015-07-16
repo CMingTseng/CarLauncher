@@ -131,7 +131,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * 获取最旧且未加锁视频Cursor
+	 * 获取最旧且未加锁视频ID
 	 * 
 	 * @return
 	 */
@@ -149,8 +149,26 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 			return -1;
 		}
 	}
-	
-	public String getVideNameById(int id){
+
+	/**
+	 * 获取最旧视频(包括加锁)ID
+	 * 
+	 * @return
+	 */
+	public int getOldestVideoId() {
+		String sqlLine = "SELECT * FROM " + VIDEO_TABLE_NAME;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sqlLine, null);
+		if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			int id = cursor.getInt(cursor.getColumnIndex(VIDEO_COL_ID));
+			return id;
+		} else {
+			return -1;
+		}
+	}
+
+	public String getVideNameById(int id) {
 		String sqlLine = "SELECT * FROM " + VIDEO_TABLE_NAME + " WHERE "
 				+ VIDEO_COL_ID + "=?";
 		String selection[] = new String[] { String.valueOf(id) };
@@ -158,7 +176,8 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(sqlLine, selection);
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			String videoName = cursor.getString(cursor.getColumnIndex(VIDEO_COL_NAME));
+			String videoName = cursor.getString(cursor
+					.getColumnIndex(VIDEO_COL_NAME));
 			return videoName;
 		} else {
 			return "";

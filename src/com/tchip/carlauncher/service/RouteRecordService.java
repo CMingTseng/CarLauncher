@@ -21,10 +21,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.tchip.carlauncher.Constant;
@@ -44,7 +44,6 @@ public class RouteRecordService extends Service {
 	private final static double ERROR_CODE = 0.0;
 	private double routeLng, routeLat;
 
-	private boolean isDebug;
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 
@@ -58,12 +57,11 @@ public class RouteRecordService extends Service {
 		super.onCreate();
 
 		// Update Running State
-		sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
-				Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		editor.putBoolean("isRun", true);
 		editor.commit();
-		isDebug = true;//isDebug();
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, false);
 		// 初始化路径
@@ -72,9 +70,8 @@ public class RouteRecordService extends Service {
 			filestoreMusic.mkdir();
 		}
 		startTime = getTimeStr();
-		if (isDebug) {
-			Toast.makeText(getApplicationContext(), "Start Record Route",
-					Toast.LENGTH_SHORT).show();
+		if (Constant.isDebug) {
+			Log.v(Constant.TAG, "Start Record Route");
 		}
 		// 开启轨迹记录线程
 		new Thread(new RouteRecordThread()).start();
@@ -84,14 +81,16 @@ public class RouteRecordService extends Service {
 
 		@Override
 		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(scanSpan);
-					Message message = new Message();
-					message.what = 1;
-					recordHandler.sendMessage(message);
-				} catch (Exception e) {
-					e.printStackTrace();
+			synchronized (recordHandler) {
+				while (true) {
+					try {
+						Thread.sleep(scanSpan);
+						Message message = new Message();
+						message.what = 1;
+						recordHandler.sendMessage(message);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -119,10 +118,8 @@ public class RouteRecordService extends Service {
 			} else {
 				routePoint.setLng(routeLng);
 				routePoint.setLat(routeLat);
-				if (isDebug) {
-					Toast.makeText(getApplicationContext(),
-							"Lat" + routeLat + "-Lng:" + routeLng,
-							Toast.LENGTH_SHORT).show();
+				if (Constant.isDebug) {
+					Log.v(Constant.TAG, "Lat:" + routeLat + "-Lng:" + routeLng);
 				}
 				list.add(routePoint);
 			}
@@ -216,7 +213,7 @@ public class RouteRecordService extends Service {
 	private String getFilePath() {
 		stopTime = getTimeStr();
 		String format = ".art"; // ART: Auto Route Track
-		if (isDebug)
+		if (Constant.isDebug)
 			format = ".txt";
 		return ROUTE_PATH + startTime + "-" + stopTime + format;
 	}
@@ -231,10 +228,6 @@ public class RouteRecordService extends Service {
 		}
 	}
 
-	public boolean isDebug() {
-		return sharedPreferences.getBoolean("isDebug", false);
-	}
-
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -246,11 +239,10 @@ public class RouteRecordService extends Service {
 		if (list.size() >= 2) {
 			String saveString = adapter.setJsonString(list);
 			writeFileSdcard(getFilePath(), saveString);
-			if (isDebug)
-				Toast.makeText(getApplicationContext(),
-						"saving route files with " + list.size() + " points",
-						Toast.LENGTH_SHORT).show();
-		} else if (isDebug) {
+			if (Constant.isDebug)
+				Log.v(Constant.TAG, "saving route files with " + list.size()
+						+ " points");
+		} else if (Constant.isDebug) {
 			Toast.makeText(getApplicationContext(),
 					"Route point is less than 2", Toast.LENGTH_SHORT).show();
 		}

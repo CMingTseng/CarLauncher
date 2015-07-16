@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.model;
 
+import com.tchip.carlauncher.service.ConnectWifiService;
 import com.tchip.carlauncher.service.NetworkChangeService;
 
 import android.content.BroadcastReceiver;
@@ -20,6 +21,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 					NetworkChangeService.class);
 			context.startService(serviceIntent);
 			// Toast.makeText(context, "网络状态变化", Toast.LENGTH_SHORT).show();
+
+			// WiFi连接
+			Intent intentWiFi = new Intent(context, ConnectWifiService.class);
+			context.startService(intentWiFi);
 		}
 	}
 }

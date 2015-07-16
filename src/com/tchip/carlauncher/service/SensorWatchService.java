@@ -9,11 +9,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 
 /**
  * Created by AlexZhou on 2015/3/26. 11:06
@@ -65,7 +69,14 @@ public class SensorWatchService extends Service {
 					isCrash = true;
 				}
 				if (isCrash) {
-					// showTextToast("Crashed at " + getTime());
+					// 当前录制视频加锁
+					if (MyApplication.isVideoReording) {
+						MyApplication.isVideoLock = true;
+						if (Constant.isDebug)
+							Log.v(Constant.TAG, "Crashed -> isVideoLock = true");
+					}
+
+					// 重置碰撞标志位
 					isCrash = false;
 				}
 			}
