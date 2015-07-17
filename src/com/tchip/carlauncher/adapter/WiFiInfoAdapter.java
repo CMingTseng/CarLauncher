@@ -7,7 +7,6 @@ import com.tchip.carlauncher.model.WifiInfo;
 import com.tchip.carlauncher.util.WiFiUtil;
 
 import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

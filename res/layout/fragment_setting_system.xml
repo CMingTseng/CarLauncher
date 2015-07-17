@@ -195,16 +195,16 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
-                android:visibility="gone"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="gone" />
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/layoutRippleFm"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
-                android:clickable="true" >
+                android:clickable="true"
+                android:visibility="gone" >
 
                 <ImageView
                     android:layout_width="@dimen/setting_item_image_height"
@@ -239,7 +239,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
-                android:clickable="true" >
+                android:clickable="true"
+                android:visibility="gone" >
 
                 <ImageView
                     android:layout_width="@dimen/setting_item_image_height"
@@ -277,7 +278,8 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleLocation"
@@ -404,10 +406,10 @@
             <RelativeLayout
                 android:id="@+id/layoutRippleReset"
                 android:layout_width="fill_parent"
-                android:visibility="gone"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
-                android:clickable="true" >
+                android:clickable="true"
+                android:visibility="gone" >
 
                 <ImageView
                     android:layout_width="@dimen/setting_item_image_height"
@@ -428,9 +430,9 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:visibility="gone"
                 android:layout_height="2dp"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleAbout"

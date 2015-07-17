@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
-import java.util.List;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -19,9 +18,6 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
-import com.baidu.mapapi.navi.BaiduMapNavigation;
-import com.baidu.mapapi.navi.NaviPara;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -36,17 +32,12 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
-import com.tchip.carlauncher.ui.activity.WifiListActivity.refreshWifiThread;
-import com.tchip.carlauncher.ui.dialog.WifiPswDialog;
-import com.tchip.carlauncher.ui.dialog.WifiPswDialog.OnCustomDialogListener;
 import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
-import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WiFiUtil;
-import com.tchip.carlauncher.util.WifiAdmin;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -62,7 +53,6 @@ import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,8 +66,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -695,7 +683,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoRecord:
 			case R.id.largeVideoRecord:
-				if (!ClickUtil.isQuickClick()) {
+				if (!ClickUtil.isQuickClick(1000)) {
 					if (mRecordState == STATE_RECORD_STOPPED) {
 						if (startRecorder() == 0) {
 							mRecordState = STATE_RECORD_STARTED;
@@ -715,7 +703,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
-				if (!ClickUtil.isQuickClick()) {
+				if (!ClickUtil.isQuickClick(800)) {
 					if (!MyApplication.isVideoLock) {
 						MyApplication.isVideoLock = true;
 						startSpeak("视频加锁");
@@ -728,7 +716,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoSize:
-				if (!ClickUtil.isQuickClick()) {
+				if (!ClickUtil.isQuickClick(1500)) {
 					// 切换分辨率录像停止，需要重置时间
 					MyApplication.isVideoReording = false;
 					secondCount = -1; // 录制时间秒钟复位
@@ -752,7 +740,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoTime:
-				if (!ClickUtil.isQuickClick()) {
+				if (!ClickUtil.isQuickClick(800)) {
 					if (mIntervalState == STATE_INTERVAL_3MIN) {
 						if (setInterval(5 * 60) == 0) {
 							mIntervalState = STATE_INTERVAL_5MIN;
@@ -772,7 +760,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoMute:
-				if (!ClickUtil.isQuickClick()) {
+				if (!ClickUtil.isQuickClick(800)) {
 					if (mMuteState == STATE_MUTE) {
 						if (setMute(false) == 0) {
 							mMuteState = STATE_UNMUTE;
@@ -790,9 +778,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoCamera:
 			case R.id.largeVideoCamera:
-				takePhoto();
-				AudioPlayUtil.playAudio(getApplicationContext(),
-						FILE_TYPE_IMAGE);
+				if (!ClickUtil.isQuickClick(500)) {
+					takePhoto();
+					AudioPlayUtil.playAudio(getApplicationContext(),
+							FILE_TYPE_IMAGE);
+				}
 				break;
 
 			case R.id.layoutWeather:
@@ -1027,25 +1017,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
 			switch (wifi_state) {
-			case WifiManager.WIFI_STATE_DISABLING:
-				imageWifiLevel.setImageResource(WiFiUtil
-						.getImageBySignal(level));
-				break;
-			case WifiManager.WIFI_STATE_DISABLED:
-				imageWifiLevel.setImageResource(WiFiUtil
-						.getImageBySignal(level));
-				break;
-			case WifiManager.WIFI_STATE_ENABLING:
-				imageWifiLevel.setImageResource(WiFiUtil
-						.getImageBySignal(level));
-				break;
 			case WifiManager.WIFI_STATE_ENABLED:
-				imageWifiLevel.setImageResource(WiFiUtil
-						.getImageBySignal(level));
-				break;
+			case WifiManager.WIFI_STATE_ENABLING:
+			case WifiManager.WIFI_STATE_DISABLING:
+			case WifiManager.WIFI_STATE_DISABLED:
 			case WifiManager.WIFI_STATE_UNKNOWN:
-				imageWifiLevel.setImageResource(WiFiUtil
-						.getImageBySignal(level));
+				updateWiFiState();
 				break;
 			}
 		}

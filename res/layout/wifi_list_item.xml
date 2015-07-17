@@ -12,12 +12,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="63dp" >
+        android:layout_height="73dp" >
 
         <ImageView
             android:id="@+id/imageSignal"
-            android:layout_width="@dimen/setting_item_image_height"
-            android:layout_height="@dimen/setting_item_image_height"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
@@ -37,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="tchip-Z"
+                android:textSize="22sp"
                 android:textColor="#ffffff" />
 
             <TextView
@@ -44,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="安全"
+                 android:textSize="18sp"
                 android:textColor="@color/setting_item_title_color" />
         </LinearLayout>
 
@@ -56,7 +58,7 @@
             android:layout_marginRight="80dp"
             android:text="已连接"
             android:textColor="@color/setting_item_title_color"
-            android:textSize="16sp" />
+            android:textSize="25sp" />
     </RelativeLayout>
 
 </LinearLayout>

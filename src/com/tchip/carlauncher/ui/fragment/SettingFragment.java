@@ -48,7 +48,7 @@ public class SettingFragment extends Fragment {
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = preferences.edit();
 
-		// 开机自动录像流量(GONE)
+		// 开机自动录像(GONE)
 		SwitchButton switchAutoRecord = (SwitchButton) systemSettingView
 				.findViewById(R.id.switchAutoRecord);
 		switchAutoRecord
@@ -92,7 +92,7 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleTraffic);
 		layoutRippleTraffic.setOnClickListener(new MyOnClickListener());
 
-		// 蓝牙
+		// 蓝牙(GONE)
 		RelativeLayout layoutRippleBluetooth = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleBluetooth);
 		layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
