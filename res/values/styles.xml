@@ -142,6 +142,7 @@
     <!-- Theme for translucent system bars -->
     <style name="AppTranslucentTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionBarSize">@dimen/setting_item_height</item>
     </style>
 
     <style name="overflowMenuStyle" parent="@android:style/Widget.Holo.PopupMenu">
