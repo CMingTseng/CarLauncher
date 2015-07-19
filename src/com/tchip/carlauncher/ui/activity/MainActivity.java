@@ -795,16 +795,21 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.mapHideView:
 			case R.id.imageNavi:
-				try {
-					ComponentName componentMap = new ComponentName(
-							"com.baidu.BaiduMap",
-							"com.baidu.baidumaps.WelcomeScreen");
-					Intent intentMap = new Intent();
-					intentMap.setComponent(componentMap);
-					startActivity(intentMap);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					ComponentName componentMap = new ComponentName(
+//							"com.baidu.BaiduMap",
+//							"com.baidu.baidumaps.WelcomeScreen");
+//					Intent intentMap = new Intent();
+//					intentMap.setComponent(componentMap);
+//					startActivity(intentMap);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+				
+				Intent intentNavi = new Intent(MainActivity.this,NavigationActivity.class);
+				startActivity(intentNavi);
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 				break;
 
 			case R.id.imageMultimedia:
