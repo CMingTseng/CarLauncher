@@ -122,8 +122,14 @@ public class MultimediaActivity extends Activity {
 				break;
 
 			case R.id.layoutMusic:
-				Intent intentMusic = new Intent(getApplicationContext(),
-						MusicMainContentActivity.class);
+				// Intent intentMusic = new Intent(getApplicationContext(),
+				// MusicMainContentActivity.class);
+				// startActivity(intentMusic);
+				ComponentName componentMusic = new ComponentName(
+						"cn.kuwo.kwmusichd",
+						"cn.kuwo.kwmusichd.WelcomeActivity");
+				Intent intentMusic = new Intent();
+				intentMusic.setComponent(componentMusic);
 				startActivity(intentMusic);
 				break;
 

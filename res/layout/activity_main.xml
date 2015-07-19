@@ -104,14 +104,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:text="未知"
-                android:singleLine="true"
                 android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:focusableInTouchMode="true"
-                android:focusable="true"
+                android:singleLine="true"
+                android:text="未知"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </LinearLayout>
@@ -219,6 +219,30 @@
                 android:layout_marginRight="5dp" >
 
                 <ImageView
+                    android:id="@+id/imageVoiceChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_voice_chat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="语音助手"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
                     android:id="@+id/imageFileExplore"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -305,30 +329,6 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="路径规划"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
-
-                <ImageView
-                    android:id="@+id/imageVoiceChat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_voice_chat" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="语音助手"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -444,24 +444,24 @@
         android:background="@drawable/ui_main_video_record" />
 
     <ImageView
-        android:id="@+id/smallVideoLock"
+        android:id="@+id/smallVideoCamera"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/surfaceCamera"
         android:layout_alignRight="@+id/surfaceCamera"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="30dp"
-        android:background="@drawable/ui_main_video_unlock" />
+        android:background="@drawable/ui_camera_shoot" />
 
     <ImageView
-        android:id="@+id/smallVideoCamera"
+        android:id="@+id/smallVideoLock"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/surfaceCamera"
         android:layout_alignLeft="@+id/surfaceCamera"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="30dp"
-        android:background="@drawable/ui_camera_shoot" />
+        android:background="@drawable/ui_main_video_unlock" />
 
     <TextView
         android:id="@+id/textRecordTime"

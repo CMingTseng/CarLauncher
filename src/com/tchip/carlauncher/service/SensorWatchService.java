@@ -18,6 +18,7 @@ import java.util.Date;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.ui.activity.MainActivity;
 
 /**
  * Created by AlexZhou on 2015/3/26. 11:06
@@ -31,9 +32,9 @@ public class SensorWatchService extends Service {
 	private float valueY = 0f;
 	private float valueZ = 0f;
 
-	private final static float LIMIT_X = 11f;
-	private final static float LIMIT_Y = 11f;
-	private final static float LIMIT_Z = 11f;
+	private final static float LIMIT_X = 55f;
+	private final static float LIMIT_Y = 55f;
+	private final static float LIMIT_Z = 55f;
 
 	private int[] crashFlag = { 0, 0, 0 }; // {X-Flag, Y-Flag, Z-Flag}
 	private boolean isCrash = false;
@@ -72,6 +73,7 @@ public class SensorWatchService extends Service {
 					// 当前录制视频加锁
 					if (MyApplication.isVideoReording) {
 						MyApplication.isVideoLock = true;
+						startSpeak("检测到碰撞，视频加锁");
 						if (Constant.isDebug)
 							Log.v(Constant.TAG, "Crashed -> isVideoLock = true");
 					}
@@ -89,6 +91,12 @@ public class SensorWatchService extends Service {
 		// 3:SENSOR_DELAY_NORMAL
 		sensorManager.registerListener(sensorEventListener, sensor,
 				SensorManager.SENSOR_DELAY_FASTEST);
+	}
+	
+	private void startSpeak(String content) {
+		Intent intent = new Intent(getApplicationContext(), SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
 	}
 
 	@Override

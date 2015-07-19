@@ -606,9 +606,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					Intent intentWiFi = new Intent(getApplicationContext(),
 							ConnectWifiService.class);
 					startService(intentWiFi);
-					Log.v(Constant.TAG, "Start Connect Wifi...");
+					// Log.v(Constant.TAG, "Start Connect Wifi...");
 				} else {
-					Log.v(Constant.TAG, "Wifi is Connected or disable");
+					// Log.v(Constant.TAG, "Wifi is Connected or disable");
 				}
 
 				// 更新位置和天气信息
@@ -1249,6 +1249,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		try {
 			mCamera = Camera.open(0);
 			mCamera.lock();
+
+			// 设置系统Camera参数
+//			Camera.Parameters para = mCamera.getParameters();
+//			para.unflatten(params_str);
+//			mCamera.setParameters(para);
+
 			mCamera.setPreviewDisplay(mHolder);
 			mCamera.startPreview();
 			mCamera.unlock();
@@ -1258,6 +1264,52 @@ public class MainActivity extends Activity implements TachographCallback,
 			return false;
 		}
 	}
+
+	private String params_str = "zoom=0;fb-smooth-level-max=4;max-num-detected-faces-hw=15;"
+			+ "cap-mode=normal;whitebalance=auto;afeng-min-focus-step=0;"
+			+ "preview-format-values=yuv420sp,yuv420p,yuv420i-yyuvyy-3plane;"
+			+ "rotation=0;jpeg-thumbnail-quality=100;preview-format=yuv420sp;"
+			+ "iso-speed=auto;hue-values=low,middle,high;preview-frame-rate=30;"
+			+ "jpeg-thumbnail-width=160;"
+			+ "scene-mode-values=auto,portrait,landscape,night,night-portrait,theatre,beach,snow,sunset,steadyphoto,fireworks,sports,party,candlelight,hdr;"
+			+ "video-size=1920x1088;preview-fps-range-values=(5000,60000);"
+			+ "contrast-values=low,middle,high;"
+			+ "preview-size-values=176x144,320x240,352x288,480x320,480x368,640x480,720x480,800x480,800x600,864x480,960x540,1280x720;"
+			+ "auto-whitebalance-lock=false;preview-fps-range=5000,60000;"
+			+ "antibanding=auto;min-exposure-compensation=-3;max-num-focus-areas=1;"
+			+ "vertical-view-angle=49;fb-smooth-level-min=-4;eng-focus-fullscan-frame-interval=0;"
+			+ "fb-skin-color=0;brightness_value=17;video-stabilization-supported=true;"
+			+ "saturation-values=low,middle,high;eng-flash-duty-value=-1;edge=middle;"
+			+ "iso-speed-values=auto,100,200,400,800,1600;picture-format-values=jpeg;"
+			+ "exposure-compensation-step=1.0;eng-flash-duty-min=0;picture-size=2560x1440;"
+			+ "saturation=middle;picture-format=jpeg;"
+			+ "whitebalance-values=auto,incandescent,fluorescent,warm-fluorescent,daylight,cloudy-daylight,twilight,shade;"
+			+ "afeng-max-focus-step=0;eng-shading-table=0;"
+			+ "preferred-preview-size-for-video=1280x720;hue=middle;"
+			+ "eng-focus-fullscan-frame-interval-max=65535;recording-hint=true;"
+			+ "video-stabilization=false;zoom-supported=true;fb-smooth-level=0;"
+			+ "fb-sharp=0;contrast=middle;eng-save-shading-table=0;jpeg-quality=90;"
+			+ "scene-mode=auto;burst-num=1;metering-areas=(0,0,0,0,0);eng-flash-duty-max=1;"
+			+ "video-size-values=176x144,480x320,640x480,864x480,1280x720,1920x1080;"
+			+ "eng-focus-fullscan-frame-interval-min=0;focal-length=3.5;"
+			+ "preview-size=1280x720;rec-mute-ogg=0;"
+			+ "cap-mode-values=normal,face_beauty,continuousshot,smileshot,bestshot,evbracketshot,autorama,mav,asd;"
+			+ "preview-frame-rate-values=15,24,30;max-num-metering-areas=9;fb-sharp-max=4;"
+			+ "sensor-type=252;focus-mode-values=auto,macro,infinity,continuous-picture,continuous-video,manual,fullscan;"
+			+ "fb-sharp-min=-4;jpeg-thumbnail-size-values=0x0,160x128,320x240;"
+			+ "zoom-ratios=100,114,132,151,174,200,229,263,303,348,400;"
+			+ "picture-size-values=320x240,640x480,1024x768,1280x720,1280x768,1280x960,1600x1200,2048x1536,2560x1440,2560x1920;"
+			+ "edge-values=low,middle,high;horizontal-view-angle=53;brightness=middle;"
+			+ "eng-flash-step-max=0;jpeg-thumbnail-height=128;capfname=/sdcard/DCIM/cap00;"
+			+ "smooth-zoom-supported=true;zsd-mode=off;focus-mode=auto;auto-whitebalance-lock-supported=true;"
+			+ "fb-skin-color-max=4;fb-skin-color-min=-4;max-num-detected-faces-sw=0;"
+			+ "video-frame-format=yuv420p;max-exposure-compensation=3;focus-areas=(0,0,0,0,0);"
+			+ "exposure-compensation=0;video-snapshot-supported=true;"
+			+ "brightness-values=low,middle,high;auto-exposure-lock=false;"
+			+ "effect-values=none,mono,negative,sepia,aqua,whiteboard,blackboard;"
+			+ "eng-flash-step-min=0;effect=none;max-zoom=10;focus-distances=0.95,1.9,Infinity;"
+			+ "mtk-cam-mode=2;auto-exposure-lock-supported=true;zsd-mode-values=off,on;"
+			+ "antibanding-values=off,50hz,60hz,auto";
 
 	private boolean closeCamera() {
 		if (mCamera == null)
@@ -1364,6 +1416,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			return mMyRecorder.stop();
 		}
+		
 		return -1;
 	}
 
@@ -1436,9 +1489,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		mMyRecorder.setCamera(mCamera);
 		mMyRecorder.setClientName(this.getPackageName());
 		if (mResolutionState == STATE_RESOLUTION_1080P) {
-			mMyRecorder.setVideoSize(1920, 1080);
+			mMyRecorder.setVideoSize(1920, 1088); // 16倍数
 			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(8500000);
+			mMyRecorder.setVideoBiteRate(8500000*2); // 8500000
 		} else {
 			mMyRecorder.setVideoSize(1280, 720);
 			mMyRecorder.setVideoFrameRate(30);
