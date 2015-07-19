@@ -18,7 +18,6 @@ import android.util.Log;
 
 public class ConnectWifiService extends Service {
 	private SharedPreferences sharedPreferences;
-	private Editor editor;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -30,16 +29,19 @@ public class ConnectWifiService extends Service {
 		super.onCreate();
 		sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-		editor = sharedPreferences.edit();
-
-		connectWifi();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+
+		connectWifi();
+
 		return super.onStartCommand(intent, flags, startId);
 	}
 
+	/**
+	 * 连接Wi-Fi
+	 */
 	private void connectWifi() {
 		try {
 			WifiManager wifiManager = (WifiManager) this
@@ -63,8 +65,10 @@ public class ConnectWifiService extends Service {
 					// 网络连接错误
 				}
 			}
-			Log.v(Constant.TAG, "wifiName:" + wifiName + " - wifiPass:"
-					+ wifiPass);
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "wifiName:" + wifiName + " - wifiPass:"
+						+ wifiPass);
+			}
 		} catch (Exception e) {
 			Log.e(Constant.TAG, e.toString());
 			e.printStackTrace();
