@@ -301,7 +301,7 @@ public class RoutePlanActivity extends Activity implements
 		String nodeTitle = null;
 		Object step = route.getAllStep().get(nodeIndex);
 		if (step instanceof DrivingRouteLine.DrivingStep) {
-			nodeLocation = ((DrivingRouteLine.DrivingStep) step).getEntrace()
+			nodeLocation = ((DrivingRouteLine.DrivingStep) step).getEntrance()
 					.getLocation();
 			nodeTitle = ((DrivingRouteLine.DrivingStep) step).getInstructions();
 		}

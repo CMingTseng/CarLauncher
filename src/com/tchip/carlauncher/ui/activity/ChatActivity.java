@@ -492,90 +492,40 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										}
 									}
 								} else if ("telephone".equals(strService)) {
-									// 打电话给张三 "operation": "CALL"
-									String peopleName = jsonObject
-											.getJSONObject("semantic")
-											.getJSONObject("slots")
-											.getString("name");
-									String operationStr = jsonObject
-											.getString("operation");
-									if ("CALL".equals(operationStr)) {
-										String phoneNum = getContactNumberByName(peopleName);
-										String phoneCode = "";
-										try {
-											phoneCode = jsonObject
-													.getJSONObject("semantic")
-													.getJSONObject("slots")
-													.getString("code");
-										} catch (Exception e) {
+									if (Constant.hasDialer) {
+										// 打电话给张三 "operation": "CALL"
+										String peopleName = jsonObject
+												.getJSONObject("semantic")
+												.getJSONObject("slots")
+												.getString("name");
+										String operationStr = jsonObject
+												.getString("operation");
+										if ("CALL".equals(operationStr)) {
+											String phoneNum = getContactNumberByName(peopleName);
+											String phoneCode = "";
+											try {
+												phoneCode = jsonObject
+														.getJSONObject(
+																"semantic")
+														.getJSONObject("slots")
+														.getString("code");
+											} catch (Exception e) {
 
-										}
-										if (phoneNum != null
-												& phoneNum.trim().length() > 0) {
-											String strAnswer = "正在打电话给："
-													+ peopleName;
-											tvAnswer.setText(strAnswer);
-											startSpeak(strAnswer);
-											phoneCall(phoneNum);
-										} else if (phoneCode != null
-												& phoneCode.trim().length() > 0) {
-											String strAnswer = "正在打电话给："
-													+ peopleName;
-											tvAnswer.setText(strAnswer);
-											startSpeak(strAnswer);
-											phoneCall(phoneCode);
-										} else {
-											String phoneNumFromPinYin = getContactNumberByPinYin(PinYinUtil
-													.convertAll(peopleName));
-
-											if (phoneNumFromPinYin != null
-													& phoneNumFromPinYin.trim()
-															.length() > 0) {
+											}
+											if (phoneNum != null
+													& phoneNum.trim().length() > 0) {
 												String strAnswer = "正在打电话给："
 														+ peopleName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
-												phoneCall(phoneNumFromPinYin);
-
-											} else {
-												String strAnswer = "通讯录中未找到："
+												phoneCall(phoneNum);
+											} else if (phoneCode != null
+													& phoneCode.trim().length() > 0) {
+												String strAnswer = "正在打电话给："
 														+ peopleName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
-											}
-										}
-									}
-								} else if ("message".equals(strService)) {
-									// 发短信给小张晚上一起吃饭。operation:SEND
-									String peopleName = jsonObject
-											.getJSONObject("semantic")
-											.getJSONObject("slots")
-											.getString("name");
-
-									String messageContent = "";
-									try {
-										messageContent = jsonObject
-												.getJSONObject("semantic")
-												.getJSONObject("slots")
-												.getString("content");
-									} catch (Exception e) {
-									}
-									String operationStr = jsonObject
-											.getString("operation");
-									if ("SEND".equals(operationStr)) {
-										if (messageContent != null
-												&& messageContent.trim()
-														.length() > 0) {
-											String phoneNum = getContactNumberByName(peopleName);
-											if (phoneNum != null
-													& phoneNum.trim().length() > 0) {
-												String strAnswer = "正在发短信给："
-														+ peopleName + "："
-														+ messageContent;
-												tvAnswer.setText(strAnswer);
-												startSpeak(strAnswer);
-												sendMessage(phoneNum,
-														messageContent);
+												phoneCall(phoneCode);
 											} else {
 												String phoneNumFromPinYin = getContactNumberByPinYin(PinYinUtil
 														.convertAll(peopleName));
@@ -584,14 +534,12 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 														& phoneNumFromPinYin
 																.trim()
 																.length() > 0) {
-													String strAnswer = "正在发短信给"
-															+ peopleName + "："
-															+ messageContent;
+													String strAnswer = "正在打电话给："
+															+ peopleName;
 													tvAnswer.setText(strAnswer);
 													startSpeak(strAnswer);
-													sendMessage(
-															phoneNumFromPinYin,
-															messageContent);
+													phoneCall(phoneNumFromPinYin);
+
 												} else {
 													String strAnswer = "通讯录中未找到："
 															+ peopleName;
@@ -599,14 +547,82 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 													startSpeak(strAnswer);
 												}
 											}
-										} else {
-											String strAnswer = "短信内容为空。";
-											tvAnswer.setText(strAnswer);
-											startSpeak(strAnswer);
 										}
+									} else {
+										String strAnswer = "本机不支持通讯功能";
+										tvAnswer.setText(strAnswer);
+										startSpeak(strAnswer);
+									}
+								} else if ("message".equals(strService)) {
+									if (Constant.hasDialer) {
+										// 发短信给小张晚上一起吃饭。operation:SEND
+										String peopleName = jsonObject
+												.getJSONObject("semantic")
+												.getJSONObject("slots")
+												.getString("name");
+
+										String messageContent = "";
+										try {
+											messageContent = jsonObject
+													.getJSONObject("semantic")
+													.getJSONObject("slots")
+													.getString("content");
+										} catch (Exception e) {
+										}
+										String operationStr = jsonObject
+												.getString("operation");
+										if ("SEND".equals(operationStr)) {
+											if (messageContent != null
+													&& messageContent.trim()
+															.length() > 0) {
+												String phoneNum = getContactNumberByName(peopleName);
+												if (phoneNum != null
+														& phoneNum.trim()
+																.length() > 0) {
+													String strAnswer = "正在发短信给："
+															+ peopleName
+															+ "："
+															+ messageContent;
+													tvAnswer.setText(strAnswer);
+													startSpeak(strAnswer);
+													sendMessage(phoneNum,
+															messageContent);
+												} else {
+													String phoneNumFromPinYin = getContactNumberByPinYin(PinYinUtil
+															.convertAll(peopleName));
+
+													if (phoneNumFromPinYin != null
+															& phoneNumFromPinYin
+																	.trim()
+																	.length() > 0) {
+														String strAnswer = "正在发短信给"
+																+ peopleName
+																+ "："
+																+ messageContent;
+														tvAnswer.setText(strAnswer);
+														startSpeak(strAnswer);
+														sendMessage(
+																phoneNumFromPinYin,
+																messageContent);
+													} else {
+														String strAnswer = "通讯录中未找到："
+																+ peopleName;
+														tvAnswer.setText(strAnswer);
+														startSpeak(strAnswer);
+													}
+												}
+											} else {
+												String strAnswer = "短信内容为空。";
+												tvAnswer.setText(strAnswer);
+												startSpeak(strAnswer);
+											}
+										}
+									} else {
+										String strAnswer = "本机不支持通讯功能";
+										tvAnswer.setText(strAnswer);
+										startSpeak(strAnswer);
 									}
 								}
-
 							} catch (JSONException e) {
 								e.printStackTrace();
 								String strNoAnswer = "小天不知道怎么回答了";
@@ -911,18 +927,20 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				LatLng startLatLng = new LatLng(startLat, startLng);
 				LatLng endLatLng = new LatLng(endLat, endLng);
 				// 构建 导航参数
-				NaviPara para = new NaviPara();
-				para.startPoint = startLatLng;
-				para.startName = "从这里开始";
-				para.endPoint = endLatLng;
-				para.endName = "到这里结束";
+				// TODO
+//				NaviPara para = new NaviPara();
+//				para.startPoint = startLatLng;
+//				para.startName = "从这里开始";
+//				para.endPoint = endLatLng;
+//				para.endName = "到这里结束";
 
-				try {
-					BaiduMapNavigation.openBaiduMapNavi(para,
-							getApplicationContext());
-				} catch (BaiduMapAppNotSupportNaviException e) {
-					e.printStackTrace();
-				}
+				
+//				try {
+//					BaiduMapNavigation.openBaiduMapNavi(para,
+//							getApplicationContext());
+//				} catch (BaiduMapAppNotSupportNaviException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 

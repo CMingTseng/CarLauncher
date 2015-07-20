@@ -9,6 +9,11 @@ public interface Constant {
 	 * Debug：打印Log
 	 */
 	public static boolean isDebug = true;
+	
+	/**
+	 * 是否有拨号短信模块
+	 */
+	public static boolean hasDialer = false;
 
 	// FACE++ SDK
 	public static final String FACE_API_KEY = "543e743fa43f0550c2977995f3ff2222";
