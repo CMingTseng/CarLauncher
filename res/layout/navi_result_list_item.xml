@@ -34,8 +34,10 @@
 
             <TextView
                 android:id="@+id/textName"
-                android:layout_width="wrap_content"
+                android:layout_width="500dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:singleLine="true"
                 android:text="科技园"
                 android:textColor="#ffffff"
                 android:textSize="22sp" />
@@ -45,8 +47,8 @@
                 android:layout_width="500dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
-                android:text="东环二路附近"
                 android:singleLine="true"
+                android:text="东环二路附近"
                 android:textColor="@color/setting_item_title_color"
                 android:textSize="18sp" />
         </LinearLayout>

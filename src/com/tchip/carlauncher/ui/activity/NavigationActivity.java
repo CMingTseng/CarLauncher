@@ -180,7 +180,17 @@ public class NavigationActivity extends FragmentActivity implements
 				break;
 
 			case R.id.btnNavi:
-				startSearchPlace(etNaviWhere.getText().toString());
+				String strCommand = etNaviWhere.getText().toString();
+				if (Constant.START_TEST_APK.equals(strCommand)) {
+					Log.d(Constant.TAG, "Start Test App");
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setClassName("com.DeviceTest",
+							"com.DeviceTest.DeviceTest");
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
+				} else {
+					startSearchPlace(strCommand);
+				}
 				break;
 
 			case R.id.layoutTitle:

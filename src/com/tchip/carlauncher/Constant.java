@@ -14,6 +14,11 @@ public interface Constant {
 	 * 是否有拨号短信模块
 	 */
 	public static boolean hasDialer = false;
+	
+	/**
+	 * 启动测试应用命令
+	 */
+	public static final String START_TEST_APK = "*#369*#";
 
 	// FACE++ SDK
 	public static final String FACE_API_KEY = "543e743fa43f0550c2977995f3ff2222";
