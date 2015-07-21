@@ -156,6 +156,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	private int mOverlapState;
 	private int mMuteState; // 静音
 
+	private LinearLayout layoutVideoSize, layoutVideoTime, layoutVideoLock,
+			layoutVideoMute, layoutVideoRecord, layoutVideoCamera,
+			layoutVideoRecordSmall, layoutVideoCameraSmall,layoutVideoLockSmall;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -254,6 +258,34 @@ public class MainActivity extends Activity implements TachographCallback,
 		surfaceCamera.getHolder().addCallback(this);
 
 		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
+
+		// TODO 增大点击区域
+		layoutVideoSize = (LinearLayout) findViewById(R.id.layoutVideoSize);
+		layoutVideoSize.setOnClickListener(new MyOnClickListener());
+
+		layoutVideoTime = (LinearLayout) findViewById(R.id.layoutVideoTime);
+		layoutVideoTime.setOnClickListener(new MyOnClickListener());
+
+		layoutVideoLock = (LinearLayout) findViewById(R.id.layoutVideoLock);
+		layoutVideoLock.setOnClickListener(new MyOnClickListener());
+
+		layoutVideoMute = (LinearLayout) findViewById(R.id.layoutVideoMute);
+		layoutVideoMute.setOnClickListener(new MyOnClickListener());
+
+		layoutVideoRecord = (LinearLayout) findViewById(R.id.layoutVideoRecord);
+		layoutVideoRecord.setOnClickListener(new MyOnClickListener());
+
+		layoutVideoCamera = (LinearLayout) findViewById(R.id.layoutVideoCamera);
+		layoutVideoCamera.setOnClickListener(new MyOnClickListener());
+
+		layoutVideoRecordSmall = (LinearLayout) findViewById(R.id.layoutVideoRecordSmall);
+		layoutVideoRecordSmall.setOnClickListener(new MyOnClickListener());
+		
+		layoutVideoCameraSmall = (LinearLayout) findViewById(R.id.layoutVideoCameraSmall);
+		layoutVideoCameraSmall.setOnClickListener(new MyOnClickListener());
+		
+		layoutVideoLockSmall = (LinearLayout) findViewById(R.id.layoutVideoLockSmall);
+		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
 
 		// 天气预报和时钟,状态图标
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
@@ -683,6 +715,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoRecord:
 			case R.id.largeVideoRecord:
+			case R.id.layoutVideoRecord:
+			case R.id.layoutVideoRecordSmall:
 				if (!ClickUtil.isQuickClick(1000)) {
 					if (mRecordState == STATE_RECORD_STOPPED) {
 						if (startRecorder() == 0) {
@@ -703,6 +737,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoLock:
 			case R.id.largeVideoLock:
+			case R.id.layoutVideoLock:
+			case R.id.layoutVideoLockSmall:
 				if (!ClickUtil.isQuickClick(800)) {
 					if (!MyApplication.isVideoLock) {
 						MyApplication.isVideoLock = true;
@@ -716,6 +752,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoSize:
+			case R.id.layoutVideoSize:
 				if (!ClickUtil.isQuickClick(1500)) {
 					// 切换分辨率录像停止，需要重置时间
 					MyApplication.isVideoReording = false;
@@ -740,6 +777,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoTime:
+			case R.id.layoutVideoTime:
 				if (!ClickUtil.isQuickClick(800)) {
 					if (mIntervalState == STATE_INTERVAL_3MIN) {
 						if (setInterval(5 * 60) == 0) {
@@ -760,6 +798,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.largeVideoMute:
+			case R.id.layoutVideoMute:
 				if (!ClickUtil.isQuickClick(800)) {
 					if (mMuteState == STATE_MUTE) {
 						if (setMute(false) == 0) {
@@ -778,6 +817,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.smallVideoCamera:
 			case R.id.largeVideoCamera:
+			case R.id.layoutVideoCamera:
+			case R.id.layoutVideoCameraSmall:
 				if (!ClickUtil.isQuickClick(500)) {
 					takePhoto();
 					AudioPlayUtil.playAudio(getApplicationContext(),
@@ -795,18 +836,19 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.mapHideView:
 			case R.id.imageNavi:
-//				try {
-//					ComponentName componentMap = new ComponentName(
-//							"com.baidu.BaiduMap",
-//							"com.baidu.baidumaps.WelcomeScreen");
-//					Intent intentMap = new Intent();
-//					intentMap.setComponent(componentMap);
-//					startActivity(intentMap);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-				
-				Intent intentNavi = new Intent(MainActivity.this,NavigationActivity.class);
+				// try {
+				// ComponentName componentMap = new ComponentName(
+				// "com.baidu.BaiduMap",
+				// "com.baidu.baidumaps.WelcomeScreen");
+				// Intent intentMap = new Intent();
+				// intentMap.setComponent(componentMap);
+				// startActivity(intentMap);
+				// } catch (Exception e) {
+				// e.printStackTrace();
+				// }
+
+				Intent intentNavi = new Intent(MainActivity.this,
+						NavigationActivity.class);
 				startActivity(intentNavi);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
@@ -1256,9 +1298,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			mCamera.lock();
 
 			// 设置系统Camera参数
-//			Camera.Parameters para = mCamera.getParameters();
-//			para.unflatten(params_str);
-//			mCamera.setParameters(para);
+			// Camera.Parameters para = mCamera.getParameters();
+			// para.unflatten(params_str);
+			// mCamera.setParameters(para);
 
 			mCamera.setPreviewDisplay(mHolder);
 			mCamera.startPreview();
@@ -1421,7 +1463,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			return mMyRecorder.stop();
 		}
-		
+
 		return -1;
 	}
 
@@ -1496,7 +1538,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (mResolutionState == STATE_RESOLUTION_1080P) {
 			mMyRecorder.setVideoSize(1920, 1088); // 16倍数
 			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(8500000*2); // 8500000
+			mMyRecorder.setVideoBiteRate(8500000 * 2); // 8500000
 		} else {
 			mMyRecorder.setVideoSize(1280, 720);
 			mMyRecorder.setVideoFrameRate(30);
