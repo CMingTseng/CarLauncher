@@ -259,7 +259,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
 
-		// TODO 增大点击区域
+		// 增大点击区域
 		layoutVideoSize = (LinearLayout) findViewById(R.id.layoutVideoSize);
 		layoutVideoSize.setOnClickListener(new MyOnClickListener());
 

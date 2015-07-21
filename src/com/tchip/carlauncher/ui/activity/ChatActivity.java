@@ -43,6 +43,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
@@ -52,6 +53,10 @@ import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.navisdk.BNaviEngineManager;
+import com.baidu.navisdk.BaiduNaviManager;
+import com.baidu.navisdk.BaiduNaviManager.OnStartNavigationListener;
+import com.baidu.navisdk.comapi.routeplan.RoutePlanParams.NE_RoutePlan_Mode;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
@@ -112,6 +117,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	private ResideMenu resideMenu;
 
 	private boolean isResideMenuClose = false;
+	private boolean mIsEngineInitSuccess = false;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -140,6 +146,85 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		Button btnToMultimedia = (Button) findViewById(R.id.btnToMultimedia);
 		btnToMultimedia.setOnClickListener(this);
+
+		// 导航实例
+		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
+				mNaviEngineInitListener, lbsAuthManagerListener);
+	}
+
+	private String getSdcardDir() {
+		if (Environment.getExternalStorageState().equalsIgnoreCase(
+				Environment.MEDIA_MOUNTED)) {
+			return Environment.getExternalStorageDirectory().toString();
+		}
+		return null;
+	}
+
+	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
+		public void engineInitSuccess() {
+			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
+			mIsEngineInitSuccess = true;
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Success!");
+			}
+		}
+
+		public void engineInitStart() {
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Start!");
+			}
+		}
+
+		public void engineInitFail() {
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Fail!");
+			}
+		}
+
+	};
+
+	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
+
+		@Override
+		public void onAuthResult(int status, String msg) {
+			String str = null;
+			if (0 == status) {
+				str = "key校验成功!";
+			} else {
+				str = "key校验失败, " + msg;
+			}
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, str);
+			}
+		}
+
+	};
+
+	/**
+	 * 启动GPS导航. 前置条件：导航引擎初始化成功
+	 */
+	private void launchNavigator(double startLatitude, double startLongitude,
+			String startName, double endLatitude, double endLongitude,
+			String endName) {
+		BaiduNaviManager.getInstance().launchNavigator(this, startLatitude,
+				startLongitude, startName, endLatitude, endLongitude, endName,
+				NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
+				true, // 真实导航
+				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略
+				new OnStartNavigationListener() { // 跳转监听
+
+					@Override
+					public void onJumpToNavigator(Bundle configParams) {
+						Intent intent = new Intent(ChatActivity.this,
+								BNavigatorActivity.class);
+						intent.putExtras(configParams);
+						startActivity(intent);
+					}
+
+					@Override
+					public void onJumpToDownloader() {
+					}
+				});
 	}
 
 	/**
@@ -447,6 +532,9 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 									mEndSearch.geocode(new GeoCodeOption()
 											.city(endCityStr)
 											.address(endPoiStr));
+									String strAnswer = "正在导航:"
+											+ endPoiStr;
+									tvAnswer.setText(strAnswer);
 
 								} else if ("app".equals(strService)) {
 									// 打开百度地图 "operation": "LAUNCH",
@@ -924,23 +1012,26 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				// 目的地
 				endLat = mEndLatLng.latitude;
 				endLng = mEndLatLng.longitude;
-				LatLng startLatLng = new LatLng(startLat, startLng);
-				LatLng endLatLng = new LatLng(endLat, endLng);
-				// 构建 导航参数
-				// TODO
-//				NaviPara para = new NaviPara();
-//				para.startPoint = startLatLng;
-//				para.startName = "从这里开始";
-//				para.endPoint = endLatLng;
-//				para.endName = "到这里结束";
+				// LatLng startLatLng = new LatLng(startLat, startLng);
+				// LatLng endLatLng = new LatLng(endLat, endLng);
 
-				
-//				try {
-//					BaiduMapNavigation.openBaiduMapNavi(para,
-//							getApplicationContext());
-//				} catch (BaiduMapAppNotSupportNaviException e) {
-//					e.printStackTrace();
-//				}
+				// 启动自写地图
+				launchNavigator(startLat, startLng, "当前位置", endLat, endLng,
+						result.getAddress());
+
+				// 构建 导航参数
+				// NaviPara para = new NaviPara();
+				// para.startPoint = startLatLng;
+				// para.startName = "从这里开始";
+				// para.endPoint = endLatLng;
+				// para.endName = "到这里结束";
+
+				// try {
+				// BaiduMapNavigation.openBaiduMapNavi(para,
+				// getApplicationContext());
+				// } catch (BaiduMapAppNotSupportNaviException e) {
+				// e.printStackTrace();
+				// }
 			}
 		}
 

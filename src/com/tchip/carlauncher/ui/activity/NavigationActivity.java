@@ -95,6 +95,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private NaviResultAdapter naviResultAdapter;
 
 	private boolean mIsEngineInitSuccess = false;
+	private boolean isResultListShow = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -176,7 +177,12 @@ public class NavigationActivity extends FragmentActivity implements
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.btnToNearFromResult:
-				finish();
+				if (isResultListShow) {
+					isResultListShow = false;
+					listResult.setVisibility(View.GONE);
+				} else {
+					finish();
+				}
 				break;
 
 			case R.id.btnNavi:
@@ -296,6 +302,8 @@ public class NavigationActivity extends FragmentActivity implements
 
 			naviResultAdapter = new NaviResultAdapter(getApplicationContext(),
 					naviArray);
+			listResult.setVisibility(View.VISIBLE);
+			isResultListShow = true;
 			listResult.setAdapter(naviResultAdapter);
 
 			listResult
@@ -304,18 +312,8 @@ public class NavigationActivity extends FragmentActivity implements
 						public void onItemClick(
 								android.widget.AdapterView<?> parent,
 								android.view.View view, int position, long id) {
-							// TODO:隐藏ListView,开始导航
+							// 开始导航
 							// listResult.setVisibility(View.GONE);
-							Toast.makeText(
-									getApplicationContext(),
-									position
-											+ ": Lat:"
-											+ naviArray.get(position)
-													.getLatitude()
-											+ "-Lng:"
-											+ naviArray.get(position)
-													.getLongitude(),
-									Toast.LENGTH_SHORT).show();
 							if (mIsEngineInitSuccess) {
 								launchNavigator(mLatLng.latitude,
 										mLatLng.longitude, "当前位置", naviArray
@@ -324,8 +322,9 @@ public class NavigationActivity extends FragmentActivity implements
 										naviArray.get(position).getName());
 							} else {
 								// 未成功初始化
+								if(Constant.isDebug){
 								Toast.makeText(getApplicationContext(),
-										"未成功初始化", Toast.LENGTH_SHORT).show();
+										"未成功初始化", Toast.LENGTH_SHORT).show();}
 							}
 						}
 					});
