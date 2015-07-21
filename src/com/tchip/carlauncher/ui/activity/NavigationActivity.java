@@ -2,7 +2,6 @@ package com.tchip.carlauncher.ui.activity;
 
 import java.util.ArrayList;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
+import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -57,16 +57,11 @@ import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.adapter.NaviResultAdapter;
-import com.tchip.carlauncher.adapter.WiFiInfoAdapter;
 import com.tchip.carlauncher.model.NaviResultInfo;
-import com.tchip.carlauncher.model.WifiInfo;
-import com.tchip.carlauncher.ui.activity.WifiListActivity.refreshWifiThread;
-import com.tchip.carlauncher.ui.dialog.WifiPswDialog;
-import com.tchip.carlauncher.ui.dialog.WifiPswDialog.OnCustomDialogListener;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
-import com.tchip.carlauncher.view.ButtonFloat;
 
+import com.baidu.navisdk.BNaviEngineManager;
 import com.baidu.navisdk.BaiduNaviManager;
 import com.baidu.navisdk.BaiduNaviManager.OnStartNavigationListener;
 import com.baidu.navisdk.comapi.routeplan.RoutePlanParams.NE_RoutePlan_Mode;
@@ -98,6 +93,8 @@ public class NavigationActivity extends FragmentActivity implements
 	private ListView listResult;
 	private ArrayList<NaviResultInfo> naviArray;
 	private NaviResultAdapter naviResultAdapter;
+
+	private boolean mIsEngineInitSuccess = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -141,6 +138,9 @@ public class NavigationActivity extends FragmentActivity implements
 
 		Button btnToNearFromResult = (Button) findViewById(R.id.btnToNearFromResult);
 		btnToNearFromResult.setOnClickListener(new MyOnClickListener());
+
+		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
+				mNaviEngineInitListener, lbsAuthManagerListener);
 	}
 
 	private void initialLayout() {
@@ -208,6 +208,14 @@ public class NavigationActivity extends FragmentActivity implements
 		mPoiSearch.destroy();
 		mSuggestionSearch.destroy();
 		super.onDestroy();
+	}
+
+	private String getSdcardDir() {
+		if (Environment.getExternalStorageState().equalsIgnoreCase(
+				Environment.MEDIA_MOUNTED)) {
+			return Environment.getExternalStorageDirectory().toString();
+		}
+		return null;
 	}
 
 	@Override
@@ -298,6 +306,17 @@ public class NavigationActivity extends FragmentActivity implements
 											+ naviArray.get(position)
 													.getLongitude(),
 									Toast.LENGTH_SHORT).show();
+							if (mIsEngineInitSuccess) {
+								launchNavigator(mLatLng.latitude,
+										mLatLng.longitude, "当前位置", naviArray
+												.get(position).getLatitude(),
+										naviArray.get(position).getLongitude(),
+										naviArray.get(position).getName());
+							} else {
+								// 未成功初始化
+								Toast.makeText(getApplicationContext(),
+										"未成功初始化", Toast.LENGTH_SHORT).show();
+							}
 						}
 					});
 
@@ -316,28 +335,68 @@ public class NavigationActivity extends FragmentActivity implements
 					.show();
 		}
 	}
-	
-	
+
+	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
+		public void engineInitSuccess() {
+			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
+			mIsEngineInitSuccess = true;
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Success!");
+			}
+		}
+
+		public void engineInitStart() {
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Start!");
+			}
+		}
+
+		public void engineInitFail() {
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Fail!");
+			}
+		}
+
+	};
+
+	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
+
+		@Override
+		public void onAuthResult(int status, String msg) {
+			String str = null;
+			if (0 == status) {
+				str = "key校验成功!";
+			} else {
+				str = "key校验失败, " + msg;
+			}
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, str);
+			}
+		}
+
+	};
+
 	/**
 	 * 启动GPS导航. 前置条件：导航引擎初始化成功
 	 */
-	private void launchNavigator(){
-		//这里给出一个起终点示例，实际应用中可以通过POI检索、外部POI来源等方式获取起终点坐标
-		BaiduNaviManager.getInstance().launchNavigator(this,
-				40.05087, 116.30142,"百度大厦", 
-		        39.90882, 116.39750,"北京天安门",
-				NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, 		 //算路方式
-				true, 									   		 //真实导航
-				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, //在离线策略
-				new OnStartNavigationListener() {				 //跳转监听
-					
+	private void launchNavigator(double startLatitude, double startLongitude,
+			String startName, double endLatitude, double endLongitude,
+			String endName) {
+		BaiduNaviManager.getInstance().launchNavigator(this, startLatitude,
+				startLongitude, startName, endLatitude, endLongitude, endName,
+				NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
+				true, // 真实导航
+				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略
+				new OnStartNavigationListener() { // 跳转监听
+
 					@Override
 					public void onJumpToNavigator(Bundle configParams) {
-						Intent intent = new Intent(NavigationActivity.this, BNavigatorActivity.class);
+						Intent intent = new Intent(NavigationActivity.this,
+								BNavigatorActivity.class);
 						intent.putExtras(configParams);
-				        startActivity(intent);
+						startActivity(intent);
 					}
-					
+
 					@Override
 					public void onJumpToDownloader() {
 					}
@@ -349,14 +408,12 @@ public class NavigationActivity extends FragmentActivity implements
 			Toast.makeText(NavigationActivity.this, "抱歉，未找到结果",
 					Toast.LENGTH_SHORT).show();
 		} else {
-			// TODO：点击地图上搜索结果气球
-			double haha = result.getLocation().latitude;
-			String name = result.getName();
-			long distance;
-
-			Toast.makeText(NavigationActivity.this,
-					result.getName() + ": " + result.getAddress(),
-					Toast.LENGTH_SHORT).show();
+			// 点击地图上搜索结果气球
+			if (Constant.isDebug) {
+				Toast.makeText(NavigationActivity.this,
+						result.getName() + ": " + result.getAddress(),
+						Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 

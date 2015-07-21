@@ -189,7 +189,8 @@ public class WeatherUtil {
 				|| weather.equals("中到大雨") || weather.equals("大到暴雨")
 				|| weather.equals("暴雨到大暴雨") || weather.equals("大暴雨到特大暴雨")
 				|| weather.equals("多云转雨") || weather.equals("多云转大雨")
-				|| weather.equals("雨转多云")) {
+				|| weather.equals("雨转多云") || weather.equals("小雨转暴雨")
+				|| weather.equals("小雨转中雨")|| weather.equals("小雨转大雨")) {
 			return WEATHER_TYPE.RAIN;
 		} else if (weather.equals("雪") || weather.equals("阵雪")
 				|| weather.equals("小雪") || weather.equals("中雪")

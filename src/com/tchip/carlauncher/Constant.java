@@ -53,6 +53,12 @@ public interface Constant {
 			.getExternalStorageDirectory().getPath() + "/Route/";
 
 	/**
+	 * SDcard Path
+	 */
+	public static final String SD_CARD_PATH = Environment
+			.getExternalStorageDirectory().getPath();
+	
+	/**
 	 * 字体目录
 	 */
 	public static final String FONT_PATH = "fonts/";
