@@ -262,6 +262,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >

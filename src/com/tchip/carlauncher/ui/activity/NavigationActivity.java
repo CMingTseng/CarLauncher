@@ -22,10 +22,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.mapapi.map.BaiduMap;
@@ -82,7 +82,8 @@ public class NavigationActivity extends FragmentActivity implements
 	private LatLng mLatLng;
 
 	private EditText etNaviWhere;
-	private RelativeLayout layoutTitle;
+	private LinearLayout layoutNaviVoice, layoutNearAdvice;
+	private RelativeLayout layoutNear;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -96,6 +97,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private boolean mIsEngineInitSuccess = false;
 	private boolean isResultListShow = false;
+	private boolean isNearLayoutShow = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -149,8 +151,31 @@ public class NavigationActivity extends FragmentActivity implements
 		Button btnNavi = (Button) findViewById(R.id.btnNavi);
 		btnNavi.setOnClickListener(new MyOnClickListener());
 
-		layoutTitle = (RelativeLayout) findViewById(R.id.layoutTitle);
-		layoutTitle.setOnClickListener(new MyOnClickListener());
+		layoutNaviVoice = (LinearLayout) findViewById(R.id.layoutNaviVoice);
+		layoutNaviVoice.setOnClickListener(new MyOnClickListener());
+
+		layoutNear = (RelativeLayout) findViewById(R.id.layoutNear);
+		layoutNear.setOnClickListener(new MyOnClickListener());
+
+		// 周边搜索
+		layoutNearAdvice = (LinearLayout) findViewById(R.id.layoutNearAdvice);
+		RelativeLayout layoutNearOilStation = (RelativeLayout) findViewById(R.id.layoutNearOilStation);
+		layoutNearOilStation.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutNearParking = (RelativeLayout) findViewById(R.id.layoutNearParking);
+		layoutNearParking.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutNear4s = (RelativeLayout) findViewById(R.id.layoutNear4s);
+		layoutNear4s.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutNearBank = (RelativeLayout) findViewById(R.id.layoutNearBank);
+		layoutNearBank.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutShop = (RelativeLayout) findViewById(R.id.layoutShop);
+		layoutShop.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutNearHotel = (RelativeLayout) findViewById(R.id.layoutNearHotel);
+		layoutNearHotel.setOnClickListener(new MyOnClickListener());
 
 		listResult = (ListView) findViewById(R.id.listResult);
 
@@ -160,7 +185,7 @@ public class NavigationActivity extends FragmentActivity implements
 		int count = mMapView.getChildCount();
 		for (int i = 0; i < count; i++) {
 			View child = mMapView.getChildAt(i);
-			if (child instanceof ImageView || child instanceof ZoomControls) {
+			if (child instanceof ImageView) {
 				child.setVisibility(View.INVISIBLE);
 			}
 		}
@@ -177,7 +202,10 @@ public class NavigationActivity extends FragmentActivity implements
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.btnToNearFromResult:
-				if (isResultListShow) {
+				if (isNearLayoutShow) {
+					isNearLayoutShow = false;
+					layoutNearAdvice.setVisibility(View.GONE);
+				} else if (isResultListShow) {
 					isResultListShow = false;
 					listResult.setVisibility(View.GONE);
 				} else {
@@ -195,18 +223,73 @@ public class NavigationActivity extends FragmentActivity implements
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(intent);
 				} else {
+					isNearLayoutShow = false;
+					layoutNearAdvice.setVisibility(View.GONE);
+
 					startSearchPlace(strCommand);
 				}
 				break;
 
-			case R.id.layoutTitle:
+			case R.id.layoutNaviVoice:
+				isNearLayoutShow = false;
+				layoutNearAdvice.setVisibility(View.GONE);
+
 				startVoiceUnderstand();
+				break;
+
+			case R.id.layoutNear:
+				showOrHideLayoutNear();
+				break;
+
+			case R.id.layoutNearOilStation:
+				searchNear("加油站");
+				break;
+
+			case R.id.layoutNearParking:
+				searchNear("停车场");
+				break;
+
+			case R.id.layoutNear4s:
+				searchNear("4S");
+				break;
+
+			case R.id.layoutNearBank:
+				searchNear("ATM");
+				break;
+
+			case R.id.layoutShop:
+				searchNear("超市");
+				break;
+
+			case R.id.layoutNearHotel:
+				searchNear("酒店");
 				break;
 
 			default:
 				break;
 			}
 		}
+	}
+
+	private void searchNear(String content) {
+		isNearLayoutShow = false;
+		layoutNearAdvice.setVisibility(View.GONE);
+
+		startSearchPlace(content);
+	}
+
+	/**
+	 * 显示或隐藏周边搜索
+	 */
+	private void showOrHideLayoutNear() {
+		if (isNearLayoutShow) {
+			isNearLayoutShow = false;
+			layoutNearAdvice.setVisibility(View.GONE);
+		} else {
+			layoutNearAdvice.setVisibility(View.VISIBLE);
+			isNearLayoutShow = true;
+		}
+
 	}
 
 	@Override
@@ -322,9 +405,7 @@ public class NavigationActivity extends FragmentActivity implements
 										naviArray.get(position).getName());
 							} else {
 								// 未成功初始化
-								if(Constant.isDebug){
-								Toast.makeText(getApplicationContext(),
-										"未成功初始化", Toast.LENGTH_SHORT).show();}
+								Log.e(Constant.TAG, "Initlal fail");
 							}
 						}
 					});
@@ -374,9 +455,9 @@ public class NavigationActivity extends FragmentActivity implements
 		public void onAuthResult(int status, String msg) {
 			String str = null;
 			if (0 == status) {
-				str = "key校验成功!";
+				str = "key auth success!";
 			} else {
-				str = "key校验失败, " + msg;
+				str = "key auth error:, " + msg;
 			}
 			if (Constant.isDebug) {
 				Log.v(Constant.TAG, str);
@@ -417,12 +498,17 @@ public class NavigationActivity extends FragmentActivity implements
 			Toast.makeText(NavigationActivity.this, "抱歉，未找到结果",
 					Toast.LENGTH_SHORT).show();
 		} else {
-			// 点击地图上搜索结果气球
-			if (Constant.isDebug) {
-				Toast.makeText(NavigationActivity.this,
-						result.getName() + ": " + result.getAddress(),
-						Toast.LENGTH_SHORT).show();
+			// 点击地图上搜索结果气球进入导航
+
+			if (mIsEngineInitSuccess) {
+				launchNavigator(mLatLng.latitude, mLatLng.longitude, "当前位置",
+						result.getLocation().latitude,
+						result.getLocation().longitude, result.getAddress());
+			} else {
+				// 未成功初始化
+				Log.e(Constant.TAG, "点击气球：未成功初始化");
 			}
+
 		}
 	}
 
