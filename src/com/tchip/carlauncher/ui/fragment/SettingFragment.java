@@ -204,8 +204,7 @@ public class SettingFragment extends Fragment {
 				// android.provider.Settings.ACTION_DATE_SETTINGS));
 
 				ComponentName componentImage = new ComponentName(
-						"com.android.settings",
-						"com.android.settings.Settings");
+						"com.android.settings", "com.android.settings.Settings");
 				Intent intentImage = new Intent();
 				intentImage.setComponent(componentImage);
 				startActivity(intentImage);

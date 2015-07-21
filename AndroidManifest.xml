@@ -237,6 +237,9 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.BNavigatorActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.FmTransmitActivity"
+            android:screenOrientation="landscape" />
 
         <receiver android:name="com.tchip.carlauncher.model.PowerStateChangeReceiver" >
             <intent-filter>

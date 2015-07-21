@@ -158,7 +158,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private LinearLayout layoutVideoSize, layoutVideoTime, layoutVideoLock,
 			layoutVideoMute, layoutVideoRecord, layoutVideoCamera,
-			layoutVideoRecordSmall, layoutVideoCameraSmall,layoutVideoLockSmall;
+			layoutVideoRecordSmall, layoutVideoCameraSmall,
+			layoutVideoLockSmall;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -280,10 +281,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		layoutVideoRecordSmall = (LinearLayout) findViewById(R.id.layoutVideoRecordSmall);
 		layoutVideoRecordSmall.setOnClickListener(new MyOnClickListener());
-		
+
 		layoutVideoCameraSmall = (LinearLayout) findViewById(R.id.layoutVideoCameraSmall);
 		layoutVideoCameraSmall.setOnClickListener(new MyOnClickListener());
-		
+
 		layoutVideoLockSmall = (LinearLayout) findViewById(R.id.layoutVideoLockSmall);
 		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
 
@@ -379,6 +380,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 行驶轨迹
 		ImageView imageRouteTrack = (ImageView) findViewById(R.id.imageRouteTrack);
 		imageRouteTrack.setOnClickListener(new MyOnClickListener());
+
+		// FM发射
+		ImageView imageFmTransmit = (ImageView) findViewById(R.id.imageFmTransmit);
+		imageFmTransmit.setOnClickListener(new MyOnClickListener());
 
 		// 路径规划（摄像头，红绿灯）
 		ImageView imageRoutePlan = (ImageView) findViewById(R.id.imageRoutePlan);
@@ -874,6 +879,14 @@ public class MainActivity extends Activity implements TachographCallback,
 				Intent intentRoutePlan = new Intent(MainActivity.this,
 						RoutePlanActivity.class);
 				startActivity(intentRoutePlan);
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
+				break;
+
+			case R.id.imageFmTransmit:
+				Intent intentFmTransmit = new Intent(MainActivity.this,
+						FmTransmitActivity.class);
+				startActivity(intentFmTransmit);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
 				break;

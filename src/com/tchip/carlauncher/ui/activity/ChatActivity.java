@@ -47,7 +47,6 @@ import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
-import com.baidu.mapapi.navi.NaviPara;
 import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
