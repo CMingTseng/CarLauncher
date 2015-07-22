@@ -1418,26 +1418,42 @@ public class MainActivity extends Activity implements TachographCallback,
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
 
 				} else {
-					// 提示用户清理空间，删除较旧的视频（加锁）
-					String strStorageFull = "空间不足，将清理加锁视频";
-					startSpeak(strStorageFull);
-					Toast.makeText(getApplicationContext(), strStorageFull,
-							Toast.LENGTH_SHORT).show();
 					int oldestVideoId = videoDb.getOldestVideoId();
-					String oldestVideoName = videoDb
-							.getVideNameById(oldestVideoId);
-					File f = new File(sdcardPath + "tachograph/"
-							+ oldestVideoName.split("_")[0] + File.separator
-							+ oldestVideoName);
-					if (f.exists() && f.isFile()) {
-						f.delete();
-						if (Constant.isDebug) {
-							Log.d(Constant.TAG,
-									"Delete Old Lock Video:" + f.getName());
+					if (oldestVideoId == -1) {
+						/**
+						 * 有一种情况：数据库中无视频信息。导致的原因：
+						 * 1：升级时选Download的话，不会清理USB存储空间，应用数据库被删除； 2：应用被清除数据
+						 * 这种情况下旧视频无法直接删除， 此时如果满存储，需要直接删除
+						 */
+						File file = new File(sdcardPath + "tachograph/");
+						RecursionDeleteFile(file);
+						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
+						if (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
+							// TODO:此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
+							break;
 						}
+					} else {
+						// 提示用户清理空间，删除较旧的视频（加锁）
+						String strStorageFull = "空间不足，将清理加锁视频";
+						startSpeak(strStorageFull);
+						Toast.makeText(getApplicationContext(), strStorageFull,
+								Toast.LENGTH_SHORT).show();
+
+						String oldestVideoName = videoDb
+								.getVideNameById(oldestVideoId);
+						File f = new File(sdcardPath + "tachograph/"
+								+ oldestVideoName.split("_")[0]
+								+ File.separator + oldestVideoName);
+						if (f.exists() && f.isFile()) {
+							f.delete();
+							if (Constant.isDebug) {
+								Log.d(Constant.TAG, "Delete Old Lock Video:"
+										+ f.getName());
+							}
+						}
+						// 删除数据库记录
+						videoDb.deleteDriveVideoById(oldestVideoId);
 					}
-					// 删除数据库记录
-					videoDb.deleteDriveVideoById(oldestVideoId);
 				}
 				// 更新剩余空间
 				sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
@@ -1449,6 +1465,30 @@ public class MainActivity extends Activity implements TachographCallback,
 			 */
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	/**
+	 * 递归删除文件和文件夹
+	 * 
+	 * @param file
+	 *            要删除的根目录
+	 */
+	public static void RecursionDeleteFile(File file) {
+		if (file.isFile()) {
+			file.delete();
+			return;
+		}
+		if (file.isDirectory()) {
+			File[] childFile = file.listFiles();
+			if (childFile == null || childFile.length == 0) {
+				file.delete();
+				return;
+			}
+			for (File f : childFile) {
+				RecursionDeleteFile(f);
+			}
+			file.delete();
 		}
 	}
 
