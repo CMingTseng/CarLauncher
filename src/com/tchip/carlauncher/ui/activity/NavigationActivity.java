@@ -717,6 +717,8 @@ public class NavigationActivity extends FragmentActivity implements
 						}
 					} else {
 						// 识别结果不正确
+						progressVoice.setVisibility(View.GONE);
+						imgVoiceSearch.setVisibility(View.VISIBLE);
 					}
 				}
 			});
@@ -737,7 +739,6 @@ public class NavigationActivity extends FragmentActivity implements
 			// 开始识别
 			imgVoiceSearch.setVisibility(View.GONE);
 			progressVoice.setVisibility(View.VISIBLE);
-
 		}
 
 		@Override

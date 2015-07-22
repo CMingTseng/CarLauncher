@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.NaviHistory;
-import com.tchip.carlauncher.model.WifiInfo;
-import com.tchip.carlauncher.util.WiFiUtil;
+import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class NaviHistoryAdapter extends BaseAdapter {
@@ -21,12 +21,17 @@ public class NaviHistoryAdapter extends BaseAdapter {
 	private LayoutInflater layoutInflater;
 	private Context context;
 
+	private NaviHistoryDbHelper naviDb;
+
 	public NaviHistoryAdapter(Context context, ArrayList<NaviHistory> naviArray) {
 		super();
 		this.context = context;
 		this.naviArray = naviArray;
 		layoutInflater = LayoutInflater.from(context);
 		naviArray = new ArrayList<NaviHistory>();
+
+		naviDb = new NaviHistoryDbHelper(context);
+
 	}
 
 	@Override
@@ -47,10 +52,11 @@ public class NaviHistoryAdapter extends BaseAdapter {
 	class MyViewHolder {
 		ImageView imageSignal;
 		TextView textKey;
+		RelativeLayout layoutDelete;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 
 		final MyViewHolder viewHolder;
 		if (convertView == null) {
@@ -63,14 +69,27 @@ public class NaviHistoryAdapter extends BaseAdapter {
 			viewHolder.textKey = (TextView) convertView
 					.findViewById(R.id.textKey);
 
+			viewHolder.layoutDelete = (RelativeLayout) convertView
+					.findViewById(R.id.layoutDelete);
+
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (MyViewHolder) convertView.getTag();
 		}
-		
+
 		// Key
 		String naviKey = naviArray.get(position).getKey();
 		viewHolder.textKey.setText(naviKey);
+
+		viewHolder.layoutDelete.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// 从数据库中删除
+				naviDb.deleteNaviHistoryById(naviArray.get(position).getId());
+				remove(naviArray.get(position));
+			}
+		});
 
 		return convertView;
 	}

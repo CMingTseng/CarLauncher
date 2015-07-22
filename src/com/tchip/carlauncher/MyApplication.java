@@ -40,9 +40,9 @@ public class MyApplication extends Application {
 		initPath();
 
 		// 流量
-		TrafficDbManager.getInstance(this).setTrafficTotal(0L);
-		TrafficUtils.startRepeatingService(MyApplication.this,
-				TrafficUtils.INTERVAL, TrafficFetchService.class, "");
+		// TrafficDbManager.getInstance(this).setTrafficTotal(0L);
+		// TrafficUtils.startRepeatingService(MyApplication.this,
+		// TrafficUtils.INTERVAL, TrafficFetchService.class, "");
 	}
 
 	private void initPath() {
@@ -89,8 +89,7 @@ public class MyApplication extends Application {
 	public static boolean isPowerConnect = true;
 	public static boolean isFirstLaunch = true;
 	public static boolean isVideoLock = false;
-	
-	
+
 	// 导航实例是否初始化成功
 	public static boolean isNaviInitialSuccess = false;
 
