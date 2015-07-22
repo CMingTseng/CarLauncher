@@ -110,6 +110,15 @@ public class WiFiInfoAdapter extends BaseAdapter {
 			notifyDataSetChanged();
 		}
 
+		// 剔除只有BSSID最后两位不同的同名WiFi
+		for (int i = 0; i < wifiArray.size(); i++) {
+			WifiInfo wifiInfo = wifiArray.get(i);
+			if ( wifiBssid.substring(0, 13) == wifiInfo.getMacAddress()
+							.substring(0, 13)) {
+				wifiArray.remove(position);
+			}
+		}
+
 		return convertView;
 	}
 

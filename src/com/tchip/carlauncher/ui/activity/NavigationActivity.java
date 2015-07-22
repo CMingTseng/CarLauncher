@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.lbsapi.auth.LBSAuthManagerListener;
@@ -81,9 +82,9 @@ public class NavigationActivity extends FragmentActivity implements
 	private double mLatitude, mLongitude;
 	private LatLng mLatLng;
 
-	private EditText etNaviWhere;
-	private LinearLayout layoutNaviVoice, layoutNearAdvice;
-	private RelativeLayout layoutNear;
+	private EditText etHistoryWhere;
+	private LinearLayout layoutNaviVoice, layoutNearAdvice, layoutShowHistory;
+	private RelativeLayout layoutNear, layoutHistory, layoutHistoryBack;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -91,13 +92,16 @@ public class NavigationActivity extends FragmentActivity implements
 	private SpeechUnderstander mSpeechUnderstander;
 	private SharedPreferences preference;
 
-	private ListView listResult;
+	private ListView listResult, listHistory;
 	private ArrayList<NaviResultInfo> naviArray;
 	private NaviResultAdapter naviResultAdapter;
 
 	private boolean mIsEngineInitSuccess = false;
 	private boolean isResultListShow = false;
 	private boolean isNearLayoutShow = false;
+	private boolean isHistoryLayoutShow = false;
+
+	private Button btnHistoryNavi, btnCloseHistory;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,10 +134,10 @@ public class NavigationActivity extends FragmentActivity implements
 		mPoiSearch.setOnGetPoiSearchResultListener(this);
 		mSuggestionSearch = SuggestionSearch.newInstance();
 		mSuggestionSearch.setOnGetSuggestionResultListener(this);
-		keyWorldsView = (AutoCompleteTextView) findViewById(R.id.searchkey);
-		sugAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line);
-		keyWorldsView.setAdapter(sugAdapter);
+		// keyWorldsView = (AutoCompleteTextView) findViewById(R.id.searchkey);
+		// sugAdapter = new ArrayAdapter<String>(this,
+		// android.R.layout.simple_dropdown_item_1line);
+		// keyWorldsView.setAdapter(sugAdapter);
 		// mBaiduMap = ((SupportMapFragment) (getSupportFragmentManager()
 		// .findFragmentById(R.id.map))).getBaiduMap();
 
@@ -147,9 +151,9 @@ public class NavigationActivity extends FragmentActivity implements
 	}
 
 	private void initialLayout() {
-		etNaviWhere = (EditText) findViewById(R.id.etNaviWhere);
-		Button btnNavi = (Button) findViewById(R.id.btnNavi);
-		btnNavi.setOnClickListener(new MyOnClickListener());
+
+		layoutShowHistory = (LinearLayout) findViewById(R.id.layoutShowHistory);
+		layoutShowHistory.setOnClickListener(new MyOnClickListener());
 
 		layoutNaviVoice = (LinearLayout) findViewById(R.id.layoutNaviVoice);
 		layoutNaviVoice.setOnClickListener(new MyOnClickListener());
@@ -181,7 +185,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 		MapView mMapView = (MapView) findViewById(R.id.map);
 
-		// 去掉缩放控件和百度Logo
+		// 去掉百度Logo
 		int count = mMapView.getChildCount();
 		for (int i = 0; i < count; i++) {
 			View child = mMapView.getChildAt(i);
@@ -195,6 +199,20 @@ public class NavigationActivity extends FragmentActivity implements
 		mLatLng = new LatLng(mLatitude, mLongitude);
 		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(mLatLng);
 		mBaiduMap.animateMapStatus(u);
+
+		// 导航搜索历史记录
+		layoutHistory = (RelativeLayout) findViewById(R.id.layoutHistory);
+		layoutHistoryBack = (RelativeLayout) findViewById(R.id.layoutHistoryBack);
+		layoutHistoryBack.setOnClickListener(new MyOnClickListener());
+		btnCloseHistory = (Button) findViewById(R.id.btnCloseHistory);
+		btnCloseHistory.setOnClickListener(new MyOnClickListener());
+
+		etHistoryWhere = (EditText) findViewById(R.id.etHistoryWhere);
+		btnHistoryNavi = (Button) findViewById(R.id.btnHistoryNavi);
+		btnHistoryNavi.setOnClickListener(new MyOnClickListener());
+
+		listHistory = (ListView) findViewById(R.id.listHistory);
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -213,23 +231,6 @@ public class NavigationActivity extends FragmentActivity implements
 				}
 				break;
 
-			case R.id.btnNavi:
-				String strCommand = etNaviWhere.getText().toString();
-				if (Constant.START_TEST_APK.equals(strCommand)) {
-					Log.d(Constant.TAG, "Start Test App");
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setClassName("com.DeviceTest",
-							"com.DeviceTest.DeviceTest");
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
-				} else {
-					isNearLayoutShow = false;
-					layoutNearAdvice.setVisibility(View.GONE);
-
-					startSearchPlace(strCommand);
-				}
-				break;
-
 			case R.id.layoutNaviVoice:
 				isNearLayoutShow = false;
 				layoutNearAdvice.setVisibility(View.GONE);
@@ -237,6 +238,11 @@ public class NavigationActivity extends FragmentActivity implements
 				startVoiceUnderstand();
 				break;
 
+			case R.id.layoutShowHistory:
+				showOrHideLayoutHistory();
+				break;
+
+			// 周边搜索
 			case R.id.layoutNear:
 				showOrHideLayoutNear();
 				break;
@@ -265,6 +271,31 @@ public class NavigationActivity extends FragmentActivity implements
 				searchNear("酒店");
 				break;
 
+			// 历史记录
+			case R.id.layoutHistoryBack:
+			case R.id.btnCloseHistory:
+				showOrHideLayoutHistory();
+				break;
+
+			case R.id.btnHistoryNavi:
+				String strContent = etHistoryWhere.getText().toString();
+				if (strContent.trim().length() > 0 && strContent != null) {
+					if (Constant.START_TEST_APK.equals(strContent)) {
+						Log.d(Constant.TAG, "Start Test App");
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setClassName("com.DeviceTest",
+								"com.DeviceTest.DeviceTest");
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
+					} else {
+						isNearLayoutShow = false;
+						layoutNearAdvice.setVisibility(View.GONE);
+
+						startSearchPlace(strContent);
+					}
+				}
+				break;
+
 			default:
 				break;
 			}
@@ -279,6 +310,19 @@ public class NavigationActivity extends FragmentActivity implements
 	}
 
 	/**
+	 * 显示或隐藏历史记录
+	 */
+	private void showOrHideLayoutHistory() {
+		if (isHistoryLayoutShow) {
+			isHistoryLayoutShow = false;
+			layoutHistory.setVisibility(View.GONE);
+		} else {
+			isHistoryLayoutShow = true;
+			layoutHistory.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
 	 * 显示或隐藏周边搜索
 	 */
 	private void showOrHideLayoutNear() {
@@ -289,7 +333,6 @@ public class NavigationActivity extends FragmentActivity implements
 			layoutNearAdvice.setVisibility(View.VISIBLE);
 			isNearLayoutShow = true;
 		}
-
 	}
 
 	@Override
@@ -642,7 +685,7 @@ public class NavigationActivity extends FragmentActivity implements
 							String strContent = jsonObject.getString("text");
 							if (!TextUtils.isEmpty(text)) {
 								// TODO
-								etNaviWhere.setText(strContent);
+								// etNaviWhere.setText(strContent);
 								startSearchPlace(strContent);
 							}
 						} catch (JSONException e) {
