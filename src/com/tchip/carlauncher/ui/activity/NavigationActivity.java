@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,8 +57,12 @@ import com.iflytek.cloud.SpeechUnderstander;
 import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.adapter.NaviHistoryAdapter;
 import com.tchip.carlauncher.adapter.NaviResultAdapter;
+import com.tchip.carlauncher.model.NaviHistory;
+import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
@@ -73,18 +78,16 @@ public class NavigationActivity extends FragmentActivity implements
 	private PoiSearch mPoiSearch = null;
 	private SuggestionSearch mSuggestionSearch = null;
 	private BaiduMap mBaiduMap = null;
-	/**
-	 * 搜索关键字输入窗口
-	 */
-	private AutoCompleteTextView keyWorldsView = null;
+
 	private ArrayAdapter<String> sugAdapter = null;
 
 	private double mLatitude, mLongitude;
 	private LatLng mLatLng;
 
 	private EditText etHistoryWhere;
-	private LinearLayout layoutNaviVoice, layoutNearAdvice, layoutShowHistory;
-	private RelativeLayout layoutNear, layoutHistory, layoutHistoryBack;
+	private LinearLayout layoutNearAdvice, layoutShowHistory;
+	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
+			layoutHistoryBack, layoutRoadCondition;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -96,12 +99,21 @@ public class NavigationActivity extends FragmentActivity implements
 	private ArrayList<NaviResultInfo> naviArray;
 	private NaviResultAdapter naviResultAdapter;
 
-	private boolean mIsEngineInitSuccess = false;
 	private boolean isResultListShow = false;
 	private boolean isNearLayoutShow = false;
 	private boolean isHistoryLayoutShow = false;
 
+	private boolean isRoadConditionOn = false;
+
 	private Button btnHistoryNavi, btnCloseHistory;
+
+	private NaviHistoryDbHelper naviDb;
+	private NaviHistoryAdapter naviHistoryAdapter;
+	private ArrayList<NaviHistory> naviHistoryArray;
+
+	private ImageView imageRoadCondition, imgVoiceSearch;
+
+	private ProgressBar progressVoice;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +124,8 @@ public class NavigationActivity extends FragmentActivity implements
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_navigation);
+
+		naviDb = new NaviHistoryDbHelper(getApplicationContext());
 
 		audioRecordDialog = new AudioRecordDialog(NavigationActivity.this);
 
@@ -134,20 +148,11 @@ public class NavigationActivity extends FragmentActivity implements
 		mPoiSearch.setOnGetPoiSearchResultListener(this);
 		mSuggestionSearch = SuggestionSearch.newInstance();
 		mSuggestionSearch.setOnGetSuggestionResultListener(this);
-		// keyWorldsView = (AutoCompleteTextView) findViewById(R.id.searchkey);
-		// sugAdapter = new ArrayAdapter<String>(this,
-		// android.R.layout.simple_dropdown_item_1line);
-		// keyWorldsView.setAdapter(sugAdapter);
-		// mBaiduMap = ((SupportMapFragment) (getSupportFragmentManager()
-		// .findFragmentById(R.id.map))).getBaiduMap();
-
-		initialLayout();
 
 		Button btnToNearFromResult = (Button) findViewById(R.id.btnToNearFromResult);
 		btnToNearFromResult.setOnClickListener(new MyOnClickListener());
 
-		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
-				mNaviEngineInitListener, lbsAuthManagerListener);
+		initialLayout();
 	}
 
 	private void initialLayout() {
@@ -155,7 +160,7 @@ public class NavigationActivity extends FragmentActivity implements
 		layoutShowHistory = (LinearLayout) findViewById(R.id.layoutShowHistory);
 		layoutShowHistory.setOnClickListener(new MyOnClickListener());
 
-		layoutNaviVoice = (LinearLayout) findViewById(R.id.layoutNaviVoice);
+		layoutNaviVoice = (RelativeLayout) findViewById(R.id.layoutNaviVoice);
 		layoutNaviVoice.setOnClickListener(new MyOnClickListener());
 
 		layoutNear = (RelativeLayout) findViewById(R.id.layoutNear);
@@ -212,6 +217,16 @@ public class NavigationActivity extends FragmentActivity implements
 		btnHistoryNavi.setOnClickListener(new MyOnClickListener());
 
 		listHistory = (ListView) findViewById(R.id.listHistory);
+
+		// 路况
+		layoutRoadCondition = (RelativeLayout) findViewById(R.id.layoutRoadCondition);
+		layoutRoadCondition.setOnClickListener(new MyOnClickListener());
+
+		imageRoadCondition = (ImageView) findViewById(R.id.imageRoadCondition);
+
+		// 语音识别进度
+		progressVoice = (ProgressBar) findViewById(R.id.progressVoice);
+		imgVoiceSearch = (ImageView) findViewById(R.id.imgVoiceSearch);
 
 	}
 
@@ -296,6 +311,10 @@ public class NavigationActivity extends FragmentActivity implements
 				}
 				break;
 
+			case R.id.layoutRoadCondition:
+				openOrCloseRoadCondition();
+				break;
+
 			default:
 				break;
 			}
@@ -310,15 +329,52 @@ public class NavigationActivity extends FragmentActivity implements
 	}
 
 	/**
+	 * 打开或关闭路况显示
+	 */
+	private void openOrCloseRoadCondition() {
+		if (isRoadConditionOn) {
+			mBaiduMap.setTrafficEnabled(false);
+			isRoadConditionOn = false;
+			imageRoadCondition.setImageDrawable(getResources().getDrawable(
+					R.drawable.main_icon_roadcondition_off));
+		} else {
+			mBaiduMap.setTrafficEnabled(true);
+			isRoadConditionOn = true;
+			imageRoadCondition.setImageDrawable(getResources().getDrawable(
+					R.drawable.main_icon_roadcondition_on));
+		}
+	}
+
+	/**
 	 * 显示或隐藏历史记录
 	 */
 	private void showOrHideLayoutHistory() {
 		if (isHistoryLayoutShow) {
 			isHistoryLayoutShow = false;
+			isResultListShow = false;
 			layoutHistory.setVisibility(View.GONE);
+			listResult.setVisibility(View.GONE);
 		} else {
 			isHistoryLayoutShow = true;
 			layoutHistory.setVisibility(View.VISIBLE);
+			naviHistoryArray = naviDb.getAllNaviHistory();
+
+			naviHistoryAdapter = new NaviHistoryAdapter(
+					getApplicationContext(), naviHistoryArray);
+			listHistory.setAdapter(naviHistoryAdapter);
+
+			listHistory
+					.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> parent,
+								View view, int position, long id) {
+							// 将内容更新到EditText
+							String strHistory = naviHistoryArray.get(position)
+									.getKey();
+							etHistoryWhere.setText(strHistory);
+						}
+					});
 		}
 	}
 
@@ -350,14 +406,6 @@ public class NavigationActivity extends FragmentActivity implements
 		mPoiSearch.destroy();
 		mSuggestionSearch.destroy();
 		super.onDestroy();
-	}
-
-	private String getSdcardDir() {
-		if (Environment.getExternalStorageState().equalsIgnoreCase(
-				Environment.MEDIA_MOUNTED)) {
-			return Environment.getExternalStorageDirectory().toString();
-		}
-		return null;
 	}
 
 	@Override
@@ -392,6 +440,15 @@ public class NavigationActivity extends FragmentActivity implements
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
+				// 存储搜索历史到数据库
+				int existId = naviDb.getNaviIdByKey(where);
+				if (existId != -1) {
+					naviDb.deleteNaviHistoryById(existId);
+				}
+				NaviHistory naviHistory = new NaviHistory(where);
+				naviDb.addNaviHistory(naviHistory);
+				naviHistoryAdapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -439,8 +496,13 @@ public class NavigationActivity extends FragmentActivity implements
 								android.widget.AdapterView<?> parent,
 								android.view.View view, int position, long id) {
 							// 开始导航
-							// listResult.setVisibility(View.GONE);
-							if (mIsEngineInitSuccess) {
+							listResult.setVisibility(View.GONE);
+							isResultListShow = false;
+
+							listHistory.setVisibility(View.GONE);
+							isHistoryLayoutShow = false;
+
+							if (MyApplication.isNaviInitialSuccess) {
 								launchNavigator(mLatLng.latitude,
 										mLatLng.longitude, "当前位置", naviArray
 												.get(position).getLatitude(),
@@ -468,46 +530,6 @@ public class NavigationActivity extends FragmentActivity implements
 					.show();
 		}
 	}
-
-	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
-		public void engineInitSuccess() {
-			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
-			mIsEngineInitSuccess = true;
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Success!");
-			}
-		}
-
-		public void engineInitStart() {
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Start!");
-			}
-		}
-
-		public void engineInitFail() {
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Fail!");
-			}
-		}
-
-	};
-
-	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
-
-		@Override
-		public void onAuthResult(int status, String msg) {
-			String str = null;
-			if (0 == status) {
-				str = "key auth success!";
-			} else {
-				str = "key auth error:, " + msg;
-			}
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, str);
-			}
-		}
-
-	};
 
 	/**
 	 * 启动GPS导航. 前置条件：导航引擎初始化成功
@@ -543,7 +565,7 @@ public class NavigationActivity extends FragmentActivity implements
 		} else {
 			// 点击地图上搜索结果气球进入导航
 
-			if (mIsEngineInitSuccess) {
+			if (MyApplication.isNaviInitialSuccess) {
 				launchNavigator(mLatLng.latitude, mLatLng.longitude, "当前位置",
 						result.getLocation().latitude,
 						result.getLocation().longitude, result.getAddress());
@@ -684,9 +706,11 @@ public class NavigationActivity extends FragmentActivity implements
 							jsonObject = new JSONObject(text);
 							String strContent = jsonObject.getString("text");
 							if (!TextUtils.isEmpty(text)) {
-								// TODO
-								// etNaviWhere.setText(strContent);
-								startSearchPlace(strContent);
+								progressVoice.setVisibility(View.GONE);
+								imgVoiceSearch.setVisibility(View.VISIBLE);
+
+								etHistoryWhere.setText(strContent);
+								// startSearchPlace(strContent);
 							}
 						} catch (JSONException e) {
 
@@ -710,6 +734,10 @@ public class NavigationActivity extends FragmentActivity implements
 			// showTip("onEndOfSpeech");
 			audioRecordDialog.dismissDialog();
 
+			// 开始识别
+			imgVoiceSearch.setVisibility(View.GONE);
+			progressVoice.setVisibility(View.VISIBLE);
+
 		}
 
 		@Override
@@ -721,6 +749,10 @@ public class NavigationActivity extends FragmentActivity implements
 		@Override
 		public void onError(SpeechError error) {
 			// showTip("onError Code：" + error.getErrorCode());
+
+			imgVoiceSearch.setVisibility(View.VISIBLE);
+			progressVoice.setVisibility(View.GONE);
+			Log.e(Constant.TAG, "SpeechError:" + error.getErrorCode());
 		}
 
 		@Override

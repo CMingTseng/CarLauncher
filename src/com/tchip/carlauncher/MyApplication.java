@@ -89,6 +89,10 @@ public class MyApplication extends Application {
 	public static boolean isPowerConnect = true;
 	public static boolean isFirstLaunch = true;
 	public static boolean isVideoLock = false;
+	
+	
+	// 导航实例是否初始化成功
+	public static boolean isNaviInitialSuccess = false;
 
 	// Recent Play Music
 	// public void savePlayList(String nowPlayMusic) {

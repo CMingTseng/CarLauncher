@@ -2,6 +2,7 @@ package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
 
+import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -18,6 +19,8 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.navisdk.BNaviEngineManager;
+import com.baidu.navisdk.BaiduNaviManager;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -55,6 +58,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -182,6 +186,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 录像
 		setupRecordDefaults();
 		setupRecordViews();
+		
+		// 导航实例
+		initialNaviInstance();
 	}
 
 	/**
@@ -448,6 +455,62 @@ public class MainActivity extends Activity implements TachographCallback,
 		intent.putExtra("content", content);
 		startService(intent);
 	}
+	
+	/**
+	 * 初始化导航实例
+	 */
+	private void initialNaviInstance(){
+		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
+				mNaviEngineInitListener, lbsAuthManagerListener);
+	}
+	
+	private String getSdcardDir() {
+		if (Environment.getExternalStorageState().equalsIgnoreCase(
+				Environment.MEDIA_MOUNTED)) {
+			return Environment.getExternalStorageDirectory().toString();
+		}
+		return null;
+	}
+	
+	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
+		public void engineInitSuccess() {
+			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
+			MyApplication.isNaviInitialSuccess = true;
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Success!");
+			}
+		}
+
+		public void engineInitStart() {
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Start!");
+			}
+		}
+
+		public void engineInitFail() {
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, "Initial Fail!");
+			}
+		}
+
+	};
+	
+	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
+
+		@Override
+		public void onAuthResult(int status, String msg) {
+			String str = null;
+			if (0 == status) {
+				str = "key auth success!";
+			} else {
+				str = "key auth error:, " + msg;
+			}
+			if (Constant.isDebug) {
+				Log.v(Constant.TAG, str);
+			}
+		}
+
+	};
 
 	/**
 	 * 初始化录像按钮
