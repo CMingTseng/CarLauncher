@@ -47,7 +47,7 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 		} else if ("android.intent.action.ACTION_POWER_DISCONNECTED"
 				.equals(intent.getAction())) {
 			MyApplication.isPowerConnect = false;
-			String strHintDisconnect = "已断开电源，正在保存数据。";
+			String strHintDisconnect = "电源断开";
 			Toast.makeText(context, strHintDisconnect, Toast.LENGTH_SHORT)
 					.show();
 			Intent intentSpeak = new Intent(context, SpeakService.class);

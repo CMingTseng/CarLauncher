@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -39,15 +40,25 @@ import com.baidu.mapapi.overlayutil.PoiOverlay;
 import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.baidu.mapapi.search.poi.PoiSortType;
+import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.baidu.mapapi.search.sug.SuggestionResult.SuggestionInfo;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
+import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -64,6 +75,7 @@ import com.tchip.carlauncher.adapter.NaviResultAdapter;
 import com.tchip.carlauncher.model.NaviHistory;
 import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
+import com.tchip.carlauncher.ui.activity.RoutePlanActivity.MyOnGetGeoCoderResultListener;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
@@ -85,15 +97,16 @@ public class NavigationActivity extends FragmentActivity implements
 	private LatLng mLatLng;
 
 	private EditText etHistoryWhere;
-	private LinearLayout layoutNearAdvice, layoutShowHistory;
+	private LinearLayout layoutNearAdvice, layoutShowHistory,
+			layoutStarContent, layoutStarEditWork, layoutStarEditHome;
 	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
-			layoutHistoryBack, layoutRoadCondition;
+			layoutHistoryBack, layoutRoadCondition, layoutStar,
+			layoutStarNaviWork, layoutStarNaviHome;
 
 	private AudioRecordDialog audioRecordDialog;
 
 	// 语义理解对象（语音到语义）。
 	private SpeechUnderstander mSpeechUnderstander;
-	private SharedPreferences preference;
 
 	private ListView listResult, listHistory;
 	private ArrayList<NaviResultInfo> naviArray;
@@ -102,8 +115,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private boolean isResultListShow = false;
 	private boolean isNearLayoutShow = false;
 	private boolean isHistoryLayoutShow = false;
-
-	private boolean isRoadConditionOn = false;
+	private boolean isStarPannelShow = false;
 
 	private Button btnHistoryNavi, btnCloseHistory;
 
@@ -114,6 +126,12 @@ public class NavigationActivity extends FragmentActivity implements
 	private ImageView imageRoadCondition, imgVoiceSearch;
 
 	private ProgressBar progressVoice;
+
+	// 百度地图地址转经纬度
+	private GeoCoder naviGeoCoder = null;
+
+	private SharedPreferences preference;
+	private Editor editor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -138,6 +156,7 @@ public class NavigationActivity extends FragmentActivity implements
 		// 获取当前经纬度
 		preference = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
+		editor = preference.edit();
 		mLatitude = Double
 				.parseDouble(preference.getString("latitude", "0.00"));
 		mLongitude = Double.parseDouble(preference.getString("longitude",
@@ -228,6 +247,24 @@ public class NavigationActivity extends FragmentActivity implements
 		progressVoice = (ProgressBar) findViewById(R.id.progressVoice);
 		imgVoiceSearch = (ImageView) findViewById(R.id.imgVoiceSearch);
 
+		// 收藏
+		layoutStarContent = (LinearLayout) findViewById(R.id.layoutStarContent);
+
+		layoutStar = (RelativeLayout) findViewById(R.id.layoutStar);
+		layoutStar.setOnClickListener(new MyOnClickListener());
+
+		layoutStarNaviWork = (RelativeLayout) findViewById(R.id.layoutStarNaviWork);
+		layoutStarNaviWork.setOnClickListener(new MyOnClickListener());
+
+		layoutStarEditWork = (LinearLayout) findViewById(R.id.layoutStarEditWork);
+		layoutStarEditWork.setOnClickListener(new MyOnClickListener());
+
+		layoutStarEditHome = (LinearLayout) findViewById(R.id.layoutStarEditHome);
+		layoutStarEditHome.setOnClickListener(new MyOnClickListener());
+
+		layoutStarNaviHome = (RelativeLayout) findViewById(R.id.layoutStarNaviHome);
+		layoutStarNaviHome.setOnClickListener(new MyOnClickListener());
+
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -235,12 +272,10 @@ public class NavigationActivity extends FragmentActivity implements
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.btnToNearFromResult:
-				if (isNearLayoutShow) {
-					isNearLayoutShow = false;
-					layoutNearAdvice.setVisibility(View.GONE);
-				} else if (isResultListShow) {
-					isResultListShow = false;
-					listResult.setVisibility(View.GONE);
+				if (isStarPannelShow || isNearLayoutShow || isResultListShow) {
+					setStarPannelVisibility(false);
+					setLayoutNearVisibility(false);
+					setLayoutHistoryVisibility(false);
 				} else {
 					finish();
 				}
@@ -254,12 +289,12 @@ public class NavigationActivity extends FragmentActivity implements
 				break;
 
 			case R.id.layoutShowHistory:
-				showOrHideLayoutHistory();
+				setLayoutHistoryVisibility(!isHistoryLayoutShow);
 				break;
 
 			// 周边搜索
 			case R.id.layoutNear:
-				showOrHideLayoutNear();
+				setLayoutNearVisibility(!isNearLayoutShow);
 				break;
 
 			case R.id.layoutNearOilStation:
@@ -289,7 +324,7 @@ public class NavigationActivity extends FragmentActivity implements
 			// 历史记录
 			case R.id.layoutHistoryBack:
 			case R.id.btnCloseHistory:
-				showOrHideLayoutHistory();
+				setLayoutHistoryVisibility(false);
 				break;
 
 			case R.id.btnHistoryNavi:
@@ -306,7 +341,14 @@ public class NavigationActivity extends FragmentActivity implements
 						isNearLayoutShow = false;
 						layoutNearAdvice.setVisibility(View.GONE);
 
-						startSearchPlace(strContent);
+						startSearchPlace(strContent, mLatLng);
+
+						// naviGeoCoder = GeoCoder.newInstance();
+						// naviGeoCoder
+						// .setOnGetGeoCodeResultListener(new
+						// MyOnGetGeoCoderResultListener());
+						// naviGeoCoder.geocode(new GeoCodeOption().city("")
+						// .address(strContent));
 					}
 				}
 				break;
@@ -315,31 +357,127 @@ public class NavigationActivity extends FragmentActivity implements
 				openOrCloseRoadCondition();
 				break;
 
+			case R.id.layoutStar:
+				setStarPannelVisibility(!isStarPannelShow);
+				break;
+
+			case R.id.layoutStarNaviWork:
+				// 导航到公司
+				setStarPannelVisibility(false);
+
+				if (preference.getBoolean("workSet", false)) {
+					String workAddress = preference
+							.getString("workAddress", "");
+
+					double workLat = Double.parseDouble(preference.getString(
+							"workLat", "0.00"));
+					double workLng = Double.parseDouble(preference.getString(
+							"workLng", "0.00"));
+
+					if (MyApplication.isNaviInitialSuccess) {
+						launchNavigator(mLatLng.latitude, mLatLng.longitude,
+								"当前位置", workLat, workLng, workAddress);
+					} else {
+						// 未成功初始化
+						Log.e(Constant.TAG, "Initlal fail");
+					}
+				} else {
+					// 未设置，跳转到设置界面
+					Toast.makeText(getApplicationContext(), "请设置公司地址",
+							Toast.LENGTH_SHORT).show();
+					setStarPlace(StarType.TYPE_WORK);
+				}
+				break;
+
+			case R.id.layoutStarEditWork:
+				setStarPlace(StarType.TYPE_WORK);
+				break;
+
+			case R.id.layoutStarNaviHome:
+				// 导航回家
+				setStarPannelVisibility(false);
+				if (preference.getBoolean("homeSet", false)) {
+					String homeAddress = preference
+							.getString("homeAddress", "");
+
+					double homeLat = Double.parseDouble(preference.getString(
+							"homeLat", "0.00"));
+					double homeLng = Double.parseDouble(preference.getString(
+							"homeLng", "0.00"));
+
+					if (MyApplication.isNaviInitialSuccess) {
+						launchNavigator(mLatLng.latitude, mLatLng.longitude,
+								"当前位置", homeLat, homeLng, homeAddress);
+					} else {
+						// 未成功初始化
+						Log.e(Constant.TAG, "Initlal fail");
+					}
+				} else {
+					// 未设置，跳转到设置界面
+					Toast.makeText(getApplicationContext(), "请设置家庭地址",
+							Toast.LENGTH_SHORT).show();
+					setStarPlace(StarType.TYPE_HOME);
+				}
+				break;
+
+			case R.id.layoutStarEditHome:
+				setStarPlace(StarType.TYPE_HOME);
+				break;
+
 			default:
 				break;
 			}
 		}
 	}
 
+	enum StarType {
+		TYPE_HOME, TYPE_WORK
+	}
+
+	private void setStarPlace(StarType type) {
+		Intent intent = new Intent(NavigationActivity.this,
+				SetStarPlaceActivity.class);
+		if (type == StarType.TYPE_HOME) {
+			intent.putExtra("starType", 1);
+		} else if (type == StarType.TYPE_WORK) {
+			intent.putExtra("starType", 0);
+		}
+		startActivity(intent);
+	}
+
 	private void searchNear(String content) {
 		isNearLayoutShow = false;
 		layoutNearAdvice.setVisibility(View.GONE);
 
-		startSearchPlace(content);
+		startSearchPlace(content, mLatLng);
+	}
+
+	/**
+	 * 显示或关闭收藏界面
+	 */
+	private void setStarPannelVisibility(boolean isShow) {
+		if (isShow) {
+			setLayoutNearVisibility(false);
+			setLayoutHistoryVisibility(false);
+
+			isStarPannelShow = true;
+			layoutStarContent.setVisibility(View.VISIBLE);
+		} else {
+			isStarPannelShow = false;
+			layoutStarContent.setVisibility(View.GONE);
+		}
 	}
 
 	/**
 	 * 打开或关闭路况显示
 	 */
 	private void openOrCloseRoadCondition() {
-		if (isRoadConditionOn) {
+		if (mBaiduMap.isTrafficEnabled()) {
 			mBaiduMap.setTrafficEnabled(false);
-			isRoadConditionOn = false;
 			imageRoadCondition.setImageDrawable(getResources().getDrawable(
 					R.drawable.main_icon_roadcondition_off));
 		} else {
 			mBaiduMap.setTrafficEnabled(true);
-			isRoadConditionOn = true;
 			imageRoadCondition.setImageDrawable(getResources().getDrawable(
 					R.drawable.main_icon_roadcondition_on));
 		}
@@ -348,13 +486,12 @@ public class NavigationActivity extends FragmentActivity implements
 	/**
 	 * 显示或隐藏历史记录
 	 */
-	private void showOrHideLayoutHistory() {
-		if (isHistoryLayoutShow) {
-			isHistoryLayoutShow = false;
-			isResultListShow = false;
-			layoutHistory.setVisibility(View.GONE);
-			listResult.setVisibility(View.GONE);
-		} else {
+	private void setLayoutHistoryVisibility(boolean isShow) {
+		if (isShow) {
+
+			setStarPannelVisibility(false);
+			setLayoutNearVisibility(false);
+
 			isHistoryLayoutShow = true;
 			layoutHistory.setVisibility(View.VISIBLE);
 			naviHistoryArray = naviDb.getAllNaviHistory();
@@ -375,19 +512,29 @@ public class NavigationActivity extends FragmentActivity implements
 							etHistoryWhere.setText(strHistory);
 						}
 					});
+
+		} else {
+			isHistoryLayoutShow = false;
+			isResultListShow = false;
+			layoutHistory.setVisibility(View.GONE);
+			listResult.setVisibility(View.GONE);
 		}
+
 	}
 
 	/**
 	 * 显示或隐藏周边搜索
 	 */
-	private void showOrHideLayoutNear() {
-		if (isNearLayoutShow) {
-			isNearLayoutShow = false;
-			layoutNearAdvice.setVisibility(View.GONE);
-		} else {
+	private void setLayoutNearVisibility(boolean isShow) {
+		if (isShow) {
+			setStarPannelVisibility(false);
+			setLayoutHistoryVisibility(false);
+
 			layoutNearAdvice.setVisibility(View.VISIBLE);
 			isNearLayoutShow = true;
+		} else {
+			isNearLayoutShow = false;
+			layoutNearAdvice.setVisibility(View.GONE);
 		}
 	}
 
@@ -418,12 +565,11 @@ public class NavigationActivity extends FragmentActivity implements
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
-	public void startSearchPlace(String where) {
+	public void startSearchPlace(String where, LatLng centerLatLng) {
 		if (where != null && where.trim().length() > 0) {
 			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
 				NetworkUtil.noNetworkHint(getApplicationContext());
 			} else {
-
 				Toast.makeText(getApplicationContext(), "正在查找" + where,
 						Toast.LENGTH_SHORT).show();
 				// mPoiSearch.searchInCity((new
@@ -432,14 +578,25 @@ public class NavigationActivity extends FragmentActivity implements
 
 				PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
 				poiOption.keyword(where);
-				poiOption.location(mLatLng);
-				poiOption.radius(15 * 1000);
-				poiOption.pageNum(0);
+				poiOption.location(centerLatLng);
+				poiOption.radius(15 * 1000 * 1000); // 检索半径，单位:m
+				poiOption.sortType(PoiSortType.distance_from_near_to_far); // 按距离排序
+				// poiOption.sortType(PoiSortType.comprehensive); // 按综合排序
+				poiOption.pageNum(0); // 分页编号
+				poiOption.pageCapacity(10); // 设置每页容量，默认为每页10条
 				try {
 					mPoiSearch.searchNearby(poiOption); // mPoiSearch.searchInCity(arg0);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
+				// mSuggestionSearch = SuggestionSearch.newInstance();
+				// mSuggestionSearch.setOnGetSuggestionResultListener(new
+				// MyOnGetSuggestionResultListener());
+				// SuggestionSearchOption option = new SuggestionSearchOption();
+				// option.keyword(where);
+				// option.city("北京");
+				// mSuggestionSearch.requestSuggestion(option);
 
 				// 存储搜索历史到数据库
 				int existId = naviDb.getNaviIdByKey(where);
@@ -450,6 +607,64 @@ public class NavigationActivity extends FragmentActivity implements
 				naviDb.addNaviHistory(naviHistory);
 				naviHistoryAdapter.notifyDataSetChanged();
 			}
+		}
+	}
+
+	class MyOnGetSuggestionResultListener implements
+			OnGetSuggestionResultListener {
+
+		@Override
+		public void onGetSuggestionResult(SuggestionResult result) {
+			if (result == null || result.getAllSuggestions() == null) {
+				return;
+			}
+			sugAdapter.clear();
+			// for (SuggestionResult.SuggestionInfo info :
+			// res.getAllSuggestions()) {
+			// if (info.key != null){
+			// sugAdapter.add(info.key);
+
+			naviArray = new ArrayList<NaviResultInfo>();
+			for (int i = 1; i < result.getAllSuggestions().size(); i++) {
+				// PoiInfo poiInfo = result.getAllPoi().get(i);
+				//
+				SuggestionInfo info = result.getAllSuggestions().get(i);
+				double distance = DistanceUtil.getDistance(mLatLng, info.pt);
+
+				NaviResultInfo naviResultInfo = new NaviResultInfo(i, info.key,
+						info.city + info.district, info.pt.longitude,
+						info.pt.latitude, distance);
+				naviArray.add(naviResultInfo);
+			}
+
+			naviResultAdapter = new NaviResultAdapter(getApplicationContext(),
+					naviArray);
+
+			listResult.setVisibility(View.VISIBLE);
+			isResultListShow = true;
+			listResult.setAdapter(naviResultAdapter);
+			// }
+			// sugAdapter.notifyDataSetChanged();
+		}
+
+	}
+
+	/**
+	 * 地址转经纬度监听
+	 */
+	class MyOnGetGeoCoderResultListener implements OnGetGeoCoderResultListener {
+
+		@Override
+		public void onGetGeoCodeResult(GeoCodeResult result) {
+			LatLng thisLatLng = result.getLocation();
+			if (thisLatLng != null) {
+				startSearchPlace(etHistoryWhere.getText().toString(),
+						thisLatLng);
+			}
+		}
+
+		@Override
+		public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
 		}
 	}
 
@@ -676,9 +891,17 @@ public class NavigationActivity extends FragmentActivity implements
 		// 设置语音后端点
 		mSpeechUnderstander.setParameter(SpeechConstant.VAD_EOS,
 				preference.getString("voiceEos", "1000"));
-		// 设置标点符号
+		// 设置是否有标点符号
 		mSpeechUnderstander.setParameter(SpeechConstant.ASR_PTT,
-				preference.getString("understander_punc_preference", "1"));
+				preference.getString("understander_punc_preference", "0"));
+		// 语音输入超时时间,单位：ms，默认60000
+		// mSpeechUnderstander.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT,"");
+
+		// 识别句子级多候选结果，如asr_nbest=3,注：设置多候选会影响性能，响应时间延迟200ms左右
+		mSpeechUnderstander.setParameter(SpeechConstant.ASR_NBEST, "1");
+
+		// 网络连接超时时间,单位：ms，默认20000
+		mSpeechUnderstander.setParameter(SpeechConstant.NET_TIMEOUT, "5000");
 		// 设置音频保存路径
 		mSpeechUnderstander.setParameter(
 				SpeechConstant.ASR_AUDIO_PATH,

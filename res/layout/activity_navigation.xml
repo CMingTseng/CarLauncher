@@ -63,7 +63,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                
                 android:layout_weight="1"
                 android:background="#000000" >
 
@@ -108,8 +107,8 @@
             <RelativeLayout
                 android:id="@+id/layoutStar"
                 android:layout_width="0dp"
-                android:layout_marginRight="5dp"
                 android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/ui_back_arrow_bg_black" >
 
@@ -367,9 +366,121 @@
         android:id="@+id/listResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_below="@id/layoutTop"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="#000000" />
+        android:background="#000000"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/layoutStarContent"
+        android:layout_width="530dp"
+        android:layout_height="175dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/layoutTop"
+        android:layout_marginRight="5dp"
+        android:background="#000000"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+       <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/layoutStarEditWork"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ui_back_arrow_bg_grey"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:src="@drawable/ui_navi_star_edit" >
+                </ImageView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutStarNaviWork"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_toLeftOf="@id/layoutStarEditWork"
+                android:background="@drawable/ui_back_arrow_bg_grey" >
+
+                <ImageView
+                    android:id="@+id/imageStarWork"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="28dp"
+                    android:src="@drawable/ui_navi_star_work" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_toRightOf="@id/imageStarWork"
+                    android:text="公司"
+                    android:textColor="#ffffff"
+                    android:textSize="28sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/layoutStarEditHome"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ui_back_arrow_bg_grey"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:src="@drawable/ui_navi_star_edit" >
+                </ImageView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutStarNaviHome"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_toLeftOf="@id/layoutStarEditHome"
+                android:background="@drawable/ui_back_arrow_bg_grey" >
+
+                <ImageView
+                    android:id="@+id/imageStarHome"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="28dp"
+                    android:src="@drawable/ui_navi_star_home" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_toRightOf="@id/imageStarHome"
+                    android:text="家"
+                    android:textColor="#ffffff"
+                    android:textSize="28sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

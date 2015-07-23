@@ -240,6 +240,9 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.FmTransmitActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.SetStarPlaceActivity"
+            android:screenOrientation="landscape" />
 
         <receiver android:name="com.tchip.carlauncher.model.PowerStateChangeReceiver" >
             <intent-filter>

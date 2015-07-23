@@ -1490,9 +1490,11 @@ public class MainActivity extends Activity implements TachographCallback,
 						 */
 						File file = new File(sdcardPath + "tachograph/");
 						RecursionDeleteFile(file);
+						Log.e(Constant.TAG, "!!! Delete tachograph/ Directory");
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						if (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
 							// TODO:此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
+							Log.e(Constant.TAG, "Storage is full...");
 							break;
 						}
 					} else {

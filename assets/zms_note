@@ -31,6 +31,18 @@ ldpi-低分辨率		320*240		QVGA		36*36		120		=0.75
 ============================================================================
 SharedPreferences-CarLauncher
 	----------------------------------------
+	[*Using]导航常用收藏
+	(boolean)homeSet	是否设置家的地址
+	(String)homeAddress 家的地址
+	(String)homeLat		家Lat
+	(String)homeLng		家Lng
+	
+	(boolean)workSet	是否设置公司地址
+	(String)workAddress 公司地址
+	(String)workLat		公司Lat
+	(String)workLng		公司Lng
+
+	----------------------------------------
 	[*Not Use] China Weather
 	(Long)cityCode		中国天气网城市代码(格式：9位数字)
 	(String)tempHigh	当日最高温度
