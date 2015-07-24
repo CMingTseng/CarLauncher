@@ -19,7 +19,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/surfaceCamera"
-        android:background="@drawable/ui_main_weather_bg"
+        android:background="@drawable/ui_back_arrow_bg_grey"
         android:orientation="vertical" >
 
         <TextClock
@@ -236,6 +236,30 @@
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
+            
+             <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
+                    android:id="@+id/imageMusicOL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_musicol" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="在线音乐"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
@@ -344,7 +368,7 @@
                     android:id="@+id/imageFmTransmit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_route_plan" />
+                    android:src="@drawable/ui_main_fm" />
 
                 <TextView
                     android:layout_width="wrap_content"
