@@ -10,11 +10,13 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
 import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
@@ -171,6 +173,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setBackgroundDrawable(null);
 		setContentView(R.layout.activity_main);
 
 		sharedPreferences = getSharedPreferences(
@@ -186,9 +189,23 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 录像
 		setupRecordDefaults();
 		setupRecordViews();
-		
+
 		// 导航实例
 		initialNaviInstance();
+
+		// 开机尝试连接WiFi
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		if (wifiManager.isWifiEnabled() && (!mWifi.isConnectedOrConnecting())) {
+			Intent intentWiFi = new Intent(getApplicationContext(),
+					ConnectWifiService.class);
+			startService(intentWiFi);
+			// Log.v(Constant.TAG, "Start Connect Wifi...");
+		} else {
+			// Log.v(Constant.TAG, "Wifi is Connected or disable");
+		}
 	}
 
 	/**
@@ -200,8 +217,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intentLocation);
 
 		// 亮度自动调整服务
-		Intent intentBrightness = new Intent(this, BrightAdjustService.class);
-		startService(intentBrightness);
+		if (Constant.hasBrightAdjust) {
+			Intent intentBrightness = new Intent(this,
+					BrightAdjustService.class);
+			startService(intentBrightness);
+		}
 
 		// 轨迹记录服务
 		Intent intentRoute = new Intent(this, RouteRecordService.class);
@@ -211,7 +231,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
 
-		importOfflineMapFromSDCard();
+		// importOfflineMapFromSDCard();
 	}
 
 	private MKOfflineMap mOffline = null;
@@ -368,6 +388,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
 		imageNavi.setOnClickListener(new MyOnClickListener());
 
+		// 在线音乐
+		ImageView imageMusicOL = (ImageView) findViewById(R.id.imageMusicOL);
+		imageMusicOL.setOnClickListener(new MyOnClickListener());
+
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
 		imageMultimedia.setOnClickListener(new MyOnClickListener());
@@ -415,7 +439,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutMap = (RelativeLayout) findViewById(R.id.layoutMap);
 		layoutSetting = (RelativeLayout) findViewById(R.id.layoutSetting);
 		hsvMain = (HorizontalScrollView) findViewById(R.id.hsvMain);
-
+		hsvMain.setDrawingCacheEnabled(true);
 		hsvMain.setOnTouchListener(new View.OnTouchListener() {
 
 			@Override
@@ -455,15 +479,15 @@ public class MainActivity extends Activity implements TachographCallback,
 		intent.putExtra("content", content);
 		startService(intent);
 	}
-	
+
 	/**
 	 * 初始化导航实例
 	 */
-	private void initialNaviInstance(){
+	private void initialNaviInstance() {
 		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
 				mNaviEngineInitListener, lbsAuthManagerListener);
 	}
-	
+
 	private String getSdcardDir() {
 		if (Environment.getExternalStorageState().equalsIgnoreCase(
 				Environment.MEDIA_MOUNTED)) {
@@ -471,7 +495,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		return null;
 	}
-	
+
 	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
 		public void engineInitSuccess() {
 			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
@@ -494,7 +518,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 	};
-	
+
 	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
 
 		@Override
@@ -678,7 +702,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(5000);
 					Message message = new Message();
 					message.what = 1;
 					updateLayoutHandler.sendMessage(message);
@@ -922,6 +946,15 @@ public class MainActivity extends Activity implements TachographCallback,
 						R.anim.zms_translate_up_in);
 				break;
 
+			case R.id.imageMusicOL:
+				ComponentName componentMusic = new ComponentName(
+						"cn.kuwo.kwmusichd",
+						"cn.kuwo.kwmusichd.WelcomeActivity");
+				Intent intentMusic = new Intent();
+				intentMusic.setComponent(componentMusic);
+				startActivity(intentMusic);
+				break;
+
 			case R.id.imageMultimedia:
 				Intent intentMultimedia = new Intent(MainActivity.this,
 						MultimediaActivity.class);
@@ -973,8 +1006,16 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageVoiceChat:
-				Intent intentVoiceChat = new Intent(MainActivity.this,
-						ChatActivity.class);
+				Intent intentVoiceChat;
+				if (Constant.isVoiceXunfei) {
+					// 讯飞语音
+					intentVoiceChat = new Intent(MainActivity.this,
+							ChatActivity.class);
+				} else {
+					// 思必驰语音
+					intentVoiceChat = new Intent(MainActivity.this,
+							ChatAiActivity.class);
+				}
 				startActivity(intentVoiceChat);
 				overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);

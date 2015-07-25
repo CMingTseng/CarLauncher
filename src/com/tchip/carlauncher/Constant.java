@@ -9,12 +9,27 @@ public interface Constant {
 	 * Debug：打印Log
 	 */
 	public static boolean isDebug = true;
-	
+
 	/**
 	 * 是否有拨号短信模块
 	 */
 	public static boolean hasDialer = false;
-	
+
+	/**
+	 * 是否有亮度自动调整功能
+	 */
+	public static boolean hasBrightAdjust = false;
+
+	/**
+	 * 天气界面是否有动画
+	 */
+	public static boolean hasWeatherAnimation = false;
+
+	/**
+	 * 语音模块是否是讯飞：true-讯飞 false-思必驰
+	 */
+	public static boolean isVoiceXunfei = true;
+
 	/**
 	 * 启动测试应用命令
 	 */
@@ -62,7 +77,7 @@ public interface Constant {
 	 */
 	public static final String SD_CARD_PATH = Environment
 			.getExternalStorageDirectory().getPath();
-	
+
 	/**
 	 * 字体目录
 	 */

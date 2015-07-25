@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -77,19 +78,22 @@ public class WeatherActivity extends Activity {
 	}
 
 	private void showWeatherAnimation(WEATHER_TYPE type) {
-		frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
-		switch (type) {
-		case RAIN:
-			WeatherUtil.rainAnimation(getApplicationContext(), frameLayout);
-			break;
-		case SNOW:
-			WeatherUtil.snowAnimation(getApplicationContext(), frameLayout);
-			break;
-		case SUN:
-		case CLOUD:
-		default:
-			WeatherUtil.cloudAnimation(getApplicationContext(), frameLayout);
-			break;
+		if (Constant.hasWeatherAnimation) {
+			frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
+			switch (type) {
+			case RAIN:
+				WeatherUtil.rainAnimation(getApplicationContext(), frameLayout);
+				break;
+			case SNOW:
+				WeatherUtil.snowAnimation(getApplicationContext(), frameLayout);
+				break;
+			case SUN:
+			case CLOUD:
+			default:
+				WeatherUtil
+						.cloudAnimation(getApplicationContext(), frameLayout);
+				break;
+			}
 		}
 	}
 
@@ -149,8 +153,11 @@ public class WeatherActivity extends Activity {
 		textTempRange.setText(day0tmpLow + "~" + day0tmpHigh);
 		textTempRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-		new Titanic().start(textTempRange);
-
+		if (Constant.hasWeatherAnimation) {
+			new Titanic().start(textTempRange);
+		} else {
+			textTempRange.setTextColor(Color.WHITE);
+		}
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
 		textWetLevel.setText("湿度 "
 				+ sharedPreferences.getString("humidity", "55.55%"));

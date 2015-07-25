@@ -2,6 +2,8 @@ package com.tchip.carlauncher.util;
 
 import java.util.List;
 
+import com.tchip.carlauncher.Constant;
+
 import android.content.Context;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -21,13 +23,13 @@ public class WifiAdmin {
 
 	// 定义一个WifiInfo对象
 	private WifiInfo mWifiInfo;
-	
+
 	// 扫描出的网络连接列表
 	private List<ScanResult> mWifiList;
-	
+
 	// 网络连接列表
 	private List<WifiConfiguration> mWifiConfigurations;
-	
+
 	WifiLock mWifiLock;
 
 	public static final int TYPE_NO_PASSWD = 0x11;
@@ -121,6 +123,22 @@ public class WifiAdmin {
 		mWifiManager.startScan();
 		// 得到扫描结果
 		mWifiList = mWifiManager.getScanResults();
+
+		// 剔除只有BSSID最后两位不同的同名WiFi
+		for (int i = 1; i < mWifiList.size(); i++) {
+			String bssidPrefix = mWifiList.get(i).BSSID.substring(0, 12);
+			String wifiName = mWifiList.get(i).SSID;
+			Log.v(Constant.TAG, "bssidPrefix:" + bssidPrefix);
+			for (int j = 0; j < i; j++) {
+				if (bssidPrefix.equals(mWifiList.get(j).BSSID.substring(0, 12))
+						&& wifiName.equals(mWifiList.get(j).SSID)) {
+					Log.e(Constant.TAG,
+							"Remove duplicate wifi:" + mWifiList.get(j).SSID
+									+ ":" + mWifiList.get(j).BSSID);
+					mWifiList.remove(i);
+				}
+			}
+		}
 		// 得到配置好的网络连接
 		mWifiConfigurations = mWifiManager.getConfiguredNetworks();
 	}
@@ -131,6 +149,7 @@ public class WifiAdmin {
 	 * @return
 	 */
 	public List<ScanResult> getWifiList() {
+
 		return mWifiList;
 	}
 
@@ -150,10 +169,20 @@ public class WifiAdmin {
 		return sb;
 	}
 
+	/**
+	 * 本机的Mac地址
+	 * 
+	 * @return
+	 */
 	public String getMacAddress() {
 		return (mWifiInfo == null) ? "NULL" : mWifiInfo.getMacAddress();
 	}
 
+	/**
+	 * 被连接网络的Mac地址
+	 * 
+	 * @return
+	 */
 	public String getBSSID() {
 		return (mWifiInfo == null) ? "NULL" : mWifiInfo.getBSSID();
 	}

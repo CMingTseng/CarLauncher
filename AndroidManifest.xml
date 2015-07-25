@@ -62,10 +62,9 @@
         android:name="com.tchip.carlauncher.MyApplication"
         android:icon="@drawable/ic_launcher"
         android:label="Car Launcher"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
         android:theme="@android:style/Theme.Holo.Light" >
-
-        <!-- android:largeHeap="true" android:hardwareAccelerated="true" -->
-
 
         <!-- 讯飞语音 -->
         <meta-data
