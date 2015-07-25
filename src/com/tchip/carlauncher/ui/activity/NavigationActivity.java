@@ -31,10 +31,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.lbsapi.auth.LBSAuthManagerListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.overlayutil.PoiOverlay;
 import com.baidu.mapapi.search.core.CityInfo;
@@ -75,6 +85,7 @@ import com.tchip.carlauncher.adapter.NaviResultAdapter;
 import com.tchip.carlauncher.model.NaviHistory;
 import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
+import com.tchip.carlauncher.ui.activity.MainActivity.MyLocationListener;
 import com.tchip.carlauncher.ui.activity.RoutePlanActivity.MyOnGetGeoCoderResultListener;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
@@ -129,9 +140,12 @@ public class NavigationActivity extends FragmentActivity implements
 
 	// 百度地图地址转经纬度
 	private GeoCoder naviGeoCoder = null;
+	private MapView mMapView;
+	private LocationClient mLocationClient;
 
 	private SharedPreferences preference;
 	private Editor editor;
+	private String naviDesFromVoice = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -146,12 +160,6 @@ public class NavigationActivity extends FragmentActivity implements
 		naviDb = new NaviHistoryDbHelper(getApplicationContext());
 
 		audioRecordDialog = new AudioRecordDialog(NavigationActivity.this);
-
-		// 接收搜索内容
-		// Bundle extras = getIntent().getExtras();
-		// if (extras != null) {
-		// findContent = extras.getString("findType");
-		// }
 
 		// 获取当前经纬度
 		preference = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
@@ -172,6 +180,18 @@ public class NavigationActivity extends FragmentActivity implements
 		btnToNearFromResult.setOnClickListener(new MyOnClickListener());
 
 		initialLayout();
+
+		// 接收来自语音的导航目的地
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			naviDesFromVoice = extras.getString("destionation");
+			if (naviDesFromVoice.trim().length() > 0
+					&& naviDesFromVoice != null) {
+				setLayoutHistoryVisibility(true);
+				setDestinationText(naviDesFromVoice);
+				startSearchPlace(naviDesFromVoice, mLatLng, false);
+			}
+		}
 	}
 
 	private void initialLayout() {
@@ -207,7 +227,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 		listResult = (ListView) findViewById(R.id.listResult);
 
-		MapView mMapView = (MapView) findViewById(R.id.map);
+		mMapView = (MapView) findViewById(R.id.map);
 
 		// 去掉百度Logo
 		int count = mMapView.getChildCount();
@@ -219,10 +239,42 @@ public class NavigationActivity extends FragmentActivity implements
 		}
 		mBaiduMap = mMapView.getMap();
 
+		// 开启定位图层
+		mBaiduMap.setMyLocationEnabled(true);
+		// 自定义Maker
+		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+				.fromResource(R.drawable.icon_arrow_up);
+
+		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
+		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
+		mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+				currentMode, true, null));
+		InitLocation(
+				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+				"bd09ll", 5000, true);
+
 		// 初始化地图位置
 		mLatLng = new LatLng(mLatitude, mLongitude);
 		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(mLatLng);
 		mBaiduMap.animateMapStatus(u);
+
+		// 设置地图放大级别 0-19
+		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14);
+		mBaiduMap.animateMapStatus(msu);
+
+		mBaiduMap.setOnMapClickListener(new OnMapClickListener() {
+
+			@Override
+			public boolean onMapPoiClick(MapPoi mapPoi) {
+				setStarPannelVisibility(false);
+				return false;
+			}
+
+			@Override
+			public void onMapClick(LatLng latLng) {
+				setStarPannelVisibility(false);
+			}
+		});
 
 		// 导航搜索历史记录
 		layoutHistory = (RelativeLayout) findViewById(R.id.layoutHistory);
@@ -265,6 +317,57 @@ public class NavigationActivity extends FragmentActivity implements
 		layoutStarNaviHome = (RelativeLayout) findViewById(R.id.layoutStarNaviHome);
 		layoutStarNaviHome.setOnClickListener(new MyOnClickListener());
 
+	}
+
+	/**
+	 * 
+	 * @param tempMode
+	 *            LocationMode.Hight_Accuracy-高精度
+	 *            LocationMode.Battery_Saving-低功耗
+	 *            LocationMode.Device_Sensors-仅设备
+	 * @param tempCoor
+	 *            gcj02-国测局加密经纬度坐标 bd09ll-百度加密经纬度坐标 bd09-百度加密墨卡托坐标
+	 * @param frequence
+	 *            MIN_SCAN_SPAN = 1000; MIN_SCAN_SPAN_NETWORK = 3000;
+	 * @param isNeedAddress
+	 *            是否需要地址
+	 */
+	private void InitLocation(
+			com.baidu.location.LocationClientOption.LocationMode tempMode,
+			String tempCoor, int frequence, boolean isNeedAddress) {
+
+		mLocationClient = new LocationClient(this.getApplicationContext());
+		mLocationClient.registerLocationListener(new MyLocationListener());
+		// mGeofenceClient = new GeofenceClient(getApplicationContext());
+
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(tempMode);
+		option.setCoorType(tempCoor);
+		option.setScanSpan(frequence);
+		option.setOpenGps(true);// 打开gps
+		mLocationClient.setLocOption(option);
+
+		mLocationClient.start();
+	}
+
+	class MyLocationListener implements BDLocationListener {
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			// MapView 销毁后不在处理新接收的位置
+			if (location == null || mMapView == null)
+				return;
+			MyLocationData locData = new MyLocationData.Builder()
+					.accuracy(0)
+					// accuracy设为0去掉蓝色精度圈，RAW:.accuracy(location.getRadius())
+					// 此处设置开发者获取到的方向信息，顺时针0-360
+					.direction(100).latitude(location.getLatitude())
+					.longitude(location.getLongitude()).build();
+			mBaiduMap.setMyLocationData(locData);
+		}
+
+		public void onReceivePoi(BDLocation poiLocation) {
+		}
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -341,7 +444,7 @@ public class NavigationActivity extends FragmentActivity implements
 						isNearLayoutShow = false;
 						layoutNearAdvice.setVisibility(View.GONE);
 
-						startSearchPlace(strContent, mLatLng);
+						startSearchPlace(strContent, mLatLng, false);
 
 						// naviGeoCoder = GeoCoder.newInstance();
 						// naviGeoCoder
@@ -443,13 +546,14 @@ public class NavigationActivity extends FragmentActivity implements
 			intent.putExtra("starType", 0);
 		}
 		startActivity(intent);
+		setStarPannelVisibility(false);
 	}
 
 	private void searchNear(String content) {
 		isNearLayoutShow = false;
 		layoutNearAdvice.setVisibility(View.GONE);
 
-		startSearchPlace(content, mLatLng);
+		startSearchPlace(content, mLatLng, true);
 	}
 
 	/**
@@ -540,11 +644,13 @@ public class NavigationActivity extends FragmentActivity implements
 
 	@Override
 	protected void onPause() {
+		mMapView.onPause();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
+		mMapView.onResume();
 		super.onResume();
 	}
 
@@ -552,6 +658,13 @@ public class NavigationActivity extends FragmentActivity implements
 	protected void onDestroy() {
 		mPoiSearch.destroy();
 		mSuggestionSearch.destroy();
+
+		// 退出时销毁定位
+		mLocationClient.stop();
+		// 关闭定位图层
+		mBaiduMap.setMyLocationEnabled(false);
+		mMapView.onDestroy();
+		mMapView = null;
 		super.onDestroy();
 	}
 
@@ -565,7 +678,8 @@ public class NavigationActivity extends FragmentActivity implements
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
-	public void startSearchPlace(String where, LatLng centerLatLng) {
+	public void startSearchPlace(String where, LatLng centerLatLng,
+			boolean isNear) {
 		if (where != null && where.trim().length() > 0) {
 			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
 				NetworkUtil.noNetworkHint(getApplicationContext());
@@ -598,14 +712,16 @@ public class NavigationActivity extends FragmentActivity implements
 				// option.city("北京");
 				// mSuggestionSearch.requestSuggestion(option);
 
-				// 存储搜索历史到数据库
-				int existId = naviDb.getNaviIdByKey(where);
-				if (existId != -1) {
-					naviDb.deleteNaviHistoryById(existId);
+				// 存储搜索历史到数据库,周边不需要
+				if (!isNear) {
+					int existId = naviDb.getNaviIdByKey(where);
+					if (existId != -1) {
+						naviDb.deleteNaviHistoryById(existId);
+					}
+					NaviHistory naviHistory = new NaviHistory(where);
+					naviDb.addNaviHistory(naviHistory);
+					naviHistoryAdapter.notifyDataSetChanged();
 				}
-				NaviHistory naviHistory = new NaviHistory(where);
-				naviDb.addNaviHistory(naviHistory);
-				naviHistoryAdapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -659,7 +775,7 @@ public class NavigationActivity extends FragmentActivity implements
 			LatLng thisLatLng = result.getLocation();
 			if (thisLatLng != null) {
 				startSearchPlace(etHistoryWhere.getText().toString(),
-						thisLatLng);
+						thisLatLng, false);
 			}
 		}
 
@@ -911,6 +1027,27 @@ public class NavigationActivity extends FragmentActivity implements
 	}
 
 	/**
+	 * 设置目的地EditText的内容
+	 */
+	private void setDestinationText(String text) {
+		if (!TextUtils.isEmpty(text)) {
+			progressVoice.setVisibility(View.GONE);
+			imgVoiceSearch.setVisibility(View.VISIBLE);
+			if (text.startsWith("导航去") || text.startsWith("导航到")
+					|| text.startsWith("我要去")) {
+				text = text.substring(3, text.length());
+			} else if (text.startsWith("导航")) {
+				text = text.substring(2, text.length());
+			} else if (text.startsWith("去") || text.startsWith("到")) {
+				text = text.substring(1, text.length());
+			}
+
+			etHistoryWhere.setText(text);
+			// startSearchPlace(strContent);
+		}
+	}
+
+	/**
 	 * 识别回调。
 	 */
 	private SpeechUnderstanderListener mRecognizerListener = new SpeechUnderstanderListener() {
@@ -928,13 +1065,7 @@ public class NavigationActivity extends FragmentActivity implements
 							JSONObject jsonObject;
 							jsonObject = new JSONObject(text);
 							String strContent = jsonObject.getString("text");
-							if (!TextUtils.isEmpty(text)) {
-								progressVoice.setVisibility(View.GONE);
-								imgVoiceSearch.setVisibility(View.VISIBLE);
-
-								etHistoryWhere.setText(strContent);
-								// startSearchPlace(strContent);
-							}
+							setDestinationText(strContent);
 						} catch (JSONException e) {
 
 						}

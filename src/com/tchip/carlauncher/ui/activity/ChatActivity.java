@@ -115,7 +115,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	// 左侧帮助侧边栏
 	private ResideMenu resideMenu;
 
-	private boolean isResideMenuClose = false;
+	private boolean isResideMenuClose = true;
 	private boolean mIsEngineInitSuccess = false;
 
 	@SuppressLint("ShowToast")
@@ -145,59 +145,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		Button btnToMultimedia = (Button) findViewById(R.id.btnToMultimedia);
 		btnToMultimedia.setOnClickListener(this);
-
-		// 导航实例
-		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
-				mNaviEngineInitListener, lbsAuthManagerListener);
 	}
-
-	private String getSdcardDir() {
-		if (Environment.getExternalStorageState().equalsIgnoreCase(
-				Environment.MEDIA_MOUNTED)) {
-			return Environment.getExternalStorageDirectory().toString();
-		}
-		return null;
-	}
-
-	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
-		public void engineInitSuccess() {
-			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
-			mIsEngineInitSuccess = true;
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Success!");
-			}
-		}
-
-		public void engineInitStart() {
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Start!");
-			}
-		}
-
-		public void engineInitFail() {
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Fail!");
-			}
-		}
-
-	};
-
-	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
-
-		@Override
-		public void onAuthResult(int status, String msg) {
-			String str = null;
-			if (0 == status) {
-				str = "key校验成功!";
-			} else {
-				str = "key校验失败, " + msg;
-			}
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, str);
-			}
-		}
-
-	};
 
 	/**
 	 * 启动GPS导航. 前置条件：导航引擎初始化成功
@@ -250,7 +198,11 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			backToMain();
+			if (isResideMenuClose) {
+				backToMain();
+			} else {
+				resideMenu.closeMenu();
+			}
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
@@ -396,17 +348,17 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				// 设置参数
 				setParam();
 
-				if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
-					mSpeechUnderstander.stopUnderstanding(); // 停止录音
+				// if (mSpeechUnderstander.isUnderstanding()) { // 开始前检查状态
+				mSpeechUnderstander.stopUnderstanding(); // 停止录音
+				// } else {
+				ret = mSpeechUnderstander
+						.startUnderstanding(mRecognizerListener);
+				if (ret != 0) {
+					// 语义理解失败,错误码:ret
 				} else {
-					ret = mSpeechUnderstander
-							.startUnderstanding(mRecognizerListener);
-					if (ret != 0) {
-						// 语义理解失败,错误码:ret
-					} else {
-						// showTip(getString(R.string.text_begin));
-					}
+					// showTip(getString(R.string.text_begin));
 				}
+				// }
 			}
 			break;
 		// 停止语音理解
@@ -522,18 +474,27 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 											.getJSONObject("slots")
 											.getJSONObject("endLoc")
 											.getString("city");
-									if ("CURRENT_CITY".equals(endCityStr))
+									if ("CURRENT_CITY".equals(endCityStr)) {
 										endCityStr = mSharedPreferences
 												.getString("cityName", "未知");
-									mEndSearch = GeoCoder.newInstance();
-									mEndSearch
-											.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
-									mEndSearch.geocode(new GeoCodeOption()
-											.city(endCityStr)
-											.address(endPoiStr));
-									String strAnswer = "正在导航:"
-											+ endPoiStr;
+									}
+									// mEndSearch = GeoCoder.newInstance();
+									// mEndSearch
+									// .setOnGetGeoCodeResultListener(new
+									// MyOnGetGeoCoderResultListener());
+									// mEndSearch.geocode(new GeoCodeOption()
+									// .city(endCityStr)
+									// .address(endPoiStr));
+									String strAnswer = "正在导航:" + endPoiStr;
 									tvAnswer.setText(strAnswer);
+
+									// 跳转到自写导航界面，不使用GeoCoder
+									Intent intentNavi = new Intent(
+											ChatActivity.this,
+											NavigationActivity.class);
+									intentNavi.putExtra("destionation",
+											endPoiStr);
+									startActivity(intentNavi);
 
 								} else if ("app".equals(strService)) {
 									// 打开百度地图 "operation": "LAUNCH",

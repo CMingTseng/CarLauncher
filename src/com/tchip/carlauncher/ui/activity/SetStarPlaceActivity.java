@@ -1,5 +1,9 @@
 package com.tchip.carlauncher.ui.activity;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -10,10 +14,13 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.ui.activity.NavigationActivity.MyLocationListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -52,6 +59,8 @@ public class SetStarPlaceActivity extends Activity {
 	 * 0-Work;1-Home
 	 */
 	private int starType = 0;
+	
+	private LocationClient mLocationClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +108,24 @@ public class SetStarPlaceActivity extends Activity {
 		locLatLng = new LatLng(mLatitude, mLongitude);
 		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(locLatLng);
 		baiduMap.animateMapStatus(u);
+
+		// 设置地图放大级别 0-19
+		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(17);
+		baiduMap.animateMapStatus(msu);
+		
+		// 开启定位图层
+		baiduMap.setMyLocationEnabled(true);
+		// 自定义Maker
+		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+				.fromResource(R.drawable.icon_arrow_up);
+
+		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
+		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
+		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+				currentMode, true, null));
+		InitLocation(
+				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+				"bd09ll", 5000, true);
 
 		baiduMap.setOnMapClickListener(new OnMapClickListener() {
 
@@ -173,6 +200,57 @@ public class SetStarPlaceActivity extends Activity {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @param tempMode
+	 *            LocationMode.Hight_Accuracy-高精度
+	 *            LocationMode.Battery_Saving-低功耗
+	 *            LocationMode.Device_Sensors-仅设备
+	 * @param tempCoor
+	 *            gcj02-国测局加密经纬度坐标 bd09ll-百度加密经纬度坐标 bd09-百度加密墨卡托坐标
+	 * @param frequence
+	 *            MIN_SCAN_SPAN = 1000; MIN_SCAN_SPAN_NETWORK = 3000;
+	 * @param isNeedAddress
+	 *            是否需要地址
+	 */
+	private void InitLocation(
+			com.baidu.location.LocationClientOption.LocationMode tempMode,
+			String tempCoor, int frequence, boolean isNeedAddress) {
+
+		mLocationClient = new LocationClient(this.getApplicationContext());
+		mLocationClient.registerLocationListener(new MyLocationListener());
+		// mGeofenceClient = new GeofenceClient(getApplicationContext());
+
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(tempMode);
+		option.setCoorType(tempCoor);
+		option.setScanSpan(frequence);
+		option.setOpenGps(true);// 打开gps
+		mLocationClient.setLocOption(option);
+
+		mLocationClient.start();
+	}
+
+	class MyLocationListener implements BDLocationListener {
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			// MapView 销毁后不在处理新接收的位置
+			if (location == null || mapView == null)
+				return;
+			MyLocationData locData = new MyLocationData.Builder()
+					.accuracy(0)
+					// accuracy设为0去掉蓝色精度圈，RAW:.accuracy(location.getRadius())
+					// 此处设置开发者获取到的方向信息，顺时针0-360
+					.direction(100).latitude(location.getLatitude())
+					.longitude(location.getLongitude()).build();
+			baiduMap.setMyLocationData(locData);
+		}
+
+		public void onReceivePoi(BDLocation poiLocation) {
+		}
+	}
 
 	private void addMakerToMap(LatLng latLng) {
 		baiduMap.clear();
@@ -182,6 +260,40 @@ public class SetStarPlaceActivity extends Activity {
 		OverlayOptions ooA = new MarkerOptions().position(latLng)
 				.icon(bitmapDescriptor).zIndex(9).draggable(true);
 		baiduMap.addOverlay(ooA);
+	}
+	
+	@Override
+	protected void onPause() {
+		mapView.onPause();
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		mapView.onResume();
+		super.onResume();
+	}
+
+	@Override
+	protected void onDestroy() {
+
+		// 退出时销毁定位
+		mLocationClient.stop();
+		// 关闭定位图层
+		baiduMap.setMyLocationEnabled(false);
+		mapView.onDestroy();
+		mapView = null;
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 }
