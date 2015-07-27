@@ -1,6 +1,12 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
@@ -29,7 +35,7 @@ public class FmTransmitActivity extends Activity {
 	 * 
 	 * 1：开 0：关
 	 */
-	private File EnableFm = new File(
+	private File nodeFmEnable = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/enable_qn8027");
 
 	/**
@@ -37,7 +43,7 @@ public class FmTransmitActivity extends Activity {
 	 * 
 	 * 频率范围：7600~10800
 	 */
-	private File SetFmCh = new File(
+	private File nodeFmChannel = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
 
 	/**
@@ -104,13 +110,12 @@ public class FmTransmitActivity extends Activity {
 				Settings.System.putString(getContentResolver(),
 						FM_TRANSMITTER_ENABLE, isChecked ? "1" : "0");
 				setButtonEnabled(isChecked);
+				SaveFileToNode(nodeFmEnable, (isChecked ? "1" : "0"));
 				if (!isChecked) {
-
 					updateChoseButton(0);
 				} else {
 					int nowId = getFmFrequcenyId();
 					updateChoseButton(nowId);
-
 				}
 			}
 		});
@@ -234,7 +239,39 @@ public class FmTransmitActivity extends Activity {
 		if (frequency >= 7600 || frequency <= 10800) {
 			Settings.System.putString(getContentResolver(),
 					FM_TRANSMITTER_CHANNEL, "" + frequency);
+
+			SaveFileToNode(nodeFmChannel, String.valueOf(frequency));
 			Log.v(Constant.TAG, "Set FM Frequency success:" + frequency);
+		}
+	}
+
+	protected void SaveFileToNode(File file, String value) {
+		if (file.exists()) {
+			try {
+				StringBuffer strbuf = new StringBuffer("");
+				strbuf.append(value);
+				Log.d(Constant.TAG, "11111111::::::	" + strbuf);
+				OutputStream output = null;
+				OutputStreamWriter outputWrite = null;
+				PrintWriter print = null;
+
+				try {
+					output = new FileOutputStream(file);
+					outputWrite = new OutputStreamWriter(output);
+					print = new PrintWriter(outputWrite);
+					print.print(strbuf.toString());
+					print.flush();
+					output.close();
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					Log.e(Constant.TAG, "output error");
+				}
+			} catch (IOException e) {
+				Log.e(Constant.TAG, "IO Exception");
+			}
+		} else {
+			Log.e(Constant.TAG, "File:" + file + "not exists");
 		}
 	}
 
