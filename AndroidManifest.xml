@@ -131,6 +131,9 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.ChatActivity"
             android:screenOrientation="landscape" />
+         <activity
+            android:name="com.tchip.carlauncher.ui.activity.ChatAiActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingActivity"
             android:screenOrientation="landscape" />

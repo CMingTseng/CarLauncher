@@ -530,7 +530,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				str = "key auth error:, " + msg;
 			}
 			if (Constant.isDebug) {
-				Log.v(Constant.TAG, str);
+				Log.v(Constant.TAG, "BaiduLBS:"+str);
 			}
 		}
 
