@@ -73,6 +73,7 @@ import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.carlauncher.util.XunFeiErrorCodeUtil;
+import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 import com.tchip.carlauncher.view.ResideMenu;
@@ -116,6 +117,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 	private boolean isResideMenuClose = true;
 	private boolean mIsEngineInitSuccess = false;
+
+	private AudioRecordDialog audioRecordDialog;
 
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
@@ -284,6 +287,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		// itemHuiyuan = new ResideMenuItem(this,
 		// R.drawable.ui_chat_hint__navi,"导航");
 		// resideMenu.addMenuItem(itemHuiyuan, ResideMenu.DIRECTION_LEFT);
+
+		audioRecordDialog = new AudioRecordDialog(ChatActivity.this);
 	}
 
 	/**
@@ -292,7 +297,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	private InitListener speechUnderstanderListener = new InitListener() {
 		@Override
 		public void onInit(int code) {
-			Log.d(Constant.TAG, "Xunfei:speechUnderstanderListener init() code = " + code);
+			Log.d(Constant.TAG,
+					"Xunfei:speechUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码：code
 				String errorContent = XunFeiErrorCodeUtil
@@ -311,7 +317,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		@Override
 		public void onInit(int code) {
-			Log.d(Constant.TAG, "Xunfei:textUnderstanderListener init() code = " + code);
+			Log.d(Constant.TAG,
+					"Xunfei:textUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码： code
 				String errorContent = XunFeiErrorCodeUtil
@@ -684,6 +691,17 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 					} else {
 						// 识别结果不正确
 					}
+					// 识别结束，停止动画
+					if (currentAnimation != null) {
+						currentAnimation.cancel();
+					}
+					currentAnimation = ProgressAnimationUtil
+							.preparePulseAnimation(drawable);
+					currentAnimation.start();
+
+					// 显示语音按钮，隐藏动画按钮
+					imageVoice.setVisibility(View.VISIBLE);
+					imageAnim.setVisibility(View.INVISIBLE);
 				}
 			});
 		}
@@ -827,26 +845,16 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		@Override
 		public void onVolumeChanged(int v) {
 			// showTip("onVolumeChanged：" + v);
+			// 更新对话框音量
+			audioRecordDialog.updateVolumeLevel(v);
 		}
 
 		@Override
 		public void onEndOfSpeech() {
-			// showTip("onEndOfSpeech");
-			if (currentAnimation != null) {
-				currentAnimation.cancel();
-			}
-			currentAnimation = ProgressAnimationUtil
-					.preparePulseAnimation(drawable);
-			currentAnimation.start();
+			// dismiss对话框
+			audioRecordDialog.dismissDialog();
 
-			// 显示语音按钮，隐藏动画按钮
-			imageVoice.setVisibility(View.VISIBLE);
-			imageAnim.setVisibility(View.INVISIBLE);
-		}
-
-		@Override
-		public void onBeginOfSpeech() {
-			// 隐藏语音按钮，显示动画按钮
+			// 开始识别动画：隐藏语音按钮，显示动画按钮
 			imageVoice.setVisibility(View.INVISIBLE);
 			imageAnim.setVisibility(View.VISIBLE);
 
@@ -859,10 +867,28 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		}
 
 		@Override
+		public void onBeginOfSpeech() {
+			// TODO：显示对话框
+			audioRecordDialog.showDialog();
+		}
+
+		@Override
 		public void onError(SpeechError error) {
 			// showTip("onError Code：" + error.getErrorCode());
 			Toast.makeText(getApplicationContext(),
 					error.getErrorDescription(), Toast.LENGTH_SHORT).show();
+			startSpeak(error.getErrorDescription());
+			// 出现异常，停止动画
+			if (currentAnimation != null) {
+				currentAnimation.cancel();
+			}
+			currentAnimation = ProgressAnimationUtil
+					.preparePulseAnimation(drawable);
+			currentAnimation.start();
+
+			// 显示语音按钮，隐藏动画按钮
+			imageVoice.setVisibility(View.VISIBLE);
+			imageAnim.setVisibility(View.INVISIBLE);
 		}
 
 		@Override
@@ -927,6 +953,12 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		mSpeechUnderstander.setParameter(SpeechConstant.ASR_PTT,
 				mSharedPreferences.getString("understander_punc_preference",
 						"1"));
+
+		// 识别句子级多候选结果，如asr_nbest=3,注：设置多候选会影响性能，响应时间延迟200ms左右
+		mSpeechUnderstander.setParameter(SpeechConstant.ASR_NBEST, "1");
+
+		// 网络连接超时时间,单位：ms，默认20000
+		mSpeechUnderstander.setParameter(SpeechConstant.NET_TIMEOUT, "5000");
 		// 设置音频保存路径
 		mSpeechUnderstander.setParameter(
 				SpeechConstant.ASR_AUDIO_PATH,

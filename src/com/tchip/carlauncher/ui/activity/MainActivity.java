@@ -122,7 +122,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private SurfaceHolder mHolder;
 	private TachographRecorder mMyRecorder;
 	private Camera mCamera;
-	
+
 	private ImageView imageDefault; // 未联网时导航的背景图
 
 	// 分辨率
@@ -235,9 +235,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
 
-		//importOfflineMapFromSDCard();
+		// importOfflineMapFromSDCard();
 	}
-
 
 	/**
 	 * 初始化布局
@@ -245,10 +244,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void initialLayout() {
 		// 未联网时导航背景
 		imageDefault = (ImageView) findViewById(R.id.imageDefault);
-		if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
 			imageDefault.setVisibility(View.GONE);
 		}
-		
+
 		// 录像窗口
 		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 		surfaceCamera.setOnClickListener(new MyOnClickListener());
@@ -1475,7 +1474,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private boolean deleteOldestUnlockVideo() {
 		try {
 			String sdcardPath = sharedPreferences.getString("sdcardPath",
-					"/mnt/sdcard/");
+					"/mnt/sdcard2/");
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
 			while (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
@@ -1575,16 +1574,39 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	public boolean isSD2Exists() {
+		try {
+			String pathVideo = PATH_SDCARD_2 + "tachograph/";
+			File fileVideo = new File(pathVideo);
+			fileVideo.mkdirs();
+			File file = new File(pathVideo);
+			if (!file.exists()) {
+				return false;
+			}
+
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
 	public int startRecorder() {
 
-		if (mMyRecorder != null) {
+		if (!isSD2Exists()) {
+			// SDCard2不存在
+			String strNoSD = "SD卡2不存在，无法录像";
+			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
+					.show();
+			startSpeak(strNoSD);
+			return -1;
+		} else if (mMyRecorder != null) {
 			deleteOldestUnlockVideo();
 			textRecordTime.setVisibility(View.VISIBLE);
 			new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
 			if (Constant.isDebug) {
 				Log.d(Constant.TAG, "Record Start");
 			}
-			// TODO
+			// 设置
 			setDirectory(PATH_SDCARD_2);
 			return mMyRecorder.start();
 		}
@@ -1620,7 +1642,14 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	public int takePhoto() {
-		if (mMyRecorder != null) {
+		if (!isSD2Exists()) {
+			// SDCard2不存在
+			String strNoSD = "SD卡2不存在，无法拍照";
+			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
+					.show();
+			startSpeak(strNoSD);
+			return -1;
+		} else if (mMyRecorder != null) {
 			return mMyRecorder.takePicture();
 		}
 		return -1;

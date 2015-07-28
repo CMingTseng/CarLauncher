@@ -13,6 +13,7 @@ import com.tchip.carlauncher.util.WifiAdmin;
 import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,7 +44,7 @@ public class WifiListActivity extends Activity {
 	private ListView listWifi;
 
 	private ProgressBar updateProgress;
-	private Button updateButton,btnWifiAp;
+	private Button updateButton, btnWifiAp;
 	private String wifiPassword = null;
 
 	private WifiManager wifiManager;
@@ -109,7 +110,7 @@ public class WifiListActivity extends Activity {
 				}
 			}
 		});
-		
+
 		btnWifiAp = (Button) findViewById(R.id.btnWifiAp);
 		btnWifiAp.setOnClickListener(new MyOnClickListener());
 
@@ -156,17 +157,23 @@ public class WifiListActivity extends Activity {
 			case R.id.btnToSettingFromWiFi:
 				finish();
 				break;
-				
+
 			case R.id.updateButton:
 				updateButton.setVisibility(View.INVISIBLE);
 				updateProgress.setVisibility(View.VISIBLE);
 				new Thread(new refreshWifiThread()).start();
 				break;
-				
+
 			case R.id.btnWifiAp:
-				//startActivity(new Intent("android.intent.action.WIFI_AP_SETTINGS"));
+
+				Intent intent = new Intent();
+				ComponentName comp = new ComponentName("com.android.settings",
+						"com.android.settings.TetherSettings");
+				intent.setComponent(comp);
+				intent.setAction("android.intent.action.VIEW");
+				startActivityForResult(intent, 0);
 				break;
-				
+
 			default:
 				break;
 			}

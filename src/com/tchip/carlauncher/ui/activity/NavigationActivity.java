@@ -1079,7 +1079,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 		@Override
 		public void onVolumeChanged(int v) {
-			Log.e("ZMS", "VOLUME:" + v);
+			Log.e(Constant.TAG, "VOLUME:" + v);
 			audioRecordDialog.updateVolumeLevel(v);
 
 		}

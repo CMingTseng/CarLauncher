@@ -33,7 +33,7 @@ public interface Constant {
 	/**
 	 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 	 */
-	public static boolean isVoiceXunfei = false;
+	public static boolean isVoiceXunfei = true;
 
 	/**
 	 * 思必驰

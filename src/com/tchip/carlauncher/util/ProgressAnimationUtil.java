@@ -72,7 +72,7 @@ public class ProgressAnimationUtil {
 
 		Animator innerCircleAnimation = ObjectAnimator.ofFloat(drawable,
 				CircularProgressDrawable.CIRCLE_SCALE_PROPERTY, 0f, 0.75f);
-		innerCircleAnimation.setDuration(3600);
+		innerCircleAnimation.setDuration(5500);
 		innerCircleAnimation.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationStart(Animator animation) {
