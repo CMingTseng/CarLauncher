@@ -80,10 +80,10 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	@Override
 	protected void onPause() {
 		if (lastFolder != null) {
-			MyApplication application = (MyApplication) getApplication();
-			application.getAppPreferences().setStartFolder(lastFolder)
-					.saveChanges(getApplicationContext());
-			Log.d(LOG_TAG, "Saved last folder " + lastFolder.toString());
+			// MyApplication application = (MyApplication) getApplication();
+			// application.getAppPreferences().setStartFolder(lastFolder)
+			// .saveChanges(getApplicationContext());
+			// Log.d(LOG_TAG, "Saved last folder " + lastFolder.toString());
 		}
 		super.onPause();
 	}
@@ -234,10 +234,10 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		// if (actionBarDrawerToggle.onOptionsItemSelected(item))
 		// return true;
 		switch (item.getItemId()) {
-		case R.id.menu_ftp:
-			startActivity(new Intent(getApplicationContext(),
-					FileRemoteControlActivity.class));
-			return true;
+//		case R.id.menu_ftp:
+//			startActivity(new Intent(getApplicationContext(),
+//					FileRemoteControlActivity.class));
+//			return true;
 		case android.R.id.home:
 			finish();
 			break;

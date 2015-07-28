@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -314,8 +313,11 @@ public class FileUtils {
 	@SuppressLint("NewApi")
 	public static int getFileIconResource(File file) {
 		if (file.isDirectory()) {
-			if (file.equals(Environment.getExternalStorageDirectory())
-					|| SDCARD_DISPLAY_PATH.equals(file.getAbsolutePath()))
+			// if (file.equals(Environment.getExternalStorageDirectory())
+			// || SDCARD_DISPLAY_PATH.equals(file.getAbsolutePath()))
+
+			if (file.getAbsolutePath().equals("/storage/sdcard1")
+					|| file.getAbsolutePath().equals("/storage/sdcard2"))
 				return R.drawable.file_icon_sdcard;
 			else if (file
 					.equals(Environment
@@ -362,8 +364,9 @@ public class FileUtils {
 			canvas.drawBitmap(folderBitmap, 0, 0, null);
 		} else {
 			Bitmap folderBitmap = BitmapFactory.decodeResource(context
-					.getResources(), homescreen ? R.drawable.file_icon_home_file
-					: R.drawable.file_icon_file);
+					.getResources(),
+					homescreen ? R.drawable.file_icon_home_file
+							: R.drawable.file_icon_file);
 
 			bitmap = Bitmap.createBitmap(folderBitmap.getWidth(),
 					folderBitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -385,9 +388,9 @@ public class FileUtils {
 
 		// add shortcut symbol
 		if (homescreen)
-			canvas.drawBitmap(BitmapFactory.decodeResource(
-					context.getResources(), R.drawable.file_icon_home_shortcut), 0,
-					0, null);
+			canvas.drawBitmap(
+					BitmapFactory.decodeResource(context.getResources(),
+							R.drawable.file_icon_home_shortcut), 0, 0, null);
 
 		return bitmap;
 	}
