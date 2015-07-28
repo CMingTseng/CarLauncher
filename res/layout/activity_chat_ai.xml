@@ -13,7 +13,7 @@
         android:layout_margin="5dp" >
 
         <Button
-            android:id="@+id/btnToMultimedia"
+            android:id="@+id/btnToMainFromVoiceAi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ui_back_arrow_bg_transparent" />

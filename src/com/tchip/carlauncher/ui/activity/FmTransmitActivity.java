@@ -41,7 +41,7 @@ public class FmTransmitActivity extends Activity {
 	/**
 	 * 频率节点
 	 * 
-	 * 频率范围：7600~10800
+	 * 频率范围：7600~10800:8750-10800
 	 */
 	private File nodeFmChannel = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
@@ -56,7 +56,7 @@ public class FmTransmitActivity extends Activity {
 	 */
 	private String FM_TRANSMITTER_CHANNEL = "fm_transmitter_channel";
 
-	private Button fm8550, fm9030, fm10570;
+	private Button fmLow, fmMiddle, fmHigh;
 
 	private RelativeLayout layoutBack;
 	private TextView textHint;
@@ -77,20 +77,20 @@ public class FmTransmitActivity extends Activity {
 	private void initialLayout() {
 		// 开关
 		SwitchButton switchFm = (SwitchButton) findViewById(R.id.switchFm);
-		fm8550 = (Button) findViewById(R.id.fm8550);
-		fm9030 = (Button) findViewById(R.id.fm9030);
-		fm10570 = (Button) findViewById(R.id.fm10570);
+		fmLow = (Button) findViewById(R.id.fmLow);
+		fmMiddle = (Button) findViewById(R.id.fmMiddle);
+		fmHigh = (Button) findViewById(R.id.fmHigh);
 
-		fm8550.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		fmLow.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
-		fm9030.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		fmMiddle.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
-		fm10570.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		fmHigh.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
 
-		fm8550.setOnClickListener(new MyOnClickListener());
-		fm9030.setOnClickListener(new MyOnClickListener());
-		fm10570.setOnClickListener(new MyOnClickListener());
+		fmLow.setOnClickListener(new MyOnClickListener());
+		fmMiddle.setOnClickListener(new MyOnClickListener());
+		fmHigh.setOnClickListener(new MyOnClickListener());
 
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
@@ -127,9 +127,9 @@ public class FmTransmitActivity extends Activity {
 	 * @param isFmTransmitOpen
 	 */
 	private void setButtonEnabled(boolean isFmTransmitOpen) {
-		fm8550.setEnabled(isFmTransmitOpen);
-		fm9030.setEnabled(isFmTransmitOpen);
-		fm10570.setEnabled(isFmTransmitOpen);
+		fmLow.setEnabled(isFmTransmitOpen);
+		fmMiddle.setEnabled(isFmTransmitOpen);
+		fmHigh.setEnabled(isFmTransmitOpen);
 	}
 
 	private int getFmFrequcenyId() {
@@ -176,31 +176,31 @@ public class FmTransmitActivity extends Activity {
 	private void updateChoseButton(int which) {
 		switch (which) {
 		case 0:
-			fm8550.setTextColor(Color.BLACK);
-			fm9030.setTextColor(Color.BLACK);
-			fm10570.setTextColor(Color.BLACK);
+			fmLow.setTextColor(Color.BLACK);
+			fmMiddle.setTextColor(Color.BLACK);
+			fmHigh.setTextColor(Color.BLACK);
 			textHint.setText("请打开FM发射开关");
 			break;
 
 		case 1:
-			fm8550.setTextColor(Color.BLUE);
-			fm9030.setTextColor(Color.BLACK);
-			fm10570.setTextColor(Color.BLACK);
-			textHint.setText("当前发射频率85.5兆赫");
+			fmLow.setTextColor(Color.BLUE);
+			fmMiddle.setTextColor(Color.BLACK);
+			fmHigh.setTextColor(Color.BLACK);
+			textHint.setText("当前发射频率" + Constant.FMTransmit.HINT_LOW + "兆赫");
 			break;
 
 		case 2:
-			fm8550.setTextColor(Color.BLACK);
-			fm9030.setTextColor(Color.BLUE);
-			fm10570.setTextColor(Color.BLACK);
-			textHint.setText("当前发射频率90.3兆赫");
+			fmLow.setTextColor(Color.BLACK);
+			fmMiddle.setTextColor(Color.BLUE);
+			fmHigh.setTextColor(Color.BLACK);
+			textHint.setText("当前发射频率" + Constant.FMTransmit.HINT_MIDDLE + "兆赫");
 			break;
 
 		case 3:
-			fm8550.setTextColor(Color.BLACK);
-			fm9030.setTextColor(Color.BLACK);
-			fm10570.setTextColor(Color.BLUE);
-			textHint.setText("当前发射频率105.7兆赫");
+			fmLow.setTextColor(Color.BLACK);
+			fmMiddle.setTextColor(Color.BLACK);
+			fmHigh.setTextColor(Color.BLUE);
+			textHint.setText("当前发射频率" + Constant.FMTransmit.HINT_HIGH + "兆赫");
 			break;
 
 		default:
@@ -217,18 +217,18 @@ public class FmTransmitActivity extends Activity {
 				finish();
 				break;
 
-			case R.id.fm8550:
-				setFmFrequency(8550);
+			case R.id.fmLow:
+				setFmFrequency(Constant.FMTransmit.CHANNEL_LOW);
 				updateChoseButton(1);
 				break;
 
-			case R.id.fm9030:
-				setFmFrequency(9030);
+			case R.id.fmMiddle:
+				setFmFrequency(Constant.FMTransmit.CHANNEL_MIDDLE);
 				updateChoseButton(2);
 				break;
 
-			case R.id.fm10570:
-				setFmFrequency(10570);
+			case R.id.fmHigh:
+				setFmFrequency(Constant.FMTransmit.CHANNEL_HIGH);
 				updateChoseButton(3);
 				break;
 			}
@@ -236,12 +236,13 @@ public class FmTransmitActivity extends Activity {
 	}
 
 	private void setFmFrequency(int frequency) {
-		if (frequency >= 7600 || frequency <= 10800) {
+		if (frequency >= 8750 || frequency <= 10800) {
 			Settings.System.putString(getContentResolver(),
 					FM_TRANSMITTER_CHANNEL, "" + frequency);
 
 			SaveFileToNode(nodeFmChannel, String.valueOf(frequency));
-			Log.v(Constant.TAG, "Set FM Frequency success:" + frequency);
+			Log.v(Constant.TAG, "FM Transmit:Set FM Frequency success:"
+					+ frequency);
 		}
 	}
 
@@ -250,7 +251,6 @@ public class FmTransmitActivity extends Activity {
 			try {
 				StringBuffer strbuf = new StringBuffer("");
 				strbuf.append(value);
-				Log.d(Constant.TAG, "11111111::::::	" + strbuf);
 				OutputStream output = null;
 				OutputStreamWriter outputWrite = null;
 				PrintWriter print = null;
@@ -265,13 +265,13 @@ public class FmTransmitActivity extends Activity {
 
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					Log.e(Constant.TAG, "output error");
+					Log.e(Constant.TAG, "FM Transmit:output error");
 				}
 			} catch (IOException e) {
-				Log.e(Constant.TAG, "IO Exception");
+				Log.e(Constant.TAG, "FM Transmit:IO Exception");
 			}
 		} else {
-			Log.e(Constant.TAG, "File:" + file + "not exists");
+			Log.e(Constant.TAG, "FM Transmit:File:" + file + "not exists");
 		}
 	}
 

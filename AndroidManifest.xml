@@ -60,9 +60,9 @@
 
     <application
         android:name="com.tchip.carlauncher.MyApplication"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="Car Launcher"
-        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:theme="@android:style/Theme.Holo.Light" >
 
@@ -114,6 +114,9 @@
             android:name="com.tchip.carlauncher.bluetooth.ClientSocketActivity"
             android:screenOrientation="landscape" />
         <activity
+            android:name="com.tchip.carlauncher.ui.activity.CopyMapActivity"
+            android:screenOrientation="landscape" />
+        <activity
             android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"
             android:screenOrientation="landscape" />
         <activity
@@ -131,7 +134,7 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.ChatActivity"
             android:screenOrientation="landscape" />
-         <activity
+        <activity
             android:name="com.tchip.carlauncher.ui.activity.ChatAiActivity"
             android:screenOrientation="landscape" />
         <activity

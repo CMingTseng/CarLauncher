@@ -20,7 +20,7 @@ public class FontApplicator {
 	}
 
 	public FontApplicator(Context context, String fontName) {
-		this(Typeface.createFromAsset(context.getAssets(), Constant.FONT_PATH
+		this(Typeface.createFromAsset(context.getAssets(), Constant.Path.FONT
 				+ fontName));
 	}
 

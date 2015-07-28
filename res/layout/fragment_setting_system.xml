@@ -167,13 +167,18 @@
                     app:thumb_marginTop="-2.5dp" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#000000" />
+
             <RelativeLayout
                 android:id="@+id/layoutRippleTraffic"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <ImageView
                     android:layout_width="@dimen/setting_item_image_height"
@@ -187,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="流量"
+                    android:text="流量使用情况"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
             </RelativeLayout>
@@ -222,11 +227,6 @@
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
             </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
 
             <View
                 android:layout_width="fill_parent"
@@ -310,7 +310,38 @@
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="#000000"
-                android:visibility="gone" />
+                android:visibility="visible" />
+
+            <RelativeLayout
+                android:id="@+id/layoutCopyMap"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/ui_setting_item_bg"
+                android:clickable="true"
+                android:visibility="visible" >
+
+                <ImageView
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/setting_item_image_margin_left"
+                    android:src="@drawable/ui_setting_map_offline" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/setting_item_text_margin_left"
+                    android:text="导入离线地图"
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#000000"
+                android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleStorage"
@@ -393,7 +424,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="更多设置"
+                    android:text="日期和时间"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
             </RelativeLayout>

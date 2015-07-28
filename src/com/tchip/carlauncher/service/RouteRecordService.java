@@ -33,7 +33,7 @@ import com.tchip.carlauncher.model.RoutePoint;
 
 public class RouteRecordService extends Service {
 	private LocationClient mLocationClient;
-	private final String ROUTE_PATH = Constant.ROUTE_TRACK_PATH;
+	private final String ROUTE_PATH = Constant.Path.ROUTE_TRACK;
 	private String startTime = "";
 	private String stopTime = "";
 

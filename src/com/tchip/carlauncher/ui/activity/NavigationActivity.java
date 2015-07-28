@@ -19,7 +19,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -872,7 +871,7 @@ public class NavigationActivity extends FragmentActivity implements
 				startLongitude, startName, endLatitude, endLongitude, endName,
 				NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
 				true, // 真实导航
-				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略
+				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略:STRATEGY_FORCE_ONLINE_PRIORITY
 				new OnStartNavigationListener() { // 跳转监听
 
 					@Override

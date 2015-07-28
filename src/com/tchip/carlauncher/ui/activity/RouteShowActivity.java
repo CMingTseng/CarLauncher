@@ -63,7 +63,7 @@ public class RouteShowActivity extends Activity {
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
 
-	private final String ROUTE_PATH = Constant.ROUTE_TRACK_PATH;
+	private final String ROUTE_PATH = Constant.Path.ROUTE_TRACK;
 	private String filePath = "";
 	private RouteAdapter routeAdapter = new RouteAdapter();
 
@@ -269,7 +269,7 @@ public class RouteShowActivity extends Activity {
 				textDistance.setVisibility(View.VISIBLE);
 				textDistance.setText("直线距离:" + (int) linearDistance
 						+ "米  行驶距离:" + (int) driveDistance + "米");
-				textDistance.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+				textDistance.setTypeface(Typefaces.get(this, Constant.Path.FONT
 						+ "Font-Helvetica-Neue-LT-Pro.otf"));
 				_db.close();
 			}

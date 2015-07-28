@@ -80,7 +80,6 @@ import com.tchip.carlauncher.view.ResideMenuInfo;
 import com.tchip.carlauncher.view.ResideMenuItem;
 
 public class ChatActivity extends FragmentActivity implements OnClickListener {
-	private static String TAG = ChatActivity.class.getSimpleName();
 	// 语义理解对象（语音到语义）。
 	private SpeechUnderstander mSpeechUnderstander;
 	// 语义理解对象（文本到语义）。
@@ -293,7 +292,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	private InitListener speechUnderstanderListener = new InitListener() {
 		@Override
 		public void onInit(int code) {
-			Log.d(TAG, "speechUnderstanderListener init() code = " + code);
+			Log.d(Constant.TAG, "Xunfei:speechUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码：code
 				String errorContent = XunFeiErrorCodeUtil
@@ -312,7 +311,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		@Override
 		public void onInit(int code) {
-			Log.d(TAG, "textUnderstanderListener init() code = " + code);
+			Log.d(Constant.TAG, "Xunfei:textUnderstanderListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码： code
 				String errorContent = XunFeiErrorCodeUtil
@@ -942,7 +941,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	protected void onResume() {
 		// 移动数据统计分析
 		FlowerCollector.onResume(ChatActivity.this);
-		FlowerCollector.onPageStart(TAG);
+		FlowerCollector.onPageStart(Constant.TAG);
 		super.onResume();
 
 		// 隐藏状态栏
@@ -953,7 +952,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		// 移动数据统计分析
-		FlowerCollector.onPageEnd(TAG);
+		FlowerCollector.onPageEnd(Constant.TAG);
 		FlowerCollector.onPause(ChatActivity.this);
 		super.onPause();
 	}

@@ -26,6 +26,11 @@ public interface Constant {
 	public static boolean hasWeatherAnimation = false;
 
 	/**
+	 * 是否有文件管理功能
+	 */
+	public static boolean hasFileManager = true;
+
+	/**
 	 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 	 */
 	public static boolean isVoiceXunfei = false;
@@ -36,6 +41,41 @@ public interface Constant {
 	public final static class AiSpeech {
 		public static final String API_KEY = "1437739850000406";// 添加您的APPKEY"1366851760000038 "1353458340
 		public static final String API_SECRET = "af227accdc76fad067bf622a1b13cfbb";// 添加您的SECRETKEY"ba312327c815536394f7eb6fd0b915c4"c0911ca544fa36fa47d5baccee1c58a0c936a4df
+	}
+
+	/**
+	 * FM
+	 */
+	public final static class FMTransmit {
+		public static final int CHANNEL_LOW = 8750;
+		public static final int CHANNEL_MIDDLE = 9750;
+		public static final int CHANNEL_HIGH = 10750;
+
+		public static final String HINT_LOW = "87.5";
+		public static final String HINT_MIDDLE = "97.5";
+		public static final String HINT_HIGH = "107.5";
+	}
+
+	/**
+	 * 路径
+	 */
+	public final static class Path {
+		/**
+		 * 行驶轨迹文件存储位置
+		 */
+		public static final String ROUTE_TRACK = Environment
+				.getExternalStorageDirectory().getPath() + "/Route/";
+
+		/**
+		 * SDcard Path
+		 */
+		public static final String SD_CARD = Environment
+				.getExternalStorageDirectory().getPath();
+
+		/**
+		 * 字体目录
+		 */
+		public static final String FONT = "fonts/";
 	}
 
 	/**
@@ -73,23 +113,6 @@ public interface Constant {
 	 * 轨迹绘制取样精度：每5个点取1个
 	 */
 	public static final int ROUTE_POINT_OFFSET_LOW = 5;
-
-	/**
-	 * 行驶轨迹文件存储位置
-	 */
-	public static final String ROUTE_TRACK_PATH = Environment
-			.getExternalStorageDirectory().getPath() + "/Route/";
-
-	/**
-	 * SDcard Path
-	 */
-	public static final String SD_CARD_PATH = Environment
-			.getExternalStorageDirectory().getPath();
-
-	/**
-	 * 字体目录
-	 */
-	public static final String FONT_PATH = "fonts/";
 
 	/**
 	 * 音乐背景图片目录

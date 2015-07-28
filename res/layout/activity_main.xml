@@ -186,6 +186,12 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true" />
 
+                <View
+                    android:id="@+id/mapHideView"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true" />
+
                 <ImageView
                     android:id="@+id/imageNavi"
                     android:layout_width="wrap_content"
@@ -193,11 +199,12 @@
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ui_main_nav" />
 
-                <View
-                    android:id="@+id/mapHideView"
-                    android:layout_width="300dp"
+                <ImageView
+                    android:id="@+id/imageDefault"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true" />
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ui_main_navi_bg_no_net" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -236,8 +243,8 @@
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
-            
-             <RelativeLayout
+
+            <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >
@@ -286,10 +293,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="5dp"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/imageNearSearch"
@@ -358,7 +365,7 @@
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
-            
+
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
@@ -384,6 +391,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutFileExplore"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >

@@ -113,11 +113,11 @@ public class WeatherActivity extends Activity {
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
 
-		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textClock.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-		textDate.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textDate.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
-		textWeek.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
 		// Day 0 (Today) Weather and Time, Location Info
 		String cityName = "";
@@ -151,7 +151,7 @@ public class WeatherActivity extends Activity {
 		day0tmpLow = day0tmpLow.split("℃")[0];
 		day0tmpHigh = day0tmpHigh.split("℃")[0];
 		textTempRange.setText(day0tmpLow + "~" + day0tmpHigh);
-		textTempRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textTempRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		if (Constant.hasWeatherAnimation) {
 			new Titanic().start(textTempRange);
@@ -202,7 +202,7 @@ public class WeatherActivity extends Activity {
 		String day1tmpLowStr = sharedPreferences.getString("day1tmpLow", "25")
 				.split("℃")[0];
 		day1tmpRange.setText(day1tmpLowStr + "~" + day1tmpHighStr);
-		day1tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		day1tmpRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day1wind = (TextView) findViewById(R.id.day1wind);
@@ -237,7 +237,7 @@ public class WeatherActivity extends Activity {
 		String day2tmpLowStr = sharedPreferences.getString("day2tmpLow", "25")
 				.split("℃")[0];
 		day2tmpRange.setText(day2tmpLowStr + "~" + day2tmpHighStr);
-		day2tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		day2tmpRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day2wind = (TextView) findViewById(R.id.day2wind);
@@ -272,7 +272,7 @@ public class WeatherActivity extends Activity {
 		String day3tmpLowStr = sharedPreferences.getString("day3tmpLow", "25")
 				.split("℃")[0];
 		day3tmpRange.setText(day3tmpLowStr + "~" + day3tmpHighStr);
-		day3tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		day3tmpRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day3wind = (TextView) findViewById(R.id.day3wind);
@@ -307,7 +307,7 @@ public class WeatherActivity extends Activity {
 		String day4tmpLowStr = sharedPreferences.getString("day4tmpLow", "25")
 				.split("℃")[0];
 		day4tmpRange.setText(day4tmpLowStr + "~" + day4tmpHighStr);
-		day4tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		day4tmpRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day4wind = (TextView) findViewById(R.id.day4wind);
@@ -342,7 +342,7 @@ public class WeatherActivity extends Activity {
 		String day5tmpLowStr = sharedPreferences.getString("day5tmpLow", "25")
 				.split("℃")[0];
 		day5tmpRange.setText(day5tmpLowStr + "~" + day5tmpHighStr);
-		day5tmpRange.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		day5tmpRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day5wind = (TextView) findViewById(R.id.day5wind);

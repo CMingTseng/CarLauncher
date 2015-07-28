@@ -3,6 +3,7 @@ package com.tchip.carlauncher.ui.fragment;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
+import com.tchip.carlauncher.ui.activity.CopyMapActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
@@ -154,6 +155,11 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleApp);
 		layoutRippleApp.setOnClickListener(new MyOnClickListener());
 
+		// 拷贝地图
+		RelativeLayout layoutCopyMap = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutCopyMap);
+		layoutCopyMap.setOnClickListener(new MyOnClickListener());
+
 		return systemSettingView;
 	}
 
@@ -162,6 +168,12 @@ public class SettingFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.layoutCopyMap:
+				Intent intentCopyMap = new Intent(context,
+						CopyMapActivity.class);
+				startActivity(intentCopyMap);
+				break;
+
 			case R.id.layoutRippleDisplay:
 				Intent intentDisplay = new Intent(context,
 						SettingSystemDisplayActivity.class);
@@ -176,9 +188,10 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleTraffic:
-				Intent intentTraffic = new Intent(context,
-						TrafficStatActivity.class);
-				startActivity(intentTraffic);
+				// Intent intentTraffic = new Intent(context,
+				// TrafficStatActivity.class);
+				// startActivity(intentTraffic);
+				startActivity(new Intent("android.settings.DATA_USAGE_SETTINGS"));
 				break;
 
 			case R.id.layoutRippleBluetooth:
@@ -200,14 +213,14 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleDate:
-				// startActivity(new Intent(
-				// android.provider.Settings.ACTION_DATE_SETTINGS));
+				startActivity(new Intent(
+						android.provider.Settings.ACTION_DATE_SETTINGS));
 
-				ComponentName componentImage = new ComponentName(
-						"com.android.settings", "com.android.settings.Settings");
-				Intent intentImage = new Intent();
-				intentImage.setComponent(componentImage);
-				startActivity(intentImage);
+				// ComponentName componentImage = new ComponentName(
+				// "com.android.settings", "com.android.settings.Settings");
+				// Intent intentImage = new Intent();
+				// intentImage.setComponent(componentImage);
+				// startActivity(intentImage);
 				break;
 
 			case R.id.layoutRippleSound:

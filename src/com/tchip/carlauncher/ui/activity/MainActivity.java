@@ -40,6 +40,7 @@ import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
+import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.WiFiUtil;
@@ -121,6 +122,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	private SurfaceHolder mHolder;
 	private TachographRecorder mMyRecorder;
 	private Camera mCamera;
+	
+	private ImageView imageDefault; // 未联网时导航的背景图
 
 	// 分辨率
 	private static final int STATE_RESOLUTION_720P = 0;
@@ -145,6 +148,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private static final String PATH_ZERO = "/mnt/sdcard";
 	private static final String PATH_ONE = "/mnt/sdcard/path_one";
 	private static final String PATH_TWO = "/mnt/sdcard/path_two";
+	private static final String PATH_SDCARD_2 = "/storage/sdcard2/";
 
 	// 重叠
 	private static final int STATE_OVERLAP_ZERO = 0;
@@ -231,55 +235,20 @@ public class MainActivity extends Activity implements TachographCallback,
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
 
-		// importOfflineMapFromSDCard();
+		//importOfflineMapFromSDCard();
 	}
 
-	private MKOfflineMap mOffline = null;
-
-	/**
-	 * 导入离线地图包
-	 */
-	public void importOfflineMapFromSDCard() {
-		mOffline = new MKOfflineMap();
-		mOffline.init(new MyMKOfflineMapListener());
-		int num = mOffline.importOfflineData();
-		if (num == 0) {
-			// 没有导入离线包，可能是离线包放置位置不正确，或离线包已经导入过
-		} else {
-			// "成功导入 num 个离线包
-		}
-	}
-
-	class MyMKOfflineMapListener implements MKOfflineMapListener {
-
-		@Override
-		public void onGetOfflineMapState(int type, int state) {
-			switch (type) {
-			case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
-				MKOLUpdateElement update = mOffline.getUpdateInfo(state);
-				// 处理下载进度更新提示
-				if (update != null) {
-					// stateView.setText(String.format("%s : %d%%",
-					// update.cityName,
-					// update.ratio));
-					// updateView();
-				}
-				break;
-			case MKOfflineMap.TYPE_NEW_OFFLINE:
-				// 有新离线地图安装
-				break;
-			case MKOfflineMap.TYPE_VER_UPDATE:
-				// 版本更新提示
-				// MKOLUpdateElement e = mOffline.getUpdateInfo(state);
-				break;
-			}
-		}
-	}
 
 	/**
 	 * 初始化布局
 	 */
 	private void initialLayout() {
+		// 未联网时导航背景
+		imageDefault = (ImageView) findViewById(R.id.imageDefault);
+		if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+			imageDefault.setVisibility(View.GONE);
+		}
+		
 		// 录像窗口
 		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 		surfaceCamera.setOnClickListener(new MyOnClickListener());
@@ -319,19 +288,19 @@ public class MainActivity extends Activity implements TachographCallback,
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
-		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textClock.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
-		textDate.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textDate.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
 
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
-		textWeek.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
 
 		textTemp = (TextView) findViewById(R.id.textTemp);
-		textTemp.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textTemp.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Droid-Sans-Fallback.ttf"));
 
 		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
@@ -399,6 +368,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 文件管理
 		ImageView imageFileExplore = (ImageView) findViewById(R.id.imageFileExplore);
 		imageFileExplore.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutFileExplore = (RelativeLayout) findViewById(R.id.layoutFileExplore);
+		if (Constant.hasFileManager) {
+			layoutFileExplore.setVisibility(View.VISIBLE);
+		} else {
+			layoutFileExplore.setVisibility(View.GONE);
+		}
 
 		// 周边搜索
 		ImageView imageNearSearch = (ImageView) findViewById(R.id.imageNearSearch);
@@ -530,7 +506,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				str = "key auth error:, " + msg;
 			}
 			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "BaiduLBS:"+str);
+				Log.v(Constant.TAG, "BaiduLBS:" + str);
 			}
 		}
 
@@ -626,6 +602,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			}
 			editor.putString("cityNameRealButOld", cityName);
+			editor.commit();
 			textLocation.setText(cityName);
 		} else {
 			textLocation
@@ -919,11 +896,13 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.layoutWeather:
-				Intent intentWeather = new Intent(MainActivity.this,
-						WeatherActivity.class);
-				startActivity(intentWeather);
-				overridePendingTransition(R.anim.zms_translate_down_out,
-						R.anim.zms_translate_down_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentWeather = new Intent(MainActivity.this,
+							WeatherActivity.class);
+					startActivity(intentWeather);
+					overridePendingTransition(R.anim.zms_translate_down_out,
+							R.anim.zms_translate_down_in);
+				}
 				break;
 
 			case R.id.mapHideView:
@@ -938,87 +917,104 @@ public class MainActivity extends Activity implements TachographCallback,
 				// } catch (Exception e) {
 				// e.printStackTrace();
 				// }
-
-				Intent intentNavi = new Intent(MainActivity.this,
-						NavigationActivity.class);
-				startActivity(intentNavi);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentNavi = new Intent(MainActivity.this,
+							NavigationActivity.class);
+					startActivity(intentNavi);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageMusicOL:
-				ComponentName componentMusic = new ComponentName(
-						"cn.kuwo.kwmusichd",
-						"cn.kuwo.kwmusichd.WelcomeActivity");
-				Intent intentMusic = new Intent();
-				intentMusic.setComponent(componentMusic);
-				startActivity(intentMusic);
+				if (!ClickUtil.isQuickClick(800)) {
+					ComponentName componentMusic = new ComponentName(
+							"cn.kuwo.kwmusichd",
+							"cn.kuwo.kwmusichd.WelcomeActivity");
+					Intent intentMusic = new Intent();
+					intentMusic.setComponent(componentMusic);
+					startActivity(intentMusic);
+				}
 				break;
 
 			case R.id.imageMultimedia:
-				Intent intentMultimedia = new Intent(MainActivity.this,
-						MultimediaActivity.class);
-				startActivity(intentMultimedia);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentMultimedia = new Intent(MainActivity.this,
+							MultimediaActivity.class);
+					startActivity(intentMultimedia);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageRouteTrack:
-				Intent intentRouteTrack = new Intent(MainActivity.this,
-						RouteListActivity.class);
-				startActivity(intentRouteTrack);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentRouteTrack = new Intent(MainActivity.this,
+							RouteListActivity.class);
+					startActivity(intentRouteTrack);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageRoutePlan:
-				Intent intentRoutePlan = new Intent(MainActivity.this,
-						RoutePlanActivity.class);
-				startActivity(intentRoutePlan);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentRoutePlan = new Intent(MainActivity.this,
+							RoutePlanActivity.class);
+					startActivity(intentRoutePlan);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageFmTransmit:
-				Intent intentFmTransmit = new Intent(MainActivity.this,
-						FmTransmitActivity.class);
-				startActivity(intentFmTransmit);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentFmTransmit = new Intent(MainActivity.this,
+							FmTransmitActivity.class);
+					startActivity(intentFmTransmit);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageFileExplore:
-				Intent intentFileExplore = new Intent(MainActivity.this,
-						FolderActivity.class);
-				// Intent intentFileExplore = new Intent(MainActivity.this,
-				// VideoListActivity.class);
-				startActivity(intentFileExplore);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentFileExplore = new Intent(MainActivity.this,
+							FolderActivity.class);
+					// Intent intentFileExplore = new Intent(MainActivity.this,
+					// VideoListActivity.class);
+					startActivity(intentFileExplore);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageNearSearch:
-				Intent intentNearSearch = new Intent(MainActivity.this,
-						NearActivity.class);
-				startActivity(intentNearSearch);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentNearSearch = new Intent(MainActivity.this,
+							NearActivity.class);
+					startActivity(intentNearSearch);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageVoiceChat:
-				Intent intentVoiceChat;
-				if (Constant.isVoiceXunfei) {
-					// 讯飞语音
-					intentVoiceChat = new Intent(MainActivity.this,
-							ChatActivity.class);
-				} else {
-					// 思必驰语音
-					intentVoiceChat = new Intent(MainActivity.this,
-							ChatAiActivity.class);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentVoiceChat;
+					if (Constant.isVoiceXunfei) {
+						// 讯飞语音
+						intentVoiceChat = new Intent(MainActivity.this,
+								ChatActivity.class);
+					} else {
+						// 思必驰语音
+						intentVoiceChat = new Intent(MainActivity.this,
+								ChatAiActivity.class);
+					}
+					startActivity(intentVoiceChat);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
 				}
-				startActivity(intentVoiceChat);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
 				break;
 
 			case R.id.imageDialer:
@@ -1032,40 +1028,48 @@ public class MainActivity extends Activity implements TachographCallback,
 				// } catch (Exception e) {
 				// e.printStackTrace();
 				// }
-				Intent intentBTDialer = new Intent(MainActivity.this,
-						BluetoothDialerActivity.class);
-				startActivity(intentBTDialer);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentBTDialer = new Intent(MainActivity.this,
+							BluetoothDialerActivity.class);
+					startActivity(intentBTDialer);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.imageMessage:
-				try {
-					ComponentName componentMessage = new ComponentName(
-							"com.android.mms",
-							"com.android.mms.ui.BootActivity");
-					Intent intentMessage = new Intent();
-					intentMessage.setComponent(componentMessage);
-					startActivity(intentMessage);
-				} catch (Exception e) {
-					e.printStackTrace();
+				if (!ClickUtil.isQuickClick(800)) {
+					try {
+						ComponentName componentMessage = new ComponentName(
+								"com.android.mms",
+								"com.android.mms.ui.BootActivity");
+						Intent intentMessage = new Intent();
+						intentMessage.setComponent(componentMessage);
+						startActivity(intentMessage);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				break;
 
 			case R.id.imageSetting:
-				Intent intentSetting = new Intent(MainActivity.this,
-						SettingActivity.class);
-				startActivity(intentSetting);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				if (!ClickUtil.isQuickClick(800)) {
+					Intent intentSetting = new Intent(MainActivity.this,
+							SettingActivity.class);
+					startActivity(intentSetting);
+					overridePendingTransition(R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				}
 				break;
 
 			case R.id.layoutWiFi:
-				// startActivity(new Intent(
-				// android.provider.Settings.ACTION_WIFI_SETTINGS));
-				Intent intentWiFi = new Intent(MainActivity.this,
-						WifiListActivity.class);
-				startActivity(intentWiFi);
+				if (!ClickUtil.isQuickClick(800)) {
+					// startActivity(new Intent(
+					// android.provider.Settings.ACTION_WIFI_SETTINGS));
+					Intent intentWiFi = new Intent(MainActivity.this,
+							WifiListActivity.class);
+					startActivity(intentWiFi);
+				}
 				break;
 
 			default:
@@ -1101,13 +1105,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 存储非“未定位”的城市信息
 			if (!"未定位".equals(location.getCity())) {
 				editor.putString("cityNameRealButOld", location.getCity());
+				editor.commit();
 			}
 
 			// 城市名发生变化，需要更新位置和天气
 			if (!sharedPreferences.getString("cityName", "未定位").equals(
 					location.getCity())) {
 				startWeatherService();
-				Editor editor = sharedPreferences.edit();
 				editor.putString("cityName", location.getCity());
 
 				editor.commit();
@@ -1123,11 +1127,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.putString("latitude", "" + location.getLatitude());
 				editor.putString("longitude", "" + location.getLongitude());
 				editor.putString("district", location.getDistrict());
-				editor.putString("floor", location.getFloor());
+				// editor.putString("floor", location.getFloor());
 				editor.putString("addrStr", location.getAddrStr());
 				editor.putString("street", location.getStreet());
 				editor.putString("streetNum", location.getStreetNumber());
-				editor.putFloat("speed", location.getSpeed());
+				// editor.putFloat("speed", location.getSpeed());
 				editor.putString("altitude", "" + location.getAltitude());
 				editor.putString("lbsTime", location.getTime());
 				editor.commit();
@@ -1372,38 +1376,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			} catch (Exception e) {
 				// e.printStackTrace();
 			}
-
 		}
-
-		// mHolder = holder;
-		// if (!MyApplication.isVideoReording) {
-		// setup();
-		// } else { // 正在录像中，回到主界面
-		// try {
-		// // mCamera = Camera.open(0);
-		// // mCamera.lock();
-		// // mCamera.stopPreview();
-		// // mCamera.setPreviewDisplay(null);
-		//
-		// mCamera.setPreviewDisplay(mHolder);
-		// mCamera.startPreview();
-		// // mCamera.unlock();
-		//
-		// surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
-		// surfaceCamera.setOnClickListener(new MyOnClickListener());
-		// surfaceCamera.getHolder().addCallback(this);
-		// } catch (Exception e) {
-		// Log.e(Constant.TAG, "Back to main when record, Err:" + e);
-		// }
-		// }
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// if (!MyApplication.isVideoReording) {
-		// release();
-		// }
-		// mHolder = null;
 	}
 
 	private boolean openCamera() {
@@ -1607,6 +1584,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (Constant.isDebug) {
 				Log.d(Constant.TAG, "Record Start");
 			}
+			// TODO
+			setDirectory(PATH_SDCARD_2);
 			return mMyRecorder.start();
 		}
 		return -1;

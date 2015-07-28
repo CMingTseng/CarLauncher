@@ -11,16 +11,20 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +40,10 @@ import com.aispeech.export.listeners.AILocalGrammarListener;
 import com.aispeech.speech.AIAuthEngine;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.AiSpeechGrammarHelper;
 import com.tchip.carlauncher.util.NetworkUtil;
+import com.tchip.carlauncher.view.ResideMenu;
 
 /**
  * 本示例将演示通过联合使用本地识别引擎和本地语法编译引擎实现定制识别。<br>
@@ -46,8 +52,14 @@ import com.tchip.carlauncher.util.NetworkUtil;
 public class ChatAiActivity extends Activity {
 
 	private RelativeLayout layoutBack;
+	private LinearLayout layoutHelp; // 帮助
+	private Button btnToMainFromVoiceAi, btnHelp;
+	private TextView tvAnswer, tvQuestion;
 
-	TextView tvAnswer;
+	private boolean isResideMenuClose = true;
+	// 左侧帮助侧边栏
+	private ResideMenu resideMenu;
+
 	Button bt_res;
 	ImageView imageVoice;
 	Toast mToast;
@@ -60,8 +72,9 @@ public class ChatAiActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/** 'Window.FEATURE_NO_TITLE' - Used to hide the title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_chat_ai);
 
 		initialLayout();
@@ -82,11 +95,32 @@ public class ChatAiActivity extends Activity {
 
 	private void initialLayout() {
 		tvAnswer = (TextView) findViewById(R.id.tvAnswer);
+		tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+		tvQuestion.setVisibility(View.GONE);
 		imageVoice = (ImageView) findViewById(R.id.imageVoice);
 		imageVoice.setOnClickListener(new MyOnClickListener());
 
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
+		btnToMainFromVoiceAi = (Button) findViewById(R.id.btnToMainFromVoiceAi);
+		btnToMainFromVoiceAi.setOnClickListener(new MyOnClickListener());
+
+		// 帮助侧边栏
+		layoutHelp = (LinearLayout) findViewById(R.id.layoutHelp);
+		layoutHelp.setOnClickListener(new MyOnClickListener());
+
+		resideMenu = new ResideMenu(this);
+		resideMenu.setBackground(R.color.grey_dark_light);
+		resideMenu.attachToActivity(this);
+		resideMenu.setMenuListener(menuListener);
+		// valid scale factor is between 0.0f and 1.0f. leftmenu'width is
+		// 150dip.
+		resideMenu.setScaleValue(0.6f);
+		// 禁止使用右侧菜单
+		resideMenu.setDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+
+		btnHelp = (Button) findViewById(R.id.btnHelp);
+		btnHelp.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -116,13 +150,65 @@ public class ChatAiActivity extends Activity {
 				break;
 
 			case R.id.layoutBack:
-				finish();
+			case R.id.btnToMainFromVoiceAi:
+				backToMain();
+				break;
+
+			case R.id.btnHelp:
+			case R.id.layoutHelp:
+				resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
 				break;
 
 			default:
 				break;
 			}
 		}
+	}
+
+	private void backToMain() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (isResideMenuClose) {
+				backToMain();
+			} else {
+				resideMenu.closeMenu();
+			}
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	/**
+	 * 侧边栏打开关闭监听
+	 */
+	private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
+		@Override
+		public void openMenu() {
+			isResideMenuClose = false;
+			layoutHelp.setVisibility(View.GONE);
+		}
+
+		@Override
+		public void closeMenu() {
+			isResideMenuClose = true;
+			layoutHelp.setVisibility(View.VISIBLE);
+		}
+	};
+
+	public ResideMenu getResideMenu() {
+		return resideMenu;
+	}
+
+	private void startSpeak(String content) {
+		Intent intent = new Intent(ChatAiActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
 	}
 
 	/**
@@ -373,6 +459,88 @@ public class ChatAiActivity extends Activity {
 			try {
 				showInfo("ts" + ts + "\n"
 						+ ((JSONObject) results.getResultObject()).toString(4));
+				// TODO:解析JSON
+				Log.v(Constant.TAG,
+						((JSONObject) results.getResultObject()).toString());
+				JSONObject jsonObject;
+				jsonObject = (JSONObject) results.getResultObject();
+
+				JSONObject jsonResult = jsonObject.getJSONObject("result");
+				String strType = jsonObject.getString("src"); // Cloud,Native
+				if ("cloud".equals(strType)) { // 云端结果
+					String strInput = jsonResult.getString("input"); // cloud
+					if (strInput != null && strInput.trim().length() > 0) {
+						tvQuestion.setVisibility(View.VISIBLE);
+						tvQuestion.setText(strInput);
+					}
+					try {
+						JSONObject jsonSemmantics = jsonResult
+								.getJSONObject("semantics");
+						JSONObject jsonRequest = jsonSemmantics
+								.getJSONObject("request");
+						String strAction = jsonRequest.getString("action");
+						String strDomain = jsonRequest.getString("domain");
+						if (strAction != null && strAction.trim().length() > 0) {
+							if ("地图".equals(strDomain)) {
+								JSONObject jsonParam = jsonRequest
+										.getJSONObject("param");
+								String strDestination = jsonParam
+										.getString("终点名称");
+								// TODO:跳转到导航
+								if (strDestination != null
+										&& strDestination.trim().length() > 0) {
+									// 跳转到自写导航界面，不使用GeoCoder
+									Intent intentNavi = new Intent(
+											ChatAiActivity.this,
+											NavigationActivity.class);
+									intentNavi.putExtra("destionation",
+											strDestination);
+									startActivity(intentNavi);
+
+								}
+							} else if ("app".equals(strDomain)) {
+
+							} else if ("日历".equals(strDomain)) {
+								JSONObject jsonParam = jsonRequest
+										.getJSONObject("param");
+								String strDate = jsonParam.getString("阳历日期");
+								Log.v(Constant.TAG, "阳历日期:" + strDate); // 格式：20150728
+
+								String strAnswer = "日期：" + strDate;
+								tvAnswer.setText(strAnswer);
+								startSpeak(strAnswer);
+							}
+						}
+					} catch (Exception e) {
+					}
+
+				} else if ("native".equals(strType)) { // 本地结果
+					String strInput = jsonObject.getJSONObject("result").getString("rec");
+					if (strInput != null && strInput.trim().length() > 0) {
+						tvQuestion.setVisibility(View.VISIBLE);
+						tvQuestion.setText(strInput);
+					}
+
+					JSONObject jsonPost = jsonResult.getJSONObject("post");
+					JSONObject jsonSem = jsonPost.getJSONObject("sem");
+					String strDomain = jsonSem.getString("domain");
+					String strAction = jsonSem.getString("call");
+					if (strDomain != null && strDomain.trim().length() > 0) {
+						if ("phone".equals(strDomain)) {
+							if (Constant.hasDialer) {
+
+							} else {
+								String strAnswer = "本机不支持通讯功能";
+								tvAnswer.setText(strAnswer);
+								startSpeak(strAnswer);
+							}
+
+						}else if("app".equals(strDomain)){
+							
+						}
+					}
+				}
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

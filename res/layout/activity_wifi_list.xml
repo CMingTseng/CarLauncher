@@ -72,6 +72,17 @@
             app:thumb_marginLeft="-5dp"
             app:thumb_marginRight="-5dp"
             app:thumb_marginTop="-2.5dp" />
+        
+         <Button
+            android:id="@+id/btnWifiAp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:layout_toLeftOf="@id/switchWifi"
+            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ui_wifi_ap" />
+        
     </RelativeLayout>
 
     <ListView

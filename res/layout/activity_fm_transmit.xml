@@ -81,26 +81,26 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/fm8550"
+                android:id="@+id/fmLow"
                 android:layout_width="150dp"
                 android:layout_height="80dp"
-                android:text="85.5"
+                android:text="87.5"
                 android:textSize="30sp" />
 
             <Button
-                android:id="@+id/fm9030"
+                android:id="@+id/fmMiddle"
                 android:layout_width="150dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text="90.3"
+                android:text="97.5"
                 android:textSize="30sp" />
 
             <Button
-                android:id="@+id/fm10570"
+                android:id="@+id/fmHigh"
                 android:layout_width="150dp"
                 android:layout_height="80dp"
-                android:text="105.7"
+                android:text="107.5"
                 android:textSize="30sp" />
         </LinearLayout>
     </RelativeLayout>

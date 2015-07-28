@@ -52,7 +52,7 @@ public class SettingSystemVolumeActivity extends Activity {
 
 		// 时钟
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
-		textClock.setTypeface(Typefaces.get(this, Constant.FONT_PATH
+		textClock.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
