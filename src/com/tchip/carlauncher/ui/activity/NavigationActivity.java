@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -26,17 +25,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -49,9 +44,7 @@ import com.baidu.mapapi.overlayutil.PoiOverlay;
 import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
@@ -61,13 +54,10 @@ import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.poi.PoiSortType;
-import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
-import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionResult.SuggestionInfo;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
-import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -84,12 +74,9 @@ import com.tchip.carlauncher.adapter.NaviResultAdapter;
 import com.tchip.carlauncher.model.NaviHistory;
 import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
-import com.tchip.carlauncher.ui.activity.MainActivity.MyLocationListener;
-import com.tchip.carlauncher.ui.activity.RoutePlanActivity.MyOnGetGeoCoderResultListener;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
-import com.baidu.navisdk.BNaviEngineManager;
 import com.baidu.navisdk.BaiduNaviManager;
 import com.baidu.navisdk.BaiduNaviManager.OnStartNavigationListener;
 import com.baidu.navisdk.comapi.routeplan.RoutePlanParams.NE_RoutePlan_Mode;
@@ -111,7 +98,7 @@ public class NavigationActivity extends FragmentActivity implements
 			layoutStarContent, layoutStarEditWork, layoutStarEditHome;
 	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
 			layoutHistoryBack, layoutRoadCondition, layoutStar,
-			layoutStarNaviWork, layoutStarNaviHome;
+			layoutStarNaviWork, layoutStarNaviHome, layoutOffline;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -137,13 +124,10 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private ProgressBar progressVoice;
 
-	// 百度地图地址转经纬度
-	private GeoCoder naviGeoCoder = null;
 	private MapView mMapView;
 	private LocationClient mLocationClient;
 
 	private SharedPreferences preference;
-	private Editor editor;
 	private String naviDesFromVoice = "";
 
 	@Override
@@ -163,7 +147,6 @@ public class NavigationActivity extends FragmentActivity implements
 		// 获取当前经纬度
 		preference = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
-		editor = preference.edit();
 		mLatitude = Double
 				.parseDouble(preference.getString("latitude", "0.00"));
 		mLongitude = Double.parseDouble(preference.getString("longitude",
@@ -241,8 +224,8 @@ public class NavigationActivity extends FragmentActivity implements
 		// 开启定位图层
 		mBaiduMap.setMyLocationEnabled(true);
 		// 自定义Maker
-		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
-				.fromResource(R.drawable.icon_arrow_up);
+		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+		// .fromResource(R.drawable.icon_arrow_up);
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
 		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
@@ -315,6 +298,10 @@ public class NavigationActivity extends FragmentActivity implements
 
 		layoutStarNaviHome = (RelativeLayout) findViewById(R.id.layoutStarNaviHome);
 		layoutStarNaviHome.setOnClickListener(new MyOnClickListener());
+
+		// 更新离线地图
+		layoutOffline = (RelativeLayout) findViewById(R.id.layoutOffline);
+		layoutOffline.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -524,6 +511,12 @@ public class NavigationActivity extends FragmentActivity implements
 
 			case R.id.layoutStarEditHome:
 				setStarPlace(StarType.TYPE_HOME);
+				break;
+
+			case R.id.layoutOffline:
+				Intent intentOffline = new Intent(NavigationActivity.this,
+						UpdateMapActivity.class);
+				startActivity(intentOffline);
 				break;
 
 			default:
