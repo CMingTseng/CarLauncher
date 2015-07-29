@@ -41,7 +41,7 @@ public class WeatherActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private FrameLayout frameLayout;
 	private String[] weatherArray;
-	
+
 	/**
 	 * 是否定位
 	 */
@@ -302,7 +302,7 @@ public class WeatherActivity extends Activity {
 		TextView day3wind = (TextView) findViewById(R.id.day3wind);
 		String day3windStr = sharedPreferences.getString("day3wind", "东北风5");
 		day3wind.setText(day3windStr);
-		
+
 		if (!isLocated) {
 			weatherArray[3] = strNoLoction;
 		} else if (!isGetSuccess) {
@@ -339,7 +339,7 @@ public class WeatherActivity extends Activity {
 		TextView day4wind = (TextView) findViewById(R.id.day4wind);
 		String day4windStr = sharedPreferences.getString("day4wind", "东北风5");
 		day4wind.setText(day4windStr);
-		
+
 		if (!isLocated) {
 			weatherArray[4] = strNoLoction;
 		} else if (!isGetSuccess) {
@@ -348,7 +348,6 @@ public class WeatherActivity extends Activity {
 			weatherArray[4] = day4WeekStr + "天气：" + day4WeatherStr + ","
 					+ day4tmpLowStr + "~" + day4tmpHighStr + "," + day4windStr;
 		}
-		
 
 		// Day 5
 		TextView day5week = (TextView) findViewById(R.id.day5week);
@@ -377,7 +376,7 @@ public class WeatherActivity extends Activity {
 		TextView day5wind = (TextView) findViewById(R.id.day5wind);
 		String day5windStr = sharedPreferences.getString("day5wind", "东北风5");
 		day5wind.setText(day5windStr);
-		
+
 		if (!isLocated) {
 			weatherArray[5] = strNoLoction;
 		} else if (!isGetSuccess) {

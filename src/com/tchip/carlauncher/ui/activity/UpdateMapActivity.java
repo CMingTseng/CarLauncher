@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class UpdateMapActivity extends Activity {
-	private final static String PATH_TO = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
 
 	private final static String[] pathFrom = {
 			"/storage/sdcard1/BaiduMapSDK/vmp/l/",
@@ -184,7 +183,7 @@ public class UpdateMapActivity extends Activity {
 
 			// 更新Media Database
 			sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-					Uri.parse("file://" + PATH_TO)));
+					Uri.parse("file://" + Constant.Path.BAIDU_OFFLINE_SUB)));
 
 			Message message = new Message();
 			message.what = 1;
@@ -251,7 +250,7 @@ public class UpdateMapActivity extends Activity {
 		public void run() {
 
 			for (int i = 0; i < pathFrom.length; i++) {
-				if (!copyFolder(pathFrom[i], PATH_TO)) {
+				if (!copyFolder(pathFrom[i], Constant.Path.BAIDU_OFFLINE_SUB)) {
 
 				} else {
 					Message message = new Message();

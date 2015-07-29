@@ -667,8 +667,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
 			imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
+
+			// 隐藏导航背景图
+			imageDefault.setVisibility(View.GONE);
 		} else {
 			imageWifiLevel.setImageResource(R.drawable.ic_qs_wifi_no_network);
+			// 显示导航背景图:当有离线地图时不需要显示
+			// imageDefault.setVisibility(View.VISIBLE);
 		}
 	}
 
