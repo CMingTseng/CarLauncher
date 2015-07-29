@@ -3,7 +3,7 @@ package com.tchip.carlauncher.ui.fragment;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
-import com.tchip.carlauncher.ui.activity.CopyMapActivity;
+import com.tchip.carlauncher.ui.activity.UpdateMapActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
@@ -170,7 +170,7 @@ public class SettingFragment extends Fragment {
 			switch (v.getId()) {
 			case R.id.layoutCopyMap:
 				Intent intentCopyMap = new Intent(context,
-						CopyMapActivity.class);
+						UpdateMapActivity.class);
 				startActivity(intentCopyMap);
 				break;
 

@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -16,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +29,7 @@ import com.baidu.mapapi.map.offline.MKOLSearchRecord;
 import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 
 /**
@@ -38,6 +45,14 @@ public class OfflineBaiduMapActivity extends Activity implements
 	private TextView stateView;
 	private EditText cityNameView;
 
+	private Button btnSearch;
+	private RelativeLayout layoutBack, layoutDownload, layoutCity,
+			layoutImport;
+
+	private LinearLayout layoutSingleDownload;
+
+	private boolean isSingleDownShow = false;
+
 	/**
 	 * 已下载的离线地图信息列表
 	 */
@@ -46,35 +61,58 @@ public class OfflineBaiduMapActivity extends Activity implements
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(R.layout.activity_offline_baidumap);
 		mOffline = new MKOfflineMap();
 		mOffline.init(this);
-		initView();
+		initialLayout();
 	}
 
-	private void initView() {
+	private void initialLayout() {
+
+		btnSearch = (Button) findViewById(R.id.btnSearch);
+		btnSearch.setOnClickListener(new MyOnClickListener());
+
+		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
+		layoutBack.setOnClickListener(new MyOnClickListener());
+
+		layoutDownload = (RelativeLayout) findViewById(R.id.layoutDownload);
+		layoutDownload.setOnClickListener(new MyOnClickListener());
+
+		layoutCity = (RelativeLayout) findViewById(R.id.layoutCity);
+		layoutCity.setOnClickListener(new MyOnClickListener());
+
+		layoutImport = (RelativeLayout) findViewById(R.id.layoutImport);
+		layoutImport.setOnClickListener(new MyOnClickListener());
+
+		layoutSingleDownload = (LinearLayout) findViewById(R.id.layoutSingleDownload);
+		layoutSingleDownload.setVisibility(View.GONE);
 
 		cidView = (TextView) findViewById(R.id.cityid);
-		cityNameView = (EditText) findViewById(R.id.city);
+		cityNameView = (EditText) findViewById(R.id.textCity);
 		stateView = (TextView) findViewById(R.id.state);
 
-		ListView hotCityList = (ListView) findViewById(R.id.hotcitylist);
-		ArrayList<String> hotCities = new ArrayList<String>();
-		// 获取热闹城市列表
+		// ListView hotCityList = (ListView) findViewById(R.id.hotcitylist);
+		// ArrayList<String> hotCities = new ArrayList<String>();
+		// // 获取热闹城市列表
 		ArrayList<MKOLSearchRecord> records1 = mOffline.getHotCityList();
-		if (records1 != null) {
-			for (MKOLSearchRecord r : records1) {
-				hotCities.add(r.cityName + "(" + r.cityID + ")" + "   --"
-						+ this.formatDataSize(r.size));
-			}
-		}
-		ListAdapter hAdapter = (ListAdapter) new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, hotCities);
-		hotCityList.setAdapter(hAdapter);
+		// if (records1 != null) {
+		// for (MKOLSearchRecord r : records1) {
+		// hotCities.add(r.cityName + "(" + r.cityID + ")" + "   --"
+		// + this.formatDataSize(r.size));
+		// }
+		// }
+		// ListAdapter hAdapter = (ListAdapter) new ArrayAdapter<String>(this,
+		// android.R.layout.simple_list_item_1, hotCities);
+		// hotCityList.setAdapter(hAdapter);
 
 		ListView allCityList = (ListView) findViewById(R.id.allcitylist);
 		// 获取所有支持离线地图的城市
-		ArrayList<String> allCities = new ArrayList<String>();
+		final ArrayList<String> allCities = new ArrayList<String>();
 		ArrayList<MKOLSearchRecord> records2 = mOffline.getOfflineCityList();
 		if (records1 != null) {
 			for (MKOLSearchRecord r : records2) {
@@ -85,6 +123,26 @@ public class OfflineBaiduMapActivity extends Activity implements
 		ListAdapter aAdapter = (ListAdapter) new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, allCities);
 		allCityList.setAdapter(aAdapter);
+		allCityList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				int startIndex = allCities.get(position).indexOf("(") + 1;
+				int endIndex = allCities.get(position).indexOf(")");
+				String clickId = allCities.get(position).substring(startIndex,
+						endIndex);
+				Log.v(Constant.TAG, "Offline Map id:" + clickId);
+
+				mOffline.start(Integer.parseInt(clickId));
+				Toast.makeText(
+						getApplicationContext(),
+						"开始下载:"
+								+ allCities.get(position).substring(0,
+										startIndex - 1), Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
 
 		LinearLayout cl = (LinearLayout) findViewById(R.id.citylist_layout);
 		LinearLayout lm = (LinearLayout) findViewById(R.id.localmap_layout);
@@ -104,41 +162,66 @@ public class OfflineBaiduMapActivity extends Activity implements
 	}
 
 	/**
-	 * 切换至城市列表
+	 * 设置下载单个城市离线地图是否可见
 	 * 
-	 * @param view
+	 * @param isShow
 	 */
-	public void clickCityListButton(View view) {
-		LinearLayout cl = (LinearLayout) findViewById(R.id.citylist_layout);
-		LinearLayout lm = (LinearLayout) findViewById(R.id.localmap_layout);
-		lm.setVisibility(View.GONE);
-		cl.setVisibility(View.VISIBLE);
-
+	private void setSingleDownShow(boolean isShow) {
+		if (!isShow) {
+			layoutSingleDownload.setVisibility(View.GONE);
+			isSingleDownShow = false;
+		} else {
+			layoutSingleDownload.setVisibility(View.VISIBLE);
+			isSingleDownShow = true;
+		}
 	}
 
-	/**
-	 * 切换至下载管理列表
-	 * 
-	 * @param view
-	 */
-	public void clickLocalMapListButton(View view) {
-		LinearLayout cl = (LinearLayout) findViewById(R.id.citylist_layout);
-		LinearLayout lm = (LinearLayout) findViewById(R.id.localmap_layout);
-		lm.setVisibility(View.VISIBLE);
-		cl.setVisibility(View.GONE);
-	}
+	class MyOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.btnSearch:
+				// 搜索离线城市
+				ArrayList<MKOLSearchRecord> records = mOffline
+						.searchCity(cityNameView.getText().toString());
+				if (records == null || records.size() != 1)
+					return;
+				setSingleDownShow(true);
+				cidView.setText(String.valueOf(records.get(0).cityID));
+				break;
 
-	/**
-	 * 搜索离线需市
-	 * 
-	 * @param view
-	 */
-	public void search(View view) {
-		ArrayList<MKOLSearchRecord> records = mOffline.searchCity(cityNameView
-				.getText().toString());
-		if (records == null || records.size() != 1)
-			return;
-		cidView.setText(String.valueOf(records.get(0).cityID));
+			case R.id.layoutBack:
+				if (isSingleDownShow) {
+					setSingleDownShow(false);
+				} else {
+					finish();
+				}
+				break;
+
+			case R.id.layoutDownload:
+				// 下载管理列表
+				LinearLayout cl = (LinearLayout) findViewById(R.id.citylist_layout);
+				LinearLayout lm = (LinearLayout) findViewById(R.id.localmap_layout);
+				lm.setVisibility(View.VISIBLE);
+				cl.setVisibility(View.GONE);
+				break;
+
+			case R.id.layoutCity:
+				// 城市列表
+				LinearLayout cls = (LinearLayout) findViewById(R.id.citylist_layout);
+				LinearLayout lms = (LinearLayout) findViewById(R.id.localmap_layout);
+				lms.setVisibility(View.GONE);
+				cls.setVisibility(View.VISIBLE);
+				break;
+
+			case R.id.layoutImport:
+				importFromSDCard();
+				break;
+
+			default:
+				break;
+			}
+		}
 	}
 
 	/**
@@ -149,7 +232,6 @@ public class OfflineBaiduMapActivity extends Activity implements
 	public void start(View view) {
 		int cityid = Integer.parseInt(cidView.getText().toString());
 		mOffline.start(cityid);
-		clickLocalMapListButton(null);
 		Toast.makeText(this, "开始下载离线地图. cityid: " + cityid, Toast.LENGTH_SHORT)
 				.show();
 		updateView();
@@ -173,10 +255,9 @@ public class OfflineBaiduMapActivity extends Activity implements
 	 * 
 	 * @param view
 	 */
-	public void remove(View view) {
-		int cityid = Integer.parseInt(cidView.getText().toString());
-		mOffline.remove(cityid);
-		Toast.makeText(this, "删除离线地图. cityid: " + cityid, Toast.LENGTH_SHORT)
+	public void deleteMapByCityId(int cityId) {
+		mOffline.remove(cityId);
+		Toast.makeText(this, "删除离线地图. cityid: " + cityId, Toast.LENGTH_SHORT)
 				.show();
 		updateView();
 	}
@@ -186,9 +267,8 @@ public class OfflineBaiduMapActivity extends Activity implements
 	 * 
 	 * 存放位置：USB存储器/BaiduMapSDK/vmp/l/zhongshan_187.dat
 	 * 
-	 * @param view
 	 */
-	public void importFromSDCard(View view) {
+	public void importFromSDCard() {
 		int num = mOffline.importOfflineData();
 		String msg = "";
 		if (num == 0) {
@@ -303,6 +383,8 @@ public class OfflineBaiduMapActivity extends Activity implements
 		void initViewItem(View view, final MKOLUpdateElement e) {
 			Button display = (Button) view.findViewById(R.id.btnDisplay);
 			Button remove = (Button) view.findViewById(R.id.remove);
+			Button btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
+
 			TextView title = (TextView) view.findViewById(R.id.title);
 			TextView update = (TextView) view.findViewById(R.id.update);
 			TextView ratio = (TextView) view.findViewById(R.id.ratio);
@@ -310,8 +392,12 @@ public class OfflineBaiduMapActivity extends Activity implements
 			title.setText(e.cityName);
 			if (e.update) {
 				update.setText("可更新");
+				update.setTextColor(Color.RED);
+				btnUpdate.setText("更新");
 			} else {
 				update.setText("最新");
+				update.setTextColor(Color.BLUE);
+				btnUpdate.setText("重新下载");
 			}
 			if (e.ratio != 100) {
 				display.setEnabled(false);
@@ -334,6 +420,14 @@ public class OfflineBaiduMapActivity extends Activity implements
 					intent.setClass(OfflineBaiduMapActivity.this,
 							OfflineBaiduMapShowActivity.class);
 					startActivity(intent);
+				}
+			});
+
+			btnUpdate.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					mOffline.update(e.cityID);
+					updateView();
 				}
 			});
 		}

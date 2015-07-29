@@ -9,9 +9,11 @@ import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.view.ButtonFlat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CopyMapActivity extends Activity {
+public class UpdateMapActivity extends Activity {
 	private final static String PATH_TO = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
 
 	private final static String[] pathFrom = {
@@ -38,8 +40,8 @@ public class CopyMapActivity extends Activity {
 
 	private ProgressBar progressCopy;
 	private TextView textHint, textDetail;
-	private RelativeLayout layoutBack;
-	private Button btnStart;
+	private RelativeLayout layoutBack, layoutUpdateOnline;
+	private ButtonFlat btnStart;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,27 +51,31 @@ public class CopyMapActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		setContentView(R.layout.activity_copy_map);
+		setContentView(R.layout.activity_update_map);
 
 		initialLayout();
 
-		//statrtScanThread();
+		// statrtScanThread();
 	}
 
 	private void initialLayout() {
 		progressCopy = (ProgressBar) findViewById(R.id.progressCopy);
 		progressCopy.setVisibility(View.GONE);
-		
+
 		textHint = (TextView) findViewById(R.id.textHint);
-		//textHint.setText("正在扫描SD卡是否有离线地图");
+		// textHint.setText("正在扫描SD卡是否有离线地图");
 
 		textDetail = (TextView) findViewById(R.id.textDetail);
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
 
-		btnStart = (Button) findViewById(R.id.btnStart);
+		btnStart = (ButtonFlat) findViewById(R.id.btnStart);
+		btnStart.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
 		btnStart.setOnClickListener(new MyOnClickListener());
 		btnStart.setVisibility(View.VISIBLE);
+
+		layoutUpdateOnline = (RelativeLayout) findViewById(R.id.layoutUpdateOnline);
+		layoutUpdateOnline.setOnClickListener(new MyOnClickListener());
 	}
 
 	private void statrtScanThread() {
@@ -105,6 +111,12 @@ public class CopyMapActivity extends Activity {
 
 			case R.id.btnStart:
 				statrtScanThread();
+				break;
+
+			case R.id.layoutUpdateOnline:
+				Intent intentUpdate = new Intent(UpdateMapActivity.this,
+						OfflineBaiduMapActivity.class);
+				startActivity(intentUpdate);
 				break;
 
 			default:
@@ -165,7 +177,7 @@ public class CopyMapActivity extends Activity {
 				progressCopy.setProgress(i);
 				Message message = new Message();
 				message.what = 3;
-				message.arg1 = i+1;
+				message.arg1 = i + 1;
 				message.arg2 = progressCopy.getMax();
 				copyHandler.sendMessage(message);
 			}
@@ -224,9 +236,9 @@ public class CopyMapActivity extends Activity {
 				textDetail.setVisibility(View.VISIBLE);
 				textDetail.setText(now + "/" + total);
 				break;
-				
+
 			case 4:
-				//textHint.setText("正在检测SD卡是否有离线地图");
+				// textHint.setText("正在检测SD卡是否有离线地图");
 				break;
 			}
 			super.handleMessage(msg);
@@ -247,7 +259,7 @@ public class CopyMapActivity extends Activity {
 					copyHandler.sendMessage(message);
 					Log.v(Constant.TAG, "Copy Map form SD Success, From:"
 							+ pathFrom[i]);
-					//importOfflineMapFromSDCard();
+					// importOfflineMapFromSDCard();
 					break;
 				}
 			}

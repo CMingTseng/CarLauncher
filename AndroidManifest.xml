@@ -114,7 +114,7 @@
             android:name="com.tchip.carlauncher.bluetooth.ClientSocketActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.CopyMapActivity"
+            android:name="com.tchip.carlauncher.ui.activity.UpdateMapActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"

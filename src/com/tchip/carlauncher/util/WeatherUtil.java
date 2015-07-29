@@ -17,7 +17,10 @@ import com.tchip.carlauncher.view.WeatherDynamicRainView;
 
 public class WeatherUtil {
 
-	public static boolean fancyBackground = false;
+	/**
+	 * 背景图是否根据天气变化
+	 */
+	public static boolean fancyBackground = true;
 
 	public static enum WEATHER_TYPE {
 		CLOUD, SUN, RAIN, SNOW, FOG, RAIN_SNOW, HAIL
@@ -190,7 +193,7 @@ public class WeatherUtil {
 				|| weather.equals("暴雨到大暴雨") || weather.equals("大暴雨到特大暴雨")
 				|| weather.equals("多云转雨") || weather.equals("多云转大雨")
 				|| weather.equals("雨转多云") || weather.equals("小雨转暴雨")
-				|| weather.equals("小雨转中雨")|| weather.equals("小雨转大雨")) {
+				|| weather.equals("小雨转中雨") || weather.equals("小雨转大雨")) {
 			return WEATHER_TYPE.RAIN;
 		} else if (weather.equals("雪") || weather.equals("阵雪")
 				|| weather.equals("小雪") || weather.equals("中雪")
