@@ -41,7 +41,20 @@ public class WeatherActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private FrameLayout frameLayout;
 	private String[] weatherArray;
-	private boolean isLocated = true;
+	
+	/**
+	 * 是否定位
+	 */
+	private boolean isLocated = false;
+
+	/**
+	 * 获取天气信息是否成功
+	 */
+	private boolean isGetSuccess = false;
+
+	private String strNoLoction = "定位失败，无法获取天气信息";
+	private String strNoWeather = "天气获取失败，请稍候重试";
+
 	private ProgressBar updateProgress;
 	private Button updateButton;
 
@@ -84,9 +97,11 @@ public class WeatherActivity extends Activity {
 			case RAIN:
 				WeatherUtil.rainAnimation(getApplicationContext(), frameLayout);
 				break;
+
 			case SNOW:
 				WeatherUtil.snowAnimation(getApplicationContext(), frameLayout);
 				break;
+
 			case SUN:
 			case CLOUD:
 			default:
@@ -171,14 +186,19 @@ public class WeatherActivity extends Activity {
 				+ sharedPreferences.getString("postTime", "2015 05:55").split(
 						" ")[1]);
 
-		if (!"未定位".equals(cityName)) {
+		if ("未定位".equals(cityName)) {
+			weatherArray[0] = strNoLoction;
+			isLocated = false;
+		} else if ("未知".equals(weatherToday)) {
+			weatherArray[0] = strNoWeather;
+			isGetSuccess = false;
+		} else {
 			weatherArray[0] = cityName + "今日天气:" + weatherToday + ","
 					+ day0tmpLow + "到" + day0tmpHigh + "℃," + day0windStr;
 			isLocated = true;
-		} else {
-			weatherArray[0] = "定位失败，无法获取天气信息";
-			isLocated = false;
+			isGetSuccess = true;
 		}
+
 		// Day 1
 		TextView day1Week = (TextView) findViewById(R.id.day1week);
 		String day1weekStr = DateUtil.getWeekStrByInt(weekToday + 1);
@@ -209,11 +229,13 @@ public class WeatherActivity extends Activity {
 		String day1windStr = sharedPreferences.getString("day1wind", "东北风5");
 		day1wind.setText(day1windStr);
 
-		if (isLocated) {
+		if (!isLocated) {
+			weatherArray[1] = strNoLoction;
+		} else if (!isGetSuccess) {
+			weatherArray[1] = strNoWeather;
+		} else {
 			weatherArray[1] = day1weekStr + "天气：" + day1weatherStr + ","
 					+ day1tmpLowStr + "~" + day1tmpHighStr + "," + day1windStr;
-		} else {
-			weatherArray[1] = "定位失败，无法获取天气信息";
 		}
 
 		// Day 2
@@ -244,11 +266,13 @@ public class WeatherActivity extends Activity {
 		String day2windStr = sharedPreferences.getString("day2wind", "东北风5");
 		day2wind.setText(day2windStr);
 
-		if (isLocated) {
+		if (!isLocated) {
+			weatherArray[2] = strNoLoction;
+		} else if (!isGetSuccess) {
+			weatherArray[2] = strNoWeather;
+		} else {
 			weatherArray[2] = day2WeekStr + "天气：" + day2WeatherStr + ","
 					+ day2tmpLowStr + "~" + day2tmpHighStr + "," + day2windStr;
-		} else {
-			weatherArray[2] = "定位失败，无法获取天气信息";
 		}
 
 		// Day 3
@@ -278,12 +302,14 @@ public class WeatherActivity extends Activity {
 		TextView day3wind = (TextView) findViewById(R.id.day3wind);
 		String day3windStr = sharedPreferences.getString("day3wind", "东北风5");
 		day3wind.setText(day3windStr);
-
-		if (isLocated) {
+		
+		if (!isLocated) {
+			weatherArray[3] = strNoLoction;
+		} else if (!isGetSuccess) {
+			weatherArray[3] = strNoWeather;
+		} else {
 			weatherArray[3] = day3WeekStr + "天气：" + day3WeatherStr + ","
 					+ day3tmpLowStr + "~" + day3tmpHighStr + "," + day3windStr;
-		} else {
-			weatherArray[3] = "定位失败，无法获取天气信息";
 		}
 
 		// Day 4
@@ -313,13 +339,16 @@ public class WeatherActivity extends Activity {
 		TextView day4wind = (TextView) findViewById(R.id.day4wind);
 		String day4windStr = sharedPreferences.getString("day4wind", "东北风5");
 		day4wind.setText(day4windStr);
-
-		if (isLocated) {
+		
+		if (!isLocated) {
+			weatherArray[4] = strNoLoction;
+		} else if (!isGetSuccess) {
+			weatherArray[4] = strNoWeather;
+		} else {
 			weatherArray[4] = day4WeekStr + "天气：" + day4WeatherStr + ","
 					+ day4tmpLowStr + "~" + day4tmpHighStr + "," + day4windStr;
-		} else {
-			weatherArray[4] = "定位失败，无法获取天气信息";
 		}
+		
 
 		// Day 5
 		TextView day5week = (TextView) findViewById(R.id.day5week);
@@ -348,12 +377,14 @@ public class WeatherActivity extends Activity {
 		TextView day5wind = (TextView) findViewById(R.id.day5wind);
 		String day5windStr = sharedPreferences.getString("day5wind", "东北风5");
 		day5wind.setText(day5windStr);
-
-		if (isLocated) {
+		
+		if (!isLocated) {
+			weatherArray[5] = strNoLoction;
+		} else if (!isGetSuccess) {
+			weatherArray[5] = strNoWeather;
+		} else {
 			weatherArray[5] = day5WeekStr + "天气：" + day5WeatherStr + ","
 					+ day5tmpLowStr + "~" + day5tmpHighStr + "," + day5windStr;
-		} else {
-			weatherArray[5] = "定位失败，无法获取天气信息";
 		}
 
 		LinearLayout layoutDay1 = (LinearLayout) findViewById(R.id.layoutDay1);
