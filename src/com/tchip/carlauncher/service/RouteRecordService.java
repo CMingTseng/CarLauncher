@@ -28,6 +28,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.model.RoutePoint;
 
@@ -60,8 +61,11 @@ public class RouteRecordService extends Service {
 		sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
-		editor.putBoolean("isRun", true);
-		editor.commit();
+
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, false);
 		// 初始化路径
@@ -75,6 +79,8 @@ public class RouteRecordService extends Service {
 		}
 		// 开启轨迹记录线程
 		new Thread(new RouteRecordThread()).start();
+
+		return super.onStartCommand(intent, flags, startId);
 	}
 
 	public class RouteRecordThread implements Runnable {
@@ -82,7 +88,7 @@ public class RouteRecordService extends Service {
 		@Override
 		public void run() {
 			synchronized (recordHandler) {
-				while (true) {
+				do {
 					try {
 						Thread.sleep(scanSpan);
 						Message message = new Message();
@@ -91,7 +97,7 @@ public class RouteRecordService extends Service {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
+				} while (MyApplication.isPowerConnect);
 			}
 		}
 	}
@@ -126,6 +132,28 @@ public class RouteRecordService extends Service {
 				}
 				list.add(routePoint);
 			}
+		}
+		// 1K轨迹点保存为1个文件
+		if (list.size() > 999 || !MyApplication.isPowerConnect) {
+			saveRouteFile(list);
+		}
+	}
+
+	/**
+	 * 保存轨迹文件
+	 * 
+	 * @param list
+	 */
+	private void saveRouteFile(List<RoutePoint> list) {
+		if (list.size() >= 2) {
+			String saveString = adapter.setJsonString(list);
+			writeFileSdcard(getFilePath(), saveString);
+			Log.v(Constant.TAG,
+					"Auto Route Track:save file with " + list.size()
+							+ " points");
+			list.clear();
+		} else {
+			Log.e(Constant.TAG, "Auto Route Track:list size is less than 2");
 		}
 	}
 
@@ -235,24 +263,10 @@ public class RouteRecordService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		mLocationClient.stop();
-		savingRouteFile(); // 服务销毁时，保存轨迹点到文件
-	}
-
-	private void savingRouteFile() {
-		if (list.size() >= 2) {
-			String saveString = adapter.setJsonString(list);
-			writeFileSdcard(getFilePath(), saveString);
-			if (Constant.isDebug)
-				Log.v(Constant.TAG, "saving route files with " + list.size()
-						+ " points");
-		} else if (Constant.isDebug) {
-			Toast.makeText(getApplicationContext(),
-					"Route point is less than 2", Toast.LENGTH_SHORT).show();
-		}
+		saveRouteFile(list); // 服务销毁时，保存轨迹点到文件
 
 		// Update Running State
-		editor.putBoolean("isRun", false);
-		editor.commit();
+		MyApplication.isRouteRecord = false;
 	}
 
 }

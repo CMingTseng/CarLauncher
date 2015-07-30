@@ -263,6 +263,10 @@
         <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
         <service android:name="com.tchip.carlauncher.service.TrafficFetchService" />
         <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
+        <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
+        <service android:name="com.tchip.carlauncher.service.BrightAdjustService" />
+        <service android:name="com.tchip.carlauncher.service.ConnectWifiService" />
+        <service android:name="com.tchip.carlauncher.service.NetworkChangeService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -280,7 +284,6 @@
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
             </intent-filter>
         </service>
-        <service android:name="com.tchip.carlauncher.service.ConnectWifiService" />
     </application>
 
 </manifest>

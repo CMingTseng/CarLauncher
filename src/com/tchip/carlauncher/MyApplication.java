@@ -22,6 +22,9 @@ public class MyApplication extends Application {
 	private static String rootPath = "/mymusic";
 	public static String lrcPath = "/lrc";
 	public static String nowPlayMusic = "";
+	
+	// Route Record
+	public static boolean isRouteRecord = false;
 
 	@Override
 	public void onCreate() {
