@@ -148,7 +148,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private static final String PATH_ZERO = "/mnt/sdcard";
 	private static final String PATH_ONE = "/mnt/sdcard/path_one";
 	private static final String PATH_TWO = "/mnt/sdcard/path_two";
-	private static final String PATH_SDCARD_2 = "/storage/sdcard2/";
+	private static final String PATH_SDCARD_2 = "/storage/sdcard2";
 
 	// 重叠
 	private static final int STATE_OVERLAP_ZERO = 0;
@@ -1478,8 +1478,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private boolean deleteOldestUnlockVideo() {
 		try {
-			String sdcardPath = sharedPreferences.getString("sdcardPath",
-					"/mnt/sdcard2/");
+			String sdcardPath = "/storage/sdcard2/";
+			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
 			while (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
@@ -1581,7 +1581,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public boolean isSD2Exists() {
 		try {
-			String pathVideo = PATH_SDCARD_2 + "tachograph/";
+			String pathVideo = PATH_SDCARD_2 + "/tachograph/";
 			File fileVideo = new File(pathVideo);
 			fileVideo.mkdirs();
 			File file = new File(pathVideo);
@@ -1750,7 +1750,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public void onError(int err) {
 		if (Constant.isDebug) {
-			Log.e(Constant.TAG, "Error : " + err);
+			Log.e(Constant.TAG, "Record Error : " + err);
 		}
 	}
 
@@ -1763,6 +1763,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
 		 */
 		deleteOldestUnlockVideo();
+		Log.v(Constant.TAG, "Save path:" + path);
 		if (type == 1) {
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
