@@ -89,7 +89,7 @@ public class UpdateMapActivity extends Activity {
 		layoutUpdateOnline.setOnClickListener(new MyOnClickListener());
 	}
 
-	private void statrtImportThread() {
+	private void startImportThread() {
 		// TODO：判断是否需要拷贝
 		new Thread(new CopyThread()).start();
 	}
@@ -142,7 +142,7 @@ public class UpdateMapActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
-							statrtImportThread();
+							startImportThread();
 						}
 					});
 					builder.setNegativeButton("取消", new OnClickListener() {
@@ -351,7 +351,6 @@ public class UpdateMapActivity extends Activity {
 					copyHandler.sendMessage(message);
 					Log.v(Constant.TAG, "Copy Map form SD Success, From:"
 							+ pathFrom[i]);
-					// importOfflineMapFromSDCard();
 					break;
 				}
 			}
@@ -359,19 +358,28 @@ public class UpdateMapActivity extends Activity {
 	}
 
 	/**
-	 * 导入离线地图包 TODO：需要新Thread
+	 * 导入离线地图包数据
 	 */
 	private MKOfflineMap mOffline = null;
 
 	public void importOfflineMapFromSDCard() {
-		mOffline = new MKOfflineMap();
-		mOffline.init(new MyMKOfflineMapListener());
-		int num = mOffline.importOfflineData();
-		Log.v(Constant.TAG, "Import Baidu Offline Map number:" + num);
-		if (num == 0) {
-			// 没有导入离线包，可能是离线包放置位置不正确，或离线包已经导入过
-		} else {
-			// "成功导入 num 个离线包
+		new Thread(new ImportDataThread()).start();
+	}
+
+	public class ImportDataThread implements Runnable {
+
+		@Override
+		public void run() {
+			mOffline = new MKOfflineMap();
+			mOffline.init(new MyMKOfflineMapListener());
+			int num = mOffline.importOfflineData();
+			Log.v(Constant.TAG,
+					"ImportDataThread:Import Baidu Offline Map number:" + num);
+			if (num == 0) {
+				// 没有导入离线包，可能是离线包放置位置不正确，或离线包已经导入过
+			} else {
+				// "成功导入 num 个离线包
+			}
 		}
 	}
 
