@@ -33,7 +33,7 @@ public interface Constant {
 	/**
 	 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 	 */
-	public static boolean isVoiceXunfei = true;
+	public static boolean isVoiceXunfei = false;
 
 	/**
 	 * 思必驰
@@ -76,6 +76,11 @@ public interface Constant {
 		 * 字体目录
 		 */
 		public static final String FONT = "fonts/";
+		
+		/**
+		 * 百度离线地图子级目录
+		 */
+		public static final String BAIDU_OFFLINE_SUB = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
 	}
 
 	/**

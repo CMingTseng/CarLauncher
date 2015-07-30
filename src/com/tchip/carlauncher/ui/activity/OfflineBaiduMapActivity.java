@@ -31,6 +31,7 @@ import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.NetworkUtil;
 
 /**
  * 安装后搜索仍需联网，但会节约达90%的流量
@@ -128,19 +129,23 @@ public class OfflineBaiduMapActivity extends Activity implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				int startIndex = allCities.get(position).indexOf("(") + 1;
-				int endIndex = allCities.get(position).indexOf(")");
-				String clickId = allCities.get(position).substring(startIndex,
-						endIndex);
-				Log.v(Constant.TAG, "Offline Map id:" + clickId);
+				if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+					int startIndex = allCities.get(position).indexOf("(") + 1;
+					int endIndex = allCities.get(position).indexOf(")");
+					String clickId = allCities.get(position).substring(
+							startIndex, endIndex);
+					Log.v(Constant.TAG, "Offline Map id:" + clickId);
 
-				mOffline.start(Integer.parseInt(clickId));
-				Toast.makeText(
-						getApplicationContext(),
-						"开始下载:"
-								+ allCities.get(position).substring(0,
-										startIndex - 1), Toast.LENGTH_SHORT)
-						.show();
+					mOffline.start(Integer.parseInt(clickId));
+					Toast.makeText(
+							getApplicationContext(),
+							"开始下载:"
+									+ allCities.get(position).substring(0,
+											startIndex - 1), Toast.LENGTH_SHORT)
+							.show();
+				} else {
+					NetworkUtil.noNetworkHint(getApplicationContext());
+				}
 			}
 		});
 
@@ -182,12 +187,19 @@ public class OfflineBaiduMapActivity extends Activity implements
 			switch (v.getId()) {
 			case R.id.btnSearch:
 				// 搜索离线城市
-				ArrayList<MKOLSearchRecord> records = mOffline
-						.searchCity(cityNameView.getText().toString());
-				if (records == null || records.size() != 1)
-					return;
-				setSingleDownShow(true);
-				cidView.setText(String.valueOf(records.get(0).cityID));
+				if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+					ArrayList<MKOLSearchRecord> records = mOffline
+							.searchCity(cityNameView.getText().toString());
+					if (records == null || records.size() != 1) {
+						Toast.makeText(getApplicationContext(), "未找到相关城市",
+								Toast.LENGTH_SHORT).show();
+						return;
+					}
+					setSingleDownShow(true);
+					cidView.setText(String.valueOf(records.get(0).cityID));
+				} else {
+					NetworkUtil.noNetworkHint(getApplicationContext());
+				}
 				break;
 
 			case R.id.layoutBack:
@@ -230,11 +242,15 @@ public class OfflineBaiduMapActivity extends Activity implements
 	 * @param view
 	 */
 	public void start(View view) {
-		int cityid = Integer.parseInt(cidView.getText().toString());
-		mOffline.start(cityid);
-		Toast.makeText(this, "开始下载离线地图. cityid: " + cityid, Toast.LENGTH_SHORT)
-				.show();
-		updateView();
+		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+			int cityid = Integer.parseInt(cidView.getText().toString());
+			mOffline.start(cityid);
+			Toast.makeText(this, "开始下载离线地图. cityid: " + cityid,
+					Toast.LENGTH_SHORT).show();
+			updateView();
+		} else {
+			NetworkUtil.noNetworkHint(getApplicationContext());
+		}
 	}
 
 	/**
@@ -426,8 +442,12 @@ public class OfflineBaiduMapActivity extends Activity implements
 			btnUpdate.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					mOffline.update(e.cityID);
-					updateView();
+					if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+						mOffline.update(e.cityID);
+						updateView();
+					} else {
+						NetworkUtil.noNetworkHint(getApplicationContext());
+					}
 				}
 			});
 		}
