@@ -6,8 +6,9 @@ import android.util.Log;
 
 import java.util.Hashtable;
 
+import com.tchip.carlauncher.Constant;
+
 public class Typefaces {
-	private static final String TAG = "Typefaces";
 	private static final Hashtable<String, Typeface> cache = new Hashtable<String, Typeface>();
 
 	public static Typeface get(Context c, String assetPath) {
@@ -18,7 +19,7 @@ public class Typefaces {
 							assetPath);
 					cache.put(assetPath, t);
 				} catch (Exception e) {
-					Log.e(TAG, "Could not get typeface '" + assetPath
+					Log.e(Constant.TAG, "Typefaces：Could not get typeface '" + assetPath
 							+ "' because " + e.getMessage());
 					return null;
 				}

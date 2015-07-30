@@ -43,7 +43,7 @@ import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
-import com.tchip.carlauncher.util.WiFiUtil;
+import com.tchip.carlauncher.util.SignalUtil;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -64,6 +64,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -171,6 +174,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoRecordSmall, layoutVideoCameraSmall,
 			layoutVideoLockSmall;
 
+	private RelativeLayout layoutSignal;
+	private ImageView imageSignalLevel, image3G;
+
+	TelephonyManager Tel;
+	private int simState;
+	MyPhoneStateListener MyListener;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -209,6 +219,82 @@ public class MainActivity extends Activity implements TachographCallback,
 			// Log.v(Constant.TAG, "Start Connect Wifi...");
 		} else {
 			// Log.v(Constant.TAG, "Wifi is Connected or disable");
+		}
+
+		// 3G信号
+		MyListener = new MyPhoneStateListener();
+		Tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		// SIM卡状态
+		simState = Tel.getSimState();
+		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+	}
+
+	private class MyPhoneStateListener extends PhoneStateListener {
+
+		/**
+		 * 更新3G信号强度
+		 */
+		@Override
+		public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+			super.onSignalStrengthsChanged(signalStrength);
+			update3GState(signalStrength.getGsmSignalStrength());
+		}
+
+		@Override
+		public void onDataConnectionStateChanged(int state) {
+
+			switch (state) {
+			case TelephonyManager.DATA_DISCONNECTED:// 网络断开
+				Log.v(Constant.TAG, "3G TelephonyManager.DATA_DISCONNECTED");
+				image3G.setVisibility(View.GONE);
+				break;
+
+			case TelephonyManager.DATA_CONNECTING:// 网络正在连接
+				Log.v(Constant.TAG, "3G TelephonyManager.DATA_CONNECTING");
+				image3G.setVisibility(View.VISIBLE);
+				break;
+
+			case TelephonyManager.DATA_CONNECTED:// 网络连接上
+				Log.v(Constant.TAG, "3G TelephonyManager.DATA_CONNECTED");
+				image3G.setVisibility(View.VISIBLE);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * TODO:更新3G状态
+	 * 
+	 * SIM_STATE_UNKNOWN = 0:Unknown.
+	 * 
+	 * SIM_STATE_ABSENT = 1:no SIM card is available in the device
+	 * 
+	 * SIM_STATE_PIN_REQUIRED = 2:requires the user's SIM PIN to unlock
+	 * 
+	 * SIM_STATE_PUK_REQUIRED = 3:requires the user's SIM PUK to unlock
+	 * 
+	 * SIM_STATE_NETWORK_LOCKED = 4:requries a network PIN to unlock
+	 * 
+	 * SIM_STATE_READY = 5:Ready
+	 * 
+	 */
+	private void update3GState(int signal) {
+		// imageSignalLevel,image3G.setVisibility(View.GONE);
+		simState = Tel.getSimState();
+		Log.v(Constant.TAG, "SIM State:" + simState);
+		if (simState == TelephonyManager.SIM_STATE_READY) {
+
+			imageSignalLevel.setBackground(getResources().getDrawable(
+					SignalUtil.get3GImageBySignal(signal)));
+			if (signal > 0 && signal < 31)
+				image3G.setVisibility(View.VISIBLE);
+			else
+				image3G.setVisibility(View.GONE);
+		} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
+				|| simState == TelephonyManager.SIM_STATE_ABSENT) {
+			image3G.setVisibility(View.GONE);
+			imageSignalLevel.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_signal_no_signal));
 		}
 	}
 
@@ -292,15 +378,15 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		TextClock textDate = (TextClock) findViewById(R.id.textDate);
 		textDate.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
 		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		textTemp = (TextView) findViewById(R.id.textTemp);
 		textTemp.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
 		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
@@ -316,6 +402,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		wifiIntentFilter = new IntentFilter();
 		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		updateWiFiState();
+
+		// 3G状态信息
+		layoutSignal = (RelativeLayout) findViewById(R.id.layoutSignal);
+		imageSignalLevel = (ImageView) findViewById(R.id.imageSignalLevel);
+		image3G = (ImageView) findViewById(R.id.image3G);
+		image3G.setVisibility(View.GONE);
 
 		// 更新天气与位置信息
 		updateLocationAndWeather();
@@ -666,7 +758,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
-			imageWifiLevel.setImageResource(WiFiUtil.getImageBySignal(level));
+			imageWifiLevel.setImageResource(SignalUtil
+					.getWifiImageBySignal(level));
 
 			// 隐藏导航背景图
 			imageDefault.setVisibility(View.GONE);
@@ -1211,6 +1304,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	protected void onPause() {
 		mainMapView.onPause();
+
+		// 3G信号
+		Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
+
 		super.onPause();
 	}
 
@@ -1224,6 +1321,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新录像界面按钮状态
 		refreshRecordButton();
 		setupRecordViews();
+
+		// 3G信号
+		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		super.onResume();
 	}

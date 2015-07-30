@@ -82,11 +82,11 @@ public class FmTransmitActivity extends Activity {
 		fmHigh = (Button) findViewById(R.id.fmHigh);
 
 		fmLow.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		fmMiddle.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		fmHigh.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		fmLow.setOnClickListener(new MyOnClickListener());
 		fmMiddle.setOnClickListener(new MyOnClickListener());

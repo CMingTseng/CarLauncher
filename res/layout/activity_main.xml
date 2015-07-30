@@ -153,10 +153,31 @@
 
             <ImageView
                 android:id="@+id/imageWifiLevel"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_qs_wifi_no_network" />
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutSignal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@id/layoutWiFi" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/image3G"
+                android:src="@drawable/ic_qs_signal_full_3g" />
+
+            <ImageView
+                android:id="@+id/imageSignalLevel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_qs_signal_no_signal" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <HorizontalScrollView

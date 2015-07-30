@@ -131,9 +131,9 @@ public class WeatherActivity extends Activity {
 		textClock.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		textDate.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Droid-Sans-Fallback.ttf"));
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		// Day 0 (Today) Weather and Time, Location Info
 		String cityName = "";
 		if ("未定位".equals(sharedPreferences.getString("cityName", "未定位"))) {

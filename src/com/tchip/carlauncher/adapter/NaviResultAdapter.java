@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.NaviResultInfo;
 import com.tchip.carlauncher.model.WifiInfo;
-import com.tchip.carlauncher.util.WiFiUtil;
+import com.tchip.carlauncher.util.SignalUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;

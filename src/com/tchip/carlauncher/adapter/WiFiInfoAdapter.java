@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.WifiInfo;
-import com.tchip.carlauncher.util.WiFiUtil;
+import com.tchip.carlauncher.util.SignalUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		this.wifiArray = wifiArray;
 		layoutInflater = LayoutInflater.from(context);
 		wifiArray = new ArrayList<WifiInfo>();
-		nowWifiBssid = WiFiUtil.getConnectWifiBssid(context);
+		nowWifiBssid = SignalUtil.getConnectWifiBssid(context);
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public class WiFiInfoAdapter extends BaseAdapter {
 
 		// WiFi Signal Level
 		int level = wifiArray.get(position).getSignal();
-		viewHolder.imageSignal.setImageResource(WiFiUtil
-				.getImageBySignal(level));
+		viewHolder.imageSignal.setImageResource(SignalUtil
+				.getWifiImageBySignal(level));
 
 		String wifiName = wifiArray.get(position).getName();
 		viewHolder.textName.setText(wifiName);
