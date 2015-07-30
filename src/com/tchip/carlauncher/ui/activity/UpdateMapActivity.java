@@ -12,6 +12,10 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.view.ButtonFlat;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -40,7 +44,9 @@ public class UpdateMapActivity extends Activity {
 	private ProgressBar progressCopy;
 	private TextView textHint, textDetail;
 	private RelativeLayout layoutBack, layoutUpdateOnline;
-	private ButtonFlat btnStart;
+	private ButtonFlat btnStart, btnScan;
+
+	private boolean hasOfflineMap = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class UpdateMapActivity extends Activity {
 		initialLayout();
 
 		// statrtScanThread();
+		setMapNumberText();
 	}
 
 	private void initialLayout() {
@@ -73,11 +80,16 @@ public class UpdateMapActivity extends Activity {
 		btnStart.setOnClickListener(new MyOnClickListener());
 		btnStart.setVisibility(View.VISIBLE);
 
+		btnScan = (ButtonFlat) findViewById(R.id.btnScan);
+		btnScan.setBackgroundColor(Color.parseColor("#ffffff")); // TextColor
+		btnScan.setOnClickListener(new MyOnClickListener());
+		btnScan.setVisibility(View.VISIBLE);
+
 		layoutUpdateOnline = (RelativeLayout) findViewById(R.id.layoutUpdateOnline);
 		layoutUpdateOnline.setOnClickListener(new MyOnClickListener());
 	}
 
-	private void statrtScanThread() {
+	private void statrtImportThread() {
 		// TODO：判断是否需要拷贝
 		new Thread(new CopyThread()).start();
 	}
@@ -88,6 +100,18 @@ public class UpdateMapActivity extends Activity {
 		// intent.addCategory(Intent.CATEGORY_HOME);
 		// startActivity(intent);
 		finish();
+	}
+
+	private void setMapNumberText() {
+		int mapNumber = getSDMapCount();
+		textHint.setVisibility(View.VISIBLE);
+		if (mapNumber > 0) {
+			textHint.setText("SD卡检测到" + mapNumber + "个离线地图包");
+			hasOfflineMap = true;
+		} else {
+			hasOfflineMap = false;
+			textHint.setText("SD卡未检测到离线地图包");
+		}
 	}
 
 	@Override
@@ -109,7 +133,33 @@ public class UpdateMapActivity extends Activity {
 				break;
 
 			case R.id.btnStart:
-				statrtScanThread();
+				if (hasOfflineMap) {
+					AlertDialog.Builder builder = new Builder(
+							UpdateMapActivity.this);
+					builder.setMessage("导入离线地图比较耗时，现在导入？");
+					builder.setTitle("提示");
+					builder.setPositiveButton("确认", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							statrtImportThread();
+						}
+					});
+					builder.setNegativeButton("取消", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+					builder.create().show();
+				} else {
+					// SD卡未扫描到离线地图
+				}
+
+				break;
+
+			case R.id.btnScan:
+				setMapNumberText();
 				break;
 
 			case R.id.layoutUpdateOnline:
@@ -121,8 +171,48 @@ public class UpdateMapActivity extends Activity {
 			default:
 				break;
 			}
-
 		}
+	}
+
+	/**
+	 * 获取SD卡离线地图数目
+	 * 
+	 * @return
+	 */
+	private int getSDMapCount() {
+
+		int fileCount1 = checkFileNumber(pathFrom[0]);
+		int fileCount2 = checkFileNumber(pathFrom[1]);
+		int fileCount3 = checkFileNumber(pathFrom[2]);
+		int fileCount4 = checkFileNumber(pathFrom[3]);
+
+		if (fileCount1 > 0)
+			return fileCount1;
+		else if (fileCount2 > 0)
+			return fileCount2;
+		else if (fileCount3 > 0)
+			return fileCount3;
+		else if (fileCount4 > 0)
+			return fileCount4;
+		else
+			return -1;
+
+	}
+
+	private int checkFileNumber(String path) {
+
+		try {
+			File a = new File(path);
+			String[] file = a.list();
+			progressCopy.setMax(file.length);
+			if (file.length > 0) {
+				return file.length;
+			} else
+				return -1;
+		} catch (Exception e) {
+			return -1;
+		}
+
 	}
 
 	/**
@@ -208,6 +298,7 @@ public class UpdateMapActivity extends Activity {
 				textHint.setText("SD卡未检测到离线地图");
 				progressCopy.setVisibility(View.GONE);
 				btnStart.setVisibility(View.VISIBLE);
+				btnScan.setVisibility(View.VISIBLE);
 				// finish();
 				break;
 
@@ -220,13 +311,15 @@ public class UpdateMapActivity extends Activity {
 				textDetail.setVisibility(View.GONE);
 				progressCopy.setVisibility(View.GONE);
 				btnStart.setVisibility(View.VISIBLE);
+				btnScan.setVisibility(View.VISIBLE);
 				importOfflineMapFromSDCard();
 				break;
 
 			case 2:
-				textHint.setText("SD卡检测到离线地图，正在导入，请勿离开。");
+				textHint.setText("正在导入离线地图，请勿离开。");
 				progressCopy.setVisibility(View.VISIBLE);
 				btnStart.setVisibility(View.GONE);
+				btnScan.setVisibility(View.GONE);
 				break;
 
 			case 3:

@@ -91,7 +91,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private ArrayAdapter<String> sugAdapter = null;
 
 	private double mLatitude, mLongitude;
-	private LatLng mLatLng;
+	private LatLng nowLatLng;
 
 	private EditText etHistoryWhere;
 	private LinearLayout layoutNearAdvice, layoutShowHistory,
@@ -126,7 +126,6 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private MapView mMapView;
 	private LocationClient mLocationClient;
-
 	private SharedPreferences preference;
 	private String naviDesFromVoice = "";
 
@@ -171,7 +170,7 @@ public class NavigationActivity extends FragmentActivity implements
 					&& naviDesFromVoice != null) {
 				setLayoutHistoryVisibility(true);
 				setDestinationText(naviDesFromVoice);
-				startSearchPlace(naviDesFromVoice, mLatLng, false);
+				startSearchPlace(naviDesFromVoice, nowLatLng, false);
 			}
 		}
 	}
@@ -235,9 +234,9 @@ public class NavigationActivity extends FragmentActivity implements
 				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
 				"bd09ll", 5000, true);
 
-		// 初始化地图位置
-		mLatLng = new LatLng(mLatitude, mLongitude);
-		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(mLatLng);
+		// 初始化地图位置,设置nowLoction数据以防NullPointer
+		nowLatLng = new LatLng(mLatitude, mLongitude);
+		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
 		mBaiduMap.animateMapStatus(u);
 
 		// 设置地图放大级别 0-19
@@ -350,6 +349,10 @@ public class NavigationActivity extends FragmentActivity implements
 					.direction(100).latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
 			mBaiduMap.setMyLocationData(locData);
+
+			// 更新当前位置用作导航起点
+			nowLatLng = new LatLng(location.getLatitude(),
+					location.getLongitude());
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -430,7 +433,7 @@ public class NavigationActivity extends FragmentActivity implements
 						isNearLayoutShow = false;
 						layoutNearAdvice.setVisibility(View.GONE);
 
-						startSearchPlace(strContent, mLatLng, false);
+						startSearchPlace(strContent, nowLatLng, false);
 
 						// naviGeoCoder = GeoCoder.newInstance();
 						// naviGeoCoder
@@ -464,8 +467,9 @@ public class NavigationActivity extends FragmentActivity implements
 							"workLng", "0.00"));
 
 					if (MyApplication.isNaviInitialSuccess) {
-						launchNavigator(mLatLng.latitude, mLatLng.longitude,
-								"当前位置", workLat, workLng, workAddress);
+						launchNavigator(nowLatLng.latitude,
+								nowLatLng.longitude, "当前位置", workLat, workLng,
+								workAddress);
 					} else {
 						// 未成功初始化
 						Log.e(Constant.TAG, "Initlal fail");
@@ -495,8 +499,9 @@ public class NavigationActivity extends FragmentActivity implements
 							"homeLng", "0.00"));
 
 					if (MyApplication.isNaviInitialSuccess) {
-						launchNavigator(mLatLng.latitude, mLatLng.longitude,
-								"当前位置", homeLat, homeLng, homeAddress);
+						launchNavigator(nowLatLng.latitude,
+								nowLatLng.longitude, "当前位置", homeLat, homeLng,
+								homeAddress);
 					} else {
 						// 未成功初始化
 						Log.e(Constant.TAG, "Initlal fail");
@@ -545,7 +550,7 @@ public class NavigationActivity extends FragmentActivity implements
 		isNearLayoutShow = false;
 		layoutNearAdvice.setVisibility(View.GONE);
 
-		startSearchPlace(content, mLatLng, true);
+		startSearchPlace(content, nowLatLng, true);
 	}
 
 	/**
@@ -737,7 +742,7 @@ public class NavigationActivity extends FragmentActivity implements
 				// PoiInfo poiInfo = result.getAllPoi().get(i);
 				//
 				SuggestionInfo info = result.getAllSuggestions().get(i);
-				double distance = DistanceUtil.getDistance(mLatLng, info.pt);
+				double distance = DistanceUtil.getDistance(nowLatLng, info.pt);
 
 				NaviResultInfo naviResultInfo = new NaviResultInfo(i, info.key,
 						info.city + info.district, info.pt.longitude,
@@ -791,7 +796,7 @@ public class NavigationActivity extends FragmentActivity implements
 			overlay.addToMap();
 			overlay.zoomToSpan();
 			// 添加结果
-			LatLng llStart = mLatLng; // 当前位置
+			LatLng llStart = nowLatLng; // 当前位置
 			naviArray = new ArrayList<NaviResultInfo>();
 			for (int i = 1; i < result.getAllPoi().size(); i++) {
 				PoiInfo poiInfo = result.getAllPoi().get(i);
@@ -826,8 +831,8 @@ public class NavigationActivity extends FragmentActivity implements
 							isHistoryLayoutShow = false;
 
 							if (MyApplication.isNaviInitialSuccess) {
-								launchNavigator(mLatLng.latitude,
-										mLatLng.longitude, "当前位置", naviArray
+								launchNavigator(nowLatLng.latitude,
+										nowLatLng.longitude, "当前位置", naviArray
 												.get(position).getLatitude(),
 										naviArray.get(position).getLongitude(),
 										naviArray.get(position).getName());
@@ -889,8 +894,8 @@ public class NavigationActivity extends FragmentActivity implements
 			// 点击地图上搜索结果气球进入导航
 
 			if (MyApplication.isNaviInitialSuccess) {
-				launchNavigator(mLatLng.latitude, mLatLng.longitude, "当前位置",
-						result.getLocation().latitude,
+				launchNavigator(nowLatLng.latitude, nowLatLng.longitude,
+						"当前位置", result.getLocation().latitude,
 						result.getLocation().longitude, result.getAddress());
 			} else {
 				// 未成功初始化

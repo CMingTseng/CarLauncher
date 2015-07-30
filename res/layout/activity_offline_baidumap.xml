@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="城市列表"
+                android:text="地图列表"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </RelativeLayout>
