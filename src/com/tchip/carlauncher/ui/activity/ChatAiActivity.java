@@ -5,13 +5,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -43,6 +48,10 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.AiSpeechGrammarHelper;
 import com.tchip.carlauncher.util.NetworkUtil;
+import com.tchip.carlauncher.util.ProgressAnimationUtil;
+import com.tchip.carlauncher.util.VolumeUtil;
+import com.tchip.carlauncher.view.AudioRecordDialog;
+import com.tchip.carlauncher.view.CircularProgressDrawable;
 import com.tchip.carlauncher.view.ResideMenu;
 
 /**
@@ -59,9 +68,16 @@ public class ChatAiActivity extends Activity {
 	private boolean isResideMenuClose = true;
 	// 左侧帮助侧边栏
 	private ResideMenu resideMenu;
+	private PackageManager packageManager;
+
+	private AudioRecordDialog audioRecordDialog;
+
+	private ImageView imageAnim; // 动画按钮
+	private ImageView imageVoice; // 语音按钮
+	private Animator currentAnimation;
+	private CircularProgressDrawable drawable;
 
 	Button bt_res;
-	ImageView imageVoice;
 	Toast mToast;
 
 	AILocalGrammarEngine mGrammarEngine;
@@ -77,6 +93,12 @@ public class ChatAiActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_chat_ai);
 
+		// 检测是否已生成并存在识别资源，若已存在，则立即初始化本地识别引擎，否则等待编译生成资源文件后加载本地识别引擎
+		if (new File(Util.getResourceDir(this) + File.separator
+				+ AILocalGrammarEngine.OUTPUT_NAME).exists()) {
+			initAsrEngine();
+		}
+
 		initialLayout();
 
 		// TODO:isAiSpeechFirstRun
@@ -84,13 +106,9 @@ public class ChatAiActivity extends Activity {
 
 		initGrammarEngine();
 
-		// 检测是否已生成并存在识别资源，若已存在，则立即初始化本地识别引擎，否则等待编译生成资源文件后加载本地识别引擎
-		if (new File(Util.getResourceDir(this) + File.separator
-				+ AILocalGrammarEngine.OUTPUT_NAME).exists()) {
-			initAsrEngine();
-		}
-
 		mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+
+		audioRecordDialog = new AudioRecordDialog(ChatAiActivity.this);
 	}
 
 	private void initialLayout() {
@@ -99,6 +117,22 @@ public class ChatAiActivity extends Activity {
 		tvQuestion.setVisibility(View.GONE);
 		imageVoice = (ImageView) findViewById(R.id.imageVoice);
 		imageVoice.setOnClickListener(new MyOnClickListener());
+
+		// 按钮动画
+		imageAnim = (ImageView) findViewById(R.id.imageAnim);
+		imageAnim.setOnClickListener(new MyOnClickListener());
+		drawable = new CircularProgressDrawable.Builder()
+				.setRingWidth(
+						getResources().getDimensionPixelSize(
+								R.dimen.drawable_ring_size))
+				.setOutlineColor(getResources().getColor(R.color.white))
+				.setRingColor(
+						getResources().getColor(R.color.ui_chat_voice_orange))
+				.setCenterColor(
+						getResources().getColor(R.color.ui_chat_voice_orange))
+				.create();
+		imageAnim.setImageDrawable(drawable);
+		imageAnim.setVisibility(View.INVISIBLE); // 隐藏动画
 
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
@@ -129,6 +163,7 @@ public class ChatAiActivity extends Activity {
 		public void onClick(View v) {
 
 			switch (v.getId()) {
+			case R.id.imageAnim:
 			case R.id.imageVoice:
 				// if ("识别".equals(bt_asr.getText())) {
 				if (mAsrEngine == null) {
@@ -251,10 +286,16 @@ public class ChatAiActivity extends Activity {
 		}
 		Log.i(Constant.TAG, "AiSpeech:asr create");
 		mAsrEngine = AIMixASREngine.createInstance();
+
+		// 设置资源文件名，该文件由思必驰进行定制
 		mAsrEngine.setResBin("ebnfr.aicar.0.0.2.bin");
+
+		// 设置网络解码文件名，该文件由思必驰进行定制
 		mAsrEngine.setNetBin(AILocalGrammarEngine.OUTPUT_NAME, true);
 
 		mAsrEngine.setServer("ws://s.api.aispeech.com");
+
+		// 设置识别所使用的资源，设为”assist”表示通用识别
 		mAsrEngine.setRes("chezai");
 		mAsrEngine.setWaitCloudTimeout(2000);
 		mAsrEngine.setVadResource("vad.aicar.0.0.3.bin");
@@ -305,6 +346,11 @@ public class ChatAiActivity extends Activity {
 								// Log.i(TAG, "Conf: " + confVal);
 								if (confVal > 0.4) {
 									selLocFlag = 1;
+									// 如果连接网络，使用Cloud结果
+									if (NetworkUtil
+											.isNetworkConnected(getApplicationContext())) {
+										selLocFlag = 0;
+									}
 								}
 							}
 							localJsonObject.put("src", "native");
@@ -338,12 +384,31 @@ public class ChatAiActivity extends Activity {
 				Constant.AiSpeech.API_KEY, Constant.AiSpeech.API_SECRET);
 		mAsrEngine.setUseCloud(true);
 		mAsrEngine.setUseXbnfRec(true);
+
+		/*
+		 * 设置多候选词个数上限,可设范围 1~10
+		 */
 		mAsrEngine.setNBest(1);
 		mAsrEngine.setAthThreshold(0.4f);
 		mAsrEngine.setRthThreshold(0.1f);
 		mAsrEngine.setIsRelyOnLocalConf(true);
-		mAsrEngine.setUseConf(true);
-		mAsrEngine.setNoSpeechTimeOut(0);
+		if (!NetworkUtil.isNetworkConnected(getApplicationContext())) {
+			mAsrEngine.setUseConf(true);
+		}
+
+		/*
+		 * 设置无语音超时时长，单位毫秒，默认值为5000ms(setNoSpeechTimeOut(0))
+		 * ；如果达到该设置值时，自动停止录音并放弃请求内核(即调用
+		 * com.aispeech.speech.AISpeechEngine#cancel()方法)
+		 */
+		mAsrEngine.setNoSpeechTimeOut(5000);
+
+		/*
+		 * 设置音频最大录音时长，达到该值将取消语音引擎并抛出异常 允许的最大录音时长 单位秒
+		 * 
+		 * 0 表示无最大录音时长限制 默认大小为60S
+		 */
+		mAsrEngine.setMaxSpeechTimeS(30);
 		mAsrEngine.setDeviceId("aA-sS_dD");
 	}
 
@@ -437,29 +502,72 @@ public class ChatAiActivity extends Activity {
 		}
 
 		@Override
+		public void onRecorderReleased() {
+			showInfo("检测到录音机停止");
+
+			// dismiss对话框
+			audioRecordDialog.dismissDialog();
+
+			// 开始识别动画：隐藏语音按钮，显示动画按钮
+			imageVoice.setVisibility(View.INVISIBLE);
+			imageAnim.setVisibility(View.VISIBLE);
+
+			if (currentAnimation != null) {
+				currentAnimation.cancel();
+			}
+			currentAnimation = ProgressAnimationUtil
+					.prepareStyle1Animation(drawable);
+			currentAnimation.start();
+		}
+
+		@Override
 		public void onReadyForSpeech() {
 			showInfo("请说话...");
+
+			audioRecordDialog.showDialog();
 		}
 
 		@Override
 		public void onRmsChanged(float rmsdB) {
-			// TODO:音量变化
+			// 音量变化 rmsdB 音量标量 0-100
+			audioRecordDialog.updateVolumeLevel((int) (rmsdB * 0.3));
 		}
 
 		@Override
 		public void onError(AIError error) {
-			Log.e(Constant.TAG, "识别发生错误:" + error.getErrId());
+			Log.e(Constant.TAG, "AiSpeech AIError:" + error.getErrId());
+			switch (error.getErrId()) {
+			case 70904:
+				// 没有检测到语音
+
+				break;
+
+			default:
+				break;
+			}
+
+			// 出现异常，停止动画
+			if (currentAnimation != null) {
+				currentAnimation.cancel();
+			}
+			currentAnimation = ProgressAnimationUtil
+					.preparePulseAnimation(drawable);
+			currentAnimation.start();
+
+			// 显示语音按钮，隐藏动画按钮
+			imageVoice.setVisibility(View.VISIBLE);
+			imageAnim.setVisibility(View.INVISIBLE);
 		}
 
 		@Override
 		public void onResults(AIResult results) {
 			ts = System.currentTimeMillis() - ts;
-			Log.i(Constant.TAG, "AiSpeech:"
+			Log.i(Constant.TAG, "AiSpeech Result:"
 					+ results.getResultObject().toString());
 			try {
 				showInfo("ts" + ts + "\n"
 						+ ((JSONObject) results.getResultObject()).toString(4));
-				// TODO:解析JSON
+				// 解析JSON
 				Log.v(Constant.TAG,
 						((JSONObject) results.getResultObject()).toString());
 				JSONObject jsonObject;
@@ -467,7 +575,8 @@ public class ChatAiActivity extends Activity {
 
 				JSONObject jsonResult = jsonObject.getJSONObject("result");
 				String strType = jsonObject.getString("src"); // Cloud,Native
-				if ("cloud".equals(strType)) { // 云端结果
+
+				if ("cloud".equals(strType)) {// TODO：云端结果
 					String strInput = jsonResult.getString("input"); // cloud
 					if (strInput != null && strInput.trim().length() > 0) {
 						tvQuestion.setVisibility(View.VISIBLE);
@@ -514,8 +623,9 @@ public class ChatAiActivity extends Activity {
 					} catch (Exception e) {
 					}
 
-				} else if ("native".equals(strType)) { // 本地结果
-					String strInput = jsonObject.getJSONObject("result").getString("rec");
+				} else if ("native".equals(strType)) { // TODO：本地结果
+					String strInput = jsonObject.getJSONObject("result")
+							.getString("rec");
 					if (strInput != null && strInput.trim().length() > 0) {
 						tvQuestion.setVisibility(View.VISIBLE);
 						tvQuestion.setText(strInput);
@@ -524,10 +634,11 @@ public class ChatAiActivity extends Activity {
 					JSONObject jsonPost = jsonResult.getJSONObject("post");
 					JSONObject jsonSem = jsonPost.getJSONObject("sem");
 					String strDomain = jsonSem.getString("domain");
-					String strAction = jsonSem.getString("call");
+					String strAction = jsonSem.getString("action");
 					if (strDomain != null && strDomain.trim().length() > 0) {
 						if ("phone".equals(strDomain)) {
 							if (Constant.hasDialer) {
+								// action:call
 
 							} else {
 								String strAnswer = "本机不支持通讯功能";
@@ -535,36 +646,97 @@ public class ChatAiActivity extends Activity {
 								startSpeak(strAnswer);
 							}
 
-						}else if("app".equals(strDomain)){
-							
+						} else if ("app".equals(strDomain)) {
+							// action:open
+							String strAppName = jsonSem.getString("appname");
+							if ("open".equals(strAction) && strAppName != null
+									&& strAppName.trim().length() > 0) {
+
+								String packageName = getAppPackageByName(strAppName);
+								if (!"com.tchip.carlauncher"
+										.equals(packageName)) {
+									String strAnswer = "正在启动：" + strAppName;
+									tvAnswer.setText(strAnswer);
+									startSpeak(strAnswer);
+									startAppbyPackage(packageName);
+								} else {
+									String strAnswer = "未找到应用：" + strAppName;
+									tvAnswer.setText(strAnswer);
+									startSpeak(strAnswer);
+								}
+							}
+						} else if ("volume".equals(strDomain)) {
+							// action: up
+							if ("up".equals(strAction)) {
+								// 增加音量
+								VolumeUtil.plusVolume(getApplicationContext(),
+										AudioManager.STREAM_MUSIC, 1);
+							} else if ("down".equals(strAction)) {
+								// 降低音量
+								VolumeUtil.minusVolume(getApplicationContext(),
+										AudioManager.STREAM_MUSIC, 1);
+							} else if ("max".equals(strAction)) {
+								// 最大音量
+								VolumeUtil.setMaxVolume(
+										getApplicationContext(),
+										AudioManager.STREAM_MUSIC);
+							} else if ("min".equals(strAction)
+									|| "mute_on".equals(strAction)) {
+								// 最小音量
+								VolumeUtil.setMinVolume(
+										getApplicationContext(),
+										AudioManager.STREAM_MUSIC);
+							} else if ("mute_off".equals(strAction)) {
+								// 关闭静音，取消静音
+								VolumeUtil.setUnmute(getApplicationContext(),
+										AudioManager.STREAM_MUSIC);
+							}
 						}
 					}
 				}
 
+				// 识别结束，停止动画
+				if (currentAnimation != null) {
+					currentAnimation.cancel();
+				}
+				currentAnimation = ProgressAnimationUtil
+						.preparePulseAnimation(drawable);
+				currentAnimation.start();
+
+				// 显示语音按钮，隐藏动画按钮
+				imageVoice.setVisibility(View.VISIBLE);
+				imageAnim.setVisibility(View.INVISIBLE);
+
 			} catch (JSONException e) {
 				e.printStackTrace();
+				// 识别错误，停止动画
+				if (currentAnimation != null) {
+					currentAnimation.cancel();
+				}
+				currentAnimation = ProgressAnimationUtil
+						.preparePulseAnimation(drawable);
+				currentAnimation.start();
+
+				// 显示语音按钮，隐藏动画按钮
+				imageVoice.setVisibility(View.VISIBLE);
+				imageAnim.setVisibility(View.INVISIBLE);
 			}
 		}
 
 		@Override
 		public void onInit(int status) {
 			if (status == 0) {
-				Log.i(Constant.TAG, "AiSpeech:end of init asr engine");
-				showInfo("本地识别引擎加载成功");
+				Log.i(Constant.TAG, "AiSpeech:init local asr engine success");
 				if (NetworkUtil.isWifiConnected(ChatAiActivity.this)) {
 					if (mAsrEngine != null) {
 						mAsrEngine.setNetWorkState("WIFI");
 					}
 				}
 			} else {
-				showInfo("本地识别引擎加载失败");
+				Log.e(Constant.TAG, "AiSpeech:init local asr engine fail");
 			}
 		}
 
-		@Override
-		public void onRecorderReleased() {
-			showInfo("检测到录音机停止");
-		}
 	}
 
 	private void showInfo(final String str) {
@@ -588,6 +760,7 @@ public class ChatAiActivity extends Activity {
 			Log.i(Constant.TAG, "AiSpeech:asr cancel");
 			mAsrEngine.cancel();
 		}
+
 	}
 
 	@Override
@@ -603,6 +776,44 @@ public class ChatAiActivity extends Activity {
 			mAsrEngine.destroy();
 			mAsrEngine = null;
 		}
+	}
+
+	private void startAppbyPackage(String packageName) {
+
+		Intent intent = packageManager.getLaunchIntentForPackage(packageName);
+		startActivity(intent);
+	}
+
+	private String getAppPackageByName(String appName) {
+		packageManager = getApplicationContext().getPackageManager();
+		Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		List<ResolveInfo> resovleInfos = packageManager.queryIntentActivities(
+				mainIntent, 0);
+		for (ResolveInfo resolve : resovleInfos) {
+			// 应用图标:resolve.loadIcon(packageManager)
+			// 应用名称:resolve.loadLabel(packageManager)
+			// 应用包名：resolve.activityInfo.packageName
+			// 应用启动的第一个Activity：resolve.activityInfo.name
+			if (UpperCaseLetter(appName).equals(
+					resolve.loadLabel(packageManager).toString())) {
+				return resolve.activityInfo.packageName.toString();
+			}
+		}
+		return "com.tchip.carlauncher";
+	}
+
+	public String UpperCaseLetter(String b) {
+		char letters[] = new char[b.length()];
+		for (int i = 0; i < b.length(); i++) {
+
+			char letter = b.charAt(i);
+			if (letter >= 'a' && letter <= 'z') {
+				letter = (char) (letter - 32);
+			}
+			letters[i] = letter;
+		}
+		return new String(letters);
 	}
 
 }

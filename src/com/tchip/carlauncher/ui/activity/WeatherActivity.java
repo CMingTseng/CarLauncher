@@ -55,6 +55,11 @@ public class WeatherActivity extends Activity {
 	private String strNoLoction = "定位失败，无法获取天气信息";
 	private String strNoWeather = "天气获取失败，请稍候重试";
 
+	/**
+	 * 天气界面是否显示
+	 */
+	private boolean isActivityShow = true;
+
 	private ProgressBar updateProgress;
 	private Button updateButton;
 
@@ -451,6 +456,8 @@ public class WeatherActivity extends Activity {
 
 	private void backToMain() {
 		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	private void updateWeather() {
@@ -485,10 +492,12 @@ public class WeatherActivity extends Activity {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-				updateButton.setVisibility(View.VISIBLE);
-				updateProgress.setVisibility(View.INVISIBLE);
-				initialLayout();
-				speakWeather(0);
+				if (isActivityShow) {
+					updateButton.setVisibility(View.VISIBLE);
+					updateProgress.setVisibility(View.INVISIBLE);
+					initialLayout();
+					speakWeather(0);
+				}
 				break;
 
 			default:
@@ -517,21 +526,15 @@ public class WeatherActivity extends Activity {
 
 	@Override
 	protected void onStop() {
+		isActivityShow = false;
 		super.onStop();
-		exitWeather();
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (KeyEvent.KEYCODE_BACK == keyCode)
-			exitWeather();
+			backToMain();
 		return super.onKeyDown(keyCode, event);
-	}
-
-	private void exitWeather() {
-		finish();
-		overridePendingTransition(R.anim.zms_translate_down_out,
-				R.anim.zms_translate_down_in);
 	}
 
 }

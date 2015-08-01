@@ -123,9 +123,10 @@ public class WifiAdmin {
 		mWifiManager.startScan();
 		// 得到扫描结果
 		mWifiList = mWifiManager.getScanResults();
-
+		
 		// 剔除只有BSSID最后两位不同的同名WiFi
-		for (int i = 1; i < mWifiList.size(); i++) {
+		int size = mWifiList.size();
+		for (int i = size-1; i >=1; i--) {
 			String bssidPrefix = mWifiList.get(i).BSSID.substring(0, 12);
 			String wifiName = mWifiList.get(i).SSID;
 			Log.v(Constant.TAG, "bssidPrefix:" + bssidPrefix);
@@ -136,6 +137,7 @@ public class WifiAdmin {
 							"Remove duplicate wifi:" + mWifiList.get(j).SSID
 									+ ":" + mWifiList.get(j).BSSID);
 					mWifiList.remove(i);
+					break;
 				}
 			}
 		}

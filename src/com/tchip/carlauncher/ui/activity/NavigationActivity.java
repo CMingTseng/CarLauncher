@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -77,6 +78,7 @@ import com.tchip.carlauncher.model.NaviResultInfo;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
+import com.baidu.navisdk.BNaviPoint;
 import com.baidu.navisdk.BaiduNaviManager;
 import com.baidu.navisdk.BaiduNaviManager.OnStartNavigationListener;
 import com.baidu.navisdk.comapi.routeplan.RoutePlanParams.NE_RoutePlan_Mode;
@@ -422,13 +424,26 @@ public class NavigationActivity extends FragmentActivity implements
 			case R.id.btnHistoryNavi:
 				String strContent = etHistoryWhere.getText().toString();
 				if (strContent.trim().length() > 0 && strContent != null) {
-					if (Constant.START_TEST_APK.equals(strContent)) {
-						Log.d(Constant.TAG, "Start Test App");
+					if (Constant.MagicCode.DEVICE_TEST.equals(strContent)) {
 						Intent intent = new Intent(Intent.ACTION_VIEW);
 						intent.setClassName("com.DeviceTest",
 								"com.DeviceTest.DeviceTest");
 						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
+					} else if (Constant.MagicCode.ENGINEER_MODE
+							.equals(strContent)) {
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setClassName("com.mediatek.engineermode",
+								"com.mediatek.engineermode.EngineerMode");
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
+					} else if (Constant.MagicCode.SETTING.equals(strContent)) {
+						ComponentName componentImage = new ComponentName(
+								"com.android.settings",
+								"com.android.settings.Settings");
+						Intent intentImage = new Intent();
+						intentImage.setComponent(componentImage);
+						startActivity(intentImage);
 					} else {
 						isNearLayoutShow = false;
 						layoutNearAdvice.setVisibility(View.GONE);
@@ -865,8 +880,20 @@ public class NavigationActivity extends FragmentActivity implements
 	private void launchNavigator(double startLatitude, double startLongitude,
 			String startName, double endLatitude, double endLongitude,
 			String endName) {
-		BaiduNaviManager.getInstance().launchNavigator(this, startLatitude,
-				startLongitude, startName, endLatitude, endLongitude, endName,
+		// TODO:转化经纬度点
+
+		BNaviPoint startPoint = new BNaviPoint(startLongitude, startLatitude,
+				startName, BNaviPoint.CoordinateType.BD09_MC);
+		BNaviPoint endPoint = new BNaviPoint(endLongitude, endLatitude,
+				endName, BNaviPoint.CoordinateType.BD09_MC);
+
+		BaiduNaviManager.getInstance().launchNavigator(this, startPoint,
+				endPoint,
+
+				// BaiduNaviManager.getInstance().launchNavigator(this,
+				// startLatitude,
+				// startLongitude, startName, endLatitude, endLongitude,
+				// endName,
 				NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
 				true, // 真实导航
 				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略:STRATEGY_FORCE_ONLINE_PRIORITY
