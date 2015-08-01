@@ -129,6 +129,20 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		return cursor;
 	}
+	
+	/**
+	 * 获取加锁视频Cursor
+	 * 
+	 * @return
+	 */
+	public Cursor getLockVideoCursor() {
+		String sqlLine = "SELECT * FROM " + VIDEO_TABLE_NAME + " WHERE "
+				+ VIDEO_COL_LOCK + "=?";
+		String selection[] = new String[] { "1" };
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sqlLine, selection);
+		return cursor;
+	}
 
 	/**
 	 * 获取最旧且未加锁视频ID
