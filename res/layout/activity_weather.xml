@@ -45,6 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/layoutBack"
                 android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
                 android:gravity="center"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
@@ -56,6 +57,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/textWeek"
                 android:format12Hour="MM月dd日"
+                android:format24Hour="MM月dd日"
                 android:gravity="center"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />

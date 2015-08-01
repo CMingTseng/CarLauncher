@@ -44,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="MM月dd日"
+                android:format24Hour="MM月dd日"
                 android:textColor="#8b8e8f"
                 android:textSize="15sp" />
 
@@ -52,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
                 android:textColor="#8b8e8f"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -64,6 +66,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:format12Hour="HH:mm"
+            android:format24Hour="HH:mm"
             android:textColor="#ffffff"
             android:textSize="45sp" />
     </RelativeLayout>
