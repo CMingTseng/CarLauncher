@@ -65,7 +65,6 @@
             android:id="@+id/textHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请打开FM发射开关"
             android:textColor="#ffffff"
             android:drawableLeft="@drawable/ui_fm_icon"
             android:background="@drawable/ui_file_remote_start"
@@ -73,37 +72,15 @@
             android:layout_centerHorizontal="true"
             android:textSize="30sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textHint"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="80dp"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/fmLow"
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                android:text="87.5"
-                android:textSize="30sp" />
-
-            <Button
-                android:id="@+id/fmMiddle"
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:text="97.5"
-                android:textSize="30sp" />
-
-            <Button
-                android:id="@+id/fmHigh"
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                android:text="107.5"
-                android:textSize="30sp" />
-        </LinearLayout>
+        <SeekBar 
+            android:id="@+id/fmSeekBar"
+            android:layout_marginBottom="150dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 
 </RelativeLayout>

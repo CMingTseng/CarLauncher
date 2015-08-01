@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import android.provider.Settings;
@@ -56,10 +58,9 @@ public class FmTransmitActivity extends Activity {
 	 */
 	private String FM_TRANSMITTER_CHANNEL = "fm_transmitter_channel";
 
-	private Button fmLow, fmMiddle, fmHigh;
-
 	private RelativeLayout layoutBack;
 	private TextView textHint;
+	private SeekBar fmSeekBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,31 +78,15 @@ public class FmTransmitActivity extends Activity {
 	private void initialLayout() {
 		// 开关
 		SwitchButton switchFm = (SwitchButton) findViewById(R.id.switchFm);
-		fmLow = (Button) findViewById(R.id.fmLow);
-		fmMiddle = (Button) findViewById(R.id.fmMiddle);
-		fmHigh = (Button) findViewById(R.id.fmHigh);
-
-		fmLow.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-		fmMiddle.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-		fmHigh.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-
-		fmLow.setOnClickListener(new MyOnClickListener());
-		fmMiddle.setOnClickListener(new MyOnClickListener());
-		fmHigh.setOnClickListener(new MyOnClickListener());
 
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
 
 		textHint = (TextView) findViewById(R.id.textHint);
-
-		updateChoseButton(getFmFrequcenyId());
+		textHint.setTypeface(Typefaces.get(this, Constant.Path.FONT
+				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		switchFm.setChecked(isFmTransmitOn());
-		setButtonEnabled(isFmTransmitOn());
-
 		switchFm.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -109,44 +94,43 @@ public class FmTransmitActivity extends Activity {
 					boolean isChecked) {
 				Settings.System.putString(getContentResolver(),
 						FM_TRANSMITTER_ENABLE, isChecked ? "1" : "0");
-				setButtonEnabled(isChecked);
 				SaveFileToNode(nodeFmEnable, (isChecked ? "1" : "0"));
-				if (!isChecked) {
-					updateChoseButton(0);
-				} else {
-					int nowId = getFmFrequcenyId();
-					updateChoseButton(nowId);
-				}
+
+			}
+		});
+
+		fmSeekBar = (SeekBar) findViewById(R.id.fmSeekBar);
+		// 875-1080
+		// 0- 205
+		fmSeekBar.setMax(205);
+		int nowFrequency = getFmFrequceny(); // 当前频率
+		fmSeekBar.setProgress(nowFrequency - 875);
+		textHint.setText("  " + nowFrequency / 10.0f + "MHz");
+		fmSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				setFmFrequency(seekBar.getProgress() + 875);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				float frequency = (progress + 875.0f) / 10;
+				textHint.setText("  "+frequency + "MHz");
 			}
 		});
 	}
 
-	/**
-	 * 按钮是否可用
-	 * 
-	 * @param isFmTransmitOpen
-	 */
-	private void setButtonEnabled(boolean isFmTransmitOpen) {
-		fmLow.setEnabled(isFmTransmitOpen);
-		fmMiddle.setEnabled(isFmTransmitOpen);
-		fmHigh.setEnabled(isFmTransmitOpen);
-	}
-
-	private int getFmFrequcenyId() {
-		int nowFmChannel = 0;
+	private int getFmFrequceny() {
 		String fmChannel = Settings.System.getString(getContentResolver(),
 				FM_TRANSMITTER_CHANNEL);
-		if (isFmTransmitOn() && fmChannel.trim().length() > 0) {
-			if ("8550".equals(fmChannel)) {
-				nowFmChannel = 1;
-			} else if ("10570".equals(fmChannel)) {
-				nowFmChannel = 3;
-			} else {
-				nowFmChannel = 2;
-			}
-		}
 
-		return nowFmChannel;
+		return Integer.parseInt(fmChannel);
 	}
 
 	/**
@@ -168,46 +152,6 @@ public class FmTransmitActivity extends Activity {
 		return isFmTransmitOpen;
 	}
 
-	/**
-	 * 根据选中状态更新按钮字体颜色
-	 * 
-	 * @param which
-	 */
-	private void updateChoseButton(int which) {
-		switch (which) {
-		case 0:
-			fmLow.setTextColor(Color.BLACK);
-			fmMiddle.setTextColor(Color.BLACK);
-			fmHigh.setTextColor(Color.BLACK);
-			textHint.setText("请打开FM发射开关");
-			break;
-
-		case 1:
-			fmLow.setTextColor(Color.BLUE);
-			fmMiddle.setTextColor(Color.BLACK);
-			fmHigh.setTextColor(Color.BLACK);
-			textHint.setText("当前发射频率" + Constant.FMTransmit.HINT_LOW + "兆赫");
-			break;
-
-		case 2:
-			fmLow.setTextColor(Color.BLACK);
-			fmMiddle.setTextColor(Color.BLUE);
-			fmHigh.setTextColor(Color.BLACK);
-			textHint.setText("当前发射频率" + Constant.FMTransmit.HINT_MIDDLE + "兆赫");
-			break;
-
-		case 3:
-			fmLow.setTextColor(Color.BLACK);
-			fmMiddle.setTextColor(Color.BLACK);
-			fmHigh.setTextColor(Color.BLUE);
-			textHint.setText("当前发射频率" + Constant.FMTransmit.HINT_HIGH + "兆赫");
-			break;
-
-		default:
-			break;
-		}
-	}
-
 	class MyOnClickListener implements View.OnClickListener {
 
 		@Override
@@ -215,21 +159,6 @@ public class FmTransmitActivity extends Activity {
 			switch (v.getId()) {
 			case R.id.layoutBack:
 				finish();
-				break;
-
-			case R.id.fmLow:
-				setFmFrequency(Constant.FMTransmit.CHANNEL_LOW);
-				updateChoseButton(1);
-				break;
-
-			case R.id.fmMiddle:
-				setFmFrequency(Constant.FMTransmit.CHANNEL_MIDDLE);
-				updateChoseButton(2);
-				break;
-
-			case R.id.fmHigh:
-				setFmFrequency(Constant.FMTransmit.CHANNEL_HIGH);
-				updateChoseButton(3);
 				break;
 			}
 		}
