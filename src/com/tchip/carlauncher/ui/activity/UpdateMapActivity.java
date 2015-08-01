@@ -48,6 +48,8 @@ public class UpdateMapActivity extends Activity {
 
 	private boolean hasOfflineMap = false;
 
+	private boolean isActivityShow = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -240,35 +242,41 @@ public class UpdateMapActivity extends Activity {
 
 			File temp = null;
 			for (int i = 0; i < file.length; i++) {
-				if (oldPath.endsWith(File.separator)) {
-					temp = new File(oldPath + file[i]);
-				} else {
-					temp = new File(oldPath + File.separator + file[i]);
-				}
-
-				if (temp.isFile()) {
-					FileInputStream input = new FileInputStream(temp);
-					FileOutputStream output = new FileOutputStream(newPath
-							+ "/" + (temp.getName()).toString());
-					byte[] b = new byte[1024 * 5];
-					int len;
-					while ((len = input.read(b)) != -1) {
-						output.write(b, 0, len);
+				if (isActivityShow) {
+					if (oldPath.endsWith(File.separator)) {
+						temp = new File(oldPath + file[i]);
+					} else {
+						temp = new File(oldPath + File.separator + file[i]);
 					}
-					output.flush();
-					output.close();
-					input.close();
+
+					if (temp.isFile()) {
+						FileInputStream input = new FileInputStream(temp);
+						FileOutputStream output = new FileOutputStream(newPath
+								+ "/" + (temp.getName()).toString());
+						byte[] b = new byte[1024 * 5];
+						int len;
+						while ((len = input.read(b)) != -1) {
+							output.write(b, 0, len);
+						}
+						output.flush();
+						output.close();
+						input.close();
+					}
+					// if (temp.isDirectory()) {// 如果是子文件夹
+					// copyFolder(oldPath + "/" + file[i], newPath + "/" +
+					// file[i]);
+					// }
+					Log.v(Constant.TAG, "Copy:" + file[i] + " Success");
+					progressCopy.setProgress(i);
+					Message message = new Message();
+					message.what = 3;
+					message.arg1 = i + 1;
+					message.arg2 = progressCopy.getMax();
+					copyHandler.sendMessage(message);
+				} else {
+					// 跳出循环，不进行后台拷贝
+					break;
 				}
-				// if (temp.isDirectory()) {// 如果是子文件夹
-				// copyFolder(oldPath + "/" + file[i], newPath + "/" + file[i]);
-				// }
-				Log.v(Constant.TAG, "Copy:" + file[i] + " Success");
-				progressCopy.setProgress(i);
-				Message message = new Message();
-				message.what = 3;
-				message.arg1 = i + 1;
-				message.arg2 = progressCopy.getMax();
-				copyHandler.sendMessage(message);
 			}
 
 			// 更新Media Database
@@ -279,7 +287,8 @@ public class UpdateMapActivity extends Activity {
 			message.what = 1;
 			copyHandler.sendMessage(message);
 		} catch (Exception e) {
-			Log.e(Constant.TAG, "Copy Map form SD Error:" + e.toString());
+			Log.e(Constant.TAG,
+					"Copy Map form SD " + oldPath + " Error:" + e.toString());
 			isok = false;
 			Message message = new Message();
 			message.what = 0;
@@ -293,7 +302,7 @@ public class UpdateMapActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
-				Log.e(Constant.TAG, "copy data failed!");
+				Log.e(Constant.TAG, "There is no offline map!");
 				textDetail.setVisibility(View.GONE);
 				textHint.setText("SD卡未检测到离线地图");
 				progressCopy.setVisibility(View.GONE);
@@ -312,7 +321,6 @@ public class UpdateMapActivity extends Activity {
 				progressCopy.setVisibility(View.GONE);
 				btnStart.setVisibility(View.VISIBLE);
 				btnScan.setVisibility(View.VISIBLE);
-				importOfflineMapFromSDCard();
 				break;
 
 			case 2:
@@ -363,23 +371,25 @@ public class UpdateMapActivity extends Activity {
 	private MKOfflineMap mOffline = null;
 
 	public void importOfflineMapFromSDCard() {
-		new Thread(new ImportDataThread()).start();
+
+		mOffline = new MKOfflineMap();
+		mOffline.init(new MyMKOfflineMapListener());
+		int num = mOffline.importOfflineData();
+		Log.v(Constant.TAG, "ImportDataThread:Import Baidu Offline Map number:"
+				+ num);
+		if (num == 0) {
+			// 没有导入离线包，可能是离线包放置位置不正确，或离线包已经导入过
+		} else {
+			// "成功导入 num 个离线包
+		}
+		// new Thread(new ImportDataThread()).start();
 	}
 
 	public class ImportDataThread implements Runnable {
 
 		@Override
 		public void run() {
-			mOffline = new MKOfflineMap();
-			mOffline.init(new MyMKOfflineMapListener());
-			int num = mOffline.importOfflineData();
-			Log.v(Constant.TAG,
-					"ImportDataThread:Import Baidu Offline Map number:" + num);
-			if (num == 0) {
-				// 没有导入离线包，可能是离线包放置位置不正确，或离线包已经导入过
-			} else {
-				// "成功导入 num 个离线包
-			}
+
 		}
 	}
 
@@ -407,6 +417,12 @@ public class UpdateMapActivity extends Activity {
 				break;
 			}
 		}
+	}
+
+	@Override
+	protected void onStop() {
+		isActivityShow = false;
+		super.onStop();
 	}
 
 }
