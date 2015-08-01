@@ -9,6 +9,11 @@ public interface Constant {
 	 * Debug：打印Log
 	 */
 	public static boolean isDebug = true;
+	
+	/**
+	 * 是否开机自动录像
+	 */
+	public static boolean autoRecord = true;
 
 	/**
 	 * 是否有拨号短信模块
@@ -76,17 +81,31 @@ public interface Constant {
 		 * 字体目录
 		 */
 		public static final String FONT = "fonts/";
-		
+
 		/**
 		 * 百度离线地图子级目录
 		 */
 		public static final String BAIDU_OFFLINE_SUB = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
 	}
 
-	/**
-	 * 启动测试应用命令
-	 */
-	public static final String START_TEST_APK = "*#86*#";
+	public final static class MagicCode {
+
+		/**
+		 * 启动测试应用命令:DeviceTest
+		 */
+		public final static String DEVICE_TEST = "*#86*#";
+
+		/**
+		 * 启动工程模式：EngineerMode
+		 */
+		public final static String ENGINEER_MODE = "*#*#3646633#*#*";
+
+		/**
+		 * 启动系统设置:Setting
+		 */
+		public final static String SETTING = "*#7388464#*";
+
+	}
 
 	// FACE++ SDK
 	public static final String FACE_API_KEY = "543e743fa43f0550c2977995f3ff2222";

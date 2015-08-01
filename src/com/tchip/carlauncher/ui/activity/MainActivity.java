@@ -204,6 +204,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordDefaults();
 		setupRecordViews();
 
+		// 3秒后开机自动录像
+		if (Constant.autoRecord) {
+			new Thread(new AutoRecordThread()).start();
+		}
+
 		// 导航实例
 		initialNaviInstance();
 
@@ -228,6 +233,35 @@ public class MainActivity extends Activity implements TachographCallback,
 		simState = Tel.getSimState();
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 	}
+
+	public class AutoRecordThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(3000);
+				Message message = new Message();
+				message.what = 1;
+				autoRecordHandler.sendMessage(message);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	final Handler autoRecordHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				startOrStopRecord();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	private class MyPhoneStateListener extends PhoneStateListener {
 
@@ -884,20 +918,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoRecord:
 			case R.id.layoutVideoRecordSmall:
 				if (!ClickUtil.isQuickClick(1000)) {
-					if (mRecordState == STATE_RECORD_STOPPED) {
-						if (startRecorder() == 0) {
-							mRecordState = STATE_RECORD_STARTED;
-							MyApplication.isVideoReording = true;
-						}
-					} else if (mRecordState == STATE_RECORD_STARTED) {
-						if (stopRecorder() == 0) {
-							mRecordState = STATE_RECORD_STOPPED;
-							MyApplication.isVideoReording = false;
-						}
-					}
-					AudioPlayUtil.playAudio(getApplicationContext(),
-							FILE_TYPE_VIDEO);
-					setupRecordViews();
+					startOrStopRecord();
 				}
 				break;
 
@@ -1175,6 +1196,30 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 开启或关闭录像
+	 */
+	private void startOrStopRecord() {
+
+		if (mRecordState == STATE_RECORD_STOPPED) {
+			if (startRecorder() == 0) {
+				mRecordState = STATE_RECORD_STARTED;
+				MyApplication.isVideoReording = true;
+			} else {
+				Log.e(Constant.TAG, "Start Record failed");
+			}
+		} else if (mRecordState == STATE_RECORD_STARTED) {
+			if (stopRecorder() == 0) {
+				mRecordState = STATE_RECORD_STOPPED;
+				MyApplication.isVideoReording = false;
+			}
+		}
+		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+		setupRecordViews();
+		Log.v(Constant.TAG, "MyApplication.isVideoReording:"
+				+ MyApplication.isVideoReording);
+	}
+
 	class MyLocationListener implements BDLocationListener {
 
 		@Override
@@ -1355,13 +1400,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		refreshRecordButton();
 
 		mRecordState = STATE_RECORD_STOPPED;
+		MyApplication.isVideoReording = false;
 
 		mPathState = STATE_PATH_ZERO;
 		mSecondaryState = STATE_SECONDARY_DISABLE;
 		mOverlapState = STATE_OVERLAP_FIVE;
 
 		mMuteState = STATE_UNMUTE;
-
 	}
 
 	private void refreshRecordButton() {
