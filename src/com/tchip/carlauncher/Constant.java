@@ -86,6 +86,11 @@ public interface Constant {
 		 * 百度离线地图子级目录
 		 */
 		public static final String BAIDU_OFFLINE_SUB = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
+		
+		/**
+		 * 百度离线地图，存储卡位置
+		 */
+		public static final String SD_CARD_MAP = "/storage/sdcard1";
 	}
 
 	public final static class MagicCode {

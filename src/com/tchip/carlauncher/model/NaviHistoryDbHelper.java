@@ -16,9 +16,10 @@ public class NaviHistoryDbHelper extends SQLiteOpenHelper {
 	private static final String NAVI_TABLE_NAME = "navi";
 	private static final String NAVI_COL_ID = "_id";
 	private static final String NAVI_COL_KEY = "key"; // 导航关键字
+	private static final String NAVI_COL_CITY = "city"; // 导航城市
 
 	private static final String[] ROUTE_COL_PROJECTION = new String[] {
-			NAVI_COL_ID, NAVI_COL_KEY, };
+			NAVI_COL_ID, NAVI_COL_KEY, NAVI_COL_CITY, };
 
 	public NaviHistoryDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,7 +30,7 @@ public class NaviHistoryDbHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		String createRouteTableSql = "CREATE TABLE " + NAVI_TABLE_NAME + " ("
 				+ NAVI_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ NAVI_COL_KEY + " TEXT" + ");";
+				+ NAVI_COL_KEY + " TEXT," + NAVI_COL_CITY + " TEXT" + ");";
 		db.execSQL(createRouteTableSql);
 	}
 
@@ -48,6 +49,7 @@ public class NaviHistoryDbHelper extends SQLiteOpenHelper {
 
 		ContentValues values = new ContentValues();
 		values.put(NAVI_COL_KEY, naviHistory.getKey());
+		values.put(NAVI_COL_CITY, naviHistory.getCity());
 
 		// Insert to database
 		long rowId = db.insert(NAVI_TABLE_NAME, null, values);
@@ -70,7 +72,7 @@ public class NaviHistoryDbHelper extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 
 		NaviHistory naviHistory = new NaviHistory(cursor.getInt(0),
-				cursor.getString(1));
+				cursor.getString(1), cursor.getString(2));
 
 		return naviHistory;
 	}
@@ -91,7 +93,7 @@ public class NaviHistoryDbHelper extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 
 		NaviHistory naviHistory = new NaviHistory(cursor.getInt(0),
-				cursor.getString(1));
+				cursor.getString(1), cursor.getString(2));
 
 		return naviHistory;
 	}
@@ -113,7 +115,7 @@ public class NaviHistoryDbHelper extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				NaviHistory naviHistory = new NaviHistory(cursor.getInt(0),
-						cursor.getString(1));
+						cursor.getString(1), cursor.getString(2));
 				naviHistoryList.add(naviHistory);
 			} while (cursor.moveToNext());
 		}

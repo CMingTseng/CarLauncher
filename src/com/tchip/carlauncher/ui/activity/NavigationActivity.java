@@ -634,6 +634,10 @@ public class NavigationActivity extends FragmentActivity implements
 							String strHistory = naviHistoryArray.get(position)
 									.getKey();
 							etHistoryWhere.setText(strHistory);
+
+							String strCity = naviHistoryArray.get(position)
+									.getCity();
+							etHistoryCity.setText(strCity);
 						}
 					});
 
@@ -732,30 +736,18 @@ public class NavigationActivity extends FragmentActivity implements
 							.show();
 
 					PoiCitySearchOption poiOption = new PoiCitySearchOption();
-					if (textCity != null && textCity.trim().length() > 0) {
-						poiOption.city(textCity);
-					}
+					poiOption.city(textCity);
 					poiOption.keyword(where);
 					poiOption.pageNum(0);
 					poiOption.pageCapacity(10);
 					mPoiSearch.searchInCity(poiOption);
-				}
 
-				// mSuggestionSearch = SuggestionSearch.newInstance();
-				// mSuggestionSearch.setOnGetSuggestionResultListener(new
-				// MyOnGetSuggestionResultListener());
-				// SuggestionSearchOption option = new SuggestionSearchOption();
-				// option.keyword(where);
-				// option.city("北京");
-				// mSuggestionSearch.requestSuggestion(option);
-
-				// 存储搜索历史到数据库,周边不需要
-				if (!isNear) {
+					// 存储搜索历史到数据库,周边不需要
 					int existId = naviDb.getNaviIdByKey(where);
 					if (existId != -1) {
 						naviDb.deleteNaviHistoryById(existId);
 					}
-					NaviHistory naviHistory = new NaviHistory(where);
+					NaviHistory naviHistory = new NaviHistory(where, textCity);
 					naviDb.addNaviHistory(naviHistory);
 					naviHistoryAdapter.notifyDataSetChanged();
 				}

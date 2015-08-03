@@ -22,7 +22,7 @@ public class MyApplication extends Application {
 	private static String rootPath = "/mymusic";
 	public static String lrcPath = "/lrc";
 	public static String nowPlayMusic = "";
-	
+
 	// Route Record
 	public static boolean isRouteRecord = false;
 
@@ -35,8 +35,20 @@ public class MyApplication extends Application {
 		SpeechUtility.createUtility(this, "appid=" + Constant.XUNFEI_APP_ID);
 		super.onCreate();
 
-		// 百度地图SDK初始化
+		/*
+		 * 百度地图SDK初始化
+		 * 
+		 * 初始化全局 context，指定 sdcard 路径，若采用默认路径，请使用initialize(Context context)
+		 * 重载函数 参数:
+		 * 
+		 * sdcardPath - sd 卡路径，请确保该路径能正常使用 context - 必须是 application context，SDK
+		 * 各组件中需要用到。
+		 */
+		// if (isMapSDExists()) {
+		// SDKInitializer.initialize(Constant.Path.SD_CARD_MAP, this);
+		// } else {
 		SDKInitializer.initialize(this);
+		// }
 
 		// Music
 		mServiceManager = new MusicServiceManager(this);
@@ -46,6 +58,21 @@ public class MyApplication extends Application {
 		// TrafficDbManager.getInstance(this).setTrafficTotal(0L);
 		// TrafficUtils.startRepeatingService(MyApplication.this,
 		// TrafficUtils.INTERVAL, TrafficFetchService.class, "");
+	}
+
+	public boolean isMapSDExists() {
+		try {
+			String pathVideo = Constant.Path.SD_CARD_MAP + "/BaiduMapSDK/";
+			File fileVideo = new File(pathVideo);
+			fileVideo.mkdirs();
+			File file = new File(pathVideo);
+			if (!file.exists()) {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	private void initPath() {

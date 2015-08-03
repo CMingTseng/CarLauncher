@@ -4,16 +4,19 @@ public class NaviHistory {
 
 	int id; // 导航历史ID
 	String key; // 导航关键字
+	String city; // 导航城市
 
-	public NaviHistory(String key) {
+	public NaviHistory(String key, String city) {
 		super();
 		this.key = key;
+		this.city = city;
 	}
 
-	public NaviHistory(int id, String key) {
+	public NaviHistory(int id, String key, String city) {
 		super();
 		this.id = id;
 		this.key = key;
+		this.city = city;
 	}
 
 	public int getId() {
@@ -30,6 +33,14 @@ public class NaviHistory {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 }

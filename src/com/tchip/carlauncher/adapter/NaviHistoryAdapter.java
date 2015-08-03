@@ -79,7 +79,13 @@ public class NaviHistoryAdapter extends BaseAdapter {
 
 		// Key
 		String naviKey = naviArray.get(position).getKey();
-		viewHolder.textKey.setText(naviKey);
+		// City
+		String naviCity = naviArray.get(position).getCity();
+		if (naviCity != null && naviCity.trim().length() > 0) {
+			viewHolder.textKey.setText(naviKey + "(" + naviCity + ")");
+		} else {
+			viewHolder.textKey.setText(naviKey);
+		}
 
 		viewHolder.layoutDelete.setOnClickListener(new View.OnClickListener() {
 
