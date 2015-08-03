@@ -123,19 +123,18 @@ public class WifiAdmin {
 		mWifiManager.startScan();
 		// 得到扫描结果
 		mWifiList = mWifiManager.getScanResults();
-		
+
 		// 剔除只有BSSID最后两位不同的同名WiFi
 		int size = mWifiList.size();
-		for (int i = size-1; i >=1; i--) {
+		for (int i = size - 1; i >= 1; i--) {
 			String bssidPrefix = mWifiList.get(i).BSSID.substring(0, 12);
 			String wifiName = mWifiList.get(i).SSID;
-			Log.v(Constant.TAG, "bssidPrefix:" + bssidPrefix);
 			for (int j = 0; j < i; j++) {
 				if (bssidPrefix.equals(mWifiList.get(j).BSSID.substring(0, 12))
 						&& wifiName.equals(mWifiList.get(j).SSID)) {
-					Log.e(Constant.TAG,
-							"Remove duplicate wifi:" + mWifiList.get(j).SSID
-									+ ":" + mWifiList.get(j).BSSID);
+					// Log.e(Constant.TAG,
+					// "Remove duplicate wifi:" + mWifiList.get(j).SSID
+					// + ":" + mWifiList.get(j).BSSID);
 					mWifiList.remove(i);
 					break;
 				}
@@ -290,6 +289,26 @@ public class WifiAdmin {
 	}
 
 	/**
+	 * 删除指定SSID的Wifi配置信息
+	 * 
+	 * @param ssid
+	 */
+	private void deleteConfigBySSID(String ssid) {
+		if (mWifiList.size() > 0) {
+			int tempId = -1;
+			for (int i = 0; i < mWifiList.size(); i++) {
+				if (mWifiList.get(i).SSID.equals(ssid)) {
+					tempId = i;
+				}
+			}
+			if (tempId != -1) {
+				mWifiConfigurations.remove(tempId);
+				Log.e(Constant.TAG, "Remove Wifi Config:" + ssid);
+			}
+		}
+	}
+
+	/**
 	 * 断开指定ID的网络
 	 * 
 	 * @param netId
@@ -311,8 +330,9 @@ public class WifiAdmin {
 			WifiConfiguration wifi = wifiConfigList.get(i);
 			if (wifi.networkId == wifiId) {
 				while (!(mWifiManager.enableNetwork(wifiId, true))) {// 激活该Id，建立连接
-					Log.i("ConnectWifi",
-							String.valueOf(wifiConfigList.get(wifiId).status));// status:0--已经连接，1--不可连接，2--可以连接
+					Log.i(Constant.TAG,
+							"ConnectWifi:"
+									+ String.valueOf(wifiConfigList.get(wifiId).status));// status:0--已经连接，1--不可连接，2--可以连接
 				}
 				return true;
 			}
@@ -325,11 +345,12 @@ public class WifiAdmin {
 	 */
 	public void getConfiguration() {
 		wifiConfigList = mWifiManager.getConfiguredNetworks();// 得到配置好的网络信息
-		for (int i = 0; i < wifiConfigList.size(); i++) {
-			Log.i("getConfiguration", wifiConfigList.get(i).SSID);
-			Log.i("getConfiguration",
-					String.valueOf(wifiConfigList.get(i).networkId));
-		}
+		// for (int i = 0; i < wifiConfigList.size(); i++) {
+		// Log.i(Constant.TAG,
+		// "getConfiguration,SSID:" + wifiConfigList.get(i).SSID
+		// + " NetworkId:"
+		// + String.valueOf(wifiConfigList.get(i).networkId));
+		// }
 	}
 
 	/**
@@ -339,7 +360,8 @@ public class WifiAdmin {
 	 * @return
 	 */
 	public int IsConfiguration(String SSID) {
-		Log.i("IsConfiguration", String.valueOf(wifiConfigList.size()));
+		Log.i(Constant.TAG,
+				"IsConfiguration" + String.valueOf(wifiConfigList.size()));
 		for (int i = 0; i < wifiConfigList.size(); i++) {
 			Log.i(wifiConfigList.get(i).SSID,
 					String.valueOf(wifiConfigList.get(i).networkId));
@@ -363,7 +385,7 @@ public class WifiAdmin {
 		for (int i = 0; i < wifiList.size(); i++) {
 			ScanResult wifi = wifiList.get(i);
 			if (wifi.SSID.equals(ssid)) {
-				Log.i("AddWifiConfig", "equals");
+				Log.i(Constant.TAG, "AddWifiConfig equals");
 				WifiConfiguration wifiCong = new WifiConfiguration();
 				wifiCong.SSID = "\"" + wifi.SSID + "\"";// \"转义字符，代表"
 				wifiCong.preSharedKey = "\"" + pwd + "\"";// WPA-PSK密码

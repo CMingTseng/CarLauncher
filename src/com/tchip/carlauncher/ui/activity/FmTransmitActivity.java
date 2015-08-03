@@ -104,12 +104,12 @@ public class FmTransmitActivity extends Activity {
 		// 0- 205
 		fmSeekBar.setMax(205);
 		int nowFrequency = getFmFrequceny(); // 当前频率
-		fmSeekBar.setProgress(nowFrequency - 875);
-		textHint.setText("  " + nowFrequency / 10.0f + "MHz");
+		fmSeekBar.setProgress(nowFrequency / 10 - 875);
+		textHint.setText("  " + nowFrequency / 100.0f + "MHz");
 		fmSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				setFmFrequency(seekBar.getProgress() + 875);
+				setFmFrequency((seekBar.getProgress() + 875) * 10);
 			}
 
 			@Override
@@ -121,11 +121,16 @@ public class FmTransmitActivity extends Activity {
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				float frequency = (progress + 875.0f) / 10;
-				textHint.setText("  "+frequency + "MHz");
+				textHint.setText("  " + frequency + "MHz");
 			}
 		});
 	}
 
+	/**
+	 * 获取设置中存取的频率
+	 * 
+	 * @return 8750-10800
+	 */
 	private int getFmFrequceny() {
 		String fmChannel = Settings.System.getString(getContentResolver(),
 				FM_TRANSMITTER_CHANNEL);
@@ -164,6 +169,11 @@ public class FmTransmitActivity extends Activity {
 		}
 	}
 
+	/**
+	 * 设置FM发射频率:8750-10800
+	 * 
+	 * @param frequency
+	 */
 	private void setFmFrequency(int frequency) {
 		if (frequency >= 8750 || frequency <= 10800) {
 			Settings.System.putString(getContentResolver(),
@@ -171,7 +181,7 @@ public class FmTransmitActivity extends Activity {
 
 			SaveFileToNode(nodeFmChannel, String.valueOf(frequency));
 			Log.v(Constant.TAG, "FM Transmit:Set FM Frequency success:"
-					+ frequency);
+					+ frequency / 100.0f + "MHz");
 		}
 	}
 

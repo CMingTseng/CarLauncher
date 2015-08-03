@@ -122,7 +122,7 @@ public class RouteRecordService extends Service {
 					&& (list.get(list.size() - 1).getLng() == routeLng)) {
 				// 经纬度未改变
 				if (Constant.isDebug) {
-					Log.v(Constant.TAG, "Location is Not Change.");
+					//Log.v(Constant.TAG, "Location is Not Change.");
 				}
 			} else {
 				routePoint.setLng(routeLng);
