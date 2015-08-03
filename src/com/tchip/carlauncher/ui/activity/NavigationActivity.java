@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -49,6 +50,7 @@ import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
@@ -95,7 +97,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private double mLatitude, mLongitude;
 	private LatLng nowLatLng;
 
-	private EditText etHistoryWhere;
+	private EditText etHistoryWhere, etHistoryCity;
 	private LinearLayout layoutNearAdvice, layoutShowHistory,
 			layoutStarContent, layoutStarEditWork, layoutStarEditHome;
 	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
@@ -267,6 +269,7 @@ public class NavigationActivity extends FragmentActivity implements
 		btnCloseHistory.setOnClickListener(new MyOnClickListener());
 
 		etHistoryWhere = (EditText) findViewById(R.id.etHistoryWhere);
+		etHistoryCity = (EditText) findViewById(R.id.etHistoryCity);
 		btnHistoryNavi = (Button) findViewById(R.id.btnHistoryNavi);
 		btnHistoryNavi.setOnClickListener(new MyOnClickListener());
 
@@ -448,14 +451,19 @@ public class NavigationActivity extends FragmentActivity implements
 						isNearLayoutShow = false;
 						layoutNearAdvice.setVisibility(View.GONE);
 
+						// TODO:
 						startSearchPlace(strContent, nowLatLng, false);
 
-						// naviGeoCoder = GeoCoder.newInstance();
-						// naviGeoCoder
-						// .setOnGetGeoCodeResultListener(new
-						// MyOnGetGeoCoderResultListener());
-						// naviGeoCoder.geocode(new GeoCodeOption().city("")
-						// .address(strContent));
+						// 使用‘百度导航’进行导航
+						// try {
+						// Uri uri = Uri.parse("bdnavi://query?name="
+						// + strContent + "&src="
+						// + "com.tchip.carlauncher");
+						// Intent intent = new Intent(
+						// "com.baidu.navi.action.START", uri);
+						// startActivity(intent);
+						// } catch (Exception e) {
+						// }
 					}
 				}
 				break;
@@ -696,24 +704,41 @@ public class NavigationActivity extends FragmentActivity implements
 			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
 				NetworkUtil.noNetworkHint(getApplicationContext());
 			} else {
-				Toast.makeText(getApplicationContext(), "正在查找" + where,
-						Toast.LENGTH_SHORT).show();
-				// mPoiSearch.searchInCity((new
-				// PoiCitySearchOption()).city(findCity)
-				// .keyword(findContent).pageNum(load_Index));
+				String textCity = etHistoryCity.getText().toString();
+				boolean isInputCity = textCity != null
+						&& textCity.trim().length() > 0;
+				if (isNear || !isInputCity) {
+					// 周边搜索
+					Toast.makeText(getApplicationContext(), "正在周边查找" + where,
+							Toast.LENGTH_SHORT).show();
 
-				PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
-				poiOption.keyword(where);
-				poiOption.location(centerLatLng);
-				poiOption.radius(15 * 1000 * 1000); // 检索半径，单位:m
-				poiOption.sortType(PoiSortType.distance_from_near_to_far); // 按距离排序
-				// poiOption.sortType(PoiSortType.comprehensive); // 按综合排序
-				poiOption.pageNum(0); // 分页编号
-				poiOption.pageCapacity(10); // 设置每页容量，默认为每页10条
-				try {
-					mPoiSearch.searchNearby(poiOption); // mPoiSearch.searchInCity(arg0);
-				} catch (Exception e) {
-					e.printStackTrace();
+					PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
+					poiOption.keyword(where);
+					poiOption.location(centerLatLng);
+					poiOption.radius(15 * 1000 * 1000); // 检索半径，单位:m
+					poiOption.sortType(PoiSortType.distance_from_near_to_far); // 按距离排序
+					// poiOption.sortType(PoiSortType.comprehensive); // 按综合排序
+					poiOption.pageNum(0); // 分页编号
+					poiOption.pageCapacity(10); // 设置每页容量，默认为每页10条
+					try {
+						mPoiSearch.searchNearby(poiOption);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					// 全国搜索
+					Toast.makeText(getApplicationContext(),
+							"正在" + textCity + "查找" + where, Toast.LENGTH_SHORT)
+							.show();
+
+					PoiCitySearchOption poiOption = new PoiCitySearchOption();
+					if (textCity != null && textCity.trim().length() > 0) {
+						poiOption.city(textCity);
+					}
+					poiOption.keyword(where);
+					poiOption.pageNum(0);
+					poiOption.pageCapacity(10);
+					mPoiSearch.searchInCity(poiOption);
 				}
 
 				// mSuggestionSearch = SuggestionSearch.newInstance();
@@ -862,15 +887,18 @@ public class NavigationActivity extends FragmentActivity implements
 		}
 		if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
 
-			// 当输入关键字在本市没有找到，但在其他城市找到时，返回包含该关键字信息的城市列表
-			String strInfo = "在";
-			for (CityInfo cityInfo : result.getSuggestCityList()) {
-				strInfo += cityInfo.city;
-				strInfo += ",";
-			}
-			strInfo += "找到结果";
-			Toast.makeText(NavigationActivity.this, strInfo, Toast.LENGTH_LONG)
-					.show();
+			// // 当输入关键字在本市没有找到，但在其他城市找到时，返回包含该关键字信息的城市列表
+			// String strInfo = "在";
+			// for (CityInfo cityInfo : result.getSuggestCityList()) {
+			// strInfo += cityInfo.city;
+			// strInfo += ",";
+			// }
+			// strInfo += "找到结果";
+			// Toast.makeText(NavigationActivity.this, strInfo,
+			// Toast.LENGTH_LONG)
+			// .show();
+			//
+
 		}
 	}
 

@@ -328,6 +328,22 @@
 
                     <requestFocus />
                 </LinearLayout>
+                <EditText
+                    android:id="@+id/etHistoryCity"
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:hint="目的地城市"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:textColor="#dddddd"
+                    android:textColorHint="#cccccc"
+                    android:textSize="24sp" />
+                <View 
+                    
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"/>
 
                 <RelativeLayout
                     android:id="@+id/layoutNaviVoice"
@@ -351,6 +367,8 @@
                         android:layout_gravity="center"
                         android:visibility="gone" />
                 </RelativeLayout>
+                
+                
 
                 <EditText
                     android:id="@+id/etHistoryWhere"

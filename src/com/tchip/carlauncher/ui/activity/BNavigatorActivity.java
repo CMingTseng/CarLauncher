@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import com.baidu.navisdk.BNaviModuleManager;
 import com.baidu.navisdk.BaiduNaviManager;
 import com.baidu.navisdk.comapi.mapcontrol.BNMapController;
+import com.baidu.navisdk.comapi.routeguide.IRGInfoListener;
 import com.baidu.navisdk.comapi.routeplan.BNRoutePlaner;
 import com.baidu.navisdk.comapi.tts.BNTTSPlayer;
 import com.baidu.navisdk.comapi.tts.BNavigatorTTSPlayer;
@@ -97,7 +99,7 @@ public class BNavigatorActivity extends Activity {
 			// TODO 偏航请求成功
 
 		}
-
+		
 		@Override
 		public void onYawingRequestStart() {
 			// TODO 开始偏航请求
@@ -115,7 +117,7 @@ public class BNavigatorActivity extends Activity {
 		}
 
 		@Override
-		public void notifyGPSStatusData(int arg0) {
+		public void notifyGPSStatusData(int status) {
 			// TODO Auto-generated method stub
 
 		}
@@ -151,6 +153,125 @@ public class BNavigatorActivity extends Activity {
 		}
 
 	};
+	
+	
+	private class MyIRGInfoListener implements IRGInfoListener{
+
+		@Override
+		public void onAssistInfoHide(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onAssistInfoShow(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onAssistInfoUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onCurRoadNameUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onDirectBoardHide(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onDirectBoardShow(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onDirectBoardUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onHUDUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onRGSyncOperation(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onRasterExpandMapHide(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onRasterExpandMapShow(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onRasterExpandMapUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onRemainDistTimeUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSimpleGuideInfoHide(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSimpleGuideInfoShow(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSimpleGuideInfoUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onVectorExpandMapHide(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onVectorExpandMapShow(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onVectorExpandMapUpdate(Message arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 
 	@Override
 	public void onResume() {
