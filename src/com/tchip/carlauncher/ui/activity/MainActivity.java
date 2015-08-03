@@ -2,7 +2,6 @@ package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
 
-import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -10,19 +9,14 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
-import com.baidu.mapapi.map.offline.MKOLUpdateElement;
-import com.baidu.mapapi.map.offline.MKOfflineMap;
-import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.navisdk.BNaviEngineManager;
-import com.baidu.navisdk.BaiduNaviManager;
+import com.baidu.navisdk.adapter.BaiduNaviManager;
+import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -76,6 +70,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -244,7 +240,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				message.what = 1;
 				autoRecordHandler.sendMessage(message);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -297,7 +292,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * TODO:更新3G状态
+	 * 更新3G状态
 	 * 
 	 * SIM_STATE_UNKNOWN = 0:Unknown.
 	 * 
@@ -584,9 +579,70 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 初始化导航实例
 	 */
+	private String mSDCardPath = null;
+	private static final String APP_FOLDER_NAME = "CarLauncher";
+
 	private void initialNaviInstance() {
-		BaiduNaviManager.getInstance().initEngine(this, getSdcardDir(),
-				mNaviEngineInitListener, lbsAuthManagerListener);
+		if (initDirs()) {
+			initNavi();
+		}
+	}
+
+	private boolean initDirs() {
+		mSDCardPath = getSdcardDir();
+		if (mSDCardPath == null) {
+			return false;
+		}
+		File f = new File(mSDCardPath, APP_FOLDER_NAME);
+		if (!f.exists()) {
+			try {
+				f.mkdir();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	String authinfo = null;
+	public static final String ROUTE_PLAN_NODE = "routePlanNode";
+	private void initNavi() {
+		BaiduNaviManager.getInstance().setNativeLibraryPath(
+				mSDCardPath + "/BaiduNaviSDK_SO");
+		BaiduNaviManager.getInstance().init(this, mSDCardPath, APP_FOLDER_NAME,
+				new NaviInitListener() {
+					@Override
+					public void onAuthResult(int status, String msg) {
+						if (0 == status) {
+							authinfo = "Success!";
+						} else {
+							authinfo = "Fail:" + msg;
+						}
+
+						Log.v(Constant.TAG, "Baidu Navi:Key auth " + authinfo);
+					}
+
+					public void initSuccess() {
+						// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
+						MyApplication.isNaviInitialSuccess = true;
+						if (Constant.isDebug) {
+							Log.v(Constant.TAG, "Baidu Navi:Initial Success!");
+						}
+					}
+
+					public void initStart() {
+						if (Constant.isDebug) {
+							Log.v(Constant.TAG, "Baidu Navi:Initial Start!");
+						}
+					}
+
+					public void initFailed() {
+						if (Constant.isDebug) {
+							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
+						}
+					}
+				}, null /* mTTSCallback */);
 	}
 
 	private String getSdcardDir() {
@@ -596,46 +652,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		return null;
 	}
-
-	private BNaviEngineManager.NaviEngineInitListener mNaviEngineInitListener = new BNaviEngineManager.NaviEngineInitListener() {
-		public void engineInitSuccess() {
-			// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
-			MyApplication.isNaviInitialSuccess = true;
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Success!");
-			}
-		}
-
-		public void engineInitStart() {
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Start!");
-			}
-		}
-
-		public void engineInitFail() {
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "Initial Fail!");
-			}
-		}
-
-	};
-
-	private LBSAuthManagerListener lbsAuthManagerListener = new LBSAuthManagerListener() {
-
-		@Override
-		public void onAuthResult(int status, String msg) {
-			String str = null;
-			if (0 == status) {
-				str = "key auth success!";
-			} else {
-				str = "key auth error:, " + msg;
-			}
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "BaiduLBS:" + str);
-			}
-		}
-
-	};
 
 	/**
 	 * 初始化录像按钮
