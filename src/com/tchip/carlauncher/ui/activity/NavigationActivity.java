@@ -397,27 +397,27 @@ public class NavigationActivity extends FragmentActivity implements
 				break;
 
 			case R.id.layoutNearOilStation:
-				searchNear("加油站");
+				searchNear(getResources().getString(R.string.near_oil_station));
 				break;
 
 			case R.id.layoutNearParking:
-				searchNear("停车场");
+				searchNear(getResources().getString(R.string.near_parking));
 				break;
 
 			case R.id.layoutNear4s:
-				searchNear("4S");
+				searchNear(getResources().getString(R.string.near_4s));
 				break;
 
 			case R.id.layoutNearBank:
-				searchNear("ATM");
+				searchNear(getResources().getString(R.string.near_atm));
 				break;
 
 			case R.id.layoutShop:
-				searchNear("超市");
+				searchNear(getResources().getString(R.string.near_market));
 				break;
 
 			case R.id.layoutNearHotel:
-				searchNear("酒店");
+				searchNear(getResources().getString(R.string.near_hotel));
 				break;
 
 			// 历史记录
@@ -493,14 +493,19 @@ public class NavigationActivity extends FragmentActivity implements
 					if (MyApplication.isNaviInitialSuccess) {
 						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
-								"当前位置", workLat, workLng, workAddress);
+								getResources()
+										.getString(R.string.location_here),
+								workLat, workLng, workAddress);
 					} else {
 						// 未成功初始化
 						Log.e(Constant.TAG, "Initlal fail");
 					}
 				} else {
 					// 未设置，跳转到设置界面
-					Toast.makeText(getApplicationContext(), "请设置公司地址",
+					Toast.makeText(
+							getApplicationContext(),
+							getResources().getString(
+									R.string.set_location_company),
 							Toast.LENGTH_SHORT).show();
 					setStarPlace(StarType.TYPE_WORK);
 				}
@@ -525,14 +530,19 @@ public class NavigationActivity extends FragmentActivity implements
 					if (MyApplication.isNaviInitialSuccess) {
 						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
-								"当前位置", homeLat, homeLng, homeAddress);
+								getResources()
+										.getString(R.string.location_here),
+								homeLat, homeLng, homeAddress);
 					} else {
 						// 未成功初始化
 						Log.e(Constant.TAG, "Initlal fail");
 					}
 				} else {
 					// 未设置，跳转到设置界面
-					Toast.makeText(getApplicationContext(), "请设置家庭地址",
+					Toast.makeText(
+							getApplicationContext(),
+							getResources()
+									.getString(R.string.set_location_home),
 							Toast.LENGTH_SHORT).show();
 					setStarPlace(StarType.TYPE_HOME);
 				}
@@ -714,8 +724,10 @@ public class NavigationActivity extends FragmentActivity implements
 						&& textCity.trim().length() > 0;
 				if (isNear || !isInputCity) {
 					// 周边搜索
-					Toast.makeText(getApplicationContext(), "正在周边查找" + where,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(
+							getApplicationContext(),
+							getResources().getString(R.string.poi_search_near)
+									+ where, Toast.LENGTH_SHORT).show();
 
 					PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
 					poiOption.keyword(where);
@@ -732,9 +744,13 @@ public class NavigationActivity extends FragmentActivity implements
 					}
 				} else {
 					// 全国搜索
-					Toast.makeText(getApplicationContext(),
-							"正在" + textCity + "查找" + where, Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(
+							getApplicationContext(),
+							getResources().getString(R.string.poi_in_city)
+									+ textCity
+									+ getResources().getString(
+											R.string.poi_search) + where,
+							Toast.LENGTH_SHORT).show();
 
 					PoiCitySearchOption poiOption = new PoiCitySearchOption();
 					poiOption.city(textCity);
@@ -817,8 +833,9 @@ public class NavigationActivity extends FragmentActivity implements
 	public void onGetPoiResult(PoiResult result) {
 		if (result == null
 				|| result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
-			Toast.makeText(NavigationActivity.this, "未找到结果", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(NavigationActivity.this,
+					getResources().getString(R.string.poi_no_result),
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 		if (result.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -864,10 +881,13 @@ public class NavigationActivity extends FragmentActivity implements
 							isHistoryLayoutShow = false;
 
 							if (MyApplication.isNaviInitialSuccess) {
-								routeplanToNavi(CoordinateType.GCJ02,
+								routeplanToNavi(
+										CoordinateType.GCJ02,
 										nowLatLng.latitude,
-										nowLatLng.longitude, "当前位置", naviArray
-												.get(position).getLatitude(),
+										nowLatLng.longitude,
+										getResources().getString(
+												R.string.location_here),
+										naviArray.get(position).getLatitude(),
 										naviArray.get(position).getLongitude(),
 										naviArray.get(position).getName());
 							} else {
@@ -1014,21 +1034,23 @@ public class NavigationActivity extends FragmentActivity implements
 
 	public void onGetPoiDetailResult(PoiDetailResult result) {
 		if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-			Toast.makeText(NavigationActivity.this, "抱歉，未找到结果",
+			Toast.makeText(NavigationActivity.this,
+					getResources().getString(R.string.poi_no_result),
 					Toast.LENGTH_SHORT).show();
 		} else {
 			// 点击地图上搜索结果气球进入导航
 
 			if (MyApplication.isNaviInitialSuccess) {
 				routeplanToNavi(CoordinateType.GCJ02, nowLatLng.latitude,
-						nowLatLng.longitude, "当前位置",
+						nowLatLng.longitude,
+						getResources().getString(R.string.poi_no_result),
 						result.getLocation().latitude,
 						result.getLocation().longitude, result.getAddress());
 			} else {
 				// 未成功初始化
-				Log.e(Constant.TAG, "点击气球：未成功初始化");
+				Log.e(Constant.TAG,
+						"NavigationActivity,onGetPoiDetailResult:Navi Initial Failed.");
 			}
-
 		}
 	}
 
@@ -1157,12 +1179,16 @@ public class NavigationActivity extends FragmentActivity implements
 		if (!TextUtils.isEmpty(text)) {
 			progressVoice.setVisibility(View.GONE);
 			imgVoiceSearch.setVisibility(View.VISIBLE);
-			if (text.startsWith("导航去") || text.startsWith("导航到")
-					|| text.startsWith("我要去")) {
+			String[] naviIntent = getResources().getStringArray(
+					R.array.navi_intent);
+			if (text.startsWith(naviIntent[0])
+					|| text.startsWith(naviIntent[1])
+					|| text.startsWith(naviIntent[2])) {
 				text = text.substring(3, text.length());
-			} else if (text.startsWith("导航")) {
+			} else if (text.startsWith(naviIntent[3])) {
 				text = text.substring(2, text.length());
-			} else if (text.startsWith("去") || text.startsWith("到")) {
+			} else if (text.startsWith(naviIntent[4])
+					|| text.startsWith(naviIntent[5])) {
 				text = text.substring(1, text.length());
 			}
 

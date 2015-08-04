@@ -730,11 +730,15 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void updateLocationAndWeather() {
 
-		if ("未定位".equals(sharedPreferences.getString("cityName", "未定位"))) {
+		String strNotLocate = getResources().getString(R.string.not_locate);
+
+		if (strNotLocate.equals(sharedPreferences.getString("cityName",
+				strNotLocate))) {
 			String cityName = sharedPreferences.getString("cityNameRealButOld",
-					"未定位");
-			if ("未定位".equals(cityName)) {
-				String addrStr = sharedPreferences.getString("addrStr", "未定位");
+					strNotLocate);
+			if (strNotLocate.equals(cityName)) {
+				String addrStr = sharedPreferences.getString("addrStr",
+						strNotLocate);
 				if (addrStr.contains("省") && addrStr.contains("市")) {
 					cityName = addrStr.split("省")[1].split("市")[0];
 				} else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
@@ -747,11 +751,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			editor.commit();
 			textLocation.setText(cityName);
 		} else {
-			textLocation
-					.setText(sharedPreferences.getString("cityName", "未定位"));
+			textLocation.setText(sharedPreferences.getString("cityName",
+					strNotLocate));
 		}
 
-		String weatherToday = sharedPreferences.getString("day0weather", "未知");
+		String weatherToday = sharedPreferences.getString("day0weather",
+				getResources().getString(R.string.unknown));
 		textTodayWeather.setText(weatherToday);
 		imageTodayWeather.setImageResource(WeatherUtil
 				.getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));
@@ -946,10 +951,12 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!ClickUtil.isQuickClick(800)) {
 					if (!MyApplication.isVideoLock) {
 						MyApplication.isVideoLock = true;
-						startSpeak("视频加锁");
+						startSpeak(getResources()
+								.getString(R.string.video_lock));
 					} else {
 						MyApplication.isVideoLock = false;
-						startSpeak("视频解锁");
+						startSpeak(getResources().getString(
+								R.string.video_unlock));
 					}
 					setupRecordViews();
 				}
@@ -968,12 +975,14 @@ public class MainActivity extends Activity implements TachographCallback,
 						setResolution(STATE_RESOLUTION_720P);
 						editor.putString("videoSize", "720");
 						mRecordState = STATE_RECORD_STOPPED;
-						startSpeak("分辨率七二零P");
+						startSpeak(getResources().getString(
+								R.string.hint_video_size_720));
 					} else if (mResolutionState == STATE_RESOLUTION_720P) {
 						setResolution(STATE_RESOLUTION_1080P);
 						editor.putString("videoSize", "1080");
 						mRecordState = STATE_RECORD_STOPPED;
-						startSpeak("分辨率一零八零P");
+						startSpeak(getResources().getString(
+								R.string.hint_video_size_1080));
 					}
 					editor.commit();
 					setupRecordViews();
@@ -987,13 +996,15 @@ public class MainActivity extends Activity implements TachographCallback,
 						if (setInterval(5 * 60) == 0) {
 							mIntervalState = STATE_INTERVAL_5MIN;
 							editor.putString("videoTime", "5");
-							startSpeak("视频分段五分钟");
+							startSpeak(getResources().getString(
+									R.string.hint_video_time_5));
 						}
 					} else if (mIntervalState == STATE_INTERVAL_5MIN) {
 						if (setInterval(3 * 60) == 0) {
 							mIntervalState = STATE_INTERVAL_3MIN;
 							editor.putString("videoTime", "3");
-							startSpeak("视频分段三分钟");
+							startSpeak(getResources().getString(
+									R.string.hint_video_time_3));
 						}
 					}
 					editor.commit();
@@ -1007,12 +1018,14 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (mMuteState == STATE_MUTE) {
 						if (setMute(false) == 0) {
 							mMuteState = STATE_UNMUTE;
-							startSpeak("录音");
+							startSpeak(getResources().getString(
+									R.string.hint_video_mute_off));
 						}
 					} else if (mMuteState == STATE_UNMUTE) {
 						if (setMute(true) == 0) {
 							mMuteState = STATE_MUTE;
-							startSpeak("静音");
+							startSpeak(getResources().getString(
+									R.string.hint_video_mute_on));
 						}
 					}
 					setupRecordViews();
@@ -1262,13 +1275,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 
 			// 存储非“未定位”的城市信息
-			if (!"未定位".equals(location.getCity())) {
+			String strNotLocate = getResources().getString(R.string.not_locate);
+			if (!strNotLocate.equals(location.getCity())) {
 				editor.putString("cityNameRealButOld", location.getCity());
 				editor.commit();
 			}
 
 			// 城市名发生变化，需要更新位置和天气
-			if (!sharedPreferences.getString("cityName", "未定位").equals(
+			if (!sharedPreferences.getString("cityName", strNotLocate).equals(
 					location.getCity())) {
 				startWeatherService();
 				editor.putString("cityName", location.getCity());
@@ -1278,7 +1292,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			String cityName = location.getCity();
 
-			if ((cityName != null) && (!cityName.equals("未定位"))) {
+			if ((cityName != null) && (!cityName.equals(strNotLocate))) {
 
 				// editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);
@@ -1683,7 +1697,8 @@ public class MainActivity extends Activity implements TachographCallback,
 						}
 					} else {
 						// 提示用户清理空间，删除较旧的视频（加锁）
-						String strStorageFull = "空间不足，将清理加锁视频";
+						String strStorageFull = getResources().getString(
+								R.string.storage_full_and_delete_lock);
 						startSpeak(strStorageFull);
 						Toast.makeText(getApplicationContext(), strStorageFull,
 								Toast.LENGTH_SHORT).show();
@@ -1761,7 +1776,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		if (!isSD2Exists()) {
 			// SDCard2不存在
-			String strNoSD = "SD卡2不存在，无法录像";
+			String strNoSD = getResources().getString(R.string.sd2_not_exist);
 			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
 					.show();
 			startSpeak(strNoSD);
@@ -1811,7 +1826,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	public int takePhoto() {
 		if (!isSD2Exists()) {
 			// SDCard2不存在
-			String strNoSD = "SD卡2不存在，无法拍照";
+			String strNoSD = getResources().getString(R.string.sd2_not_exist);
 			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
 					.show();
 			startSpeak(strNoSD);
@@ -1945,8 +1960,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					videoResolution);
 			videoDb.addDriveVideo(driveVideo);
 		} else {
-			Toast.makeText(getApplicationContext(), "照片已保存", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.photo_save),
+					Toast.LENGTH_SHORT).show();
 		}
 
 		// 更新Media Database

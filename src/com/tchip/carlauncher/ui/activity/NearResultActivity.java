@@ -154,8 +154,10 @@ public class NearResultActivity extends FragmentActivity implements
 		if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
 			NetworkUtil.noNetworkHint(getApplicationContext());
 		} else {
-			Toast.makeText(getApplicationContext(), "正在查找" + findContent,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(
+					getApplicationContext(),
+					getResources().getString(R.string.poi_search_near)
+							+ findContent, Toast.LENGTH_SHORT).show();
 			// mPoiSearch.searchInCity((new
 			// PoiCitySearchOption()).city(findCity)
 			// .keyword(findContent).pageNum(load_Index));
@@ -172,8 +174,9 @@ public class NearResultActivity extends FragmentActivity implements
 	public void onGetPoiResult(PoiResult result) {
 		if (result == null
 				|| result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
-			Toast.makeText(NearResultActivity.this, "未找到结果", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(NearResultActivity.this,
+					getResources().getString(R.string.poi_no_result),
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 		if (result.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -188,12 +191,12 @@ public class NearResultActivity extends FragmentActivity implements
 		if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
 
 			// 当输入关键字在本市没有找到，但在其他城市找到时，返回包含该关键字信息的城市列表
-			String strInfo = "在";
+			String strInfo = getResources().getString(R.string.poi_in_city);
 			for (CityInfo cityInfo : result.getSuggestCityList()) {
 				strInfo += cityInfo.city;
 				strInfo += ",";
 			}
-			strInfo += "找到结果";
+			strInfo += getResources().getString(R.string.poi_has_result);
 			Toast.makeText(NearResultActivity.this, strInfo, Toast.LENGTH_LONG)
 					.show();
 		}
@@ -201,7 +204,8 @@ public class NearResultActivity extends FragmentActivity implements
 
 	public void onGetPoiDetailResult(PoiDetailResult result) {
 		if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-			Toast.makeText(NearResultActivity.this, "抱歉，未找到结果",
+			Toast.makeText(NearResultActivity.this,
+					getResources().getString(R.string.poi_no_result),
 					Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(NearResultActivity.this,

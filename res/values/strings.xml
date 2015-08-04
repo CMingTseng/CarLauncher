@@ -183,7 +183,6 @@
 
     <!-- Traffic Stats -->
     <string name="cur_type">当前正在使用：%1$s</string>
-    <string name="unknown">未知</string>
     <string name="wifi">Wi-Fi</string>
     <string name="invalid_network">未连接网络</string>
     <string name="_3g_above">高速网络（3G、4G）</string>
@@ -242,23 +241,105 @@
     <string name="add_favourite">添加收藏</string>
     <string name="file_info">文件信息</string>
     <string name="mime_type_s">文件类型: %s</string>
-    
+
     <!-- 循环录像和文件加锁 -->
     <string name="back">返回</string>
-    
     <string name="del_title">删除提示</string>
     <string name="del_msg">是否要删除该视频吗？\n提示：删除后该视频不可恢复！</string>
     <string name="del_msg_nodel">是否要删除该碰撞视频吗？\n提示：删除后该视频不可恢复！</string>
-    
     <string name="del_success">删除成功</string>
     <string name="del_fail">删除失败</string>
-    
     <string name="choose_file_ctrl">请选择对视频文件的操作</string>
     <string name="cancle">取消</string>
     <string name="dlg_keep_save">保存至存档</string>
-    
     <string name="normal_video">正常视频</string>
-	<string name="urgent_video">紧急视频</string>
-	<string name="keep_save_video">存档视频</string>
+    <string name="urgent_video">紧急视频</string>
+    <string name="keep_save_video">存档视频</string>
+
+    <!-- ChatActivity -->
+    <string name="chat_hello_greet">你好，有什么可以帮您？</string>
+    <string name="chat_no_answer">小天不知道怎么回答了</string>
+    <string name="hint_no_network">无网络链接</string>
+    <string name="weather">天气</string>
+    <string name="temperature">温度</string>
+    <string name="start_navigation">正在导航</string>
+    <string name="app_is_openning">正在打开</string>
+    <string name="app_is_not_found">未找到应用</string>
+    <string name="phone_call_to">正在打电话给</string>
+    <string name="contact_not_found">通讯录中未找到</string>
+    <string name="phone_not_support">本机不支持通讯功能</string>
+    <string name="mms_end_to">"正在发短信给</string>
+    <string name="mms_content_empty">短信内容为空</string>
+    <string name="mms_send_success">短信发送成功</string>
+
+    <!-- MainActivity -->
+    <string name="not_locate">未定位</string>
+    <string name="unknown">未知</string>
+    <string name="video_lock">视频加锁</string>
+    <string name="video_unlock">视频解锁</string>
+    <string name="hint_video_size_720">分辨率七二零P</string>
+    <string name="hint_video_size_1080">分辨率一零八零P</string>
+    <string name="hint_video_time_5">视频分段五分钟</string>
+    <string name="hint_video_time_3">视频分段三分钟</string>
+    <string name="hint_video_mute_off">录音</string>
+    <string name="hint_video_mute_on">静音</string>
+    <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
+    <string name="sd2_not_exist">SD卡2不存在</string>
+    <string name="photo_save">照片已保存</string>
+
+    <!-- MultimediaActivity -->
+    <string name="music_play_now">正在播放</string>
+    <string name="music_play_recent">最近播放</string>
+
+    <!-- NavigationActivity -->
+    <string name="near_oil_station">加油站</string>
+    <string name="near_parking">停车场</string>
+    <string name="near_4s">4S</string>
+    <string name="near_atm">ATM</string>
+    <string name="near_market">超市</string>
+    <string name="near_hotel">酒店</string>
+    <string name="location_here">当前位置</string>
+    <string name="set_location_company">请设置公司地址</string>
+    <string name="set_location_home">请设置家庭地址</string>
+    <string name="poi_search_near">正在查找</string>
+    <string name="poi_search">查找</string>
+    <string name="poi_in_city">在</string>
+    <string name="poi_no_result">未找到结果</string>
+    <string name="poi_has_result">找到结果</string>
+
+    <string-array name="navi_intent">
+        <item>导航去</item>
+        <item>导航到</item>
+        <item>我要去</item>
+        <item>导航</item>
+        <item>去</item>
+        <item>到</item>
+    </string-array>
+    
+    <!-- OfflineBaiduMapActivity -->
+    <string name="start_download">开始下载</string>
+    <string name="offline_download_start">开始下载离线地图</string>
+    <string name="offline_download_pause">暂停下载离线地图</string>
+    <string name="offline_download_delete">删除离线地图</string>
+    
+    <string name="no_match_city">未找到相关城市</string>
+    <string name="not_import_offline_map">没有导入离线包，这可能是离线包放置位置不正确，或离线包已经导入过</string>
+    <string name="import_success">成功导入 %d 个离线包，可以在下载管理查看</string>
+    
+    <string name="has_update">可更新</string>
+    <string name="update">更新</string>
+    <string name="no_update">最新</string>
+    <string name="re_download">重新下载</string>
+    
+    <!-- RouteShowActivity -->
+    <string name="no_route_file">轨迹文件不存在</string>
+    <string name="share_route_screenshot_to">分享轨迹图到</string>
+    <string name="share_route">分享轨迹</string>
+    <string name="route_point_less">轨迹点数目小于2个</string>
+    <string name="linear_diatance">直线距离</string>
+    <string name="drive_distance">行驶距离</string>
+    <string name="meter">米</string>
+    <string name="location_end">终点位置</string>
+    <string name="location_start">起始位置</string>
 
 </resources>

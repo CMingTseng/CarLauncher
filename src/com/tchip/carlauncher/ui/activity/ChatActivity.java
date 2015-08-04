@@ -150,7 +150,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		// screenFilter.addAction(Intent.ACTION_SCREEN_ON);
 		// registerReceiver(ScreenOnOffReceiver, screenFilter);
 
-		startSpeak("你好，有什么可以帮您？");
+		startSpeak(getResources().getString(R.string.chat_hello_greet));
 
 		Button btnToMultimedia = (Button) findViewById(R.id.btnToMultimedia);
 		btnToMultimedia.setOnClickListener(this);
@@ -467,7 +467,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		case R.id.imageVoice:
 		case R.id.imageAnim:
 			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
-				String strNoNetwork = "无网络链接";
+				String strNoNetwork = getResources().getString(
+						R.string.hint_no_network);
 				tvAnswer.setText(strNoNetwork);
 				startSpeak(strNoNetwork);
 				Toast.makeText(getApplicationContext(), strNoNetwork,
@@ -585,8 +586,15 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 									String weather = todayJSON
 											.getString("weather");
 									String city = todayJSON.getString("city");
-									String strAnswer = city + "天气：" + weather
-											+ ",温度" + tempRange;
+									String strAnswer = city
+											+ getResources().getString(
+													R.string.weather)
+											+ "："
+											+ weather
+											+ ","
+											+ getResources().getString(
+													R.string.temperature)
+											+ tempRange;
 									tvAnswer.setText(strAnswer);
 									startSpeak(strAnswer);
 								} else if ("music".equals(strService)) {
@@ -614,7 +622,10 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 									// mEndSearch.geocode(new GeoCodeOption()
 									// .city(endCityStr)
 									// .address(endPoiStr));
-									String strAnswer = "正在导航:" + endPoiStr;
+									String strAnswer = getResources()
+											.getString(
+													R.string.start_navigation)
+											+ ":" + endPoiStr;
 									tvAnswer.setText(strAnswer);
 
 									// 跳转到自写导航界面，不使用GeoCoder
@@ -637,7 +648,9 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										// 百度导航
 										if ("百度导航".equals(appName)) {
 											try {
-												String strAnswer = "正在打开"
+												String strAnswer = getResources()
+														.getString(
+																R.string.app_is_openning)
 														+ appName;
 												tvAnswer.setText(strAnswer);
 
@@ -655,14 +668,18 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 											String packageName = getAppPackageByName(appName);
 											if (!"com.tchip.carlauncher"
 													.equals(packageName)) {
-												String strAnswer = "正在启动："
-														+ appName;
+												String strAnswer = getResources()
+														.getString(
+																R.string.app_is_openning)
+														+ "：" + appName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
 												startAppbyPackage(packageName);
 											} else {
-												String strAnswer = "未找到应用："
-														+ appName;
+												String strAnswer = getResources()
+														.getString(
+																R.string.app_is_not_found)
+														+ "：" + appName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
 											}
@@ -691,15 +708,19 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 											}
 											if (phoneNum != null
 													& phoneNum.trim().length() > 0) {
-												String strAnswer = "正在打电话给："
-														+ peopleName;
+												String strAnswer = getResources()
+														.getString(
+																R.string.phone_call_to)
+														+ "：" + peopleName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
 												phoneCall(phoneNum);
 											} else if (phoneCode != null
 													& phoneCode.trim().length() > 0) {
-												String strAnswer = "正在打电话给："
-														+ peopleName;
+												String strAnswer = getResources()
+														.getString(
+																R.string.phone_call_to)
+														+ "：" + peopleName;
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
 												phoneCall(phoneCode);
@@ -711,22 +732,28 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 														& phoneNumFromPinYin
 																.trim()
 																.length() > 0) {
-													String strAnswer = "正在打电话给："
-															+ peopleName;
+													String strAnswer = getResources()
+															.getString(
+																	R.string.phone_call_to)
+															+ "：" + peopleName;
 													tvAnswer.setText(strAnswer);
 													startSpeak(strAnswer);
 													phoneCall(phoneNumFromPinYin);
 
 												} else {
-													String strAnswer = "通讯录中未找到："
-															+ peopleName;
+													String strAnswer = getResources()
+															.getString(
+																	R.string.contact_not_found)
+															+ "：" + peopleName;
 													tvAnswer.setText(strAnswer);
 													startSpeak(strAnswer);
 												}
 											}
 										}
 									} else {
-										String strAnswer = "本机不支持通讯功能";
+										String strAnswer = getResources()
+												.getString(
+														R.string.phone_not_support);
 										tvAnswer.setText(strAnswer);
 										startSpeak(strAnswer);
 									}
@@ -756,7 +783,10 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 												if (phoneNum != null
 														& phoneNum.trim()
 																.length() > 0) {
-													String strAnswer = "正在发短信给："
+													String strAnswer = getResources()
+															.getString(
+																	R.string.mms_end_to)
+															+ "："
 															+ peopleName
 															+ "："
 															+ messageContent;
@@ -772,8 +802,9 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 															& phoneNumFromPinYin
 																	.trim()
 																	.length() > 0) {
-														String strAnswer = "正在发短信给"
-																+ peopleName
+														String strAnswer = getResources()
+																.getString(
+																		R.string.mms_end_to)
 																+ "："
 																+ messageContent;
 														tvAnswer.setText(strAnswer);
@@ -782,27 +813,35 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 																phoneNumFromPinYin,
 																messageContent);
 													} else {
-														String strAnswer = "通讯录中未找到："
+														String strAnswer = getResources()
+																.getString(
+																		R.string.contact_not_found)
+																+ "："
 																+ peopleName;
 														tvAnswer.setText(strAnswer);
 														startSpeak(strAnswer);
 													}
 												}
 											} else {
-												String strAnswer = "短信内容为空。";
+												String strAnswer = getResources()
+														.getString(
+																R.string.mms_content_empty);
 												tvAnswer.setText(strAnswer);
 												startSpeak(strAnswer);
 											}
 										}
 									} else {
-										String strAnswer = "本机不支持通讯功能";
+										String strAnswer = getResources()
+												.getString(
+														R.string.phone_not_support);
 										tvAnswer.setText(strAnswer);
 										startSpeak(strAnswer);
 									}
 								}
 							} catch (JSONException e) {
 								e.printStackTrace();
-								String strNoAnswer = "小天不知道怎么回答了";
+								String strNoAnswer = getResources().getString(
+										R.string.chat_no_answer);
 								tvAnswer.setText(strNoAnswer);
 								startSpeak(strNoAnswer);
 							} finally {
@@ -860,7 +899,10 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				public void onReceive(Context _context, Intent _intent) {
 					switch (getResultCode()) {
 					case Activity.RESULT_OK:
-						Toast.makeText(getApplicationContext(), "短信已发送",
+						Toast.makeText(
+								getApplicationContext(),
+								getResources().getString(
+										R.string.mms_send_success),
 								Toast.LENGTH_SHORT).show();
 						break;
 					case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
@@ -920,7 +962,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 					// 可以获取到电话号码
 					return c.getString(c.getColumnIndex(Phone.NUMBER));
 				}
-
 			}
 			return "";
 

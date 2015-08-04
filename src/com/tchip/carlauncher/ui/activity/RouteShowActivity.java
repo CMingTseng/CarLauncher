@@ -103,7 +103,8 @@ public class RouteShowActivity extends Activity {
 			filePath = extras.getString("filePath");
 			// setTitle(filePath.substring(0, filePath.length() - 4));
 		} else {
-			Toast.makeText(getApplicationContext(), "轨迹文件不存在",
+			Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.no_route_file),
 					Toast.LENGTH_SHORT).show();
 			finish();
 		}
@@ -144,9 +145,14 @@ public class RouteShowActivity extends Activity {
 							Uri uri = Uri.fromFile(file);
 							intent.setType("image/png");
 							intent.putExtra(Intent.EXTRA_STREAM, uri);
-							intent.putExtra(Intent.EXTRA_TITLE, "分享轨迹图到");
-							Intent chooserIntent = Intent.createChooser(intent,
-									"分享轨迹");
+							intent.putExtra(
+									Intent.EXTRA_TITLE,
+									getResources().getString(
+											R.string.share_route_screenshot_to));
+							Intent chooserIntent = Intent.createChooser(
+									intent,
+									getResources().getString(
+											R.string.share_route));
 							if (chooserIntent == null) {
 								return;
 							}
@@ -219,7 +225,8 @@ public class RouteShowActivity extends Activity {
 		List<LatLng> points = getRoutePoints(path);
 
 		if (points.size() < 2) {
-			Toast.makeText(getApplicationContext(), "轨迹点数目小于2个",
+			Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.route_point_less),
 					Toast.LENGTH_SHORT).show();
 			finish();
 		} else {
@@ -267,8 +274,14 @@ public class RouteShowActivity extends Activity {
 				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
 			} finally {
 				textDistance.setVisibility(View.VISIBLE);
-				textDistance.setText("直线距离:" + (int) linearDistance
-						+ "米  行驶距离:" + (int) driveDistance + "米");
+				textDistance.setText(getResources().getString(
+						R.string.linear_diatance)
+						+ ":"
+						+ (int) linearDistance
+						+ getResources().getString(R.string.meter)
+						+ getResources().getString(R.string.drive_distance)
+						+ (int) driveDistance
+						+ getResources().getString(R.string.meter));
 				textDistance.setTypeface(Typefaces.get(this, Constant.Path.FONT
 						+ "Font-Helvetica-Neue-LT-Pro.otf"));
 				_db.close();
@@ -376,7 +389,8 @@ public class RouteShowActivity extends Activity {
 			button.setBackgroundResource(R.drawable.popup);
 			OnInfoWindowClickListener listener = null;
 			if (marker == mMarkerStart) {
-				button.setText("起始位置");
+				button.setText(getResources()
+						.getString(R.string.location_start));
 				listener = new OnInfoWindowClickListener() {
 					public void onInfoWindowClick() {
 						// LatLng ll = marker.getPosition();
@@ -392,7 +406,8 @@ public class RouteShowActivity extends Activity {
 						listener);
 				mBaiduMap.showInfoWindow(mInfoWindow);
 			} else if (marker == mMarkerEnd) {
-				button.setText("终点位置");
+				button.setText(getResources()
+						.getString(R.string.drive_distance));
 			}
 			return true;
 		}

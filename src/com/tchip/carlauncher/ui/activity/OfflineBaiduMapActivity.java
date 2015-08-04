@@ -139,7 +139,8 @@ public class OfflineBaiduMapActivity extends Activity implements
 					mOffline.start(Integer.parseInt(clickId));
 					Toast.makeText(
 							getApplicationContext(),
-							"开始下载:"
+							getResources().getString(R.string.start_download)
+									+ ":"
 									+ allCities.get(position).substring(0,
 											startIndex - 1), Toast.LENGTH_SHORT)
 							.show();
@@ -191,7 +192,10 @@ public class OfflineBaiduMapActivity extends Activity implements
 					ArrayList<MKOLSearchRecord> records = mOffline
 							.searchCity(cityNameView.getText().toString());
 					if (records == null || records.size() != 1) {
-						Toast.makeText(getApplicationContext(), "未找到相关城市",
+						Toast.makeText(
+								getApplicationContext(),
+								getResources()
+										.getString(R.string.no_match_city),
 								Toast.LENGTH_SHORT).show();
 						return;
 					}
@@ -245,7 +249,8 @@ public class OfflineBaiduMapActivity extends Activity implements
 		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
 			int cityid = Integer.parseInt(cidView.getText().toString());
 			mOffline.start(cityid);
-			Toast.makeText(this, "开始下载离线地图. cityid: " + cityid,
+			Toast.makeText(this,
+					getResources().getString(R.string.offline_download_start),
 					Toast.LENGTH_SHORT).show();
 			updateView();
 		} else {
@@ -261,8 +266,9 @@ public class OfflineBaiduMapActivity extends Activity implements
 	public void stop(View view) {
 		int cityid = Integer.parseInt(cidView.getText().toString());
 		mOffline.pause(cityid);
-		Toast.makeText(this, "暂停下载离线地图. cityid: " + cityid, Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(this,
+				getResources().getString(R.string.offline_download_pause),
+				Toast.LENGTH_SHORT).show();
 		updateView();
 	}
 
@@ -273,8 +279,9 @@ public class OfflineBaiduMapActivity extends Activity implements
 	 */
 	public void deleteMapByCityId(int cityId) {
 		mOffline.remove(cityId);
-		Toast.makeText(this, "删除离线地图. cityid: " + cityId, Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(this,
+				getResources().getString(R.string.offline_download_delete),
+				Toast.LENGTH_SHORT).show();
 		updateView();
 	}
 
@@ -288,9 +295,10 @@ public class OfflineBaiduMapActivity extends Activity implements
 		int num = mOffline.importOfflineData();
 		String msg = "";
 		if (num == 0) {
-			msg = "没有导入离线包，这可能是离线包放置位置不正确，或离线包已经导入过";
+			msg = getResources().getString(R.string.not_import_offline_map);
 		} else {
-			msg = String.format("成功导入 %d 个离线包，可以在下载管理查看", num);
+			msg = String.format(
+					getResources().getString(R.string.import_success), num);
 		}
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 		updateView();
@@ -407,13 +415,14 @@ public class OfflineBaiduMapActivity extends Activity implements
 			ratio.setText(e.ratio + "%");
 			title.setText(e.cityName);
 			if (e.update) {
-				update.setText("可更新");
+				update.setText(getResources().getString(R.string.has_update));
 				update.setTextColor(Color.RED);
-				btnUpdate.setText("更新");
+				btnUpdate.setText(getResources().getString(R.string.update));
 			} else {
-				update.setText("最新");
+				update.setText(getResources().getString(R.string.no_update));
 				update.setTextColor(Color.BLUE);
-				btnUpdate.setText("重新下载");
+				btnUpdate.setText(getResources()
+						.getString(R.string.re_download));
 			}
 			if (e.ratio != 100) {
 				display.setEnabled(false);

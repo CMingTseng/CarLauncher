@@ -87,7 +87,8 @@ public class MultimediaActivity extends Activity {
 
 			textRecent.setText(MyApplication.nowPlayMusic);
 			layoutMusicRecent.setVisibility(View.VISIBLE);
-			textRecentHint.setText("正在播放");
+			textRecentHint.setText(getResources().getString(
+					R.string.music_play_now));
 
 			editor.putString("rencentMusicList", MyApplication.nowPlayMusic);
 			editor.commit();
@@ -96,7 +97,8 @@ public class MultimediaActivity extends Activity {
 			if (!"NULL".equals(nowPlayMusic)) {
 				layoutMusicRecent.setVisibility(View.VISIBLE);
 				textRecent.setText(nowPlayMusic);
-				textRecentHint.setText("最近播放");
+				textRecentHint.setText(getResources().getString(
+						R.string.music_play_recent));
 			} else
 				layoutMusicRecent.setVisibility(View.INVISIBLE);
 		}
