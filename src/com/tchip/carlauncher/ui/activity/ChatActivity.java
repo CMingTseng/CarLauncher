@@ -45,6 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.lbsapi.auth.LBSAuthManagerListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
@@ -73,6 +75,7 @@ import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.ui.activity.NavigationActivity.DemoRoutePlanListener;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
@@ -156,57 +159,55 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	/**
 	 * 启动GPS导航. 前置条件：导航引擎初始化成功
 	 */
-//	private void launchNavigator(double startLatitude, double startLongitude,
-//			String startName, double endLatitude, double endLongitude,
-//			String endName) {
-//		BaiduNaviManager.getInstance().launchNavigator(this, startLatitude,
-//				startLongitude, startName, endLatitude, endLongitude, endName,
-//				NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
-//				true, // 真实导航
-//				BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略
-//				new OnStartNavigationListener() { // 跳转监听
-//
-//					@Override
-//					public void onJumpToNavigator(Bundle configParams) {
-//						Intent intent = new Intent(ChatActivity.this,
-//								BNavigatorActivity.class);
-//						intent.putExtras(configParams);
-//						startActivity(intent);
-//					}
-//
-//					@Override
-//					public void onJumpToDownloader() {
-//					}
-//				});
-//	}
+	// private void launchNavigator(double startLatitude, double startLongitude,
+	// String startName, double endLatitude, double endLongitude,
+	// String endName) {
+	// BaiduNaviManager.getInstance().launchNavigator(this, startLatitude,
+	// startLongitude, startName, endLatitude, endLongitude, endName,
+	// NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
+	// true, // 真实导航
+	// BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略
+	// new OnStartNavigationListener() { // 跳转监听
+	//
+	// @Override
+	// public void onJumpToNavigator(Bundle configParams) {
+	// Intent intent = new Intent(ChatActivity.this,
+	// BNavigatorActivity.class);
+	// intent.putExtras(configParams);
+	// startActivity(intent);
+	// }
+	//
+	// @Override
+	// public void onJumpToDownloader() {
+	// }
+	// });
+	// }
 
-	private void routeplanToNavi(CoordinateType coType) {
+	private void routeplanToNavi(CoordinateType coType, double startLatitude,
+			double startLongitude, String startName, double endLatitude,
+			double endLongitude, String endName) {
 		BNRoutePlanNode sNode = null;
 		BNRoutePlanNode eNode = null;
-		switch (coType) {
-		case GCJ02: {
-			sNode = new BNRoutePlanNode(116.30142, 40.05087, "百度大厦", null,
-					coType);
-			eNode = new BNRoutePlanNode(116.39750, 39.90882, "北京天安门", null,
-					coType);
-			break;
-		}
-		case WGS84: {
-			sNode = new BNRoutePlanNode(116.300821, 40.050969, "百度大厦", null,
-					coType);
-			eNode = new BNRoutePlanNode(116.397491, 39.908749, "北京天安门", null,
-					coType);
-			break;
-		}
-		case BD09_MC: {
-			sNode = new BNRoutePlanNode(12947471, 4846474, "百度大厦", null, coType);
-			eNode = new BNRoutePlanNode(12958160, 4825947, "北京天安门", null,
-					coType);
-			break;
-		}
-		default:
-			;
-		}
+		// TODO:需要将bd09ll转成BD09_MC,GCJ02,WGS84
+		BDLocation bdLocStartBefore = new BDLocation();
+		bdLocStartBefore.setLatitude(startLatitude);
+		bdLocStartBefore.setLongitude(startLongitude);
+		BDLocation bdLocStartAfter = LocationClient.getBDLocationInCoorType(
+				bdLocStartBefore, BDLocation.BDLOCATION_BD09LL_TO_GCJ02);
+
+		BDLocation bdLocEndBefore = new BDLocation();
+		bdLocEndBefore.setLatitude(endLatitude);
+		bdLocEndBefore.setLongitude(endLongitude);
+		BDLocation bdLocEndAfter = LocationClient.getBDLocationInCoorType(
+				bdLocEndBefore, BDLocation.BDLOCATION_BD09LL_TO_GCJ02);
+
+		sNode = new BNRoutePlanNode(bdLocStartAfter.getLongitude(),
+				bdLocStartAfter.getLatitude(), startName, null,
+				CoordinateType.GCJ02);
+		eNode = new BNRoutePlanNode(bdLocEndAfter.getLongitude(),
+				bdLocEndAfter.getLatitude(), endName, null,
+				CoordinateType.GCJ02);
+
 		if (sNode != null && eNode != null) {
 			List<BNRoutePlanNode> list = new ArrayList<BNRoutePlanNode>();
 			list.add(sNode);
@@ -237,8 +238,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		@Override
 		public void onRoutePlanFailed() {
-			// TODO Auto-generated method stub
-
+			Log.e(Constant.TAG, "Baidu Navi:Route Plan Failed!");
 		}
 	}
 
@@ -1129,11 +1129,9 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				// LatLng startLatLng = new LatLng(startLat, startLng);
 				// LatLng endLatLng = new LatLng(endLat, endLng);
 
-				// TODO:启动自写地图
-//				launchNavigator(startLat, startLng, "当前位置", endLat, endLng,
-//						result.getAddress());
-				routeplanToNavi(CoordinateType.BD09_MC);
-				
+				// 启动自写地图
+				routeplanToNavi(CoordinateType.GCJ02, startLat, startLng,
+						"当前位置", endLat, endLng, result.getAddress());
 
 				// 构建 导航参数
 				// NaviPara para = new NaviPara();

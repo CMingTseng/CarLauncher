@@ -607,6 +607,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	String authinfo = null;
 	public static final String ROUTE_PLAN_NODE = "routePlanNode";
+
 	private void initNavi() {
 		BaiduNaviManager.getInstance().setNativeLibraryPath(
 				mSDCardPath + "/BaiduNaviSDK_SO");

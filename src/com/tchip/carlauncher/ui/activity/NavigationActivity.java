@@ -238,7 +238,7 @@ public class NavigationActivity extends FragmentActivity implements
 				currentMode, true, null));
 		InitLocation(
 				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09", 5000, true);
+				"bd09ll", 5000, true);
 
 		// 初始化地图位置,设置nowLoction数据以防NullPointer
 		nowLatLng = new LatLng(mLatitude, mLongitude);
@@ -491,7 +491,7 @@ public class NavigationActivity extends FragmentActivity implements
 							"workLng", "0.00"));
 
 					if (MyApplication.isNaviInitialSuccess) {
-						routeplanToNavi(CoordinateType.BD09_MC,
+						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
 								"当前位置", workLat, workLng, workAddress);
 					} else {
@@ -523,7 +523,7 @@ public class NavigationActivity extends FragmentActivity implements
 							"homeLng", "0.00"));
 
 					if (MyApplication.isNaviInitialSuccess) {
-						routeplanToNavi(CoordinateType.BD09_MC,
+						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
 								"当前位置", homeLat, homeLng, homeAddress);
 					} else {
@@ -864,7 +864,7 @@ public class NavigationActivity extends FragmentActivity implements
 							isHistoryLayoutShow = false;
 
 							if (MyApplication.isNaviInitialSuccess) {
-								routeplanToNavi(CoordinateType.BD09_MC,
+								routeplanToNavi(CoordinateType.GCJ02,
 										nowLatLng.latitude,
 										nowLatLng.longitude, "当前位置", naviArray
 												.get(position).getLatitude(),
@@ -896,66 +896,30 @@ public class NavigationActivity extends FragmentActivity implements
 		}
 	}
 
-	/**
-	 * 启动GPS导航. 前置条件：导航引擎初始化成功
-	 */
-	// private void launchNavigator(double startLatitude, double startLongitude,
-	// String startName, double endLatitude, double endLongitude,
-	// String endName) {
-	// // TODO:转化经纬度点
-	//
-	// BNRoutePlanNode startPoint = new BNRoutePlanNode(startLongitude,
-	// startLatitude, startName, CoordinateType.BD09_MC);
-	// BNaviPoint endPoint = new BNaviPoint(endLongitude, endLatitude,
-	// endName, BNaviPoint.CoordinateType.BD09_MC);
-	//
-	// BaiduNaviManager.getInstance().launchNavigator(this, startPoint,
-	// endPoint,
-	//
-	// // BaiduNaviManager.getInstance().launchNavigator(this,
-	// // startLatitude,
-	// // startLongitude, startName, endLatitude, endLongitude,
-	// // endName,
-	// NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
-	// true, // 真实导航
-	// BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, //
-	// 在离线策略:STRATEGY_FORCE_ONLINE_PRIORITY
-	// new OnStartNavigationListener() { // 跳转监听
-	//
-	// @Override
-	// public void onJumpToNavigator(Bundle configParams) {
-	// Intent intent = new Intent(NavigationActivity.this,
-	// BNavigatorActivity.class);
-	// intent.putExtras(configParams);
-	// startActivity(intent);
-	// }
-	//
-	// @Override
-	// public void onJumpToDownloader() {
-	// }
-	// });
-	// }
-
-	double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-
-	LatLng convert(LatLng node) {
-		double x = node.longitude - 0.0065, y = node.latitude - 0.006;
-		double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
-		double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
-		return new LatLng(z * Math.sin(theta), z * Math.cos(theta));
-	}
-
 	private void routeplanToNavi(CoordinateType coType, double startLatitude,
 			double startLongitude, String startName, double endLatitude,
 			double endLongitude, String endName) {
 		BNRoutePlanNode sNode = null;
 		BNRoutePlanNode eNode = null;
 		// TODO:需要将bd09ll转成BD09_MC,GCJ02,WGS84
+		BDLocation bdLocStartBefore = new BDLocation();
+		bdLocStartBefore.setLatitude(startLatitude);
+		bdLocStartBefore.setLongitude(startLongitude);
+		BDLocation bdLocStartAfter = LocationClient.getBDLocationInCoorType(
+				bdLocStartBefore, BDLocation.BDLOCATION_BD09LL_TO_GCJ02);
 
-		 sNode = new BNRoutePlanNode(startLongitude, startLatitude, startName,
-		 null, CoordinateType.BD09_MC);
-		 eNode = new BNRoutePlanNode(endLongitude, endLatitude, endName, null,
-		 CoordinateType.BD09_MC);
+		BDLocation bdLocEndBefore = new BDLocation();
+		bdLocEndBefore.setLatitude(endLatitude);
+		bdLocEndBefore.setLongitude(endLongitude);
+		BDLocation bdLocEndAfter = LocationClient.getBDLocationInCoorType(
+				bdLocEndBefore, BDLocation.BDLOCATION_BD09LL_TO_GCJ02);
+
+		sNode = new BNRoutePlanNode(bdLocStartAfter.getLongitude(),
+				bdLocStartAfter.getLatitude(), startName, null,
+				CoordinateType.GCJ02);
+		eNode = new BNRoutePlanNode(bdLocEndAfter.getLongitude(),
+				bdLocEndAfter.getLatitude(), endName, null,
+				CoordinateType.GCJ02);
 
 		if (sNode != null && eNode != null) {
 			List<BNRoutePlanNode> list = new ArrayList<BNRoutePlanNode>();
@@ -1056,7 +1020,7 @@ public class NavigationActivity extends FragmentActivity implements
 			// 点击地图上搜索结果气球进入导航
 
 			if (MyApplication.isNaviInitialSuccess) {
-				routeplanToNavi(CoordinateType.BD09_MC, nowLatLng.latitude,
+				routeplanToNavi(CoordinateType.GCJ02, nowLatLng.latitude,
 						nowLatLng.longitude, "当前位置",
 						result.getLocation().latitude,
 						result.getLocation().longitude, result.getAddress());

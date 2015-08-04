@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.baidu.navisdk.adapter.BNRouteGuideManager;
 import com.baidu.navisdk.adapter.BNRouteGuideManager.CustomizedLayerItem;
@@ -27,6 +29,11 @@ public class BNavigatorActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setBackgroundDrawable(null);
+
 		createHandler();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 		}
@@ -120,7 +127,7 @@ public class BNavigatorActivity extends Activity {
 			hd = new Handler(getMainLooper()) {
 				public void handleMessage(android.os.Message msg) {
 					if (msg.what == MSG_SHOW) {
-						addCustomizedLayerItems();
+						// addCustomizedLayerItems();
 						// hd.sendEmptyMessageDelayed(MSG_HIDE, 5000);
 					} else if (msg.what == MSG_HIDE) {
 						BNRouteGuideManager.getInstance().showCustomizedLayer(
