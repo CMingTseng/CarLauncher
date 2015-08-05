@@ -209,17 +209,20 @@ public class MainActivity extends Activity implements TachographCallback,
 		initialNaviInstance();
 
 		// 开机尝试连接WiFi
-		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo mWifi = connManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		if (wifiManager.isWifiEnabled() && (!mWifi.isConnectedOrConnecting())) {
-			Intent intentWiFi = new Intent(getApplicationContext(),
-					ConnectWifiService.class);
-			startService(intentWiFi);
-			// Log.v(Constant.TAG, "Start Connect Wifi...");
-		} else {
-			// Log.v(Constant.TAG, "Wifi is Connected or disable");
+		if (!Constant.isWifiSystem) {
+			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+			NetworkInfo mWifi = connManager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			if (wifiManager.isWifiEnabled()
+					&& (!mWifi.isConnectedOrConnecting())) {
+				Intent intentWiFi = new Intent(getApplicationContext(),
+						ConnectWifiService.class);
+				startService(intentWiFi);
+				// Log.v(Constant.TAG, "Start Connect Wifi...");
+			} else {
+				// Log.v(Constant.TAG, "Wifi is Connected or disable");
+			}
 		}
 
 		// 3G信号
@@ -853,18 +856,20 @@ public class MainActivity extends Activity implements TachographCallback,
 				updateWiFiState();
 
 				// 连接WiFi
-				WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-				ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-				NetworkInfo mWifi = connManager
-						.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-				if (wifiManager.isWifiEnabled()
-						&& (!mWifi.isConnectedOrConnecting())) {
-					Intent intentWiFi = new Intent(getApplicationContext(),
-							ConnectWifiService.class);
-					startService(intentWiFi);
-					// Log.v(Constant.TAG, "Start Connect Wifi...");
-				} else {
-					// Log.v(Constant.TAG, "Wifi is Connected or disable");
+				if (!Constant.isWifiSystem) {
+					WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+					ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+					NetworkInfo mWifi = connManager
+							.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+					if (wifiManager.isWifiEnabled()
+							&& (!mWifi.isConnectedOrConnecting())) {
+						Intent intentWiFi = new Intent(getApplicationContext(),
+								ConnectWifiService.class);
+						startService(intentWiFi);
+						// Log.v(Constant.TAG, "Start Connect Wifi...");
+					} else {
+						// Log.v(Constant.TAG, "Wifi is Connected or disable");
+					}
 				}
 
 				// 更新位置和天气信息
@@ -1214,11 +1219,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.layoutWiFi:
 				if (!ClickUtil.isQuickClick(800)) {
-					// startActivity(new Intent(
-					// android.provider.Settings.ACTION_WIFI_SETTINGS));
-					Intent intentWiFi = new Intent(MainActivity.this,
-							WifiListActivity.class);
-					startActivity(intentWiFi);
+					if (Constant.isWifiSystem) {
+						startActivity(new Intent(
+								android.provider.Settings.ACTION_WIFI_SETTINGS));
+					} else {
+						Intent intentWiFi = new Intent(MainActivity.this,
+								WifiListActivity.class);
+						startActivity(intentWiFi);
+					}
 				}
 				break;
 
@@ -1889,11 +1897,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (mResolutionState == STATE_RESOLUTION_1080P) {
 			mMyRecorder.setVideoSize(1920, 1088); // 16倍数
 			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(8500000 * 2); // 8500000
+			mMyRecorder.setVideoBiteRate(9000000 * 2); // 8500000
 		} else {
 			mMyRecorder.setVideoSize(1280, 720);
 			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(3500000);
+			mMyRecorder.setVideoBiteRate(3500000); // 3500000
 		}
 		if (mSecondaryState == STATE_SECONDARY_ENABLE) {
 			mMyRecorder.setSecondaryVideoEnable(true);
