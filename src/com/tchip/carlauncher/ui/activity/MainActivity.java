@@ -1901,7 +1901,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else {
 			mMyRecorder.setVideoSize(1280, 720);
 			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(3500000); // 3500000
+			mMyRecorder.setVideoBiteRate(9000000); // 3500000
 		}
 		if (mSecondaryState == STATE_SECONDARY_ENABLE) {
 			mMyRecorder.setSecondaryVideoEnable(true);
