@@ -11,6 +11,7 @@ import com.iflytek.cloud.TextUnderstander;
 import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.R;
 
 import android.app.Service;
 import android.content.Context;
@@ -41,7 +42,24 @@ public class WeatherService extends Service {
 		mTextUnderstander = TextUnderstander.createTextUnderstander(
 				getApplicationContext(), textUnderstanderListener);
 
-		getWeather(preferences.getString("cityName", "未定位"));
+		String strNotLocate = getResources().getString(R.string.not_locate);
+		String cityName = preferences.getString("cityName", strNotLocate);
+
+		if (strNotLocate.equals(cityName)) {
+			cityName = preferences
+					.getString("cityNameRealButOld", strNotLocate);
+			if (strNotLocate.equals(cityName)) {
+				String addrStr = preferences.getString("addrStr", strNotLocate);
+				if (addrStr.contains("省") && addrStr.contains("市")) {
+					cityName = addrStr.split("省")[1].split("市")[0];
+				} else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
+					cityName = addrStr.split("市")[0];
+				} else {
+					cityName = addrStr;
+				}
+			}
+		}
+		getWeather(cityName);
 	}
 
 	@Override

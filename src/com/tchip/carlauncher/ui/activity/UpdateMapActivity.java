@@ -108,11 +108,12 @@ public class UpdateMapActivity extends Activity {
 		int mapNumber = getSDMapCount();
 		textHint.setVisibility(View.VISIBLE);
 		if (mapNumber > 0) {
-			textHint.setText("SD卡检测到" + mapNumber + "个离线地图包");
+			textHint.setText(String.format(
+					getResources().getString(R.string.sd_has_map), mapNumber));
 			hasOfflineMap = true;
 		} else {
 			hasOfflineMap = false;
-			textHint.setText("SD卡未检测到离线地图包");
+			textHint.setText(getResources().getString(R.string.sd_has_no_map));
 		}
 	}
 
@@ -138,21 +139,28 @@ public class UpdateMapActivity extends Activity {
 				if (hasOfflineMap) {
 					AlertDialog.Builder builder = new Builder(
 							UpdateMapActivity.this);
-					builder.setMessage("导入离线地图比较耗时，现在导入？");
-					builder.setTitle("提示");
-					builder.setPositiveButton("确认", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-							startImportThread();
-						}
-					});
-					builder.setNegativeButton("取消", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
+					builder.setMessage(getResources().getString(
+							R.string.hint_import_is_cost_time));
+					builder.setTitle(getResources().getString(R.string.hint));
+					builder.setPositiveButton(
+							getResources().getString(R.string.confirm),
+							new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+									startImportThread();
+								}
+							});
+					builder.setNegativeButton(
+							getResources().getString(R.string.cancel),
+							new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							});
 					builder.create().show();
 				} else {
 					// SD卡未扫描到离线地图
@@ -304,7 +312,8 @@ public class UpdateMapActivity extends Activity {
 			case 0:
 				Log.e(Constant.TAG, "There is no offline map!");
 				textDetail.setVisibility(View.GONE);
-				textHint.setText("SD卡未检测到离线地图");
+				textHint.setText(getResources().getString(
+						R.string.sd_has_no_map));
 				progressCopy.setVisibility(View.GONE);
 				btnStart.setVisibility(View.VISIBLE);
 				btnScan.setVisibility(View.VISIBLE);
@@ -316,7 +325,8 @@ public class UpdateMapActivity extends Activity {
 				Intent i = new Intent();
 				setResult(RESULT_OK, i);
 
-				textHint.setText("离线地图更新完成.");
+				textHint.setText(getResources().getString(
+						R.string.import_sd_success));
 				textDetail.setVisibility(View.GONE);
 				progressCopy.setVisibility(View.GONE);
 				btnStart.setVisibility(View.VISIBLE);
@@ -324,7 +334,8 @@ public class UpdateMapActivity extends Activity {
 				break;
 
 			case 2:
-				textHint.setText("正在导入离线地图，请勿离开。");
+				textHint.setText(getResources().getString(
+						R.string.importing_not_exist));
 				progressCopy.setVisibility(View.VISIBLE);
 				btnStart.setVisibility(View.GONE);
 				btnScan.setVisibility(View.GONE);

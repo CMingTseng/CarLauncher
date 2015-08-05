@@ -52,8 +52,7 @@ public class WeatherActivity extends Activity {
 	 */
 	private boolean isGetSuccess = false;
 
-	private String strNoLoction = "定位失败，无法获取天气信息";
-	private String strNoWeather = "天气获取失败，请稍候重试";
+	private String strNoLoction, strNoWeather;
 
 	/**
 	 * 天气界面是否显示
@@ -119,6 +118,12 @@ public class WeatherActivity extends Activity {
 
 	private void initialLayout() {
 		weatherArray = new String[6];
+		
+		strNoLoction = getResources().getString(
+				R.string.locate_fail_no_weather);
+		
+		strNoWeather = getResources().getString(
+				R.string.get_weather_fail);
 
 		// 返回
 		RelativeLayout layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
@@ -141,15 +146,24 @@ public class WeatherActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		// Day 0 (Today) Weather and Time, Location Info
 		String cityName = "";
-		if ("未定位".equals(sharedPreferences.getString("cityName", "未定位"))) {
-			cityName = sharedPreferences.getString("cityNameRealButOld", "未定位");
+		String strNotLocate = getResources().getString(R.string.not_locate);
+		String strUnknown = getResources().getString(R.string.unknown);
+		String strWeatherColon = getResources().getString(
+				R.string.weather_colon);
+		String strDefaultWind = getResources().getString(
+				R.string.weather_default_wind_info);
+		if (strNotLocate.equals(sharedPreferences.getString("cityName",
+				strNotLocate))) {
+			cityName = sharedPreferences.getString("cityNameRealButOld",
+					strNotLocate);
 		} else {
-			cityName = sharedPreferences.getString("cityName", "未定位");
+			cityName = sharedPreferences.getString("cityName", strNotLocate);
 		}
 		TextView textLocation = (TextView) findViewById(R.id.textLocation);
 		textLocation.setText(cityName);
 
-		String weatherToday = sharedPreferences.getString("day0weather", "未知");
+		String weatherToday = sharedPreferences.getString("day0weather",
+				strUnknown);
 
 		showWeatherAnimation(WeatherUtil.getTypeByStr(weatherToday));
 
@@ -179,27 +193,32 @@ public class WeatherActivity extends Activity {
 			textTempRange.setTextColor(Color.WHITE);
 		}
 		TextView textWetLevel = (TextView) findViewById(R.id.textWetLevel);
-		textWetLevel.setText("湿度 "
+		textWetLevel.setText(getResources().getString(R.string.humidity_colon)
 				+ sharedPreferences.getString("humidity", "55.55%"));
 
 		TextView textWind = (TextView) findViewById(R.id.textWind);
-		String day0windStr = sharedPreferences.getString("day0wind", "东北风5");
+		String day0windStr = sharedPreferences.getString("day0wind",
+				strDefaultWind);
 		textWind.setText(day0windStr);
 
 		TextView textUpdateTime = (TextView) findViewById(R.id.textUpdateTime);
-		textUpdateTime.setText("发布时间 "
+		textUpdateTime.setText(getResources().getString(
+				R.string.weather_post_time)
 				+ sharedPreferences.getString("postTime", "2015 05:55").split(
 						" ")[1]);
 
-		if ("未定位".equals(cityName)) {
+		if (strNotLocate.equals(cityName)) {
 			weatherArray[0] = strNoLoction;
 			isLocated = false;
-		} else if ("未知".equals(weatherToday)) {
+		} else if (strUnknown.equals(weatherToday)) {
 			weatherArray[0] = strNoWeather;
 			isGetSuccess = false;
 		} else {
-			weatherArray[0] = cityName + "今日天气:" + weatherToday + ","
-					+ day0tmpLow + "到" + day0tmpHigh + "℃," + day0windStr;
+			weatherArray[0] = cityName
+					+ getResources().getString(R.string.weather_today)
+					+ weatherToday + "," + day0tmpLow
+					+ getResources().getString(R.string.weather_temp_range_to)
+					+ day0tmpHigh + "℃," + day0windStr;
 			isLocated = true;
 			isGetSuccess = true;
 		}
@@ -214,8 +233,8 @@ public class WeatherActivity extends Activity {
 				.substring(5, 10));
 
 		ImageView day1image = (ImageView) findViewById(R.id.day1image);
-		String day1weatherStr = sharedPreferences
-				.getString("day1weather", "未知");
+		String day1weatherStr = sharedPreferences.getString("day1weather",
+				strUnknown);
 		TextView day1weather = (TextView) findViewById(R.id.day1weather);
 		day1weather.setText(day1weatherStr);
 		day1image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
@@ -231,7 +250,8 @@ public class WeatherActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day1wind = (TextView) findViewById(R.id.day1wind);
-		String day1windStr = sharedPreferences.getString("day1wind", "东北风5");
+		String day1windStr = sharedPreferences.getString("day1wind",
+				strDefaultWind);
 		day1wind.setText(day1windStr);
 
 		if (!isLocated) {
@@ -239,8 +259,9 @@ public class WeatherActivity extends Activity {
 		} else if (!isGetSuccess) {
 			weatherArray[1] = strNoWeather;
 		} else {
-			weatherArray[1] = day1weekStr + "天气：" + day1weatherStr + ","
-					+ day1tmpLowStr + "~" + day1tmpHighStr + "," + day1windStr;
+			weatherArray[1] = day1weekStr + strWeatherColon + day1weatherStr
+					+ "," + day1tmpLowStr + "~" + day1tmpHighStr + ","
+					+ day1windStr;
 		}
 
 		// Day 2
@@ -253,8 +274,8 @@ public class WeatherActivity extends Activity {
 				.substring(5, 10));
 
 		ImageView day2image = (ImageView) findViewById(R.id.day2image);
-		String day2WeatherStr = sharedPreferences
-				.getString("day2weather", "未知");
+		String day2WeatherStr = sharedPreferences.getString("day2weather",
+				strUnknown);
 		day2image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day2WeatherStr)));
 
@@ -268,7 +289,8 @@ public class WeatherActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day2wind = (TextView) findViewById(R.id.day2wind);
-		String day2windStr = sharedPreferences.getString("day2wind", "东北风5");
+		String day2windStr = sharedPreferences.getString("day2wind",
+				strDefaultWind);
 		day2wind.setText(day2windStr);
 
 		if (!isLocated) {
@@ -276,8 +298,9 @@ public class WeatherActivity extends Activity {
 		} else if (!isGetSuccess) {
 			weatherArray[2] = strNoWeather;
 		} else {
-			weatherArray[2] = day2WeekStr + "天气：" + day2WeatherStr + ","
-					+ day2tmpLowStr + "~" + day2tmpHighStr + "," + day2windStr;
+			weatherArray[2] = day2WeekStr + strWeatherColon + day2WeatherStr
+					+ "," + day2tmpLowStr + "~" + day2tmpHighStr + ","
+					+ day2windStr;
 		}
 
 		// Day 3
@@ -290,8 +313,8 @@ public class WeatherActivity extends Activity {
 				.substring(5, 10));
 
 		ImageView day3image = (ImageView) findViewById(R.id.day3image);
-		String day3WeatherStr = sharedPreferences
-				.getString("day3weather", "未知");
+		String day3WeatherStr = sharedPreferences.getString("day3weather",
+				strUnknown);
 		day3image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day3WeatherStr)));
 
@@ -305,7 +328,8 @@ public class WeatherActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day3wind = (TextView) findViewById(R.id.day3wind);
-		String day3windStr = sharedPreferences.getString("day3wind", "东北风5");
+		String day3windStr = sharedPreferences.getString("day3wind",
+				strDefaultWind);
 		day3wind.setText(day3windStr);
 
 		if (!isLocated) {
@@ -313,8 +337,9 @@ public class WeatherActivity extends Activity {
 		} else if (!isGetSuccess) {
 			weatherArray[3] = strNoWeather;
 		} else {
-			weatherArray[3] = day3WeekStr + "天气：" + day3WeatherStr + ","
-					+ day3tmpLowStr + "~" + day3tmpHighStr + "," + day3windStr;
+			weatherArray[3] = day3WeekStr + strWeatherColon + day3WeatherStr
+					+ "," + day3tmpLowStr + "~" + day3tmpHighStr + ","
+					+ day3windStr;
 		}
 
 		// Day 4
@@ -327,8 +352,8 @@ public class WeatherActivity extends Activity {
 				.substring(5, 10));
 
 		ImageView day4image = (ImageView) findViewById(R.id.day4image);
-		String day4WeatherStr = sharedPreferences
-				.getString("day4weather", "未知");
+		String day4WeatherStr = sharedPreferences.getString("day4weather",
+				strUnknown);
 		day4image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day4WeatherStr)));
 
@@ -342,7 +367,8 @@ public class WeatherActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day4wind = (TextView) findViewById(R.id.day4wind);
-		String day4windStr = sharedPreferences.getString("day4wind", "东北风5");
+		String day4windStr = sharedPreferences.getString("day4wind",
+				strDefaultWind);
 		day4wind.setText(day4windStr);
 
 		if (!isLocated) {
@@ -350,8 +376,9 @@ public class WeatherActivity extends Activity {
 		} else if (!isGetSuccess) {
 			weatherArray[4] = strNoWeather;
 		} else {
-			weatherArray[4] = day4WeekStr + "天气：" + day4WeatherStr + ","
-					+ day4tmpLowStr + "~" + day4tmpHighStr + "," + day4windStr;
+			weatherArray[4] = day4WeekStr + strWeatherColon + day4WeatherStr
+					+ "," + day4tmpLowStr + "~" + day4tmpHighStr + ","
+					+ day4windStr;
 		}
 
 		// Day 5
@@ -364,8 +391,8 @@ public class WeatherActivity extends Activity {
 				.substring(5, 10));
 
 		ImageView day5image = (ImageView) findViewById(R.id.day5image);
-		String day5WeatherStr = sharedPreferences
-				.getString("day5weather", "未知");
+		String day5WeatherStr = sharedPreferences.getString("day5weather",
+				strUnknown);
 		day5image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day5WeatherStr)));
 
@@ -379,7 +406,8 @@ public class WeatherActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		TextView day5wind = (TextView) findViewById(R.id.day5wind);
-		String day5windStr = sharedPreferences.getString("day5wind", "东北风5");
+		String day5windStr = sharedPreferences.getString("day5wind",
+				strDefaultWind);
 		day5wind.setText(day5windStr);
 
 		if (!isLocated) {
@@ -387,8 +415,9 @@ public class WeatherActivity extends Activity {
 		} else if (!isGetSuccess) {
 			weatherArray[5] = strNoWeather;
 		} else {
-			weatherArray[5] = day5WeekStr + "天气：" + day5WeatherStr + ","
-					+ day5tmpLowStr + "~" + day5tmpHighStr + "," + day5windStr;
+			weatherArray[5] = day5WeekStr + strWeatherColon + day5WeatherStr
+					+ "," + day5tmpLowStr + "~" + day5tmpHighStr + ","
+					+ day5windStr;
 		}
 
 		LinearLayout layoutDay1 = (LinearLayout) findViewById(R.id.layoutDay1);

@@ -134,6 +134,8 @@ public class NavigationActivity extends FragmentActivity implements
 	private LocationClient mLocationClient;
 	private SharedPreferences preference;
 	private String naviDesFromVoice = "";
+	
+	private boolean isFirstLoc = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -242,8 +244,8 @@ public class NavigationActivity extends FragmentActivity implements
 
 		// 初始化地图位置,设置nowLoction数据以防NullPointer
 		nowLatLng = new LatLng(mLatitude, mLongitude);
-		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
-		mBaiduMap.animateMapStatus(u);
+//		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
+//		mBaiduMap.animateMapStatus(u);
 
 		// 设置地图放大级别 0-19
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14);
@@ -358,8 +360,12 @@ public class NavigationActivity extends FragmentActivity implements
 			mBaiduMap.setMyLocationData(locData);
 
 			// 更新当前位置用作导航起点
+			if (isFirstLoc) {
+				isFirstLoc = false;
 			nowLatLng = new LatLng(location.getLatitude(),
 					location.getLongitude());
+			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
+			mBaiduMap.animateMapStatus(u);}
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {

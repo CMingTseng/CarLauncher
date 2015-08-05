@@ -220,7 +220,10 @@ public class WifiListActivity extends Activity {
 					if (wifiItemId != -1) {
 						if (wiFiAdmin.ConnectWifi(wifiItemId)) {
 							// 连接已保存密码的WiFi
-							Toast.makeText(getApplicationContext(), "正在连接",
+							Toast.makeText(
+									getApplicationContext(),
+									getResources().getString(
+											R.string.wifi_connecting),
 									Toast.LENGTH_SHORT).show();
 							updateButton.setVisibility(View.INVISIBLE);
 							updateProgress.setVisibility(View.VISIBLE);

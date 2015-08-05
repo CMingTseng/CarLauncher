@@ -250,7 +250,6 @@
     <string name="del_success">删除成功</string>
     <string name="del_fail">删除失败</string>
     <string name="choose_file_ctrl">请选择对视频文件的操作</string>
-    <string name="cancle">取消</string>
     <string name="dlg_keep_save">保存至存档</string>
     <string name="normal_video">正常视频</string>
     <string name="urgent_video">紧急视频</string>
@@ -341,5 +340,33 @@
     <string name="meter">米</string>
     <string name="location_end">终点位置</string>
     <string name="location_start">起始位置</string>
+    
+    <!-- TrafficChatActivity -->
+    <string name="data_error">数据异常</string>
+    <string name="data_not_load">未加载数</string>
+    <string name="traffic_state">天流量情况（单位：MB）</string>
+    
+    <!-- UpdateMapActivity -->
+    <string name="sd_has_no_map">SD卡未检测到离线地图包</string>
+    <string name="sd_has_map">SD卡检测到%d个离线地图包</string>
+    <string name="hint_import_is_cost_time">导入离线地图比较耗时，现在导入？</string>
+    <string name="hint">提示</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+    <string name="import_sd_success">离线地图更新完成.</string>
+    <string name="importing_not_exist">正在导入离线地图，请勿离开。</string>
+    
+    <!-- WeatherActivity -->
+    <string name="locate_fail_no_weather">定位失败，无法获取天气信息</string>
+    <string name="get_weather_fail">天气获取失败，请稍候重试</string>
+    <string name="weather_colon">天气：</string>
+    <string name="humidity_colon">湿度：</string>
+    <string name="weather_post_time">发布时间</string>
+    <string name="weather_today">今日天气</string>
+    <string name="weather_default_wind_info">东北风5</string>
+    <string name="weather_temp_range_to">到</string>
+    
+    <!-- WifiListActivity -->
+    <string name="wifi_connecting">正在连接</string>
 
 </resources>
