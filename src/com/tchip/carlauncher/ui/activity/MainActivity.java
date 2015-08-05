@@ -235,7 +235,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(Constant.autoRecordDelay);
 				Message message = new Message();
 				message.what = 1;
 				autoRecordHandler.sendMessage(message);

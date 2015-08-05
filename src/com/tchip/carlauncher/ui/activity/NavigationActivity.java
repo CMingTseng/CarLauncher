@@ -134,7 +134,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private LocationClient mLocationClient;
 	private SharedPreferences preference;
 	private String naviDesFromVoice = "";
-	
+
 	private boolean isFirstLoc = true;
 
 	@Override
@@ -244,8 +244,8 @@ public class NavigationActivity extends FragmentActivity implements
 
 		// 初始化地图位置,设置nowLoction数据以防NullPointer
 		nowLatLng = new LatLng(mLatitude, mLongitude);
-//		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
-//		mBaiduMap.animateMapStatus(u);
+		// MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
+		// mBaiduMap.animateMapStatus(u);
 
 		// 设置地图放大级别 0-19
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14);
@@ -362,10 +362,11 @@ public class NavigationActivity extends FragmentActivity implements
 			// 更新当前位置用作导航起点
 			if (isFirstLoc) {
 				isFirstLoc = false;
-			nowLatLng = new LatLng(location.getLatitude(),
-					location.getLongitude());
-			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
-			mBaiduMap.animateMapStatus(u);}
+				nowLatLng = new LatLng(location.getLatitude(),
+						location.getLongitude());
+				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
+				mBaiduMap.animateMapStatus(u);
+			}
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -728,7 +729,7 @@ public class NavigationActivity extends FragmentActivity implements
 				String textCity = etHistoryCity.getText().toString();
 				boolean isInputCity = textCity != null
 						&& textCity.trim().length() > 0;
-				if (isNear || !isInputCity) {
+				if (isNear) {
 					// 周边搜索
 					Toast.makeText(
 							getApplicationContext(),
@@ -749,21 +750,46 @@ public class NavigationActivity extends FragmentActivity implements
 						e.printStackTrace();
 					}
 				} else {
-					// 全国搜索
-					Toast.makeText(
-							getApplicationContext(),
-							getResources().getString(R.string.poi_in_city)
-									+ textCity
-									+ getResources().getString(
-											R.string.poi_search) + where,
-							Toast.LENGTH_SHORT).show();
+					if (!isInputCity) {
+						// 周边搜索
+						Toast.makeText(
+								getApplicationContext(),
+								getResources().getString(
+										R.string.poi_search_near)
+										+ where, Toast.LENGTH_SHORT).show();
 
-					PoiCitySearchOption poiOption = new PoiCitySearchOption();
-					poiOption.city(textCity);
-					poiOption.keyword(where);
-					poiOption.pageNum(0);
-					poiOption.pageCapacity(10);
-					mPoiSearch.searchInCity(poiOption);
+						PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
+						poiOption.keyword(where);
+						poiOption.location(centerLatLng);
+						poiOption.radius(15 * 1000 * 1000); // 检索半径，单位:m
+						poiOption
+								.sortType(PoiSortType.distance_from_near_to_far); // 按距离排序
+						// poiOption.sortType(PoiSortType.comprehensive); //
+						// 按综合排序
+						poiOption.pageNum(0); // 分页编号
+						poiOption.pageCapacity(10); // 设置每页容量，默认为每页10条
+						try {
+							mPoiSearch.searchNearby(poiOption);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						// 全国搜索
+						Toast.makeText(
+								getApplicationContext(),
+								getResources().getString(R.string.poi_in_city)
+										+ textCity
+										+ getResources().getString(
+												R.string.poi_search) + where,
+								Toast.LENGTH_SHORT).show();
+
+						PoiCitySearchOption poiOption = new PoiCitySearchOption();
+						poiOption.city(textCity);
+						poiOption.keyword(where);
+						poiOption.pageNum(0);
+						poiOption.pageCapacity(10);
+						mPoiSearch.searchInCity(poiOption);
+					}
 
 					// 存储搜索历史到数据库,周边不需要
 					int existId = naviDb.getNaviIdByKey(where);

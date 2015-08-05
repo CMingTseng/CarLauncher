@@ -118,12 +118,11 @@ public class WeatherActivity extends Activity {
 
 	private void initialLayout() {
 		weatherArray = new String[6];
-		
-		strNoLoction = getResources().getString(
-				R.string.locate_fail_no_weather);
-		
-		strNoWeather = getResources().getString(
-				R.string.get_weather_fail);
+
+		strNoLoction = getResources()
+				.getString(R.string.locate_fail_no_weather);
+
+		strNoWeather = getResources().getString(R.string.get_weather_fail);
 
 		// 返回
 		RelativeLayout layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
@@ -145,17 +144,29 @@ public class WeatherActivity extends Activity {
 		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 		// Day 0 (Today) Weather and Time, Location Info
-		String cityName = "";
 		String strNotLocate = getResources().getString(R.string.not_locate);
 		String strUnknown = getResources().getString(R.string.unknown);
 		String strWeatherColon = getResources().getString(
 				R.string.weather_colon);
 		String strDefaultWind = getResources().getString(
 				R.string.weather_default_wind_info);
-		if (strNotLocate.equals(sharedPreferences.getString("cityName",
-				strNotLocate))) {
+		String cityName = sharedPreferences.getString("cityName", strNotLocate);
+
+		if (strNotLocate.equals(cityName)) {
 			cityName = sharedPreferences.getString("cityNameRealButOld",
 					strNotLocate);
+
+			if (strNotLocate.equals(cityName)) {
+				String addrStr = sharedPreferences.getString("addrStr",
+						strNotLocate);
+				if (addrStr.contains("省") && addrStr.contains("市")) {
+					cityName = addrStr.split("省")[1].split("市")[0];
+				} else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
+					cityName = addrStr.split("市")[0];
+				} else {
+					cityName = addrStr;
+				}
+			}
 		} else {
 			cityName = sharedPreferences.getString("cityName", strNotLocate);
 		}

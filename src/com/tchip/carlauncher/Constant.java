@@ -14,7 +14,12 @@ public interface Constant {
 	 * 是否开机自动录像
 	 */
 	public static boolean autoRecord = true;
-
+	
+	/**
+	 * 开机自动录像延时
+	 */
+	public static int autoRecordDelay = 5000;
+	
 	/**
 	 * 是否有拨号短信模块
 	 */
