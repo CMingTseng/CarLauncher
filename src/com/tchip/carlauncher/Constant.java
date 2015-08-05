@@ -39,6 +39,11 @@ public interface Constant {
 	 * 是否有文件管理功能
 	 */
 	public static boolean hasFileManager = true;
+	
+	/**
+	 * WiFi设置是否使用系统
+	 */
+	public static boolean isWifiSystem = true;
 
 	/**
 	 * 语音模块是否是讯飞：true-讯飞 false-思必驰

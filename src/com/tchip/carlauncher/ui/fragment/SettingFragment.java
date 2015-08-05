@@ -181,10 +181,14 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleWifi:
-				// startActivity(new Intent(
-				// android.provider.Settings.ACTION_WIFI_SETTINGS));
-				Intent intentWifi = new Intent(context, WifiListActivity.class);
-				startActivity(intentWifi);
+				if (Constant.isWifiSystem) {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_WIFI_SETTINGS));
+				} else {
+					Intent intentWifi = new Intent(context,
+							WifiListActivity.class);
+					startActivity(intentWifi);
+				}
 				break;
 
 			case R.id.layoutRippleTraffic:

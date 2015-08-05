@@ -302,7 +302,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * SIM_STATE_PUK_REQUIRED = 3:requires the user's SIM PUK to unlock
 	 * 
-	 * SIM_STATE_NETWORK_LOCKED = 4:requries a network PIN to unlock
+	 * SIM_STATE_NETWORK_LOCKED = 4:requires a network PIN to unlock
 	 * 
 	 * SIM_STATE_READY = 5:Ready
 	 * 
