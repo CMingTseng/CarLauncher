@@ -11,6 +11,11 @@ public interface Constant {
 	public static boolean isDebug = true;
 	
 	/**
+	 * 是否包含录像模块，去掉可用作其他平台做对比测试
+	 */
+	public static boolean hasCamera = true;
+	
+	/**
 	 * 是否开机自动录像
 	 */
 	public static boolean autoRecord = true;

@@ -364,9 +364,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 录像窗口
-		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
-		surfaceCamera.setOnClickListener(new MyOnClickListener());
-		surfaceCamera.getHolder().addCallback(this);
+		if (Constant.hasCamera) {
+			surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
+			surfaceCamera.setOnClickListener(new MyOnClickListener());
+			surfaceCamera.getHolder().addCallback(this);
+		}
 
 		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
 
