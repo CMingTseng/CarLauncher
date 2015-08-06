@@ -104,7 +104,7 @@ public class NavigationActivity extends FragmentActivity implements
 			layoutStarContent, layoutStarEditWork, layoutStarEditHome;
 	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
 			layoutHistoryBack, layoutRoadCondition, layoutStar,
-			layoutStarNaviWork, layoutStarNaviHome, layoutOffline;
+			layoutStarNaviWork, layoutStarNaviHome;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -308,8 +308,12 @@ public class NavigationActivity extends FragmentActivity implements
 		layoutStarNaviHome.setOnClickListener(new MyOnClickListener());
 
 		// 更新离线地图
-		layoutOffline = (RelativeLayout) findViewById(R.id.layoutOffline);
+		RelativeLayout layoutOffline = (RelativeLayout) findViewById(R.id.layoutOffline);
 		layoutOffline.setOnClickListener(new MyOnClickListener());
+
+		// 回到当前位置
+		RelativeLayout layoutLocate = (RelativeLayout) findViewById(R.id.layoutLocate);
+		layoutLocate.setOnClickListener(new MyOnClickListener());
 	}
 
 	/**
@@ -567,6 +571,10 @@ public class NavigationActivity extends FragmentActivity implements
 				Intent intentOffline = new Intent(NavigationActivity.this,
 						UpdateMapActivity.class);
 				startActivity(intentOffline);
+				break;
+
+			case R.id.layoutLocate:
+				whereAmI(nowLatLng);
 				break;
 
 			default:

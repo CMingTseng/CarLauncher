@@ -10,12 +10,28 @@
         android:clickable="true" />
 
     <RelativeLayout
+        android:id="@+id/layoutLocate"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/ui_back_arrow_bg_transparent" >
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ui_map_locate" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/layoutOffline"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_margin="5dp"
-        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/layoutLocate"
         android:background="@drawable/ui_back_arrow_bg_transparent" >
 
         <ImageView
@@ -328,6 +344,7 @@
 
                     <requestFocus />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/etHistoryCity"
                     android:layout_width="180dp"
@@ -339,11 +356,11 @@
                     android:textColor="#dddddd"
                     android:textColorHint="#cccccc"
                     android:textSize="24sp" />
-                <View 
-                    
+
+                <View
                     android:layout_width="5dp"
                     android:layout_height="match_parent"
-                    android:background="@color/white"/>
+                    android:background="@color/white" />
 
                 <RelativeLayout
                     android:id="@+id/layoutNaviVoice"
@@ -367,8 +384,6 @@
                         android:layout_gravity="center"
                         android:visibility="gone" />
                 </RelativeLayout>
-                
-                
 
                 <EditText
                     android:id="@+id/etHistoryWhere"
