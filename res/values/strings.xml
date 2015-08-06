@@ -200,7 +200,6 @@
     <string name="close_drawer">关闭抽屉</string>
     <string name="remove_favourite">移除收藏</string>
     <string name="folder_empty">空文件夹</string>
-    <string name="delete">删除</string>
     <string name="_d_objects">%d 条目</string>
     <string name="delete_d_items_">删除 %d 个条目?</string>
     <string name="select_all">全选</string>
@@ -226,7 +225,6 @@
     <string name="folder_could_not_be_created">文件夹未创建</string>
     <string name="pasting_files_">正在粘贴文件…</string>
     <string name="downloads">下载</string>
-    <string name="music">音乐</string>
     <string name="pictures">图片</string>
     <string name="movies">电影</string>
     <string name="dcim">DCIM</string>
@@ -257,6 +255,7 @@
 
     <!-- ChatActivity -->
     <string name="chat_hello_greet">你好，有什么可以帮您？</string>
+    <string name="what_can_i_say">我可以说什么？</string>
     <string name="chat_no_answer">小天不知道怎么回答了</string>
     <string name="hint_no_network">无网络链接</string>
     <string name="weather">天气</string>
@@ -285,10 +284,24 @@
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
     <string name="sd2_not_exist">SD卡2不存在</string>
     <string name="photo_save">照片已保存</string>
+    <string name="title_navigation">导航</string>
+    <string name="title_chat">语音助手</string>
+    <string name="title_music_online">在线音乐</string>
+    <string name="title_multimedia">多媒体</string>
+    <string name="title_near_search">周边搜索</string>
+    <string name="title_drive_route">行车轨迹</string>
+    <string name="title_route_plan">路径规划</string>
+    <string name="title_file_manager">文件管理</string>
+    <string name="title_message">短信</string>
+    <string name="title_phone">电话</string>
+    <string name="title_setting">设置</string>
 
     <!-- MultimediaActivity -->
     <string name="music_play_now">正在播放</string>
     <string name="music_play_recent">最近播放</string>
+    <string name="music">音乐</string>
+    <string name="picture">图片</string>
+    <string name="video">视频</string>
 
     <!-- NavigationActivity -->
     <string name="near_oil_station">加油站</string>
@@ -305,6 +318,13 @@
     <string name="poi_in_city">在</string>
     <string name="poi_no_result">未找到结果</string>
     <string name="poi_has_result">找到结果</string>
+    <string name="navigation_with_blank">导 航</string>
+    <string name="near_with_blank">周 边</string>
+    <string name="star_with_blank">收 藏</string>
+    <string name="destination_city">目的地城市</string>
+    <string name="input_navigation_destination">输入导航目的地</string>
+    <string name="star_company">公司</string>
+    <string name="star_home">家</string>
 
     <string-array name="navi_intent">
         <item>导航去</item>
@@ -314,22 +334,28 @@
         <item>去</item>
         <item>到</item>
     </string-array>
-    
+
     <!-- OfflineBaiduMapActivity -->
     <string name="start_download">开始下载</string>
     <string name="offline_download_start">开始下载离线地图</string>
     <string name="offline_download_pause">暂停下载离线地图</string>
     <string name="offline_download_delete">删除离线地图</string>
-    
     <string name="no_match_city">未找到相关城市</string>
     <string name="not_import_offline_map">没有导入离线包，这可能是离线包放置位置不正确，或离线包已经导入过</string>
     <string name="import_success">成功导入 %d 个离线包，可以在下载管理查看</string>
-    
     <string name="has_update">可更新</string>
     <string name="update">更新</string>
     <string name="no_update">最新</string>
     <string name="re_download">重新下载</string>
-    
+    <string name="map_list">地图列表</string>
+    <string name="download_manager">下载管理</string>
+    <string name="input_city_name">    请输入城市名</string>
+    <string name="city_downloaded">已下载城市</string>
+    <string name="start">开始</string>
+    <string name="stop">停止</string>
+    <string name="delete">删除</string>
+    <string name="download_state_default">已下载:--</string>
+
     <!-- RouteShowActivity -->
     <string name="no_route_file">轨迹文件不存在</string>
     <string name="share_route_screenshot_to">分享轨迹图到</string>
@@ -340,12 +366,12 @@
     <string name="meter">米</string>
     <string name="location_end">终点位置</string>
     <string name="location_start">起始位置</string>
-    
+
     <!-- TrafficChatActivity -->
     <string name="data_error">数据异常</string>
     <string name="data_not_load">未加载数</string>
     <string name="traffic_state">天流量情况（单位：MB）</string>
-    
+
     <!-- UpdateMapActivity -->
     <string name="sd_has_no_map">SD卡未检测到离线地图包</string>
     <string name="sd_has_map">SD卡检测到%d个离线地图包</string>
@@ -355,7 +381,7 @@
     <string name="confirm">确认</string>
     <string name="import_sd_success">离线地图更新完成.</string>
     <string name="importing_not_exist">正在导入离线地图，请勿离开。</string>
-    
+
     <!-- WeatherActivity -->
     <string name="locate_fail_no_weather">定位失败，无法获取天气信息</string>
     <string name="get_weather_fail">天气获取失败，请稍候重试</string>
@@ -365,8 +391,11 @@
     <string name="weather_today">今日天气</string>
     <string name="weather_default_wind_info">东北风5</string>
     <string name="weather_temp_range_to">到</string>
-    
+
     <!-- WifiListActivity -->
     <string name="wifi_connecting">正在连接</string>
+
+    <!-- FmTransmitActivity -->
+    <string name="title_fm_transmit">FM发射</string>
 
 </resources>

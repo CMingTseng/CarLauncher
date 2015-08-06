@@ -93,7 +93,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:singleLine="true"
-                        android:text="导 航"
+                        android:text="@string/navigation_with_blank"
                         android:textColor="#dddddd"
                         android:textSize="32sp" />
                 </LinearLayout>
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="20dp"
-                    android:text="周 边"
+                    android:text="@string/near_with_blank"
                     android:textColor="#dddddd"
                     android:textSize="32sp" />
             </RelativeLayout>
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="20dp"
-                    android:text="收 藏"
+                    android:text="@string/star_with_blank"
                     android:textColor="#dddddd"
                     android:textSize="32sp" />
             </RelativeLayout>
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="加油站"
+                    android:text="@string/near_oil_station"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_near_item_text_size" />
             </RelativeLayout>
@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="停车场"
+                    android:text="@string/near_parking"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_near_item_text_size" />
             </RelativeLayout>
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="4S"
+                    android:text="@string/near_4s"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_near_item_text_size" />
             </RelativeLayout>
@@ -225,7 +225,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="ATM"
+                    android:text="@string/near_atm"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_near_item_text_size" />
             </RelativeLayout>
@@ -242,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="超市"
+                    android:text="@string/near_market"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_near_item_text_size" />
             </RelativeLayout>
@@ -259,7 +259,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="酒店"
+                    android:text="@string/near_hotel"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_near_item_text_size" />
             </RelativeLayout>
@@ -333,7 +333,7 @@
                     android:layout_width="180dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:hint="目的地城市"
+                    android:hint="@string/destination_city"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="#dddddd"
@@ -375,7 +375,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:hint="输入导航目的地"
+                    android:hint="@string/input_navigation_destination"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="#dddddd"
@@ -459,7 +459,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="50dp"
                     android:layout_toRightOf="@id/imageStarWork"
-                    android:text="公司"
+                    android:text="@string/star_company"
                     android:textColor="#ffffff"
                     android:textSize="28sp" />
             </RelativeLayout>
@@ -508,7 +508,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="50dp"
                     android:layout_toRightOf="@id/imageStarHome"
-                    android:text="家"
+                    android:text="@string/star_home"
                     android:textColor="#ffffff"
                     android:textSize="28sp" />
             </RelativeLayout>

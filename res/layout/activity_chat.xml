@@ -78,7 +78,7 @@
                 android:layout_below="@id/tvQuestion"
                 android:layout_margin="10dp"
                 android:background="@drawable/ui_chat_dialog_white"
-                android:text="你好，有什么可以帮您？"
+                android:text="@string/chat_hello_greet"
                 android:textColor="#000000"
                 android:textSize="@dimen/ui_chat_speak_text_size" />
 
@@ -110,7 +110,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我可以说什么？"
+            android:text="@string/what_can_i_say"
             android:textSize="20sp"
             android:layout_gravity="center_vertical"
             android:textColor="#888888" />

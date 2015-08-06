@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="地图列表"
+                android:text="@string/map_list"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </RelativeLayout>
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="下载管理"
+                android:text="@string/download_manager"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </RelativeLayout>
@@ -102,12 +102,12 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/layoutImport"
             android:background="@drawable/ui_setting_top_bar_bg"
-            android:hint="    请输入城市名"
+            android:hint="@string/input_city_name"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:textSize="22sp"
+            android:textColor="#ffffff"
             android:textColorHint="#ffffff"
-            android:textColor="#ffffff" />
+            android:textSize="22sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -142,10 +142,10 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:gravity="center_horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="已下载城市 " />
+                    android:gravity="center_horizontal"
+                    android:text="@string/city_downloaded" />
 
                 <ListView
                     android:id="@+id/localmaplist"
@@ -156,27 +156,27 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/ui_setting_top_bar_bg"
         android:id="@+id/layoutSingleDownload"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="5dp"
         android:layout_below="@id/layoutTop"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ui_setting_top_bar_bg"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="50dip"
-            android:visibility="invisible"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="invisible" >
 
             <TextView
                 android:id="@+id/cityid"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#ffffff"
-                android:text="131" />
+                android:text="131"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
         <LinearLayout
@@ -189,18 +189,18 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="@string/download_state_default"
                 android:textColor="#ffffff"
-                android:visibility="gone"
-                android:text="已下载:--" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/start"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="#ffffff"
                 android:onClick="start"
-                android:text="开始" />
+                android:text="@string/start"
+                android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/stop"
@@ -208,17 +208,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="stop"
-                android:textColor="#ffffff"
-                android:text="停止" />
+                android:text="@string/stop"
+                android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/del"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="#ffffff"
                 android:onClick="remove"
-                android:text="删除" />
+                android:text="@string/delete"
+                android:textColor="#ffffff" />
         </LinearLayout>
     </LinearLayout>
 

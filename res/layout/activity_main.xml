@@ -114,7 +114,7 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="未知"
+                android:text="@string/unknown"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </LinearLayout>
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:text="未定位"
+                android:text="@string/not_locate"
                 android:textColor="#ffffff"
                 android:textSize="22sp" />
         </LinearLayout>
@@ -170,9 +170,9 @@
             android:layout_toLeftOf="@id/layoutWiFi" >
 
             <ImageView
+                android:id="@+id/image3G"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/image3G"
                 android:src="@drawable/ic_qs_signal_full_3g" />
 
             <ImageView
@@ -239,7 +239,7 @@
                     android:layout_marginTop="15dp"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="导航"
+                    android:text="@string/title_navigation"
                     android:textColor="#000000"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -263,7 +263,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="语音助手"
+                    android:text="@string/title_chat"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -287,7 +287,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="在线音乐"
+                    android:text="@string/title_music_online"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -311,7 +311,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="多媒体"
+                    android:text="@string/title_multimedia"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -336,7 +336,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="周边搜索"
+                    android:text="@string/title_near_search"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -360,7 +360,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="行车轨迹"
+                    android:text="@string/title_drive_route"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -385,7 +385,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="路径规划"
+                    android:text="@string/title_route_plan"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -409,7 +409,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="FM发射"
+                    android:text="@string/title_fm_transmit"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -434,7 +434,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="文件管理"
+                    android:text="@string/title_file_manager"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -459,7 +459,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="短信"
+                    android:text="@string/title_message"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -484,7 +484,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="电话"
+                    android:text="@string/title_phone"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -508,7 +508,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="设置"
+                    android:text="@string/title_setting"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>

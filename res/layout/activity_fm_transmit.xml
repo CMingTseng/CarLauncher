@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/layoutBack"
-            android:text="FM发射"
+            android:text="@string/title_fm_transmit"
             android:textColor="#ffffff"
             android:textSize="25sp" />
 

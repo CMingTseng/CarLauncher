@@ -310,7 +310,6 @@ public class NavigationActivity extends FragmentActivity implements
 		// 更新离线地图
 		layoutOffline = (RelativeLayout) findViewById(R.id.layoutOffline);
 		layoutOffline.setOnClickListener(new MyOnClickListener());
-
 	}
 
 	/**
@@ -342,6 +341,11 @@ public class NavigationActivity extends FragmentActivity implements
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
+	}
+
+	private void whereAmI(LatLng latLng) {
+		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+		mBaiduMap.animateMapStatus(u);
 	}
 
 	class MyLocationListener implements BDLocationListener {
@@ -1225,7 +1229,7 @@ public class NavigationActivity extends FragmentActivity implements
 			}
 
 			etHistoryWhere.setText(text);
-			// startSearchPlace(strContent);
+			startSearchPlace(text, nowLatLng, false);
 		}
 	}
 

@@ -45,9 +45,10 @@ public class MyApplication extends Application {
 		 * 各组件中需要用到。
 		 */
 		// if (isMapSDExists()) {
-		// SDKInitializer.initialize(Constant.Path.SD_CARD_MAP, this);
+		// SDKInitializer.initialize(Constant.Path.SD_CARD_MAP,
+		// getApplicationContext());
 		// } else {
-		SDKInitializer.initialize(this);
+		SDKInitializer.initialize(getApplicationContext());
 		// }
 
 		// Music
