@@ -465,13 +465,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
 				.fromResource(R.drawable.icon_arrow_up);
 
-		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
-		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
-		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-				currentMode, true, null));
-		InitLocation(
-				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09ll", scanSpan, true);
 		// 设置地图放大级别 0-19
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
 		baiduMap.animateMapStatus(msu);
@@ -1389,7 +1382,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onPause() {
+		Log.v(Constant.TAG, "MainActivity:onPause");
+		
 		mainMapView.onPause();
+
+		// 销毁定位
+		mLocationClient.stop();
 
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
@@ -1399,7 +1397,17 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+		Log.v(Constant.TAG, "MainActivity:onResume");
+		
 		mainMapView.onResume();
+
+		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
+		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
+		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+				currentMode, true, null));
+		InitLocation(
+				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+				"bd09ll", scanSpan, true);
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
@@ -1416,8 +1424,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onDestroy() {
-		// 退出时销毁定位
-		mLocationClient.stop();
 
 		// 关闭定位图层
 		baiduMap.setMyLocationEnabled(false);

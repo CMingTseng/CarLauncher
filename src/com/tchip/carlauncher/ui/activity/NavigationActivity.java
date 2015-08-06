@@ -234,14 +234,6 @@ public class NavigationActivity extends FragmentActivity implements
 		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
 		// .fromResource(R.drawable.icon_arrow_up);
 
-		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
-		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
-		mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-				currentMode, true, null));
-		InitLocation(
-				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09ll", 5000, true);
-
 		// 初始化地图位置,设置nowLoction数据以防NullPointer
 		nowLatLng = new LatLng(mLatitude, mLongitude);
 		// MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
@@ -698,13 +690,27 @@ public class NavigationActivity extends FragmentActivity implements
 
 	@Override
 	protected void onPause() {
+		Log.v(Constant.TAG, "NavigationActivity:onPause");
 		mMapView.onPause();
+
+		// 销毁定位
+		mLocationClient.stop();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
+		Log.v(Constant.TAG, "NavigationActivity:onResume");
+
 		mMapView.onResume();
+
+		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
+		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
+		mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+				currentMode, true, null));
+		InitLocation(
+				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+				"bd09ll", 5000, true);
 		super.onResume();
 	}
 
@@ -713,8 +719,6 @@ public class NavigationActivity extends FragmentActivity implements
 		mPoiSearch.destroy();
 		mSuggestionSearch.destroy();
 
-		// 退出时销毁定位
-		mLocationClient.stop();
 		// 关闭定位图层
 		mBaiduMap.setMyLocationEnabled(false);
 		mMapView.onDestroy();

@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -59,7 +60,7 @@ public class SetStarPlaceActivity extends Activity {
 	 * 0-Work;1-Home
 	 */
 	private int starType = 0;
-	
+
 	private LocationClient mLocationClient;
 
 	@Override
@@ -112,20 +113,12 @@ public class SetStarPlaceActivity extends Activity {
 		// 设置地图放大级别 0-19
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(17);
 		baiduMap.animateMapStatus(msu);
-		
+
 		// 开启定位图层
 		baiduMap.setMyLocationEnabled(true);
 		// 自定义Maker
 		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
 				.fromResource(R.drawable.icon_arrow_up);
-
-		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
-		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
-		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-				currentMode, true, null));
-		InitLocation(
-				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09ll", 5000, true);
 
 		baiduMap.setOnMapClickListener(new OnMapClickListener() {
 
@@ -200,7 +193,7 @@ public class SetStarPlaceActivity extends Activity {
 		}
 
 	}
-	
+
 	/**
 	 * 
 	 * @param tempMode
@@ -261,24 +254,35 @@ public class SetStarPlaceActivity extends Activity {
 				.icon(bitmapDescriptor).zIndex(9).draggable(true);
 		baiduMap.addOverlay(ooA);
 	}
-	
+
 	@Override
 	protected void onPause() {
+		Log.v(Constant.TAG, "SetStarPlaceActivity:onPause");
 		mapView.onPause();
+
+		// 销毁定位
+		mLocationClient.stop();
+
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
+		Log.v(Constant.TAG, "SetStarPlaceActivity:onResume");
 		mapView.onResume();
+
+		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
+		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
+		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+				currentMode, true, null));
+		InitLocation(
+				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+				"bd09ll", 5000, true);
 		super.onResume();
 	}
 
 	@Override
 	protected void onDestroy() {
-
-		// 退出时销毁定位
-		mLocationClient.stop();
 		// 关闭定位图层
 		baiduMap.setMyLocationEnabled(false);
 		mapView.onDestroy();
