@@ -335,8 +335,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void initialService() {
 		// 位置
-		Intent intentLocation = new Intent(this, LocationService.class);
-		startService(intentLocation);
+		// Intent intentLocation = new Intent(this, LocationService.class);
+		// startService(intentLocation);
 
 		// 亮度自动调整服务
 		if (Constant.hasBrightAdjust) {
