@@ -1268,13 +1268,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					.longitude(location.getLongitude()).build();
 			baiduMap.setMyLocationData(locData);
 			if (isFirstLoc) {
-				isFirstLoc = false;
 				LatLng ll = new LatLng(location.getLatitude(),
 						location.getLongitude());
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
 				baiduMap.animateMapStatus(u);
-				// 更新天气
-				startWeatherService();
 			}
 
 			// 存储非“未定位”的城市信息
@@ -1313,6 +1310,12 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.commit();
 
 				// new Thread(networkTask).start();
+			}
+
+			if (isFirstLoc) {
+				isFirstLoc = false;
+				// 更新天气
+				startWeatherService();
 			}
 		}
 
@@ -1383,7 +1386,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	protected void onPause() {
 		Log.v(Constant.TAG, "MainActivity:onPause");
-		
+
 		mainMapView.onPause();
 
 		// 销毁定位
@@ -1398,7 +1401,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	protected void onResume() {
 		Log.v(Constant.TAG, "MainActivity:onResume");
-		
+
 		mainMapView.onResume();
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
