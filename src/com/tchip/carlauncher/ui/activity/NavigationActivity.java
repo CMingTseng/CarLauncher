@@ -360,10 +360,11 @@ public class NavigationActivity extends FragmentActivity implements
 			mBaiduMap.setMyLocationData(locData);
 
 			// 更新当前位置用作导航起点
-			if (isFirstLoc) {
+			nowLatLng = new LatLng(location.getLatitude(),
+					location.getLongitude());
+			// 初次定位和移动过程，更新当前位置到地图中心
+			if (isFirstLoc || location.getSpeed() > 0) {
 				isFirstLoc = false;
-				nowLatLng = new LatLng(location.getLatitude(),
-						location.getLongitude());
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
 				mBaiduMap.animateMapStatus(u);
 			}
