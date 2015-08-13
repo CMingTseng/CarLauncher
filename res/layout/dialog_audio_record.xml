@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,30 +8,48 @@
     android:padding="20dp"
     tools:context="com.zms.wechatrecorder.MainActivity" >
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/layoutImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/progressLoad"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true" />
 
         <ImageView
             android:id="@+id/imageRecord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:src="@drawable/icon_dialog_recording" />
 
         <ImageView
             android:id="@+id/imageVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/imageRecord"
             android:src="@drawable/icon_volume_1" />
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ui_dialog_warning" />
+    </RelativeLayout>
 
     <TextView
+        android:id="@+id/textHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/layoutImage"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:textColor="#ffffff"
-        android:id="@+id/textHint"
-        android:text="请说话" />
+        android:textColor="#ffffff" />
 
-</LinearLayout>
+</RelativeLayout>

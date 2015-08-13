@@ -742,7 +742,7 @@ public class RoutePlanActivity extends Activity implements
 		@Override
 		public void onBeginOfSpeech() {
 			// showTip("onBeginOfSpeech");
-			audioRecordDialog.showDialog();
+			audioRecordDialog.showVoiceDialog();
 		}
 
 		@Override

@@ -524,7 +524,7 @@ public class ChatAiActivity extends Activity {
 		public void onReadyForSpeech() {
 			showInfo("请说话...");
 
-			audioRecordDialog.showDialog();
+			audioRecordDialog.showVoiceDialog();
 		}
 
 		@Override

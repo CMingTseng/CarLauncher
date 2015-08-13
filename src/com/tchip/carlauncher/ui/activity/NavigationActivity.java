@@ -179,7 +179,7 @@ public class NavigationActivity extends FragmentActivity implements
 			naviDesFromVoice = extras.getString("destionation");
 			if (naviDesFromVoice.trim().length() > 0
 					&& naviDesFromVoice != null) {
-				setLayoutHistoryVisibility(true);
+				//setLayoutHistoryVisibility(true);
 				setDestinationText(naviDesFromVoice);
 				startSearchPlace(naviDesFromVoice, nowLatLng, false);
 			}
@@ -371,10 +371,10 @@ public class NavigationActivity extends FragmentActivity implements
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
 				mBaiduMap.animateMapStatus(u);
 			}
-			
-			// TODO:存储位置到SharedPreference
-			editor.putString("latitude", ""+location.getLatitude());
-			editor.putString("longitude", ""+location.getLongitude());
+
+			// 存储位置到SharedPreference
+			editor.putString("latitude", "" + location.getLatitude());
+			editor.putString("longitude", "" + location.getLongitude());
 			editor.commit();
 		}
 
@@ -951,6 +951,8 @@ public class NavigationActivity extends FragmentActivity implements
 										naviArray.get(position).getLatitude(),
 										naviArray.get(position).getLongitude(),
 										naviArray.get(position).getName());
+
+								audioRecordDialog.showLoadDialog();
 							} else {
 								// 未成功初始化
 								Log.e(Constant.TAG, "Initlal fail");
@@ -1021,6 +1023,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 		@Override
 		public void onJumpToNavigator() {
+			audioRecordDialog.dismissDialog();
 			Intent intent = new Intent(NavigationActivity.this,
 					BNavigatorActivity.class);
 			Bundle bundle = new Bundle();
@@ -1033,6 +1036,9 @@ public class NavigationActivity extends FragmentActivity implements
 
 		@Override
 		public void onRoutePlanFailed() {
+			audioRecordDialog.dismissDialog();
+			Toast.makeText(getApplicationContext(), "导航路线规划失败",
+					Toast.LENGTH_SHORT).show();
 			Log.e(Constant.TAG, "Baidu Navi:Route Plan Failed!");
 		}
 	}
@@ -1310,7 +1316,7 @@ public class NavigationActivity extends FragmentActivity implements
 		@Override
 		public void onBeginOfSpeech() {
 			// showTip("onBeginOfSpeech");
-			audioRecordDialog.showDialog();
+			audioRecordDialog.showVoiceDialog();
 		}
 
 		@Override

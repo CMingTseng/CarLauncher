@@ -7,26 +7,41 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class AudioRecordDialog {
 	private Dialog dialog;
-	private ImageView imageVolume;
+	private ImageView imageVolume, imageRecord, imageError;
+	private TextView textHint;
+	private ProgressBar progressLoad;
 
 	private Context context;
 
 	public AudioRecordDialog(Context context) {
 		this.context = context;
-	}
-
-	public void showDialog() {
-
 		dialog = new Dialog(context, R.style.Theme_RecordDialog);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.dialog_audio_record, null);
 		dialog.setContentView(view);
 
 		imageVolume = (ImageView) dialog.findViewById(R.id.imageVolume);
+		imageRecord = (ImageView) dialog.findViewById(R.id.imageRecord);
+		imageError = (ImageView) dialog.findViewById(R.id.imageError);
+		textHint = (TextView) dialog.findViewById(R.id.textHint);
 
+		progressLoad = (ProgressBar) dialog.findViewById(R.id.progressLoad);
+	}
+
+	/**
+	 * 显示音量框
+	 */
+	public void showVoiceDialog() {
+		imageVolume.setVisibility(View.VISIBLE);
+		imageRecord.setVisibility(View.VISIBLE);
+		imageError.setVisibility(View.INVISIBLE);
+		progressLoad.setVisibility(View.INVISIBLE);
+		textHint.setText("请说话");
 		dialog.show();
 	}
 
@@ -35,6 +50,30 @@ public class AudioRecordDialog {
 			dialog.dismiss();
 			dialog = null;
 		}
+	}
+
+	/**
+	 * 显示加载对话框
+	 */
+	public void showLoadDialog() {
+		textHint.setText("加载中");
+		imageVolume.setVisibility(View.INVISIBLE);
+		imageRecord.setVisibility(View.INVISIBLE);
+		imageError.setVisibility(View.INVISIBLE);
+		progressLoad.setVisibility(View.VISIBLE);
+		dialog.show();
+	}
+
+	/**
+	 * 显示错误对话框
+	 */
+	public void showErrorDialog(String text) {
+		textHint.setText(text);
+		imageVolume.setVisibility(View.INVISIBLE);
+		imageRecord.setVisibility(View.INVISIBLE);
+		imageError.setVisibility(View.VISIBLE);
+		progressLoad.setVisibility(View.INVISIBLE);
+		dialog.show();
 	}
 
 	/**

@@ -279,7 +279,7 @@ public class NearActivity extends Activity {
 		@Override
 		public void onBeginOfSpeech() {
 			// showTip("onBeginOfSpeech");
-			audioRecordDialog.showDialog();
+			audioRecordDialog.showVoiceDialog();
 		}
 
 		@Override

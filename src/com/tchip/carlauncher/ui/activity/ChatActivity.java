@@ -1033,7 +1033,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		@Override
 		public void onBeginOfSpeech() {
 			// TODO：显示对话框
-			audioRecordDialog.showDialog();
+			audioRecordDialog.showVoiceDialog();
 		}
 
 		@Override
