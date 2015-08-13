@@ -50,6 +50,7 @@
         android:layout_below="@id/layoutImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:textSize="22sp"
         android:textColor="#ffffff" />
 
 </RelativeLayout>

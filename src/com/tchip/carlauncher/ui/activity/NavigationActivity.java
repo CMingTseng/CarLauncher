@@ -981,7 +981,7 @@ public class NavigationActivity extends FragmentActivity implements
 			double endLongitude, String endName) {
 		BNRoutePlanNode sNode = null;
 		BNRoutePlanNode eNode = null;
-		// TODO:需要将bd09ll转成BD09_MC,GCJ02,WGS84
+		// 需要将bd09ll转成BD09_MC,GCJ02,WGS84
 		BDLocation bdLocStartBefore = new BDLocation();
 		bdLocStartBefore.setLatitude(startLatitude);
 		bdLocStartBefore.setLongitude(startLongitude);

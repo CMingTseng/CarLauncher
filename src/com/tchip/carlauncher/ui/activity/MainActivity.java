@@ -568,7 +568,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					break;
 				default:
 					break;
-
 				}
 				return false;
 			}
@@ -592,8 +591,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void initialNaviInstance() {
 		if (initDirs()) {
-			initNavi();
 		}
+		initNavi();
 	}
 
 	private boolean initDirs() {
