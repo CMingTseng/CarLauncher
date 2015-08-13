@@ -649,6 +649,8 @@ public class MainActivity extends Activity implements TachographCallback,
 					public void initFailed() {
 						if (Constant.isDebug) {
 							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
+							Toast.makeText(getApplicationContext(), "导航初始化失败",
+									Toast.LENGTH_SHORT).show();
 						}
 					}
 				}, null /* mTTSCallback */);
