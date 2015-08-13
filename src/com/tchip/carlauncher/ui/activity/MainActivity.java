@@ -1,6 +1,12 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -58,6 +64,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -231,6 +238,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// SIM卡状态
 		simState = Tel.getSimState();
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+		// 初始化fm发射
+		initFmTransmit();
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -1712,6 +1722,9 @@ public class MainActivity extends Activity implements TachographCallback,
 						if (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
 							// TODO:此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							Log.e(Constant.TAG, "Storage is full...");
+							Toast.makeText(MainActivity.this, "空间不足,请清理SD卡2",
+									Toast.LENGTH_LONG);
+							startSpeak("空间不足,请清理SD卡2");
 							break;
 						}
 					} else {
@@ -2026,4 +2039,95 @@ public class MainActivity extends Activity implements TachographCallback,
 			return super.onKeyDown(keyCode, event);
 	}
 
+	/**
+	 * 启动时初始化fm发射
+	 */
+	// 系统设置：FM发射开关
+	private String FM_TRANSMITTER_ENABLE = "fm_transmitter_enable";
+	// 系统设置：FM发射频率
+	private String FM_TRANSMITTER_CHANNEL = "fm_transmitter_channel";
+	// 频率节点 频率范围：7600~10800:8750-10800
+	private File nodeFmChannel = new File(
+			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
+
+	private void initFmTransmit() {
+		if (isFmTransmitOn()) {
+			int freq = getFmFrequceny();
+			if (freq >= 8750 && freq <= 10800)
+				setFmFrequency(freq);
+			else
+				setFmFrequency(8750);
+		}
+	}
+
+	private boolean isFmTransmitOn() {
+		boolean isFmTransmitOpen = false;
+		String fmEnable = Settings.System.getString(getContentResolver(),
+				FM_TRANSMITTER_ENABLE);
+		if (fmEnable.trim().length() > 0) {
+			if ("1".equals(fmEnable)) {
+				isFmTransmitOpen = true;
+			} else {
+				isFmTransmitOpen = false;
+			}
+		}
+		return isFmTransmitOpen;
+	}
+
+	/**
+	 * 获取设置中存取的频率
+	 * 
+	 * @return 8750-10800
+	 */
+	private int getFmFrequceny() {
+		String fmChannel = Settings.System.getString(getContentResolver(),
+				FM_TRANSMITTER_CHANNEL);
+
+		return Integer.parseInt(fmChannel);
+	}
+
+	/**
+	 * 设置FM发射频率:8750-10800
+	 * 
+	 * @param frequency
+	 */
+	private void setFmFrequency(int frequency) {
+		if (frequency >= 8750 || frequency <= 10800) {
+			Settings.System.putString(getContentResolver(),
+					FM_TRANSMITTER_CHANNEL, "" + frequency);
+
+			SaveFileToNode(nodeFmChannel, String.valueOf(frequency));
+			Log.v(Constant.TAG, "FM Transmit:Set FM Frequency success:"
+					+ frequency / 100.0f + "MHz");
+		}
+	}
+
+	protected void SaveFileToNode(File file, String value) {
+		if (file.exists()) {
+			try {
+				StringBuffer strbuf = new StringBuffer("");
+				strbuf.append(value);
+				OutputStream output = null;
+				OutputStreamWriter outputWrite = null;
+				PrintWriter print = null;
+
+				try {
+					output = new FileOutputStream(file);
+					outputWrite = new OutputStreamWriter(output);
+					print = new PrintWriter(outputWrite);
+					print.print(strbuf.toString());
+					print.flush();
+					output.close();
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					Log.e(Constant.TAG, "FM Transmit:output error");
+				}
+			} catch (IOException e) {
+				Log.e(Constant.TAG, "FM Transmit:IO Exception");
+			}
+		} else {
+			Log.e(Constant.TAG, "FM Transmit:File:" + file + "not exists");
+		}
+	}
 }
