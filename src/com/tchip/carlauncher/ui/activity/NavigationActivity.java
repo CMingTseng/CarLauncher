@@ -179,7 +179,7 @@ public class NavigationActivity extends FragmentActivity implements
 			naviDesFromVoice = extras.getString("destionation");
 			if (naviDesFromVoice.trim().length() > 0
 					&& naviDesFromVoice != null) {
-				//setLayoutHistoryVisibility(true);
+				setLayoutHistoryVisibility(true);
 				setDestinationText(naviDesFromVoice);
 				startSearchPlace(naviDesFromVoice, nowLatLng, false);
 			}
@@ -187,7 +187,6 @@ public class NavigationActivity extends FragmentActivity implements
 	}
 
 	private void initialLayout() {
-
 		layoutShowHistory = (LinearLayout) findViewById(R.id.layoutShowHistory);
 		layoutShowHistory.setOnClickListener(new MyOnClickListener());
 
@@ -643,12 +642,12 @@ public class NavigationActivity extends FragmentActivity implements
 	 */
 	private void setLayoutHistoryVisibility(boolean isShow) {
 		if (isShow) {
-
 			setStarPannelVisibility(false);
 			setLayoutNearVisibility(false);
 
 			isHistoryLayoutShow = true;
 			layoutHistory.setVisibility(View.VISIBLE);
+			// listHistory.setVisibility(View.VISIBLE);
 			naviHistoryArray = naviDb.getAllNaviHistory();
 
 			naviHistoryAdapter = new NaviHistoryAdapter(
@@ -937,9 +936,7 @@ public class NavigationActivity extends FragmentActivity implements
 							// 开始导航
 							listResult.setVisibility(View.GONE);
 							isResultListShow = false;
-
-							listHistory.setVisibility(View.GONE);
-							isHistoryLayoutShow = false;
+							setLayoutHistoryVisibility(false);
 
 							if (MyApplication.isNaviInitialSuccess) {
 								routeplanToNavi(

@@ -42,13 +42,14 @@ public class AudioRecordDialog {
 		imageError.setVisibility(View.INVISIBLE);
 		progressLoad.setVisibility(View.INVISIBLE);
 		textHint.setText("请说话");
-		dialog.show();
+		if (dialog != null) {
+			dialog.show();
+		}
 	}
 
 	public void dismissDialog() {
 		if (dialog != null && dialog.isShowing()) {
 			dialog.dismiss();
-			dialog = null;
 		}
 	}
 
@@ -61,7 +62,9 @@ public class AudioRecordDialog {
 		imageRecord.setVisibility(View.INVISIBLE);
 		imageError.setVisibility(View.INVISIBLE);
 		progressLoad.setVisibility(View.VISIBLE);
-		dialog.show();
+		if (dialog != null) {
+			dialog.show();
+		}
 	}
 
 	/**
@@ -73,7 +76,9 @@ public class AudioRecordDialog {
 		imageRecord.setVisibility(View.INVISIBLE);
 		imageError.setVisibility(View.VISIBLE);
 		progressLoad.setVisibility(View.INVISIBLE);
-		dialog.show();
+		if (dialog != null) {
+			dialog.show();
+		}
 	}
 
 	/**
