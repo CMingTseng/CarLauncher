@@ -669,6 +669,7 @@ public class NavigationActivity extends FragmentActivity implements
 							String strCity = naviHistoryArray.get(position)
 									.getCity();
 							etHistoryCity.setText(strCity);
+							startSearchPlace(strHistory, nowLatLng, false);
 						}
 					});
 
