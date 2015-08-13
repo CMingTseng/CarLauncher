@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -133,6 +134,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private MapView mMapView;
 	private LocationClient mLocationClient;
 	private SharedPreferences preference;
+	private Editor editor;
 	private String naviDesFromVoice = "";
 
 	private boolean isFirstLoc = true;
@@ -154,6 +156,7 @@ public class NavigationActivity extends FragmentActivity implements
 		// 获取当前经纬度
 		preference = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
+		editor = preference.edit();
 		mLatitude = Double
 				.parseDouble(preference.getString("latitude", "0.00"));
 		mLongitude = Double.parseDouble(preference.getString("longitude",
@@ -368,6 +371,11 @@ public class NavigationActivity extends FragmentActivity implements
 				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
 				mBaiduMap.animateMapStatus(u);
 			}
+			
+			// TODO:存储位置到SharedPreference
+			editor.putString("latitude", ""+location.getLatitude());
+			editor.putString("longitude", ""+location.getLongitude());
+			editor.commit();
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -711,7 +719,7 @@ public class NavigationActivity extends FragmentActivity implements
 				currentMode, true, null));
 		InitLocation(
 				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09ll", 5000, true);
+				"bd09ll", 3000, true);
 		super.onResume();
 	}
 
@@ -739,6 +747,9 @@ public class NavigationActivity extends FragmentActivity implements
 
 	public void startSearchPlace(String where, LatLng centerLatLng,
 			boolean isNear) {
+		Log.v(Constant.TAG, "startSearchPlace:" + where + ",Lat:"
+				+ centerLatLng.latitude + ",Lng:" + centerLatLng.longitude
+				+ ",isNear:" + isNear);
 		if (where != null && where.trim().length() > 0) {
 			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
 				NetworkUtil.noNetworkHint(getApplicationContext());
@@ -1016,6 +1027,7 @@ public class NavigationActivity extends FragmentActivity implements
 					(BNRoutePlanNode) mBNRoutePlanNode);
 			intent.putExtras(bundle);
 			startActivity(intent);
+			Log.v(Constant.TAG, "RoutePlanListener:onJumpToNavigator");
 		}
 
 		@Override
