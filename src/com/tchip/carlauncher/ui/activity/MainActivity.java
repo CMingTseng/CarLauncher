@@ -155,6 +155,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private static final String PATH_ONE = "/mnt/sdcard/path_one";
 	private static final String PATH_TWO = "/mnt/sdcard/path_two";
 	private static final String PATH_SDCARD_2 = "/storage/sdcard2";
+	private static final String PATH_SDCARD_1 = "/storage/sdcard1";
 
 	// 重叠
 	private static final int STATE_OVERLAP_ZERO = 0;
@@ -568,7 +569,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					break;
 				default:
 					break;
-
 				}
 				return false;
 			}
@@ -592,8 +592,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void initialNaviInstance() {
 		if (initDirs()) {
-			initNavi();
 		}
+		initNavi();
 	}
 
 	private boolean initDirs() {
@@ -649,6 +649,8 @@ public class MainActivity extends Activity implements TachographCallback,
 					public void initFailed() {
 						if (Constant.isDebug) {
 							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
+							Toast.makeText(getApplicationContext(), "导航初始化失败",
+									Toast.LENGTH_SHORT).show();
 						}
 					}
 				}, null /* mTTSCallback */);
@@ -1683,7 +1685,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private boolean deleteOldestUnlockVideo() {
 		try {
-			String sdcardPath = "/storage/sdcard2/";
+			String sdcardPath = PATH_SDCARD_1 + File.separator;// "/storage/sdcard1/";
+			if (Constant.saveVideoToSD2) {
+				sdcardPath = PATH_SDCARD_2 + File.separator;// "/storage/sdcard2/";
+			}
 			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
@@ -1788,9 +1793,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	public boolean isSD2Exists() {
+	public boolean isSDExists() {
 		try {
-			String pathVideo = PATH_SDCARD_2 + "/tachograph/";
+			String pathVideo = PATH_SDCARD_1 + "/tachograph/";
+			if (Constant.saveVideoToSD2) {
+				pathVideo = PATH_SDCARD_2 + "/tachograph/";
+			}
 			File fileVideo = new File(pathVideo);
 			fileVideo.mkdirs();
 			File file = new File(pathVideo);
@@ -1806,9 +1814,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int startRecorder() {
 
-		if (!isSD2Exists()) {
+		if (!isSDExists()) {
 			// SDCard2不存在
-			String strNoSD = getResources().getString(R.string.sd2_not_exist);
+			String strNoSD = getResources().getString(R.string.sd1_not_exist);
+			if (Constant.saveVideoToSD2) {
+				strNoSD = getResources().getString(R.string.sd2_not_exist);
+			}
 			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
 					.show();
 			startSpeak(strNoSD);
@@ -1820,8 +1831,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (Constant.isDebug) {
 				Log.d(Constant.TAG, "Record Start");
 			}
-			// 设置
-			setDirectory(PATH_SDCARD_2);
+			// 设置保存路径
+			if (Constant.saveVideoToSD2) {
+				setDirectory(PATH_SDCARD_2);
+			} else {
+				setDirectory(PATH_SDCARD_1);
+			}
 			return mMyRecorder.start();
 		}
 		return -1;
@@ -1856,9 +1871,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	public int takePhoto() {
-		if (!isSD2Exists()) {
-			// SDCard2不存在
-			String strNoSD = getResources().getString(R.string.sd2_not_exist);
+		if (!isSDExists()) {
+			// SDCard不存在
+			String strNoSD = getResources().getString(R.string.sd1_not_exist);
+			if (Constant.saveVideoToSD2) {
+				strNoSD = getResources().getString(R.string.sd2_not_exist);
+			}
 			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
 					.show();
 			startSpeak(strNoSD);

@@ -283,6 +283,7 @@
     <string name="hint_video_mute_on">静音</string>
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
     <string name="sd2_not_exist">SD卡2不存在</string>
+    <string name="sd1_not_exist">SD卡1不存在</string>
     <string name="photo_save">照片已保存</string>
     <string name="title_navigation">导航</string>
     <string name="title_chat">语音助手</string>
