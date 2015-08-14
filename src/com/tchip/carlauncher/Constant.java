@@ -10,25 +10,29 @@ public interface Constant {
 	 */
 	public static boolean isDebug = true;
 
-	/**
-	 * 是否包含录像模块，去掉可用作其他平台做对比测试
-	 */
-	public static boolean hasCamera = true;
+	public final class Record {
 
-	/**
-	 * 是否开机自动录像
-	 */
-	public static boolean autoRecord = true;
+		/**
+		 * 是否包含录像模块，去掉可用作其他平台做对比测试
+		 */
+		public static boolean hasCamera = true;
 
-	/**
-	 * 开机自动录像延时
-	 */
-	public static int autoRecordDelay = 5000;
+		/**
+		 * 是否开机自动录像
+		 */
+		public static boolean autoRecord = true;
 
-	/**
-	 * 录像保存到SD卡2 true:SD2 false:SD1
-	 */
-	public static boolean saveVideoToSD2 = true;
+		/**
+		 * 开机自动录像延时
+		 */
+		public static int autoRecordDelay = 5000;
+		
+
+		/**
+		 * 录像保存到SD卡2 true:SD2 false:SD1
+		 */
+		public static boolean saveVideoToSD2 = true;
+	}
 
 	/**
 	 * 是否有拨号短信模块
@@ -96,6 +100,9 @@ public interface Constant {
 		 */
 		public static final String SD_CARD = Environment
 				.getExternalStorageDirectory().getPath();
+
+		public static final String SDCARD_1 = "/storage/sdcard1";
+		public static final String SDCARD_2 = "/storage/sdcard2";
 
 		/**
 		 * 字体目录

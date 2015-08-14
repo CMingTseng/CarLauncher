@@ -25,6 +25,11 @@ public class MyApplication extends Application {
 
 	// Route Record
 	public static boolean isRouteRecord = false;
+	
+	/**
+	 * SD卡取出
+	 */
+	public static boolean isVideoCardEject = false;
 
 	@Override
 	public void onCreate() {
@@ -59,21 +64,6 @@ public class MyApplication extends Application {
 		// TrafficDbManager.getInstance(this).setTrafficTotal(0L);
 		// TrafficUtils.startRepeatingService(MyApplication.this,
 		// TrafficUtils.INTERVAL, TrafficFetchService.class, "");
-	}
-
-	public boolean isMapSDExists() {
-		try {
-			String pathVideo = Constant.Path.SD_CARD_MAP + "/BaiduMapSDK/";
-			File fileVideo = new File(pathVideo);
-			fileVideo.mkdirs();
-			File file = new File(pathVideo);
-			if (!file.exists()) {
-				return false;
-			}
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
 	}
 
 	private void initPath() {

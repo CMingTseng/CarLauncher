@@ -255,6 +255,17 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
+        <receiver android:name="com.tchip.carlauncher.model.CardEjectReceiver" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_EJECT" />
+                <action android:name="android.intent.action.MEDIA_BAD_REMOVAL" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                 <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+
+                <data android:scheme="file" />
+            </intent-filter>
+        </receiver>
 
         <service android:name="com.tchip.carlauncher.service.FTPServerService" />
         <service android:name="com.tchip.carlauncher.service.SpeakService" />

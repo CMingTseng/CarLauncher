@@ -152,8 +152,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private static final String PATH_ZERO = "/mnt/sdcard";
 	private static final String PATH_ONE = "/mnt/sdcard/path_one";
 	private static final String PATH_TWO = "/mnt/sdcard/path_two";
-	private static final String PATH_SDCARD_2 = "/storage/sdcard2";
-	private static final String PATH_SDCARD_1 = "/storage/sdcard1";
 
 	// 重叠
 	private static final int STATE_OVERLAP_ZERO = 0;
@@ -207,7 +205,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordViews();
 
 		// 开机自动录像
-		if (Constant.autoRecord) {
+		if (Constant.Record.autoRecord) {
 			new Thread(new AutoRecordThread()).start();
 		}
 
@@ -244,7 +242,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(Constant.autoRecordDelay);
+				Thread.sleep(Constant.Record.autoRecordDelay);
 				Message message = new Message();
 				message.what = 1;
 				autoRecordHandler.sendMessage(message);
@@ -373,7 +371,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 录像窗口
-		if (Constant.hasCamera) {
+		if (Constant.Record.hasCamera) {
 			surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
 			surfaceCamera.setOnClickListener(new MyOnClickListener());
 			surfaceCamera.getHolder().addCallback(this);
@@ -782,14 +780,24 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
 			synchronized (updateRecordTimeHandler) {
 				do {
-					try {
-						Thread.sleep(1000);
-						Message message = new Message();
-						message.what = 1;
-						updateRecordTimeHandler.sendMessage(message);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+
+					if (MyApplication.isVideoCardEject) {
+						// 录像时视频SD卡拔出
+						Message messageEject = new Message();
+						messageEject.what = 2;
+						updateRecordTimeHandler.sendMessage(messageEject);
+						break;
+					} else {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Message messageSecond = new Message();
+						messageSecond.what = 1;
+						updateRecordTimeHandler.sendMessage(messageSecond);
 					}
+
 				} while (MyApplication.isVideoReording);
 			}
 		}
@@ -802,6 +810,27 @@ public class MainActivity extends Activity implements TachographCallback,
 				secondCount++;
 				textRecordTime.setText(DateUtil
 						.getFormatTimeBySecond(secondCount));
+				break;
+
+			case 2:
+				// 停止录像
+				if (stopRecorder() == 0) {
+					mRecordState = STATE_RECORD_STOPPED;
+					MyApplication.isVideoReording = false;
+					setupRecordViews();
+				} else {
+					if (stopRecorder() == 0) {
+						mRecordState = STATE_RECORD_STOPPED;
+						MyApplication.isVideoReording = false;
+						setupRecordViews();
+					}
+				}
+
+				String strVideoCardEject = "SD卡异常移除，停止录像";
+				Toast.makeText(getApplicationContext(), strVideoCardEject,
+						Toast.LENGTH_SHORT).show();
+				Log.e(Constant.TAG, "CardEjectReceiver:Video SD Removed");
+				startSpeak(strVideoCardEject);
 				break;
 
 			default:
@@ -1423,6 +1452,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 导航实例
 		if (!MyApplication.isNaviInitialSuccess) {
 			initialNaviInstance();
+			Log.v(Constant.TAG, "initialNaviInstance()");
 		}
 
 		super.onResume();
@@ -1676,9 +1706,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private boolean deleteOldestUnlockVideo() {
 		try {
-			String sdcardPath = PATH_SDCARD_1 + File.separator;// "/storage/sdcard1/";
-			if (Constant.saveVideoToSD2) {
-				sdcardPath = PATH_SDCARD_2 + File.separator;// "/storage/sdcard2/";
+			String sdcardPath = Constant.Path.SDCARD_1 + File.separator;// "/storage/sdcard1/";
+			if (Constant.Record.saveVideoToSD2) {
+				sdcardPath = Constant.Path.SDCARD_2 + File.separator;// "/storage/sdcard2/";
 			}
 			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
@@ -1784,31 +1814,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	public boolean isSDExists() {
-		try {
-			String pathVideo = PATH_SDCARD_1 + "/tachograph/";
-			if (Constant.saveVideoToSD2) {
-				pathVideo = PATH_SDCARD_2 + "/tachograph/";
-			}
-			File fileVideo = new File(pathVideo);
-			fileVideo.mkdirs();
-			File file = new File(pathVideo);
-			if (!file.exists()) {
-				return false;
-			}
-
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
 	public int startRecorder() {
 
-		if (!isSDExists()) {
+		if (!StorageUtil.isVideoCardExists()) {
 			// SDCard2不存在
 			String strNoSD = getResources().getString(R.string.sd1_not_exist);
-			if (Constant.saveVideoToSD2) {
+			if (Constant.Record.saveVideoToSD2) {
 				strNoSD = getResources().getString(R.string.sd2_not_exist);
 			}
 			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
@@ -1823,10 +1834,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				Log.d(Constant.TAG, "Record Start");
 			}
 			// 设置保存路径
-			if (Constant.saveVideoToSD2) {
-				setDirectory(PATH_SDCARD_2);
+			if (Constant.Record.saveVideoToSD2) {
+				setDirectory(Constant.Path.SDCARD_2);
 			} else {
-				setDirectory(PATH_SDCARD_1);
+				setDirectory(Constant.Path.SDCARD_1);
 			}
 			return mMyRecorder.start();
 		}
@@ -1862,10 +1873,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	public int takePhoto() {
-		if (!isSDExists()) {
+		if (!StorageUtil.isVideoCardExists()) {
 			// SDCard不存在
 			String strNoSD = getResources().getString(R.string.sd1_not_exist);
-			if (Constant.saveVideoToSD2) {
+			if (Constant.Record.saveVideoToSD2) {
 				strNoSD = getResources().getString(R.string.sd2_not_exist);
 			}
 			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
@@ -2060,7 +2071,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
 
 	private void initFmTransmit() {
-		//if (isFmTransmitOn()) 
+		// if (isFmTransmitOn())
 		{
 			int freq = getFmFrequceny();
 			if (freq >= 8750 && freq <= 10800)
