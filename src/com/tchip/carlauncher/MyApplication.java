@@ -123,6 +123,7 @@ public class MyApplication extends Application {
 
 	// 导航实例是否初始化成功
 	public static boolean isNaviInitialSuccess = false;
+	public static boolean isNaviAuthSuccess = false;
 
 	// Recent Play Music
 	// public void savePlayList(String nowPlayMusic) {

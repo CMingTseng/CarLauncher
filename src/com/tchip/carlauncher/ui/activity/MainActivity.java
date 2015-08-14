@@ -77,8 +77,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -208,13 +206,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordDefaults();
 		setupRecordViews();
 
-		// 3秒后开机自动录像
+		// 开机自动录像
 		if (Constant.autoRecord) {
 			new Thread(new AutoRecordThread()).start();
 		}
-
-		// 导航实例
-		initialNaviInstance();
 
 		// 开机尝试连接WiFi
 		if (!Constant.isWifiSystem) {
@@ -472,7 +467,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 开启定位图层
 		baiduMap.setMyLocationEnabled(true);
 
-		// 自定义Maker
+		// 自定义Marker
 		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
 				.fromResource(R.drawable.icon_arrow_up);
 
@@ -625,8 +620,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					public void onAuthResult(int status, String msg) {
 						if (0 == status) {
 							authinfo = "Success!";
+							MyApplication.isNaviAuthSuccess = true;
 						} else {
 							authinfo = "Fail:" + msg;
+							MyApplication.isNaviAuthSuccess = false;
 						}
 
 						Log.v(Constant.TAG, "Baidu Navi:Key auth " + authinfo);
@@ -893,16 +890,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
-				// 连接电源自动录像
-				// if (MyApplication.isFirstLaunch &&
-				// (!MyApplication.isVideoReording)
-				// && sharedPreferences.getBoolean("autoRecord", true)
-				// && MyApplication.isPowerConnect) {
-				// mRecordState = STATE_RECORD_STARTED;
-				// MyApplication.isVideoReording = true;
-				// MyApplication.isFirstLaunch = false;
-				// setupRecordViews();
-				// }
 				break;
 
 			default:
@@ -1360,7 +1347,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		option.setLocationMode(tempMode);
 		option.setCoorType(tempCoor);
 		option.setScanSpan(frequence);
-		option.setOpenGps(true);// 打开gps
+		option.setOpenGps(true); // 打开gps
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
@@ -1397,8 +1384,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onPause() {
-		Log.v(Constant.TAG, "MainActivity:onPause");
-
+		Log.v(Constant.TAG, "MainActivity:MapView onPause");
 		mainMapView.onPause();
 
 		// 销毁定位
@@ -1412,7 +1398,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
-		Log.v(Constant.TAG, "MainActivity:onResume");
+		Log.v(Constant.TAG, "MainActivity:MapView onResume");
 
 		mainMapView.onResume();
 
@@ -1433,6 +1419,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+		// 导航实例
+		if (!MyApplication.isNaviInitialSuccess) {
+			initialNaviInstance();
+		}
 
 		super.onResume();
 	}
@@ -1725,7 +1716,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						Log.e(Constant.TAG, "!!! Delete tachograph/ Directory");
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						if (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
-							// TODO:此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
+							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							Log.e(Constant.TAG, "Storage is full...");
 							Toast.makeText(MainActivity.this, "空间不足,请清理SD卡2",
 									Toast.LENGTH_LONG);

@@ -139,6 +139,9 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private boolean isFirstLoc = true;
 
+	private String strAuthFail = "导航实例授权失败，需联网后返回主界面重新初始化";
+	private String strInitFail = "导航实例初始化失败，需联网后返回主界面重新初始化";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -335,7 +338,7 @@ public class NavigationActivity extends FragmentActivity implements
 		option.setLocationMode(tempMode);
 		option.setCoorType(tempCoor);
 		option.setScanSpan(frequence);
-		option.setOpenGps(true);// 打开gps
+		option.setOpenGps(true); // 打开gps
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
@@ -505,15 +508,20 @@ public class NavigationActivity extends FragmentActivity implements
 					double workLng = Double.parseDouble(preference.getString(
 							"workLng", "0.00"));
 
-					if (MyApplication.isNaviInitialSuccess) {
+					if (!MyApplication.isNaviAuthSuccess) {
+						Log.e(Constant.TAG, "Navigation:Auth Fail");
+						Toast.makeText(getApplicationContext(), strAuthFail,
+								Toast.LENGTH_SHORT).show();
+					} else if (!MyApplication.isNaviInitialSuccess) {
+						Log.e(Constant.TAG, "Navigation:Initial Fail");
+						Toast.makeText(getApplicationContext(), strInitFail,
+								Toast.LENGTH_SHORT).show();
+					} else {
 						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
 								getResources()
 										.getString(R.string.location_here),
 								workLat, workLng, workAddress);
-					} else {
-						// 未成功初始化
-						Log.e(Constant.TAG, "Initlal fail");
 					}
 				} else {
 					// 未设置，跳转到设置界面
@@ -542,15 +550,22 @@ public class NavigationActivity extends FragmentActivity implements
 					double homeLng = Double.parseDouble(preference.getString(
 							"homeLng", "0.00"));
 
-					if (MyApplication.isNaviInitialSuccess) {
+					if (!MyApplication.isNaviAuthSuccess) {
+
+						Log.e(Constant.TAG, "Navigation:Auth Fail");
+						Toast.makeText(getApplicationContext(), strAuthFail,
+								Toast.LENGTH_SHORT).show();
+					} else if (!MyApplication.isNaviInitialSuccess) {
+
+						Log.e(Constant.TAG, "Navigation:Initial Fail");
+						Toast.makeText(getApplicationContext(), strInitFail,
+								Toast.LENGTH_SHORT).show();
+					} else {
 						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
 								getResources()
 										.getString(R.string.location_here),
 								homeLat, homeLng, homeAddress);
-					} else {
-						// 未成功初始化
-						Log.e(Constant.TAG, "Initlal fail");
 					}
 				} else {
 					// 未设置，跳转到设置界面
@@ -938,7 +953,15 @@ public class NavigationActivity extends FragmentActivity implements
 							isResultListShow = false;
 							setLayoutHistoryVisibility(false);
 
-							if (MyApplication.isNaviInitialSuccess) {
+							if (!MyApplication.isNaviAuthSuccess) {
+								Log.e(Constant.TAG, "Navigation:Auth Fail");
+								Toast.makeText(getApplicationContext(),
+										strAuthFail, Toast.LENGTH_SHORT).show();
+							} else if (!MyApplication.isNaviInitialSuccess) {
+								Log.e(Constant.TAG, "Navigation:Initial Fail");
+								Toast.makeText(getApplicationContext(),
+										strInitFail, Toast.LENGTH_SHORT).show();
+							} else {
 								routeplanToNavi(
 										CoordinateType.GCJ02,
 										nowLatLng.latitude,
@@ -950,9 +973,6 @@ public class NavigationActivity extends FragmentActivity implements
 										naviArray.get(position).getName());
 
 								audioRecordDialog.showLoadDialog();
-							} else {
-								// 未成功初始化
-								Log.e(Constant.TAG, "Initlal fail");
 							}
 						}
 					});
@@ -1105,16 +1125,20 @@ public class NavigationActivity extends FragmentActivity implements
 		} else {
 			// 点击地图上搜索结果气球进入导航
 
-			if (MyApplication.isNaviInitialSuccess) {
+			if (!MyApplication.isNaviAuthSuccess) {
+				Log.e(Constant.TAG, "Navigation:Auth Fail");
+				Toast.makeText(getApplicationContext(), strAuthFail,
+						Toast.LENGTH_SHORT).show();
+			} else if (!MyApplication.isNaviInitialSuccess) {
+				Log.e(Constant.TAG, "Navigation:Initial Fail");
+				Toast.makeText(getApplicationContext(), strInitFail,
+						Toast.LENGTH_SHORT).show();
+			} else {
 				routeplanToNavi(CoordinateType.GCJ02, nowLatLng.latitude,
 						nowLatLng.longitude,
 						getResources().getString(R.string.poi_no_result),
 						result.getLocation().latitude,
 						result.getLocation().longitude, result.getAddress());
-			} else {
-				// 未成功初始化
-				Log.e(Constant.TAG,
-						"NavigationActivity,onGetPoiDetailResult:Navi Initial Failed.");
 			}
 		}
 	}
