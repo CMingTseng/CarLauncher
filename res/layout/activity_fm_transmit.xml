@@ -71,6 +71,26 @@
             android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
             android:textSize="30sp" />
+        
+        <Button 
+            android:id="@+id/fmFreqDecrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_toLeftOf="@id/textHint"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/btn_fm_decrease_frequency"
+            />
+        
+        <Button 
+            android:id="@+id/fmFreqIncrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_toRightOf="@id/textHint"
+            android:layout_marginLeft="20dip"
+            android:background="@drawable/btn_fm_increase_frequency"
+            />
 
         <SeekBar 
             android:id="@+id/fmSeekBar"
@@ -81,6 +101,91 @@
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
             />
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/fmSeekBar"
+            android:orientation="horizontal"
+            >
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_marginLeft="-20dp"
+	            android:layout_weight="1.5"
+	            android:text="87.5\n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="90.0\n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="92.0\n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="94.0\n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="96.0\n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="98.0\n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="100.0 \n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="102.0 \n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="104.0 \n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="106.0 \n|"
+                />
+            <TextView 
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+	            android:layout_weight="1"
+	            android:text="108.0 \n|"
+                />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

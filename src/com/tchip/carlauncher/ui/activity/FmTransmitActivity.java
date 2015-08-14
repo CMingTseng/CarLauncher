@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -61,6 +62,8 @@ public class FmTransmitActivity extends Activity {
 	private RelativeLayout layoutBack;
 	private TextView textHint;
 	private SeekBar fmSeekBar;
+	
+	private Button fmFreqDecrease, fmFreqIncrease;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +127,40 @@ public class FmTransmitActivity extends Activity {
 				textHint.setText("  " + frequency + "MHz");
 			}
 		});
+		
+		//fm频率0.1增加减少
+		fmFreqDecrease = (Button) findViewById(R.id.fmFreqDecrease);
+		fmFreqIncrease = (Button) findViewById(R.id.fmFreqIncrease);
+		fmFreqDecrease.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				setFmFrequencySmallDeIncrease(false);
+			}
+		});
+		fmFreqIncrease.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				setFmFrequencySmallDeIncrease(true);
+			}
+		});
 	}
+	
+	/**
+	 * 小幅度的调整fm频率
+	 * @param deincrease
+	 */
+	private void setFmFrequencySmallDeIncrease(boolean deincrease){
+		int nowFrequency = getFmFrequceny() + (deincrease ? 10 : -10); // 当前频率
+		fmSeekBar.setProgress(nowFrequency / 10 - 875);
+		textHint.setText("  " + nowFrequency / 100.0f + "MHz");
+		
+		setFmFrequency(nowFrequency);
+	}
+	
 
 	/**
 	 * 获取设置中存取的频率

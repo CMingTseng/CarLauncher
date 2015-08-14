@@ -2051,7 +2051,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
 
 	private void initFmTransmit() {
-		if (isFmTransmitOn()) {
+		//if (isFmTransmitOn()) 
+		{
 			int freq = getFmFrequceny();
 			if (freq >= 8750 && freq <= 10800)
 				setFmFrequency(freq);
