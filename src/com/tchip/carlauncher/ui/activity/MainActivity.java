@@ -344,10 +344,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 初始化服务
 	 */
 	private void initialService() {
-		// 位置
-		// Intent intentLocation = new Intent(this, LocationService.class);
-		// startService(intentLocation);
-
 		// 亮度自动调整服务
 		if (Constant.hasBrightAdjust) {
 			Intent intentBrightness = new Intent(this,
@@ -1383,6 +1379,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		option.setCoorType(tempCoor);
 		option.setScanSpan(frequence);
 		option.setOpenGps(true); // 打开gps
+		option.setIsNeedAddress(isNeedAddress);
 		mLocationClient.setLocOption(option);
 
 		mLocationClient.start();
@@ -1763,7 +1760,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							audioRecordDialog.showErrorDialog(strNoStorage);
 							// new Thread(new dismissDialogThread()).start();
 							startSpeak(strNoStorage);
-							
+
 							return false;
 						}
 					} else {
