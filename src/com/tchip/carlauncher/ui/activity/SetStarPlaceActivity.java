@@ -20,7 +20,6 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.activity.NavigationActivity.MyLocationListener;
 
 import android.app.Activity;
 import android.content.Context;

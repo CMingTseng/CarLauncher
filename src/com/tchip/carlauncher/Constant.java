@@ -26,12 +26,41 @@ public interface Constant {
 		 * 开机自动录像延时
 		 */
 		public static int autoRecordDelay = 5000;
-		
 
 		/**
 		 * 录像保存到SD卡2 true:SD2 false:SD1
 		 */
 		public static boolean saveVideoToSD2 = true;
+
+		// 分辨率
+		public static final int STATE_RESOLUTION_720P = 0;
+		public static final int STATE_RESOLUTION_1080P = 1;
+
+		// 录像状态
+		public static final int STATE_RECORD_STARTED = 0;
+		public static final int STATE_RECORD_STOPPED = 1;
+
+		// 视频分段
+		public static final int STATE_INTERVAL_3MIN = 0;
+		public static final int STATE_INTERVAL_5MIN = 1;
+
+		// 第二视图
+		public static final int STATE_SECONDARY_ENABLE = 0;
+		public static final int STATE_SECONDARY_DISABLE = 1;
+
+		// 路径
+		public static final int STATE_PATH_ZERO = 0;
+		public static final int STATE_PATH_ONE = 1;
+		public static final int STATE_PATH_TWO = 2;
+		public static final String PATH_ZERO = "/mnt/sdcard";
+
+		// 重叠
+		public static final int STATE_OVERLAP_ZERO = 0;
+		public static final int STATE_OVERLAP_FIVE = 1;
+
+		// 静音
+		public static final int STATE_MUTE = 0;
+		public static final int STATE_UNMUTE = 1;
 	}
 
 	/**

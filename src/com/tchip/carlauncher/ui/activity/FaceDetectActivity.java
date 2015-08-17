@@ -42,7 +42,6 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.FaceDetectUtil;
 import com.tchip.carlauncher.util.NetworkUtil;
-import com.tchip.carlauncher.view.ButtonFloat;
 
 public class FaceDetectActivity extends Activity {
 
@@ -104,7 +103,6 @@ public class FaceDetectActivity extends Activity {
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnGetImage:
 				// 读取图库图片
@@ -401,24 +399,24 @@ public class FaceDetectActivity extends Activity {
 		}
 	}
 
-//	private class FaceppDetect {
-//		DetectCallback callback = null;
-//
-//		public void setDetectCallback(DetectCallback detectCallback) {
-//			callback = detectCallback;
-//		}
-//
-//		public void detect(final Bitmap image) {
-//
-//			new Thread(new Runnable() {
-//
-//				public void run() {
-//					// zj: old position
-//
-//				}
-//			}).start();
-//		}
-//	}
+	// private class FaceppDetect {
+	// DetectCallback callback = null;
+	//
+	// public void setDetectCallback(DetectCallback detectCallback) {
+	// callback = detectCallback;
+	// }
+	//
+	// public void detect(final Bitmap image) {
+	//
+	// new Thread(new Runnable() {
+	//
+	// public void run() {
+	// // zj: old position
+	//
+	// }
+	// }).start();
+	// }
+	// }
 
 	interface DetectCallback {
 		void detectResult(JSONObject rst);

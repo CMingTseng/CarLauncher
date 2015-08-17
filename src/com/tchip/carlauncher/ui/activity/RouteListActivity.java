@@ -14,7 +14,6 @@ import com.tchip.carlauncher.model.SwipeMenu;
 import com.tchip.carlauncher.model.SwipeMenuItem;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.view.ButtonFlat;
-import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.SwipeMenuListView;
 import com.tchip.carlauncher.view.SwipeMenuListView.OnMenuItemClickListener;
 import com.tchip.carlauncher.view.SwipeMenuListView.OnSwipeListener;

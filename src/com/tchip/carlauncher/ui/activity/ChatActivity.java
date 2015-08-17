@@ -188,7 +188,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 			double endLongitude, String endName) {
 		BNRoutePlanNode sNode = null;
 		BNRoutePlanNode eNode = null;
-		// TODO:需要将bd09ll转成BD09_MC,GCJ02,WGS84
+		// 需要将bd09ll转成BD09_MC,GCJ02,WGS84
 		BDLocation bdLocStartBefore = new BDLocation();
 		bdLocStartBefore.setLatitude(startLatitude);
 		bdLocStartBefore.setLongitude(startLongitude);
@@ -246,55 +246,46 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		@Override
 		public void stopTTS() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void resumeTTS() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void releaseTTSPlayer() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public int playTTSText(String speech, int bPreempt) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public void phoneHangUp() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void phoneCalling() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void pauseTTS() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void initTTSPlayer() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public int getTTSState() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 	};
@@ -1032,7 +1023,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		@Override
 		public void onBeginOfSpeech() {
-			// TODO：显示对话框
+			// 显示对话框
 			audioRecordDialog.showVoiceDialog();
 		}
 

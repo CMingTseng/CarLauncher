@@ -3,33 +3,21 @@ package com.tchip.carlauncher.ui.activity;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
-import com.tchip.carlauncher.util.SettingUtil;
-import com.tchip.carlauncher.view.MaterialSwitch;
 import com.tchip.carlauncher.view.NumberSeekBar;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextClock;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class SettingSystemVolumeActivity extends Activity {
 
-	private Context context;
-
-	private SharedPreferences sharedPreferences;
-	private Editor editor;
 	private AudioManager audioManager;
 
 	@Override
@@ -39,12 +27,6 @@ public class SettingSystemVolumeActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_setting_system_volume);
-
-		context = getApplicationContext();
-
-		sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-		editor = sharedPreferences.edit();
 
 		// 返回
 		RelativeLayout layoutToSettingFromBright = (RelativeLayout) findViewById(R.id.layoutToSettingFromBright);
@@ -96,7 +78,6 @@ public class SettingSystemVolumeActivity extends Activity {
 								value, 0);
 					}
 				});
-
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

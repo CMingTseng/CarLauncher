@@ -4,7 +4,6 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.MusicInfo;
-import com.tchip.carlauncher.service.MusicServiceManager;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -17,8 +16,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

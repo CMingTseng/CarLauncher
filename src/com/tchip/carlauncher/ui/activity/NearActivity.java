@@ -15,7 +15,6 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
-import com.tchip.carlauncher.view.ButtonFloat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -289,7 +288,6 @@ public class NearActivity extends Activity {
 
 		@Override
 		public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-			// TODO Auto-generated method stub
 
 		}
 	};

@@ -10,10 +10,7 @@ import com.iflytek.cloud.SpeechUtility;
 import com.tchip.carlauncher.lib.filemanager.AppPreferences;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager;
 import com.tchip.carlauncher.lib.filemanager.FileIconResolver;
-import com.tchip.carlauncher.model.TrafficDbManager;
 import com.tchip.carlauncher.service.MusicServiceManager;
-import com.tchip.carlauncher.service.TrafficFetchService;
-import com.tchip.carlauncher.util.TrafficUtils;
 
 public class MyApplication extends Application {
 	// Music
@@ -25,7 +22,7 @@ public class MyApplication extends Application {
 
 	// Route Record
 	public static boolean isRouteRecord = false;
-	
+
 	/**
 	 * SD卡取出
 	 */

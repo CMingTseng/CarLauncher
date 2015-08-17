@@ -114,7 +114,6 @@ public class NearResultActivity extends FragmentActivity implements
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnToNearFromResult:
 				finish();

@@ -14,7 +14,6 @@ import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -135,7 +134,6 @@ public class FmTransmitActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				setFmFrequencySmallDeIncrease(false);
 			}
 		});
@@ -143,7 +141,6 @@ public class FmTransmitActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				setFmFrequencySmallDeIncrease(true);
 			}
 		});

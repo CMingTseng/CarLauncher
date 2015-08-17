@@ -21,7 +21,6 @@ import android.widget.RadioGroup;
 import android.widget.TextClock;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class SettingSystemDisplayActivity extends Activity {
 

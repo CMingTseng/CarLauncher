@@ -27,11 +27,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class UpdateMapActivity extends Activity {
 
@@ -92,7 +90,7 @@ public class UpdateMapActivity extends Activity {
 	}
 
 	private void startImportThread() {
-		// TODO：判断是否需要拷贝
+		// 判断是否需要拷贝
 		new Thread(new CopyThread()).start();
 	}
 
