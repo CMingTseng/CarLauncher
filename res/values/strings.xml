@@ -282,8 +282,10 @@
     <string name="hint_video_mute_off">录音</string>
     <string name="hint_video_mute_on">静音</string>
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
+    <string name="storage_full_cause_by_other">空间不足,请清理SD卡2</string>
     <string name="sd2_not_exist">SD卡2不存在</string>
     <string name="sd1_not_exist">SD卡1不存在</string>
+    <string name="sd_remove_badly">SD卡异常或不存在，停止录像</string>
     <string name="photo_save">照片已保存</string>
     <string name="title_navigation">导航</string>
     <string name="title_chat">语音助手</string>
@@ -326,6 +328,8 @@
     <string name="input_navigation_destination">输入导航目的地</string>
     <string name="star_company">公司</string>
     <string name="star_home">家</string>
+    <string name="hint_navi_init_fail">导航实例初始化失败，需联网后返回主界面重新初始化</string>
+    <string name="hint_navi_auth_fail">导航实例授权失败，需联网后返回主界面重新初始化</string>
 
     <string-array name="navi_intent">
         <item>导航去</item>

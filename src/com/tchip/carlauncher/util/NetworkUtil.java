@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.util;
 
+import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.activity.ChatActivity;
 
@@ -24,7 +25,7 @@ public class NetworkUtil {
 	}
 
 	public static void noNetworkHint(Context context) {
-		String strNoNetwork = "无网络链接";
+		String strNoNetwork = context.getResources().getString(R.string.hint_no_network);
 
 		Intent intent = new Intent(context, SpeakService.class);
 		intent.putExtra("content", strNoNetwork);

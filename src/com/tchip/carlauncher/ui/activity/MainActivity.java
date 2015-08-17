@@ -37,6 +37,7 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.ui.activity.NavigationActivity.dismissDialogThread;
 import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
@@ -44,6 +45,7 @@ import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.SignalUtil;
+import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -181,6 +183,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	private int simState;
 	MyPhoneStateListener MyListener;
 
+	private AudioRecordDialog audioRecordDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -195,6 +199,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		editor = sharedPreferences.edit();
 
 		videoDb = new DriveVideoDbHelper(getApplicationContext());
+
+		audioRecordDialog = new AudioRecordDialog(MainActivity.this);
 
 		initialLayout();
 		initialCameraButton();
@@ -642,10 +648,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 
 					public void initFailed() {
+						MyApplication.isNaviInitialSuccess = false;
 						if (Constant.isDebug) {
 							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
-							Toast.makeText(getApplicationContext(), "导航初始化失败",
-									Toast.LENGTH_SHORT).show();
 						}
 					}
 				}, null /* mTTSCallback */);
@@ -780,7 +785,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
 			synchronized (updateRecordTimeHandler) {
 				do {
-
 					if (MyApplication.isVideoCardEject) {
 						// 录像时视频SD卡拔出
 						Message messageEject = new Message();
@@ -797,7 +801,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageSecond.what = 1;
 						updateRecordTimeHandler.sendMessage(messageSecond);
 					}
-
 				} while (MyApplication.isVideoReording);
 			}
 		}
@@ -826,11 +829,14 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
-				String strVideoCardEject = "SD卡异常移除，停止录像";
+				String strVideoCardEject = getResources().getString(
+						R.string.sd_remove_badly);
 				Toast.makeText(getApplicationContext(), strVideoCardEject,
 						Toast.LENGTH_SHORT).show();
 				Log.e(Constant.TAG, "CardEjectReceiver:Video SD Removed");
 				startSpeak(strVideoCardEject);
+				audioRecordDialog.showErrorDialog(strVideoCardEject);
+				new Thread(new dismissDialogThread()).start();
 				break;
 
 			default:
@@ -1450,9 +1456,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 导航实例
-		if (!MyApplication.isNaviInitialSuccess) {
+		if (MyApplication.isNaviInitialSuccess) {
+			Log.v(Constant.TAG, "Navi Instance Already Initial");
+		} else {
 			initialNaviInstance();
-			Log.v(Constant.TAG, "initialNaviInstance()");
+			Log.v(Constant.TAG, "Navi Instance is Initialing...");
 		}
 
 		super.onResume();
@@ -1748,10 +1756,15 @@ public class MainActivity extends Activity implements TachographCallback,
 						if (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
 							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							Log.e(Constant.TAG, "Storage is full...");
-							Toast.makeText(MainActivity.this, "空间不足,请清理SD卡2",
-									Toast.LENGTH_LONG);
-							startSpeak("空间不足,请清理SD卡2");
-							break;
+
+							String strNoStorage = getResources().getString(
+									R.string.storage_full_cause_by_other);
+
+							audioRecordDialog.showErrorDialog(strNoStorage);
+							// new Thread(new dismissDialogThread()).start();
+							startSpeak(strNoStorage);
+							
+							return false;
 						}
 					} else {
 						// 提示用户清理空间，删除较旧的视频（加锁）
@@ -1822,27 +1835,57 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (Constant.Record.saveVideoToSD2) {
 				strNoSD = getResources().getString(R.string.sd2_not_exist);
 			}
-			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
-					.show();
+			audioRecordDialog.showErrorDialog(strNoSD);
+			new Thread(new dismissDialogThread()).start();
 			startSpeak(strNoSD);
 			return -1;
 		} else if (mMyRecorder != null) {
-			deleteOldestUnlockVideo();
-			textRecordTime.setVisibility(View.VISIBLE);
-			new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
-			if (Constant.isDebug) {
-				Log.d(Constant.TAG, "Record Start");
+			if (deleteOldestUnlockVideo()) {
+				textRecordTime.setVisibility(View.VISIBLE);
+				new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+				if (Constant.isDebug) {
+					Log.d(Constant.TAG, "Record Start");
+				}
+				// 设置保存路径
+				if (Constant.Record.saveVideoToSD2) {
+					setDirectory(Constant.Path.SDCARD_2);
+				} else {
+					setDirectory(Constant.Path.SDCARD_1);
+				}
+				return mMyRecorder.start();
 			}
-			// 设置保存路径
-			if (Constant.Record.saveVideoToSD2) {
-				setDirectory(Constant.Path.SDCARD_2);
-			} else {
-				setDirectory(Constant.Path.SDCARD_1);
-			}
-			return mMyRecorder.start();
 		}
 		return -1;
 	}
+
+	public class dismissDialogThread implements Runnable {
+		@Override
+		public void run() {
+			synchronized (dismissDialogHandler) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				Message messageEject = new Message();
+				messageEject.what = 1;
+				dismissDialogHandler.sendMessage(messageEject);
+			}
+		}
+	}
+
+	final Handler dismissDialogHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				audioRecordDialog.dismissDialog();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	public int stopRecorder() {
 		if (mMyRecorder != null) {
@@ -1879,8 +1922,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (Constant.Record.saveVideoToSD2) {
 				strNoSD = getResources().getString(R.string.sd2_not_exist);
 			}
-			Toast.makeText(getApplicationContext(), strNoSD, Toast.LENGTH_SHORT)
-					.show();
+			audioRecordDialog.showErrorDialog(strNoSD);
+			new Thread(new dismissDialogThread()).start();
 			startSpeak(strNoSD);
 			return -1;
 		} else if (mMyRecorder != null) {

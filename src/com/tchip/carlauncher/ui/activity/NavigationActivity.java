@@ -14,6 +14,8 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -78,6 +80,8 @@ import com.tchip.carlauncher.adapter.NaviResultAdapter;
 import com.tchip.carlauncher.model.NaviHistory;
 import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
+import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
@@ -139,8 +143,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private boolean isFirstLoc = true;
 
-	private String strAuthFail = "导航实例授权失败，需联网后返回主界面重新初始化";
-	private String strInitFail = "导航实例初始化失败，需联网后返回主界面重新初始化";
+	private String strAuthFail,strInitFail;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -151,6 +154,9 @@ public class NavigationActivity extends FragmentActivity implements
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_navigation);
+
+		strAuthFail = getResources().getString(R.string.hint_navi_auth_fail);
+		strInitFail = getResources().getString(R.string.hint_navi_init_fail);
 
 		naviDb = new NaviHistoryDbHelper(getApplicationContext());
 
@@ -550,16 +556,22 @@ public class NavigationActivity extends FragmentActivity implements
 					double homeLng = Double.parseDouble(preference.getString(
 							"homeLng", "0.00"));
 
+					MyApplication.isNaviAuthSuccess = false;
 					if (!MyApplication.isNaviAuthSuccess) {
-
+						// TODO:
 						Log.e(Constant.TAG, "Navigation:Auth Fail");
 						Toast.makeText(getApplicationContext(), strAuthFail,
 								Toast.LENGTH_SHORT).show();
+						audioRecordDialog.showErrorDialog(strAuthFail);
+						new Thread(new dismissDialogThread()).start();
+
 					} else if (!MyApplication.isNaviInitialSuccess) {
 
 						Log.e(Constant.TAG, "Navigation:Initial Fail");
 						Toast.makeText(getApplicationContext(), strInitFail,
 								Toast.LENGTH_SHORT).show();
+						audioRecordDialog.showErrorDialog(strInitFail);
+						new Thread(new dismissDialogThread()).start();
 					} else {
 						routeplanToNavi(CoordinateType.GCJ02,
 								nowLatLng.latitude, nowLatLng.longitude,
@@ -597,6 +609,35 @@ public class NavigationActivity extends FragmentActivity implements
 			}
 		}
 	}
+
+	public class dismissDialogThread implements Runnable {
+		@Override
+		public void run() {
+			synchronized (dismissDialogHandler) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				Message messageEject = new Message();
+				messageEject.what = 1;
+				dismissDialogHandler.sendMessage(messageEject);
+			}
+		}
+	}
+
+	final Handler dismissDialogHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				audioRecordDialog.dismissDialog();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	enum StarType {
 		TYPE_HOME, TYPE_WORK
@@ -1343,6 +1384,7 @@ public class NavigationActivity extends FragmentActivity implements
 		@Override
 		public void onError(SpeechError error) {
 			// showTip("onError Code：" + error.getErrorCode());
+			startSpeak(error.getErrorDescription());
 
 			imgVoiceSearch.setVisibility(View.VISIBLE);
 			progressVoice.setVisibility(View.GONE);
@@ -1354,5 +1396,11 @@ public class NavigationActivity extends FragmentActivity implements
 
 		}
 	};
+
+	private void startSpeak(String content) {
+		Intent intent = new Intent(NavigationActivity.this, SpeakService.class);
+		intent.putExtra("content", content);
+		startService(intent);
+	}
 
 }
