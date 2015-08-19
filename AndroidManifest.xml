@@ -261,7 +261,7 @@
                 <action android:name="android.intent.action.MEDIA_EJECT" />
                 <action android:name="android.intent.action.MEDIA_BAD_REMOVAL" />
                 <action android:name="android.intent.action.MEDIA_REMOVED" />
-                 <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
 
                 <data android:scheme="file" />
             </intent-filter>

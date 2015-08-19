@@ -126,12 +126,14 @@ public class WeatherService extends Service {
 					} catch (JSONException e) {
 						e.printStackTrace();
 						editor.putString("exception", e.toString());
+						editor.commit();
 					} finally {
 						stopSelf();
 					}
 				}
 			} else {
 				editor.putString("exception", " 识别结果不正确");
+				editor.commit();
 				// 识别结果不正确
 			}
 

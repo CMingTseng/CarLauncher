@@ -426,8 +426,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		baiduMap.setMyLocationEnabled(true);
 
 		// 自定义Marker
-		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
-				.fromResource(R.drawable.icon_arrow_up);
+		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+		// .fromResource(R.drawable.icon_arrow_up);
 
 		// 设置地图放大级别 0-19
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
@@ -1253,12 +1253,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					.direction(100).latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
 			baiduMap.setMyLocationData(locData);
-			if (isFirstLoc) {
-				LatLng ll = new LatLng(location.getLatitude(),
-						location.getLongitude());
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-				baiduMap.animateMapStatus(u);
-			}
+
+			// if (isFirstLoc) {
+			LatLng ll = new LatLng(location.getLatitude(),
+					location.getLongitude());
+			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+			baiduMap.animateMapStatus(u);
+			// }
 
 			// 存储非“未定位”的城市信息
 			String strNotLocate = getResources().getString(R.string.not_locate);
@@ -1278,30 +1279,30 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			String cityName = location.getCity();
 
-			// if ((cityName != null) && (!cityName.equals(strNotLocate))) {
+			if ((cityName != null) && (!cityName.equals(strNotLocate))) {
 
-			// editor.putLong("cityCode", cityCode);
-			editor.putString("cityName", cityName);
-			editor.putString("cityNameRealButOld", cityName);
-			editor.putString("latitude", "" + location.getLatitude());
-			editor.putString("longitude", "" + location.getLongitude());
-			editor.putString("district", location.getDistrict());
-			// editor.putString("floor", location.getFloor());
-			editor.putString("addrStr", location.getAddrStr());
-			editor.putString("street", location.getStreet());
-			editor.putString("streetNum", location.getStreetNumber());
-			// editor.putFloat("speed", location.getSpeed());
-			editor.putString("altitude", "" + location.getAltitude());
-			editor.putString("lbsTime", location.getTime());
-			editor.commit();
+				// editor.putLong("cityCode", cityCode);
+				editor.putString("cityName", cityName);
+				editor.putString("cityNameRealButOld", cityName);
+				editor.putString("latitude", "" + location.getLatitude());
+				editor.putString("longitude", "" + location.getLongitude());
+				editor.putString("district", location.getDistrict());
+				// editor.putString("floor", location.getFloor());
+				editor.putString("addrStr", location.getAddrStr());
+				editor.putString("street", location.getStreet());
+				editor.putString("streetNum", location.getStreetNumber());
+				// editor.putFloat("speed", location.getSpeed());
+				editor.putString("altitude", "" + location.getAltitude());
+				editor.putString("lbsTime", location.getTime());
+				editor.commit();
 
-			// new Thread(networkTask).start();
-			// }
+				// new Thread(networkTask).start();
 
-			if (isFirstLoc) {
-				isFirstLoc = false;
-				// 更新天气
-				startWeatherService();
+				if (isFirstLoc) {
+					isFirstLoc = false;
+					// 更新天气
+					startWeatherService();
+				}
 			}
 		}
 
@@ -1409,8 +1410,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 导航实例
-		if (MyApplication.isNaviInitialSuccess) {
-			Log.v(Constant.TAG, "Navi Instance Already Initial");
+		if (MyApplication.isNaviAuthSuccess) {
+			Log.v(Constant.TAG, "Navi Instance Already Initial Success");
 		} else {
 			initialNaviInstance();
 			Log.v(Constant.TAG, "Navi Instance is Initialing...");

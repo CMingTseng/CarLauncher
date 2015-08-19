@@ -1,16 +1,12 @@
 package com.tchip.carlauncher.model;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.util.StorageUtil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
 public class CardEjectReceiver extends BroadcastReceiver {
 
