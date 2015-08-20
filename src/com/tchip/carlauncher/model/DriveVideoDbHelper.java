@@ -98,7 +98,30 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * 获取所有的轨迹距离信息
+	 * 根据视频名查询是否加锁
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public int getLockStateByVideoName(String name) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.query(VIDEO_TABLE_NAME, ROUTE_COL_PROJECTION,
+				VIDEO_COL_NAME + "=?", new String[] { name }, null, null, null,
+				null);
+
+		if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			int videoLock = cursor
+					.getInt(cursor.getColumnIndex(VIDEO_COL_LOCK));
+			return videoLock;
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * 获取所有的视频信息
 	 * 
 	 * @return
 	 */
@@ -129,7 +152,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		return cursor;
 	}
-	
+
 	/**
 	 * 获取加锁视频Cursor
 	 * 

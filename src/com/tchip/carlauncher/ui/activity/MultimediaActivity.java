@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -127,11 +128,18 @@ public class MultimediaActivity extends Activity {
 				break;
 
 			case R.id.layoutVideo:
+				// intentVideo.setAction("android.intent.action.VIEW");
+				// intentVideo.addCategory("android.intent.category.LAUNCHER");
+
 				ComponentName componentVideo = new ComponentName(
 						"com.mediatek.videoplayer",
 						"com.mediatek.videoplayer.MovieListActivity");
 				Intent intentVideo = new Intent();
 				intentVideo.setComponent(componentVideo);
+				intentVideo.addCategory(Intent.CATEGORY_DEFAULT);
+				intentVideo.addCategory(Intent.CATEGORY_LAUNCHER);
+				intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+						| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 				startActivity(intentVideo);
 				break;
 
