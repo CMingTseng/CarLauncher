@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.lib.filemanager;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.util.List;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 
 public class BaseFileAdapter extends RobotoAdapter<File> {

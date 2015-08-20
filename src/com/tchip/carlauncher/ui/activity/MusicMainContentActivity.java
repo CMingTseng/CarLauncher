@@ -132,17 +132,17 @@ public class MusicMainContentActivity extends FragmentActivity implements
 
 			@Override
 			public void run() {
-				if (mMusicDao.hasData()) {
-					// 如果有数据就等三秒跳转
-					mHandler.sendMessageDelayed(mHandler.obtainMessage(), 3000);
-				} else {
-					MusicUtils.queryMusic(MusicMainContentActivity.this,
-							START_FROM_LOCAL);
-					MusicUtils.queryAlbums(MusicMainContentActivity.this);
-					MusicUtils.queryArtist(MusicMainContentActivity.this);
-					MusicUtils.queryFolder(MusicMainContentActivity.this);
-					mHandler.sendEmptyMessage(1);
-				}
+				// if (mMusicDao.hasData()) {
+				// // 如果有数据就等三秒跳转
+				// mHandler.sendMessageDelayed(mHandler.obtainMessage(), 3000);
+				// } else {
+				MusicUtils.queryMusic(MusicMainContentActivity.this,
+						START_FROM_LOCAL);
+				MusicUtils.queryAlbums(MusicMainContentActivity.this);
+				MusicUtils.queryArtist(MusicMainContentActivity.this);
+				MusicUtils.queryFolder(MusicMainContentActivity.this);
+				mHandler.sendEmptyMessage(1);
+				// }
 			}
 		}).start();
 	}
@@ -294,7 +294,7 @@ public class MusicMainContentActivity extends FragmentActivity implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		// unregisterReceiver(sdCardReceiver);
+		unregisterReceiver(sdCardReceiver);
 		// unregisterReceiver(mAlarmReceiver);
 		// MyApplication.mServiceManager.exit();
 		// MyApplication.mServiceManager = null;

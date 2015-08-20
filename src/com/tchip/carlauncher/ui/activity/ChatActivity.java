@@ -335,10 +335,9 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		public void onReceive(final Context context, final Intent intent) {
 			final String action = intent.getAction();
 			if (Intent.ACTION_SCREEN_ON.equals(action)) {
-				Log.e("zms", "-----------------screen is on...");
+				Log.e(Constant.TAG, "-----------------screen is on...");
 			} else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-				Log.e("zms", "----------------- screen is off...");
-
+				Log.e(Constant.TAG, "----------------- screen is off...");
 			}
 		}
 	};

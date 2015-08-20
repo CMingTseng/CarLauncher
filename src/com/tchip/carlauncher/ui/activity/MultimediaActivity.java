@@ -10,7 +10,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -122,8 +121,15 @@ public class MultimediaActivity extends Activity {
 				break;
 
 			case R.id.layoutMusic:
-				Intent intentMusic = new Intent(getApplicationContext(),
-						MusicMainContentActivity.class);
+				// Intent intentMusic = new Intent(getApplicationContext(),
+				// MusicMainContentActivity.class);
+				// startActivity(intentMusic);
+
+				ComponentName componentMusic = new ComponentName(
+						"com.android.music",
+						"com.android.music.MusicBrowserActivity");
+				Intent intentMusic = new Intent();
+				intentMusic.setComponent(componentMusic);
 				startActivity(intentMusic);
 				break;
 
