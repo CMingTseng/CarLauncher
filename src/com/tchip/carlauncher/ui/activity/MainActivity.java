@@ -1062,9 +1062,15 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageMusicOL:
 				if (!ClickUtil.isQuickClick(800)) {
-					ComponentName componentMusic = new ComponentName(
-							"cn.kuwo.kwmusichd",
-							"cn.kuwo.kwmusichd.WelcomeActivity");
+					ComponentName componentMusic;
+					if (Constant.isMusicKuwo) {
+						componentMusic = new ComponentName("cn.kuwo.kwmusichd",
+								"cn.kuwo.kwmusichd.WelcomeActivity");
+					} else {
+						componentMusic = new ComponentName(
+								"com.kugou.playerHD2",
+								"com.kugou.playerHD.activity.SplashActivity");
+					}
 					Intent intentMusic = new Intent();
 					intentMusic.setComponent(componentMusic);
 					startActivity(intentMusic);

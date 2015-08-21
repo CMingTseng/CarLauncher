@@ -67,6 +67,11 @@ public interface Constant {
 	 * 是否有拨号短信模块
 	 */
 	public static boolean hasDialer = false;
+	
+	/**
+	 * 在线音乐是酷我还是酷狗
+	 */
+	public static final boolean isMusicKuwo = false;
 
 	/**
 	 * 是否有亮度自动调整功能
