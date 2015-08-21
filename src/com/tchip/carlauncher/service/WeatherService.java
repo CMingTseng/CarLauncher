@@ -34,6 +34,10 @@ public class WeatherService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
@@ -60,10 +64,6 @@ public class WeatherService extends Service {
 			}
 		}
 		getWeather(cityName);
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		return super.onStartCommand(intent, flags, startId);
 	}

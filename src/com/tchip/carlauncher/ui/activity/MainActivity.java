@@ -1277,6 +1277,15 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.commit();
 			}
 
+			if (isFirstLoc) {
+				// 如果初次定位未联网，则不将isFirstLoc置为false
+				if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+					isFirstLoc = false;
+				}
+				// 更新天气
+				startWeatherService();
+			}
+
 			String cityName = location.getCity();
 
 			if ((cityName != null) && (!cityName.equals(strNotLocate))) {
@@ -1297,12 +1306,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.commit();
 
 				// new Thread(networkTask).start();
-
-				if (isFirstLoc) {
-					isFirstLoc = false;
-					// 更新天气
-					startWeatherService();
-				}
 			}
 		}
 
