@@ -109,8 +109,8 @@ public class MusicMainFragment extends Fragment implements Constant,
 		mSdm.setMusicTimer(mMusicTimer);
 
 		mPlayBroadcast = new MusicPlayBroadcast();
-		IntentFilter filter = new IntentFilter(BROADCAST_NAME);
-		filter.addAction(BROADCAST_NAME);
+		IntentFilter filter = new IntentFilter(Constant.Music.BROADCAST_NAME);
+		filter.addAction(Constant.Music.BROADCAST_NAME);
 		getActivity().registerReceiver(mPlayBroadcast, filter);
 
 		// 更新音乐数目
@@ -119,9 +119,9 @@ public class MusicMainFragment extends Fragment implements Constant,
 		// 更新按钮状态
 		if (mServiceManager != null) {
 			int state = mServiceManager.getPlayState();
-			if (state == Constant.MPS_PLAYING) {
+			if (state == Constant.Music.MPS_PLAYING) {
 				mServiceManager.rePlay();
-			} else if (state == Constant.MPS_PAUSE) {
+			} else if (state == Constant.Music.MPS_PAUSE) {
 				mServiceManager.pause();
 			}
 		}
@@ -158,7 +158,7 @@ public class MusicMainFragment extends Fragment implements Constant,
 		public int getCount() {
 			return 5;
 		}
-		
+
 		@Override
 		public Object getItem(int arg0) {
 			return null;
@@ -225,19 +225,19 @@ public class MusicMainFragment extends Fragment implements Constant,
 					int from = -1;
 					switch (position) {
 					case 0:// 我的音乐
-						from = START_FROM_LOCAL;
+						from = Constant.Music.START_FROM_LOCAL;
 						break;
 					case 1:// 我的最爱
-						from = START_FROM_FAVORITE;
+						from = Constant.Music.START_FROM_FAVORITE;
 						break;
 					case 2:// 文件夹
-						from = START_FROM_FOLDER;
+						from = Constant.Music.START_FROM_FOLDER;
 						break;
 					case 3:// 歌手
-						from = START_FROM_ARTIST;
+						from = Constant.Music.START_FROM_ARTIST;
 						break;
 					case 4:// 专辑
-						from = START_FROM_ALBUM;
+						from = Constant.Music.START_FROM_ALBUM;
 						break;
 					}
 					mUIManager.setContentType(from);
@@ -277,16 +277,19 @@ public class MusicMainFragment extends Fragment implements Constant,
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(BROADCAST_NAME)) {
+			if (intent.getAction().equals(Constant.Music.BROADCAST_NAME)) {
 				MusicInfo music = new MusicInfo();
-				int playState = intent.getIntExtra(PLAY_STATE_NAME, MPS_NOFILE);
-				int curPlayIndex = intent.getIntExtra(PLAY_MUSIC_INDEX, -1);
+				int playState = intent.getIntExtra(
+						Constant.Music.PLAY_STATE_NAME,
+						Constant.Music.MPS_NOFILE);
+				int curPlayIndex = intent.getIntExtra(
+						Constant.Music.PLAY_MUSIC_INDEX, -1);
 				Bundle bundle = intent.getBundleExtra(MusicInfo.KEY_MUSIC);
 				if (bundle != null) {
 					music = bundle.getParcelable(MusicInfo.KEY_MUSIC);
 				}
 				switch (playState) {
-				case MPS_INVALID:// 考虑后面加上如果文件不可播放直接跳到下一首
+				case Constant.Music.MPS_INVALID:// 考虑后面加上如果文件不可播放直接跳到下一首
 					mMusicTimer.stopTimer();
 					mSdm.refreshUI(0, music.duration, music);
 					mSdm.showPlay(true);
@@ -294,7 +297,7 @@ public class MusicMainFragment extends Fragment implements Constant,
 					mBottomUIManager.refreshUI(0, music.duration, music);
 					mBottomUIManager.showPlay(true);
 					break;
-				case MPS_PAUSE:
+				case Constant.Music.MPS_PAUSE:
 					mMusicTimer.stopTimer();
 					mSdm.refreshUI(mServiceManager.position(), music.duration,
 							music);
@@ -306,7 +309,7 @@ public class MusicMainFragment extends Fragment implements Constant,
 
 					mServiceManager.cancelNotification();
 					break;
-				case MPS_PLAYING:
+				case Constant.Music.MPS_PLAYING:
 					mMusicTimer.startTimer();
 					mSdm.refreshUI(mServiceManager.position(), music.duration,
 							music);
@@ -317,7 +320,7 @@ public class MusicMainFragment extends Fragment implements Constant,
 					mBottomUIManager.showPlay(false);
 
 					break;
-				case MPS_PREPARE:
+				case Constant.Music.MPS_PREPARE:
 					mMusicTimer.stopTimer();
 					mSdm.refreshUI(0, music.duration, music);
 					mSdm.showPlay(true);

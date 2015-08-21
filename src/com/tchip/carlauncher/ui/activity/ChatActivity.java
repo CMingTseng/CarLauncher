@@ -676,7 +676,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										}
 									}
 								} else if ("telephone".equals(strService)) {
-									if (Constant.hasDialer) {
+									if (Constant.Module.hasDialer) {
 										// 打电话给张三 "operation": "CALL"
 										String peopleName = jsonObject
 												.getJSONObject("semantic")
@@ -748,7 +748,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										startSpeak(strAnswer);
 									}
 								} else if ("message".equals(strService)) {
-									if (Constant.hasDialer) {
+									if (Constant.Module.hasDialer) {
 										// 发短信给小张晚上一起吃饭。operation:SEND
 										String peopleName = jsonObject
 												.getJSONObject("semantic")

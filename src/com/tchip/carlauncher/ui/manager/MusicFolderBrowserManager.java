@@ -27,8 +27,8 @@ import com.tchip.carlauncher.util.MusicUtils;
 /**
  * 文件夹列表
  */
-public class MusicFolderBrowserManager extends MusicMainUIManager implements Constant,
-		OnItemClickListener, OnClickListener {
+public class MusicFolderBrowserManager extends MusicMainUIManager implements
+		Constant, OnItemClickListener, OnClickListener {
 
 	private Activity mActivity;
 	private LayoutInflater mInflater;
@@ -127,8 +127,8 @@ public class MusicFolderBrowserManager extends MusicMainUIManager implements Con
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		mUIManager
-				.setContentType(FOLDER_TO_MYMUSIC, mAdapter.getItem(position));
+		mUIManager.setContentType(Constant.Music.FOLDER_TO_MYMUSIC,
+				mAdapter.getItem(position));
 	}
 
 	@Override

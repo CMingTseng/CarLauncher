@@ -568,8 +568,8 @@ public class RoutePlanActivity extends Activity implements
 								+ startLongitude + "," + startLatitude
 								+ "&destination=" + endLongitude + ","
 								+ endLatitude + "&output=json&ak="
-								+ Constant.BAIDU_API_KEY + "&mcode="
-								+ Constant.BAIDU_MCODE);
+								+ Constant.BaiduMap.API_KEY + "&mcode="
+								+ Constant.BaiduMap.MCODE);
 				URLConnection ucon = uri.openConnection();
 				InputStream is = ucon.getInputStream();
 				BufferedInputStream bis = new BufferedInputStream(is);

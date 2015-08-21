@@ -93,9 +93,9 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 		mActivity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		mPlayBroadcast = new MusicPlayBroadcast();
-		IntentFilter filter = new IntentFilter(BROADCAST_NAME);
-		filter.addAction(BROADCAST_NAME);
-		filter.addAction(BROADCAST_QUERY_COMPLETE_NAME);
+		IntentFilter filter = new IntentFilter(Constant.Music.BROADCAST_NAME);
+		filter.addAction(Constant.Music.BROADCAST_NAME);
+		filter.addAction(Constant.Music.BROADCAST_QUERY_COMPLETE_NAME);
 		mActivity.registerReceiver(mPlayBroadcast, filter);
 
 		mUIm = new MusicMyUIManager(mActivity, mServiceManager, view,
@@ -120,7 +120,7 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 			mMainLayout.setBackgroundDrawable(new BitmapDrawable(mActivity
 					.getResources(), bitmap));
 		} else {
-			//mMainLayout.setBackgroundResource(R.drawable.bg);
+			// mMainLayout.setBackgroundResource(R.drawable.bg);
 		}
 	}
 
@@ -128,10 +128,11 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 		try {
 			mSdm.setListViewAdapter(mAdapter);
 			int playState = mServiceManager.getPlayState();
-			if (playState == MPS_NOFILE || playState == MPS_INVALID) {
+			if (playState == Constant.Music.MPS_NOFILE
+					|| playState == Constant.Music.MPS_INVALID) {
 				return;
 			}
-			if (playState == MPS_PLAYING) {
+			if (playState == Constant.Music.MPS_PLAYING) {
 				mMusicTimer.startTimer();
 			}
 			List<MusicInfo> musicList = mAdapter.getData();
@@ -165,36 +166,39 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 		});
 		StringBuffer select = new StringBuffer();
 		switch (mFrom) {
-		case START_FROM_ARTIST:
+		case Constant.Music.START_FROM_ARTIST:
 			MusicArtistInfo artistInfo = (MusicArtistInfo) mObj;
 			// select.append(" and " + Media.ARTIST + " = '"
 			// + artistInfo.artist_name + "'");
 			mAdapter.setData(MusicUtils.queryMusic(mActivity,
 					select.toString(), artistInfo.artist_name,
-					START_FROM_ARTIST));
+					Constant.Music.START_FROM_ARTIST));
 			break;
-		case START_FROM_ALBUM:
+
+		case Constant.Music.START_FROM_ALBUM:
 			MusicAlbumInfo albumInfo = (MusicAlbumInfo) mObj;
 			// select.append(" and " + Media.ALBUM_ID + " = "
 			// + albumInfo.album_id);
 			mAdapter.setData(MusicUtils.queryMusic(mActivity,
 					select.toString(), albumInfo.album_id + "",
-					START_FROM_ALBUM));
+					Constant.Music.START_FROM_ALBUM));
 			break;
-		case START_FROM_FOLDER:
+
+		case Constant.Music.START_FROM_FOLDER:
 			MusicFolderInfo folderInfo = (MusicFolderInfo) mObj;
 			// select.append(" and " + Media.DATA + " like '"
 			// + folderInfo.folder_path + File.separator + "%'");
 			mAdapter.setData(MusicUtils.queryMusic(mActivity,
 					select.toString(), folderInfo.folder_path,
-					START_FROM_FOLDER));
+					Constant.Music.START_FROM_FOLDER));
 			break;
-		case START_FROM_FAVORITE:
+		case Constant.Music.START_FROM_FAVORITE:
 			mAdapter.setData(MusicUtils.queryFavorite(mActivity),
-					START_FROM_FAVORITE);
+					Constant.Music.START_FROM_FAVORITE);
 			break;
 		default:
-			mAdapter.setData(MusicUtils.queryMusic(mActivity, START_FROM_LOCAL));
+			mAdapter.setData(MusicUtils.queryMusic(mActivity,
+					Constant.Music.START_FROM_LOCAL));
 			break;
 		}
 	}
@@ -203,17 +207,20 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(BROADCAST_NAME)) {
+			if (intent.getAction().equals(Constant.Music.BROADCAST_NAME)) {
 				MusicInfo music = new MusicInfo();
-				int playState = intent.getIntExtra(PLAY_STATE_NAME, MPS_NOFILE);
-				int curPlayIndex = intent.getIntExtra(PLAY_MUSIC_INDEX, -1);
+				int playState = intent.getIntExtra(
+						Constant.Music.PLAY_STATE_NAME,
+						Constant.Music.MPS_NOFILE);
+				int curPlayIndex = intent.getIntExtra(
+						Constant.Music.PLAY_MUSIC_INDEX, -1);
 				Bundle bundle = intent.getBundleExtra(MusicInfo.KEY_MUSIC);
 				if (bundle != null) {
 					music = bundle.getParcelable(MusicInfo.KEY_MUSIC);
 				}
 				mAdapter.setPlayState(playState, curPlayIndex);
 				switch (playState) {
-				case MPS_INVALID:// 考虑后面加上如果文件不可播放直接跳到下一首
+				case Constant.Music.MPS_INVALID:// 考虑后面加上如果文件不可播放直接跳到下一首
 					mMusicTimer.stopTimer();
 					mSdm.refreshUI(0, music.duration, music);
 					mSdm.showPlay(true);
@@ -222,7 +229,7 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 					mUIm.showPlay(true);
 					mServiceManager.next();
 					break;
-				case MPS_PAUSE:
+				case Constant.Music.MPS_PAUSE:
 					mMusicTimer.stopTimer();
 					mSdm.refreshUI(mServiceManager.position(), music.duration,
 							music);
@@ -234,7 +241,7 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 
 					mServiceManager.cancelNotification();
 					break;
-				case MPS_PLAYING:
+				case Constant.Music.MPS_PLAYING:
 					mMusicTimer.startTimer();
 					mSdm.refreshUI(mServiceManager.position(), music.duration,
 							music);
@@ -253,7 +260,7 @@ public class MusicManager extends MusicMainUIManager implements Constant,
 							music.artist);
 
 					break;
-				case MPS_PREPARE:
+				case Constant.Music.MPS_PREPARE:
 					mMusicTimer.stopTimer();
 					mSdm.refreshUI(0, music.duration, music);
 					mSdm.showPlay(true);

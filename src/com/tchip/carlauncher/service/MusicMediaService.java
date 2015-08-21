@@ -70,8 +70,8 @@ public class MusicMediaService extends Service implements Constant,
 		registerReceiver(mConrolBroadcast, filter);
 
 		mPlayBroadcast = new MusicPlayBroadcast();
-		IntentFilter filter1 = new IntentFilter(BROADCAST_NAME);
-		filter1.addAction(BROADCAST_SHAKE);
+		IntentFilter filter1 = new IntentFilter(Constant.Music.BROADCAST_NAME);
+		filter1.addAction(Constant.Music.BROADCAST_SHAKE);
 		registerReceiver(mPlayBroadcast, filter1);
 	}
 
@@ -131,10 +131,10 @@ public class MusicMediaService extends Service implements Constant,
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(BROADCAST_NAME)) {
-				int playState = intent.getIntExtra(PLAY_STATE_NAME, MPS_NOFILE);
+			if (intent.getAction().equals(Constant.Music.BROADCAST_NAME)) {
+				int playState = intent.getIntExtra(Constant.Music.PLAY_STATE_NAME, Constant.Music.MPS_NOFILE);
 				switch (playState) {
-				case MPS_PLAYING:
+				case Constant.Music.MPS_PLAYING:
 					mIsPlaying = true;
 					if (mSp.getShake()) {
 						mShakeDetector.start();
@@ -144,8 +144,8 @@ public class MusicMediaService extends Service implements Constant,
 					mIsPlaying = false;
 					mShakeDetector.stop();
 				}
-			} else if (intent.getAction().equals(BROADCAST_SHAKE)) {
-				mShake = intent.getBooleanExtra(SHAKE_ON_OFF, false);
+			} else if (intent.getAction().equals(Constant.Music.BROADCAST_SHAKE)) {
+				mShake = intent.getBooleanExtra(Constant.Music.SHAKE_ON_OFF, false);
 				if (mShake && mIsPlaying) {// 如果开启了监听并且歌曲正在播放
 					mShakeDetector.start();
 				} else if (!mShake) {

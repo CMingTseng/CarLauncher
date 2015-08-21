@@ -181,7 +181,7 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleWifi:
-				if (Constant.isWifiSystem) {
+				if (Constant.Module.isWifiSystem) {
 					startActivity(new Intent(
 							android.provider.Settings.ACTION_WIFI_SETTINGS));
 				} else {

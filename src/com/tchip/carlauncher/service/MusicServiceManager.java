@@ -257,7 +257,7 @@ public class MusicServiceManager implements Constant {
 			}
 		}
 		mContext.unbindService(mConn);
-		mContext.stopService(new Intent(SERVICE_NAME));
+		mContext.stopService(new Intent(Constant.Music.SERVICE_NAME));
 	}
 
 	public void updateNotification(Bitmap bitmap, String title, String name) {

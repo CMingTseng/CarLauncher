@@ -76,7 +76,7 @@ public class MultimediaActivity extends Activity {
 	private void updateRecentMusic() {
 		String nowPlayMusic = MyApplication.nowPlayMusic;
 		if (MyApplication.mServiceManager != null
-				&& MyApplication.mServiceManager.getPlayState() == Constant.MPS_PLAYING
+				&& MyApplication.mServiceManager.getPlayState() == Constant.Music.MPS_PLAYING
 				&& nowPlayMusic != null && nowPlayMusic.trim().length() > 0) {
 			MusicInfo musicNow = MyApplication.mServiceManager.getCurMusic();
 			MyApplication.nowPlayMusic = musicNow.artist + "-"

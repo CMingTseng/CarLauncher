@@ -81,7 +81,7 @@ public class MusicListSearchActivity extends Activity implements
 
 	private Animation mAnimIn, mAnimOut;
 	private MusicPlayBroadcast mPlayBroadcast;
-	private int mPlayState = MPS_PLAYING;
+	private int mPlayState = Constant.Music.MPS_PLAYING;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class MusicListSearchActivity extends Activity implements
 		setContentView(R.layout.music_search);
 
 		mPlayBroadcast = new MusicPlayBroadcast();
-		IntentFilter filter = new IntentFilter(BROADCAST_NAME);
+		IntentFilter filter = new IntentFilter(Constant.Music.BROADCAST_NAME);
 		registerReceiver(mPlayBroadcast, filter);
 
 		mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -260,9 +260,9 @@ public class MusicListSearchActivity extends Activity implements
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(BROADCAST_NAME)) {
-				int playState = intent.getIntExtra(PLAY_STATE_NAME, MPS_NOFILE);
-				int curPlayIndex = intent.getIntExtra(PLAY_MUSIC_INDEX, -1);
+			if (intent.getAction().equals(Constant.Music.BROADCAST_NAME)) {
+				int playState = intent.getIntExtra(Constant.Music.PLAY_STATE_NAME, Constant.Music.MPS_NOFILE);
+				int curPlayIndex = intent.getIntExtra(Constant.Music.PLAY_MUSIC_INDEX, -1);
 
 				mAdapter.setPlayState(playState, curPlayIndex);
 			}
@@ -336,7 +336,7 @@ public class MusicListSearchActivity extends Activity implements
 				viewHolder.playStateIv.setVisibility(View.GONE);
 			} else {
 				viewHolder.playStateIv.setVisibility(View.VISIBLE);
-				if (mPlayState == MPS_PAUSE) {
+				if (mPlayState == Constant.Music.MPS_PAUSE) {
 					viewHolder.playStateIv
 							.setBackgroundResource(R.drawable.list_pause_state);
 				} else {

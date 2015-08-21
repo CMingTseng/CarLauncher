@@ -95,7 +95,7 @@ public class WeatherActivity extends Activity {
 	}
 
 	private void showWeatherAnimation(WEATHER_TYPE type) {
-		if (Constant.hasWeatherAnimation) {
+		if (Constant.Module.hasWeatherAnimation) {
 			frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
 			switch (type) {
 			case RAIN:
@@ -198,7 +198,7 @@ public class WeatherActivity extends Activity {
 		textTempRange.setText(day0tmpLow + "~" + day0tmpHigh);
 		textTempRange.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-		if (Constant.hasWeatherAnimation) {
+		if (Constant.Module.hasWeatherAnimation) {
 			new Titanic().start(textTempRange);
 		} else {
 			textTempRange.setTextColor(Color.WHITE);

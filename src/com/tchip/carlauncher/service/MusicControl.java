@@ -36,8 +36,8 @@ public class MusicControl implements Constant, OnCompletionListener {
 		mMediaPlayer = new MediaPlayer();
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mMediaPlayer.setOnCompletionListener(this);
-		mPlayMode = MPM_LIST_LOOP_PLAY;
-		mPlayState = MPS_NOFILE;
+		mPlayMode = Constant.Music.MPM_LIST_LOOP_PLAY;
+		mPlayState = Constant.Music.MPS_NOFILE;
 		mCurPlayIndex = -1;
 		mCurMusicId = -1;
 		this.mContext = context;
@@ -52,7 +52,7 @@ public class MusicControl implements Constant, OnCompletionListener {
 		if (mCurPlayIndex == pos) {
 			if (!mMediaPlayer.isPlaying()) {
 				mMediaPlayer.start();
-				mPlayState = MPS_PLAYING;
+				mPlayState = Constant.Music.MPS_PLAYING;
 				sendBroadCast();
 			} else {
 				pause();
@@ -78,7 +78,7 @@ public class MusicControl implements Constant, OnCompletionListener {
 		if (mCurMusicId == id) {
 			if (!mMediaPlayer.isPlaying()) {
 				mMediaPlayer.start();
-				mPlayState = MPS_PLAYING;
+				mPlayState = Constant.Music.MPS_PLAYING;
 				sendBroadCast();
 			} else {
 				pause();
@@ -93,28 +93,28 @@ public class MusicControl implements Constant, OnCompletionListener {
 	}
 
 	public boolean replay() {
-		if (mPlayState == MPS_INVALID || mPlayState == MPS_NOFILE) {
+		if (mPlayState == Constant.Music.MPS_INVALID || mPlayState == Constant.Music.MPS_NOFILE) {
 			return false;
 		}
 
 		mMediaPlayer.start();
-		mPlayState = MPS_PLAYING;
+		mPlayState = Constant.Music.MPS_PLAYING;
 		sendBroadCast();
 		return true;
 	}
 
 	public boolean pause() {
-		if (mPlayState != MPS_PLAYING) {
+		if (mPlayState != Constant.Music.MPS_PLAYING) {
 			return false;
 		}
 		mMediaPlayer.pause();
-		mPlayState = MPS_PAUSE;
+		mPlayState = Constant.Music.MPS_PAUSE;
 		sendBroadCast();
 		return true;
 	}
 
 	public boolean prev() {
-		if (mPlayState == MPS_NOFILE) {
+		if (mPlayState == Constant.Music.MPS_NOFILE) {
 			return false;
 		}
 		mCurPlayIndex--;
@@ -126,7 +126,7 @@ public class MusicControl implements Constant, OnCompletionListener {
 	}
 
 	public boolean next() {
-		if (mPlayState == MPS_NOFILE) {
+		if (mPlayState == Constant.Music.MPS_NOFILE) {
 			return false;
 		}
 		mCurPlayIndex++;
@@ -148,7 +148,7 @@ public class MusicControl implements Constant, OnCompletionListener {
 	}
 
 	public int position() {
-		if (mPlayState == MPS_PLAYING || mPlayState == MPS_PAUSE) {
+		if (mPlayState == Constant.Music.MPS_PLAYING || mPlayState == Constant.Music.MPS_PAUSE) {
 			return mMediaPlayer.getCurrentPosition();
 		}
 		return 0;
@@ -160,14 +160,14 @@ public class MusicControl implements Constant, OnCompletionListener {
 	 * @return
 	 */
 	public int duration() {
-		if (mPlayState == MPS_INVALID || mPlayState == MPS_NOFILE) {
+		if (mPlayState == Constant.Music.MPS_INVALID || mPlayState == Constant.Music.MPS_NOFILE) {
 			return 0;
 		}
 		return mMediaPlayer.getDuration();
 	}
 
 	public boolean seekTo(int progress) {
-		if (mPlayState == MPS_INVALID || mPlayState == MPS_NOFILE) {
+		if (mPlayState == Constant.Music.MPS_INVALID || mPlayState == Constant.Music.MPS_NOFILE) {
 			return false;
 		}
 		int pro = reviseSeekValue(progress);
@@ -190,7 +190,7 @@ public class MusicControl implements Constant, OnCompletionListener {
 		mMusicList.clear();
 		mMusicList.addAll(musicList);
 		if (mMusicList.size() == 0) {
-			mPlayState = MPS_NOFILE;
+			mPlayState = Constant.Music.MPS_NOFILE;
 			mCurPlayIndex = -1;
 			return;
 		}
@@ -211,10 +211,10 @@ public class MusicControl implements Constant, OnCompletionListener {
 		try {
 			mMediaPlayer.setDataSource(path);
 			mMediaPlayer.prepare();
-			mPlayState = MPS_PREPARE;
+			mPlayState = Constant.Music.MPS_PREPARE;
 		} catch (Exception e) {
 			Log.e(TAG, "", e);
-			mPlayState = MPS_INVALID;
+			mPlayState = Constant.Music.MPS_INVALID;
 			if (pos < mMusicList.size()) {
 				pos++;
 				playById(mMusicList.get(pos).songId);
@@ -227,11 +227,11 @@ public class MusicControl implements Constant, OnCompletionListener {
 	}
 
 	public void sendBroadCast() {
-		Intent intent = new Intent(BROADCAST_NAME);
-		intent.putExtra(PLAY_STATE_NAME, mPlayState);
-		intent.putExtra(PLAY_MUSIC_INDEX, mCurPlayIndex);
+		Intent intent = new Intent(Constant.Music.BROADCAST_NAME);
+		intent.putExtra(Constant.Music.PLAY_STATE_NAME, mPlayState);
+		intent.putExtra(Constant.Music.PLAY_MUSIC_INDEX, mCurPlayIndex);
 		intent.putExtra("music_num", mMusicList.size());
-		if (mPlayState != MPS_NOFILE && mMusicList.size() > 0) {
+		if (mPlayState != Constant.Music.MPS_NOFILE && mMusicList.size() > 0) {
 			Bundle bundle = new Bundle();
 			mCurMusic = mMusicList.get(mCurPlayIndex);
 			mCurMusicId = mCurMusic.songId;
@@ -259,10 +259,10 @@ public class MusicControl implements Constant, OnCompletionListener {
 
 	public void setPlayMode(int mode) {
 		switch (mode) {
-		case MPM_LIST_LOOP_PLAY:
-		case MPM_ORDER_PLAY:
-		case MPM_RANDOM_PLAY:
-		case MPM_SINGLE_LOOP_PLAY:
+		case Constant.Music.MPM_LIST_LOOP_PLAY:
+		case Constant.Music.MPM_ORDER_PLAY:
+		case Constant.Music.MPM_RANDOM_PLAY:
+		case Constant.Music.MPM_SINGLE_LOOP_PLAY:
 			mPlayMode = mode;
 			break;
 		}
@@ -275,17 +275,17 @@ public class MusicControl implements Constant, OnCompletionListener {
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		switch (mPlayMode) {
-		case MPM_LIST_LOOP_PLAY:
+		case Constant.Music.MPM_LIST_LOOP_PLAY:
 			next();
 			break;
-		case MPM_ORDER_PLAY:
+		case Constant.Music.MPM_ORDER_PLAY:
 			if (mCurPlayIndex != mMusicList.size() - 1) {
 				next();
 			} else {
 				prepare(mCurPlayIndex);
 			}
 			break;
-		case MPM_RANDOM_PLAY:
+		case Constant.Music.MPM_RANDOM_PLAY:
 			int index = getRandomIndex();
 			if (index != -1) {
 				mCurPlayIndex = index;
@@ -296,7 +296,7 @@ public class MusicControl implements Constant, OnCompletionListener {
 				replay();
 			}
 			break;
-		case MPM_SINGLE_LOOP_PLAY:
+		case Constant.Music.MPM_SINGLE_LOOP_PLAY:
 			play(mCurPlayIndex);
 			break;
 		}

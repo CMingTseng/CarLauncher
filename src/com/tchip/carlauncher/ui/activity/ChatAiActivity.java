@@ -637,7 +637,7 @@ public class ChatAiActivity extends Activity {
 					String strAction = jsonSem.getString("action");
 					if (strDomain != null && strDomain.trim().length() > 0) {
 						if ("phone".equals(strDomain)) {
-							if (Constant.hasDialer) {
+							if (Constant.Module.hasDialer) {
 								// action:call
 
 							} else {

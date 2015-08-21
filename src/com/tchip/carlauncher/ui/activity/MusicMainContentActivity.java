@@ -137,7 +137,7 @@ public class MusicMainContentActivity extends FragmentActivity implements
 				// mHandler.sendMessageDelayed(mHandler.obtainMessage(), 3000);
 				// } else {
 				MusicUtils.queryMusic(MusicMainContentActivity.this,
-						START_FROM_LOCAL);
+						Constant.Music.START_FROM_LOCAL);
 				MusicUtils.queryAlbums(MusicMainContentActivity.this);
 				MusicUtils.queryArtist(MusicMainContentActivity.this);
 				MusicUtils.queryFolder(MusicMainContentActivity.this);

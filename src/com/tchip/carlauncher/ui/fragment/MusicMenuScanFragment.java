@@ -37,8 +37,8 @@ public class MusicMenuScanFragment extends Fragment implements Constant,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.music_menu_scan_fragment, container,
-				false);
+		View view = inflater.inflate(R.layout.music_menu_scan_fragment,
+				container, false);
 		mScanBtn = (Button) view.findViewById(R.id.scanBtn);
 		mBackBtn = (ImageButton) view.findViewById(R.id.backBtn);
 		mScanBtn.setOnClickListener(this);
@@ -49,8 +49,8 @@ public class MusicMenuScanFragment extends Fragment implements Constant,
 			public void handleMessage(Message msg) {
 				super.handleMessage(msg);
 				mProgress.dismiss();
-				((MusicMenuScanActivity) getActivity()).mViewPager.setCurrentItem(0,
-						true);
+				((MusicMenuScanActivity) getActivity()).mViewPager
+						.setCurrentItem(0, true);
 			}
 		};
 
@@ -63,7 +63,8 @@ public class MusicMenuScanFragment extends Fragment implements Constant,
 			@Override
 			public void run() {
 				mHelper.deleteTables(getActivity());
-				MusicUtils.queryMusic(getActivity(), START_FROM_LOCAL);
+				MusicUtils.queryMusic(getActivity(),
+						Constant.Music.START_FROM_LOCAL);
 				MusicUtils.queryAlbums(getActivity());
 				MusicUtils.queryArtist(getActivity());
 				MusicUtils.queryFolder(getActivity());
@@ -82,8 +83,8 @@ public class MusicMenuScanFragment extends Fragment implements Constant,
 			mProgress.show();
 			getData();
 		} else if (v == mBackBtn) {
-			((MusicMenuScanActivity) getActivity()).mViewPager.setCurrentItem(0,
-					true);
+			((MusicMenuScanActivity) getActivity()).mViewPager.setCurrentItem(
+					0, true);
 		}
 	}
 }

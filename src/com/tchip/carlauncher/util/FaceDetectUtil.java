@@ -31,8 +31,8 @@ public class FaceDetectUtil {
 				try {
 					// 请求
 					HttpRequests httpRequests = new HttpRequests(
-							Constant.FACE_API_KEY, Constant.FACE_API_SECRET,
-							true, true);
+							Constant.FacePlusPlus.API_KEY,
+							Constant.FacePlusPlus.API_SECRET, true, true);
 					// Log.v(TAG, "image size : " + img.getWidth() + " " +
 					// img.getHeight());
 
@@ -56,12 +56,12 @@ public class FaceDetectUtil {
 					params.setImg(array);
 
 					JSONObject result = httpRequests.detectionDetect(params);
-					if(faceCallBack!=null){
+					if (faceCallBack != null) {
 						faceCallBack.success(result);
 					}
 				} catch (FaceppParseException e) {
 					e.printStackTrace();
-					if(faceCallBack!=null){
+					if (faceCallBack != null) {
 						faceCallBack.error(e);
 					}
 				}

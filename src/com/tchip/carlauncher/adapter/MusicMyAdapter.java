@@ -164,7 +164,7 @@ public class MusicMyAdapter extends BaseAdapter implements Constant {
 			viewHolder.playStateIconIv.setVisibility(View.GONE);
 		} else {
 			viewHolder.playStateIconIv.setVisibility(View.VISIBLE);
-			if (mPlayState == MPS_PAUSE) {
+			if (mPlayState == Constant.Music.MPS_PAUSE) {
 				viewHolder.playStateIconIv
 						.setBackgroundResource(R.drawable.list_pause_state);
 			} else {
@@ -178,7 +178,7 @@ public class MusicMyAdapter extends BaseAdapter implements Constant {
 			@Override
 			public void onClick(View v) {
 				if (music.favorite == 1) {
-					if (mFrom == START_FROM_FAVORITE) {
+					if (mFrom == Constant.Music.START_FROM_FAVORITE) {
 						mMusicList.remove(position);
 						notifyDataSetChanged();
 					}

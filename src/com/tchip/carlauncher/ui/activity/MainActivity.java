@@ -175,7 +175,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 开机尝试连接WiFi
-		if (!Constant.isWifiSystem) {
+		if (!Constant.Module.isWifiSystem) {
 			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 			ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 			NetworkInfo mWifi = connManager
@@ -304,7 +304,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void initialService() {
 		// 亮度自动调整服务
-		if (Constant.hasBrightAdjust) {
+		if (Constant.Module.hasBrightAdjust) {
 			Intent intentBrightness = new Intent(this,
 					BrightAdjustService.class);
 			startService(intentBrightness);
@@ -452,7 +452,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		imageFileExplore.setOnClickListener(new MyOnClickListener());
 
 		RelativeLayout layoutFileExplore = (RelativeLayout) findViewById(R.id.layoutFileExplore);
-		if (Constant.hasFileManager) {
+		if (Constant.Module.hasFileManager) {
 			layoutFileExplore.setVisibility(View.VISIBLE);
 		} else {
 			layoutFileExplore.setVisibility(View.GONE);
@@ -845,7 +845,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				updateWiFiState();
 
 				// 连接WiFi
-				if (!Constant.isWifiSystem) {
+				if (!Constant.Module.isWifiSystem) {
 					WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 					ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 					NetworkInfo mWifi = connManager
@@ -1063,7 +1063,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageMusicOL:
 				if (!ClickUtil.isQuickClick(800)) {
 					ComponentName componentMusic;
-					if (Constant.isMusicKuwo) {
+					if (Constant.Module.isMusicKuwo) {
 						componentMusic = new ComponentName("cn.kuwo.kwmusichd",
 								"cn.kuwo.kwmusichd.WelcomeActivity");
 					} else {
@@ -1142,7 +1142,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageVoiceChat:
 				if (!ClickUtil.isQuickClick(800)) {
 					Intent intentVoiceChat;
-					if (Constant.isVoiceXunfei) {
+					if (Constant.Module.isVoiceXunfei) {
 						// 讯飞语音
 						intentVoiceChat = new Intent(MainActivity.this,
 								ChatActivity.class);
@@ -1204,7 +1204,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.layoutWiFi:
 				if (!ClickUtil.isQuickClick(800)) {
-					if (Constant.isWifiSystem) {
+					if (Constant.Module.isWifiSystem) {
 						startActivity(new Intent(
 								android.provider.Settings.ACTION_WIFI_SETTINGS));
 					} else {
@@ -1684,7 +1684,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
-			while (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
+			while (sdFree < sdTotal * Constant.Record.SD_MIN_FREE_PERCENT) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
 				// 删除较旧未加锁视频文件
 				if (oldestUnlockVideoId != -1) {
@@ -1716,7 +1716,8 @@ public class MainActivity extends Activity implements TachographCallback,
 						RecursionDeleteFile(file);
 						Log.e(Constant.TAG, "!!! Delete tachograph/ Directory");
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-						if (sdFree < sdTotal * Constant.SD_MIN_FREE_PERCENT) {
+						if (sdFree < sdTotal
+								* Constant.Record.SD_MIN_FREE_PERCENT) {
 							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							Log.e(Constant.TAG, "Storage is full...");
 

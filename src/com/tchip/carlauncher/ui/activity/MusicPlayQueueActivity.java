@@ -124,8 +124,8 @@ public class MusicPlayQueueActivity extends Activity implements
 
 	private void changeMode() {
 		mCurMode++;
-		if (mCurMode > MPM_SINGLE_LOOP_PLAY) {
-			mCurMode = MPM_LIST_LOOP_PLAY;
+		if (mCurMode > Constant.Music.MPM_SINGLE_LOOP_PLAY) {
+			mCurMode = Constant.Music.MPM_LIST_LOOP_PLAY;
 		}
 		mPlayModeIv.setBackgroundResource(modeDrawable[mCurMode]);
 	}

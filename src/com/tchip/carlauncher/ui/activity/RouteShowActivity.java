@@ -431,11 +431,11 @@ public class RouteShowActivity extends Activity {
 	public int getOffset() {
 		String offsetStr = sharedPreferences.getString("routeSpan", "HIGH");
 		if ("LOW".equals(offsetStr))
-			return Constant.ROUTE_POINT_OFFSET_LOW;
+			return Constant.BaiduMap.ROUTE_POINT_OFFSET_LOW;
 		else if ("MIDDLE".equals(offsetStr))
-			return Constant.ROUTE_POINT_OFFSET_MIDDLE;
+			return Constant.BaiduMap.ROUTE_POINT_OFFSET_MIDDLE;
 		else
-			return Constant.ROUTE_POINT_OFFSET_HIGH;
+			return Constant.BaiduMap.ROUTE_POINT_OFFSET_HIGH;
 	}
 
 	@Override

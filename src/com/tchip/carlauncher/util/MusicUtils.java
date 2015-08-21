@@ -120,8 +120,8 @@ public class MusicUtils implements Constant {
 		if (mFolderInfoDao.hasData()) {
 			return mFolderInfoDao.getFolderInfo();
 		} else {
-			List<MusicFolderInfo> list = getFolderList(cr.query(uri, proj_folder,
-					mSelection.toString(), null, null));
+			List<MusicFolderInfo> list = getFolderList(cr.query(uri,
+					proj_folder, mSelection.toString(), null, null));
 			mFolderInfoDao.saveFolderInfo(list);
 			return list;
 		}
@@ -142,9 +142,9 @@ public class MusicUtils implements Constant {
 		if (mArtistInfoDao.hasData()) {
 			return mArtistInfoDao.getArtistInfo();
 		} else {
-			List<MusicArtistInfo> list = getArtistList(cr.query(uri, proj_artist,
-					null, null, MediaStore.Audio.Artists.NUMBER_OF_TRACKS
-							+ " desc"));
+			List<MusicArtistInfo> list = getArtistList(cr.query(uri,
+					proj_artist, null, null,
+					MediaStore.Audio.Artists.NUMBER_OF_TRACKS + " desc"));
 			mArtistInfoDao.saveArtistInfo(list);
 			return list;
 		}
@@ -222,7 +222,7 @@ public class MusicUtils implements Constant {
 		}
 
 		switch (from) {
-		case START_FROM_LOCAL:
+		case Constant.Music.START_FROM_LOCAL:
 			if (mMusicInfoDao.hasData()) {
 				return mMusicInfoDao.getMusicInfo();
 			} else {
@@ -232,24 +232,26 @@ public class MusicUtils implements Constant {
 				mMusicInfoDao.saveMusicInfo(list);
 				return list;
 			}
-		case START_FROM_ARTIST:
+
+		case Constant.Music.START_FROM_ARTIST:
 			if (mMusicInfoDao.hasData()) {
 				return mMusicInfoDao.getMusicInfoByType(selection,
-						START_FROM_ARTIST);
+						Constant.Music.START_FROM_ARTIST);
 			} else {
 				// return getMusicList(cr.query(uri, proj_music,
 				// select.toString(), null,
 				// MediaStore.Audio.Media.ARTIST_KEY));
 			}
-		case START_FROM_ALBUM:
+
+		case Constant.Music.START_FROM_ALBUM:
 			if (mMusicInfoDao.hasData()) {
 				return mMusicInfoDao.getMusicInfoByType(selection,
-						START_FROM_ALBUM);
+						Constant.Music.START_FROM_ALBUM);
 			}
-		case START_FROM_FOLDER:
+		case Constant.Music.START_FROM_FOLDER:
 			if (mMusicInfoDao.hasData()) {
 				return mMusicInfoDao.getMusicInfoByType(selection,
-						START_FROM_FOLDER);
+						Constant.Music.START_FROM_FOLDER);
 			}
 		default:
 			return null;

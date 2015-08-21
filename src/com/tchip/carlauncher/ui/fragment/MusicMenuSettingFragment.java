@@ -79,8 +79,9 @@ public class MusicMenuSettingFragment extends Fragment implements
 		case R.id.shake_change_song:
 			mChangeSongTv.toggle();
 			mSp.saveShake(mChangeSongTv.isChecked());
-			Intent intent = new Intent(BROADCAST_SHAKE);
-			intent.putExtra(SHAKE_ON_OFF, mChangeSongTv.isChecked());
+			Intent intent = new Intent(Constant.Music.BROADCAST_SHAKE);
+			intent.putExtra(Constant.Music.SHAKE_ON_OFF,
+					mChangeSongTv.isChecked());
 			getActivity().sendBroadcast(intent);
 			break;
 		case R.id.auto_download_lyric:

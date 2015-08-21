@@ -94,7 +94,8 @@ public class MusicUIManager implements Constant, OnBackListener {
 
 	private void initBroadCast() {
 		mReceiver = new ChangeBgReceiver();
-		IntentFilter filter = new IntentFilter(BROADCAST_CHANGEBG);
+		IntentFilter filter = new IntentFilter(
+				Constant.Music.BROADCAST_CHANGEBG);
 		mActivity.registerReceiver(mReceiver, filter);
 	}
 
@@ -117,7 +118,8 @@ public class MusicUIManager implements Constant, OnBackListener {
 		AssetManager am = mActivity.getAssets();
 		Bitmap bitmap = null;
 		try {
-			InputStream is = am.open(Constant.MUSIC_IMAGE_PATH + "/" + path);
+			InputStream is = am.open(Constant.Music.MUSIC_IMAGE_PATH + "/"
+					+ path);
 			bitmap = BitmapFactory.decodeStream(is);
 			is.close();
 		} catch (IOException e) {
@@ -151,11 +153,12 @@ public class MusicUIManager implements Constant, OnBackListener {
 		// 注册监听返回按钮
 		mMainActivity.registerBackListener(this);
 		switch (type) {
-		case START_FROM_LOCAL:
+		case Constant.Music.START_FROM_LOCAL:
 			mMainUIManager = new MusicManager(mActivity, this);
 			View transView1 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
-			View contentView1 = mMainUIManager.getView(START_FROM_LOCAL);
+			View contentView1 = mMainUIManager
+					.getView(Constant.Music.START_FROM_LOCAL);
 			mViewPager.setVisibility(View.VISIBLE);
 			mListViews.clear();
 			mViewPager.removeAllViews();
@@ -165,11 +168,13 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPager.setAdapter(new MyPagerAdapter(mListViews));
 			mViewPager.setCurrentItem(1, true);
 			break;
-		case START_FROM_FAVORITE:
+
+		case Constant.Music.START_FROM_FAVORITE:
 			mMainUIManager = new MusicManager(mActivity, this);
 			View transView2 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
-			View contentView2 = mMainUIManager.getView(START_FROM_FAVORITE);
+			View contentView2 = mMainUIManager
+					.getView(Constant.Music.START_FROM_FAVORITE);
 			mViewPager.setVisibility(View.VISIBLE);
 			mListViews.clear();
 			mViewPager.removeAllViews();
@@ -179,7 +184,8 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPager.setAdapter(new MyPagerAdapter(mListViews));
 			mViewPager.setCurrentItem(1, true);
 			break;
-		case START_FROM_FOLDER:
+
+		case Constant.Music.START_FROM_FOLDER:
 			mMainUIManager = new MusicFolderBrowserManager(mActivity, this);
 			View transView3 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
@@ -193,7 +199,8 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPager.setAdapter(new MyPagerAdapter(mListViews));
 			mViewPager.setCurrentItem(1, true);
 			break;
-		case START_FROM_ARTIST:
+
+		case Constant.Music.START_FROM_ARTIST:
 			mMainUIManager = new MusicArtistBrowserManager(mActivity, this);
 			View transView4 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
@@ -207,7 +214,8 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPager.setAdapter(new MyPagerAdapter(mListViews));
 			mViewPager.setCurrentItem(1, true);
 			break;
-		case START_FROM_ALBUM:
+
+		case Constant.Music.START_FROM_ALBUM:
 			mMainUIManager = new MusicAlbumBrowserManager(mActivity, this);
 			View transView5 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
@@ -221,12 +229,13 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPager.setAdapter(new MyPagerAdapter(mListViews));
 			mViewPager.setCurrentItem(1, true);
 			break;
-		case FOLDER_TO_MYMUSIC:
+
+		case Constant.Music.FOLDER_TO_MYMUSIC:
 			mMainUIManager = new MusicManager(mActivity, this);
 			View transViewSub1 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
-			View contentViewSub1 = mMainUIManager.getView(START_FROM_FOLDER,
-					obj);
+			View contentViewSub1 = mMainUIManager.getView(
+					Constant.Music.START_FROM_FOLDER, obj);
 			mViewPagerSub.setVisibility(View.VISIBLE);
 			mListViewsSub.clear();
 			mViewPagerSub.removeAllViews();
@@ -236,12 +245,13 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPagerSub.setAdapter(new MyPagerAdapter(mListViewsSub));
 			mViewPagerSub.setCurrentItem(1, true);
 			break;
-		case ARTIST_TO_MYMUSIC:
+
+		case Constant.Music.ARTIST_TO_MYMUSIC:
 			mMainUIManager = new MusicManager(mActivity, this);
 			View transViewSub2 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
-			View contentViewSub2 = mMainUIManager.getView(START_FROM_ARTIST,
-					obj);
+			View contentViewSub2 = mMainUIManager.getView(
+					Constant.Music.START_FROM_ARTIST, obj);
 			mViewPagerSub.setVisibility(View.VISIBLE);
 			mListViewsSub.clear();
 			mViewPagerSub.removeAllViews();
@@ -251,12 +261,13 @@ public class MusicUIManager implements Constant, OnBackListener {
 			mViewPagerSub.setAdapter(new MyPagerAdapter(mListViewsSub));
 			mViewPagerSub.setCurrentItem(1, true);
 			break;
-		case ALBUM_TO_MYMUSIC:
+
+		case Constant.Music.ALBUM_TO_MYMUSIC:
 			mMainUIManager = new MusicManager(mActivity, this);
 			View transViewSub3 = mInflater.inflate(
 					R.layout.music_viewpager_trans_layout, null);
-			View contentViewSub3 = mMainUIManager
-					.getView(START_FROM_ALBUM, obj);
+			View contentViewSub3 = mMainUIManager.getView(
+					Constant.Music.START_FROM_ALBUM, obj);
 			mViewPagerSub.setVisibility(View.VISIBLE);
 			mListViewsSub.clear();
 			mViewPagerSub.removeAllViews();

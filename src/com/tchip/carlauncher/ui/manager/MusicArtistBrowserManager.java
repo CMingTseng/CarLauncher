@@ -134,8 +134,8 @@ public class MusicArtistBrowserManager extends MusicMainUIManager implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		mUIManager
-				.setContentType(ARTIST_TO_MYMUSIC, mAdapter.getItem(position));
+		mUIManager.setContentType(Constant.Music.ARTIST_TO_MYMUSIC,
+				mAdapter.getItem(position));
 	}
 
 	@Override

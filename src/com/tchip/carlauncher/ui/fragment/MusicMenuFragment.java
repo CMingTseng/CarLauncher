@@ -43,7 +43,8 @@ public class MusicMenuFragment extends Fragment implements OnClickListener,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.music_frame_menu1, container, false);
+		View view = inflater.inflate(R.layout.music_frame_menu1, container,
+				false);
 		initView(view);
 		mServiceManager = MyApplication.mServiceManager;
 
@@ -90,7 +91,8 @@ public class MusicMenuFragment extends Fragment implements OnClickListener,
 					MusicMenuBackgroundActivity.class));
 			break;
 		case R.id.preference_text:
-			startActivity(new Intent(getActivity(), MusicMenuSettingActivity.class));
+			startActivity(new Intent(getActivity(),
+					MusicMenuSettingActivity.class));
 			break;
 		case R.id.txt_sleep:
 			mMainActivity.showSleepDialog();
@@ -106,14 +108,15 @@ public class MusicMenuFragment extends Fragment implements OnClickListener,
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 1) {
 			// 刷新主页内容
-			((MusicMainContentActivity) getActivity()).mMainFragment.refreshNum();
+			((MusicMainContentActivity) getActivity()).mMainFragment
+					.refreshNum();
 		}
 	}
 
 	private void changeMode() {
 		mCurMode++;
-		if (mCurMode > MPM_SINGLE_LOOP_PLAY) {
-			mCurMode = MPM_LIST_LOOP_PLAY;
+		if (mCurMode > Constant.Music.MPM_SINGLE_LOOP_PLAY) {
+			mCurMode = Constant.Music.MPM_LIST_LOOP_PLAY;
 		}
 		mServiceManager.setPlayMode(mCurMode);
 		initPlayMode();
