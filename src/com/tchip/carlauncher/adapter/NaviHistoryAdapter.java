@@ -19,13 +19,11 @@ public class NaviHistoryAdapter extends BaseAdapter {
 	private ArrayList<NaviHistory> naviArray;
 
 	private LayoutInflater layoutInflater;
-	private Context context;
 
 	private NaviHistoryDbHelper naviDb;
 
 	public NaviHistoryAdapter(Context context, ArrayList<NaviHistory> naviArray) {
 		super();
-		this.context = context;
 		this.naviArray = naviArray;
 		layoutInflater = LayoutInflater.from(context);
 		naviArray = new ArrayList<NaviHistory>();

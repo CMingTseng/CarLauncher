@@ -17,14 +17,12 @@ public class BluetoothInfoAdapter extends BaseAdapter {
 	private ArrayList<BluetoothInfo> bluetoothArray;
 
 	private LayoutInflater layoutInflater;
-	private Context context;
 
 	// private String nowWifiBssid;
 
 	public BluetoothInfoAdapter(Context context,
 			ArrayList<BluetoothInfo> bluetoothArray) {
 		super();
-		this.context = context;
 		this.bluetoothArray = bluetoothArray;
 		layoutInflater = LayoutInflater.from(context);
 		bluetoothArray = new ArrayList<BluetoothInfo>();

@@ -81,8 +81,8 @@ abstract public class CmdAbstractStore extends FtpCmd {
 			} else {
 				myLog.d("Mode is ascii");
 			}
-			int bytesSinceReopen = 0;
-			int bytesSinceFlush = 0;
+			// int bytesSinceReopen = 0;
+			// int bytesSinceFlush = 0;
 			while (true) {
 				/*
 				 * if(dedicatedWriter.checkErrorFlag()) { errString =

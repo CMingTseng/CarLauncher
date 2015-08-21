@@ -2,7 +2,6 @@ package com.tchip.carlauncher.lib.filemanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 
 import java.io.File;
 import java.security.InvalidParameterException;
@@ -30,13 +29,14 @@ public class AppPreferences {
 	}
 
 	private void loadFromSharedPreferences(SharedPreferences sharedPreferences) {
-//		String startPath = sharedPreferences.getString(PREF_START_FOLDER, null);
-//		if (startPath == null) {
-//			if (Environment.getExternalStorageDirectory().list() != null)
-//				startFolder = Environment.getExternalStorageDirectory();
-//			else
-//				startFolder = new File("/storage/");
-//		} else
+		// String startPath = sharedPreferences.getString(PREF_START_FOLDER,
+		// null);
+		// if (startPath == null) {
+		// if (Environment.getExternalStorageDirectory().list() != null)
+		// startFolder = Environment.getExternalStorageDirectory();
+		// else
+		// startFolder = new File("/storage/");
+		// } else
 		this.startFolder = new File("/storage/");
 		this.sortBy = sharedPreferences.getInt(PREF_SORT_BY, DEFAULT_SORT_BY);
 		this.cardLayout = sharedPreferences.getInt(PREF_CARD_LAYOUT,
@@ -44,8 +44,7 @@ public class AppPreferences {
 	}
 
 	private void saveToSharedPreferences(SharedPreferences sharedPreferences) {
-		sharedPreferences.edit()
-				.putString(PREF_START_FOLDER, "/storage/")
+		sharedPreferences.edit().putString(PREF_START_FOLDER, "/storage/")
 				.putInt(PREF_SORT_BY, sortBy)
 				.putInt(PREF_CARD_LAYOUT, cardLayout).apply();
 	}

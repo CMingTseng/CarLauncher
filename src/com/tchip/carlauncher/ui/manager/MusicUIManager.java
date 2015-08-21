@@ -118,8 +118,7 @@ public class MusicUIManager implements Constant, OnBackListener {
 		AssetManager am = mActivity.getAssets();
 		Bitmap bitmap = null;
 		try {
-			InputStream is = am.open(Constant.Music.MUSIC_IMAGE_PATH + "/"
-					+ path);
+			InputStream is = am.open(Constant.Path.MUSIC_IMAGE + "/" + path);
 			bitmap = BitmapFactory.decodeStream(is);
 			is.close();
 		} catch (IOException e) {

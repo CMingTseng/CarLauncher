@@ -1,7 +1,5 @@
 package com.tchip.carlauncher;
 
-import java.io.File;
-
 import android.os.Environment;
 
 public interface Constant {
@@ -20,22 +18,22 @@ public interface Constant {
 		/**
 		 * 是否包含录像模块，去掉可用作其他平台做对比测试
 		 */
-		public static boolean hasCamera = true;
+		public static final boolean hasCamera = true;
 
 		/**
 		 * 是否开机自动录像
 		 */
-		public static boolean autoRecord = true;
+		public static final boolean autoRecord = true;
 
 		/**
 		 * 开机自动录像延时
 		 */
-		public static int autoRecordDelay = 5000;
+		public static final int autoRecordDelay = 5000;
 
 		/**
 		 * 录像保存到SD卡2 true:SD2 false:SD1
 		 */
-		public static boolean saveVideoToSD2 = true;
+		public static final boolean saveVideoToSD2 = true;
 
 		/**
 		 * 循环录像保留空间(单位：字节B)
@@ -113,7 +111,6 @@ public interface Constant {
 		 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 		 */
 		public static final boolean isVoiceXunfei = true;
-
 	}
 
 	/**
@@ -140,7 +137,7 @@ public interface Constant {
 	/**
 	 * 路径
 	 */
-	public final static class Path {
+	public static final class Path {
 		/**
 		 * 行驶轨迹文件存储位置
 		 */
@@ -182,17 +179,17 @@ public interface Constant {
 		/**
 		 * 启动测试应用命令:DeviceTest
 		 */
-		public final static String DEVICE_TEST = "*#86*#";
+		public static final String DEVICE_TEST = "*#86*#";
 
 		/**
 		 * 启动工程模式：EngineerMode
 		 */
-		public final static String ENGINEER_MODE = "*#*#3646633#*#*";
+		public static final String ENGINEER_MODE = "*#*#3646633#*#*";
 
 		/**
 		 * 启动系统设置:Setting
 		 */
-		public final static String SETTING = "*#7388464#*";
+		public static final String SETTING = "*#7388464#*";
 	}
 
 	/**
@@ -235,7 +232,7 @@ public interface Constant {
 	 * SharedPreferences名称
 	 */
 	public static final String SHARED_PREFERENCES_NAME = "CarLauncher";
-	
+
 	public static final class Music {
 
 		public static final String BROADCAST_NAME = "com.tchip.carlauncher.music.broadcast";
@@ -250,7 +247,7 @@ public interface Constant {
 		public static final String SP_AUTO_DOWNLOAD_LYRIC = "auto_download_lyric";
 		public static final String SP_FILTER_SIZE = "filter_size";
 		public static final String SP_FILTER_TIME = "filter_time";
-		public final static int REFRESH_PROGRESS_EVENT = 0x100;
+		public static final int REFRESH_PROGRESS_EVENT = 0x100;
 		// 播放状态
 		public static final int MPS_NOFILE = -1; // 无音乐文件
 		public static final int MPS_INVALID = 0; // 当前音乐文件无效
@@ -285,35 +282,4 @@ public interface Constant {
 	 * 设置条目点击波纹速度
 	 */
 	public static final int SETTING_ITEM_RIPPLE_SPEED = 80;
-
-	// 循环录像和加锁相关
-	public static final class RESOLUTION {
-		public static final int res1080P = 1;
-		public static final int res720P = 2;
-	}
-
-	public static final class SAVE_TIME {
-		public static final int time_3min = 1;
-		public static final int time_5min = 2;
-	}
-
-	public static final class SENSITIVITY {
-		public static final int sen_high = 1;
-		public static final int sen_mid = 2;
-		public static final int sen_low = 3;
-	}
-
-	public static final class EROOTPATH {
-		public static final String ROOTPATH = "/mnt/sdcard" + File.separator
-				+ "tachograph" + File.separator;
-		public static final String TEMPVIDEOPATH = ROOTPATH;// + "TempVieo" +
-															// File.separator;
-		public static final String URGENVIDEOPATH = ROOTPATH + "UrgentVieo"
-				+ File.separator;
-		public static final String SAVEPATH = ROOTPATH + "SaveVieo"
-				+ File.separator;
-		public static final String PHOTOPATH = ROOTPATH + "Photo"
-				+ File.separator;
-	}
-
 }

@@ -4,27 +4,22 @@ import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.NaviResultInfo;
-import com.tchip.carlauncher.model.WifiInfo;
-import com.tchip.carlauncher.util.SignalUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NaviResultAdapter extends BaseAdapter {
 	private ArrayList<NaviResultInfo> naviArray;
 
 	private LayoutInflater layoutInflater;
-	private Context context;
 
 	public NaviResultAdapter(Context context,
 			ArrayList<NaviResultInfo> naviArray) {
 		super();
-		this.context = context;
 		this.naviArray = naviArray;
 		layoutInflater = LayoutInflater.from(context);
 		naviArray = new ArrayList<NaviResultInfo>();
@@ -87,7 +82,7 @@ public class NaviResultAdapter extends BaseAdapter {
 		} else {
 			viewHolder.textDistance.setText("距离：" + distance / 1000 + "km");
 		}
-		
+
 		return convertView;
 	}
 
