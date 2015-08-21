@@ -101,6 +101,46 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <!-- 微信 -->
+         <activity
+            android:name="com.tchip.carlauncher.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="sdksample" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.SendToWXActivity"
+            android:label="@string/app_name"
+            android:theme="@style/MMTheme.Basic" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.GetFromWXActivity"
+            android:label="@string/app_name"
+            android:theme="@style/MMTheme.Basic" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.ShowFromWXActivity"
+            android:label="@string/app_name"
+            android:theme="@style/MMTheme.Basic" />
+
+        <receiver
+            android:name="com.tchip.carlauncher.WeChatRegister"
+            android:permission="com.tencent.mm.plugin.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name="com.tchip.carlauncher.ui.activity.NearActivity"
             android:screenOrientation="landscape" />
