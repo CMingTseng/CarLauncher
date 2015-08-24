@@ -1001,7 +1001,7 @@ public class NavigationActivity extends FragmentActivity implements
 			Toast.makeText(NavigationActivity.this,
 					getResources().getString(R.string.poi_no_result),
 					Toast.LENGTH_LONG).show();
-			pageIndex = 0;
+			pageIndex--;
 			return;
 		}
 		if (result.error == SearchResult.ERRORNO.NO_ERROR) {
