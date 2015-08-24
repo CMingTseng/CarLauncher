@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -81,7 +80,6 @@ import com.tchip.carlauncher.model.NaviHistory;
 import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
@@ -90,7 +88,6 @@ import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
 import com.baidu.navisdk.adapter.BaiduNaviManager.RoutePlanListener;
-import com.baidu.navisdk.comapi.routeplan.RoutePlanParams.NE_RoutePlan_Mode;
 
 public class NavigationActivity extends FragmentActivity implements
 		OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
@@ -109,7 +106,8 @@ public class NavigationActivity extends FragmentActivity implements
 			layoutStarContent, layoutStarEditWork, layoutStarEditHome;
 	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
 			layoutHistoryBack, layoutRoadCondition, layoutStar,
-			layoutStarNaviWork, layoutStarNaviHome, layoutResult;
+			layoutStarNaviWork, layoutStarNaviHome, layoutResult,
+			layoutPagePriv, layoutPageNext;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -131,8 +129,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private NaviHistoryAdapter naviHistoryAdapter;
 	private ArrayList<NaviHistory> naviHistoryArray;
 
-	private ImageView imageRoadCondition, imgVoiceSearch, imagePagePriv,
-			imagePageNext;
+	private ImageView imageRoadCondition, imgVoiceSearch;
 
 	private ProgressBar progressVoice;
 
@@ -147,7 +144,7 @@ public class NavigationActivity extends FragmentActivity implements
 	private String strAuthFail, strInitFail;
 
 	/**
-	 * 设置每页容量，默认为每页10条
+	 * 设置每页容量，默认为每页条数
 	 */
 	private int pageCapacity = 6;
 	private int pageIndex = 0;
@@ -332,10 +329,10 @@ public class NavigationActivity extends FragmentActivity implements
 		layoutResult = (RelativeLayout) findViewById(R.id.layoutResult);
 		layoutResult.setOnClickListener(new MyOnClickListener());
 
-		RelativeLayout layoutPagePriv = (RelativeLayout) findViewById(R.id.layoutPagePriv);
+		layoutPagePriv = (RelativeLayout) findViewById(R.id.layoutPagePriv);
 		layoutPagePriv.setOnClickListener(new MyOnClickListener());
 
-		RelativeLayout layoutPageNext = (RelativeLayout) findViewById(R.id.layoutPageNext);
+		layoutPageNext = (RelativeLayout) findViewById(R.id.layoutPageNext);
 		layoutPageNext.setOnClickListener(new MyOnClickListener());
 	}
 
@@ -842,6 +839,12 @@ public class NavigationActivity extends FragmentActivity implements
 		Log.v(Constant.TAG, "startSearchPlace:" + where + ",Lat:"
 				+ centerLatLng.latitude + ",Lng:" + centerLatLng.longitude
 				+ ",isNear:" + isNear);
+
+		if (pageIndex < 1) {
+			layoutPagePriv.setVisibility(View.INVISIBLE);
+		} else {
+			layoutPagePriv.setVisibility(View.VISIBLE);
+		}
 		if (where != null && where.trim().length() > 0) {
 			if (-1 == NetworkUtil.getNetworkType(getApplicationContext())) {
 				NetworkUtil.noNetworkHint(getApplicationContext());
@@ -914,7 +917,7 @@ public class NavigationActivity extends FragmentActivity implements
 						PoiCitySearchOption poiOption = new PoiCitySearchOption();
 						poiOption.city(textCity);
 						poiOption.keyword(where);
-						poiOption.pageNum(0);
+						poiOption.pageNum(pageIndex);
 						poiOption.pageCapacity(pageCapacity);
 						mPoiSearch.searchInCity(poiOption);
 					}
@@ -947,6 +950,8 @@ public class NavigationActivity extends FragmentActivity implements
 			// sugAdapter.add(info.key);
 
 			naviArray = new ArrayList<NaviResultInfo>();
+			Log.v(Constant.TAG, "result.getAllSuggestions().size():"
+					+ result.getAllSuggestions().size());
 			for (int i = 1; i < result.getAllSuggestions().size(); i++) {
 				// PoiInfo poiInfo = result.getAllPoi().get(i);
 				//
@@ -996,6 +1001,7 @@ public class NavigationActivity extends FragmentActivity implements
 			Toast.makeText(NavigationActivity.this,
 					getResources().getString(R.string.poi_no_result),
 					Toast.LENGTH_LONG).show();
+			pageIndex = 0;
 			return;
 		}
 		if (result.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -1008,7 +1014,14 @@ public class NavigationActivity extends FragmentActivity implements
 			// 添加结果
 			LatLng llStart = nowLatLng; // 当前位置
 			naviArray = new ArrayList<NaviResultInfo>();
-			for (int i = 1; i < result.getAllPoi().size(); i++) {
+			int arraySize = result.getAllPoi().size();
+			if (arraySize < pageCapacity) {
+				layoutPageNext.setVisibility(View.INVISIBLE);
+			} else {
+				layoutPageNext.setVisibility(View.VISIBLE);
+			}
+			Log.v(Constant.TAG, "result.getAllPoi().size():" + arraySize);
+			for (int i = 1; i < arraySize; i++) {
 				PoiInfo poiInfo = result.getAllPoi().get(i);
 
 				double distance = DistanceUtil.getDistance(llStart,
@@ -1024,9 +1037,9 @@ public class NavigationActivity extends FragmentActivity implements
 			naviResultAdapter = new NaviResultAdapter(getApplicationContext(),
 					naviArray);
 			layoutResult.setVisibility(View.VISIBLE);
-			//setLayoutHistoryVisibility(false);
-//			layoutHistory.setVisibility(View.GONE);
-//			isHistoryLayoutShow = false;
+			// setLayoutHistoryVisibility(false);
+			// layoutHistory.setVisibility(View.GONE);
+			// isHistoryLayoutShow = false;
 			isResultListShow = true;
 			listResult.setAdapter(naviResultAdapter);
 
