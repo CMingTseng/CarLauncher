@@ -14,6 +14,11 @@ $BT_CMD = (($BT_ACTION_PREFIX_01 ($PERSONX | $NUM) $BT_ACTION_SUFFIX_01)
 				| ($BT_ACTION_PREFIX_03 ($PERSONX | $NUM) $BT_ACTION_SUFFIX_03))/domain="phone"/;
 
 
+$TCHIP = (关闭 | 返回 | 打开 | 回到);
+$TCHIP_NAME = (屏幕 | 桌面);
+$TCHIP_DO_CMD = (($TCHIP $TCHIP_NAME))/action="do"/;
+$TCHIP_CMD = (($TCHIP_DO_CMD))/domain="t-chip"/;
+
 $MEDIA_DATASOURCE_ALL = #MUSIC#;
 $MEDIA_DATASOURCE_ALLX = ($MEDIA_DATASOURCE_ALL)/k="song"/;
 $MEDIA_PLAY_CMD = ((((来 | 放 | 唱 | 听)(首 | 一首 | 一曲)) | (播放 | 演唱))[歌曲 | 音乐]($MEDIA_DATASOURCE_ALLX))/action="play"/;
@@ -67,6 +72,8 @@ $BRIGHTNESS_DONW_CMD = (($BRIGHTNESS_DOWN1 $BRIGHTNESS_NAME1) | ($BRIGHTNESS_NAM
 $BRIGHTNESS_CMD = (($BRIGHTNESS_UP_CMD) | ($BRIGHTNESS_DONW_CMD))/domain="brightness"/;
 
 
+
+
 $EQ_NAMES = (用户 | 电子 | 摇滚 | 古典 | 爵士 | 最佳 | 平面 | 流行)/k="value"/;
 $EQ_CMD = (((设置)($EQ_NAMES)(音效)) | ((设置音效)[为]($EQ_NAMES)))/domain="eq"/;
 
@@ -90,6 +97,6 @@ $APP_CLOSE_CMD = ($APP_CLOSE_ACTION_PREFIX)[$APP_NAME_ACTION]($DATASOURCE_APPX);
 $APP_CMD = (($APP_OPEN_CMD) | ($APP_CLOSE_CMD))/domain="app"/;
 
 
-$MESSAGE = ($MEDIA_CMD) | ($MEDIA_RADIO_CMD) | ($BT_CMD) | ($VOLUME_CMD) | ($BRIGHTNESS_CMD) | ($EQ_CMD) | ($OPT_CMD) | ($APP_CMD);
+$MESSAGE = ($MEDIA_CMD) | ($TCHIP_CMD)  | ($MEDIA_RADIO_CMD) | ($BT_CMD) | ($VOLUME_CMD) | ($BRIGHTNESS_CMD) | ($EQ_CMD) | ($OPT_CMD) | ($APP_CMD);
 
 ( \<s\> (  $MESSAGE  ) \<\/s\> )

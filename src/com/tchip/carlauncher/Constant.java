@@ -124,7 +124,7 @@ public interface Constant {
 		/**
 		 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 		 */
-		public static final boolean isVoiceXunfei = true;
+		public static final boolean isVoiceXunfei = false;
 	}
 
 	/**

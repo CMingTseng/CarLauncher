@@ -23,6 +23,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
+import com.tchip.aispeech.util.SpeechConfig;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -44,6 +45,8 @@ import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.SignalUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
+import com.tchip.speech.SpeechService;
+import com.tchip.speech.WakeUpCloudAsr;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -199,7 +202,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 初始化fm发射
-		initFmTransmit();
+		//initFmTransmit();
+		
+		//启动思必驰语音服务
+		if(!Constant.Module.isVoiceXunfei){
+			Intent intent = new Intent(this, SpeechService.class);
+			startService(intent);
+		}
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -1149,7 +1158,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					} else {
 						// 思必驰语音
 						intentVoiceChat = new Intent(MainActivity.this,
-								ChatAiActivity.class);
+								WakeUpCloudAsr.class);
 					}
 					startActivity(intentVoiceChat);
 					overridePendingTransition(R.anim.zms_translate_up_out,
@@ -1426,6 +1435,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			Log.v(Constant.TAG, "Navi Instance is Initialing...");
 		}
 
+		// 初始化fm发射
+		initFmTransmit();
+		
 		super.onResume();
 	}
 
@@ -2081,6 +2093,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// if (isFmTransmitOn())
 		{
 			int freq = getFmFrequceny();
+			Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
 			if (freq >= 8750 && freq <= 10800)
 				setFmFrequency(freq);
 			else
