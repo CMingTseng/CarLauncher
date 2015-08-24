@@ -109,7 +109,7 @@ public class NavigationActivity extends FragmentActivity implements
 			layoutStarContent, layoutStarEditWork, layoutStarEditHome;
 	private RelativeLayout layoutNaviVoice, layoutNear, layoutHistory,
 			layoutHistoryBack, layoutRoadCondition, layoutStar,
-			layoutStarNaviWork, layoutStarNaviHome;
+			layoutStarNaviWork, layoutStarNaviHome, layoutResult;
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -131,7 +131,8 @@ public class NavigationActivity extends FragmentActivity implements
 	private NaviHistoryAdapter naviHistoryAdapter;
 	private ArrayList<NaviHistory> naviHistoryArray;
 
-	private ImageView imageRoadCondition, imgVoiceSearch;
+	private ImageView imageRoadCondition, imgVoiceSearch, imagePagePriv,
+			imagePageNext;
 
 	private ProgressBar progressVoice;
 
@@ -143,7 +144,17 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private boolean isFirstLoc = true;
 
-	private String strAuthFail,strInitFail;
+	private String strAuthFail, strInitFail;
+
+	/**
+	 * 设置每页容量，默认为每页10条
+	 */
+	private int pageCapacity = 6;
+	private int pageIndex = 0;
+
+	private String doingWhere;
+	private LatLng doingLatLng;
+	private boolean doingIsNear;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -190,7 +201,7 @@ public class NavigationActivity extends FragmentActivity implements
 					&& naviDesFromVoice != null) {
 				setLayoutHistoryVisibility(true);
 				setDestinationText(naviDesFromVoice);
-				startSearchPlace(naviDesFromVoice, nowLatLng, false);
+				startSearchPlace(naviDesFromVoice, nowLatLng, false, false);
 			}
 		}
 	}
@@ -317,6 +328,15 @@ public class NavigationActivity extends FragmentActivity implements
 		// 回到当前位置
 		RelativeLayout layoutLocate = (RelativeLayout) findViewById(R.id.layoutLocate);
 		layoutLocate.setOnClickListener(new MyOnClickListener());
+
+		layoutResult = (RelativeLayout) findViewById(R.id.layoutResult);
+		layoutResult.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutPagePriv = (RelativeLayout) findViewById(R.id.layoutPagePriv);
+		layoutPagePriv.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutPageNext = (RelativeLayout) findViewById(R.id.layoutPageNext);
+		layoutPageNext.setOnClickListener(new MyOnClickListener());
 	}
 
 	/**
@@ -477,7 +497,7 @@ public class NavigationActivity extends FragmentActivity implements
 						isNearLayoutShow = false;
 						layoutNearAdvice.setVisibility(View.GONE);
 
-						startSearchPlace(strContent, nowLatLng, false);
+						startSearchPlace(strContent, nowLatLng, false, false);
 
 						// 使用‘百度导航’进行导航
 						// try {
@@ -604,6 +624,14 @@ public class NavigationActivity extends FragmentActivity implements
 				whereAmI(nowLatLng);
 				break;
 
+			case R.id.layoutPagePriv:
+				changePage(-1);
+				break;
+
+			case R.id.layoutPageNext:
+				changePage(1);
+				break;
+
 			default:
 				break;
 			}
@@ -659,7 +687,7 @@ public class NavigationActivity extends FragmentActivity implements
 		isNearLayoutShow = false;
 		layoutNearAdvice.setVisibility(View.GONE);
 
-		startSearchPlace(content, nowLatLng, true);
+		startSearchPlace(content, nowLatLng, true, false);
 	}
 
 	/**
@@ -724,7 +752,8 @@ public class NavigationActivity extends FragmentActivity implements
 							String strCity = naviHistoryArray.get(position)
 									.getCity();
 							etHistoryCity.setText(strCity);
-							startSearchPlace(strHistory, nowLatLng, false);
+							startSearchPlace(strHistory, nowLatLng, false,
+									false);
 						}
 					});
 
@@ -732,7 +761,7 @@ public class NavigationActivity extends FragmentActivity implements
 			isHistoryLayoutShow = false;
 			isResultListShow = false;
 			layoutHistory.setVisibility(View.GONE);
-			listResult.setVisibility(View.GONE);
+			layoutResult.setVisibility(View.GONE);
 		}
 
 	}
@@ -796,13 +825,20 @@ public class NavigationActivity extends FragmentActivity implements
 		super.onSaveInstanceState(outState);
 	}
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
+	private void changePage(int set) {
+		pageIndex += set;
+		if (pageIndex < 0) {
+			pageIndex = 0;
+		}
+		Log.v(Constant.TAG, "Page Index:" + pageIndex);
+		startSearchPlace(doingWhere, doingLatLng, doingIsNear, true);
 	}
 
 	public void startSearchPlace(String where, LatLng centerLatLng,
-			boolean isNear) {
+			boolean isNear, boolean isPage) {
+		doingWhere = where;
+		doingLatLng = centerLatLng;
+		doingIsNear = isNear;
 		Log.v(Constant.TAG, "startSearchPlace:" + where + ",Lat:"
 				+ centerLatLng.latitude + ",Lng:" + centerLatLng.longitude
 				+ ",isNear:" + isNear);
@@ -815,10 +851,13 @@ public class NavigationActivity extends FragmentActivity implements
 						&& textCity.trim().length() > 0;
 				if (isNear) {
 					// 周边搜索
-					Toast.makeText(
-							getApplicationContext(),
-							getResources().getString(R.string.poi_search_near)
-									+ where, Toast.LENGTH_SHORT).show();
+					if (!isPage) {
+						Toast.makeText(
+								getApplicationContext(),
+								getResources().getString(
+										R.string.poi_search_near)
+										+ where, Toast.LENGTH_SHORT).show();
+					}
 
 					PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
 					poiOption.keyword(where);
@@ -826,8 +865,8 @@ public class NavigationActivity extends FragmentActivity implements
 					poiOption.radius(15 * 1000 * 1000); // 检索半径，单位:m
 					poiOption.sortType(PoiSortType.distance_from_near_to_far); // 按距离排序
 					// poiOption.sortType(PoiSortType.comprehensive); // 按综合排序
-					poiOption.pageNum(0); // 分页编号
-					poiOption.pageCapacity(10); // 设置每页容量，默认为每页10条
+					poiOption.pageNum(pageIndex); // 分页编号
+					poiOption.pageCapacity(pageCapacity);
 					try {
 						mPoiSearch.searchNearby(poiOption);
 					} catch (Exception e) {
@@ -836,11 +875,13 @@ public class NavigationActivity extends FragmentActivity implements
 				} else {
 					if (!isInputCity) {
 						// 周边搜索
-						Toast.makeText(
-								getApplicationContext(),
-								getResources().getString(
-										R.string.poi_search_near)
-										+ where, Toast.LENGTH_SHORT).show();
+						if (!isPage) {
+							Toast.makeText(
+									getApplicationContext(),
+									getResources().getString(
+											R.string.poi_search_near)
+											+ where, Toast.LENGTH_SHORT).show();
+						}
 
 						PoiNearbySearchOption poiOption = new PoiNearbySearchOption();
 						poiOption.keyword(where);
@@ -850,8 +891,8 @@ public class NavigationActivity extends FragmentActivity implements
 								.sortType(PoiSortType.distance_from_near_to_far); // 按距离排序
 						// poiOption.sortType(PoiSortType.comprehensive); //
 						// 按综合排序
-						poiOption.pageNum(0); // 分页编号
-						poiOption.pageCapacity(10); // 设置每页容量，默认为每页10条
+						poiOption.pageNum(pageIndex); // 分页编号
+						poiOption.pageCapacity(pageCapacity);
 						try {
 							mPoiSearch.searchNearby(poiOption);
 						} catch (Exception e) {
@@ -859,19 +900,22 @@ public class NavigationActivity extends FragmentActivity implements
 						}
 					} else {
 						// 全国搜索
-						Toast.makeText(
-								getApplicationContext(),
-								getResources().getString(R.string.poi_in_city)
-										+ textCity
-										+ getResources().getString(
-												R.string.poi_search) + where,
-								Toast.LENGTH_SHORT).show();
+						if (!isPage) {
+							Toast.makeText(
+									getApplicationContext(),
+									getResources().getString(
+											R.string.poi_in_city)
+											+ textCity
+											+ getResources().getString(
+													R.string.poi_search)
+											+ where, Toast.LENGTH_SHORT).show();
+						}
 
 						PoiCitySearchOption poiOption = new PoiCitySearchOption();
 						poiOption.city(textCity);
 						poiOption.keyword(where);
 						poiOption.pageNum(0);
-						poiOption.pageCapacity(10);
+						poiOption.pageCapacity(pageCapacity);
 						mPoiSearch.searchInCity(poiOption);
 					}
 
@@ -918,7 +962,7 @@ public class NavigationActivity extends FragmentActivity implements
 			naviResultAdapter = new NaviResultAdapter(getApplicationContext(),
 					naviArray);
 
-			listResult.setVisibility(View.VISIBLE);
+			layoutResult.setVisibility(View.VISIBLE);
 			isResultListShow = true;
 			listResult.setAdapter(naviResultAdapter);
 			// }
@@ -937,7 +981,7 @@ public class NavigationActivity extends FragmentActivity implements
 			LatLng thisLatLng = result.getLocation();
 			if (thisLatLng != null) {
 				startSearchPlace(etHistoryWhere.getText().toString(),
-						thisLatLng, false);
+						thisLatLng, false, false);
 			}
 		}
 
@@ -979,7 +1023,10 @@ public class NavigationActivity extends FragmentActivity implements
 
 			naviResultAdapter = new NaviResultAdapter(getApplicationContext(),
 					naviArray);
-			listResult.setVisibility(View.VISIBLE);
+			layoutResult.setVisibility(View.VISIBLE);
+			//setLayoutHistoryVisibility(false);
+//			layoutHistory.setVisibility(View.GONE);
+//			isHistoryLayoutShow = false;
 			isResultListShow = true;
 			listResult.setAdapter(naviResultAdapter);
 
@@ -990,7 +1037,8 @@ public class NavigationActivity extends FragmentActivity implements
 								android.widget.AdapterView<?> parent,
 								android.view.View view, int position, long id) {
 							// 开始导航
-							listResult.setVisibility(View.GONE);
+							layoutResult.setVisibility(View.GONE);
+							pageIndex = 0; // 重设搜索结果页码为0
 							isResultListShow = false;
 							setLayoutHistoryVisibility(false);
 
@@ -1323,7 +1371,7 @@ public class NavigationActivity extends FragmentActivity implements
 			}
 
 			etHistoryWhere.setText(text);
-			startSearchPlace(text, nowLatLng, false);
+			startSearchPlace(text, nowLatLng, false, false);
 		}
 	}
 

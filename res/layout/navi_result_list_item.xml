@@ -21,7 +21,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/ic_launcher" />
 
         <LinearLayout
@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/textDistance"
             android:layout_toRightOf="@id/imageNavi"
             android:orientation="vertical" >
 
@@ -48,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="东环二路附近"
+                android:text="中华人民共和国广东省深圳市宝安区西乡街道"
                 android:textColor="@color/setting_item_title_color"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -59,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="20dp"
             android:text="距离5.5Km"
             android:textColor="@color/setting_item_title_color"
             android:textSize="25sp" />
