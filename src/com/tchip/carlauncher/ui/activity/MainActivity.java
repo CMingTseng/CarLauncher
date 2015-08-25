@@ -206,8 +206,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 启动思必驰语音服务
 		// if(!Constant.Module.isVoiceXunfei){
-		// Intent intent = new Intent(this, SpeechService.class);
-		// startService(intent);
+		 Intent intent = new Intent(this, SpeechService.class);
+		 startService(intent);
 		// }
 	}
 

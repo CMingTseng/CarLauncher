@@ -97,7 +97,7 @@ public class SpeechService extends Service {
         pm=(PowerManager) getSystemService(Context.POWER_SERVICE);  
         wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK,"bright"); 
         
-        Toast.makeText(getApplicationContext(), "speech Service is started..", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "speech Service is started..", Toast.LENGTH_LONG).show();
 	}
 	
 	//初始化speech本地和云端语音
@@ -389,7 +389,7 @@ public class SpeechService extends Service {
             try {
                 object = new JSONObject(result.getResultObject().toString());
                 //resultText.append(object.toString(4));
-                sendUserMessage(object.toString(4));
+                //sendUserMessage(object.toString(4));
                 String data = analysisSpeechMessage(object.toString(4));
                 if(data == null){
                     sendMachineMessage("欢迎使用小智");
