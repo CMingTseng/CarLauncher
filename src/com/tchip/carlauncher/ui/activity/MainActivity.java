@@ -21,6 +21,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
 import com.tchip.aispeech.util.SpeechConfig;
@@ -614,8 +615,57 @@ public class MainActivity extends Activity implements TachographCallback,
 							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
 						}
 					}
-				}, null /* mTTSCallback */);
+				}, /* null*/ mTTSCallback );
 	}
+	
+	BNOuterTTSPlayerCallback mTTSCallback = new BNOuterTTSPlayerCallback() {
+		
+		@Override
+		public void stopTTS() {
+			
+		}
+		
+		@Override
+		public void resumeTTS() {
+			
+		}
+		
+		@Override
+		public void releaseTTSPlayer() {
+			
+		}
+		
+		@Override
+		public int playTTSText(String text, int arg1) {
+			startSpeak(text);
+			return 0;
+		}
+		
+		@Override
+		public void phoneHangUp() {
+			
+		}
+		
+		@Override
+		public void phoneCalling() {
+			
+		}
+		
+		@Override
+		public void pauseTTS() {
+			
+		}
+		
+		@Override
+		public void initTTSPlayer() {
+			
+		}
+		
+		@Override
+		public int getTTSState() {
+			return 1;
+		}
+	};
 
 	private String getSdcardDir() {
 		if (Environment.getExternalStorageState().equalsIgnoreCase(

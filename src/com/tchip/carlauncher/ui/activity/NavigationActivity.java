@@ -1178,43 +1178,36 @@ public class NavigationActivity extends FragmentActivity implements
 
 		@Override
 		public void releaseTTSPlayer() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public int playTTSText(String speech, int bPreempt) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public void phoneHangUp() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void phoneCalling() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void pauseTTS() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void initTTSPlayer() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public int getTTSState() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 	};
