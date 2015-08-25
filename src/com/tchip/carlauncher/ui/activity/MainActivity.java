@@ -205,10 +205,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		//initFmTransmit();
 		
 		//启动思必驰语音服务
-		if(!Constant.Module.isVoiceXunfei){
-			Intent intent = new Intent(this, SpeechService.class);
-			startService(intent);
-		}
+		//if(!Constant.Module.isVoiceXunfei){
+		//	Intent intent = new Intent(this, SpeechService.class);
+		//	startService(intent);
+		//}
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -2093,7 +2093,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// if (isFmTransmitOn())
 		{
 			int freq = getFmFrequceny();
-			Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
 			if (freq >= 8750 && freq <= 10800)
 				setFmFrequency(freq);
 			else

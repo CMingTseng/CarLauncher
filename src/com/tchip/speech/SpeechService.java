@@ -96,6 +96,8 @@ public class SpeechService extends Service {
         kl = km.newKeyguardLock("");   
         pm=(PowerManager) getSystemService(Context.POWER_SERVICE);  
         wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK,"bright"); 
+        
+        Toast.makeText(getApplicationContext(), "speech Service is started..", Toast.LENGTH_LONG).show();
 	}
 	
 	//初始化speech本地和云端语音
