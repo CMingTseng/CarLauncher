@@ -26,6 +26,8 @@ public class WeatherService extends Service {
 	private SharedPreferences preferences;
 	private Editor editor;
 
+	private String strNotLocate, cityName;
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -34,11 +36,6 @@ public class WeatherService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-
 		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
 				Context.MODE_PRIVATE);
 		editor = preferences.edit();
@@ -46,8 +43,12 @@ public class WeatherService extends Service {
 		mTextUnderstander = TextUnderstander.createTextUnderstander(
 				getApplicationContext(), textUnderstanderListener);
 
-		String strNotLocate = getResources().getString(R.string.not_locate);
-		String cityName = preferences.getString("cityName", strNotLocate);
+		strNotLocate = getResources().getString(R.string.not_locate);
+		cityName = preferences.getString("cityName", strNotLocate);
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		if (strNotLocate.equals(cityName)) {
 			cityName = preferences

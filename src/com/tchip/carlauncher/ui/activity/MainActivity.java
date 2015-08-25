@@ -202,13 +202,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 初始化fm发射
-		//initFmTransmit();
-		
-		//启动思必驰语音服务
-		//if(!Constant.Module.isVoiceXunfei){
-		//	Intent intent = new Intent(this, SpeechService.class);
-		//	startService(intent);
-		//}
+		// initFmTransmit();
+
+		// 启动思必驰语音服务
+		// if(!Constant.Module.isVoiceXunfei){
+		// Intent intent = new Intent(this, SpeechService.class);
+		// startService(intent);
+		// }
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -1296,9 +1296,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				// 如果初次定位未联网，则不将isFirstLoc置为false
 				if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
 					isFirstLoc = false;
+					// 更新天气
+					startWeatherService();
 				}
-				// 更新天气
-				startWeatherService();
 			}
 
 			String cityName = location.getCity();
@@ -1437,7 +1437,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 初始化fm发射
 		initFmTransmit();
-		
+
 		super.onResume();
 	}
 
@@ -2093,7 +2093,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// if (isFmTransmitOn())
 		{
 			int freq = getFmFrequceny();
-			//Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
+			// Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
 			if (freq >= 8750 && freq <= 10800)
 				setFmFrequency(freq);
 			else
