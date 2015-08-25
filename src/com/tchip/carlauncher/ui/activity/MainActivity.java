@@ -1258,6 +1258,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
+
+			boolean hasNetwork = NetworkUtil
+					.isNetworkConnected(getApplicationContext());
 			// MapView 销毁后不在处理新接收的位置
 			if (location == null || mainMapView == null)
 				return;
@@ -1285,25 +1288,23 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			// 城市名发生变化，需要更新位置和天气
 			if (!sharedPreferences.getString("cityName", strNotLocate).equals(
-					location.getCity())) {
+					location.getCity())
+					&& hasNetwork) {
 				startWeatherService();
 				editor.putString("cityName", location.getCity());
 
 				editor.commit();
 			}
 
-			if (isFirstLoc) {
-				// 如果初次定位未联网，则不将isFirstLoc置为false
-				if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-					isFirstLoc = false;
-					// 更新天气
-					startWeatherService();
-				}
+			// 如果初次定位未联网，则不将isFirstLoc置为false
+			if (hasNetwork && isFirstLoc) {
+				isFirstLoc = false;
+				// 更新天气
+				startWeatherService();
 			}
-
 			String cityName = location.getCity();
-
-			if ((cityName != null) && (!cityName.equals(strNotLocate))) {
+			if (hasNetwork && (cityName != null)
+					&& (!cityName.equals(strNotLocate))) {
 
 				// editor.putLong("cityCode", cityCode);
 				editor.putString("cityName", cityName);
