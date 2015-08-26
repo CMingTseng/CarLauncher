@@ -78,7 +78,7 @@ public class WeatherInfo{
 									String highTempStr = "最高气温" + tempArray[0];
 									String lowTempStr = "最低气温" + tempArray[1];
 									
-									intent.putExtra("value", city + "," + weatherStr + "," + windStr + "," + highTempStr + "," + lowTempStr);
+									intent.putExtra("value", city + "，" + weatherStr + "，" + windStr + "，" + highTempStr + "，" + lowTempStr);
 									context.sendBroadcast(intent);
 									return;
 								}

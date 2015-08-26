@@ -177,6 +177,17 @@ public class AnalysisNativeMessage{
                 context.startActivity(intent);  
 	    		return "正在拨打" + detail;
     		}
+    	}else if(SpeechConfig.t_chip.equals(domain)){
+    		if(SpeechConfig.screenOff.equals(detail)){
+    			//关闭屏幕
+    			return SpeechConfig.screenOff;
+    		}else if(SpeechConfig.goCarLauncher.contains(detail)){
+    			//返回桌面
+				Intent intentLauncher = new Intent(context, MainActivity.class);
+				intentLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intentLauncher);
+    			return SpeechConfig.goCarLaunchering;
+    		}
     	}else if(SpeechConfig.volume.equals(domain)){
     		//调整音量
     		if(action.equals("up")){
