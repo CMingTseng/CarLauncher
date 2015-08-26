@@ -99,7 +99,12 @@ public interface Constant {
 		/**
 		 * 在线音乐是酷我还是酷狗
 		 */
-		public static final boolean isMusicKuwo = false;
+		public static final boolean isOnlineMusicKuwo = false;
+		
+		/**
+		 * 本地音乐是否是系统音乐
+		 */
+		public static final boolean isLocalMusicSystem = true;
 
 		/**
 		 * 是否有亮度自动调整功能

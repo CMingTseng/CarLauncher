@@ -1,7 +1,6 @@
 package com.tchip.carlauncher.model;
 
 import com.tchip.carlauncher.MyApplication;
-import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.StorageUtil;
 
 import android.content.BroadcastReceiver;
@@ -17,7 +16,6 @@ public class CardEjectReceiver extends BroadcastReceiver {
 		this.context = context;
 
 		String action = intent.getAction();
-		//
 		if (action.equals(Intent.ACTION_MEDIA_EJECT)
 				|| action.equals(Intent.ACTION_MEDIA_BAD_REMOVAL)
 				|| action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
@@ -30,11 +28,4 @@ public class CardEjectReceiver extends BroadcastReceiver {
 			}
 		}
 	}
-
-	private void startSpeak(String content) {
-		Intent intent = new Intent(context, SpeakService.class);
-		intent.putExtra("content", content);
-		context.startService(intent);
-	}
-
 }

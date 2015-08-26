@@ -111,6 +111,8 @@ public class MultimediaActivity extends Activity {
 						"com.android.gallery3d.app.GalleryActivity");
 				Intent intentImage = new Intent();
 				intentImage.setComponent(componentImage);
+				intentImage.addCategory(Intent.CATEGORY_LAUNCHER);
+				intentImage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intentImage);
 				break;
 
@@ -121,16 +123,18 @@ public class MultimediaActivity extends Activity {
 				break;
 
 			case R.id.layoutMusic:
-				// Intent intentMusic = new Intent(getApplicationContext(),
-				// MusicMainContentActivity.class);
-				// startActivity(intentMusic);
-
-				ComponentName componentMusic = new ComponentName(
-						"com.android.music",
-						"com.android.music.MusicBrowserActivity");
-				Intent intentMusic = new Intent();
-				intentMusic.setComponent(componentMusic);
-				startActivity(intentMusic);
+				if (Constant.Module.isLocalMusicSystem) {
+					ComponentName componentMusic = new ComponentName(
+							"com.android.music",
+							"com.android.music.MusicBrowserActivity");
+					Intent intentMusic = new Intent();
+					intentMusic.setComponent(componentMusic);
+					startActivity(intentMusic);
+				} else {
+					Intent intentMusic = new Intent(getApplicationContext(),
+							MusicMainContentActivity.class);
+					startActivity(intentMusic);
+				}
 				break;
 
 			case R.id.layoutVideo:
@@ -153,7 +157,6 @@ public class MultimediaActivity extends Activity {
 				backToMain();
 				break;
 			}
-
 		}
 	}
 

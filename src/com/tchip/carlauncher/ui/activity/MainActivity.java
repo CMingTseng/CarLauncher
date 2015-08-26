@@ -1122,7 +1122,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageMusicOL:
 				if (!ClickUtil.isQuickClick(800)) {
 					ComponentName componentMusic;
-					if (Constant.Module.isMusicKuwo) {
+					if (Constant.Module.isOnlineMusicKuwo) {
 						componentMusic = new ComponentName("cn.kuwo.kwmusichd",
 								"cn.kuwo.kwmusichd.WelcomeActivity");
 					} else {
