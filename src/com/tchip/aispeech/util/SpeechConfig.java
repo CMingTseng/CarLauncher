@@ -26,6 +26,8 @@ public class SpeechConfig {
 	public static String userMesage = "com.tchip.speechUserMessage";
 	public static String uiMesage = "com.tchip.speechUIMessage";
 	
+	public static String weatherMesage = "com.tchip.speechWeatherMessage";
+	
 	//本地语音关键词
     public static String app = "app";
     public static String baiduMap = "百度地图";
@@ -46,4 +48,5 @@ public class SpeechConfig {
     public static String time = "时间";
     public static String map = "地图";
     public static String hello = "你好";
+    public static String weather = "天气";
 }

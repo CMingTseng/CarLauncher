@@ -1,15 +1,20 @@
 package com.tchip.speech.json;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.tchip.aispeech.util.SpeechConfig;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.ui.activity.ChatActivity;
 import com.tchip.carlauncher.ui.activity.NavigationActivity;
+import com.tchip.speech.WeatherInfo;
 
 /**
  * 
@@ -20,9 +25,17 @@ import com.tchip.carlauncher.ui.activity.NavigationActivity;
  */
 public class AnalysisCloudMessage{
     private Context context;
+	private SharedPreferences preferences;
+	private Editor editor;
+	
     public AnalysisCloudMessage(Context context) {
 		// TODO Auto-generated constructor stub
     	this.context = context;
+		preferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+				Context.MODE_PRIVATE);
+		editor = preferences.edit();
+		
+		weatherInfo = new WeatherInfo(context);
 	}
 
 	/**
@@ -97,15 +110,78 @@ public class AnalysisCloudMessage{
     		if(param != null){
     			// 跳转到自写导航界面，不使用GeoCoder
     			int start = param.indexOf("终点名称") + 7;
-	    			param = param.substring(start);
-	    			param = param.substring(0, param.indexOf("\""));
-					Intent intentNavi = new Intent(context, NavigationActivity.class);
-					intentNavi.putExtra("destionation", param);
-					intentNavi.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(intentNavi);
-	    			return "正在启动导航";
+    			param = param.substring(start);
+    			param = param.substring(0, param.indexOf("\""));
+				Intent intentNavi = new Intent(context, NavigationActivity.class);
+				intentNavi.putExtra("destionation", param);
+				intentNavi.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intentNavi);
+    			return "正在启动导航";
+    		}
+    	}else if(SpeechConfig.weather.equals(domain)){
+    		//天气
+    		if(param != null){
+    			//获取城市
+    			int start = param.indexOf("城市") + 5;
+    			String city = null;
+    			if(start != 4){ //返回没有城市
+    				city = param.substring(start);
+	    			city = city.substring(0, city.indexOf("\""));
+    			}
+    			if(city == null){
+    				city = preferences.getString("cityNameRealButOld", null);
+    				if(city == null)
+    					return null;
+    			}
+
+    			//获取日期
+    			start = param.indexOf("日期") + 5;
+    			String date = null;
+    			if(start != 4){ //返回没有日期
+	    			date = param.substring(start);
+	    			date = date.substring(0, date.indexOf("\""));
+    			}
+    			if(date == null){
+    				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    				date = sdf.format(new Date());
+    			}
+    			
+    			//在存储中获取本地天气数据
+    			String storeAddr = preferences.getString("addrStr", null);
+    			if(storeAddr != null && storeAddr.contains(city)){
+    				//存储中有当前城市
+    				String storeDate = null;
+    				for(int i=0;i<6;i++){
+    					storeDate = preferences.getString("day" + i + "date", null);
+    					if(storeDate != null){
+    						storeDate = storeDate.replace("-", "");
+    						if(storeDate.equals(date)){
+    							return preferences.getString("day" + i + "weather", null) + "，" +
+    									preferences.getString("day" + i + "wind", null) + "，最高气温" + 
+    									preferences.getString("day" + i + "tmpHigh", null) +  "，最低气温" + 
+    									preferences.getString("day" + i + "tmpLow", null);
+    						}
+    					}
+    				}
+    				//天气不是最新的
+    				getWeather(city, date);
+    				return SpeechConfig.weather;
+    			}else{
+    				//不是本地天气
+    				getWeather(city, date);
+    				return SpeechConfig.weather;
+    			}
     		}
     	}
     	return null;
+    }
+    
+    
+    /*
+     * 天气，从讯飞接口获取
+     */
+    WeatherInfo weatherInfo;
+    private void getWeather(String city, String date){
+    	weatherInfo.getWeather(city, date);
     }
 }

@@ -4,6 +4,7 @@ import com.aispeech.AIError;
 import com.aispeech.common.AIConstant;
 import com.aispeech.common.Util;
 import com.aispeech.export.engines.AICloudTTSEngine;
+import com.aispeech.export.engines.AILocalTTSEngine;
 import com.aispeech.export.listeners.AITTSListener;
 import com.aispeech.speech.AIAuthEngine;
 import com.tchip.aispeech.util.SpeechConfig;
@@ -25,6 +26,7 @@ public class SpeechCloudTTS{
 	
 	interface OnSpeechCloudTTSCompleteListener{
 		void complete();
+		void error();
 	}
 	OnSpeechCloudTTSCompleteListener listener;
 	public void setOnSpeechCloudTTSCompleteListener(OnSpeechCloudTTSCompleteListener listener){
@@ -65,6 +67,9 @@ public class SpeechCloudTTS{
 		}
 		return cloudTTSEngineInit;
 	}
+	/*
+	 * 云端合成
+	 */
     private class AITTSListenerImpl implements AITTSListener {
 
         @Override
@@ -85,7 +90,7 @@ public class SpeechCloudTTS{
 
         @Override
         public void onError(String utteranceId, AIError error) {
-        	
+        	listener.error();
         }
 
         @Override

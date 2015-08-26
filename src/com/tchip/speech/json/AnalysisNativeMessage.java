@@ -125,7 +125,8 @@ public class AnalysisNativeMessage{
 	    	if(SpeechConfig.baiduMap.equals(detail)){
 	    		try{
 					Intent intent = new Intent();
-		    		ComponentName comp = new ComponentName("com.baidu.BaiduMap", "com.baidu.baidumaps.WelcomeScreen");
+		    		//ComponentName comp = new ComponentName("com.baidu.BaiduMap", "com.baidu.baidumaps.WelcomeScreen");
+		    		ComponentName comp = new ComponentName("com.baidu.navi.hd", "com.baidu.navi.NaviActivity");		    		
 		    		intent.setComponent(comp);
 		    		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		    		context.startActivity(intent);
@@ -139,6 +140,7 @@ public class AnalysisNativeMessage{
     		if(SpeechConfig.musicAction[0].equals(action) || SpeechConfig.musicAction[1].equals(action) || SpeechConfig.musicAction[2].equals(action)){
 				Log.d("wwj_test", "打开酷我音乐盒");
     			//打开酷我音乐盒
+				//ComponentName componentMusic = new ComponentName("cn.kuwo.kwmusichd", "cn.kuwo.kwmusichd.WelcomeActivity");
 				ComponentName componentMusic = new ComponentName("cn.kuwo.kwmusichd", "cn.kuwo.kwmusichd.WelcomeActivity");
 				try{
 					//ComponentName componentMusic = new ComponentName("cn.kuwo.player", "cn.kuwo.player.activities.EntryActivity");

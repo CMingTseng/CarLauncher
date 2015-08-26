@@ -15,21 +15,28 @@ import com.aispeech.export.listeners.AILocalWakeupListener;
 import com.tchip.aispeech.util.BeepPlayer;
 import com.tchip.aispeech.util.SpeechConfig;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.NetworkUtil;
+import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.speech.SpeechCloudTTS.OnSpeechCloudTTSCompleteListener;
+import com.tchip.speech.SpeechLocalTTS.OnSpeechLocalTTSCompleteListener;
+import com.tchip.speech.WakeUpCloudAsr.MessageReceiver;
 import com.tchip.speech.json.AnalysisCloudMessage;
 import com.tchip.speech.json.AnalysisNativeMessage;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -56,6 +63,7 @@ public class SpeechService extends Service {
     Toast mToast;
 
     SpeechCloudTTS sctts;
+    SpeechLocalTTS sltts;
     
     LinearLayout chartMsgPanel;
     ScrollView chartMsgScroll;
@@ -68,6 +76,30 @@ public class SpeechService extends Service {
 	//声明电源管理器
 	private PowerManager pm;
 	private PowerManager.WakeLock wl;
+	
+
+	/*
+	 * 接受weather发送的消息广播
+	 */
+    public class WeatherReceiver extends BroadcastReceiver {    	
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        	String action = intent.getAction();
+        	if(SpeechConfig.weatherMesage.equals(action)){
+        		String value = intent.getStringExtra("value");
+                sendMachineMessage(value);
+                if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+                	sctts.cloudTTS(value);
+                }else{
+                	//sltts.localTTS(value);
+    		        mWakeupEngine.start();
+    		        mWakeupEngine.setStopOnWakeupSuccess(false);
+                }
+        	}
+        }
+    }
+    WeatherReceiver receiver;
+	
 	@Override
 	public void onCreate(){
 		super.onCreate();
@@ -80,6 +112,30 @@ public class SpeechService extends Service {
 			
 			@Override
 			public void complete() {
+				// TODO Auto-generated method stub
+		        mWakeupEngine.start();
+		        mWakeupEngine.setStopOnWakeupSuccess(false);
+			}
+
+			@Override
+			public void error() {
+				// TODO Auto-generated method stub
+		        mWakeupEngine.start();
+		        mWakeupEngine.setStopOnWakeupSuccess(false);
+			}
+		});
+        sltts = new SpeechLocalTTS(this);
+        sltts.setOnSpeechLocalTTSCompleteListener(new OnSpeechLocalTTSCompleteListener() {
+			
+			@Override
+			public void complete() {
+				// TODO Auto-generated method stub
+		        mWakeupEngine.start();
+		        mWakeupEngine.setStopOnWakeupSuccess(false);
+			}
+
+			@Override
+			public void error() {
 				// TODO Auto-generated method stub
 		        mWakeupEngine.start();
 		        mWakeupEngine.setStopOnWakeupSuccess(false);
@@ -98,6 +154,12 @@ public class SpeechService extends Service {
         wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK,"bright"); 
         
         //Toast.makeText(getApplicationContext(), "speech Service is started..", Toast.LENGTH_LONG).show();
+        
+
+        receiver = new WeatherReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SpeechConfig.weatherMesage);
+        registerReceiver(receiver, filter);
 	}
 	
 	//初始化speech本地和云端语音
@@ -259,6 +321,7 @@ public class SpeechService extends Service {
             //showTip(error.toString());
             initSpeech();
             sctts.cloudTTS("引擎错误，以重新初始化");
+            //sltts.localTTS("引擎错误，以重新初始化");
             sendUIMessage("speech_end");
             Log.d("wwj_test", "error aispeech : " + error.getError());
         }
@@ -363,7 +426,8 @@ public class SpeechService extends Service {
         @Override
         public void onError(AIError error) {
             //showTip(error.toString());
-            mAsrEngine.start();
+	        mWakeupEngine.start();
+	        mWakeupEngine.setStopOnWakeupSuccess(false);
             //initSpeech();
             //sctts.cloudTTS("引擎错误，以重新初始化");
             //Log.d("wwj_test", "error aiasr : " + error.getError());
@@ -389,30 +453,59 @@ public class SpeechService extends Service {
             try {
                 object = new JSONObject(result.getResultObject().toString());
                 //resultText.append(object.toString(4));
-                //sendUserMessage(object.toString(4));
+                sendUserMessage(object.toString(4));
                 String data = analysisSpeechMessage(object.toString(4));
                 if(data == null){
+                	//不对语言进行识别
                     sendMachineMessage("欢迎使用小智");
-                	sctts.cloudTTS("欢迎使用小智");
+                    
+                    if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+                    	sctts.cloudTTS("欢迎使用小智");
+                    }else{
+                    	//sltts.localTTS("欢迎使用小智");
+        		        mWakeupEngine.start();
+        		        mWakeupEngine.setStopOnWakeupSuccess(false);
+                    }
                 } else {
                 	if(data.contains(SpeechConfig.screenOff)){
+                		//关闭屏幕
                 		kl.reenableKeyguard();
                 		wl.acquire(1000);
-	                	sctts.cloudTTS(SpeechConfig.screenOffing);
 	                    sendMachineMessage(SpeechConfig.screenOffing);
+	                    
+	                    if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+		                	sctts.cloudTTS(SpeechConfig.screenOffing);
+	                    }else{
+		                	//sltts.localTTS(SpeechConfig.screenOffing);
+	        		        mWakeupEngine.start();
+	        		        mWakeupEngine.setStopOnWakeupSuccess(false);
+	                    }
+                	}else if(SpeechConfig.weather.equals(data)){
+                		//天气查询，要等待讯飞接口的返回
+                		//暂时什么也不做，等待消息返回，后操作
+                		
                 	}else{
+                		//其他操作
 	                    sendMachineMessage(data);
-	                	sctts.cloudTTS(data);
+	                    
+	                    if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+	                    	sctts.cloudTTS(data);
+	                    }else{
+		                	//sltts.localTTS(data);
+	        		        mWakeupEngine.start();
+	        		        mWakeupEngine.setStopOnWakeupSuccess(false);
+	                    }
+	                	
                 	}
                 }
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                mWakeupEngine.start();
+                mWakeupEngine.setStopOnWakeupSuccess(false);
             }
 
             sendUIMessage("speech_end");
-            //mWakeupEngine.start();
-            //mWakeupEngine.setStopOnWakeupSuccess(false);
         }
 
         @Override
