@@ -469,8 +469,9 @@ public class SpeechService extends Service {
                 } else {
                 	if(data.contains(SpeechConfig.screenOff)){
                 		//关闭屏幕
-                		kl.reenableKeyguard();
-                		wl.acquire(1000);
+                		//kl.reenableKeyguard();
+                		//wl.acquire(1);
+                		sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value", "power"));
 	                    sendMachineMessage(SpeechConfig.screenOffing);
 	                    
 	                    if(NetworkUtil.isNetworkConnected(getApplicationContext())){

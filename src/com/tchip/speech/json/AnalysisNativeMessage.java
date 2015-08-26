@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.tchip.aispeech.util.SpeechConfig;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.ui.activity.MainActivity;
 
 /**
@@ -90,6 +91,26 @@ public class AnalysisNativeMessage{
 						Log.d("wwj_test", "action : " + action);
 						Log.d("wwj_test", "rec : " + rec);
 						return actionDo(domain, action, rec, false);
+					}else if(sem.contains("open") && sem.contains("app")){
+						//打开app
+						NativeSemInfo nsInfo = JSON.parseObject(sem, NativeSemInfo.class);
+						domain = nsInfo.getDomain();
+						action = nsInfo.getAction();
+						String appname = nsInfo.getAppname();
+	
+						Log.d("wwj_test", "domain : " + domain);
+						Log.d("wwj_test", "action : " + action);
+						Log.d("wwj_test", "appname : " + appname);
+						return actionDo(domain, action, appname, false);
+					}else if(sem.contains(SpeechConfig.volume)){
+						//调整音量
+						NativeSemInfo nsInfo = JSON.parseObject(sem, NativeSemInfo.class);
+						domain = nsInfo.getDomain();
+						action = nsInfo.getAction();
+						
+						Log.d("wwj_test", "domain : " + domain);
+						Log.d("wwj_test", "action : " + action);
+						return actionDo(domain, action, null, false);
 					}
 				}
 			}
@@ -134,25 +155,16 @@ public class AnalysisNativeMessage{
 	    		}catch(Exception e){
 		    		return "没有找到百度地图";
 				}
+	    	}else if(SpeechConfig.kuwoMusic.contains(detail) || SpeechConfig.kugouMusic.contains(detail)){
+    			//打开酷我音乐盒或者酷狗音乐
+	    		return openMusic();
 	    	}
     	}else if(SpeechConfig.music.equals(domain)){
     		//音乐播放
     		if(SpeechConfig.musicAction[0].equals(action) || SpeechConfig.musicAction[1].equals(action) || SpeechConfig.musicAction[2].equals(action)){
 				Log.d("wwj_test", "打开酷我音乐盒");
     			//打开酷我音乐盒
-				//ComponentName componentMusic = new ComponentName("cn.kuwo.kwmusichd", "cn.kuwo.kwmusichd.WelcomeActivity");
-				ComponentName componentMusic = new ComponentName("cn.kuwo.kwmusichd", "cn.kuwo.kwmusichd.WelcomeActivity");
-				try{
-					//ComponentName componentMusic = new ComponentName("cn.kuwo.player", "cn.kuwo.player.activities.EntryActivity");
-					Intent intentMusic = new Intent();
-					intentMusic.setComponent(componentMusic);
-					intentMusic.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(intentMusic);
-					sendMusicBroadcast();
-		    		return "正在打开酷我音乐盒";
-				}catch(Exception e){
-		    		return "没有找到酷我音乐盒";
-				}
+				return openMusic();
     		}
     	}else if(SpeechConfig.phone.equals(domain)){
     		//打电话
@@ -165,20 +177,47 @@ public class AnalysisNativeMessage{
                 context.startActivity(intent);  
 	    		return "正在拨打" + detail;
     		}
-    	}else if(SpeechConfig.t_chip.equals(domain)){
-    		if(SpeechConfig.screenOff.equals(detail)){
-    			//关闭屏幕
-    			return SpeechConfig.screenOff;
-    		}else if(SpeechConfig.goCarLauncher.contains(detail)){
-    			//返回桌面
-				Intent intentLauncher = new Intent(context, MainActivity.class);
-				intentLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intentLauncher);
-    			return SpeechConfig.goCarLaunchering;
+    	}else if(SpeechConfig.volume.equals(domain)){
+    		//调整音量
+    		if(action.equals("up")){
+        		context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value", "volume_up"));
+    		}else if(action.equals("down")){
+    			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value", "volume_down"));
     		}
+    		return "";
     	}
     	
     	return null;
+    }
+    
+    /*
+     * 处理打开酷我音乐还是打开酷狗音乐
+     */
+    private String openMusic(){
+    	ComponentName componentMusic;
+		if(Constant.Module.isOnlineMusicKuwo){
+			componentMusic = new ComponentName("cn.kuwo.kwmusichd", "cn.kuwo.kwmusichd.WelcomeActivity");
+		}else{
+			componentMusic = new ComponentName("com.kugou.playerHD2", "com.kugou.playerHD.activity.SplashActivity");
+		}
+		try{
+			//ComponentName componentMusic = new ComponentName("cn.kuwo.player", "cn.kuwo.player.activities.EntryActivity");
+			Intent intentMusic = new Intent();
+			intentMusic.setComponent(componentMusic);
+			intentMusic.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(intentMusic);
+			sendMusicBroadcast();
+			
+			if(Constant.Module.isOnlineMusicKuwo)
+				return "正在打开酷我音乐盒";
+			else
+				return "正在打开酷狗音乐";
+		}catch(Exception e){					
+			if(Constant.Module.isOnlineMusicKuwo)
+				return "没有找到酷我音乐盒";
+			else
+				return "没有找到酷狗音乐";
+		}
     }
 
     
