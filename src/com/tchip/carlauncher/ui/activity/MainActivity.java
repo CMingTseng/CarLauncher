@@ -1,20 +1,12 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -24,7 +16,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
-import com.tchip.aispeech.util.SpeechConfig;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -42,6 +33,7 @@ import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.NetworkUtil;
+import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.SignalUtil;
@@ -68,7 +60,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -84,7 +75,6 @@ import android.view.SurfaceHolder.Callback;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -139,7 +129,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoRecordSmall, layoutVideoCameraSmall,
 			layoutVideoLockSmall;
 
-	private RelativeLayout layoutSignal;
 	private ImageView imageSignalLevel, image3G;
 
 	private TelephonyManager Tel;
@@ -147,6 +136,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	private MyPhoneStateListener MyListener;
 
 	private AudioRecordDialog audioRecordDialog;
+
+	private String strNotLocate;
+
+	private WifiManager wifiManager;
+	private ConnectivityManager connManager;
+	private NetworkInfo mWifi;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +158,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		videoDb = new DriveVideoDbHelper(getApplicationContext());
 
+		// Dialog
 		audioRecordDialog = new AudioRecordDialog(MainActivity.this);
+
+		strNotLocate = getResources().getString(R.string.not_locate);
+		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 		initialLayout();
 		initialCameraButton();
@@ -207,8 +208,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 启动思必驰语音服务
 		// if(!Constant.Module.isVoiceXunfei){
-		 Intent intent = new Intent(this, SpeechService.class);
-		 startService(intent);
+		Intent intent = new Intent(this, SpeechService.class);
+		startService(intent);
 		// }
 	}
 
@@ -412,7 +413,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		updateWiFiState();
 
 		// 3G状态信息
-		layoutSignal = (RelativeLayout) findViewById(R.id.layoutSignal);
 		imageSignalLevel = (ImageView) findViewById(R.id.imageSignalLevel);
 		image3G = (ImageView) findViewById(R.id.image3G);
 		image3G.setVisibility(View.GONE);
@@ -615,52 +615,52 @@ public class MainActivity extends Activity implements TachographCallback,
 							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
 						}
 					}
-				}, /* null*/ mTTSCallback );
+				}, /* null */mTTSCallback);
 	}
-	
+
 	BNOuterTTSPlayerCallback mTTSCallback = new BNOuterTTSPlayerCallback() {
-		
+
 		@Override
 		public void stopTTS() {
-			
+
 		}
-		
+
 		@Override
 		public void resumeTTS() {
-			
+
 		}
-		
+
 		@Override
 		public void releaseTTSPlayer() {
-			
+
 		}
-		
+
 		@Override
 		public int playTTSText(String text, int arg1) {
 			startSpeak(text);
 			return 0;
 		}
-		
+
 		@Override
 		public void phoneHangUp() {
-			
+
 		}
-		
+
 		@Override
 		public void phoneCalling() {
-			
+
 		}
-		
+
 		@Override
 		public void pauseTTS() {
-			
+
 		}
-		
+
 		@Override
 		public void initTTSPlayer() {
-			
+
 		}
-		
+
 		@Override
 		public int getTTSState() {
 			return 1;
@@ -751,8 +751,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void updateLocationAndWeather() {
 
-		String strNotLocate = getResources().getString(R.string.not_locate);
-
 		if (strNotLocate.equals(sharedPreferences.getString("cityName",
 				strNotLocate))) {
 			String cityName = sharedPreferences.getString("cityNameRealButOld",
@@ -796,8 +794,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
 			synchronized (updateRecordTimeHandler) {
 				do {
-					if (MyApplication.isVideoCardEject) {
-						// 录像时视频SD卡拔出
+					if (MyApplication.isVideoCardEject
+							|| (!MyApplication.isPowerConnect)) {
+						// 录像时视频SD卡拔出,电源断开保存视频
 						Message messageEject = new Message();
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
@@ -860,10 +859,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 更新WiF状态
 	 */
 	private void updateWiFiState() {
-		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo mWifi = connManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
@@ -922,19 +917,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				// 更新位置和天气信息
 				updateLocationAndWeather();
-
-				// 电源断开保存视频
-				if (MyApplication.isVideoReording
-						&& (!MyApplication.isPowerConnect)) {
-					if (stopRecorder() == 0) {
-						secondCount = -1; // 录制时间秒钟复位
-						textRecordTime.setText("00:00:00");
-						textRecordTime.setVisibility(View.INVISIBLE);
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
-						MyApplication.isVideoReording = false;
-						setupRecordViews();
-					}
-				}
 
 				break;
 
@@ -1284,7 +1266,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 开启或关闭录像
 	 */
 	private void startOrStopRecord() {
-
 		if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
 			if (startRecorder() == 0) {
 				mRecordState = Constant.Record.STATE_RECORD_STARTED;
@@ -1659,7 +1640,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			// 设置系统Camera参数
 			// Camera.Parameters para = mCamera.getParameters();
-			// para.unflatten(params_str);
+			// para.unflatten(Constant.CAMERA_PARAMS);
 			// mCamera.setParameters(para);
 
 			mCamera.setPreviewDisplay(mHolder);
@@ -1671,52 +1652,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			return false;
 		}
 	}
-
-	private String params_str = "zoom=0;fb-smooth-level-max=4;max-num-detected-faces-hw=15;"
-			+ "cap-mode=normal;whitebalance=auto;afeng-min-focus-step=0;"
-			+ "preview-format-values=yuv420sp,yuv420p,yuv420i-yyuvyy-3plane;"
-			+ "rotation=0;jpeg-thumbnail-quality=100;preview-format=yuv420sp;"
-			+ "iso-speed=auto;hue-values=low,middle,high;preview-frame-rate=30;"
-			+ "jpeg-thumbnail-width=160;"
-			+ "scene-mode-values=auto,portrait,landscape,night,night-portrait,theatre,beach,snow,sunset,steadyphoto,fireworks,sports,party,candlelight,hdr;"
-			+ "video-size=1920x1088;preview-fps-range-values=(5000,60000);"
-			+ "contrast-values=low,middle,high;"
-			+ "preview-size-values=176x144,320x240,352x288,480x320,480x368,640x480,720x480,800x480,800x600,864x480,960x540,1280x720;"
-			+ "auto-whitebalance-lock=false;preview-fps-range=5000,60000;"
-			+ "antibanding=auto;min-exposure-compensation=-3;max-num-focus-areas=1;"
-			+ "vertical-view-angle=49;fb-smooth-level-min=-4;eng-focus-fullscan-frame-interval=0;"
-			+ "fb-skin-color=0;brightness_value=17;video-stabilization-supported=true;"
-			+ "saturation-values=low,middle,high;eng-flash-duty-value=-1;edge=middle;"
-			+ "iso-speed-values=auto,100,200,400,800,1600;picture-format-values=jpeg;"
-			+ "exposure-compensation-step=1.0;eng-flash-duty-min=0;picture-size=2560x1440;"
-			+ "saturation=middle;picture-format=jpeg;"
-			+ "whitebalance-values=auto,incandescent,fluorescent,warm-fluorescent,daylight,cloudy-daylight,twilight,shade;"
-			+ "afeng-max-focus-step=0;eng-shading-table=0;"
-			+ "preferred-preview-size-for-video=1280x720;hue=middle;"
-			+ "eng-focus-fullscan-frame-interval-max=65535;recording-hint=true;"
-			+ "video-stabilization=false;zoom-supported=true;fb-smooth-level=0;"
-			+ "fb-sharp=0;contrast=middle;eng-save-shading-table=0;jpeg-quality=90;"
-			+ "scene-mode=auto;burst-num=1;metering-areas=(0,0,0,0,0);eng-flash-duty-max=1;"
-			+ "video-size-values=176x144,480x320,640x480,864x480,1280x720,1920x1080;"
-			+ "eng-focus-fullscan-frame-interval-min=0;focal-length=3.5;"
-			+ "preview-size=1280x720;rec-mute-ogg=0;"
-			+ "cap-mode-values=normal,face_beauty,continuousshot,smileshot,bestshot,evbracketshot,autorama,mav,asd;"
-			+ "preview-frame-rate-values=15,24,30;max-num-metering-areas=9;fb-sharp-max=4;"
-			+ "sensor-type=252;focus-mode-values=auto,macro,infinity,continuous-picture,continuous-video,manual,fullscan;"
-			+ "fb-sharp-min=-4;jpeg-thumbnail-size-values=0x0,160x128,320x240;"
-			+ "zoom-ratios=100,114,132,151,174,200,229,263,303,348,400;"
-			+ "picture-size-values=320x240,640x480,1024x768,1280x720,1280x768,1280x960,1600x1200,2048x1536,2560x1440,2560x1920;"
-			+ "edge-values=low,middle,high;horizontal-view-angle=53;brightness=middle;"
-			+ "eng-flash-step-max=0;jpeg-thumbnail-height=128;capfname=/sdcard/DCIM/cap00;"
-			+ "smooth-zoom-supported=true;zsd-mode=off;focus-mode=auto;auto-whitebalance-lock-supported=true;"
-			+ "fb-skin-color-max=4;fb-skin-color-min=-4;max-num-detected-faces-sw=0;"
-			+ "video-frame-format=yuv420p;max-exposure-compensation=3;focus-areas=(0,0,0,0,0);"
-			+ "exposure-compensation=0;video-snapshot-supported=true;"
-			+ "brightness-values=low,middle,high;auto-exposure-lock=false;"
-			+ "effect-values=none,mono,negative,sepia,aqua,whiteboard,blackboard;"
-			+ "eng-flash-step-min=0;effect=none;max-zoom=10;focus-distances=0.95,1.9,Infinity;"
-			+ "mtk-cam-mode=2;auto-exposure-lock-supported=true;zsd-mode-values=off,on;"
-			+ "antibanding-values=off,50hz,60hz,auto";
 
 	private boolean closeCamera() {
 		if (mCamera == null)
@@ -2132,94 +2067,17 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 启动时初始化fm发射
 	 */
-	// 系统设置：FM发射开关
-	private String FM_TRANSMITTER_ENABLE = "fm_transmitter_enable";
-	// 系统设置：FM发射频率
-	private String FM_TRANSMITTER_CHANNEL = "fm_transmitter_channel";
 	// 频率节点 频率范围：7600~10800:8750-10800
-	private File nodeFmChannel = new File(
-			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
 
 	private void initFmTransmit() {
 		// if (isFmTransmitOn())
 		{
-			int freq = getFmFrequceny();
+			int freq = SettingUtil.getFmFrequceny(this);
 			// Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
 			if (freq >= 8750 && freq <= 10800)
-				setFmFrequency(freq);
+				SettingUtil.setFmFrequency(this, freq);
 			else
-				setFmFrequency(8750);
-		}
-	}
-
-	private boolean isFmTransmitOn() {
-		boolean isFmTransmitOpen = false;
-		String fmEnable = Settings.System.getString(getContentResolver(),
-				FM_TRANSMITTER_ENABLE);
-		if (fmEnable.trim().length() > 0) {
-			if ("1".equals(fmEnable)) {
-				isFmTransmitOpen = true;
-			} else {
-				isFmTransmitOpen = false;
-			}
-		}
-		return isFmTransmitOpen;
-	}
-
-	/**
-	 * 获取设置中存取的频率
-	 * 
-	 * @return 8750-10800
-	 */
-	private int getFmFrequceny() {
-		String fmChannel = Settings.System.getString(getContentResolver(),
-				FM_TRANSMITTER_CHANNEL);
-
-		return Integer.parseInt(fmChannel);
-	}
-
-	/**
-	 * 设置FM发射频率:8750-10800
-	 * 
-	 * @param frequency
-	 */
-	private void setFmFrequency(int frequency) {
-		if (frequency >= 8750 || frequency <= 10800) {
-			Settings.System.putString(getContentResolver(),
-					FM_TRANSMITTER_CHANNEL, "" + frequency);
-
-			SaveFileToNode(nodeFmChannel, String.valueOf(frequency));
-			Log.v(Constant.TAG, "FM Transmit:Set FM Frequency success:"
-					+ frequency / 100.0f + "MHz");
-		}
-	}
-
-	protected void SaveFileToNode(File file, String value) {
-		if (file.exists()) {
-			try {
-				StringBuffer strbuf = new StringBuffer("");
-				strbuf.append(value);
-				OutputStream output = null;
-				OutputStreamWriter outputWrite = null;
-				PrintWriter print = null;
-
-				try {
-					output = new FileOutputStream(file);
-					outputWrite = new OutputStreamWriter(output);
-					print = new PrintWriter(outputWrite);
-					print.print(strbuf.toString());
-					print.flush();
-					output.close();
-
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					Log.e(Constant.TAG, "FM Transmit:output error");
-				}
-			} catch (IOException e) {
-				Log.e(Constant.TAG, "FM Transmit:IO Exception");
-			}
-		} else {
-			Log.e(Constant.TAG, "FM Transmit:File:" + file + "not exists");
+				SettingUtil.setFmFrequency(this, 8750);
 		}
 	}
 }

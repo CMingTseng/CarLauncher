@@ -28,7 +28,7 @@ public interface Constant {
 		/**
 		 * 开机自动录像延时
 		 */
-		public static final int autoRecordDelay = 5000;
+		public static final int autoRecordDelay = 8000;
 
 		/**
 		 * 录像保存到SD卡2 true:SD2 false:SD1
@@ -74,6 +74,55 @@ public interface Constant {
 		// 静音
 		public static final int STATE_MUTE = 0;
 		public static final int STATE_UNMUTE = 1;
+
+		/**
+		 * 相机参数
+		 */
+		public static final String CAMERA_PARAMS = "zoom=0;fb-smooth-level-max=4;max-num-detected-faces-hw=15;"
+				+ "cap-mode=normal;whitebalance=auto;afeng-min-focus-step=0;"
+				+ "preview-format-values=yuv420sp,yuv420p,yuv420i-yyuvyy-3plane;"
+				+ "rotation=0;jpeg-thumbnail-quality=100;preview-format=yuv420sp;"
+				+ "iso-speed=auto;hue-values=low,middle,high;preview-frame-rate=30;"
+				+ "jpeg-thumbnail-width=160;"
+				+ "scene-mode-values=auto,portrait,landscape,night,night-portrait,theatre,beach,snow,sunset,steadyphoto,fireworks,sports,party,candlelight,hdr;"
+				+ "video-size=1920x1088;preview-fps-range-values=(5000,60000);"
+				+ "contrast-values=low,middle,high;"
+				+ "preview-size-values=176x144,320x240,352x288,480x320,480x368,640x480,720x480,800x480,800x600,864x480,960x540,1280x720;"
+				+ "auto-whitebalance-lock=false;preview-fps-range=5000,60000;"
+				+ "antibanding=auto;min-exposure-compensation=-3;max-num-focus-areas=1;"
+				+ "vertical-view-angle=49;fb-smooth-level-min=-4;eng-focus-fullscan-frame-interval=0;"
+				+ "fb-skin-color=0;brightness_value=17;video-stabilization-supported=true;"
+				+ "saturation-values=low,middle,high;eng-flash-duty-value=-1;edge=middle;"
+				+ "iso-speed-values=auto,100,200,400,800,1600;picture-format-values=jpeg;"
+				+ "exposure-compensation-step=1.0;eng-flash-duty-min=0;picture-size=2560x1440;"
+				+ "saturation=middle;picture-format=jpeg;"
+				+ "whitebalance-values=auto,incandescent,fluorescent,warm-fluorescent,daylight,cloudy-daylight,twilight,shade;"
+				+ "afeng-max-focus-step=0;eng-shading-table=0;"
+				+ "preferred-preview-size-for-video=1280x720;hue=middle;"
+				+ "eng-focus-fullscan-frame-interval-max=65535;recording-hint=true;"
+				+ "video-stabilization=false;zoom-supported=true;fb-smooth-level=0;"
+				+ "fb-sharp=0;contrast=middle;eng-save-shading-table=0;jpeg-quality=90;"
+				+ "scene-mode=auto;burst-num=1;metering-areas=(0,0,0,0,0);eng-flash-duty-max=1;"
+				+ "video-size-values=176x144,480x320,640x480,864x480,1280x720,1920x1080;"
+				+ "eng-focus-fullscan-frame-interval-min=0;focal-length=3.5;"
+				+ "preview-size=1280x720;rec-mute-ogg=0;"
+				+ "cap-mode-values=normal,face_beauty,continuousshot,smileshot,bestshot,evbracketshot,autorama,mav,asd;"
+				+ "preview-frame-rate-values=15,24,30;max-num-metering-areas=9;fb-sharp-max=4;"
+				+ "sensor-type=252;focus-mode-values=auto,macro,infinity,continuous-picture,continuous-video,manual,fullscan;"
+				+ "fb-sharp-min=-4;jpeg-thumbnail-size-values=0x0,160x128,320x240;"
+				+ "zoom-ratios=100,114,132,151,174,200,229,263,303,348,400;"
+				+ "picture-size-values=320x240,640x480,1024x768,1280x720,1280x768,1280x960,1600x1200,2048x1536,2560x1440,2560x1920;"
+				+ "edge-values=low,middle,high;horizontal-view-angle=53;brightness=middle;"
+				+ "eng-flash-step-max=0;jpeg-thumbnail-height=128;capfname=/sdcard/DCIM/cap00;"
+				+ "smooth-zoom-supported=true;zsd-mode=off;focus-mode=auto;auto-whitebalance-lock-supported=true;"
+				+ "fb-skin-color-max=4;fb-skin-color-min=-4;max-num-detected-faces-sw=0;"
+				+ "video-frame-format=yuv420p;max-exposure-compensation=3;focus-areas=(0,0,0,0,0);"
+				+ "exposure-compensation=0;video-snapshot-supported=true;"
+				+ "brightness-values=low,middle,high;auto-exposure-lock=false;"
+				+ "effect-values=none,mono,negative,sepia,aqua,whiteboard,blackboard;"
+				+ "eng-flash-step-min=0;effect=none;max-zoom=10;focus-distances=0.95,1.9,Infinity;"
+				+ "mtk-cam-mode=2;auto-exposure-lock-supported=true;zsd-mode-values=off,on;"
+				+ "antibanding-values=off,50hz,60hz,auto";
 	}
 
 	/**
@@ -100,7 +149,7 @@ public interface Constant {
 		 * 在线音乐是酷我还是酷狗
 		 */
 		public static final boolean isOnlineMusicKuwo = false;
-		
+
 		/**
 		 * 本地音乐是否是系统音乐
 		 */
@@ -144,6 +193,16 @@ public interface Constant {
 	 * FM发射
 	 */
 	public static final class FMTransmit {
+		/**
+		 * 系统设置：FM发射开关
+		 */
+		public static final String SETTING_ENABLE = "fm_transmitter_enable";
+
+		/**
+		 * 系统设置：FM发射频率
+		 */
+		public static final String SETTING_CHANNEL = "fm_transmitter_channel";
+
 		public static final int CHANNEL_LOW = 8750;
 		public static final int CHANNEL_MIDDLE = 9750;
 		public static final int CHANNEL_HIGH = 10750;
