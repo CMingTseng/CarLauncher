@@ -813,6 +813,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (MyApplication.isVideoCardEject
 							|| (!MyApplication.isPowerConnect)) {
 						// 录像时视频SD卡拔出,电源断开保存视频
+						mMyRecorder.stop();
+						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						MyApplication.isVideoReording = false;
 						Log.e(Constant.TAG,
 								"SD card remove badly or power unconnected, stop record!");
 						Message messageEject = new Message();
@@ -1781,10 +1784,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	};
 
 	public int stopRecorder() {
+		secondCount = -1; // 录制时间秒钟复位
+		textRecordTime.setText("00:00:00");
+		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
-			secondCount = -1; // 录制时间秒钟复位
-			textRecordTime.setText("00:00:00");
-			textRecordTime.setVisibility(View.INVISIBLE);
 			if (Constant.isDebug) {
 				Log.d(Constant.TAG, "Record Stop");
 			}
