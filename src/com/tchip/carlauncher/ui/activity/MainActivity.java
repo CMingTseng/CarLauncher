@@ -156,6 +156,24 @@ public class MainActivity extends Activity implements TachographCallback,
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
+		if (StorageUtil.isVideoCardExists()
+				&& sharedPreferences.getBoolean("isFirstLaunch", true)) {
+			
+			// 初次启动清空录像文件夹
+			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
+			if (Constant.Record.saveVideoToSD2) {
+				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
+			}
+			
+			File file = new File(sdcardPath + "tachograph/");
+			RecursionDeleteFile(file);
+			Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
+
+			editor.putBoolean("isFirstLaunch", false);
+		} else {
+			Log.e(Constant.TAG, "Video card not exist or isn't first launch");
+		}
+
 		videoDb = new DriveVideoDbHelper(getApplicationContext());
 
 		// Dialog
@@ -862,7 +880,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		
+
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
@@ -1378,7 +1396,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	protected void onResume() {
 		Log.v(Constant.TAG, "MainActivity:MapView onResume");
-
 		mainMapView.onResume();
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS

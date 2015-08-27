@@ -1,6 +1,5 @@
 package com.tchip.carlauncher.ui.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -24,9 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,7 +33,6 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,24 +40,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.lbsapi.auth.LBSAuthManagerListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
-import com.baidu.mapapi.navi.BaiduMapNavigation;
-import com.baidu.mapapi.search.geocode.GeoCodeOption;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.baidu.navisdk.BNaviEngineManager;
-import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
-import com.baidu.navisdk.adapter.BNRoutePlanNode;
-import com.baidu.navisdk.adapter.BaiduNaviManager;
-import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
-import com.baidu.navisdk.adapter.BaiduNaviManager.RoutePlanListener;
-import com.baidu.navisdk.comapi.routeplan.RoutePlanParams.NE_RoutePlan_Mode;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
@@ -75,24 +53,19 @@ import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.ui.activity.NavigationActivity.DemoRoutePlanListener;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.PinYinUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
 import com.tchip.carlauncher.util.XunFeiErrorCodeUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
-import com.tchip.carlauncher.view.ButtonFloat;
 import com.tchip.carlauncher.view.CircularProgressDrawable;
 import com.tchip.carlauncher.view.ResideMenu;
-import com.tchip.carlauncher.view.ResideMenuInfo;
-import com.tchip.carlauncher.view.ResideMenuItem;
 
 public class ChatActivity extends FragmentActivity implements OnClickListener {
 	// 语义理解对象（语音到语义）。
 	private SpeechUnderstander mSpeechUnderstander;
 	// 语义理解对象（文本到语义）。
 	private TextUnderstander mTextUnderstander;
-	private Toast mToast;
 	private TextView tvHint;
 	private TextView tvQuestion, tvAnswer;
 	private String strService;
@@ -107,15 +80,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 	private ScrollView scrollArea;
 
 	private PackageManager packageManager;
-
-	// 百度地图地址转经纬度
-	private GeoCoder mEndSearch = null;
-	private LatLng mEndLatLng;
-	private double startLat = 0.0;
-	private double startLng = 0.0;
-	private double endLat = 0.0;
-	private double endLng = 0.0;
-
 	private RelativeLayout layoutBack; // 返回
 	private LinearLayout layoutHelp; // 帮助
 
@@ -142,8 +106,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		mTextUnderstander = TextUnderstander.createTextUnderstander(
 				ChatActivity.this, textUnderstanderListener);
 
-		mToast = Toast.makeText(ChatActivity.this, "", Toast.LENGTH_SHORT);
-
 		// 监听屏幕熄灭与点亮
 		// final IntentFilter screenFilter = new IntentFilter();
 		// screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -155,140 +117,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		Button btnToMultimedia = (Button) findViewById(R.id.btnToMultimedia);
 		btnToMultimedia.setOnClickListener(this);
 	}
-
-	/**
-	 * 启动GPS导航. 前置条件：导航引擎初始化成功
-	 */
-	// private void launchNavigator(double startLatitude, double startLongitude,
-	// String startName, double endLatitude, double endLongitude,
-	// String endName) {
-	// BaiduNaviManager.getInstance().launchNavigator(this, startLatitude,
-	// startLongitude, startName, endLatitude, endLongitude, endName,
-	// NE_RoutePlan_Mode.ROUTE_PLAN_MOD_MIN_TIME, // 算路方式
-	// true, // 真实导航
-	// BaiduNaviManager.STRATEGY_FORCE_ONLINE_PRIORITY, // 在离线策略
-	// new OnStartNavigationListener() { // 跳转监听
-	//
-	// @Override
-	// public void onJumpToNavigator(Bundle configParams) {
-	// Intent intent = new Intent(ChatActivity.this,
-	// BNavigatorActivity.class);
-	// intent.putExtras(configParams);
-	// startActivity(intent);
-	// }
-	//
-	// @Override
-	// public void onJumpToDownloader() {
-	// }
-	// });
-	// }
-
-	private void routeplanToNavi(CoordinateType coType, double startLatitude,
-			double startLongitude, String startName, double endLatitude,
-			double endLongitude, String endName) {
-		BNRoutePlanNode sNode = null;
-		BNRoutePlanNode eNode = null;
-		// 需要将bd09ll转成BD09_MC,GCJ02,WGS84
-		BDLocation bdLocStartBefore = new BDLocation();
-		bdLocStartBefore.setLatitude(startLatitude);
-		bdLocStartBefore.setLongitude(startLongitude);
-		BDLocation bdLocStartAfter = LocationClient.getBDLocationInCoorType(
-				bdLocStartBefore, BDLocation.BDLOCATION_BD09LL_TO_GCJ02);
-
-		BDLocation bdLocEndBefore = new BDLocation();
-		bdLocEndBefore.setLatitude(endLatitude);
-		bdLocEndBefore.setLongitude(endLongitude);
-		BDLocation bdLocEndAfter = LocationClient.getBDLocationInCoorType(
-				bdLocEndBefore, BDLocation.BDLOCATION_BD09LL_TO_GCJ02);
-
-		sNode = new BNRoutePlanNode(bdLocStartAfter.getLongitude(),
-				bdLocStartAfter.getLatitude(), startName, null,
-				CoordinateType.GCJ02);
-		eNode = new BNRoutePlanNode(bdLocEndAfter.getLongitude(),
-				bdLocEndAfter.getLatitude(), endName, null,
-				CoordinateType.GCJ02);
-
-		if (sNode != null && eNode != null) {
-			List<BNRoutePlanNode> list = new ArrayList<BNRoutePlanNode>();
-			list.add(sNode);
-			list.add(eNode);
-			BaiduNaviManager.getInstance().launchNavigator(this, list, 1, true,
-					new DemoRoutePlanListener(sNode));
-		}
-	}
-
-	public class DemoRoutePlanListener implements RoutePlanListener {
-
-		private BNRoutePlanNode mBNRoutePlanNode = null;
-
-		public DemoRoutePlanListener(BNRoutePlanNode node) {
-			mBNRoutePlanNode = node;
-		}
-
-		@Override
-		public void onJumpToNavigator() {
-			Intent intent = new Intent(ChatActivity.this,
-					BNavigatorActivity.class);
-			Bundle bundle = new Bundle();
-			bundle.putSerializable(MainActivity.ROUTE_PLAN_NODE,
-					(BNRoutePlanNode) mBNRoutePlanNode);
-			intent.putExtras(bundle);
-			startActivity(intent);
-		}
-
-		@Override
-		public void onRoutePlanFailed() {
-			Log.e(Constant.TAG, "Baidu Navi:Route Plan Failed!");
-		}
-	}
-
-	private BNOuterTTSPlayerCallback mTTSCallback = new BNOuterTTSPlayerCallback() {
-
-		@Override
-		public void stopTTS() {
-
-		}
-
-		@Override
-		public void resumeTTS() {
-
-		}
-
-		@Override
-		public void releaseTTSPlayer() {
-
-		}
-
-		@Override
-		public int playTTSText(String speech, int bPreempt) {
-			return 0;
-		}
-
-		@Override
-		public void phoneHangUp() {
-
-		}
-
-		@Override
-		public void phoneCalling() {
-
-		}
-
-		@Override
-		public void pauseTTS() {
-
-		}
-
-		@Override
-		public void initTTSPlayer() {
-
-		}
-
-		@Override
-		public int getTTSState() {
-			return 0;
-		}
-	};
 
 	/**
 	 * 侧边栏打开关闭监听
@@ -418,7 +246,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 						.getErrorDescription(code);
 				Toast.makeText(getApplicationContext(), errorContent,
 						Toast.LENGTH_SHORT).show();
-
 			}
 		}
 	};
@@ -521,7 +348,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 			// 初始化失败,错误码： code
 			Toast.makeText(getApplicationContext(),
 					error.getErrorDescription(), Toast.LENGTH_SHORT).show();
-
 		}
 	};
 
@@ -541,7 +367,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 						String text = result.getResultString();
 						if (!TextUtils.isEmpty(text)) {
 							tvHint.setText(text);
-
 							try {
 								JSONObject jsonObject;
 								jsonObject = new JSONObject(text);
@@ -605,13 +430,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										endCityStr = mSharedPreferences
 												.getString("cityName", "未知");
 									}
-									// mEndSearch = GeoCoder.newInstance();
-									// mEndSearch
-									// .setOnGetGeoCodeResultListener(new
-									// MyOnGetGeoCoderResultListener());
-									// mEndSearch.geocode(new GeoCodeOption()
-									// .city(endCityStr)
-									// .address(endPoiStr));
 									String strAnswer = getResources()
 											.getString(
 													R.string.start_navigation)
@@ -651,6 +469,28 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 												intentMap
 														.setComponent(componentMap);
 												startActivity(intentMap);
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+										} else if ("音乐".equals(appName)
+												|| "在线音乐".equals(appName)
+												|| "酷我".equals(appName)
+												|| "酷我音乐盒".equals(appName)) {
+											try {
+												String strAnswer = getResources()
+														.getString(
+																R.string.app_is_openning)
+														+ appName;
+												tvAnswer.setText(strAnswer);
+
+												ComponentName componentMusic;
+												componentMusic = new ComponentName(
+														"cn.kuwo.kwmusichd",
+														"cn.kuwo.kwmusichd.WelcomeActivity");
+												Intent intentMusic = new Intent();
+												intentMusic
+														.setComponent(componentMusic);
+												startActivity(intentMusic);
 											} catch (Exception e) {
 												e.printStackTrace();
 											}
@@ -895,10 +735,13 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										R.string.mms_send_success),
 								Toast.LENGTH_SHORT).show();
 						break;
+
 					case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
 						break;
+
 					case SmsManager.RESULT_ERROR_RADIO_OFF:
 						break;
+
 					case SmsManager.RESULT_ERROR_NULL_PDU:
 						break;
 					}
@@ -954,7 +797,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				}
 			}
 			return "";
-
 		}
 
 		private void startAppbyPackage(String packageName) {
@@ -998,7 +840,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 		@Override
 		public void onVolumeChanged(int v) {
-			// showTip("onVolumeChanged：" + v);
 			// 更新对话框音量
 			audioRecordDialog.updateVolumeLevel(v);
 		}
@@ -1075,11 +916,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		mTextUnderstander.destroy();
 	}
 
-	private void showTip(final String str) {
-		mToast.setText(str);
-		mToast.show();
-	}
-
 	/**
 	 * 参数设置
 	 * 
@@ -1119,7 +955,6 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				mSharedPreferences.getString("voicePath",
 						Environment.getExternalStorageDirectory()
 								+ "/iflytek/wavaudio.pcm")
-
 		);
 	}
 
@@ -1142,47 +977,5 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		FlowerCollector.onPause(ChatActivity.this);
 		super.onPause();
 	}
-
-	class MyOnGetGeoCoderResultListener implements OnGetGeoCoderResultListener {
-
-		@Override
-		public void onGetGeoCodeResult(GeoCodeResult result) {
-			mEndLatLng = result.getLocation();
-			if (mEndLatLng != null) {
-				// 起始点：当前位置
-				startLat = Double.parseDouble(mSharedPreferences.getString(
-						"latitude", "0.0"));
-				startLng = Double.parseDouble(mSharedPreferences.getString(
-						"longitude", "0.0"));
-				// 目的地
-				endLat = mEndLatLng.latitude;
-				endLng = mEndLatLng.longitude;
-				// LatLng startLatLng = new LatLng(startLat, startLng);
-				// LatLng endLatLng = new LatLng(endLat, endLng);
-
-				// 启动自写地图
-				routeplanToNavi(CoordinateType.GCJ02, startLat, startLng,
-						"当前位置", endLat, endLng, result.getAddress());
-
-				// 构建 导航参数
-				// NaviPara para = new NaviPara();
-				// para.startPoint = startLatLng;
-				// para.startName = "从这里开始";
-				// para.endPoint = endLatLng;
-				// para.endName = "到这里结束";
-
-				// try {
-				// BaiduMapNavigation.openBaiduMapNavi(para,
-				// getApplicationContext());
-				// } catch (BaiduMapAppNotSupportNaviException e) {
-				// e.printStackTrace();
-				// }
-			}
-		}
-
-		@Override
-		public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-		}
-	}
-
+	
 }

@@ -16,6 +16,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 
 import java.util.ArrayList;
@@ -32,13 +33,9 @@ public class ResideMenu extends FrameLayout {
 
 	private ImageView imageViewShadow;
 	private ImageView imageViewBackground;
-	private LinearLayout layoutLeftMenu;
-	private LinearLayout layoutRightMenu;
-	private LinearLayout layoutInfo;
-	private LinearLayout layoutHint;
-	private RelativeLayout leftMenu;
-	private RelativeLayout rightMenu;
-	private RelativeLayout scrollViewMenu;
+	private LinearLayout layoutDialer, layoutLeftMenu, layoutMessage,
+			layoutRightMenu, layoutInfo, layoutHint;
+	private RelativeLayout leftMenu, rightMenu, scrollViewMenu;
 	/** the activity that view attach to */
 	private Activity activity;
 	/** the decorview of the activity */
@@ -83,6 +80,17 @@ public class ResideMenu extends FrameLayout {
 		layoutInfo = (LinearLayout) findViewById(R.id.layout_info);
 
 		layoutHint = (LinearLayout) findViewById(R.id.layoutHint);
+
+		layoutDialer = (LinearLayout) findViewById(R.id.layoutDialer);
+		layoutMessage = (LinearLayout) findViewById(R.id.layoutMessage);
+
+		if (Constant.Module.hasDialer) {
+			layoutDialer.setVisibility(View.VISIBLE);
+			layoutMessage.setVisibility(View.VISIBLE);
+		} else {
+			layoutDialer.setVisibility(View.GONE);
+			layoutMessage.setVisibility(View.GONE);
+		}
 	}
 
 	/**
