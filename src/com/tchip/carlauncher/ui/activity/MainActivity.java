@@ -410,6 +410,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		wifiIntentFilter = new IntentFilter();
 		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		wifiIntentFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
 		updateWiFiState();
 
 		// 3G状态信息
@@ -537,9 +538,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			});
 		}
-
-		// 更新界面线程
-		new Thread(new UpdateLayoutThread()).start();
 	}
 
 	private void startSpeak(String content) {
@@ -742,7 +740,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			smallVideoCamera.setVisibility(View.VISIBLE);
 			layoutLargeButton.setVisibility(View.INVISIBLE);
 		}
-
 	}
 
 	private boolean isSurfaceLarge() {
@@ -801,7 +798,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							|| (!MyApplication.isPowerConnect)) {
 						// 录像时视频SD卡拔出,电源断开保存视频
 						Log.e(Constant.TAG,
-								"SD card remove badly, stop record!");
+								"SD card remove badly or power unconnected, stop record!");
 						Message messageEject = new Message();
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
@@ -878,59 +875,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			// imageDefault.setVisibility(View.VISIBLE);
 		}
 	}
-
-	public class UpdateLayoutThread implements Runnable {
-
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(5000);
-					Message message = new Message();
-					message.what = 1;
-					updateLayoutHandler.sendMessage(message);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	final Handler updateLayoutHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case 1:
-				// 更新WiFi状态图标
-				// updateWiFiState();
-
-				// 连接WiFi
-				if (!Constant.Module.isWifiSystem) {
-					WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-					ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-					NetworkInfo mWifi = connManager
-							.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-					if (wifiManager.isWifiEnabled()
-							&& (!mWifi.isConnectedOrConnecting())) {
-						Intent intentWiFi = new Intent(getApplicationContext(),
-								ConnectWifiService.class);
-						startService(intentWiFi);
-						// Log.v(Constant.TAG, "Start Connect Wifi...");
-					} else {
-						// Log.v(Constant.TAG, "Wifi is Connected or disable");
-					}
-				}
-
-				// 更新位置和天气信息
-				updateLocationAndWeather();
-
-				break;
-
-			default:
-				break;
-			}
-			super.handleMessage(msg);
-		}
-	};
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
@@ -1336,6 +1280,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				isFirstLoc = false;
 				// 更新天气
 				startWeatherService();
+				// 更新位置和天气信息
+				updateLocationAndWeather();
 			}
 			String cityName = location.getCity();
 			if (hasNetwork && (cityName != null)
@@ -1356,7 +1302,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.putString("lbsTime", location.getTime());
 				editor.commit();
 
-				// new Thread(networkTask).start();
 			}
 		}
 
@@ -1396,6 +1341,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		mLocationClient.start();
 	}
 
+	private int oldWifiLevel = 0;
+
 	/**
 	 * WiFi状态Receiver
 	 */
@@ -1405,6 +1352,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			int wifi_state = intent.getIntExtra("wifi_state", 0);
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
+			if (oldWifiLevel != level) {
+				updateWiFiState();
+				oldWifiLevel = level;
+				Log.v(Constant.TAG, "wifiIntentReceiver, Wifi Level:" + level);
+			}
+
 			switch (wifi_state) {
 			case WifiManager.WIFI_STATE_ENABLED:
 			case WifiManager.WIFI_STATE_ENABLING:
