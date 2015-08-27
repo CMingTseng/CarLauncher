@@ -146,6 +146,11 @@ public interface Constant {
 		public static final boolean hasDialer = false;
 
 		/**
+		 * 在线音乐是酷我还是酷狗
+		 */
+		public static final boolean isOnlineMusicKuwo = true;
+
+		/**
 		 * 本地音乐是否是系统音乐
 		 */
 		public static final boolean isLocalMusicSystem = true;

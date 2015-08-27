@@ -162,9 +162,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		audioRecordDialog = new AudioRecordDialog(MainActivity.this);
 
 		strNotLocate = getResources().getString(R.string.not_locate);
-		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 		initialLayout();
 		initialCameraButton();
@@ -411,6 +408,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		wifiIntentFilter = new IntentFilter();
 		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		wifiIntentFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+		wifiIntentFilter.setPriority(Integer.MAX_VALUE);
 		updateWiFiState();
 
 		// 3G状态信息
@@ -861,6 +859,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 更新WiF状态
 	 */
 	private void updateWiFiState() {
+		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
@@ -1031,16 +1033,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.mapHideView:
 			case R.id.imageNavi:
-				// try {
-				// ComponentName componentMap = new ComponentName(
-				// "com.baidu.BaiduMap",
-				// "com.baidu.baidumaps.WelcomeScreen");
-				// Intent intentMap = new Intent();
-				// intentMap.setComponent(componentMap);
-				// startActivity(intentMap);
-				// } catch (Exception e) {
-				// e.printStackTrace();
-				// }
 				if (!ClickUtil.isQuickClick(800)) {
 					Intent intentNavi = new Intent(MainActivity.this,
 							NavigationActivity.class);
@@ -1105,8 +1097,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!ClickUtil.isQuickClick(800)) {
 					Intent intentFileExplore = new Intent(MainActivity.this,
 							FolderActivity.class);
-					// Intent intentFileExplore = new Intent(MainActivity.this,
-					// VideoListActivity.class);
 					startActivity(intentFileExplore);
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
@@ -1295,7 +1285,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.putString("altitude", "" + location.getAltitude());
 				editor.putString("lbsTime", location.getTime());
 				editor.commit();
-
 			}
 		}
 

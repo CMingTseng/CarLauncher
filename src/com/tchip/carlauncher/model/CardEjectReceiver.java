@@ -9,12 +9,8 @@ import android.content.Intent;
 
 public class CardEjectReceiver extends BroadcastReceiver {
 
-	private Context context;
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		this.context = context;
-
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_MEDIA_EJECT)
 				|| action.equals(Intent.ACTION_MEDIA_BAD_REMOVAL)
