@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.tchip.aispeech.util.SpeechConfig;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.ui.activity.ChatActivity;
+import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.ui.activity.NavigationActivity;
 import com.tchip.speech.WeatherInfo;
 
@@ -56,7 +57,17 @@ public class AnalysisCloudMessage{
 			
 			//处理一些日常用语
 			if(SpeechConfig.hello.equals(input)){
-				return SpeechConfig.hello;
+				//hello
+				return SpeechConfig.helloAck;
+			}else if(input.contains(SpeechConfig.userDo) && input.contains(SpeechConfig.me)){
+				//我可以说什么
+				return SpeechConfig.userDoAck;
+			}else if(SpeechConfig.goBack.equals(input)){
+				//返回桌面
+				Intent intentLauncher = new Intent(context, MainActivity.class);
+				intentLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intentLauncher);
+    			return SpeechConfig.goCarLaunchering;
 			}else{
 				if(semantics == null){
 					return "我听不懂你说什么！";

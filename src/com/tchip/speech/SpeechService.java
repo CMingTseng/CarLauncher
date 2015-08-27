@@ -345,6 +345,7 @@ public class SpeechService extends Service {
                 //resultText.setText("初始化失败!code:" + status);
             	sendMachineMessage("初始化失败");
             }
+            sendUIMessage("speech_end");
         }
 
         @Override
@@ -467,7 +468,7 @@ public class SpeechService extends Service {
         		        mWakeupEngine.setStopOnWakeupSuccess(false);
                     }
                 } else {
-                	if(data.contains(SpeechConfig.screenOff)){
+                	if(data.equals(SpeechConfig.screenOff)){
                 		//关闭屏幕
                 		//kl.reenableKeyguard();
                 		//wl.acquire(1);
@@ -487,7 +488,8 @@ public class SpeechService extends Service {
                 		
                 	}else{
                 		//其他操作
-	                    sendMachineMessage(data);
+                		if(data.length() > 0) //当字符串为""时不显示
+                			sendMachineMessage(data);
 	                    
 	                    if(NetworkUtil.isNetworkConnected(getApplicationContext())){
 	                    	sctts.cloudTTS(data);
