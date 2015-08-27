@@ -12,6 +12,7 @@
     <!-- <supports-screens android:anyDensity="false" /> -->
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -115,6 +116,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.tchip.carlauncher.OLMusicPlayActivity"
+            android:screenOrientation="landscape" />
 
         <!-- 微信 -->
         <activity
@@ -357,10 +361,10 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        
+
         <receiver android:name="com.tchip.speech.SystemBootCompletedReceiver" >
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            <intent-filter android:priority="1000" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <!-- 语音服务 service -->

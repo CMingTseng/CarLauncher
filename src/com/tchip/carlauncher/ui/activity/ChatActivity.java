@@ -51,6 +51,7 @@ import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.OLMusicPlayActivity;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.NetworkUtil;
@@ -414,6 +415,32 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 									startSpeak(strAnswer);
 								} else if ("music".equals(strService)) {
 									// 下载邓紫棋的喜欢你
+									// operation": "PLAY",
+									String operationStr = jsonObject
+											.getString("operation");
+									JSONObject slotObject = jsonObject
+											.getJSONObject("semantic")
+											.getJSONObject("slots");
+									String strArtist = slotObject
+											.getString("artist");
+									String strSong = slotObject
+											.getString("song");
+
+									if ("PLAY".equals(operationStr)) {
+										JSONArray resultArray = jsonObject
+												.getJSONObject("data")
+												.getJSONArray("result");
+										JSONObject resultFirst = resultArray
+												.getJSONObject(0);
+										String downloadUrl = resultFirst
+												.getString("downloadUrl");
+										Intent intentMusic = new Intent(
+												ChatActivity.this,
+												OLMusicPlayActivity.class);
+										intentMusic.putExtra("downloadUrl",
+												downloadUrl);
+										startActivity(intentMusic);
+									}
 								} else if ("map".equals(strService)) {
 									// 导航到中山市图书馆 operation": "ROUTE"
 									String endPoiStr = jsonObject
@@ -954,8 +981,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 				SpeechConstant.ASR_AUDIO_PATH,
 				mSharedPreferences.getString("voicePath",
 						Environment.getExternalStorageDirectory()
-								+ "/iflytek/wavaudio.pcm")
-		);
+								+ "/iflytek/wavaudio.pcm"));
 	}
 
 	@Override
@@ -977,5 +1003,5 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		FlowerCollector.onPause(ChatActivity.this);
 		super.onPause();
 	}
-	
+
 }
