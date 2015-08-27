@@ -158,18 +158,18 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		if (StorageUtil.isVideoCardExists()
 				&& sharedPreferences.getBoolean("isFirstLaunch", true)) {
-			
 			// 初次启动清空录像文件夹
 			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
 			if (Constant.Record.saveVideoToSD2) {
 				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 			}
-			
+
 			File file = new File(sdcardPath + "tachograph/");
-			RecursionDeleteFile(file);
+			StorageUtil.RecursionDeleteFile(file);
 			Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
 
 			editor.putBoolean("isFirstLaunch", false);
+			editor.commit();
 		} else {
 			Log.e(Constant.TAG, "Video card not exist or isn't first launch");
 		}
@@ -1666,7 +1666,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						 * 这种情况下旧视频无法直接删除， 此时如果满存储，需要直接删除
 						 */
 						File file = new File(sdcardPath + "tachograph/");
-						RecursionDeleteFile(file);
+						StorageUtil.RecursionDeleteFile(file);
 						Log.e(Constant.TAG, "!!! Delete tachograph/ Directory");
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						if (sdFree < sdTotal
@@ -1717,30 +1717,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			 */
 			e.printStackTrace();
 			return false;
-		}
-	}
-
-	/**
-	 * 递归删除文件和文件夹
-	 * 
-	 * @param file
-	 *            要删除的根目录
-	 */
-	public static void RecursionDeleteFile(File file) {
-		if (file.isFile()) {
-			file.delete();
-			return;
-		}
-		if (file.isDirectory()) {
-			File[] childFile = file.listFiles();
-			if (childFile == null || childFile.length == 0) {
-				file.delete();
-				return;
-			}
-			for (File f : childFile) {
-				RecursionDeleteFile(f);
-			}
-			file.delete();
 		}
 	}
 
