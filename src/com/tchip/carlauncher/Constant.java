@@ -179,6 +179,11 @@ public interface Constant {
 		 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 		 */
 		public static final boolean isVoiceXunfei = true;
+		
+		/**
+		 * HorizontalScrollView是否有onTouch事件
+		 */
+		public static final boolean isHsvTouch = false;
 	}
 
 	/**

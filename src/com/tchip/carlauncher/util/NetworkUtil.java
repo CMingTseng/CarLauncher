@@ -2,7 +2,6 @@ package com.tchip.carlauncher.util;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.ui.activity.ChatActivity;
 
 import android.content.Context;
 import android.content.Intent;

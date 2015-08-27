@@ -1,12 +1,5 @@
 package com.tchip.carlauncher.ui.activity;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
@@ -16,7 +9,6 @@ import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;

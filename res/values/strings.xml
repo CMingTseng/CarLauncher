@@ -328,8 +328,8 @@
     <string name="input_navigation_destination">输入导航目的地</string>
     <string name="star_company">公司</string>
     <string name="star_home">家</string>
-    <string name="hint_navi_init_fail">导航实例初始化失败，需联网后返回主界面重新初始化</string>
-    <string name="hint_navi_auth_fail">导航实例授权失败，需联网后返回主界面重新初始化</string>
+    <string name="hint_navi_init_fail">导航实例初始化失败，请联网后重启机器</string>
+    <string name="hint_navi_auth_fail">导航实例授权失败，请联网后重启机器</string>
 
     <string-array name="navi_intent">
         <item>导航去</item>

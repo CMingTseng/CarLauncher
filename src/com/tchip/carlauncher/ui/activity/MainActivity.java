@@ -506,34 +506,37 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		hsvMain = (HorizontalScrollView) findViewById(R.id.hsvMain);
 		hsvMain.setDrawingCacheEnabled(true);
-		hsvMain.setOnTouchListener(new View.OnTouchListener() {
+		if (Constant.Module.isHsvTouch) {
+			hsvMain.setOnTouchListener(new View.OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_MOVE:
-					View childFirst = ((HorizontalScrollView) v).getChildAt(0);
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					switch (event.getAction()) {
+					case MotionEvent.ACTION_MOVE:
+						View childFirst = ((HorizontalScrollView) v)
+								.getChildAt(0);
 
-					// 右侧阴影
-					if (v.getScrollX() + v.getWidth() + 20 >= childFirst
-							.getMeasuredWidth()) {
-						imageShadowRight.setVisibility(View.INVISIBLE);
-					} else {
-						imageShadowRight.setVisibility(View.VISIBLE);
+						// 右侧阴影
+						if (v.getScrollX() + v.getWidth() + 20 >= childFirst
+								.getMeasuredWidth()) {
+							imageShadowRight.setVisibility(View.INVISIBLE);
+						} else {
+							imageShadowRight.setVisibility(View.VISIBLE);
+						}
+						// 左侧阴影
+						if (v.getScrollX() >= 20) {
+							imageShadowLeft.setVisibility(View.VISIBLE);
+						} else {
+							imageShadowLeft.setVisibility(View.INVISIBLE);
+						}
+						break;
+					default:
+						break;
 					}
-					// 左侧阴影
-					if (v.getScrollX() >= 20) {
-						imageShadowLeft.setVisibility(View.VISIBLE);
-					} else {
-						imageShadowLeft.setVisibility(View.INVISIBLE);
-					}
-					break;
-				default:
-					break;
+					return false;
 				}
-				return false;
-			}
-		});
+			});
+		}
 
 		// 更新界面线程
 		new Thread(new UpdateLayoutThread()).start();
@@ -797,6 +800,8 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (MyApplication.isVideoCardEject
 							|| (!MyApplication.isPowerConnect)) {
 						// 录像时视频SD卡拔出,电源断开保存视频
+						Log.e(Constant.TAG,
+								"SD card remove badly, stop record!");
 						Message messageEject = new Message();
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
@@ -896,7 +901,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (msg.what) {
 			case 1:
 				// 更新WiFi状态图标
-				updateWiFiState();
+				// updateWiFiState();
 
 				// 连接WiFi
 				if (!Constant.Module.isWifiSystem) {
@@ -1311,7 +1316,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			// }
 
 			// 存储非“未定位”的城市信息
-			String strNotLocate = getResources().getString(R.string.not_locate);
 			if (!strNotLocate.equals(location.getCity())) {
 				editor.putString("cityNameRealButOld", location.getCity());
 				editor.commit();
@@ -1698,10 +1702,8 @@ public class MainActivity extends Activity implements TachographCallback,
 									"Delete Old Unlock Video:" + f.getName());
 						}
 					}
-
 					// 删除数据库记录
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
-
 				} else {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
