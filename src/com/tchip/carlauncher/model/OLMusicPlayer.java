@@ -51,6 +51,8 @@ public class OLMusicPlayer implements OnBufferingUpdateListener,
 
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+			if (mediaPlayer == null)
+				return;
 			int position = mediaPlayer.getCurrentPosition();
 			int duration = mediaPlayer.getDuration();
 			if (duration > 0) {
@@ -117,9 +119,9 @@ public class OLMusicPlayer implements OnBufferingUpdateListener,
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		seekBar.setSecondaryProgress(percent);
-		int currentProgress = seekBar.getMax()
-				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
-		Log.e(currentProgress + "% play", percent + " buffer");
+		// int currentProgress = seekBar.getMax()
+		// * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
+		// Log.e(currentProgress + "% play", percent + " buffer");
 	}
 
 	public int getAudioSessionId() {

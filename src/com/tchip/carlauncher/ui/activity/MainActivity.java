@@ -159,17 +159,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (StorageUtil.isVideoCardExists()
 				&& sharedPreferences.getBoolean("isFirstLaunch", true)) {
 			// 初次启动清空录像文件夹
-			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
-			if (Constant.Record.saveVideoToSD2) {
-				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
-			}
-
-			File file = new File(sdcardPath + "tachograph/");
-			StorageUtil.RecursionDeleteFile(file);
-			Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
-
-			editor.putBoolean("isFirstLaunch", false);
-			editor.commit();
+			new Thread(new DeleteVideoDirectoryThread()).start();
 		} else {
 			Log.e(Constant.TAG, "Video card not exist or isn't first launch");
 		}
@@ -220,6 +210,28 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 初始化fm发射
 		// initFmTransmit();
+	}
+
+	/**
+	 * 删除视频文件夹线程
+	 */
+	public class DeleteVideoDirectoryThread implements Runnable {
+
+		@Override
+		public void run() {
+			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
+			if (Constant.Record.saveVideoToSD2) {
+				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
+			}
+
+			File file = new File(sdcardPath + "tachograph/");
+			StorageUtil.RecursionDeleteFile(file);
+			Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
+
+			editor.putBoolean("isFirstLaunch", false);
+			editor.commit();
+		}
+
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -499,14 +511,15 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageRoutePlan = (ImageView) findViewById(R.id.imageRoutePlan);
 		imageRoutePlan.setOnClickListener(new MyOnClickListener());
 
-		// 拨号
-		ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
-		imageDialer.setOnClickListener(new MyOnClickListener());
+		if (Constant.Module.hasDialer) {
+			// 拨号
+			ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
+			imageDialer.setOnClickListener(new MyOnClickListener());
 
-		// 短信
-		ImageView imageMessage = (ImageView) findViewById(R.id.imageMessage);
-		imageMessage.setOnClickListener(new MyOnClickListener());
-
+			// 短信
+			ImageView imageMessage = (ImageView) findViewById(R.id.imageMessage);
+			imageMessage.setOnClickListener(new MyOnClickListener());
+		}
 		// 设置
 		ImageView imageSetting = (ImageView) findViewById(R.id.imageSetting);
 		imageSetting.setOnClickListener(new MyOnClickListener());
@@ -1447,7 +1460,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 导航实例
 		if (MyApplication.isNaviAuthSuccess) {
 			Log.v(Constant.TAG, "Navi Instance Already Initial Success");
-		} else {
+		} else if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
 			initialNaviInstance();
 			Log.v(Constant.TAG, "Navi Instance is Initialing...");
 		}
