@@ -1166,13 +1166,11 @@ public class NavigationActivity extends FragmentActivity implements
 
 		@Override
 		public void stopTTS() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void resumeTTS() {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -1413,10 +1411,8 @@ public class NavigationActivity extends FragmentActivity implements
 		}
 
 		@Override
-		public void onVolumeChanged(int v) {
-			Log.e(Constant.TAG, "VOLUME:" + v);
-			audioRecordDialog.updateVolumeLevel(v);
-
+		public void onVolumeChanged(int volume, byte[] arg1) {
+			audioRecordDialog.updateVolumeLevel(volume);
 		}
 
 		@Override

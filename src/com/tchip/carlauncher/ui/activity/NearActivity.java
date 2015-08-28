@@ -262,10 +262,8 @@ public class NearActivity extends Activity {
 		}
 
 		@Override
-		public void onVolumeChanged(int v) {
-			Log.e("ZMS", "VOLUME:" + v);
-			audioRecordDialog.updateVolumeLevel(v);
-
+		public void onVolumeChanged(int volume, byte[] arg1) {
+			audioRecordDialog.updateVolumeLevel(volume);
 		}
 
 		@Override

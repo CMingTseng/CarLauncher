@@ -63,9 +63,9 @@ import com.tchip.carlauncher.view.CircularProgressDrawable;
 import com.tchip.carlauncher.view.ResideMenu;
 
 public class ChatActivity extends FragmentActivity implements OnClickListener {
-	// 语义理解对象（语音到语义）。
+	// 语义理解对象（语音到语义）
 	private SpeechUnderstander mSpeechUnderstander;
-	// 语义理解对象（文本到语义）。
+	// 语义理解对象（文本到语义）
 	private TextUnderstander mTextUnderstander;
 	private TextView tvHint;
 	private TextView tvQuestion, tvAnswer;
@@ -866,7 +866,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		}
 
 		@Override
-		public void onVolumeChanged(int v) {
+		public void onVolumeChanged(int v, byte[] b) {
 			// 更新对话框音量
 			audioRecordDialog.updateVolumeLevel(v);
 		}

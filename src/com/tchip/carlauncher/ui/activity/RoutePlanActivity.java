@@ -726,10 +726,8 @@ public class RoutePlanActivity extends Activity implements
 		}
 
 		@Override
-		public void onVolumeChanged(int v) {
-			Log.e("ZMS", "VOLUME:" + v);
+		public void onVolumeChanged(int v, byte[] b) {
 			audioRecordDialog.updateVolumeLevel(v);
-
 		}
 
 		@Override
