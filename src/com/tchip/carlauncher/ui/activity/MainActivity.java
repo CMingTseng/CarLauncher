@@ -231,7 +231,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			editor.putBoolean("isFirstLaunch", false);
 			editor.commit();
 		}
-
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -490,10 +489,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else {
 			layoutFileExplore.setVisibility(View.GONE);
 		}
-
-		// 周边搜索
-		ImageView imageNearSearch = (ImageView) findViewById(R.id.imageNearSearch);
-		imageNearSearch.setOnClickListener(new MyOnClickListener());
 
 		// 语音助手
 		ImageView imageVoiceChat = (ImageView) findViewById(R.id.imageVoiceChat);
@@ -1151,16 +1146,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					Intent intentFileExplore = new Intent(MainActivity.this,
 							FolderActivity.class);
 					startActivity(intentFileExplore);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
-				break;
-
-			case R.id.imageNearSearch:
-				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentNearSearch = new Intent(MainActivity.this,
-							NearActivity.class);
-					startActivity(intentNearSearch);
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
 				}

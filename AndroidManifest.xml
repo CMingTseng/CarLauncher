@@ -159,9 +159,6 @@
         </receiver>
 
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.NearActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.tchip.carlauncher.ui.activity.NearResultActivity"
             android:screenOrientation="landscape" />
         <activity
