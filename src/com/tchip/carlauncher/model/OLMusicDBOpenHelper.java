@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

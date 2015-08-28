@@ -1,4 +1,4 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.model;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -120,6 +120,10 @@ public class OLMusicPlayer implements OnBufferingUpdateListener,
 		int currentProgress = seekBar.getMax()
 				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		Log.e(currentProgress + "% play", percent + " buffer");
+	}
+
+	public int getAudioSessionId() {
+		return mediaPlayer.getAudioSessionId();
 	}
 
 }

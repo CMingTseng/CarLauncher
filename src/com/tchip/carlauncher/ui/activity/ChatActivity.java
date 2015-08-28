@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +30,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -37,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,8 +54,8 @@ import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.iflytek.sunflower.FlowerCollector;
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.OLMusicPlayActivity;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.model.OLMusicPlayer;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.PinYinUtil;
@@ -92,12 +95,17 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 
 	private AudioRecordDialog audioRecordDialog;
 
+	// 音乐播放
+	private OLMusicPlayer player;
+	private SeekBar musicSeekBar;
+
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(R.layout.activity_chat);
 
 		initLayout();
@@ -432,14 +440,19 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 												.getJSONArray("result");
 										JSONObject resultFirst = resultArray
 												.getJSONObject(0);
-										String downloadUrl = resultFirst
+										final String downloadUrl = resultFirst
 												.getString("downloadUrl");
-										Intent intentMusic = new Intent(
-												ChatActivity.this,
-												OLMusicPlayActivity.class);
-										intentMusic.putExtra("downloadUrl",
-												downloadUrl);
-										startActivity(intentMusic);
+										musicSeekBar = (SeekBar) findViewById(R.id.musicSeekBar);
+										player = new OLMusicPlayer(musicSeekBar);
+
+										new Thread(new Runnable() {
+
+											@Override
+											public void run() {
+												player.playUrl(downloadUrl);
+											}
+										}).start();
+
 									}
 								} else if ("map".equals(strService)) {
 									// 导航到中山市图书馆 operation": "ROUTE"
@@ -941,6 +954,12 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		if (mTextUnderstander.isUnderstanding())
 			mTextUnderstander.cancel();
 		mTextUnderstander.destroy();
+
+		// 暂停音乐
+		if (player != null) {
+			player.stop();
+			player = null;
+		}
 	}
 
 	/**

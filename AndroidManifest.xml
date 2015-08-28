@@ -117,7 +117,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tchip.carlauncher.OLMusicPlayActivity"
+            android:name="com.tchip.carlauncher.ui.activity.OLMusicPlayActivity"
             android:screenOrientation="landscape" />
 
         <!-- 微信 -->

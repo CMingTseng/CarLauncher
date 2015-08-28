@@ -1,8 +1,16 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.R.id;
+import com.tchip.carlauncher.R.layout;
+import com.tchip.carlauncher.R.string;
+import com.tchip.carlauncher.model.OLMusicDownloadProgressListener;
+import com.tchip.carlauncher.model.OLMusicFileDownloader;
+import com.tchip.carlauncher.model.OLMusicPlayer;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,9 +18,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -34,6 +45,8 @@ public class OLMusicPlayActivity extends Activity {
 	private Handler handler = new UIHandler();
 
 	private String downloadUrl;
+
+	private RelativeLayout layoutTop;
 
 	private final class UIHandler extends Handler {
 		public void handleMessage(Message msg) {
@@ -61,20 +74,25 @@ public class OLMusicPlayActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_ol_music_play);
 
-		// 接收搜索内容
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			downloadUrl = extras.getString("downloadUrl");
-		}
 
 		pathText = (EditText) findViewById(R.id.path);
 		resultView = (TextView) findViewById(R.id.resultView);
 		downloadButton = (Button) findViewById(R.id.downloadbutton);
 		stopButton = (Button) findViewById(R.id.stopbutton);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
-		ButtonClickListener listener = new ButtonClickListener();
+		
+		MyOnClickListener listener = new MyOnClickListener();
+		
+		layoutTop = (RelativeLayout) findViewById(R.id.layoutTop);
+		layoutTop.setOnClickListener(listener);
+		
 		downloadButton.setOnClickListener(listener);
 		stopButton.setOnClickListener(listener);
 		playBtn = (Button) findViewById(R.id.btn_online_play);
@@ -82,12 +100,30 @@ public class OLMusicPlayActivity extends Activity {
 		musicProgress = (SeekBar) findViewById(R.id.music_progress);
 		player = new OLMusicPlayer(musicProgress);
 		musicProgress.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+
+		// 接收搜索内容
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			downloadUrl = extras.getString("downloadUrl");
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					player.playUrl(downloadUrl);
+				}
+			}).start();
+		}
 	}
 
-	private final class ButtonClickListener implements View.OnClickListener {
+	class MyOnClickListener implements View.OnClickListener {
+
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.layoutTop:
+				finish();
+				break;
+				
 			case R.id.downloadbutton: // 开始下载
 				// http://abv.cn/music/光辉岁月.mp3，可以换成其他文件下载的链接
 				String path = downloadUrl;// pathText.getText().toString();
@@ -127,13 +163,17 @@ public class OLMusicPlayActivity extends Activity {
 
 					@Override
 					public void run() {
-						player.playUrl(pathText.getText().toString());
+						player.playUrl(downloadUrl);
 					}
 				}).start();
 				break;
-			}
-		}
 
+			default:
+				break;
+			}
+
+		}
+		
 		/*
 		 * 由于用户的输入事件(点击button, 触摸屏幕....)是由主线程负责处理的，如果主线程处于工作状态，
 		 * 此时用户产生的输入事件如果没能在5秒内得到处理，系统就会报“应用无响应”错误。
@@ -200,6 +240,7 @@ public class OLMusicPlayActivity extends Activity {
 				}
 			}
 		}
+
 	}
 
 	class SeekBarChangeEvent implements OnSeekBarChangeListener {

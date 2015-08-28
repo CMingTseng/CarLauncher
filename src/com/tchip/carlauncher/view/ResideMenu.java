@@ -34,7 +34,7 @@ public class ResideMenu extends FrameLayout {
 	private ImageView imageViewShadow;
 	private ImageView imageViewBackground;
 	private LinearLayout layoutDialer, layoutLeftMenu, layoutMessage,
-			layoutRightMenu, layoutInfo, layoutHint;
+			layoutRightMenu, layoutInfo, layoutHint, layoutMusic;
 	private RelativeLayout leftMenu, rightMenu, scrollViewMenu;
 	/** the activity that view attach to */
 	private Activity activity;
@@ -83,6 +83,7 @@ public class ResideMenu extends FrameLayout {
 
 		layoutDialer = (LinearLayout) findViewById(R.id.layoutDialer);
 		layoutMessage = (LinearLayout) findViewById(R.id.layoutMessage);
+		layoutMusic = (LinearLayout) findViewById(R.id.layoutMusic);
 
 		if (Constant.Module.hasDialer) {
 			layoutDialer.setVisibility(View.VISIBLE);
@@ -90,6 +91,11 @@ public class ResideMenu extends FrameLayout {
 		} else {
 			layoutDialer.setVisibility(View.GONE);
 			layoutMessage.setVisibility(View.GONE);
+		}
+		if (Constant.Module.isVoiceXunfei) {
+			layoutMusic.setVisibility(View.VISIBLE);
+		} else {
+			layoutMusic.setVisibility(View.GONE);
 		}
 	}
 

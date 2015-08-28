@@ -810,16 +810,18 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
 			synchronized (updateRecordTimeHandler) {
 				do {
-					if (MyApplication.isVideoCardEject
-							|| (!MyApplication.isPowerConnect)) {
-						// 录像时视频SD卡拔出,电源断开保存视频
-						mMyRecorder.stop();
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
-						MyApplication.isVideoReording = false;
+					if (MyApplication.isVideoCardEject) {
+						// 录像时视频SD卡拔出停止录像
 						Log.e(Constant.TAG,
 								"SD card remove badly or power unconnected, stop record!");
 						Message messageEject = new Message();
 						messageEject.what = 2;
+						updateRecordTimeHandler.sendMessage(messageEject);
+						break;
+					} else if (!MyApplication.isPowerConnect) {
+						Log.e(Constant.TAG, "Stop Record:Power is unconnected");
+						Message messageEject = new Message();
+						messageEject.what = 3;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						break;
 					} else {
@@ -847,7 +849,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 2:
-				// 停止录像
+				// SD卡异常移除：停止录像
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
@@ -869,6 +871,29 @@ public class MainActivity extends Activity implements TachographCallback,
 				audioRecordDialog.showErrorDialog(strVideoCardEject);
 				new Thread(new dismissDialogThread()).start();
 				break;
+
+			case 3:
+				// 电源断开，停止录像
+				if (stopRecorder() == 0) {
+					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					MyApplication.isVideoReording = false;
+					setupRecordViews();
+				} else {
+					if (stopRecorder() == 0) {
+						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						MyApplication.isVideoReording = false;
+						setupRecordViews();
+					}
+				}
+
+				String strPowerUnconnect = getResources().getString(
+						R.string.stop_record_power_unconnect);
+				Toast.makeText(getApplicationContext(), strPowerUnconnect,
+						Toast.LENGTH_SHORT).show();
+				Log.e(Constant.TAG, "Power");
+				startSpeak(strPowerUnconnect);
+				audioRecordDialog.showErrorDialog(strPowerUnconnect);
+				new Thread(new dismissDialogThread()).start();
 
 			default:
 				break;

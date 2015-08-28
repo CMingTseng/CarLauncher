@@ -1,7 +1,9 @@
-package com.tchip.carlauncher;
+package com.tchip.carlauncher.service;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.tchip.carlauncher.model.OLMusicDBOpenHelper;
 
 import android.content.Context;
 import android.database.Cursor;
