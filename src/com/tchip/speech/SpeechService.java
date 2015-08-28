@@ -14,6 +14,7 @@ import com.aispeech.export.listeners.AIASRListener;
 import com.aispeech.export.listeners.AILocalWakeupListener;
 import com.tchip.aispeech.util.BeepPlayer;
 import com.tchip.aispeech.util.SpeechConfig;
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.ProgressAnimationUtil;
@@ -30,6 +31,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -99,11 +102,23 @@ public class SpeechService extends Service {
         }
     }
     WeatherReceiver receiver;
-	
+	private SharedPreferences preferences;
+	private Editor editor;
 	@Override
 	public void onCreate(){
 		super.onCreate();
 
+		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_SPEECH_NAME, Context.MODE_PRIVATE);
+		if(!preferences.getBoolean("speech_init", false)){
+			if(NetworkUtil.isNetworkConnected(getApplicationContext())){
+				editor = preferences.edit();
+				editor.putBoolean("speech_init", true);
+				editor.commit();
+			}else{
+				this.stopSelf();
+			}
+		}
+		
         
         new LocalGrammar(this);
         

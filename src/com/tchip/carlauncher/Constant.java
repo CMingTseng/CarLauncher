@@ -315,6 +315,7 @@ public interface Constant {
 	 * SharedPreferences名称
 	 */
 	public static final String SHARED_PREFERENCES_NAME = "CarLauncher";
+	public static final String SHARED_PREFERENCES_SPEECH_NAME = "speech";
 
 	public static final class Music {
 

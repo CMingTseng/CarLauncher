@@ -220,12 +220,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 初始化fm发射
 		// initFmTransmit();
-
-		// 启动思必驰语音服务
-		// if(!Constant.Module.isVoiceXunfei){
-		Intent intent = new Intent(this, SpeechService.class);
-		startService(intent);
-		// }
 	}
 
 	public class AutoRecordThread implements Runnable {
@@ -1424,6 +1418,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	protected void onResume() {
 		Log.v(Constant.TAG, "MainActivity:MapView onResume");
+
+		// 启动思必驰语音服务
+		// if(!Constant.Module.isVoiceXunfei){
+		Intent intent = new Intent(this, SpeechService.class);
+		startService(intent);
+		// }
 		mainMapView.onResume();
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
