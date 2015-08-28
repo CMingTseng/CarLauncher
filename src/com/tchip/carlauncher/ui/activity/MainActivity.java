@@ -502,10 +502,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageFmTransmit = (ImageView) findViewById(R.id.imageFmTransmit);
 		imageFmTransmit.setOnClickListener(new MyOnClickListener());
 
-		// 路径规划（摄像头，红绿灯）
-		ImageView imageRoutePlan = (ImageView) findViewById(R.id.imageRoutePlan);
-		imageRoutePlan.setOnClickListener(new MyOnClickListener());
-
 		if (Constant.Module.hasDialer) {
 			// 拨号
 			ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
@@ -1116,16 +1112,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					Intent intentRouteTrack = new Intent(MainActivity.this,
 							RouteListActivity.class);
 					startActivity(intentRouteTrack);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
-				break;
-
-			case R.id.imageRoutePlan:
-				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentRoutePlan = new Intent(MainActivity.this,
-							RoutePlanActivity.class);
-					startActivity(intentRoutePlan);
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
 				}

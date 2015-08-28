@@ -159,9 +159,6 @@
         </receiver>
 
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.NearResultActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.tchip.carlauncher.ui.activity.BluetoothActivity"
             android:screenOrientation="landscape" />
         <activity
@@ -175,12 +172,6 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MultimediaActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.RoutePlanActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.AboutActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.BluetoothDialerActivity"
