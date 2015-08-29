@@ -32,6 +32,7 @@ import com.tchip.carlauncher.service.WeatherService;
 import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
@@ -156,14 +157,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
-		if (StorageUtil.isVideoCardExists()
-				&& sharedPreferences.getBoolean("isFirstLaunch", true)) {
-			// 初次启动清空录像文件夹
-			new Thread(new DeleteVideoDirectoryThread()).start();
-		} else {
-			Log.e(Constant.TAG, "Video card not exist or isn't first launch");
-		}
-
 		videoDb = new DriveVideoDbHelper(getApplicationContext());
 
 		// Dialog
@@ -173,16 +166,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		initialLayout();
 		initialCameraButton();
-		initialService();
-
-		// 录像
+		// 录像：配置参数，初始化布局
 		setupRecordDefaults();
 		setupRecordViews();
 
-		// 开机自动录像
-		if (Constant.Record.autoRecord) {
-			new Thread(new AutoRecordThread()).start();
-		}
+		// 序列任务线程
+		new Thread(new AutoThread()).start();
 
 		// 开机尝试连接WiFi
 		if (!Constant.Module.isWifiSystem) {
@@ -195,9 +184,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				Intent intentWiFi = new Intent(getApplicationContext(),
 						ConnectWifiService.class);
 				startService(intentWiFi);
-				// Log.v(Constant.TAG, "Start Connect Wifi...");
 			} else {
-				// Log.v(Constant.TAG, "Wifi is Connected or disable");
 			}
 		}
 
@@ -213,48 +200,67 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 删除视频文件夹线程
+	 * 序列任务线程，分步执行
 	 */
-	public class DeleteVideoDirectoryThread implements Runnable {
-
-		@Override
-		public void run() {
-			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
-			if (Constant.Record.saveVideoToSD2) {
-				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
-			}
-
-			File file = new File(sdcardPath + "tachograph/");
-			StorageUtil.RecursionDeleteFile(file);
-			Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
-
-			editor.putBoolean("isFirstLaunch", false);
-			editor.commit();
-		}
-	}
-
-	public class AutoRecordThread implements Runnable {
+	public class AutoThread implements Runnable {
 
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(Constant.Record.autoRecordDelay);
-				Message message = new Message();
-				message.what = 1;
-				autoRecordHandler.sendMessage(message);
+				// 初次启动清空录像文件夹
+				if (StorageUtil.isVideoCardExists()
+						&& sharedPreferences.getBoolean("isFirstLaunch", true)) {
+					String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
+					if (Constant.Record.saveVideoToSD2) {
+						sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
+					}
+
+					File file = new File(sdcardPath + "tachograph/");
+					StorageUtil.RecursionDeleteFile(file);
+					MyLog.e("Delete video directory:tachograph !!!");
+
+					editor.putBoolean("isFirstLaunch", false);
+					editor.commit();
+				} else {
+					MyLog.e("Video card not exist or isn't first launch");
+				}
+
+				// 自动录像
+				if (Constant.Record.autoRecord) {
+					Thread.sleep(Constant.Record.autoRecordDelay);
+					Message message = new Message();
+					message.what = 1;
+					autoHandler.sendMessage(message);
+				}
+				// 启动服务
+				Thread.sleep(3000);
+				initialService();
+
+				// 缩放地图
+				Thread.sleep(2000);
+				Message messageMap = new Message();
+				messageMap.what = 2;
+				autoHandler.sendMessage(messageMap);
+
+				// TODO
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+
 		}
 	}
 
-	final Handler autoRecordHandler = new Handler() {
+	final Handler autoHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
 				startOrStopRecord();
 				break;
 
+			case 2:
+				initialMapView();
+				break;
 			default:
 				break;
 			}
@@ -277,17 +283,17 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			switch (state) {
 			case TelephonyManager.DATA_DISCONNECTED:// 网络断开
-				Log.v(Constant.TAG, "3G TelephonyManager.DATA_DISCONNECTED");
+				MyLog.v("3G TelephonyManager.DATA_DISCONNECTED");
 				image3G.setVisibility(View.GONE);
 				break;
 
 			case TelephonyManager.DATA_CONNECTING:// 网络正在连接
-				Log.v(Constant.TAG, "3G TelephonyManager.DATA_CONNECTING");
+				MyLog.v("3G TelephonyManager.DATA_CONNECTING");
 				image3G.setVisibility(View.VISIBLE);
 				break;
 
 			case TelephonyManager.DATA_CONNECTED:// 网络连接上
-				Log.v(Constant.TAG, "3G TelephonyManager.DATA_CONNECTED");
+				MyLog.v("3G TelephonyManager.DATA_CONNECTED");
 				image3G.setVisibility(View.VISIBLE);
 				break;
 			}
@@ -313,7 +319,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void update3GState(int signal) {
 		// imageSignalLevel,image3G.setVisibility(View.GONE);
 		simState = Tel.getSimState();
-		Log.v(Constant.TAG, "SIM State:" + simState);
+		MyLog.v("SIM State:" + simState);
 		if (simState == TelephonyManager.SIM_STATE_READY) {
 
 			imageSignalLevel.setBackground(getResources().getDrawable(
@@ -348,8 +354,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 碰撞侦测服务
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
-
-		// importOfflineMapFromSDCard();
 	}
 
 	/**
@@ -361,6 +365,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
 			imageDefault.setVisibility(View.GONE);
 		}
+
+		// 定位地图
+		mainMapView = (MapView) findViewById(R.id.mainMapView);
+		baiduMap = mainMapView.getMap();
 
 		// 录像窗口
 		if (Constant.Record.hasCamera) {
@@ -442,28 +450,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新天气与位置信息
 		updateLocationAndWeather();
 		// updateProgress.setVisibility(View.VISIBLE);
-
-		// 定位地图
-		mainMapView = (MapView) findViewById(R.id.mainMapView);
-		// 去掉缩放控件和百度Logo
-		int count = mainMapView.getChildCount();
-		for (int i = 0; i < count; i++) {
-			View child = mainMapView.getChildAt(i);
-			if (child instanceof ImageView || child instanceof ZoomControls) {
-				child.setVisibility(View.INVISIBLE);
-			}
-		}
-		baiduMap = mainMapView.getMap();
-		// 开启定位图层
-		baiduMap.setMyLocationEnabled(true);
-
-		// 自定义Marker
-		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
-		// .fromResource(R.drawable.icon_arrow_up);
-
-		// 设置地图放大级别 0-19
-		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
-		baiduMap.animateMapStatus(msu);
 
 		View mapHideView = findViewById(R.id.mapHideView);
 		mapHideView.setOnClickListener(new MyOnClickListener());
@@ -554,6 +540,30 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 加载地图，放到UI线程容易阻塞
+	 */
+	private void initialMapView() {
+		// 去掉缩放控件和百度Logo
+		int count = mainMapView.getChildCount();
+		for (int i = 0; i < count; i++) {
+			View child = mainMapView.getChildAt(i);
+			if (child instanceof ImageView || child instanceof ZoomControls) {
+				child.setVisibility(View.INVISIBLE);
+			}
+		}
+		// 开启定位图层
+		baiduMap.setMyLocationEnabled(true);
+
+		// 自定义Marker
+		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+		// .fromResource(R.drawable.icon_arrow_up);
+
+		// 设置地图放大级别 0-19
+		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
+		baiduMap.animateMapStatus(msu);
+	}
+
 	private void startSpeak(String content) {
 		Intent intent = new Intent(MainActivity.this, SpeakService.class);
 		intent.putExtra("content", content);
@@ -607,28 +617,22 @@ public class MainActivity extends Activity implements TachographCallback,
 							MyApplication.isNaviAuthSuccess = false;
 						}
 
-						Log.v(Constant.TAG, "Baidu Navi:Key auth " + authinfo);
+						MyLog.v("Baidu Navi:Key auth " + authinfo);
 					}
 
 					public void initSuccess() {
 						// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
 						MyApplication.isNaviInitialSuccess = true;
-						if (Constant.isDebug) {
-							Log.v(Constant.TAG, "Baidu Navi:Initial Success!");
-						}
+						MyLog.v("Baidu Navi:Initial Success!");
 					}
 
 					public void initStart() {
-						if (Constant.isDebug) {
-							Log.v(Constant.TAG, "Baidu Navi:Initial Start!");
-						}
+						MyLog.v("Baidu Navi:Initial Start!");
 					}
 
 					public void initFailed() {
 						MyApplication.isNaviInitialSuccess = false;
-						if (Constant.isDebug) {
-							Log.v(Constant.TAG, "Baidu Navi:Initial Fail!");
-						}
+						MyLog.v("Baidu Navi:Initial Fail!");
 					}
 				}, /* null */mTTSCallback);
 	}
@@ -810,14 +814,13 @@ public class MainActivity extends Activity implements TachographCallback,
 				do {
 					if (MyApplication.isVideoCardEject) {
 						// 录像时视频SD卡拔出停止录像
-						Log.e(Constant.TAG,
-								"SD card remove badly or power unconnected, stop record!");
+						MyLog.e("SD card remove badly or power unconnected, stop record!");
 						Message messageEject = new Message();
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						break;
 					} else if (!MyApplication.isPowerConnect) {
-						Log.e(Constant.TAG, "Stop Record:Power is unconnected");
+						MyLog.e("Stop Record:Power is unconnected");
 						Message messageEject = new Message();
 						messageEject.what = 3;
 						updateRecordTimeHandler.sendMessage(messageEject);
@@ -864,7 +867,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						R.string.sd_remove_badly);
 				Toast.makeText(getApplicationContext(), strVideoCardEject,
 						Toast.LENGTH_SHORT).show();
-				Log.e(Constant.TAG, "CardEjectReceiver:Video SD Removed");
+				MyLog.e("CardEjectReceiver:Video SD Removed");
 				startSpeak(strVideoCardEject);
 				audioRecordDialog.showErrorDialog(strVideoCardEject);
 				new Thread(new dismissDialogThread()).start();
@@ -888,7 +891,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						R.string.stop_record_power_unconnect);
 				Toast.makeText(getApplicationContext(), strPowerUnconnect,
 						Toast.LENGTH_SHORT).show();
-				Log.e(Constant.TAG, "Power");
+				MyLog.e("Record Stop:power unconnect.");
 				startSpeak(strPowerUnconnect);
 				audioRecordDialog.showErrorDialog(strPowerUnconnect);
 				new Thread(new dismissDialogThread()).start();
@@ -1088,12 +1091,16 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageMusicOL:
 				if (!ClickUtil.isQuickClick(800)) {
-					ComponentName componentMusic;
-					componentMusic = new ComponentName("cn.kuwo.kwmusichd",
-							"cn.kuwo.kwmusichd.WelcomeActivity");
-					Intent intentMusic = new Intent();
-					intentMusic.setComponent(componentMusic);
-					startActivity(intentMusic);
+					try {
+						ComponentName componentMusic;
+						componentMusic = new ComponentName("cn.kuwo.kwmusichd",
+								"cn.kuwo.kwmusichd.WelcomeActivity");
+						Intent intentMusic = new Intent();
+						intentMusic.setComponent(componentMusic);
+						startActivity(intentMusic);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				break;
 
@@ -1228,7 +1235,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				mRecordState = Constant.Record.STATE_RECORD_STARTED;
 				MyApplication.isVideoReording = true;
 			} else {
-				Log.e(Constant.TAG, "Start Record failed");
+				if (Constant.isDebug)
+					MyLog.e("Start Record Failed");
 			}
 		} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
 			if (stopRecorder() == 0) {
@@ -1238,8 +1246,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 		setupRecordViews();
-		Log.v(Constant.TAG, "MyApplication.isVideoReording:"
-				+ MyApplication.isVideoReording);
+		if (Constant.isDebug) {
+			MyLog.v("MyApplication.isVideoReording:"
+					+ MyApplication.isVideoReording);
+		}
 	}
 
 	class MyLocationListener implements BDLocationListener {
@@ -1279,7 +1289,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					&& hasNetwork) {
 				startWeatherService();
 				editor.putString("cityName", location.getCity());
-
 				editor.commit();
 			}
 
@@ -1362,7 +1371,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (oldWifiLevel != level) {
 				updateWiFiState();
 				oldWifiLevel = level;
-				Log.v(Constant.TAG, "wifiIntentReceiver, Wifi Level:" + level);
+				MyLog.v("wifiIntentReceiver, Wifi Level:" + level);
 			}
 
 			switch (wifi_state) {
@@ -1387,7 +1396,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onPause() {
-		Log.v(Constant.TAG, "MainActivity:MapView onPause");
 		mainMapView.onPause();
 
 		// 销毁定位
@@ -1401,8 +1409,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
-		Log.v(Constant.TAG, "MainActivity:MapView onResume");
-
 		// 启动思必驰语音服务
 		// if(!Constant.Module.isVoiceXunfei){
 		Intent intent = new Intent(this, SpeechService.class);
@@ -1662,10 +1668,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							+ File.separator + oldestUnlockVideoName);
 					if (f.exists() && f.isFile()) {
 						f.delete();
-						if (Constant.isDebug) {
-							Log.d(Constant.TAG,
-									"Delete Old Unlock Video:" + f.getName());
-						}
+						MyLog.d("Delete Old Unlock Video:" + f.getName());
 					}
 					// 删除数据库记录
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
@@ -1679,12 +1682,12 @@ public class MainActivity extends Activity implements TachographCallback,
 						 */
 						File file = new File(sdcardPath + "tachograph/");
 						StorageUtil.RecursionDeleteFile(file);
-						Log.e(Constant.TAG, "!!! Delete tachograph/ Directory");
+						MyLog.e("!!! Delete tachograph/ Directory");
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						if (sdFree < sdTotal
 								* Constant.Record.SD_MIN_FREE_PERCENT) {
 							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
-							Log.e(Constant.TAG, "Storage is full...");
+							MyLog.e("Storage is full...");
 
 							String strNoStorage = getResources().getString(
 									R.string.storage_full_cause_by_other);
@@ -1711,8 +1714,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						if (f.exists() && f.isFile()) {
 							f.delete();
 							if (Constant.isDebug) {
-								Log.d(Constant.TAG, "Delete Old Lock Video:"
-										+ f.getName());
+								MyLog.d("Delete Old Lock Video:" + f.getName());
 							}
 						}
 						// 删除数据库记录
@@ -1733,7 +1735,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	public int startRecorder() {
-
 		if (!StorageUtil.isVideoCardExists()) {
 			// SDCard2不存在
 			String strNoSD = getResources().getString(R.string.sd1_not_exist);
@@ -1748,9 +1749,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (deleteOldestUnlockVideo()) {
 				textRecordTime.setVisibility(View.VISIBLE);
 				new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
-				if (Constant.isDebug) {
-					Log.d(Constant.TAG, "Record Start");
-				}
+				MyLog.d("Record Start");
 				// 设置保存路径
 				if (Constant.Record.saveVideoToSD2) {
 					setDirectory(Constant.Path.SDCARD_2);
@@ -1797,9 +1796,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		textRecordTime.setText("00:00:00");
 		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
-			if (Constant.isDebug) {
-				Log.d(Constant.TAG, "Record Stop");
-			}
+			MyLog.d("Record Stop");
 			return mMyRecorder.stop();
 		}
 
@@ -1918,17 +1915,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			mMyRecorder.close();
 			mMyRecorder.release();
 			mMyRecorder = null;
-			if (Constant.isDebug) {
-				Log.d(Constant.TAG, "Record Release");
-			}
+			MyLog.d("Record Release");
 		}
 	}
 
 	@Override
 	public void onError(int err) {
-		if (Constant.isDebug) {
-			Log.e(Constant.TAG, "Record Error : " + err);
-		}
+		MyLog.e("Record Error : " + err);
 	}
 
 	@Override
@@ -1940,7 +1933,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
 		 */
 		deleteOldestUnlockVideo();
-		Log.v(Constant.TAG, "Save path:" + path);
+		MyLog.v("Save path:" + path);
 		if (type == 1) {
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
@@ -1968,9 +1961,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新Media Database
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
 				Uri.parse("file://" + path)));
-		if (Constant.isDebug) {
-			Log.d(Constant.TAG, "File Save, Type=" + type);
-		}
+		MyLog.d("File Save, Type=" + type);
 	}
 
 	public void setup() {
