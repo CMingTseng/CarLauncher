@@ -63,7 +63,7 @@ public class RouteShowActivity extends Activity {
 	public double mRouteLatitude = 0.0;
 	public double mRouteLongitude = 0.0;
 
-	private final String ROUTE_PATH = Constant.Path.ROUTE_TRACK;
+	private final String ROUTE_PATH = Constant.RouteTrack.PATH;
 	private String filePath = "";
 	private RouteAdapter routeAdapter = new RouteAdapter();
 

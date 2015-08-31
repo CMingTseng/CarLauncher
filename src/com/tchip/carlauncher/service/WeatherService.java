@@ -12,6 +12,7 @@ import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.MyLog;
 
 import android.app.Service;
 import android.content.Context;
@@ -150,6 +151,7 @@ public class WeatherService extends Service {
 		int ret = 0;// 函数调用返回值
 
 		String text = cityStr + "天气";
+		MyLog.v("WeatherService:Get city:" + cityStr);
 
 		if (mTextUnderstander.isUnderstanding()) {
 			mTextUnderstander.cancel();

@@ -1,24 +1,19 @@
 package com.tchip.carlauncher.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
-import com.tchip.carlauncher.ui.activity.MainActivity;
+import com.tchip.carlauncher.util.MyLog;
 
 /**
  * Created by AlexZhou on 2015/3/26. 11:06
@@ -38,7 +33,6 @@ public class SensorWatchService extends Service {
 
 	private int[] crashFlag = { 0, 0, 0 }; // {X-Flag, Y-Flag, Z-Flag}
 	private boolean isCrash = false;
-	private Toast toast = null;
 
 	@Override
 	public void onCreate() {
@@ -74,8 +68,7 @@ public class SensorWatchService extends Service {
 					if (MyApplication.isVideoReording) {
 						MyApplication.isVideoLock = true;
 						startSpeak("检测到碰撞，视频加锁");
-						if (Constant.isDebug)
-							Log.v(Constant.TAG, "Crashed -> isVideoLock = true");
+						MyLog.v("SensorWarchService:Crashed -> isVideoLock = true");
 					}
 
 					// 重置碰撞标志位
@@ -92,7 +85,7 @@ public class SensorWatchService extends Service {
 		sensorManager.registerListener(sensorEventListener, sensor,
 				SensorManager.SENSOR_DELAY_FASTEST);
 	}
-	
+
 	private void startSpeak(String content) {
 		Intent intent = new Intent(getApplicationContext(), SpeakService.class);
 		intent.putExtra("content", content);
@@ -102,17 +95,6 @@ public class SensorWatchService extends Service {
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
-	}
-
-	private void showTextToast(String msg) {
-		if (toast == null) {
-			toast = Toast.makeText(getApplicationContext(), msg,
-					Toast.LENGTH_SHORT);
-			toast.show();
-		} else {
-			toast.setText(msg);
-		}
-
 	}
 
 	public String getTime() {

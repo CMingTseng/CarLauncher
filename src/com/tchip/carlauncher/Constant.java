@@ -179,7 +179,7 @@ public interface Constant {
 		 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 		 */
 		public static final boolean isVoiceXunfei = true;
-		
+
 		/**
 		 * HorizontalScrollView是否有onTouch事件
 		 */
@@ -218,15 +218,25 @@ public interface Constant {
 	}
 
 	/**
+	 * 行驶轨迹
+	 */
+	public static final class RouteTrack {
+		/**
+		 * 存储位置
+		 */
+		public static final String PATH = Environment
+				.getExternalStorageDirectory().getPath() + "/Route/";
+
+		/**
+		 * 扩展名
+		 */
+		public static final String EXTENSION = ".art"; // Auto Route Track
+	}
+
+	/**
 	 * 路径
 	 */
 	public static final class Path {
-		/**
-		 * 行驶轨迹文件存储位置
-		 */
-		public static final String ROUTE_TRACK = Environment
-				.getExternalStorageDirectory().getPath() + "/Route/";
-
 		/**
 		 * SDcard Path
 		 */

@@ -148,7 +148,7 @@ public class FaceDetectActivity extends Activity {
 
 				RelativeLayout layoutFaceDetect = (RelativeLayout) findViewById(R.id.layoutFaceDetect);
 				Bitmap shareBitmap = createViewBitmap(layoutFaceDetect);
-				File file = new File(Constant.Path.ROUTE_TRACK
+				File file = new File(Constant.RouteTrack.PATH
 						+ "face_detect_share" + ".png");
 				FileOutputStream out;
 				try {
