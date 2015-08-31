@@ -120,7 +120,7 @@ public class SpeechService extends Service {
 		}
 		
         
-        new LocalGrammar(this);
+        //new LocalGrammar(this);
         
         sctts = new SpeechCloudTTS(this);
         sctts.setOnSpeechCloudTTSCompleteListener(new OnSpeechCloudTTSCompleteListener() {
@@ -179,6 +179,7 @@ public class SpeechService extends Service {
 	
 	//初始化speech本地和云端语音
 	private void initSpeech(){
+        new LocalGrammar(this);
         mWakeupEngine = AILocalWakeupEngine.createInstance();
 
         mWakeupEngine.setNetBin("net.bin.imy");
@@ -339,6 +340,7 @@ public class SpeechService extends Service {
             //sltts.localTTS("引擎错误，以重新初始化");
             sendUIMessage("speech_end");
             Log.d("wwj_test", "error aispeech : " + error.getError());
+            //SpeechService.this.stopSelf();
         }
 
         @Override
@@ -469,7 +471,7 @@ public class SpeechService extends Service {
             try {
                 object = new JSONObject(result.getResultObject().toString());
                 //resultText.append(object.toString(4));
-                sendUserMessage(object.toString(4));
+                //sendUserMessage(object.toString(4));
                 String data = analysisSpeechMessage(object.toString(4));
                 if(data == null){
                 	//不对语言进行识别
