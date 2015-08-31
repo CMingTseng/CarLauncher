@@ -466,6 +466,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageMusicOL = (ImageView) findViewById(R.id.imageMusicOL);
 		imageMusicOL.setOnClickListener(new MyOnClickListener());
 
+		// 电子狗
+		ImageView imageEDog = (ImageView) findViewById(R.id.imageEDog);
+		imageEDog.setOnClickListener(new MyOnClickListener());
+
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
 		imageMultimedia.setOnClickListener(new MyOnClickListener());
@@ -1130,6 +1134,20 @@ public class MainActivity extends Activity implements TachographCallback,
 						Intent intentMusic = new Intent();
 						intentMusic.setComponent(componentMusic);
 						startActivity(intentMusic);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				break;
+
+			case R.id.imageEDog:
+				if (!ClickUtil.isQuickClick(800)) {
+					try {
+						ComponentName componentEDog = new ComponentName(
+								"entry.dsa2014", "entry.dsa2014.MainActivity");
+						Intent intentEDog = new Intent();
+						intentEDog.setComponent(componentEDog);
+						startActivity(intentEDog);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

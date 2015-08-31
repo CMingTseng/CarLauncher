@@ -196,39 +196,38 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:orientation="horizontal" >
-            
-            <LinearLayout 
+
+            <LinearLayout
                 android:id="@+id/quick_icon_layout"
-	            android:layout_width="100dp"
-	            android:layout_height="match_parent"
-	            android:orientation="vertical"
-                android:layout_marginRight="5dp" 
-                >
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical" >
+
                 <ImageButton
                     android:id="@+id/quick_wifi"
-		            android:layout_width="match_parent"
-		            android:layout_height="0dp"
-		            android:layout_weight="1"
-		            android:background="@drawable/quick_wifi_bg"
-		            android:layout_marginBottom="3dp" 
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/quick_wifi_bg" />
+
                 <ImageButton
                     android:id="@+id/quick_fm"
-		            android:layout_width="match_parent"
-		            android:layout_height="0dp"
-		            android:layout_weight="1"
-		            android:background="@drawable/quick_fm_bg"
-		            android:layout_marginTop="2dp" 
-		            android:layout_marginBottom="2dp" 
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/quick_fm_bg" />
+
                 <ImageButton
                     android:id="@+id/quick_gps"
-		            android:layout_width="match_parent"
-		            android:layout_height="0dp"
-		            android:layout_weight="1"
-		            android:background="@drawable/quick_gps_bg"
-		            android:layout_marginTop="2dp" 
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/quick_gps_bg" />
             </LinearLayout>
 
             <RelativeLayout
@@ -321,6 +320,30 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_music_online"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp" >
+
+                <ImageView
+                    android:id="@+id/imageEDog"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_edog" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_edog"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>

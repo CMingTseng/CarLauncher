@@ -751,14 +751,12 @@ public class NavigationActivity extends FragmentActivity implements
 									false);
 						}
 					});
-
 		} else {
 			isHistoryLayoutShow = false;
 			isResultListShow = false;
 			layoutHistory.setVisibility(View.GONE);
 			layoutResult.setVisibility(View.GONE);
 		}
-
 	}
 
 	/**
