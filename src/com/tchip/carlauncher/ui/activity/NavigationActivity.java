@@ -792,12 +792,14 @@ public class NavigationActivity extends FragmentActivity implements
 		mMapView.onResume();
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
-		com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
-		mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-				currentMode, true, null));
-		InitLocation(
-				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09ll", 3000, true);
+		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+			com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
+			mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+					currentMode, true, null));
+			InitLocation(
+					com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
+					"bd09ll", 5000, true);
+		}
 		super.onResume();
 	}
 
