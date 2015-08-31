@@ -37,10 +37,8 @@ public class SpeakService extends Service {
 	// 语音+安装助手类
 	ApkInstaller mInstaller;
 
-	// private Toast mToast;
 	private SharedPreferences mSharedPreferences;
 	private String content = "";
-
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -67,20 +65,19 @@ public class SpeakService extends Service {
 		mTts = SpeechSynthesizer.createSynthesizer(this, mTtsInitListener);
 		mSharedPreferences = getSharedPreferences(TtsSettings.PREFER_NAME,
 				Context.MODE_PRIVATE);
-		// mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
 		// mInstaller = new ApkInstaller(SpeakService.this);
 
 		// 设置参数
 		setParam();
-			int code = mTts.startSpeaking(content, mTtsListener);
-			if (code != ErrorCode.SUCCESS) {
-				if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
-					// 未安装则跳转到提示安装页面 mInstaller.install();
-				} else {
-					// 语音合成失败,错误码:code
-				}
+		int code = mTts.startSpeaking(content, mTtsListener);
+		if (code != ErrorCode.SUCCESS) {
+			if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
+				// 未安装则跳转到提示安装页面 mInstaller.install();
+			} else {
+				// 语音合成失败,错误码:code
 			}
+		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 

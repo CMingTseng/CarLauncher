@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.ui.activity.MainActivity;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.WifiAdmin;
 
 import android.app.Service;
@@ -65,10 +66,7 @@ public class ConnectWifiService extends Service {
 					// 网络连接错误
 				}
 			}
-			if (Constant.isDebug) {
-				Log.v(Constant.TAG, "wifiName:" + wifiName + " - wifiPass:"
-						+ wifiPass);
-			}
+			MyLog.v("wifiName:" + wifiName + " - wifiPass:" + wifiPass);
 		} catch (Exception e) {
 			Log.e(Constant.TAG, e.toString());
 			e.printStackTrace();

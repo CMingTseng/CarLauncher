@@ -31,10 +31,11 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.adapter.RouteAdapter;
 import com.tchip.carlauncher.model.RoutePoint;
+import com.tchip.carlauncher.util.MyLog;
 
 public class RouteRecordService extends Service {
 	private LocationClient mLocationClient;
-	private final String ROUTE_PATH = Constant.Path.ROUTE_TRACK;
+	private final String ROUTE_PATH = Constant.RouteTrack.PATH;
 	private String startTime = "";
 	private String stopTime = "";
 
@@ -74,9 +75,7 @@ public class RouteRecordService extends Service {
 			filestoreMusic.mkdir();
 		}
 		startTime = getTimeStr();
-		if (Constant.isDebug) {
-			Log.v(Constant.TAG, "Start Record Route");
-		}
+		MyLog.v("[RouteRecordService] Start Record Route");
 		// 开启轨迹记录线程
 		new Thread(new RouteRecordThread()).start();
 
@@ -121,15 +120,12 @@ public class RouteRecordService extends Service {
 					&& list.get(list.size() - 1).getLat() == routeLat
 					&& (list.get(list.size() - 1).getLng() == routeLng)) {
 				// 经纬度未改变
-				if (Constant.isDebug) {
-					//Log.v(Constant.TAG, "Location is Not Change.");
-				}
+				// MyLog.v("[RouteRecordService] Location is Not Change.");
 			} else {
 				routePoint.setLng(routeLng);
 				routePoint.setLat(routeLat);
-				if (Constant.isDebug) {
-					Log.v(Constant.TAG, "Lat:" + routeLat + "-Lng:" + routeLng);
-				}
+				MyLog.v("[RouteRecordService] Lat:" + routeLat + "-Lng:"
+						+ routeLng);
 				list.add(routePoint);
 			}
 		}
@@ -148,12 +144,11 @@ public class RouteRecordService extends Service {
 		if (list.size() >= 2) {
 			String saveString = adapter.setJsonString(list);
 			writeFileSdcard(getFilePath(), saveString);
-			Log.v(Constant.TAG,
-					"Auto Route Track:save file with " + list.size()
-							+ " points");
+			MyLog.v("[RouteRecordService] save file with " + list.size()
+					+ " points");
 			list.clear();
 		} else {
-			Log.e(Constant.TAG, "Auto Route Track:list size is less than 2");
+			MyLog.e("[RouteRecordService] list size is less than 2");
 		}
 	}
 
@@ -243,9 +238,7 @@ public class RouteRecordService extends Service {
 	 */
 	private String getFilePath() {
 		stopTime = getTimeStr();
-		String format = ".art"; // ART: Auto Route Track
-		if (Constant.isDebug)
-			format = ".txt";
+		String format = Constant.RouteTrack.EXTENSION;
 		return ROUTE_PATH + startTime + "-" + stopTime + format;
 	}
 

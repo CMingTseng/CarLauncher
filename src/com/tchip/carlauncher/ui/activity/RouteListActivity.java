@@ -45,7 +45,7 @@ import android.widget.Toast;
 
 public class RouteListActivity extends Activity {
 	private SwipeMenuListView routeList;
-	private final String ROUTE_PATH = Constant.Path.ROUTE_TRACK;
+	private final String ROUTE_PATH = Constant.RouteTrack.PATH;
 	// private ArrayAdapter<String> adapter;
 	private CalendarView filterDate;
 	private TextView tvNoFile;
