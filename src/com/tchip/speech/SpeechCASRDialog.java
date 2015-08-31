@@ -70,7 +70,7 @@ public class SpeechCASRDialog extends Dialog {
      * 有语音输入界面显示状态
      */
     public void speechListening(){
-    	speechColume.setImageResource(R.drawable.icon_volume);
+    	speechColume.setImageResource(R.drawable.quick_icon_wifi_offing);
     	speechListening.setVisibility(View.VISIBLE);
     	speechPB.setVisibility(View.INVISIBLE);
     }

@@ -61,6 +61,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -70,10 +71,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -166,6 +170,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		initialLayout();
 		initialCameraButton();
+		initQuickIconLayout();
 		// 录像：配置参数，初始化布局
 		setupRecordDefaults();
 		setupRecordViews();
@@ -909,6 +914,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		
+		if(quickWifi != null)
+			quickWifi.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on : R.drawable.quick_icon_wifi_off);
 
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
@@ -1376,8 +1384,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			switch (wifi_state) {
 			case WifiManager.WIFI_STATE_ENABLED:
+				updateWiFiState();
+				break;
 			case WifiManager.WIFI_STATE_ENABLING:
+				updateWiFiState();
+				quickWifi.setImageResource(R.drawable.quick_icon_wifi_oning);
+				break;
 			case WifiManager.WIFI_STATE_DISABLING:
+				//quickWifi.setImageResource(R.drawable.quick_icon_wifi_offing);
 			case WifiManager.WIFI_STATE_DISABLED:
 			case WifiManager.WIFI_STATE_UNKNOWN:
 				updateWiFiState();
@@ -1444,6 +1458,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 初始化fm发射
 		initFmTransmit();
+		
+		initQuickIconStatus();
 
 		super.onResume();
 	}
@@ -2013,5 +2029,116 @@ public class MainActivity extends Activity implements TachographCallback,
 			else
 				SettingUtil.setFmFrequency(this, 8750);
 		}
+	}
+	/**
+	 * FM发射是否打开
+	 * 
+	 * @return
+	 */
+	private boolean isFmTransmitOn() {
+		boolean isFmTransmitOpen = false;
+		String fmEnable = Settings.System.getString(getContentResolver(),
+				Constant.FMTransmit.SETTING_ENABLE);
+		if (fmEnable.trim().length() > 0) {
+			if ("1".equals(fmEnable)) {
+				isFmTransmitOpen = true;
+			} else {
+				isFmTransmitOpen = false;
+			}
+		}
+		return isFmTransmitOpen;
+	}
+	
+	/**
+	 * 主界面快捷按键
+	 */
+	LinearLayout quickIconLayout;
+	ImageButton quickWifi, quickFm, quickGPS;
+	
+	private void initQuickIconLayout(){
+		quickIconLayout = (LinearLayout) findViewById(R.id.quick_icon_layout);
+		quickWifi = (ImageButton) findViewById(R.id.quick_wifi);
+		quickFm = (ImageButton) findViewById(R.id.quick_fm);
+		quickGPS = (ImageButton) findViewById(R.id.quick_gps);
+		
+		quickWifi.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (!wifiManager.isWifiEnabled()) { 
+					wifiManager.setWifiEnabled(true);
+					quickWifi.setImageResource(R.drawable.quick_icon_wifi_on);
+				}else{
+					wifiManager.setWifiEnabled(false);  
+					quickWifi.setImageResource(R.drawable.quick_icon_wifi_off);
+				}  
+			}
+		});
+		quickWifi.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				if (Constant.Module.isWifiSystem) {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_WIFI_SETTINGS));
+				} else {
+					Intent intentWiFi = new Intent(MainActivity.this,
+							WifiListActivity.class);
+					startActivity(intentWiFi);
+				}
+				return false;
+			}
+		});
+		
+		quickFm.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				boolean fmOpen = isFmTransmitOn();
+				Settings.System.putString(getContentResolver(),
+						Constant.FMTransmit.SETTING_ENABLE, !fmOpen ? "1" : "0");
+				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, (!fmOpen ? "1" : "0"));
+				
+				quickFm.setImageResource((!fmOpen) ? R.drawable.quick_icon_fm_on : R.drawable.quick_icon_fm_off);
+			}
+		});
+		quickFm.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intentFmTransmit = new Intent(MainActivity.this, FmTransmitActivity.class);
+				startActivity(intentFmTransmit);
+				overridePendingTransition(R.anim.zms_translate_up_out, R.anim.zms_translate_up_in);
+				return false;
+			}
+		});
+		
+		quickGPS.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		quickGPS.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+	}
+	/*
+	 * 初始化quick icon状态
+	 */
+	private void initQuickIconStatus(){
+		quickWifi.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on : R.drawable.quick_icon_wifi_off);
+		quickFm.setImageResource(isFmTransmitOn() ? R.drawable.quick_icon_fm_on : R.drawable.quick_icon_fm_off);
 	}
 }
