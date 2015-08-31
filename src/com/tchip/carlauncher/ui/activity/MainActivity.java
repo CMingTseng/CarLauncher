@@ -914,9 +914,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		
-		if(quickWifi != null)
-			quickWifi.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on : R.drawable.quick_icon_wifi_off);
+
+		if (quickWifi != null)
+			quickWifi
+					.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on
+							: R.drawable.quick_icon_wifi_off);
 
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
@@ -1089,11 +1091,33 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.mapHideView:
 			case R.id.imageNavi:
 				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentNavi = new Intent(MainActivity.this,
-							NavigationActivity.class);
-					startActivity(intentNavi);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
+					if (!MyApplication.isNaviAuthSuccess) {
+						MyLog.e("Navigation:Auth Fail");
+						Toast.makeText(
+								getApplicationContext(),
+								getResources().getString(
+										R.string.hint_navi_auth_fail),
+								Toast.LENGTH_SHORT).show();
+					} else if (!MyApplication.isNaviInitialSuccess) {
+						if (NetworkUtil
+								.isNetworkConnected(getApplicationContext())) {
+							initialNaviInstance();
+							MyLog.v("Navi Instance is Initialing...");
+						}
+						MyLog.e("Navigation:Initial Fail");
+						Toast.makeText(
+								getApplicationContext(),
+								getResources().getString(
+										R.string.hint_navi_init_fail),
+								Toast.LENGTH_SHORT).show();
+					} else {
+						MyLog.v("Navi Instance Already Initial Success");
+						Intent intentNavi = new Intent(MainActivity.this,
+								NavigationActivity.class);
+						startActivity(intentNavi);
+						overridePendingTransition(R.anim.zms_translate_up_out,
+								R.anim.zms_translate_up_in);
+					}
 				}
 				break;
 
@@ -1391,7 +1415,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				quickWifi.setImageResource(R.drawable.quick_icon_wifi_oning);
 				break;
 			case WifiManager.WIFI_STATE_DISABLING:
-				//quickWifi.setImageResource(R.drawable.quick_icon_wifi_offing);
+				// quickWifi.setImageResource(R.drawable.quick_icon_wifi_offing);
 			case WifiManager.WIFI_STATE_DISABLED:
 			case WifiManager.WIFI_STATE_UNKNOWN:
 				updateWiFiState();
@@ -1458,7 +1482,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 初始化fm发射
 		initFmTransmit();
-		
+
 		initQuickIconStatus();
 
 		super.onResume();
@@ -2030,6 +2054,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				SettingUtil.setFmFrequency(this, 8750);
 		}
 	}
+
 	/**
 	 * FM发射是否打开
 	 * 
@@ -2048,35 +2073,35 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		return isFmTransmitOpen;
 	}
-	
+
 	/**
 	 * 主界面快捷按键
 	 */
 	LinearLayout quickIconLayout;
 	ImageButton quickWifi, quickFm, quickGPS;
-	
-	private void initQuickIconLayout(){
+
+	private void initQuickIconLayout() {
 		quickIconLayout = (LinearLayout) findViewById(R.id.quick_icon_layout);
 		quickWifi = (ImageButton) findViewById(R.id.quick_wifi);
 		quickFm = (ImageButton) findViewById(R.id.quick_fm);
 		quickGPS = (ImageButton) findViewById(R.id.quick_gps);
-		
+
 		quickWifi.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (!wifiManager.isWifiEnabled()) { 
+				if (!wifiManager.isWifiEnabled()) {
 					wifiManager.setWifiEnabled(true);
 					quickWifi.setImageResource(R.drawable.quick_icon_wifi_on);
-				}else{
-					wifiManager.setWifiEnabled(false);  
+				} else {
+					wifiManager.setWifiEnabled(false);
 					quickWifi.setImageResource(R.drawable.quick_icon_wifi_off);
-				}  
+				}
 			}
 		});
 		quickWifi.setOnLongClickListener(new OnLongClickListener() {
-			
+
 			@Override
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
@@ -2091,42 +2116,48 @@ public class MainActivity extends Activity implements TachographCallback,
 				return false;
 			}
 		});
-		
+
 		quickFm.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				boolean fmOpen = isFmTransmitOn();
-				Settings.System.putString(getContentResolver(),
-						Constant.FMTransmit.SETTING_ENABLE, !fmOpen ? "1" : "0");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, (!fmOpen ? "1" : "0"));
-				
-				quickFm.setImageResource((!fmOpen) ? R.drawable.quick_icon_fm_on : R.drawable.quick_icon_fm_off);
+				Settings.System
+						.putString(getContentResolver(),
+								Constant.FMTransmit.SETTING_ENABLE,
+								!fmOpen ? "1" : "0");
+				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
+						(!fmOpen ? "1" : "0"));
+
+				quickFm.setImageResource((!fmOpen) ? R.drawable.quick_icon_fm_on
+						: R.drawable.quick_icon_fm_off);
 			}
 		});
 		quickFm.setOnLongClickListener(new OnLongClickListener() {
-			
+
 			@Override
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intentFmTransmit = new Intent(MainActivity.this, FmTransmitActivity.class);
+				Intent intentFmTransmit = new Intent(MainActivity.this,
+						FmTransmitActivity.class);
 				startActivity(intentFmTransmit);
-				overridePendingTransition(R.anim.zms_translate_up_out, R.anim.zms_translate_up_in);
+				overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 				return false;
 			}
 		});
-		
+
 		quickGPS.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		quickGPS.setOnLongClickListener(new OnLongClickListener() {
-			
+
 			@Override
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
@@ -2134,11 +2165,15 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		});
 	}
+
 	/*
 	 * 初始化quick icon状态
 	 */
-	private void initQuickIconStatus(){
-		quickWifi.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on : R.drawable.quick_icon_wifi_off);
-		quickFm.setImageResource(isFmTransmitOn() ? R.drawable.quick_icon_fm_on : R.drawable.quick_icon_fm_off);
+	private void initQuickIconStatus() {
+		quickWifi
+				.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on
+						: R.drawable.quick_icon_wifi_off);
+		quickFm.setImageResource(isFmTransmitOn() ? R.drawable.quick_icon_fm_on
+				: R.drawable.quick_icon_fm_off);
 	}
 }

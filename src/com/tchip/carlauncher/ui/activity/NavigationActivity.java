@@ -80,6 +80,7 @@ import com.tchip.carlauncher.model.NaviHistory;
 import com.tchip.carlauncher.model.NaviHistoryDbHelper;
 import com.tchip.carlauncher.model.NaviResultInfo;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
@@ -532,11 +533,11 @@ public class NavigationActivity extends FragmentActivity implements
 							"workLng", "0.00"));
 
 					if (!MyApplication.isNaviAuthSuccess) {
-						Log.e(Constant.TAG, "Navigation:Auth Fail");
+						MyLog.e("Navigation:Auth Fail");
 						Toast.makeText(getApplicationContext(), strAuthFail,
 								Toast.LENGTH_SHORT).show();
 					} else if (!MyApplication.isNaviInitialSuccess) {
-						Log.e(Constant.TAG, "Navigation:Initial Fail");
+						MyLog.e("Navigation:Initial Fail");
 						Toast.makeText(getApplicationContext(), strInitFail,
 								Toast.LENGTH_SHORT).show();
 					} else {
@@ -573,18 +574,15 @@ public class NavigationActivity extends FragmentActivity implements
 					double homeLng = Double.parseDouble(preference.getString(
 							"homeLng", "0.00"));
 
-					MyApplication.isNaviAuthSuccess = false;
 					if (!MyApplication.isNaviAuthSuccess) {
-						// TODO:
-						Log.e(Constant.TAG, "Navigation:Auth Fail");
+						MyLog.e("Navigation:Auth Fail");
 						Toast.makeText(getApplicationContext(), strAuthFail,
 								Toast.LENGTH_SHORT).show();
 						audioRecordDialog.showErrorDialog(strAuthFail);
 						new Thread(new dismissDialogThread()).start();
 
 					} else if (!MyApplication.isNaviInitialSuccess) {
-
-						Log.e(Constant.TAG, "Navigation:Initial Fail");
+						MyLog.e("Navigation:Initial Fail");
 						Toast.makeText(getApplicationContext(), strInitFail,
 								Toast.LENGTH_SHORT).show();
 						audioRecordDialog.showErrorDialog(strInitFail);
