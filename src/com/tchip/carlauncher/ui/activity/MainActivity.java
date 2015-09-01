@@ -24,7 +24,6 @@ import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.service.BrightAdjustService;
-import com.tchip.carlauncher.service.ConnectWifiService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
@@ -177,21 +176,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 序列任务线程
 		new Thread(new AutoThread()).start();
-
-		// 开机尝试连接WiFi
-		if (!Constant.Module.isWifiSystem) {
-			WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-			NetworkInfo mWifi = connManager
-					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-			if (wifiManager.isWifiEnabled()
-					&& (!mWifi.isConnectedOrConnecting())) {
-				Intent intentWiFi = new Intent(getApplicationContext(),
-						ConnectWifiService.class);
-				startService(intentWiFi);
-			} else {
-			}
-		}
 
 		// 3G信号
 		MyListener = new MyPhoneStateListener();
@@ -452,8 +436,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		image3G = (ImageView) findViewById(R.id.image3G);
 		image3G.setVisibility(View.GONE);
 
-		// 更新天气与位置信息
-		updateLocationAndWeather();
 		// updateProgress.setVisibility(View.VISIBLE);
 
 		View mapHideView = findViewById(R.id.mapHideView);
@@ -1471,6 +1453,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intent);
 		// }
 		mainMapView.onResume();
+
+		// 更新天气与位置信息
+		updateLocationAndWeather();
 
 		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
 		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;

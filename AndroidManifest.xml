@@ -312,7 +312,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.tchip.carlauncher.service.FTPServerService" />
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
         <service android:name="com.tchip.carlauncher.service.WeatherService" />
@@ -321,8 +320,6 @@
         <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
         <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
         <service android:name="com.tchip.carlauncher.service.BrightAdjustService" />
-        <service android:name="com.tchip.carlauncher.service.ConnectWifiService" />
-        <service android:name="com.tchip.carlauncher.service.NetworkChangeService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

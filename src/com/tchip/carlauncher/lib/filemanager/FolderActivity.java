@@ -27,7 +27,6 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.Clipboard.ClipboardListener;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager.FavouritesListener;
 import com.tchip.carlauncher.lib.filemanager.NavDrawerAdapter.NavDrawerItem;
-import com.tchip.carlauncher.ui.activity.FileRemoteControlActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -234,10 +233,10 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		// if (actionBarDrawerToggle.onOptionsItemSelected(item))
 		// return true;
 		switch (item.getItemId()) {
-//		case R.id.menu_ftp:
-//			startActivity(new Intent(getApplicationContext(),
-//					FileRemoteControlActivity.class));
-//			return true;
+		// case R.id.menu_ftp:
+		// startActivity(new Intent(getApplicationContext(),
+		// FileRemoteControlActivity.class));
+		// return true;
 		case android.R.id.home:
 			finish();
 			break;
