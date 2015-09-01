@@ -2,17 +2,6 @@ package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
 import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
@@ -35,10 +24,8 @@ import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.NetworkUtil;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
-import com.tchip.carlauncher.util.WeatherUtil;
 import com.tchip.carlauncher.util.SignalUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
-import com.tchip.speech.SpeechService;
 import com.tchip.speech.WakeUpCloudAsr;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
@@ -93,21 +80,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private DriveVideoDbHelper videoDb;
 
-	private LocationClient mLocationClient;
-
 	private SurfaceView surfaceCamera;
 	private boolean isSurfaceLarge = false;
-	private MapView mainMapView;
-	private BaiduMap baiduMap;
-	private com.baidu.mapapi.map.MyLocationConfiguration.LocationMode currentMode;
-	boolean isFirstLoc = true;// 是否首次定位
-
-	private int scanSpan = 1000; // 轨迹点采集间隔(ms)
 
 	private ImageView smallVideoRecord, smallVideoLock, smallVideoCamera;
-	private RelativeLayout layoutLargeButton;
-	private TextView textTemp, textLocation, textTodayWeather, textRecordTime;
-	private ImageView imageTodayWeather;
+	private RelativeLayout layoutLargeButton, layoutMap;
+	private TextView textRecordTime;
+	// private ImageView imageTodayWeather;
 
 	private ImageView imageWifiLevel; // WiFi状态图标
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
@@ -122,8 +101,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private SurfaceHolder mHolder;
 	private TachographRecorder mMyRecorder;
 	private Camera mCamera;
-
-	private ImageView imageDefault; // 未联网时导航的背景图
 
 	private int mResolutionState, mRecordState, mIntervalState, mPathState,
 			mSecondaryState, mOverlapState, mMuteState;
@@ -140,8 +117,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private MyPhoneStateListener MyListener;
 
 	private AudioRecordDialog audioRecordDialog;
-
-	private String strNotLocate;
 
 	private WifiManager wifiManager;
 	private ConnectivityManager connManager;
@@ -164,8 +139,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// Dialog
 		audioRecordDialog = new AudioRecordDialog(MainActivity.this);
-
-		strNotLocate = getResources().getString(R.string.not_locate);
 
 		initialLayout();
 		initialCameraButton();
@@ -225,18 +198,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				Thread.sleep(3000);
 				initialService();
 
-				// 缩放地图
-				Thread.sleep(2000);
-				Message messageMap = new Message();
-				messageMap.what = 2;
-				autoHandler.sendMessage(messageMap);
-
-				// TODO
-
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 
@@ -247,9 +211,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				startOrStopRecord();
 				break;
 
-			case 2:
-				initialMapView();
-				break;
 			default:
 				break;
 			}
@@ -349,16 +310,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 初始化布局
 	 */
 	private void initialLayout() {
-		// 未联网时导航背景
-		imageDefault = (ImageView) findViewById(R.id.imageDefault);
-		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-			imageDefault.setVisibility(View.GONE);
-		}
-
-		// 定位地图
-		mainMapView = (MapView) findViewById(R.id.mainMapView);
-		baiduMap = mainMapView.getMap();
-
 		// 录像窗口
 		if (Constant.Record.hasCamera) {
 			surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
@@ -411,13 +362,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
-		textTemp = (TextView) findViewById(R.id.textTemp);
-		textTemp.setTypeface(Typefaces.get(this, Constant.Path.FONT
-				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-
-		imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
-		textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
-		textLocation = (TextView) findViewById(R.id.textLocation);
+		// textTemp = (TextView) findViewById(R.id.textTemp);
+		// textTemp.setTypeface(Typefaces.get(this, Constant.Path.FONT
+		// + "Font-Helvetica-Neue-LT-Pro.otf"));
+		//
+		// imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
+		// textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
+		// textLocation = (TextView) findViewById(R.id.textLocation);
 
 		LinearLayout layoutWiFi = (LinearLayout) findViewById(R.id.layoutWiFi);
 		layoutWiFi.setOnClickListener(new MyOnClickListener());
@@ -436,11 +387,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		image3G = (ImageView) findViewById(R.id.image3G);
 		image3G.setVisibility(View.GONE);
 
-		// updateProgress.setVisibility(View.VISIBLE);
-
-		View mapHideView = findViewById(R.id.mapHideView);
-		mapHideView.setOnClickListener(new MyOnClickListener());
-
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
 		imageNavi.setOnClickListener(new MyOnClickListener());
 
@@ -451,6 +397,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 电子狗
 		ImageView imageEDog = (ImageView) findViewById(R.id.imageEDog);
 		imageEDog.setOnClickListener(new MyOnClickListener());
+
+		RelativeLayout layoutEDog = (RelativeLayout) findViewById(R.id.layoutEDog);
+		if (Constant.Module.hasEDog) {
+			layoutEDog.setVisibility(View.VISIBLE);
+		} else {
+			layoutEDog.setVisibility(View.GONE);
+		}
 
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
@@ -529,30 +482,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			});
 		}
-	}
-
-	/**
-	 * 加载地图，放到UI线程容易阻塞
-	 */
-	private void initialMapView() {
-		// 去掉缩放控件和百度Logo
-		int count = mainMapView.getChildCount();
-		for (int i = 0; i < count; i++) {
-			View child = mainMapView.getChildAt(i);
-			if (child instanceof ImageView || child instanceof ZoomControls) {
-				child.setVisibility(View.INVISIBLE);
-			}
-		}
-		// 开启定位图层
-		baiduMap.setMyLocationEnabled(true);
-
-		// 自定义Marker
-		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
-		// .fromResource(R.drawable.icon_arrow_up);
-
-		// 设置地图放大级别 0-19
-		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15);
-		baiduMap.animateMapStatus(msu);
 	}
 
 	private void startSpeak(String content) {
@@ -758,41 +687,41 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 更新位置和天气
 	 */
-	private void updateLocationAndWeather() {
-
-		if (strNotLocate.equals(sharedPreferences.getString("cityName",
-				strNotLocate))) {
-			String cityName = sharedPreferences.getString("cityNameRealButOld",
-					strNotLocate);
-			if (strNotLocate.equals(cityName)) {
-				String addrStr = sharedPreferences.getString("addrStr",
-						strNotLocate);
-				if (addrStr.contains("省") && addrStr.contains("市")) {
-					cityName = addrStr.split("省")[1].split("市")[0];
-				} else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
-					cityName = addrStr.split("市")[0];
-				} else {
-					cityName = addrStr;
-				}
-			}
-			editor.putString("cityNameRealButOld", cityName);
-			editor.commit();
-			textLocation.setText(cityName);
-		} else {
-			textLocation.setText(sharedPreferences.getString("cityName",
-					strNotLocate));
-		}
-
-		String weatherToday = sharedPreferences.getString("day0weather",
-				getResources().getString(R.string.unknown));
-		textTodayWeather.setText(weatherToday);
-		imageTodayWeather.setImageResource(WeatherUtil
-				.getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));
-		String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
-		String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
-		day0tmpLow = day0tmpLow.split("℃")[0];
-		textTemp.setText(day0tmpLow + "~" + day0tmpHigh);
-	}
+	// private void updateLocationAndWeather() {
+	//
+	// if (strNotLocate.equals(sharedPreferences.getString("cityName",
+	// strNotLocate))) {
+	// String cityName = sharedPreferences.getString("cityNameRealButOld",
+	// strNotLocate);
+	// if (strNotLocate.equals(cityName)) {
+	// String addrStr = sharedPreferences.getString("addrStr",
+	// strNotLocate);
+	// if (addrStr.contains("省") && addrStr.contains("市")) {
+	// cityName = addrStr.split("省")[1].split("市")[0];
+	// } else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
+	// cityName = addrStr.split("市")[0];
+	// } else {
+	// cityName = addrStr;
+	// }
+	// }
+	// editor.putString("cityNameRealButOld", cityName);
+	// editor.commit();
+	// textLocation.setText(cityName);
+	// } else {
+	// textLocation.setText(sharedPreferences.getString("cityName",
+	// strNotLocate));
+	// }
+	//
+	// String weatherToday = sharedPreferences.getString("day0weather",
+	// getResources().getString(R.string.unknown));
+	// textTodayWeather.setText(weatherToday);
+	// imageTodayWeather.setImageResource(WeatherUtil
+	// .getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));
+	// String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
+	// String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
+	// day0tmpLow = day0tmpLow.split("℃")[0];
+	// textTemp.setText(day0tmpLow + "~" + day0tmpHigh);
+	// }
 
 	private int secondCount = -1;
 
@@ -912,12 +841,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			imageWifiLevel.setImageResource(SignalUtil
 					.getWifiImageBySignal(level));
 
-			// 隐藏导航背景图
-			imageDefault.setVisibility(View.GONE);
 		} else {
 			imageWifiLevel.setImageResource(R.drawable.ic_qs_wifi_no_network);
-			// 显示导航背景图:当有离线地图时不需要显示
-			// imageDefault.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -1074,7 +999,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 				break;
 
-			case R.id.mapHideView:
 			case R.id.imageNavi:
 				if (!ClickUtil.isQuickClick(800)) {
 					if (!MyApplication.isNaviAuthSuccess) {
@@ -1284,111 +1208,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	class MyLocationListener implements BDLocationListener {
-
-		@Override
-		public void onReceiveLocation(BDLocation location) {
-
-			boolean hasNetwork = NetworkUtil
-					.isNetworkConnected(getApplicationContext());
-			// MapView 销毁后不在处理新接收的位置
-			if (location == null || mainMapView == null)
-				return;
-			MyLocationData locData = new MyLocationData.Builder()
-					.accuracy(0)
-					// accuracy设为0去掉蓝色精度圈，RAW:.accuracy(location.getRadius())
-					// 此处设置开发者获取到的方向信息，顺时针0-360
-					.direction(100).latitude(location.getLatitude())
-					.longitude(location.getLongitude()).build();
-			baiduMap.setMyLocationData(locData);
-
-			// if (isFirstLoc) {
-			LatLng ll = new LatLng(location.getLatitude(),
-					location.getLongitude());
-			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-			baiduMap.animateMapStatus(u);
-			// }
-
-			// 存储非“未定位”的城市信息
-			if (!strNotLocate.equals(location.getCity())) {
-				editor.putString("cityNameRealButOld", location.getCity());
-				editor.commit();
-			}
-
-			// 城市名发生变化，需要更新位置和天气
-			if (!sharedPreferences.getString("cityName", strNotLocate).equals(
-					location.getCity())
-					&& hasNetwork) {
-				startWeatherService();
-				editor.putString("cityName", location.getCity());
-				editor.commit();
-			}
-
-			// 如果初次定位未联网，则不将isFirstLoc置为false
-			if (hasNetwork && isFirstLoc) {
-				isFirstLoc = false;
-				// 更新天气
-				startWeatherService();
-				// 更新位置和天气信息
-				updateLocationAndWeather();
-			}
-			String cityName = location.getCity();
-			if (hasNetwork && (cityName != null)
-					&& (!cityName.equals(strNotLocate))) {
-
-				// editor.putLong("cityCode", cityCode);
-				editor.putString("cityName", cityName);
-				editor.putString("cityNameRealButOld", cityName);
-				editor.putString("latitude", "" + location.getLatitude());
-				editor.putString("longitude", "" + location.getLongitude());
-				editor.putString("district", location.getDistrict());
-				// editor.putString("floor", location.getFloor());
-				editor.putString("addrStr", location.getAddrStr());
-				editor.putString("street", location.getStreet());
-				editor.putString("streetNum", location.getStreetNumber());
-				// editor.putFloat("speed", location.getSpeed());
-				editor.putString("altitude", "" + location.getAltitude());
-				editor.putString("lbsTime", location.getTime());
-				editor.commit();
-			}
-		}
-
-		public void onReceivePoi(BDLocation poiLocation) {
-		}
-	}
-
-	/**
-	 * 
-	 * @param tempMode
-	 *            LocationMode.Hight_Accuracy-高精度
-	 *            LocationMode.Battery_Saving-低功耗
-	 *            LocationMode.Device_Sensors-仅设备
-	 * @param tempCoor
-	 *            gcj02-国测局加密经纬度坐标 bd09ll-百度加密经纬度坐标 bd09-百度加密墨卡托坐标
-	 * @param frequence
-	 *            MIN_SCAN_SPAN = 1000; MIN_SCAN_SPAN_NETWORK = 3000;
-	 * @param isNeedAddress
-	 *            是否需要地址
-	 */
-	private void InitLocation(
-			com.baidu.location.LocationClientOption.LocationMode tempMode,
-			String tempCoor, int frequence, boolean isNeedAddress) {
-
-		mLocationClient = new LocationClient(this.getApplicationContext());
-		mLocationClient.registerLocationListener(new MyLocationListener());
-		// mGeofenceClient = new GeofenceClient(getApplicationContext());
-
-		LocationClientOption option = new LocationClientOption();
-		option.setLocationMode(tempMode);
-		option.setCoorType(tempCoor);
-		option.setScanSpan(frequence);
-		option.setOpenGps(true); // 打开gps
-		option.setIsNeedAddress(isNeedAddress);
-		mLocationClient.setLocOption(option);
-
-		mLocationClient.start();
-	}
-
 	private int oldWifiLevel = 0;
 
 	/**
@@ -1434,11 +1253,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onPause() {
-		mainMapView.onPause();
-
-		// 销毁定位
-		mLocationClient.stop();
-
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
 
@@ -1449,21 +1263,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	protected void onResume() {
 		// 启动思必驰语音服务
 		// if(!Constant.Module.isVoiceXunfei){
-		Intent intent = new Intent(this, SpeechService.class);
-		startService(intent);
+		// Intent intent = new Intent(this, SpeechService.class);
+		// startService(intent);
 		// }
-		mainMapView.onResume();
-
-		// 更新天气与位置信息
-		updateLocationAndWeather();
-
-		// LocationMode 跟随：FOLLOWING 普通：NORMAL 罗盘：COMPASS
-		currentMode = com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.NORMAL;
-		baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-				currentMode, true, null));
-		InitLocation(
-				com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy,
-				"bd09ll", scanSpan, true);
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
@@ -1493,11 +1295,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onDestroy() {
-
-		// 关闭定位图层
-		baiduMap.setMyLocationEnabled(false);
-		mainMapView.onDestroy();
-		mainMapView = null;
 
 		// 取消注册wifi消息处理器
 		unregisterReceiver(wifiIntentReceiver);
@@ -1596,27 +1393,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			largeVideoMute.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_sound_on));
 		}
-
-		// 路径
-		// if (mPathState == STATE_PATH_ZERO) {
-		// mPathBtn.setText(R.string.path_zero);
-		// } else if (mPathState == STATE_PATH_ONE) {
-		// mPathBtn.setText(R.string.path_one);
-		// } else if (mPathState == STATE_PATH_TWO) {
-		// mPathBtn.setText(R.string.path_two);
-		// }
-
-		// if (mSecondaryState == STATE_SECONDARY_DISABLE) {
-		// mSecondaryBtn.setText(R.string.secondary_disable);
-		// } else if (mSecondaryState == STATE_SECONDARY_ENABLE) {
-		// mSecondaryBtn.setText(R.string.secondary_enable);
-		// }
-
-		// if (mOverlapState == STATE_OVERLAP_ZERO) {
-		// mOverlapBtn.setText(R.string.nooverlap);
-		// } else if (mOverlapState == STATE_OVERLAP_FIVE) {
-		// mOverlapBtn.setText(R.string.overlap_5s);
-		// }
 
 	}
 

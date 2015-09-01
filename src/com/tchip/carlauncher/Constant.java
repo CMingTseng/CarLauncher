@@ -141,6 +141,11 @@ public interface Constant {
 
 	public static final class Module {
 		/**
+		 * 是否有电子狗
+		 */
+		public static final boolean hasEDog = false;
+		
+		/**
 		 * 是否有拨号短信模块
 		 */
 		public static final boolean hasDialer = false;

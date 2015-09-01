@@ -27,20 +27,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
             android:layout_marginLeft="35dp"
-            android:layout_marginTop="20dp"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
-            android:gravity="top"
             android:textColor="#ffe1c5"
-            android:textSize="75sp" />
+            android:textSize="100sp" />
 
         <LinearLayout
             android:id="@+id/layoutDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textClock"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
             android:layout_marginLeft="35dp"
             android:orientation="horizontal" >
 
@@ -51,19 +50,20 @@
                 android:format12Hour="MM月dd日"
                 android:format24Hour="MM月dd日"
                 android:textColor="#ffe1c5"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
 
             <TextClock
                 android:id="@+id/textWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="15dp"
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:textColor="#ffe1c5"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
+        <!--
         <TextView
             android:id="@+id/textTemp"
             android:layout_width="wrap_content"
@@ -76,23 +76,14 @@
             android:textColor="#ffffff"
             android:textSize="25sp" />
 
-        <ProgressBar
-            android:id="@+id/updateProgress"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@id/textTemp"
-            android:layout_alignTop="@id/textTemp"
-            android:layout_marginRight="2dp"
-            android:layout_toLeftOf="@id/textTemp"
-            android:visibility="gone" />
-
-        <LinearLayout
+         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/textTemp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="230dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <ImageView
                 android:id="@+id/imageTodayWeather"
@@ -117,7 +108,10 @@
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
         </LinearLayout>
+        -->
 
+
+        <!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,7 +119,8 @@
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="35dp"
             android:layout_marginLeft="35dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <ImageView
                 android:layout_width="25dp"
@@ -143,6 +138,7 @@
                 android:textColor="#ffffff"
                 android:textSize="22sp" />
         </LinearLayout>
+        -->
 
         <LinearLayout
             android:id="@+id/layoutWiFi"
@@ -232,47 +228,28 @@
 
             <RelativeLayout
                 android:id="@+id/layoutMap"
-                android:layout_width="380dp"
+                android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
-
-                <com.baidu.mapapi.map.MapView
-                    android:id="@+id/mainMapView"
-                    android:layout_width="280dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true" />
-
-                <View
-                    android:id="@+id/mapHideView"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true" />
+                android:layout_marginRight="5dp"
+                android:background="#ffffff" >
 
                 <ImageView
                     android:id="@+id/imageNavi"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ui_main_nav" />
-
-                <ImageView
-                    android:id="@+id/imageDefault"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ui_main_navi_bg_no_net" />
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ui_main_navi" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_navigation"
-                    android:textColor="#000000"
+                    android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
 
@@ -325,6 +302,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutEDog"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >

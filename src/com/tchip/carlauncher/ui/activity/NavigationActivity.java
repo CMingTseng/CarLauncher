@@ -250,9 +250,6 @@ public class NavigationActivity extends FragmentActivity implements
 
 		// 开启定位图层
 		mBaiduMap.setMyLocationEnabled(true);
-		// 自定义Maker
-		// BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
-		// .fromResource(R.drawable.icon_arrow_up);
 
 		// 初始化地图位置,设置nowLoction数据以防NullPointer
 		nowLatLng = new LatLng(mLatitude, mLongitude);
