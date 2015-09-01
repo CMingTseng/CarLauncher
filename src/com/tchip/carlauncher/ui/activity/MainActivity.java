@@ -26,7 +26,6 @@ import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.SignalUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
-import com.tchip.speech.WakeUpCloudAsr;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -1109,8 +1108,8 @@ public class MainActivity extends Activity implements TachographCallback,
 								ChatActivity.class);
 					} else {
 						// 思必驰语音
-						intentVoiceChat = new Intent(MainActivity.this,
-								WakeUpCloudAsr.class);
+						//intentVoiceChat = new Intent(MainActivity.this,
+						//		WakeUpCloudAsr.class);
 					}
 					startActivity(intentVoiceChat);
 					overridePendingTransition(R.anim.zms_translate_up_out,

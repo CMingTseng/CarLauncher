@@ -337,23 +337,6 @@
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
             </intent-filter>
         </service>
-
-        <!-- 语音显示界面 -->
-        <activity
-            android:name="com.tchip.speech.WakeUpCloudAsr"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <receiver android:name="com.tchip.speech.SystemBootCompletedReceiver" >
-            <intent-filter android:priority="1000" >
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <!-- 语音服务 service -->
-        <service android:name="com.tchip.speech.SpeechService" />
     </application>
 
 </manifest>
