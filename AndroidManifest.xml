@@ -283,6 +283,7 @@
         </activity>
         <activity
             android:name="com.tchip.carlauncher.ui.activity.NavigationActivity"
+            android:exported="true"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.BNavigatorActivity"

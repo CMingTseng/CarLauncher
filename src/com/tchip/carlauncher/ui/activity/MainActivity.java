@@ -69,7 +69,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 public class MainActivity extends Activity implements TachographCallback,
 		Callback {
@@ -85,7 +84,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView smallVideoRecord, smallVideoLock, smallVideoCamera;
 	private RelativeLayout layoutLargeButton, layoutMap;
 	private TextView textRecordTime;
-	// private ImageView imageTodayWeather;
 
 	private ImageView imageWifiLevel; // WiFi状态图标
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
@@ -155,9 +153,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// SIM卡状态
 		simState = Tel.getSimState();
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
-		// 初始化fm发射
-		// initFmTransmit();
 	}
 
 	/**
@@ -1002,6 +997,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!ClickUtil.isQuickClick(800)) {
 					if (!MyApplication.isNaviAuthSuccess) {
 						MyLog.e("Navigation:Auth Fail");
+						if (NetworkUtil
+								.isNetworkConnected(getApplicationContext())) {
+							initialNaviInstance();
+							MyLog.v("Navi Instance is Initialing...");
+						}
 						Toast.makeText(
 								getApplicationContext(),
 								getResources().getString(
@@ -1475,7 +1475,10 @@ public class MainActivity extends Activity implements TachographCallback,
 			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
-			while (sdFree < sdTotal * Constant.Record.SD_MIN_FREE_PERCENT) {
+			int intSdFree = (int) sdFree;
+			MyLog.v("sdFree:" + intSdFree);
+			while (sdFree < sdTotal * Constant.Record.SD_MIN_FREE_PERCENT
+					|| intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
 				// 删除较旧未加锁视频文件
 				if (oldestUnlockVideoId != -1) {
@@ -1485,8 +1488,13 @@ public class MainActivity extends Activity implements TachographCallback,
 							+ oldestUnlockVideoName.split("_")[0]
 							+ File.separator + oldestUnlockVideoName);
 					if (f.exists() && f.isFile()) {
-						f.delete();
 						MyLog.d("Delete Old Unlock Video:" + f.getName());
+						int i = 0;
+						while (!f.delete() && i < 5) {
+							i++;
+							MyLog.d("Delete Old Unlock Video:" + f.getName()
+									+ " Filed!!! Try:" + i);
+						}
 					}
 					// 删除数据库记录
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
@@ -1502,8 +1510,10 @@ public class MainActivity extends Activity implements TachographCallback,
 						StorageUtil.RecursionDeleteFile(file);
 						MyLog.e("!!! Delete tachograph/ Directory");
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
+						intSdFree = (int) sdFree;
 						if (sdFree < sdTotal
-								* Constant.Record.SD_MIN_FREE_PERCENT) {
+								* Constant.Record.SD_MIN_FREE_PERCENT
+								|| intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
 							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							MyLog.e("Storage is full...");
 
@@ -1530,9 +1540,12 @@ public class MainActivity extends Activity implements TachographCallback,
 								+ oldestVideoName.split("_")[0]
 								+ File.separator + oldestVideoName);
 						if (f.exists() && f.isFile()) {
-							f.delete();
-							if (Constant.isDebug) {
-								MyLog.d("Delete Old Lock Video:" + f.getName());
+
+							int i = 0;
+							while (!f.delete() && i < 5) {
+								i++;
+								MyLog.d("Delete Old lock Video:" + f.getName()
+										+ " Filed!!! Try:" + i);
 							}
 						}
 						// 删除数据库记录
@@ -1541,6 +1554,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 				// 更新剩余空间
 				sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
+				intSdFree = (int) sdFree;
 			}
 			return true;
 		} catch (Exception e) {
@@ -1548,7 +1562,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			 * 异常原因：1.文件由用户手动删除
 			 */
 			e.printStackTrace();
-			return false;
+			return true;
 		}
 	}
 
@@ -1738,8 +1752,26 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	@Override
-	public void onError(int err) {
-		MyLog.e("Record Error : " + err);
+	public void onError(int error) {
+		switch (error) {
+		case TachographCallback.ERROR_SAVE_VIDEO_FAIL:
+			Toast.makeText(getApplicationContext(), "视频保存失败",
+					Toast.LENGTH_SHORT).show();
+			MyLog.e("Record Error : ERROR_SAVE_VIDEO_FAIL");
+			break;
+
+		case TachographCallback.ERROR_SAVE_IMAGE_FAIL:
+			Toast.makeText(getApplicationContext(), "图片保存失败",
+					Toast.LENGTH_SHORT).show();
+			MyLog.e("Record Error : ERROR_SAVE_IMAGE_FAIL");
+			break;
+
+		case TachographCallback.ERROR_RECORDER_CLOSED:
+			MyLog.e("Record Error : ERROR_RECORDER_CLOSED");
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override

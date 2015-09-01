@@ -38,7 +38,7 @@ public interface Constant {
 		/**
 		 * 循环录像保留空间(单位：字节B)
 		 */
-		public static final long SD_MIN_FREE_STORAGE = 500 * 1024 * 1024; // 500M
+		public static final long SD_MIN_FREE_STORAGE = 800 * 1024 * 1024; // 800M
 
 		/**
 		 * 循环录像最大占用空间百分比
