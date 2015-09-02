@@ -19,7 +19,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	private static final String VIDEO_COL_LOCK = "lock"; // 是否加锁：0-否 1-是
 	private static final String VIDEO_COL_RESOLUTION = "resolution"; // 视频分辨率：720/1080
 
-	private static final String[] ROUTE_COL_PROJECTION = new String[] {
+	private static final String[] VIDEO_COL_PROJECTION = new String[] {
 			VIDEO_COL_ID, VIDEO_COL_NAME, VIDEO_COL_LOCK, VIDEO_COL_RESOLUTION, };
 
 	public DriveVideoDbHelper(Context context) {
@@ -67,7 +67,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	public DriveVideo getRouteDistanceById(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(VIDEO_TABLE_NAME, ROUTE_COL_PROJECTION,
+		Cursor cursor = db.query(VIDEO_TABLE_NAME, VIDEO_COL_PROJECTION,
 				VIDEO_COL_ID + "=?", new String[] { String.valueOf(id) }, null,
 				null, null, null);
 
@@ -81,10 +81,10 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	}
 
 	// Get DriveVideo By Name
-	public DriveVideo getRouteDistanceByName(String name) {
+	public DriveVideo getDriveVideoByName(String name) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(VIDEO_TABLE_NAME, ROUTE_COL_PROJECTION,
+		Cursor cursor = db.query(VIDEO_TABLE_NAME, VIDEO_COL_PROJECTION,
 				VIDEO_COL_NAME + "=?", new String[] { name }, null, null, null,
 				null);
 
@@ -97,6 +97,19 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 		return driveVideo;
 	}
 
+	public boolean isVideoExist(String name) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.query(VIDEO_TABLE_NAME, VIDEO_COL_PROJECTION,
+				VIDEO_COL_NAME + "=?", new String[] { name }, null, null, null,
+				null);
+
+		if (cursor.getCount() > 0)
+			return true;
+		else
+			return false;
+	}
+
 	/**
 	 * 根据视频名查询是否加锁
 	 * 
@@ -106,7 +119,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	public int getLockStateByVideoName(String name) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(VIDEO_TABLE_NAME, ROUTE_COL_PROJECTION,
+		Cursor cursor = db.query(VIDEO_TABLE_NAME, VIDEO_COL_PROJECTION,
 				VIDEO_COL_NAME + "=?", new String[] { name }, null, null, null,
 				null);
 

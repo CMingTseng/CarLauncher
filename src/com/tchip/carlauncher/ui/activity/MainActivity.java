@@ -181,6 +181,12 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyLog.e("Video card not exist or isn't first launch");
 				}
 
+				// 检查并删除异常视频文件
+				if (StorageUtil.isVideoCardExists()
+						&& !MyApplication.isVideoReording) {
+					CheckErrorFile();
+				}
+
 				// 自动录像
 				if (Constant.Record.autoRecord) {
 					Thread.sleep(Constant.Record.autoRecordDelay);
@@ -355,14 +361,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		TextClock textWeek = (TextClock) findViewById(R.id.textWeek);
 		textWeek.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
-
-		// textTemp = (TextView) findViewById(R.id.textTemp);
-		// textTemp.setTypeface(Typefaces.get(this, Constant.Path.FONT
-		// + "Font-Helvetica-Neue-LT-Pro.otf"));
-		//
-		// imageTodayWeather = (ImageView) findViewById(R.id.imageTodayWeather);
-		// textTodayWeather = (TextView) findViewById(R.id.textTodayWeather);
-		// textLocation = (TextView) findViewById(R.id.textLocation);
 
 		LinearLayout layoutWiFi = (LinearLayout) findViewById(R.id.layoutWiFi);
 		layoutWiFi.setOnClickListener(new MyOnClickListener());
@@ -677,45 +675,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private boolean isSurfaceLarge() {
 		return isSurfaceLarge;
 	}
-
-	/**
-	 * 更新位置和天气
-	 */
-	// private void updateLocationAndWeather() {
-	//
-	// if (strNotLocate.equals(sharedPreferences.getString("cityName",
-	// strNotLocate))) {
-	// String cityName = sharedPreferences.getString("cityNameRealButOld",
-	// strNotLocate);
-	// if (strNotLocate.equals(cityName)) {
-	// String addrStr = sharedPreferences.getString("addrStr",
-	// strNotLocate);
-	// if (addrStr.contains("省") && addrStr.contains("市")) {
-	// cityName = addrStr.split("省")[1].split("市")[0];
-	// } else if ((!addrStr.contains("省")) && addrStr.contains("市")) {
-	// cityName = addrStr.split("市")[0];
-	// } else {
-	// cityName = addrStr;
-	// }
-	// }
-	// editor.putString("cityNameRealButOld", cityName);
-	// editor.commit();
-	// textLocation.setText(cityName);
-	// } else {
-	// textLocation.setText(sharedPreferences.getString("cityName",
-	// strNotLocate));
-	// }
-	//
-	// String weatherToday = sharedPreferences.getString("day0weather",
-	// getResources().getString(R.string.unknown));
-	// textTodayWeather.setText(weatherToday);
-	// imageTodayWeather.setImageResource(WeatherUtil
-	// .getWeatherDrawable(WeatherUtil.getTypeByStr(weatherToday)));
-	// String day0tmpLow = sharedPreferences.getString("day0tmpLow", "15℃");
-	// String day0tmpHigh = sharedPreferences.getString("day0tmpHigh", "25℃");
-	// day0tmpLow = day0tmpLow.split("℃")[0];
-	// textTemp.setText(day0tmpLow + "~" + day0tmpHigh);
-	// }
 
 	private int secondCount = -1;
 
@@ -1108,8 +1067,8 @@ public class MainActivity extends Activity implements TachographCallback,
 								ChatActivity.class);
 					} else {
 						// 思必驰语音
-						//intentVoiceChat = new Intent(MainActivity.this,
-						//		WakeUpCloudAsr.class);
+						// intentVoiceChat = new Intent(MainActivity.this,
+						// WakeUpCloudAsr.class);
 					}
 					startActivity(intentVoiceChat);
 					overridePendingTransition(R.anim.zms_translate_up_out,
@@ -1594,6 +1553,42 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 检查并删除异常视频文件：SD存在但数据库中不存在的文件
+	 */
+	private void CheckErrorFile() {
+		if (StorageUtil.isVideoCardExists()) {
+			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
+			if (Constant.Record.saveVideoToSD2) {
+				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
+			}
+			File file = new File(sdcardPath + "tachograph/");
+			RecursionCheckFile(file);
+		}
+	}
+
+	public void RecursionCheckFile(File file) {
+		if (file.isFile()) {
+			if (!videoDb.isVideoExist(file.getName())) {
+				file.delete();
+				MyLog.v("[RecursionCheckFile] Delete Error File:"
+						+ file.getName());
+			}
+			return;
+		}
+		if (file.isDirectory()) {
+			File[] childFile = file.listFiles();
+			if (childFile == null || childFile.length == 0) {
+				// file.delete();
+				return;
+			}
+			for (File f : childFile) {
+				RecursionCheckFile(f);
+			}
+			// file.delete();
+		}
+	}
+
 	public class dismissDialogThread implements Runnable {
 		@Override
 		public void run() {
@@ -1783,6 +1778,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
 		 */
 		deleteOldestUnlockVideo();
+		// new Thread(new CheckErrorFileThread()).start();
+
 		MyLog.v("Save path:" + path);
 		if (type == 1) {
 			String videoName = path.split("/")[5];
@@ -1812,6 +1809,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
 				Uri.parse("file://" + path)));
 		MyLog.d("File Save, Type=" + type);
+
+		MyLog.v("[onFileSave] isVideoReording:" + MyApplication.isVideoReording);
+		if (!MyApplication.isVideoReording) {
+			// 需要在当前视频存储到数据库之后，且当前未录像时再进行
+			CheckErrorFile();
+		}
 	}
 
 	public void setup() {
