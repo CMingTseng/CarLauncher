@@ -330,8 +330,8 @@
     <string name="input_navigation_destination">输入导航目的地</string>
     <string name="star_company">公司</string>
     <string name="star_home">家</string>
-    <string name="hint_navi_init_fail">导航实例初始化失败，请联网后重启机器</string>
-    <string name="hint_navi_auth_fail">导航实例授权失败，请联网后重启机器</string>
+    <string name="hint_navi_init_fail">导航实例正在初始化，请稍候</string>
+    <string name="hint_navi_auth_fail">导航实例正在授权，请稍候</string>
 
     <string-array name="navi_intent">
         <item>导航去</item>
@@ -404,9 +404,9 @@
 
     <!-- FmTransmitActivity -->
     <string name="title_fm_transmit">FM发射</string>
-    
+
     <!-- WeChat -->
-     <string name="app_back">返回</string>
+    <string name="app_back">返回</string>
     <string name="app_ok">确定</string>
     <string name="app_cancel">取消</string>
     <string name="app_continue">继续</string>
@@ -445,78 +445,76 @@
     <string name="fmt_evening">晚上</string>
     <string name="fmt_pre_yesterday">昨天</string>
     <string name="fmt_iap_err" formatted="false">网络连接不可用，请稍候重试</string>
-    
     <string name="hello">Hello World, SDKSampleActivity!</string>
-	<string name="app_share">分享</string>
-    
+    <string name="app_share">分享</string>
     <string name="enter">这是SDK_Sample的入口界面</string>
     <string name="reg">将该app注册到微信</string>
     <string name="goto_send">跳转到发消息界面</string>
     <string name="launch_wx">启动微信</string>
     <string name="check_timeline_supported">检查是否支持发送到朋友圈</string>
-    
     <string name="send_to_wx_title">发送到微信</string>
-	<string name="get_from_wx_title">从微信接收</string>
-	<string name="show_from_wx_title">显示微信请求的消息</string>
+    <string name="get_from_wx_title">从微信接收</string>
+    <string name="show_from_wx_title">显示微信请求的消息</string>
+    <string name="errcode_success">发送成功</string>
+    <string name="errcode_cancel">发送取消</string>
+    <string name="errcode_deny">发送被拒绝</string>
+    <string name="errcode_unknown">发送返回</string>
 
-	<string name="errcode_success">发送成功</string>
-	<string name="errcode_cancel">发送取消</string>
-	<string name="errcode_deny">发送被拒绝</string>
-	<string name="errcode_unknown">发送返回</string>
-	
     <!-- WXMediaMessage -->
-	<string name="send">发送到微信</string>
-	<string name="receive">从微信接收</string>
-	
-	<string name="is_timeline">是否分享到朋友圈</string>
-	<string name="send_text">发送文本</string>
-	<string name="send_text_default">这段文字发送自微信SDK示例程序</string>
-	
-	<string name="send_img">发送图片</string>
-	<string-array name="send_img_item">
+    <string name="send">发送到微信</string>
+    <string name="receive">从微信接收</string>
+    <string name="is_timeline">是否分享到朋友圈</string>
+    <string name="send_text">发送文本</string>
+    <string name="send_text_default">这段文字发送自微信SDK示例程序</string>
+    <string name="send_img">发送图片</string>
+
+    <string-array name="send_img_item">
         <item>发送图片的二进制数据</item>
         <item>发送图片的本地路径</item>
         <item>发送图片的URL</item>
     </string-array>
-	<string name="send_img_file_not_exist">文件不存在</string>
-	
-	<string name="send_pic">发送照片</string>
-	
-	<string name="send_music">发送音乐</string>
-	<string-array name="send_music_item">
-	    <item>发送音乐url</item>
-	    <item>发送低带宽音乐url</item>
-	</string-array>
 
-	<string name="send_video">发送视频</string>
-	<string-array name="send_video_item">
-	    <item>发送视频url</item>
-	    <item>发送低带宽视频url</item>
-	</string-array>
-	
-	<string name="send_webpage">发送网页</string>
-	<string-array name="send_webpage_item">
-	    <item>发送网页url</item>
-	</string-array>
+    <string name="send_img_file_not_exist">文件不存在</string>
+    <string name="send_pic">发送照片</string>
+    <string name="send_music">发送音乐</string>
 
-	<string name="send_appdata">发送app消息</string>
-	<string-array name="send_appdata_item">
-	    <item>发送app文件本地路径</item>
-	    <item>发送app二进制数据</item>
-	    <item>发送无附件的app</item>
-	</string-array>
-	
-	<string name="send_emoji">发送表情消息</string>
-	<string-array name="send_emoji_item">
-	    <item>发送表情本地路径</item>
-	    <item>发送表情二进制数据</item>
-	</string-array>
-	
-	<string-array name="send_emoji_item_format">
-	    <item>发送GIF图片</item>
-	    <item>发送非GIF图片</item>
-	</string-array>
-	
+    <string-array name="send_music_item">
+        <item>发送音乐url</item>
+        <item>发送低带宽音乐url</item>
+    </string-array>
+
+    <string name="send_video">发送视频</string>
+
+    <string-array name="send_video_item">
+        <item>发送视频url</item>
+        <item>发送低带宽视频url</item>
+    </string-array>
+
+    <string name="send_webpage">发送网页</string>
+
+    <string-array name="send_webpage_item">
+        <item>发送网页url</item>
+    </string-array>
+
+    <string name="send_appdata">发送app消息</string>
+
+    <string-array name="send_appdata_item">
+        <item>发送app文件本地路径</item>
+        <item>发送app二进制数据</item>
+        <item>发送无附件的app</item>
+    </string-array>
+
+    <string name="send_emoji">发送表情消息</string>
+
+    <string-array name="send_emoji_item">
+        <item>发送表情本地路径</item>
+        <item>发送表情二进制数据</item>
+    </string-array>
+    <string-array name="send_emoji_item_format">
+        <item>发送GIF图片</item>
+        <item>发送非GIF图片</item>
+    </string-array>
+
     <string name="share_text_to_weixin">回应文本到微信</string>
     <string name="share_text_default">这段文字回应自微信SDK示例程序</string>
     <string name="share_url_to_weixin">回应URL到微信</string>
@@ -524,12 +522,9 @@
     <string name="share_music_to_weixin">回应音乐到微信</string>
     <string name="share_video_to_weixin">回应视频到微信</string>
     <string name="share_appdata_to_weixin">回应app消息到微信</string>
-    
     <string name="register_as_weixin_app_sender">注册微信事件发送器</string>
     <string name="get_token_from_weixin">获取微信访问Token</string>
     <string name="unregister_from_weixin">从微信反注册</string>
-    
     <string name="show_from_wx_tip">这个界面用于显示微信向第三方app请求显示的信息</string>
-    
 
 </resources>

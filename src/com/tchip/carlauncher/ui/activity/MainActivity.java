@@ -108,6 +108,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoLockSmall;
 
 	private ImageView imageSignalLevel, image3G;
+	private ImageView imageNaviState;
 
 	private TelephonyManager Tel;
 	private int simState;
@@ -379,8 +380,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		image3G = (ImageView) findViewById(R.id.image3G);
 		image3G.setVisibility(View.GONE);
 
+		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
 		imageNavi.setOnClickListener(new MyOnClickListener());
+
+		imageNaviState = (ImageView) findViewById(R.id.imageNaviState);
 
 		// 在线音乐
 		ImageView imageMusicOL = (ImageView) findViewById(R.id.imageMusicOL);
@@ -515,6 +519,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	public static final String ROUTE_PLAN_NODE = "routePlanNode";
 
 	private void initNavi() {
+		MyLog.v("Navi Instance is Initialing...");
 		BaiduNaviManager.getInstance().setNativeLibraryPath(
 				mSDCardPath + "/BaiduNaviSDK_SO");
 		BaiduNaviManager.getInstance().init(this, mSDCardPath, APP_FOLDER_NAME,
@@ -536,6 +541,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
 						MyApplication.isNaviInitialSuccess = true;
 						MyLog.v("Baidu Navi:Initial Success!");
+						refreshNaviState();
 					}
 
 					public void initStart() {
@@ -545,6 +551,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					public void initFailed() {
 						MyApplication.isNaviInitialSuccess = false;
 						MyLog.v("Baidu Navi:Initial Fail!");
+						refreshNaviState();
 					}
 				}, /* null */mTTSCallback);
 	}
@@ -954,37 +961,40 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageNavi:
 				if (!ClickUtil.isQuickClick(800)) {
-					if (!MyApplication.isNaviAuthSuccess) {
-						MyLog.e("Navigation:Auth Fail");
-						if (NetworkUtil
-								.isNetworkConnected(getApplicationContext())) {
-							initialNaviInstance();
-							MyLog.v("Navi Instance is Initialing...");
+					if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+						if (!MyApplication.isNaviAuthSuccess) {
+							MyLog.e("Navigation:Auth Fail");
+							if (NetworkUtil
+									.isNetworkConnected(getApplicationContext())) {
+								initialNaviInstance();
+							}
+							Toast.makeText(
+									getApplicationContext(),
+									getResources().getString(
+											R.string.hint_navi_auth_fail),
+									Toast.LENGTH_SHORT).show();
+						} else if (!MyApplication.isNaviInitialSuccess) {
+							if (NetworkUtil
+									.isNetworkConnected(getApplicationContext())) {
+								initialNaviInstance();
+							}
+							MyLog.e("Navigation:Initial Fail");
+							Toast.makeText(
+									getApplicationContext(),
+									getResources().getString(
+											R.string.hint_navi_init_fail),
+									Toast.LENGTH_SHORT).show();
+						} else {
+							MyLog.v("Navi Instance Already Initial Success");
+							Intent intentNavi = new Intent(MainActivity.this,
+									NavigationActivity.class);
+							startActivity(intentNavi);
+							overridePendingTransition(
+									R.anim.zms_translate_up_out,
+									R.anim.zms_translate_up_in);
 						}
-						Toast.makeText(
-								getApplicationContext(),
-								getResources().getString(
-										R.string.hint_navi_auth_fail),
-								Toast.LENGTH_SHORT).show();
-					} else if (!MyApplication.isNaviInitialSuccess) {
-						if (NetworkUtil
-								.isNetworkConnected(getApplicationContext())) {
-							initialNaviInstance();
-							MyLog.v("Navi Instance is Initialing...");
-						}
-						MyLog.e("Navigation:Initial Fail");
-						Toast.makeText(
-								getApplicationContext(),
-								getResources().getString(
-										R.string.hint_navi_init_fail),
-								Toast.LENGTH_SHORT).show();
 					} else {
-						MyLog.v("Navi Instance Already Initial Success");
-						Intent intentNavi = new Intent(MainActivity.this,
-								NavigationActivity.class);
-						startActivity(intentNavi);
-						overridePendingTransition(R.anim.zms_translate_up_out,
-								R.anim.zms_translate_up_in);
+						NetworkUtil.noNetworkHint(getApplicationContext());
 					}
 				}
 				break;
@@ -1209,6 +1219,18 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intent);
 	}
 
+	/**
+	 * 导航初始化情况
+	 */
+	private void refreshNaviState() {
+		if (MyApplication.isNaviAuthSuccess
+				&& MyApplication.isNaviInitialSuccess) {
+			imageNaviState.setImageResource(R.drawable.ui_main_navi_state_yes);
+		} else {
+			imageNaviState.setImageResource(R.drawable.ui_main_navi_state_no);
+		}
+	}
+
 	@Override
 	protected void onPause() {
 		// 3G信号
@@ -1219,11 +1241,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
-		// 启动思必驰语音服务
-		// if(!Constant.Module.isVoiceXunfei){
-		// Intent intent = new Intent(this, SpeechService.class);
-		// startService(intent);
-		// }
+		refreshNaviState();
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);

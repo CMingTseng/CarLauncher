@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="45dp"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="45dp"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
             android:textColor="#ffe1c5"
@@ -62,83 +62,6 @@
                 android:textColor="#ffe1c5"
                 android:textSize="25sp" />
         </LinearLayout>
-
-        <!--
-        <TextView
-            android:id="@+id/textTemp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="35dp"
-            android:layout_marginLeft="230dp"
-            android:singleLine="true"
-            android:textColor="#ffffff"
-            android:textSize="25sp" />
-
-         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/textTemp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="230dp"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <ImageView
-                android:id="@+id/imageTodayWeather"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ui_weather_sun_day_small" />
-
-            <TextView
-                android:id="@+id/textTodayWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:text="@string/unknown"
-                android:textColor="#ffffff"
-                android:textSize="25sp" />
-        </LinearLayout>
-        -->
-
-
-        <!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="35dp"
-            android:layout_marginLeft="35dp"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ui_main_weather_location" />
-
-            <TextView
-                android:id="@+id/textLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/not_locate"
-                android:textColor="#ffffff"
-                android:textSize="22sp" />
-        </LinearLayout>
-        -->
 
         <LinearLayout
             android:id="@+id/layoutWiFi"
@@ -251,6 +174,15 @@
                     android:text="@string/title_navigation"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
+
+                <ImageView
+                    android:id="@+id/imageNaviState"
+                    android:layout_margin="5dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/ui_main_navi_state_no" />
             </RelativeLayout>
 
             <RelativeLayout
