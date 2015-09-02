@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.model;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SpeakService;
@@ -28,8 +29,10 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 			MyApplication.isPowerConnect = false;
 
 			// 熄灭屏幕
-			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-					"value", "power"));
+			if (Constant.Module.autoCloseScreen) {
+				context.sendBroadcast(new Intent("com.tchip.powerKey")
+						.putExtra("value", "power"));
+			}
 
 			String strHintDisconnect = "电源断开";
 			Toast.makeText(context, strHintDisconnect, Toast.LENGTH_SHORT)

@@ -141,10 +141,15 @@ public interface Constant {
 
 	public static final class Module {
 		/**
+		 * 拔掉电源熄灭屏幕
+		 */
+		public static final boolean autoCloseScreen = false;
+
+		/**
 		 * 是否有电子狗
 		 */
 		public static final boolean hasEDog = false;
-		
+
 		/**
 		 * 是否有拨号短信模块
 		 */
