@@ -1435,7 +1435,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
 			int intSdFree = (int) sdFree;
-			MyLog.v("sdFree:" + intSdFree);
+			MyLog.v("[deleteOldestUnlockVideo] sdFree:" + intSdFree);
 			while (sdFree < sdTotal * Constant.Record.SD_MIN_FREE_PERCENT
 					|| intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
@@ -1499,7 +1499,6 @@ public class MainActivity extends Activity implements TachographCallback,
 								+ oldestVideoName.split("_")[0]
 								+ File.separator + oldestVideoName);
 						if (f.exists() && f.isFile()) {
-
 							int i = 0;
 							while (!f.delete() && i < 5) {
 								i++;
@@ -1778,9 +1777,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
 		 */
 		deleteOldestUnlockVideo();
-		// new Thread(new CheckErrorFileThread()).start();
 
-		MyLog.v("Save path:" + path);
 		if (type == 1) {
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
@@ -1808,9 +1805,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 更新Media Database
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
 				Uri.parse("file://" + path)));
-		MyLog.d("File Save, Type=" + type);
+		MyLog.d("[onFileSave] File Save, Type=" + type + ",Save path:" + path);
 
-		MyLog.v("[onFileSave] isVideoReording:" + MyApplication.isVideoReording);
 		if (!MyApplication.isVideoReording) {
 			// 需要在当前视频存储到数据库之后，且当前未录像时再进行
 			CheckErrorFile();
