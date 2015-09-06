@@ -165,7 +165,6 @@ public class WifiListActivity extends Activity {
 				break;
 
 			case R.id.btnWifiAp:
-
 				Intent intent = new Intent();
 				ComponentName comp = new ComponentName("com.android.settings",
 						"com.android.settings.TetherSettings");

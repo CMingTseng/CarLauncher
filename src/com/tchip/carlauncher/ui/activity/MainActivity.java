@@ -154,6 +154,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// SIM卡状态
 		simState = Tel.getSimState();
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		
+		// 注册wifi消息处理器
+		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
 	}
 
 	/**
@@ -1176,8 +1179,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	private int oldWifiLevel = 0;
-
 	/**
 	 * WiFi状态Receiver
 	 */
@@ -1187,25 +1188,79 @@ public class MainActivity extends Activity implements TachographCallback,
 			int wifi_state = intent.getIntExtra("wifi_state", 0);
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
-			if (oldWifiLevel != level) {
-				updateWiFiState();
-				oldWifiLevel = level;
-				MyLog.v("wifiIntentReceiver, Wifi Level:" + level);
-			}
+			updateWiFiState();
+			MyLog.v("wifiIntentReceiver, Wifi Level:" + level);
 
 			switch (wifi_state) {
 			case WifiManager.WIFI_STATE_ENABLED:
 				updateWiFiState();
+				new Thread(new updateWifiThread()).start();
 				break;
+
 			case WifiManager.WIFI_STATE_ENABLING:
 				updateWiFiState();
+				new Thread(new updateWifiThread()).start();
 				quickWifi.setImageResource(R.drawable.quick_icon_wifi_oning);
 				break;
+
 			case WifiManager.WIFI_STATE_DISABLING:
 				// quickWifi.setImageResource(R.drawable.quick_icon_wifi_offing);
 			case WifiManager.WIFI_STATE_DISABLED:
 			case WifiManager.WIFI_STATE_UNKNOWN:
 				updateWiFiState();
+				break;
+			}
+		}
+	};
+
+	/**
+	 * 更新wifi图标
+	 */
+	public class updateWifiThread implements Runnable {
+		@Override
+		public void run() {
+			synchronized (updateWifiHandler) {
+				int updateWifiTime = 1;
+				boolean shouldUpdateWifi = true;
+				while (shouldUpdateWifi) {
+					try {
+						Thread.sleep(2500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					MyLog.v("updateWifiThread:Refresh Wifi! " + updateWifiTime);
+					Message messageWifi = new Message();
+					messageWifi.what = 1;
+					updateWifiHandler.sendMessage(messageWifi);
+					updateWifiTime++;
+					if (updateWifiTime > 5) {
+						shouldUpdateWifi = false;
+						if (!MyApplication.isNaviAuthSuccess
+								|| !MyApplication.isNaviInitialSuccess) {
+							MyLog.v("updateWifiThread:Initial Navigation!");
+							Message messageNavi = new Message();
+							messageNavi.what = 2;
+							updateWifiHandler.sendMessage(messageNavi);
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	final Handler updateWifiHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				updateWiFiState();
+				break;
+
+			case 2:
+				initialNaviInstance();
+				break;
+
+			default:
 				break;
 			}
 		}
@@ -1243,9 +1298,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	protected void onResume() {
 		refreshNaviState();
 
-		// 注册wifi消息处理器
-		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
-
 		// 更新录像界面按钮状态
 		refreshRecordButton();
 		setupRecordViews();
@@ -1274,10 +1326,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 取消注册wifi消息处理器
 		unregisterReceiver(wifiIntentReceiver);
-		super.onDestroy();
-
 		// 录像区域
 		release();
+		
+		super.onDestroy();
 	}
 
 	// *********** Record ***********

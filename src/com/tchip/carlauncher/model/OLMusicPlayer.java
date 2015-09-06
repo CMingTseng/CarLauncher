@@ -11,6 +11,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.SeekBar;
 
 public class OLMusicPlayer implements OnBufferingUpdateListener,
@@ -59,6 +60,9 @@ public class OLMusicPlayer implements OnBufferingUpdateListener,
 				// 计算进度（获取进度条最大刻度*当前音乐播放位置 / 当前音乐时长）
 				long pos = seekBar.getMax() * position / duration;
 				seekBar.setProgress((int) pos);
+				if (seekBar.getProgress() == 95) {
+					seekBar.setVisibility(View.INVISIBLE);
+				}
 			}
 		};
 	};

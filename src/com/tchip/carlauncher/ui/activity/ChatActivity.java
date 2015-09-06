@@ -443,6 +443,8 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 										final String downloadUrl = resultFirst
 												.getString("downloadUrl");
 										musicSeekBar = (SeekBar) findViewById(R.id.musicSeekBar);
+										musicSeekBar
+												.setVisibility(View.VISIBLE);
 										player = new OLMusicPlayer(musicSeekBar);
 
 										new Thread(new Runnable() {
@@ -453,6 +455,10 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 											}
 										}).start();
 
+										String strAnswer = "正在播放" + strArtist
+												+ "的" + strSong;
+										tvAnswer.setText(strAnswer);
+										startSpeak(strAnswer);
 									}
 								} else if ("map".equals(strService)) {
 									// 导航到中山市图书馆 operation": "ROUTE"
