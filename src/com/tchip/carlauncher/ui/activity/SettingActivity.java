@@ -11,6 +11,7 @@ import com.tchip.carlauncher.view.SettingFadeTabIndicator;
 import com.tchip.carlauncher.view.SettingFadeTabIndicator.FadingTab;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,8 +21,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View.OnLongClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.Toast;
 
 public class SettingActivity extends FragmentActivity {
 	private SettingFadeTabIndicator settingFadeTabIndicator;
@@ -46,6 +49,16 @@ public class SettingActivity extends FragmentActivity {
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
 		textClock.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
+		textClock.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				Intent intentMagic = new Intent(SettingActivity.this,
+						MagicActivity.class);
+				startActivity(intentMagic);
+				return false;
+			}
+		});
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

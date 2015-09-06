@@ -468,43 +468,10 @@ public class NavigationActivity extends FragmentActivity implements
 			case R.id.btnHistoryNavi:
 				String strContent = etHistoryWhere.getText().toString();
 				if (strContent.trim().length() > 0 && strContent != null) {
-					if (Constant.MagicCode.DEVICE_TEST.equals(strContent)) {
-						Intent intent = new Intent(Intent.ACTION_VIEW);
-						intent.setClassName("com.DeviceTest",
-								"com.DeviceTest.DeviceTest");
-						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-					} else if (Constant.MagicCode.ENGINEER_MODE
-							.equals(strContent)) {
-						Intent intent = new Intent(Intent.ACTION_VIEW);
-						intent.setClassName("com.mediatek.engineermode",
-								"com.mediatek.engineermode.EngineerMode");
-						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-					} else if (Constant.MagicCode.SETTING.equals(strContent)) {
-						ComponentName componentImage = new ComponentName(
-								"com.android.settings",
-								"com.android.settings.Settings");
-						Intent intentImage = new Intent();
-						intentImage.setComponent(componentImage);
-						startActivity(intentImage);
-					} else {
-						isNearLayoutShow = false;
-						layoutNearAdvice.setVisibility(View.GONE);
+					isNearLayoutShow = false;
+					layoutNearAdvice.setVisibility(View.GONE);
 
-						startSearchPlace(strContent, nowLatLng, false, false);
-
-						// 使用‘百度导航’进行导航
-						// try {
-						// Uri uri = Uri.parse("bdnavi://query?name="
-						// + strContent + "&src="
-						// + "com.tchip.carlauncher");
-						// Intent intent = new Intent(
-						// "com.baidu.navi.action.START", uri);
-						// startActivity(intent);
-						// } catch (Exception e) {
-						// }
-					}
+					startSearchPlace(strContent, nowLatLng, false, false);
 				}
 				break;
 

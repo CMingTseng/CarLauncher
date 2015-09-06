@@ -280,6 +280,11 @@ public interface Constant {
 	public static final class MagicCode {
 
 		/**
+		 * 进入MagicActivity的密码
+		 */
+		public static final String PASSWORD = "55555";
+
+		/**
 		 * 启动测试应用命令:DeviceTest
 		 */
 		public static final String DEVICE_TEST = "*#86*#";
