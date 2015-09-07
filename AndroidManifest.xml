@@ -122,6 +122,9 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MagicActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.SettingGravityActivity"
+            android:screenOrientation="landscape" />
 
         <!-- 微信 -->
         <activity

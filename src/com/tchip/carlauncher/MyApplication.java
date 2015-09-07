@@ -101,6 +101,8 @@ public class MyApplication extends Application {
 	public static boolean isVideoReording = false;
 	public static boolean isPowerConnect = true;
 	public static boolean isVideoLock = false;
+	public static boolean isCrashed = false;
+	public static boolean shouldVideoRecordWhenChangeSize = false;
 
 	// 导航实例是否初始化成功
 	public static boolean isNaviInitialSuccess = false;

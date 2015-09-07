@@ -405,6 +405,10 @@
     <!-- FmTransmitActivity -->
     <string name="title_fm_transmit">FM发射</string>
 
+    <!-- SettingGravityActivity -->
+    <string name="title_setting_gravity">碰撞侦测</string>
+    <string name="setting_gravity_hint">设置合适的灵敏度：过低容易导致误判，过高则较难触发视频加锁，调整后重启生效</string>
+
     <!-- WeChat -->
     <string name="app_back">返回</string>
     <string name="app_ok">确定</string>

@@ -1,7 +1,9 @@
 package com.tchip.carlauncher.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.util.MyLog;
 
@@ -27,9 +30,7 @@ public class SensorWatchService extends Service {
 	private float valueY = 0f;
 	private float valueZ = 0f;
 
-	private final static float LIMIT_X = 55f;
-	private final static float LIMIT_Y = 55f;
-	private final static float LIMIT_Z = 55f;
+	private float LIMIT_X, LIMIT_Y;
 
 	private int[] crashFlag = { 0, 0, 0 }; // {X-Flag, Y-Flag, Z-Flag}
 	private boolean isCrash = false;
@@ -37,6 +38,11 @@ public class SensorWatchService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		int sensorLevel = Integer.parseInt(sharedPreferences.getString(
+				"crashSensitive", Constant.GravitySensor.DEFAULT_SENSITIVE));
+		LIMIT_X = LIMIT_Y = sensorLevel * Constant.GravitySensor.VALUE;
 
 		SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// Using TYPE_ACCELEROMETER first if exit, then TYPE_GRAVITY
@@ -49,7 +55,7 @@ public class SensorWatchService extends Service {
 			public void onSensorChanged(SensorEvent event) {
 				valueX = event.values[AXIS_X];
 				valueY = event.values[AXIS_Y];
-				valueZ = event.values[AXIS_Z];
+				// valueZ = event.values[AXIS_Z];
 
 				if (valueX > LIMIT_X || valueX < -LIMIT_X) {
 					crashFlag[0] = 1;
@@ -59,16 +65,19 @@ public class SensorWatchService extends Service {
 					crashFlag[1] = 1;
 					isCrash = true;
 				}
-				if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
-					crashFlag[2] = 1;
-					isCrash = true;
-				}
+				// if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
+				// crashFlag[2] = 1;
+				// isCrash = true;
+				// }
 				if (isCrash) {
 					// 当前录制视频加锁
-					if (MyApplication.isVideoReording) {
+					if (MyApplication.isVideoReording
+							&& !MyApplication.isVideoLock) {
 						MyApplication.isVideoLock = true;
+						MyApplication.isCrashed = true;
 						startSpeak("检测到碰撞，视频加锁");
-						MyLog.v("SensorWarchService:Crashed -> isVideoLock = true");
+						MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
+								+ valueX + ",Y:" + valueY);
 					}
 
 					// 重置碰撞标志位

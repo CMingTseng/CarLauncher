@@ -3,6 +3,7 @@ package com.tchip.carlauncher.ui.fragment;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
+import com.tchip.carlauncher.ui.activity.SettingGravityActivity;
 import com.tchip.carlauncher.ui.activity.UpdateMapActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
@@ -88,10 +89,15 @@ public class SettingFragment extends Fragment {
 			}
 		});
 
-		// 流量(GONE)
+		// 流量使用情况
 		RelativeLayout layoutRippleTraffic = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleTraffic);
 		layoutRippleTraffic.setOnClickListener(new MyOnClickListener());
+
+		// 碰撞侦测
+		RelativeLayout layoutGravity = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutGravity);
+		layoutGravity.setOnClickListener(new MyOnClickListener());
 
 		// 蓝牙(GONE)
 		RelativeLayout layoutRippleBluetooth = (RelativeLayout) systemSettingView
@@ -196,6 +202,12 @@ public class SettingFragment extends Fragment {
 				// TrafficStatActivity.class);
 				// startActivity(intentTraffic);
 				startActivity(new Intent("android.settings.DATA_USAGE_SETTINGS"));
+				break;
+
+			case R.id.layoutGravity:
+				Intent intentGravity = new Intent(context,
+						SettingGravityActivity.class);
+				startActivity(intentGravity);
 				break;
 
 			case R.id.layoutRippleBluetooth:

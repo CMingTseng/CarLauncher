@@ -1,16 +1,11 @@
 ToDo List>
-多媒体：图库顶部栏增加返回。
-系统：开机图片。
+
 其他：视频录制预览界面，预览异常时，默认图片。
-优先级低：
-	高德
-	开机自动录像，默认打开
 
 ==========================================	
 后续>
 	地理位置上报（微信硬件）
 	OTA升级
-	流量统计界面
 	初次打开应用引导
 ==========================================
 	
@@ -93,7 +88,8 @@ SharedPreferences-CarLauncher
 	(String)videoQuality	视频质量(LOW-MIDDLE-*HIGH)
 	(String)videoSize		视频尺寸(*720-1080)
 	(String)videoTime		视频长度(3-*5-10)
-	(String)crashSensitive	碰撞侦测灵敏度(LOW-*MIDDLE-HIGH)
+	(String)crashSensitive	碰撞侦测灵敏度(1,2,3,4,5,*6,7,8,9,10)
+	(boolean)crashOn		碰撞侦测开关(*false-true)
 	
 	(boolean)voiceSpeakHour	整点语音报时(*false-true)
 	(String)voiceAccent		语音口音(*Mandarin-English-Cantonese)
@@ -116,7 +112,7 @@ SharedPreferences-CarLauncher
 	(String)sdcardPath		SD卡路径(如：/mnt/sdcard/)
 	
 	----------------------------------------
-	[*Using]Last Connected WiFi Info
+	[*Not use]Last Connected WiFi Info
 	(String)wifiName
 	(String)wifiPass
 	

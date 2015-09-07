@@ -154,7 +154,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// SIM卡状态
 		simState = Tel.getSimState();
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-		
+
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
 	}
@@ -209,6 +209,38 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	final Handler autoHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				startOrStopRecord();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	/**
+	 * 更改分辨率后重启录像
+	 */
+	public class StartRecordWhenChangeSizeThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(3000);
+				Message message = new Message();
+				message.what = 1;
+				startRecordWhenChangeSize.sendMessage(message);
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	final Handler startRecordWhenChangeSize = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -695,6 +727,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
 			synchronized (updateRecordTimeHandler) {
 				do {
+					if (MyApplication.isCrashed) {
+						Message messageVideoLock = new Message();
+						messageVideoLock.what = 4;
+						updateRecordTimeHandler.sendMessage(messageVideoLock);
+					}
 					if (MyApplication.isVideoCardEject) {
 						// 录像时视频SD卡拔出停止录像
 						MyLog.e("SD card remove badly or power unconnected, stop record!");
@@ -778,6 +815,12 @@ public class MainActivity extends Activity implements TachographCallback,
 				startSpeak(strPowerUnconnect);
 				audioRecordDialog.showErrorDialog(strPowerUnconnect);
 				new Thread(new dismissDialogThread()).start();
+				break;
+
+			case 4:
+				setupRecordViews();
+				MyApplication.isCrashed = false;
+				break;
 
 			default:
 				break;
@@ -858,16 +901,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoLock:
 			case R.id.layoutVideoLockSmall:
 				if (!ClickUtil.isQuickClick(800)) {
-					if (!MyApplication.isVideoLock) {
-						MyApplication.isVideoLock = true;
-						startSpeak(getResources()
-								.getString(R.string.video_lock));
-					} else {
-						MyApplication.isVideoLock = false;
-						startSpeak(getResources().getString(
-								R.string.video_unlock));
-					}
-					setupRecordViews();
+					lockOrUnlockVideo();
 				}
 				break;
 
@@ -875,6 +909,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoSize:
 				if (!ClickUtil.isQuickClick(1500)) {
 					// 切换分辨率录像停止，需要重置时间
+					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
 					MyApplication.isVideoReording = false;
 					secondCount = -1; // 录制时间秒钟复位
 					textRecordTime.setText("00:00:00");
@@ -895,6 +930,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 					editor.commit();
 					setupRecordViews();
+
+					// 修改分辨率后按需启动录像
+					if (MyApplication.shouldVideoRecordWhenChangeSize) {
+						new Thread(new StartRecordWhenChangeSizeThread())
+								.start();
+						MyApplication.shouldVideoRecordWhenChangeSize = false;
+					}
 				}
 				break;
 
@@ -1180,6 +1222,20 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
+	 * 加锁或加锁视频
+	 */
+	private void lockOrUnlockVideo() {
+		if (!MyApplication.isVideoLock) {
+			MyApplication.isVideoLock = true;
+			startSpeak(getResources().getString(R.string.video_lock));
+		} else {
+			MyApplication.isVideoLock = false;
+			startSpeak(getResources().getString(R.string.video_unlock));
+		}
+		setupRecordViews();
+	}
+
+	/**
 	 * WiFi状态Receiver
 	 */
 	private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
@@ -1328,7 +1384,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		unregisterReceiver(wifiIntentReceiver);
 		// 录像区域
 		release();
-		
+
 		super.onDestroy();
 	}
 
