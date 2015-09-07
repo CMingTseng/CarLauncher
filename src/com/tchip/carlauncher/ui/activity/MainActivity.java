@@ -338,8 +338,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intentRoute);
 
 		// 碰撞侦测服务
-		Intent intentSensor = new Intent(this, SensorWatchService.class);
-		startService(intentSensor);
+		boolean hasSensorWatchService = sharedPreferences.getBoolean("crashOn",
+				false);
+		if (hasSensorWatchService) {
+			Intent intentSensor = new Intent(this, SensorWatchService.class);
+			startService(intentSensor);
+		}
 	}
 
 	/**

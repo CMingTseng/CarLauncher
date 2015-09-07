@@ -89,6 +89,11 @@ public class SettingFragment extends Fragment {
 			}
 		});
 
+		// 热点共享
+		RelativeLayout layoutWifiAp = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutWifiAp);
+		layoutWifiAp.setOnClickListener(new MyOnClickListener());
+
 		// 流量使用情况
 		RelativeLayout layoutRippleTraffic = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleTraffic);
@@ -195,6 +200,22 @@ public class SettingFragment extends Fragment {
 							WifiListActivity.class);
 					startActivity(intentWifi);
 				}
+				break;
+
+			case R.id.layoutWifiAp:
+				// try {
+				// Intent intent = new Intent();
+				// ComponentName comp = new ComponentName(
+				// "com.android.settings",
+				// "com.android.settings.TetherSettings");
+				// intent.setComponent(comp);
+				// intent.setAction("android.intent.action.VIEW");
+				// startActivityForResult(intent, 0);
+				// } catch (Exception e) {
+				// e.printStackTrace();
+				// }
+				startActivity(new Intent(
+						"android.settings.TETHER_WIFI_SETTINGS"));
 				break;
 
 			case R.id.layoutRippleTraffic:

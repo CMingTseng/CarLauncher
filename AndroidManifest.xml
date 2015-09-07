@@ -190,6 +190,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.RouteListActivity"
