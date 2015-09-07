@@ -1625,6 +1625,7 @@ public class MainActivity extends Activity implements TachographCallback,
 								+ oldestVideoName.split("_")[0]
 								+ File.separator + oldestVideoName);
 						if (f.exists() && f.isFile()) {
+							MyLog.d("Delete Old lock Video:" + f.getName());
 							int i = 0;
 							while (!f.delete() && i < 5) {
 								i++;

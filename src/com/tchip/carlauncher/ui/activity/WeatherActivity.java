@@ -496,8 +496,8 @@ public class WeatherActivity extends Activity {
 
 	private void backToMain() {
 		finish();
-		overridePendingTransition(R.anim.zms_translate_down_out,
-				R.anim.zms_translate_down_in);
+		overridePendingTransition(R.anim.zms_translate_up_out,
+				R.anim.zms_translate_up_in);
 	}
 
 	private void updateWeather() {

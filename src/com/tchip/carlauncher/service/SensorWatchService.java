@@ -80,7 +80,6 @@ public class SensorWatchService extends Service {
 						MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
 								+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
 					}
-
 					// 重置碰撞标志位
 					isCrash = false;
 				}
@@ -90,10 +89,13 @@ public class SensorWatchService extends Service {
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			}
 		};
-		// 0:SENSOR_DELAY_FASTEST 1:SENSOR_DELAY_GAME 2:SENSOR_DELAY_UI
-		// 3:SENSOR_DELAY_NORMAL
+		// 0:000000μs-SENSOR_DELAY_FASTEST
+		// 1:020000μs-SENSOR_DELAY_GAME
+		// 2:060000μs-SENSOR_DELAY_UI
+		// 3:200000μs-SENSOR_DELAY_NORMAL
+		// 尽量使用比较低的传感器采样率，这样可以让系统的负荷比较小，同时可以省电
 		sensorManager.registerListener(sensorEventListener, sensor,
-				SensorManager.SENSOR_DELAY_FASTEST);
+				SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	private void startSpeak(String content) {
