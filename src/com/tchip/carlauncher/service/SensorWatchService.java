@@ -30,7 +30,7 @@ public class SensorWatchService extends Service {
 	private float valueY = 0f;
 	private float valueZ = 0f;
 
-	private float LIMIT_X, LIMIT_Y;
+	private float LIMIT_X, LIMIT_Y, LIMIT_Z;
 
 	private int[] crashFlag = { 0, 0, 0 }; // {X-Flag, Y-Flag, Z-Flag}
 	private boolean isCrash = false;
@@ -42,7 +42,8 @@ public class SensorWatchService extends Service {
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		int sensorLevel = Integer.parseInt(sharedPreferences.getString(
 				"crashSensitive", Constant.GravitySensor.DEFAULT_SENSITIVE));
-		LIMIT_X = LIMIT_Y = sensorLevel * Constant.GravitySensor.VALUE;
+		LIMIT_X = LIMIT_Y = LIMIT_Z = sensorLevel
+				* Constant.GravitySensor.VALUE;
 
 		SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// Using TYPE_ACCELEROMETER first if exit, then TYPE_GRAVITY
@@ -55,20 +56,20 @@ public class SensorWatchService extends Service {
 			public void onSensorChanged(SensorEvent event) {
 				valueX = event.values[AXIS_X];
 				valueY = event.values[AXIS_Y];
-				// valueZ = event.values[AXIS_Z];
+				valueZ = event.values[AXIS_Z];
 
 				if (valueX > LIMIT_X || valueX < -LIMIT_X) {
 					crashFlag[0] = 1;
 					isCrash = true;
 				}
-				if (valueY > LIMIT_Y || valueY < -LIMIT_Y) {
-					crashFlag[1] = 1;
-					isCrash = true;
-				}
-				// if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
-				// crashFlag[2] = 1;
+				// if (valueY > LIMIT_Y || valueY < -LIMIT_Y) {
+				// crashFlag[1] = 1;
 				// isCrash = true;
 				// }
+				if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
+					crashFlag[2] = 1;
+					isCrash = true;
+				}
 				if (isCrash) {
 					// 当前录制视频加锁
 					if (MyApplication.isVideoReording
@@ -77,7 +78,7 @@ public class SensorWatchService extends Service {
 						MyApplication.isCrashed = true;
 						startSpeak("检测到碰撞，视频加锁");
 						MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
-								+ valueX + ",Y:" + valueY);
+								+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
 					}
 
 					// 重置碰撞标志位
