@@ -13,6 +13,11 @@ import com.tchip.carlauncher.lib.filemanager.FileIconResolver;
 import com.tchip.carlauncher.service.MusicServiceManager;
 
 public class MyApplication extends Application {
+	/**
+	 * 是否进入低功耗待机状态
+	 */
+	public static boolean isSleeping = false;
+	
 	// Music
 	public static boolean mIsSleepClockSetting = false;
 	public static MusicServiceManager mServiceManager = null;

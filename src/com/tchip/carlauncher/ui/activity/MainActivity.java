@@ -41,6 +41,7 @@ import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -743,7 +744,9 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						break;
-					} else if (!MyApplication.isPowerConnect) {
+					} else if (!MyApplication.isPowerConnect
+							|| MyApplication.isSleeping) {
+						// 电源断开或者进入低功耗休眠
 						MyLog.e("Stop Record:Power is unconnected");
 						Message messageEject = new Message();
 						messageEject.what = 3;
@@ -2115,5 +2118,10 @@ public class MainActivity extends Activity implements TachographCallback,
 						: R.drawable.quick_icon_wifi_off);
 		quickFm.setImageResource(isFmTransmitOn() ? R.drawable.quick_icon_fm_on
 				: R.drawable.quick_icon_fm_off);
+	}
+
+	private void test() {
+		WifiConfiguration config = new WifiConfiguration();
+		config.wepKeys[0] = "12345678";
 	}
 }

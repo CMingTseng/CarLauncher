@@ -44,7 +44,6 @@
     <uses-permission android:name="android.permission.CAMERA" >
     </uses-permission>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <!-- 来电消音 -->
@@ -291,6 +290,7 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.NavigationActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.BNavigatorActivity"
@@ -317,6 +317,12 @@
                 <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
 
                 <data android:scheme="file" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.tchip.carlauncher.model.SleepReceiver" >
+            <intent-filter>
+                <action android:name="com.tchip.SLEEP_ON" />
+                <action android:name="com.tchip.SLEEP_OFF" />
             </intent-filter>
         </receiver>
 
