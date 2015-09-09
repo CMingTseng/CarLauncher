@@ -22,6 +22,10 @@ public class SleepReceiver extends BroadcastReceiver {
 				setAirplaneMode(true);
 			}
 
+			// 熄灭屏幕
+			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+					"value", "power"));
+
 		} else if (action.equals("com.tchip.SLEEP_OFF")) {
 			// 取消低功耗待机
 			MyApplication.isSleeping = false;
