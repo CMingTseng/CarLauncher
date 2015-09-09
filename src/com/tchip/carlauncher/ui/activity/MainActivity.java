@@ -141,7 +141,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		initialLayout();
 		initialCameraButton();
-		initQuickIconLayout();
 		// 录像：配置参数，初始化布局
 		setupRecordDefaults();
 		setupRecordViews();
@@ -843,11 +842,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		if (quickWifi != null)
-			quickWifi
-					.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on
-							: R.drawable.quick_icon_wifi_off);
-
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
@@ -1263,7 +1257,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			case WifiManager.WIFI_STATE_ENABLING:
 				updateWiFiState();
 				new Thread(new updateWifiThread()).start();
-				quickWifi.setImageResource(R.drawable.quick_icon_wifi_oning);
 				break;
 
 			case WifiManager.WIFI_STATE_DISABLING:
@@ -1378,8 +1371,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 初始化fm发射
 		initFmTransmit();
-
-		initQuickIconStatus();
 
 		super.onResume();
 	}
@@ -2015,109 +2006,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		}
 		return isFmTransmitOpen;
-	}
-
-	/**
-	 * 主界面快捷按键
-	 */
-	LinearLayout quickIconLayout;
-	ImageButton quickWifi, quickFm, quickGPS;
-
-	private void initQuickIconLayout() {
-		quickIconLayout = (LinearLayout) findViewById(R.id.quick_icon_layout);
-		quickWifi = (ImageButton) findViewById(R.id.quick_wifi);
-		quickFm = (ImageButton) findViewById(R.id.quick_fm);
-		quickGPS = (ImageButton) findViewById(R.id.quick_gps);
-
-		quickWifi.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (!wifiManager.isWifiEnabled()) {
-					wifiManager.setWifiEnabled(true);
-					quickWifi.setImageResource(R.drawable.quick_icon_wifi_on);
-				} else {
-					wifiManager.setWifiEnabled(false);
-					quickWifi.setImageResource(R.drawable.quick_icon_wifi_off);
-				}
-			}
-		});
-		quickWifi.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				if (Constant.Module.isWifiSystem) {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_WIFI_SETTINGS));
-				} else {
-					Intent intentWiFi = new Intent(MainActivity.this,
-							WifiListActivity.class);
-					startActivity(intentWiFi);
-				}
-				return false;
-			}
-		});
-
-		quickFm.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				boolean fmOpen = isFmTransmitOn();
-				Settings.System
-						.putString(getContentResolver(),
-								Constant.FMTransmit.SETTING_ENABLE,
-								!fmOpen ? "1" : "0");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
-						(!fmOpen ? "1" : "0"));
-
-				quickFm.setImageResource((!fmOpen) ? R.drawable.quick_icon_fm_on
-						: R.drawable.quick_icon_fm_off);
-			}
-		});
-		quickFm.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intentFmTransmit = new Intent(MainActivity.this,
-						FmTransmitActivity.class);
-				startActivity(intentFmTransmit);
-				overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
-				return false;
-			}
-		});
-
-		quickGPS.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		quickGPS.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
-	}
-
-	/*
-	 * 初始化quick icon状态
-	 */
-	private void initQuickIconStatus() {
-		quickWifi
-				.setImageResource(wifiManager.isWifiEnabled() ? R.drawable.quick_icon_wifi_on
-						: R.drawable.quick_icon_wifi_off);
-		quickFm.setImageResource(isFmTransmitOn() ? R.drawable.quick_icon_fm_on
-				: R.drawable.quick_icon_fm_off);
 	}
 
 	private void test() {

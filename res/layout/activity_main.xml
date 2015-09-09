@@ -116,39 +116,6 @@
             android:layout_marginTop="5dp"
             android:orientation="horizontal" >
 
-            <LinearLayout
-                android:id="@+id/quick_icon_layout"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:orientation="vertical" >
-
-                <ImageButton
-                    android:id="@+id/quick_wifi"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/quick_wifi_bg" />
-
-                <ImageButton
-                    android:id="@+id/quick_fm"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/quick_fm_bg" />
-
-                <ImageButton
-                    android:id="@+id/quick_gps"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/quick_gps_bg" />
-            </LinearLayout>
-
             <RelativeLayout
                 android:id="@+id/layoutMap"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
