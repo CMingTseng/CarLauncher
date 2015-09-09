@@ -306,6 +306,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name="com.tchip.POWER_OFF" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.tchip.carlauncher.model.CardEjectReceiver" >
