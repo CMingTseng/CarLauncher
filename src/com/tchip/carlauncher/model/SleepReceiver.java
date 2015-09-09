@@ -1,10 +1,15 @@
 package com.tchip.carlauncher.model;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.service.BrightAdjustService;
+import com.tchip.carlauncher.service.RouteRecordService;
+import com.tchip.carlauncher.service.SensorWatchService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.Settings;
 
 public class SleepReceiver extends BroadcastReceiver {
@@ -31,6 +36,28 @@ public class SleepReceiver extends BroadcastReceiver {
 			MyApplication.isSleeping = false;
 			if (isAirplaneModeOn()) {
 				setAirplaneMode(false);
+			}
+
+			// 碰撞侦测服务
+			SharedPreferences sharedPreferences = context.getSharedPreferences(
+					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+			boolean hasSensorWatchService = sharedPreferences.getBoolean(
+					"crashOn", false);
+			if (hasSensorWatchService) {
+				Intent intentSensor = new Intent(context,
+						SensorWatchService.class);
+				context.startService(intentSensor);
+			}
+
+			// 轨迹记录服务
+			Intent intentRoute = new Intent(context, RouteRecordService.class);
+			context.startService(intentRoute);
+
+			// 亮度自动调整服务
+			if (Constant.Module.hasBrightAdjust) {
+				Intent intentBrightness = new Intent(context,
+						BrightAdjustService.class);
+				context.startService(intentBrightness);
 			}
 		}
 	}

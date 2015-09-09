@@ -8,6 +8,7 @@ import com.tchip.carlauncher.ui.activity.UpdateMapActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
+import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 import com.tchip.carlauncher.ui.activity.WifiListActivity;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.SwitchButton;
@@ -65,6 +66,17 @@ public class SettingFragment extends Fragment {
 						editor.commit();
 					}
 				});
+
+		// 用户中心
+		RelativeLayout layoutUserCenter = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutUserCenter);
+		layoutUserCenter.setOnClickListener(new MyOnClickListener());
+		View lineUserCenter = systemSettingView
+				.findViewById(R.id.lineUserCenter);
+		if (!Constant.Module.hasUserCenter) {
+			layoutUserCenter.setVisibility(View.GONE);
+			lineUserCenter.setVisibility(View.GONE);
+		}
 
 		// 亮度设置
 		RelativeLayout layoutRippleDisplay = (RelativeLayout) systemSettingView
@@ -179,6 +191,12 @@ public class SettingFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.layoutUserCenter:
+				Intent intentUserCenter = new Intent(context,
+						UserCenterActivity.class);
+				startActivity(intentUserCenter);
+				break;
+
 			case R.id.layoutCopyMap:
 				Intent intentCopyMap = new Intent(context,
 						UpdateMapActivity.class);

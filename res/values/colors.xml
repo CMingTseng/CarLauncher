@@ -8,6 +8,8 @@
     <drawable name="line_background">#161823</drawable>
 
     <color name="white">#FFFFFF</color>
+    <color name="blue_light">#3399FF</color>
+    <color name="blue_dark">#3333FF</color>
 
     <!-- 控件按下时显示的颜色 -->
     <color name="list_backgroud_color">#2fb3cb</color>

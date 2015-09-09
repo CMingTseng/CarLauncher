@@ -222,6 +222,11 @@
             android:name="com.tchip.carlauncher.ui.activity.OfflineBaiduMapShowActivity"
             android:screenOrientation="landscape" />
 
+        <!-- User Center -->
+        <activity
+            android:name="com.tchip.carlauncher.ui.activity.UserCenterActivity"
+            android:screenOrientation="landscape" />
+
         <!-- Music -->
 
         <activity

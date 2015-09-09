@@ -67,6 +67,36 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
+                android:id="@+id/lineUserCenter"
+                android:background="#000000" />
+
+            <RelativeLayout
+                android:id="@+id/layoutUserCenter"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/ui_setting_item_bg"
+                android:clickable="true" >
+
+                <ImageView
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/setting_item_image_margin_left"
+                    android:src="@drawable/ui_setting_user_center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/setting_item_text_margin_left"
+                    android:text="用户中心"
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
                 android:background="#000000" />
 
             <RelativeLayout
@@ -184,8 +214,8 @@
                     android:layout_width="@dimen/setting_item_image_height"
                     android:layout_height="@dimen/setting_item_image_height"
                     android:layout_centerVertical="true"
-                    android:padding="3dp"
                     android:layout_marginLeft="@dimen/setting_item_image_margin_left"
+                    android:padding="3dp"
                     android:src="@drawable/ui_wifi_ap" />
 
                 <TextView

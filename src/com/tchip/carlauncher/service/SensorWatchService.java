@@ -54,6 +54,10 @@ public class SensorWatchService extends Service {
 		SensorEventListener sensorEventListener = new SensorEventListener() {
 			@Override
 			public void onSensorChanged(SensorEvent event) {
+				if(MyApplication.isSleeping){
+					stopSelf();
+					return;
+				}
 				valueX = event.values[AXIS_X];
 				valueY = event.values[AXIS_Y];
 				valueZ = event.values[AXIS_Z];
