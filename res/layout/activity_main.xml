@@ -14,7 +14,7 @@
 
     <RelativeLayout
         android:id="@+id/layoutWeather"
-        android:layout_width="374dp"
+        android:layout_width="match_parent"
         android:layout_height="270dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -26,13 +26,13 @@
             android:id="@+id/textClock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="45dp"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
             android:textColor="#ffe1c5"
-            android:textSize="92sp" />
+            android:textSize="83sp" />
 
         <LinearLayout
             android:id="@+id/layoutDate"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="17dp"
             android:orientation="horizontal" >
 
             <TextClock
@@ -121,6 +121,7 @@
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 android:background="#ffffff" >
 
                 <ImageView
@@ -144,11 +145,11 @@
 
                 <ImageView
                     android:id="@+id/imageNaviState"
-                    android:layout_margin="5dp"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
+                    android:layout_margin="5dp"
                     android:src="@drawable/ui_main_navi_state_no" />
             </RelativeLayout>
 

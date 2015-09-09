@@ -238,10 +238,25 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		// FileRemoteControlActivity.class));
 		// return true;
 		case android.R.id.home:
-			finish();
+			backToMain();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToMain();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToMain() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	public void showFragment(Fragment fragment) {

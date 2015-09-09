@@ -161,7 +161,7 @@
                 android:src="@drawable/ui_weather_sun_day" />
 
             <RelativeLayout
-                android:layout_width="650dp"
+                android:layout_width="match_parent"
                 android:layout_height="150dp" >
 
                 <com.tchip.carlauncher.view.TitanicTextView

@@ -31,7 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class UpdateMapActivity extends Activity {
+public class OfflineBaiduMapUpdateActivity extends Activity {
 
 	private final static String[] pathFrom = {
 			"/storage/sdcard1/BaiduMapSDK/vmp/l/",
@@ -136,7 +136,7 @@ public class UpdateMapActivity extends Activity {
 			case R.id.btnStart:
 				if (hasOfflineMap) {
 					AlertDialog.Builder builder = new Builder(
-							UpdateMapActivity.this);
+							OfflineBaiduMapUpdateActivity.this);
 					builder.setMessage(getResources().getString(
 							R.string.hint_import_is_cost_time));
 					builder.setTitle(getResources().getString(R.string.hint));
@@ -171,7 +171,7 @@ public class UpdateMapActivity extends Activity {
 				break;
 
 			case R.id.layoutUpdateOnline:
-				Intent intentUpdate = new Intent(UpdateMapActivity.this,
+				Intent intentUpdate = new Intent(OfflineBaiduMapUpdateActivity.this,
 						OfflineBaiduMapActivity.class);
 				startActivity(intentUpdate);
 				break;

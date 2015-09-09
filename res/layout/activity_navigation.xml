@@ -173,10 +173,11 @@
 
             <RelativeLayout
                 android:id="@+id/layoutNearOilStation"
-                android:layout_width="@dimen/ui_near_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/ui_near_item_height"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/ui_near_oil" >
 
                 <TextView
@@ -191,9 +192,10 @@
 
             <RelativeLayout
                 android:id="@+id/layoutNearParking"
-                android:layout_width="@dimen/ui_near_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/ui_near_item_height"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/ui_near_parking" >
 
                 <TextView
@@ -208,9 +210,10 @@
 
             <RelativeLayout
                 android:id="@+id/layoutNear4s"
-                android:layout_width="@dimen/ui_near_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/ui_near_item_height"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/ui_near_4s" >
 
                 <TextView
@@ -230,10 +233,11 @@
 
             <RelativeLayout
                 android:id="@+id/layoutNearBank"
-                android:layout_width="@dimen/ui_near_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/ui_near_item_height"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/ui_near_atm" >
 
                 <TextView
@@ -248,9 +252,10 @@
 
             <RelativeLayout
                 android:id="@+id/layoutShop"
-                android:layout_width="@dimen/ui_near_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/ui_near_item_height"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/ui_near_shop" >
 
                 <TextView
@@ -265,9 +270,10 @@
 
             <RelativeLayout
                 android:id="@+id/layoutNearHotel"
-                android:layout_width="@dimen/ui_near_item_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/ui_near_item_height"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/ui_near_hotel" >
 
                 <TextView

@@ -72,7 +72,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:text="从SD卡导入离线地图：将百度离线地图包解压后放置于SD卡根目录下。"
+        android:text="从SD卡导入离线地图：将离线地图包解压后放到SD卡根目录下。"
         android:textColor="#1E88E5"
         android:textSize="22sp" />
 

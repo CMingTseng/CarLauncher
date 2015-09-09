@@ -79,18 +79,35 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="377dp"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:orientation="horizontal" >
+          <RelativeLayout
+            android:id="@+id/layoutVideo"
+            android:layout_width="278dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent"
+            android:background="@drawable/ui_media_video" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/video"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/ui_media_text_item_size" />
+        </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="561dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@id/layoutVideo"
             android:orientation="vertical" >
 
             <RelativeLayout
@@ -126,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
+                        android:visibility="gone"
                         android:src="@drawable/ui_media_music_shadow_recent" />
 
                     <TextView
@@ -159,7 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/music"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_media_text_item_size" />
@@ -176,35 +194,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:visibility="gone"
                     android:src="@drawable/ui_media_image_shadow" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/picture"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_media_text_item_size" />
             </RelativeLayout>
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/layoutVideo"
-            android:layout_width="278dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ui_media_video" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:text="@string/video"
-                android:textColor="#ffffff"
-                android:textSize="@dimen/ui_media_text_item_size" />
-        </RelativeLayout>
-    </LinearLayout>
+      
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

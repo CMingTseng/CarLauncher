@@ -170,7 +170,7 @@
             android:name="com.tchip.carlauncher.bluetooth.ClientSocketActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.UpdateMapActivity"
+            android:name="com.tchip.carlauncher.ui.activity.OfflineBaiduMapUpdateActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"

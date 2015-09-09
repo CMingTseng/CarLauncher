@@ -356,7 +356,7 @@
     <string name="re_download">重新下载</string>
     <string name="map_list">地图列表</string>
     <string name="download_manager">下载管理</string>
-    <string name="input_city_name">    请输入城市名</string>
+    <string name="input_city_name">    输入城市名</string>
     <string name="city_downloaded">已下载城市</string>
     <string name="start">开始</string>
     <string name="stop">停止</string>

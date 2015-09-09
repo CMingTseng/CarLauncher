@@ -18,6 +18,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -415,7 +416,7 @@ public class NavigationActivity extends FragmentActivity implements
 					setLayoutNearVisibility(false);
 					setLayoutHistoryVisibility(false);
 				} else {
-					finish();
+					backToMain();
 				}
 				break;
 
@@ -575,7 +576,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 			case R.id.layoutOffline:
 				Intent intentOffline = new Intent(NavigationActivity.this,
-						UpdateMapActivity.class);
+						OfflineBaiduMapUpdateActivity.class);
 				startActivity(intentOffline);
 				break;
 
@@ -595,6 +596,21 @@ public class NavigationActivity extends FragmentActivity implements
 				break;
 			}
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToMain();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToMain() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
 	}
 
 	public class dismissDialogThread implements Runnable {

@@ -1,6 +1,5 @@
 package com.tchip.carlauncher.ui.activity;
 
-
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
@@ -11,6 +10,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -64,7 +64,8 @@ public class FmTransmitActivity extends Activity {
 				Settings.System.putString(getContentResolver(),
 						Constant.FMTransmit.SETTING_ENABLE, isChecked ? "1"
 								: "0");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, (isChecked ? "1" : "0"));
+				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
+						(isChecked ? "1" : "0"));
 
 			}
 		});
@@ -115,6 +116,21 @@ public class FmTransmitActivity extends Activity {
 		});
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			backToVice();
+			return true;
+		} else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	private void backToVice() {
+		finish();
+		overridePendingTransition(R.anim.zms_translate_down_out,
+				R.anim.zms_translate_down_in);
+	}
+
 	/**
 	 * 小幅度的调整fm频率
 	 * 
@@ -154,7 +170,7 @@ public class FmTransmitActivity extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutBack:
-				finish();
+				backToVice();
 				break;
 			}
 		}
