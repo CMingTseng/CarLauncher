@@ -3,6 +3,7 @@ package com.tchip.carlauncher.model;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.MyLog;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,9 +15,9 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		if ("com.tchip.POWER_OFF".equals(action)
-				|| "android.intent.action.ACTION_POWER_CONNECTED"
-						.equals(action)) {
+		// "android.intent.action.ACTION_POWER_UNCONNECTED".equals(action)
+		MyLog.v("[PowerStateChangeReceiver]action:" + action);
+		if ("com.tchip.POWER_OFF".equals(action)) {
 			MyApplication.isPowerConnect = false;
 
 			// 熄灭屏幕
@@ -33,12 +34,13 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 			// 停止轨迹记录服务，保存轨迹
 			Intent intentRoute = new Intent(context, RouteRecordService.class);
 			context.stopService(intentRoute);
-		} else if ("android.intent.action.ACTION_POWER_CONNECTED".equals(intent
-				.getAction())) {
-			MyApplication.isPowerConnect = true;
-			// 轨迹记录服务
-			Intent intentRoute = new Intent(context, RouteRecordService.class);
-			context.startService(intentRoute);
 		}
+		// else if ("android.intent.action.ACTION_POWER_CONNECTED".equals(intent
+		// .getAction())) {
+		// MyApplication.isPowerConnect = true;
+		// // 轨迹记录服务
+		// Intent intentRoute = new Intent(context, RouteRecordService.class);
+		// context.startService(intentRoute);
+		// }
 	}
 }

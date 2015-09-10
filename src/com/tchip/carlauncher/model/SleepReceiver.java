@@ -5,6 +5,7 @@ import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
+import com.tchip.carlauncher.util.MyLog;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ public class SleepReceiver extends BroadcastReceiver {
 		this.context = context;
 
 		String action = intent.getAction();
+		MyLog.v("[SleepReceiver]action:" + action);
 		if (action.equals("com.tchip.SLEEP_ON")) {
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
@@ -70,6 +72,7 @@ public class SleepReceiver extends BroadcastReceiver {
 		int modeIdx = Settings.Global.getInt(context.getContentResolver(),
 				Settings.Global.AIRPLANE_MODE_ON, 0);
 		boolean isEnabled = (modeIdx == 1);
+		MyLog.v("[SleepReceiver]isAirplaneModeOn:" + isEnabled);
 		return isEnabled;
 	}
 
@@ -77,6 +80,7 @@ public class SleepReceiver extends BroadcastReceiver {
 	 * 设置飞行模式
 	 */
 	private void setAirplaneMode(boolean setAirPlane) {
+		MyLog.v("[SleepReceiver]setAirplaneMode:" + setAirPlane);
 		Settings.Global.putInt(context.getContentResolver(),
 				Settings.Global.AIRPLANE_MODE_ON, setAirPlane ? 1 : 0);
 		// 广播飞行模式的改变，让相应的程序可以处理。

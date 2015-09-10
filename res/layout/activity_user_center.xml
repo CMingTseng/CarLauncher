@@ -134,23 +134,24 @@
         android:src="@drawable/ui_route_track_shadow_vertical" />
 
     <RelativeLayout
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layoutTop"
+        android:layout_margin="20dp"
         android:layout_toRightOf="@id/layoutLeft" >
 
         <RelativeLayout
             android:id="@+id/layoutContentSign"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:visibility="gone" >
 
             <EditText
                 android:id="@+id/textSignUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请输入常用手机号"
-                android:inputType="textPhonetic" />
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/textSignPassOne"
@@ -173,7 +174,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textSignPassTwo"
-                android:text="登录" />
+                android:text="注册" />
 
             <Button
                 android:id="@+id/btnSignReset"
@@ -187,14 +188,15 @@
         <RelativeLayout
             android:id="@+id/layoutContentLogin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:visibility="gone" >
 
             <EditText
                 android:id="@+id/textLoginUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请输入手机号"
-                android:inputType="textPhonetic" />
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/textLoginPass"
@@ -206,16 +208,16 @@
 
             <Button
                 android:id="@+id/btnLogin"
-                android:layout_below="@id/textLoginPass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textLoginPass"
                 android:text="登录" />
 
             <Button
                 android:id="@+id/btnLoginReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                  android:layout_alignTop="@id/btnLogin"
+                android:layout_alignTop="@id/btnLogin"
                 android:layout_toRightOf="@id/btnLogin"
                 android:text="重置" />
         </RelativeLayout>
@@ -223,7 +225,8 @@
         <RelativeLayout
             android:id="@+id/layoutContentDefault"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -235,7 +238,8 @@
         <RelativeLayout
             android:id="@+id/layoutContentMessage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="wrap_content"
