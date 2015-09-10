@@ -134,13 +134,14 @@
         android:src="@drawable/ui_route_track_shadow_vertical" />
 
     <RelativeLayout
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layoutTop"
         android:layout_toRightOf="@id/layoutLeft" >
 
         <RelativeLayout
-            android:id="@+id/layoutSignContent"
+            android:id="@+id/layoutContentSign"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -184,7 +185,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/layoutLoginContent"
+            android:id="@+id/layoutContentLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -205,6 +206,7 @@
 
             <Button
                 android:id="@+id/btnLogin"
+                android:layout_below="@id/textLoginPass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="登录" />
@@ -213,18 +215,32 @@
                 android:id="@+id/btnLoginReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                  android:layout_alignTop="@id/btnLogin"
+                android:layout_toRightOf="@id/btnLogin"
                 android:text="重置" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/layoutNoLoginContent"
+            android:id="@+id/layoutContentDefault"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="登录后关注微信公众号可使用更强大功能" >
+                android:text="登录后关注微信公众号可使用更多功能" >
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutContentMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="消息界面" >
             </TextView>
         </RelativeLayout>
     </RelativeLayout>
