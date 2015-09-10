@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.provider.Settings;
 
 public class SleepReceiver extends BroadcastReceiver {
@@ -25,20 +26,18 @@ public class SleepReceiver extends BroadcastReceiver {
 		if (action.equals("com.tchip.SLEEP_ON")) {
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
-			if (!isAirplaneModeOn()) {
-				setAirplaneMode(true);
-			}
+			// 打开飞行模式
+			context.sendBroadcast(new Intent("com.tchip.AIRPLANE_ON"));
 
 			// 熄灭屏幕
 			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
 					"value", "power"));
-
 		} else if (action.equals("com.tchip.SLEEP_OFF")) {
 			// 取消低功耗待机
 			MyApplication.isSleeping = false;
-			if (isAirplaneModeOn()) {
-				setAirplaneMode(false);
-			}
+
+			// 关闭飞行模式
+			context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
 
 			// 碰撞侦测服务
 			SharedPreferences sharedPreferences = context.getSharedPreferences(
