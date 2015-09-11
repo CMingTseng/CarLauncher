@@ -120,8 +120,8 @@ public class MyApplication extends Application {
 	public static boolean isCrashed = false;
 	public static boolean shouldVideoRecordWhenChangeSize = false;
 
-	// 导航实例是否初始化成功
-	public static boolean isNaviInitialSuccess = false;
-	public static boolean isNaviAuthSuccess = false;
+	// 百度导航实例是否初始化成功
+	public static boolean isBaiduNaviInitialSuccess = false;
+	public static boolean isBaiduNaviAuthSuccess = false;
 
 }

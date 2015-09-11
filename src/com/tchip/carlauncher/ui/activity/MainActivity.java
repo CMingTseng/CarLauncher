@@ -466,6 +466,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		imageNavi.setOnClickListener(new MyOnClickListener());
 
 		imageNaviState = (ImageView) findViewById(R.id.imageNaviState);
+		if (!Constant.Module.isNavigationBaidu) {
+			imageNaviState.setVisibility(View.GONE);
+		}
 
 		// 在线音乐
 		ImageView imageMusicOL = (ImageView) findViewById(R.id.imageMusicOL);
@@ -573,10 +576,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	private String mSDCardPath = null;
 	private static final String APP_FOLDER_NAME = "CarLauncher";
 
-	private void initialNaviInstance() {
+	private void initialBaiduNaviInstance() {
 		if (initDirs()) {
 		}
-		initNavi();
+		initBaiduNavi();
 	}
 
 	private boolean initDirs() {
@@ -599,7 +602,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	String authinfo = null;
 	public static final String ROUTE_PLAN_NODE = "routePlanNode";
 
-	private void initNavi() {
+	private void initBaiduNavi() {
 		MyLog.v("Navi Instance is Initialing...");
 		BaiduNaviManager.getInstance().setNativeLibraryPath(
 				mSDCardPath + "/BaiduNaviSDK_SO");
@@ -609,10 +612,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					public void onAuthResult(int status, String msg) {
 						if (0 == status) {
 							authinfo = "Success!";
-							MyApplication.isNaviAuthSuccess = true;
+							MyApplication.isBaiduNaviAuthSuccess = true;
 						} else {
 							authinfo = "Fail:" + msg;
-							MyApplication.isNaviAuthSuccess = false;
+							MyApplication.isBaiduNaviAuthSuccess = false;
 						}
 
 						MyLog.v("Baidu Navi:Key auth " + authinfo);
@@ -620,7 +623,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 					public void initSuccess() {
 						// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
-						MyApplication.isNaviInitialSuccess = true;
+						MyApplication.isBaiduNaviInitialSuccess = true;
 						MyLog.v("Baidu Navi:Initial Success!");
 						refreshNaviState();
 					}
@@ -630,7 +633,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 
 					public void initFailed() {
-						MyApplication.isNaviInitialSuccess = false;
+						MyApplication.isBaiduNaviInitialSuccess = false;
 						MyLog.v("Baidu Navi:Initial Fail!");
 						refreshNaviState();
 					}
@@ -1053,36 +1056,41 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageNavi:
 				if (!ClickUtil.isQuickClick(800)) {
 					if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-						if (!MyApplication.isNaviAuthSuccess) {
-							MyLog.e("Navigation:Auth Fail");
-							if (NetworkUtil
-									.isNetworkConnected(getApplicationContext())) {
-								initialNaviInstance();
+						if (Constant.Module.isNavigationBaidu) {
+							if (!MyApplication.isBaiduNaviAuthSuccess) {
+								MyLog.e("Navigation:Auth Fail");
+								if (NetworkUtil
+										.isNetworkConnected(getApplicationContext())) {
+									initialBaiduNaviInstance();
+								}
+								Toast.makeText(
+										getApplicationContext(),
+										getResources().getString(
+												R.string.hint_navi_auth_fail),
+										Toast.LENGTH_SHORT).show();
+							} else if (!MyApplication.isBaiduNaviInitialSuccess) {
+								if (NetworkUtil
+										.isNetworkConnected(getApplicationContext())) {
+									initialBaiduNaviInstance();
+								}
+								MyLog.e("Navigation:Initial Fail");
+								Toast.makeText(
+										getApplicationContext(),
+										getResources().getString(
+												R.string.hint_navi_init_fail),
+										Toast.LENGTH_SHORT).show();
+							} else {
+								MyLog.v("Navi Instance Already Initial Success");
+								Intent intentNavi = new Intent(
+										MainActivity.this,
+										NavigationActivity.class);
+								startActivity(intentNavi);
+								overridePendingTransition(
+										R.anim.zms_translate_up_out,
+										R.anim.zms_translate_up_in);
 							}
-							Toast.makeText(
-									getApplicationContext(),
-									getResources().getString(
-											R.string.hint_navi_auth_fail),
-									Toast.LENGTH_SHORT).show();
-						} else if (!MyApplication.isNaviInitialSuccess) {
-							if (NetworkUtil
-									.isNetworkConnected(getApplicationContext())) {
-								initialNaviInstance();
-							}
-							MyLog.e("Navigation:Initial Fail");
-							Toast.makeText(
-									getApplicationContext(),
-									getResources().getString(
-											R.string.hint_navi_init_fail),
-									Toast.LENGTH_SHORT).show();
 						} else {
-							MyLog.v("Navi Instance Already Initial Success");
-							Intent intentNavi = new Intent(MainActivity.this,
-									NavigationActivity.class);
-							startActivity(intentNavi);
-							overridePendingTransition(
-									R.anim.zms_translate_up_out,
-									R.anim.zms_translate_up_in);
+							// 高德
 						}
 					} else {
 						NetworkUtil.noNetworkHint(getApplicationContext());
@@ -1336,8 +1344,8 @@ public class MainActivity extends Activity implements TachographCallback,
 					updateWifiTime++;
 					if (updateWifiTime > 5) {
 						shouldUpdateWifi = false;
-						if (!MyApplication.isNaviAuthSuccess
-								|| !MyApplication.isNaviInitialSuccess) {
+						if (!MyApplication.isBaiduNaviAuthSuccess
+								|| !MyApplication.isBaiduNaviInitialSuccess) {
 							MyLog.v("updateWifiThread:Initial Navigation!");
 							Message messageNavi = new Message();
 							messageNavi.what = 2;
@@ -1358,7 +1366,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 2:
-				initialNaviInstance();
+				initialBaiduNaviInstance();
 				break;
 
 			default:
@@ -1379,8 +1387,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 导航初始化情况
 	 */
 	private void refreshNaviState() {
-		if (MyApplication.isNaviAuthSuccess
-				&& MyApplication.isNaviInitialSuccess) {
+		if (MyApplication.isBaiduNaviAuthSuccess
+				&& MyApplication.isBaiduNaviInitialSuccess) {
 			imageNaviState.setImageResource(R.drawable.ui_main_navi_state_yes);
 		} else {
 			imageNaviState.setImageResource(R.drawable.ui_main_navi_state_no);
@@ -1410,11 +1418,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 导航实例
-		if (MyApplication.isNaviAuthSuccess) {
-			Log.v(Constant.TAG, "Navi Instance Already Initial Success");
-		} else if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-			initialNaviInstance();
-			Log.v(Constant.TAG, "Navi Instance is Initialing...");
+		if (Constant.Module.isNavigationBaidu) {
+			if (MyApplication.isBaiduNaviAuthSuccess) {
+				Log.v(Constant.TAG, "Navi Instance Already Initial Success");
+			} else if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+				initialBaiduNaviInstance();
+				Log.v(Constant.TAG, "Navi Instance is Initialing...");
+			}
 		}
 
 		// 初始化fm发射

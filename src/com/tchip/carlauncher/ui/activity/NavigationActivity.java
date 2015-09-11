@@ -508,11 +508,11 @@ public class NavigationActivity extends FragmentActivity implements
 					double workLng = Double.parseDouble(preference.getString(
 							"workLng", "0.00"));
 
-					if (!MyApplication.isNaviAuthSuccess) {
+					if (!MyApplication.isBaiduNaviAuthSuccess) {
 						MyLog.e("Navigation:Auth Fail");
 						Toast.makeText(getApplicationContext(), strAuthFail,
 								Toast.LENGTH_SHORT).show();
-					} else if (!MyApplication.isNaviInitialSuccess) {
+					} else if (!MyApplication.isBaiduNaviInitialSuccess) {
 						MyLog.e("Navigation:Initial Fail");
 						Toast.makeText(getApplicationContext(), strInitFail,
 								Toast.LENGTH_SHORT).show();
@@ -550,14 +550,14 @@ public class NavigationActivity extends FragmentActivity implements
 					double homeLng = Double.parseDouble(preference.getString(
 							"homeLng", "0.00"));
 
-					if (!MyApplication.isNaviAuthSuccess) {
+					if (!MyApplication.isBaiduNaviAuthSuccess) {
 						MyLog.e("Navigation:Auth Fail");
 						Toast.makeText(getApplicationContext(), strAuthFail,
 								Toast.LENGTH_SHORT).show();
 						audioRecordDialog.showErrorDialog(strAuthFail);
 						new Thread(new dismissDialogThread()).start();
 
-					} else if (!MyApplication.isNaviInitialSuccess) {
+					} else if (!MyApplication.isBaiduNaviInitialSuccess) {
 						MyLog.e("Navigation:Initial Fail");
 						Toast.makeText(getApplicationContext(), strInitFail,
 								Toast.LENGTH_SHORT).show();
@@ -1042,11 +1042,11 @@ public class NavigationActivity extends FragmentActivity implements
 							isResultListShow = false;
 							setLayoutHistoryVisibility(false);
 
-							if (!MyApplication.isNaviAuthSuccess) {
+							if (!MyApplication.isBaiduNaviAuthSuccess) {
 								Log.e(Constant.TAG, "Navigation:Auth Fail");
 								Toast.makeText(getApplicationContext(),
 										strAuthFail, Toast.LENGTH_SHORT).show();
-							} else if (!MyApplication.isNaviInitialSuccess) {
+							} else if (!MyApplication.isBaiduNaviInitialSuccess) {
 								Log.e(Constant.TAG, "Navigation:Initial Fail");
 								Toast.makeText(getApplicationContext(),
 										strInitFail, Toast.LENGTH_SHORT).show();
@@ -1205,11 +1205,11 @@ public class NavigationActivity extends FragmentActivity implements
 		} else {
 			// 点击地图上搜索结果气球进入导航
 
-			if (!MyApplication.isNaviAuthSuccess) {
+			if (!MyApplication.isBaiduNaviAuthSuccess) {
 				Log.e(Constant.TAG, "Navigation:Auth Fail");
 				Toast.makeText(getApplicationContext(), strAuthFail,
 						Toast.LENGTH_SHORT).show();
-			} else if (!MyApplication.isNaviInitialSuccess) {
+			} else if (!MyApplication.isBaiduNaviInitialSuccess) {
 				Log.e(Constant.TAG, "Navigation:Initial Fail");
 				Toast.makeText(getApplicationContext(), strInitFail,
 						Toast.LENGTH_SHORT).show();

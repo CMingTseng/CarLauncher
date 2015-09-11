@@ -150,6 +150,11 @@ public interface Constant {
 
 	public static final class Module {
 		/**
+		 * 导航是否是百度:true-百度 false-高德
+		 */
+		public static final boolean isNavigationBaidu = false;
+
+		/**
 		 * 拔掉电源熄灭屏幕
 		 */
 		public static final boolean autoCloseScreen = false;
