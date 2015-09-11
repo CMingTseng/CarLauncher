@@ -18,6 +18,16 @@ public class MyApplication extends Application {
 	 * 是否进入低功耗待机状态
 	 */
 	public static boolean isSleeping = false;
+	
+	/**
+	 * 是否有后台导航
+	 */
+	public static boolean isNavigating = false;
+	
+	/**
+	 * 休眠唤醒，需要启动录像
+	 */
+	public static boolean shouldWakeRecord = false;
 
 	// Music
 	public static boolean mIsSleepClockSetting = false;

@@ -1,17 +1,12 @@
 package com.tchip.carlauncher.model;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
-import com.tchip.carlauncher.service.BrightAdjustService;
-import com.tchip.carlauncher.service.RouteRecordService;
-import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.util.MyLog;
+import com.tchip.carlauncher.util.SettingUtil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.provider.Settings;
 
 public class SleepReceiver extends BroadcastReceiver {
@@ -32,34 +27,26 @@ public class SleepReceiver extends BroadcastReceiver {
 			// 熄灭屏幕
 			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
 					"value", "power"));
+
+			// 关闭GPS
+			context.sendBroadcast(new Intent(
+					"tchip.intent.action.ACTION_GPS_OFF"));
 		} else if (action.equals("com.tchip.SLEEP_OFF")) {
 			// 取消低功耗待机
 			MyApplication.isSleeping = false;
 
+			// 点亮屏幕
+			SettingUtil.lightScreen(context);
+
+			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
+			MyApplication.shouldWakeRecord = true;
+
 			// 关闭飞行模式
 			context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
 
-			// 碰撞侦测服务
-			SharedPreferences sharedPreferences = context.getSharedPreferences(
-					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-			boolean hasSensorWatchService = sharedPreferences.getBoolean(
-					"crashOn", false);
-			if (hasSensorWatchService) {
-				Intent intentSensor = new Intent(context,
-						SensorWatchService.class);
-				context.startService(intentSensor);
-			}
-
-			// 轨迹记录服务
-			Intent intentRoute = new Intent(context, RouteRecordService.class);
-			context.startService(intentRoute);
-
-			// 亮度自动调整服务
-			if (Constant.Module.hasBrightAdjust) {
-				Intent intentBrightness = new Intent(context,
-						BrightAdjustService.class);
-				context.startService(intentBrightness);
-			}
+			// 打开GPS
+			context.sendBroadcast(new Intent(
+					"tchip.intent.action.ACTION_GPS_ON"));
 		}
 	}
 

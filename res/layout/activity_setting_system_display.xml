@@ -105,12 +105,14 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="2dp"
-            android:background="#cccccc" />
+            android:background="#cccccc"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_system_bright_item_height"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -161,11 +163,11 @@
                 android:orientation="horizontal" >
 
                 <RadioButton
-                    android:id="@+id/screenOff1min"
+                    android:id="@+id/screenOff30Second"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/setting_system_bright_radio_margin"
-                    android:text="1分"
+                    android:text="30秒"
                     android:textColor="#1E88E5"
                     android:textSize="@dimen/setting_system_bright_text_size" />
 

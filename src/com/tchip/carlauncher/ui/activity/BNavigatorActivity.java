@@ -16,7 +16,9 @@ import com.baidu.navisdk.adapter.BNRouteGuideManager;
 import com.baidu.navisdk.adapter.BNRouteGuideManager.CustomizedLayerItem;
 import com.baidu.navisdk.adapter.BNRouteGuideManager.OnNavigationListener;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.MyLog;
 
 /**
  * 诱导界面
@@ -67,20 +69,24 @@ public class BNavigatorActivity extends Activity {
 
 	@Override
 	protected void onResume() {
+		MyLog.v("[BNavigatorActivity]onResume");
 		BNRouteGuideManager.getInstance().onResume();
+		MyApplication.isNavigating = true;
 		super.onResume();
-
 		hd.sendEmptyMessageDelayed(MSG_SHOW, 5000);
 	}
 
 	protected void onPause() {
+		MyLog.v("[BNavigatorActivity]onPause");
 		super.onPause();
 		BNRouteGuideManager.getInstance().onPause();
 	};
 
 	@Override
 	protected void onDestroy() {
+		MyLog.v("[BNavigatorActivity]onDestroy");
 		BNRouteGuideManager.getInstance().onDestroy();
+		MyApplication.isNavigating = false;
 		super.onDestroy();
 	}
 
@@ -92,7 +98,9 @@ public class BNavigatorActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
+		// onBackPressed(boolean showQuitDialog)
 		BNRouteGuideManager.getInstance().onBackPressed(false);
+		MyLog.v("[BNavigatorActivity]onBackPressed");
 	}
 
 	public void onConfigurationChanged(

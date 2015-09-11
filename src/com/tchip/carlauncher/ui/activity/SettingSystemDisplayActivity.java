@@ -27,7 +27,7 @@ public class SettingSystemDisplayActivity extends Activity {
 	private MaterialSwitch nightSwitch;
 	private Context context;
 	private RadioGroup screenOffGroup;
-	private RadioButton screenOff1min, screenOff2min, screenOff5min,
+	private RadioButton screenOff30Second, screenOff2min, screenOff5min,
 			screenOff10min, screenOffNone;
 
 	private SharedPreferences sharedPreferences;
@@ -103,15 +103,15 @@ public class SettingSystemDisplayActivity extends Activity {
 		screenOffGroup = (RadioGroup) findViewById(R.id.screenOffGroup);
 		screenOffGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
-		screenOff1min = (RadioButton) findViewById(R.id.screenOff1min);
+		screenOff30Second = (RadioButton) findViewById(R.id.screenOff30Second);
 		screenOff2min = (RadioButton) findViewById(R.id.screenOff2min);
 		screenOff5min = (RadioButton) findViewById(R.id.screenOff5min);
 		screenOff10min = (RadioButton) findViewById(R.id.screenOff10min);
 		screenOffNone = (RadioButton) findViewById(R.id.screenOffNone);
 		int nowScreenOffTime = SettingUtil.getScreenOffTime(context);
 		switch (nowScreenOffTime) {
-		case 60000:
-			screenOff1min.setChecked(true);
+		case 30000:
+			screenOff30Second.setChecked(true);
 			break;
 		case 120000:
 			screenOff2min.setChecked(true);
@@ -132,8 +132,8 @@ public class SettingSystemDisplayActivity extends Activity {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			switch (checkedId) {
-			case R.id.screenOff1min:
-				SettingUtil.setScreenOffTime(context, 60000);
+			case R.id.screenOff30Second:
+				SettingUtil.setScreenOffTime(context, 30000);
 				break;
 			case R.id.screenOff2min:
 				SettingUtil.setScreenOffTime(context, 120000);

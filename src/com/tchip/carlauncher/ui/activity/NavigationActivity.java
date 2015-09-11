@@ -158,6 +158,17 @@ public class NavigationActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (MyApplication.isNavigating) {
+			Intent intent = new Intent(NavigationActivity.this,
+					BNavigatorActivity.class);
+			// Bundle bundle = new Bundle();
+			// bundle.putSerializable(MainActivity.ROUTE_PLAN_NODE,
+			// (BNRoutePlanNode) mBNRoutePlanNode);
+			// intent.putExtras(bundle);
+			startActivity(intent);
+			return;
+		}
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);

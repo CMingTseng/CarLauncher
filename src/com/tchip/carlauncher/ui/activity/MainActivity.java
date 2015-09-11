@@ -221,6 +221,45 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
+	public class BackThread implements Runnable {
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					Thread.sleep(5000);
+					Message message = new Message();
+					message.what = 1;
+					backHandler.sendMessage(message);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	final Handler backHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				if (NetworkUtil.isWifiConnected(getApplicationContext())) {
+					updateWiFiState();
+				}
+
+				if (MyApplication.shouldWakeRecord) {
+					// 序列任务线程
+					new Thread(new AutoThread()).start();
+					MyApplication.shouldWakeRecord = false;
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
 	/**
 	 * 更改分辨率后重启录像
 	 */
@@ -533,8 +572,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void initialNaviInstance() {
 		if (initDirs()) {
-			initNavi();
 		}
+		initNavi();
 	}
 
 	private boolean initDirs() {
@@ -972,14 +1011,17 @@ public class MainActivity extends Activity implements TachographCallback,
 							mMuteState = Constant.Record.STATE_UNMUTE;
 							startSpeak(getResources().getString(
 									R.string.hint_video_mute_off));
+							editor.putBoolean("videoVoice", true);
 						}
 					} else if (mMuteState == Constant.Record.STATE_UNMUTE) {
 						if (setMute(true) == 0) {
 							mMuteState = Constant.Record.STATE_MUTE;
 							startSpeak(getResources().getString(
 									R.string.hint_video_mute_on));
+							editor.putBoolean("videoVoice", false);
 						}
 					}
+					editor.commit();
 					setupRecordViews();
 				}
 				break;
@@ -1352,6 +1394,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+
+		MyLog.v("[MainActivity]isNavigating:" + MyApplication.isNavigating);
+
 		refreshNaviState();
 
 		// 更新录像界面按钮状态
@@ -1400,11 +1445,17 @@ public class MainActivity extends Activity implements TachographCallback,
 		mPathState = Constant.Record.STATE_PATH_ZERO;
 		mSecondaryState = Constant.Record.STATE_SECONDARY_DISABLE;
 		mOverlapState = Constant.Record.STATE_OVERLAP_FIVE;
-
-		mMuteState = Constant.Record.STATE_UNMUTE;
 	}
 
 	private void refreshRecordButton() {
+		// 录音,静音
+		boolean videoVoice = sharedPreferences.getBoolean("videoVoice", true);
+		if (!videoVoice) {
+			mMuteState = Constant.Record.STATE_MUTE; // 不录音
+		} else {
+			mMuteState = Constant.Record.STATE_UNMUTE;
+		}
+
 		// 视频尺寸
 		String videoSizeStr = sharedPreferences.getString("videoSize", "720");
 		if ("1080".equals(videoSizeStr)) {

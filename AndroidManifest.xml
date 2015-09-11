@@ -168,6 +168,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
@@ -278,9 +279,12 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.BNavigatorActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:launchMode="singleTask" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.FmTransmitActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SetStarPlaceActivity"

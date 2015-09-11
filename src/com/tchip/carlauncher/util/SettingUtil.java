@@ -10,7 +10,16 @@ import java.io.PrintWriter;
 
 import com.tchip.carlauncher.Constant;
 
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
@@ -142,4 +151,31 @@ public class SettingUtil {
 		}
 	}
 
+	/**
+	 * 点亮屏幕
+	 * 
+	 * @param context
+	 */
+	public static void lightScreen(Context context) {
+		// 获取电源管理器对象
+		PowerManager pm = (PowerManager) context
+				.getSystemService(Context.POWER_SERVICE);
+
+		// 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+		PowerManager.WakeLock wl = pm.newWakeLock(
+				PowerManager.ACQUIRE_CAUSES_WAKEUP
+						| PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
+
+		wl.acquire(); // 点亮屏幕
+		wl.release(); // 释放
+
+		// 得到键盘锁管理器对象
+		KeyguardManager km = (KeyguardManager) context
+				.getSystemService(Context.KEYGUARD_SERVICE);
+
+		// 参数是LogCat里用的Tag
+		KeyguardLock kl = km.newKeyguardLock("ZMS");
+
+		kl.disableKeyguard();
+	}
 }
