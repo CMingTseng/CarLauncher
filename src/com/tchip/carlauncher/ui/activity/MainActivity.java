@@ -148,6 +148,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 序列任务线程
 		new Thread(new AutoThread()).start();
 
+		// 后台线程
+		new Thread(new BackThread()).start();
+
 		// 3G信号
 		MyListener = new MyPhoneStateListener();
 		Tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
