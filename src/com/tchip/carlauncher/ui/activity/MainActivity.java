@@ -247,14 +247,16 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (NetworkUtil.isWifiConnected(getApplicationContext())) {
-					updateWiFiState();
-				}
+				if (!MyApplication.isSleeping) {
+					if (NetworkUtil.isWifiConnected(getApplicationContext())) {
+						updateWiFiState();
+					}
 
-				if (MyApplication.shouldWakeRecord) {
-					// 序列任务线程
-					new Thread(new AutoThread()).start();
-					MyApplication.shouldWakeRecord = false;
+					if (MyApplication.shouldWakeRecord) {
+						// 序列任务线程
+						new Thread(new AutoThread()).start();
+						MyApplication.shouldWakeRecord = false;
+					}
 				}
 				break;
 

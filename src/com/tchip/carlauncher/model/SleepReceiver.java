@@ -58,14 +58,15 @@ public class SleepReceiver extends BroadcastReceiver {
 
 			// 静音
 			// 媒体声音
-			int volumeMusic = audioManager
-					.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-			int volumeRing = audioManager
-					.getStreamVolume(AudioManager.STREAM_RING);
-			editor.putInt("volumeMusic", volumeMusic);
-			editor.putInt("volumeRing", volumeRing);
-			editor.commit();
-
+			if (Constant.Module.muteWhenSleep) {
+				int volumeMusic = audioManager
+						.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+				int volumeRing = audioManager
+						.getStreamVolume(AudioManager.STREAM_RING);
+				editor.putInt("volumeMusic", volumeMusic);
+				editor.putInt("volumeRing", volumeRing);
+				editor.commit();
+			}
 		} else if (action.equals("com.tchip.SLEEP_OFF")) {
 			// 取消低功耗待机
 			MyApplication.isSleeping = false;
@@ -94,12 +95,14 @@ public class SleepReceiver extends BroadcastReceiver {
 			}
 
 			// 恢复音量设置
-			int volumeMusic = preferences.getInt("volumeMusic", 8);
-			int volumeRing = preferences.getInt("volumeRing", 8);
-			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-					volumeMusic, 0);
-			audioManager.setStreamVolume(AudioManager.STREAM_RING, volumeRing,
-					0);
+			if (Constant.Module.muteWhenSleep) {
+				int volumeMusic = preferences.getInt("volumeMusic", 8);
+				int volumeRing = preferences.getInt("volumeRing", 8);
+				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+						volumeMusic, 0);
+				audioManager.setStreamVolume(AudioManager.STREAM_RING,
+						volumeRing, 0);
+			}
 		}
 	}
 

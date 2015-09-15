@@ -23,7 +23,6 @@ public interface Constant {
 	}
 
 	public static final class Record {
-
 		/**
 		 * 是否包含录像模块，去掉可用作其他平台做对比测试
 		 */
@@ -149,6 +148,11 @@ public interface Constant {
 	}
 
 	public static final class Module {
+		/**
+		 * 休眠时是否静音
+		 */
+		public static final boolean muteWhenSleep = false;
+		
 		/**
 		 * 导航是否是百度:true-百度 false-独立导航Demo(百度SDK)
 		 */
