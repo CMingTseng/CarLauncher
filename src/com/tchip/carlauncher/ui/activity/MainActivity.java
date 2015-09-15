@@ -37,6 +37,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -788,13 +789,20 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						break;
-					} else if (!MyApplication.isPowerConnect
-							|| MyApplication.isSleeping) {
-						// 电源断开或者进入低功耗休眠
+					} else if (!MyApplication.isPowerConnect) {
+						// 电源断开
 						MyLog.e("Stop Record:Power is unconnected");
-						Message messageEject = new Message();
-						messageEject.what = 3;
-						updateRecordTimeHandler.sendMessage(messageEject);
+						Message messagePowerUnconnect = new Message();
+						messagePowerUnconnect.what = 3;
+						updateRecordTimeHandler
+								.sendMessage(messagePowerUnconnect);
+						break;
+					} else if (MyApplication.isSleeping) {
+						// 进入低功耗休眠
+						MyLog.e("Stop Record:isSleeping = true");
+						Message messageSleep = new Message();
+						messageSleep.what = 5;
+						updateRecordTimeHandler.sendMessage(messageSleep);
 						break;
 					} else {
 						try {
@@ -871,6 +879,30 @@ public class MainActivity extends Activity implements TachographCallback,
 			case 4:
 				setupRecordViews();
 				MyApplication.isCrashed = false;
+				break;
+
+			case 5:
+				// 电源断开，停止录像
+				if (stopRecorder() == 0) {
+					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					MyApplication.isVideoReording = false;
+					setupRecordViews();
+				} else {
+					if (stopRecorder() == 0) {
+						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						MyApplication.isVideoReording = false;
+						setupRecordViews();
+					}
+				}
+
+				String strSleepOn = getResources().getString(
+						R.string.stop_record_sleep_on);
+				Toast.makeText(getApplicationContext(), strSleepOn,
+						Toast.LENGTH_SHORT).show();
+				MyLog.e("Record Stop:sleep on.");
+				startSpeak(strSleepOn);
+				audioRecordDialog.showErrorDialog(strSleepOn);
+				new Thread(new dismissDialogThread()).start();
 				break;
 
 			default:
@@ -1090,7 +1122,27 @@ public class MainActivity extends Activity implements TachographCallback,
 										R.anim.zms_translate_up_in);
 							}
 						} else {
-							// 高德
+							// com.tchip.baidunavi
+//							PackageManager packageManager = getApplicationContext().getPackageManager();
+//							Intent intent = packageManager
+//									.getLaunchIntentForPackage("com.tchip.baidunavi");
+//							intent.setFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
+////							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+////									| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+//
+//							startActivity(intent);
+							
+							
+							ComponentName componentMusic;
+							componentMusic = new ComponentName(
+									"com.tchip.baidunavi",
+									"com.tchip.baidunavi.ui.activity.MainActivity");
+							Intent intentBaiduNavi = new Intent();
+							intentBaiduNavi
+									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+											| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+							intentBaiduNavi.setComponent(componentMusic);
+							startActivity(intentBaiduNavi);
 						}
 					} else {
 						NetworkUtil.noNetworkHint(getApplicationContext());

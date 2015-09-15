@@ -34,6 +34,9 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 			// 停止轨迹记录服务，保存轨迹
 			Intent intentRoute = new Intent(context, RouteRecordService.class);
 			context.stopService(intentRoute);
+
+			// 发送关机广播
+			context.sendBroadcast(new Intent("tchip.intent.action.ACTION_POWER_OFF"));
 		}
 		// else if ("android.intent.action.ACTION_POWER_CONNECTED".equals(intent
 		// .getAction())) {

@@ -150,7 +150,7 @@ public interface Constant {
 
 	public static final class Module {
 		/**
-		 * 导航是否是百度:true-百度 false-高德
+		 * 导航是否是百度:true-百度 false-独立导航Demo(百度SDK)
 		 */
 		public static final boolean isNavigationBaidu = false;
 

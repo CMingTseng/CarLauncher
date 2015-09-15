@@ -6,10 +6,14 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Environment;
@@ -100,7 +104,7 @@ public class NavigationActivity extends FragmentActivity implements
 
 	private ArrayAdapter<String> sugAdapter = null;
 
-	private double mLatitude, mLongitude;
+	private double mLatitude, mLongitude, naviLat, naviLng;
 	private LatLng nowLatLng;
 
 	private EditText etHistoryWhere, etHistoryCity;
@@ -158,16 +162,6 @@ public class NavigationActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (MyApplication.isNavigating) {
-			Intent intent = new Intent(NavigationActivity.this,
-					BNavigatorActivity.class);
-			// Bundle bundle = new Bundle();
-			// bundle.putSerializable(MainActivity.ROUTE_PLAN_NODE,
-			// (BNRoutePlanNode) mBNRoutePlanNode);
-			// intent.putExtras(bundle);
-			startActivity(intent);
-			return;
-		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -175,6 +169,10 @@ public class NavigationActivity extends FragmentActivity implements
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_navigation);
+
+		preference = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+				Context.MODE_PRIVATE);
+		editor = preference.edit();
 
 		strAuthFail = getResources().getString(R.string.hint_navi_auth_fail);
 		strInitFail = getResources().getString(R.string.hint_navi_init_fail);
@@ -184,9 +182,6 @@ public class NavigationActivity extends FragmentActivity implements
 		audioRecordDialog = new AudioRecordDialog(NavigationActivity.this);
 
 		// 获取当前经纬度
-		preference = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
-				Context.MODE_PRIVATE);
-		editor = preference.edit();
 		mLatitude = Double
 				.parseDouble(preference.getString("latitude", "0.00"));
 		mLongitude = Double.parseDouble(preference.getString("longitude",
@@ -213,6 +208,56 @@ public class NavigationActivity extends FragmentActivity implements
 				setDestinationText(naviDesFromVoice);
 				startSearchPlace(naviDesFromVoice, nowLatLng, false, false);
 			}
+		}
+		MyLog.v("[NavigationActivity]MyApplication.isNavigating:"
+				+ MyApplication.isNavigating);
+		if (preference.getBoolean("naviResume", false)
+				|| MyApplication.isNavigating) {
+			// TODO：还原未完成的导航
+			AlertDialog.Builder builder = new Builder(NavigationActivity.this);
+			builder.setMessage(getResources().getString(
+					R.string.hint_import_is_cost_time));
+			builder.setTitle(getResources().getString(R.string.hint));
+			builder.setPositiveButton(getResources()
+					.getString(R.string.confirm), new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					if (!MyApplication.isBaiduNaviAuthSuccess) {
+						Log.e(Constant.TAG, "Navigation:Auth Fail");
+						Toast.makeText(getApplicationContext(), strAuthFail,
+								Toast.LENGTH_SHORT).show();
+					} else if (!MyApplication.isBaiduNaviInitialSuccess) {
+						Log.e(Constant.TAG, "Navigation:Initial Fail");
+						Toast.makeText(getApplicationContext(), strInitFail,
+								Toast.LENGTH_SHORT).show();
+					} else {
+						naviLat = Double.parseDouble(preference.getString(
+								"naviLat", "0.00"));
+						naviLng = Double.parseDouble(preference.getString(
+								"naviLng", "0.00"));
+						String naviName = preference.getString("naviName", " ");
+
+						routeplanToNavi(CoordinateType.GCJ02,
+								nowLatLng.latitude, nowLatLng.longitude,
+								getResources()
+										.getString(R.string.location_here),
+								naviLat, naviLng, naviName);
+
+						audioRecordDialog.showLoadDialog();
+					}
+
+				}
+			});
+			builder.setNegativeButton(
+					getResources().getString(R.string.cancel),
+					new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+			builder.create().show();
 		}
 	}
 
@@ -389,28 +434,31 @@ public class NavigationActivity extends FragmentActivity implements
 			// MapView 销毁后不在处理新接收的位置
 			if (location == null || mMapView == null)
 				return;
-			MyLocationData locData = new MyLocationData.Builder()
-					.accuracy(0)
-					// accuracy设为0去掉蓝色精度圈，RAW:.accuracy(location.getRadius())
-					// 此处设置开发者获取到的方向信息，顺时针0-360
-					.direction(100).latitude(location.getLatitude())
-					.longitude(location.getLongitude()).build();
-			mBaiduMap.setMyLocationData(locData);
+			if (location.getLatitude() != 0.0 && location.getLongitude() != 0.0) {
+				MyLocationData locData = new MyLocationData.Builder()
+						.accuracy(0)
+						// accuracy设为0去掉蓝色精度圈，RAW:.accuracy(location.getRadius())
+						// 此处设置开发者获取到的方向信息，顺时针0-360
+						.direction(100).latitude(location.getLatitude())
+						.longitude(location.getLongitude()).build();
+				mBaiduMap.setMyLocationData(locData);
 
-			// 更新当前位置用作导航起点
-			nowLatLng = new LatLng(location.getLatitude(),
-					location.getLongitude());
-			// 初次定位和移动过程，更新当前位置到地图中心
-			if (isFirstLoc || location.getSpeed() > 0) {
-				isFirstLoc = false;
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(nowLatLng);
-				mBaiduMap.animateMapStatus(u);
+				// 更新当前位置用作导航起点
+				nowLatLng = new LatLng(location.getLatitude(),
+						location.getLongitude());
+				// 初次定位和移动过程，更新当前位置到地图中心
+				if (isFirstLoc || location.getSpeed() > 0) {
+					isFirstLoc = false;
+					MapStatusUpdate u = MapStatusUpdateFactory
+							.newLatLng(nowLatLng);
+					mBaiduMap.animateMapStatus(u);
+				}
+
+				// 存储位置到SharedPreference
+				editor.putString("latitude", "" + location.getLatitude());
+				editor.putString("longitude", "" + location.getLongitude());
+				editor.commit();
 			}
-
-			// 存储位置到SharedPreference
-			editor.putString("latitude", "" + location.getLatitude());
-			editor.putString("longitude", "" + location.getLongitude());
-			editor.commit();
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -1088,6 +1136,12 @@ public class NavigationActivity extends FragmentActivity implements
 	private void routeplanToNavi(CoordinateType coType, double startLatitude,
 			double startLongitude, String startName, double endLatitude,
 			double endLongitude, String endName) {
+		editor.putBoolean("naviResume", true);
+		editor.putString("naviLat", "" + endLatitude);
+		editor.putString("naviLng", "" + endLongitude);
+		editor.putString("naviName", endName);
+		editor.commit();
+
 		BNRoutePlanNode sNode = null;
 		BNRoutePlanNode eNode = null;
 		// 需要将bd09ll转成BD09_MC,GCJ02,WGS84

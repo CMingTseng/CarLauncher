@@ -34,7 +34,12 @@ SharedPreferences-CarLauncher
 	[*Using]
 	(boolean)isFirstLaunch 是否初次启动(true)
 	----------------------------------------
-	[*Using]导航常用收藏
+	[*Using]导航
+	(boolean)naviResume	是否有导航需要还原(false)
+	(String)naviLat		导航目的地Latitude
+	(String)naviLng		导航目的地Longitude
+	(String)naviName	导航目的地Name
+	
 	(boolean)homeSet	是否设置家的地址
 	(String)homeAddress 家的地址
 	(String)homeLat		家Lat

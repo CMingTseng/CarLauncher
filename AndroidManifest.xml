@@ -279,8 +279,8 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.BNavigatorActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:launchMode="singleTask" />
+        <!-- android:configChanges="orientation|screenSize|keyboard|keyboardHidden" -->
         <activity
             android:name="com.tchip.carlauncher.ui.activity.FmTransmitActivity"
             android:exported="true"
