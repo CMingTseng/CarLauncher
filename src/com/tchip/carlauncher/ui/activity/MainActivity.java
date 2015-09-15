@@ -1123,25 +1123,14 @@ public class MainActivity extends Activity implements TachographCallback,
 							}
 						} else {
 							// com.tchip.baidunavi
-//							PackageManager packageManager = getApplicationContext().getPackageManager();
-//							Intent intent = packageManager
-//									.getLaunchIntentForPackage("com.tchip.baidunavi");
-//							intent.setFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-////							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-////									| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-//
-//							startActivity(intent);
-							
-							
-							ComponentName componentMusic;
-							componentMusic = new ComponentName(
+							ComponentName componentBaiduNavi;
+							componentBaiduNavi = new ComponentName(
 									"com.tchip.baidunavi",
 									"com.tchip.baidunavi.ui.activity.MainActivity");
 							Intent intentBaiduNavi = new Intent();
 							intentBaiduNavi
-									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-											| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-							intentBaiduNavi.setComponent(componentMusic);
+									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							intentBaiduNavi.setComponent(componentBaiduNavi);
 							startActivity(intentBaiduNavi);
 						}
 					} else {
