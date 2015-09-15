@@ -232,11 +232,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			while (true) {
 				try {
 					Thread.sleep(5000);
-					Message message = new Message();
-					message.what = 1;
-					backHandler.sendMessage(message);
+					if (!MyApplication.isSleeping) {
+						Message message = new Message();
+						message.what = 1;
+						backHandler.sendMessage(message);
+					}
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -1125,15 +1126,20 @@ public class MainActivity extends Activity implements TachographCallback,
 							}
 						} else {
 							// com.tchip.baidunavi
-							ComponentName componentBaiduNavi;
-							componentBaiduNavi = new ComponentName(
-									"com.tchip.baidunavi",
-									"com.tchip.baidunavi.ui.activity.MainActivity");
-							Intent intentBaiduNavi = new Intent();
-							intentBaiduNavi
-									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							intentBaiduNavi.setComponent(componentBaiduNavi);
-							startActivity(intentBaiduNavi);
+							try {
+								ComponentName componentBaiduNavi;
+								componentBaiduNavi = new ComponentName(
+										"com.tchip.baidunavi",
+										"com.tchip.baidunavi.ui.activity.MainActivity");
+								Intent intentBaiduNavi = new Intent();
+								intentBaiduNavi
+										.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+								intentBaiduNavi
+										.setComponent(componentBaiduNavi);
+								startActivity(intentBaiduNavi);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 					} else {
 						NetworkUtil.noNetworkHint(getApplicationContext());

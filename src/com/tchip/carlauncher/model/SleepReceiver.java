@@ -32,76 +32,85 @@ public class SleepReceiver extends BroadcastReceiver {
 		String action = intent.getAction();
 		MyLog.v("[SleepReceiver]action:" + action);
 		if (action.equals("com.tchip.SLEEP_ON")) {
-			// 进入低功耗待机
-			MyApplication.isSleeping = true;
-			// 打开飞行模式
-			context.sendBroadcast(new Intent("com.tchip.AIRPLANE_ON"));
+			try {
+				// 进入低功耗待机
+				MyApplication.isSleeping = true;
+				// 打开飞行模式
+				context.sendBroadcast(new Intent("com.tchip.AIRPLANE_ON"));
 
-			// 熄灭屏幕
-			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-					"value", "power"));
+				// 熄灭屏幕
+				context.sendBroadcast(new Intent("com.tchip.powerKey")
+						.putExtra("value", "power"));
 
-			// 关闭GPS
-			context.sendBroadcast(new Intent(
-					"tchip.intent.action.ACTION_GPS_OFF"));
+				// 关闭GPS
+				context.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_OFF"));
 
-			// 关闭FM发射，并保存休眠前状态
-			boolean fmStateBeforeSleep = SettingUtil.isFmTransmitOn(context);
-			editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
-			editor.commit();
-			if (fmStateBeforeSleep) {
-				MyLog.v("[SleepReceiver]Sleep:close FM");
-				Settings.System.putString(context.getContentResolver(),
-						Constant.FMTransmit.SETTING_ENABLE, "0");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
-			}
-
-			// 静音
-			// 媒体声音
-			if (Constant.Module.muteWhenSleep) {
-				int volumeMusic = audioManager
-						.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-				int volumeRing = audioManager
-						.getStreamVolume(AudioManager.STREAM_RING);
-				editor.putInt("volumeMusic", volumeMusic);
-				editor.putInt("volumeRing", volumeRing);
+				// 关闭FM发射，并保存休眠前状态
+				boolean fmStateBeforeSleep = SettingUtil
+						.isFmTransmitOn(context);
+				editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
 				editor.commit();
+				if (fmStateBeforeSleep) {
+					MyLog.v("[SleepReceiver]Sleep:close FM");
+					Settings.System.putString(context.getContentResolver(),
+							Constant.FMTransmit.SETTING_ENABLE, "0");
+					SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
+				}
+
+				// 静音
+				// 媒体声音
+				if (Constant.Module.muteWhenSleep) {
+					int volumeMusic = audioManager
+							.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+					int volumeRing = audioManager
+							.getStreamVolume(AudioManager.STREAM_RING);
+					editor.putInt("volumeMusic", volumeMusic);
+					editor.putInt("volumeRing", volumeRing);
+					editor.commit();
+				}
+			} catch (Exception e) {
+				MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_ON");
 			}
 		} else if (action.equals("com.tchip.SLEEP_OFF")) {
-			// 取消低功耗待机
-			MyApplication.isSleeping = false;
+			try {
+				// 取消低功耗待机
+				MyApplication.isSleeping = false;
 
-			// 点亮屏幕
-			SettingUtil.lightScreen(context);
+				// 点亮屏幕
+				SettingUtil.lightScreen(context);
 
-			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
-			MyApplication.shouldWakeRecord = true;
+				// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
+				MyApplication.shouldWakeRecord = true;
 
-			// 关闭飞行模式
-			context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
+				// 关闭飞行模式
+				context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
 
-			// 打开GPS
-			context.sendBroadcast(new Intent(
-					"tchip.intent.action.ACTION_GPS_ON"));
+				// 打开GPS
+				context.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON"));
 
-			// 重置FM发射状态
-			boolean fmStateBeforeSleep = preferences.getBoolean(
-					"fmStateBeforeSleep", true);
-			if (fmStateBeforeSleep) {
-				MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
-				Settings.System.putString(context.getContentResolver(),
-						Constant.FMTransmit.SETTING_ENABLE, "1");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
-			}
+				// 重置FM发射状态
+				boolean fmStateBeforeSleep = preferences.getBoolean(
+						"fmStateBeforeSleep", true);
+				if (fmStateBeforeSleep) {
+					MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
+					Settings.System.putString(context.getContentResolver(),
+							Constant.FMTransmit.SETTING_ENABLE, "1");
+					SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
+				}
 
-			// 恢复音量设置
-			if (Constant.Module.muteWhenSleep) {
-				int volumeMusic = preferences.getInt("volumeMusic", 8);
-				int volumeRing = preferences.getInt("volumeRing", 8);
-				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-						volumeMusic, 0);
-				audioManager.setStreamVolume(AudioManager.STREAM_RING,
-						volumeRing, 0);
+				// 恢复音量设置
+				if (Constant.Module.muteWhenSleep) {
+					int volumeMusic = preferences.getInt("volumeMusic", 8);
+					int volumeRing = preferences.getInt("volumeRing", 8);
+					audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+							volumeMusic, 0);
+					audioManager.setStreamVolume(AudioManager.STREAM_RING,
+							volumeRing, 0);
+				}
+			} catch (Exception e) {
+				MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_OFF");
 			}
 		}
 	}
