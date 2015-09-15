@@ -123,6 +123,11 @@ SharedPreferences-CarLauncher
 	(String)sdcardPath		SD卡路径(如：/mnt/sdcard/)
 	----------------------------------------
 	WeatherType：晴，多云，阴，阵雨
+	
+	[*Sleep Receiver]
+	(Boolean)fmStateBeforeSleep	FM发射在深度休眠前的状态(true)
+	(int)volumeMusic	休眠前的媒体音量
+	(int)volumeRing		休眠前的铃声音量
 
 ============================================================================
 	*进程间进行数据共享

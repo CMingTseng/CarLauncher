@@ -483,12 +483,18 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 									tvAnswer.setText(strAnswer);
 
 									// 跳转到自写导航界面，不使用GeoCoder
-									Intent intentNavi = new Intent(
-											ChatActivity.this,
-											NavigationActivity.class);
-									intentNavi.putExtra("destionation",
+									ComponentName componentBaiduNavi;
+									componentBaiduNavi = new ComponentName(
+											"com.tchip.baidunavi",
+											"com.tchip.baidunavi.ui.activity.MainActivity");
+									Intent intentBaiduNavi = new Intent();
+									intentBaiduNavi
+											.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									intentBaiduNavi
+											.setComponent(componentBaiduNavi);
+									intentBaiduNavi.putExtra("destionation",
 											endPoiStr);
-									startActivity(intentNavi);
+									startActivity(intentBaiduNavi);
 
 								} else if ("app".equals(strService)) {
 									// 打开百度地图 "operation": "LAUNCH",
