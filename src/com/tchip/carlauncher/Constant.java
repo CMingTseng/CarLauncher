@@ -149,6 +149,16 @@ public interface Constant {
 
 	public static final class Module {
 		/**
+		 * 主界面是否显示讯飞语音助手
+		 */
+		public static final boolean hasVoiceChat = false;
+		
+		/**
+		 * 主界面是否显示设置入口
+		 */
+		public static final boolean hasSetting = false;
+		
+		/**
 		 * 休眠时是否静音
 		 */
 		public static final boolean muteWhenSleep = false;

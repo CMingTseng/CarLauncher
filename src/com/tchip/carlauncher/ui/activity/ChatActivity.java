@@ -489,7 +489,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 											"com.tchip.baidunavi.ui.activity.MainActivity");
 									Intent intentBaiduNavi = new Intent();
 									intentBaiduNavi
-											.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+											.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 									intentBaiduNavi
 											.setComponent(componentBaiduNavi);
 									intentBaiduNavi.putExtra("destionation",

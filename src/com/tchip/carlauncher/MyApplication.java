@@ -119,6 +119,9 @@ public class MyApplication extends Application {
 	public static boolean isVideoLock = false;
 	public static boolean isCrashed = false;
 	public static boolean shouldVideoRecordWhenChangeSize = false;
+	
+	public static boolean shouldResetRecordWhenResume = false;
+	public static boolean isFirstLaunch = true;
 
 	// 百度导航实例是否初始化成功
 	public static boolean isBaiduNaviInitialSuccess = false;

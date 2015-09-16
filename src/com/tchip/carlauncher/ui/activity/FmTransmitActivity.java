@@ -7,6 +7,10 @@ import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +34,23 @@ public class FmTransmitActivity extends Activity {
 	private SeekBar fmSeekBar;
 
 	private Button fmFreqDecrease, fmFreqIncrease;
+	
+	/*
+	 * 接受weather发送的消息广播
+	 */
+	private FMReceiver fmReceiver;
+
+	public class FMReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals("com.tchip.FM_OPEN_SYSTEMUI")) {
+				switchFm.setChecked(true);
+			} else if (action.equals("com.tchip.FM_CLOSE_SYSTEMUI")) {
+				switchFm.setChecked(false);;
+			}
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +63,25 @@ public class FmTransmitActivity extends Activity {
 		setContentView(R.layout.activity_fm_transmit);
 
 		initialLayout();
+
+        fmReceiver = new FMReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.tchip.FM_OPEN_SYSTEMUI");
+        filter.addAction("com.tchip.FM_CLOSE_SYSTEMUI");
+        registerReceiver(fmReceiver, filter);
 	}
 
+	protected void onDestory(){
+		super.onDestroy();
+		if(fmReceiver != null){
+			unregisterReceiver(fmReceiver);
+		}
+	}
+	
+	private SwitchButton switchFm;
 	private void initialLayout() {
 		// 开关
-		SwitchButton switchFm = (SwitchButton) findViewById(R.id.switchFm);
+		switchFm = (SwitchButton) findViewById(R.id.switchFm);
 
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
@@ -66,6 +101,8 @@ public class FmTransmitActivity extends Activity {
 								: "0");
 				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
 						(isChecked ? "1" : "0"));
+				
+				sendBroadcast(new Intent(isChecked ? "com.tchip.FM_OPEN_CARLAUNCHER" : "com.tchip.FM_CLOSE_CARLAUNCHER"));
 
 			}
 		});

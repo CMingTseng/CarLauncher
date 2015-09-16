@@ -80,9 +80,6 @@ public class SleepReceiver extends BroadcastReceiver {
 				// 点亮屏幕
 				SettingUtil.lightScreen(context);
 
-				// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
-				MyApplication.shouldWakeRecord = true;
-
 				// 关闭飞行模式
 				context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
 
@@ -109,6 +106,10 @@ public class SleepReceiver extends BroadcastReceiver {
 					audioManager.setStreamVolume(AudioManager.STREAM_RING,
 							volumeRing, 0);
 				}
+
+				// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
+				MyApplication.shouldWakeRecord = true;
+
 			} catch (Exception e) {
 				MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_OFF");
 			}
