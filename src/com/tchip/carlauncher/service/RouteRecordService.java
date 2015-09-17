@@ -96,7 +96,7 @@ public class RouteRecordService extends Service {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				} while (MyApplication.isPowerConnect);
+				} while (!MyApplication.isSleeping);
 			}
 		}
 	}
@@ -130,7 +130,7 @@ public class RouteRecordService extends Service {
 			}
 		}
 		// 1K轨迹点保存为1个文件
-		if (list.size() > 999 || !MyApplication.isPowerConnect) {
+		if (list.size() > 999 || MyApplication.isSleeping) {
 			saveRouteFile(list);
 		}
 	}
