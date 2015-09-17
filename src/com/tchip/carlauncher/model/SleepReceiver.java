@@ -2,6 +2,7 @@ package com.tchip.carlauncher.model;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 
@@ -11,7 +12,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
+import android.os.PowerManager;
 import android.provider.Settings;
+import android.view.KeyEvent;
 
 public class SleepReceiver extends BroadcastReceiver {
 
@@ -38,9 +41,15 @@ public class SleepReceiver extends BroadcastReceiver {
 				// 打开飞行模式
 				context.sendBroadcast(new Intent("com.tchip.AIRPLANE_ON"));
 
-				// 熄灭屏幕
-				context.sendBroadcast(new Intent("com.tchip.powerKey")
-						.putExtra("value", "power"));
+				// 熄灭屏幕,判断当前屏幕是否关闭
+				PowerManager pm = (PowerManager) context
+						.getSystemService(Context.POWER_SERVICE);
+				boolean isScreenOn = pm.isScreenOn();
+				if (!isScreenOn) {
+				} else {
+					context.sendBroadcast(new Intent("com.tchip.powerKey")
+							.putExtra("value", "power"));
+				}
 
 				// 关闭GPS
 				context.sendBroadcast(new Intent(
@@ -77,6 +86,10 @@ public class SleepReceiver extends BroadcastReceiver {
 				// 取消低功耗待机
 				MyApplication.isSleeping = false;
 
+				// 发送Home键，回到主界面
+				context.sendBroadcast(new Intent("com.tchip.powerKey")
+						.putExtra("value", "home"));
+
 				// 点亮屏幕
 				SettingUtil.lightScreen(context);
 
@@ -89,7 +102,7 @@ public class SleepReceiver extends BroadcastReceiver {
 
 				// 重置FM发射状态
 				boolean fmStateBeforeSleep = preferences.getBoolean(
-						"fmStateBeforeSleep", true);
+						"fmStateBeforeSleep", false);
 				if (fmStateBeforeSleep) {
 					MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
 					Settings.System.putString(context.getContentResolver(),
