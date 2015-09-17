@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextClock;
 import android.widget.RelativeLayout;
 
@@ -40,44 +42,64 @@ public class SettingSystemVolumeActivity extends Activity {
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 		// 媒体音量SeekBar
-		int color = Color.parseColor("#1E88E5");
-		NumberSeekBar volumeMedia = (NumberSeekBar) findViewById(R.id.volumeMedia);
-		volumeMedia.setBackgroundColor(color);
-		volumeMedia.setShowNumberIndicator(true);
-		volumeMedia.setMin(0);
+		SeekBar volumeMedia = (SeekBar) findViewById(R.id.volumeMedia);
 		volumeMedia.setMax(audioManager
 				.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-		volumeMedia.setValue(audioManager
+		volumeMedia.setProgress(audioManager
 				.getStreamVolume(AudioManager.STREAM_MUSIC));
-		volumeMedia
-				.setOnValueChangedListener(new NumberSeekBar.OnValueChangedListener() {
+		volumeMedia.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-					@Override
-					public void onValueChanged(int value) {
-						audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-								value, 0);
-					}
-				});
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+						seekBar.getProgress(), 0);
+
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 		// 铃声音量SeekBar
 
-		NumberSeekBar volumeRing = (NumberSeekBar) findViewById(R.id.volumeRing);
-		volumeRing.setBackgroundColor(color);
-		volumeRing.setShowNumberIndicator(true);
-		volumeRing.setMin(0);
+		SeekBar volumeRing = (SeekBar) findViewById(R.id.volumeRing);
+
 		volumeRing.setMax(audioManager
 				.getStreamMaxVolume(AudioManager.STREAM_RING));
-		volumeRing.setValue(audioManager
+		volumeRing.setProgress(audioManager
 				.getStreamVolume(AudioManager.STREAM_RING));
-		volumeRing
-				.setOnValueChangedListener(new NumberSeekBar.OnValueChangedListener() {
+		volumeRing.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-					@Override
-					public void onValueChanged(int value) {
-						audioManager.setStreamVolume(AudioManager.STREAM_RING,
-								value, 0);
-					}
-				});
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				audioManager.setStreamVolume(AudioManager.STREAM_RING,
+						seekBar.getProgress(), 0);
+
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

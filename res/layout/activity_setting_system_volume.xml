@@ -92,9 +92,10 @@
                 android:textColor="#000000"
                 android:textSize="@dimen/setting_system_bright_text_size" />
 
-            <com.tchip.carlauncher.view.NumberSeekBar
+            <SeekBar
                 android:id="@+id/volumeMedia"
                 android:layout_width="0dp"
+                android:max="15"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
@@ -121,12 +122,13 @@
                 android:textColor="#000000"
                 android:textSize="@dimen/setting_system_bright_text_size" />
 
-            <com.tchip.carlauncher.view.NumberSeekBar
+            <SeekBar
                 android:id="@+id/volumeRing"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
+                android:max="15"
                 android:layout_weight="12" />
         </LinearLayout>
 
