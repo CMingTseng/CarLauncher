@@ -284,9 +284,12 @@ public class WeatherActivity extends Activity {
 		day2date.setText(sharedPreferences.getString("day2date", "2015-01-01")
 				.substring(5, 10));
 
+		
 		ImageView day2image = (ImageView) findViewById(R.id.day2image);
 		String day2WeatherStr = sharedPreferences.getString("day2weather",
 				strUnknown);
+		TextView day2weather = (TextView) findViewById(R.id.day2weather);
+		day2weather.setText(day2WeatherStr);
 		day2image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day2WeatherStr)));
 
@@ -326,6 +329,8 @@ public class WeatherActivity extends Activity {
 		ImageView day3image = (ImageView) findViewById(R.id.day3image);
 		String day3WeatherStr = sharedPreferences.getString("day3weather",
 				strUnknown);
+		TextView day3weather = (TextView) findViewById(R.id.day3weather);
+		day3weather.setText(day3WeatherStr);
 		day3image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day3WeatherStr)));
 
@@ -365,6 +370,8 @@ public class WeatherActivity extends Activity {
 		ImageView day4image = (ImageView) findViewById(R.id.day4image);
 		String day4WeatherStr = sharedPreferences.getString("day4weather",
 				strUnknown);
+		TextView day4weather = (TextView) findViewById(R.id.day4weather);
+		day4weather.setText(day4WeatherStr);
 		day4image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day4WeatherStr)));
 
@@ -404,6 +411,8 @@ public class WeatherActivity extends Activity {
 		ImageView day5image = (ImageView) findViewById(R.id.day5image);
 		String day5WeatherStr = sharedPreferences.getString("day5weather",
 				strUnknown);
+		TextView day5weather = (TextView) findViewById(R.id.day5weather);
+		day5weather.setText(day5WeatherStr);
 		day5image.setImageResource(WeatherUtil.getWeatherDrawable(WeatherUtil
 				.getTypeByStr(day5WeatherStr)));
 
