@@ -163,14 +163,12 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.ChatActivity"
             android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.ChatAiActivity"
-            android:screenOrientation="landscape" />
 
         <!-- android:launchMode="singleTask" -->
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.RouteListActivity"
@@ -277,17 +275,6 @@
 
         <!-- android:launchMode="singleTask" -->
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.NavigationActivity"
-            android:exported="true"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.BNavigatorActivity"
-            android:launchMode="singleTask" />
-        <!-- android:configChanges="orientation|screenSize|keyboard|keyboardHidden" -->
-
-
-        <!-- android:launchMode="singleTask" -->
-        <activity
             android:name="com.tchip.carlauncher.ui.activity.FmTransmitActivity"
             android:exported="true"
             android:screenOrientation="landscape" />
@@ -337,9 +324,11 @@
                 </action>
             </intent-filter>
         </service>
-        <service
+        <!--
+            <service
             android:name="com.baidu.navi.location.f"
             android:enabled="true" />
+        -->
         <service android:name="com.tchip.carlauncher.service.MusicMediaService" >
             <intent-filter>
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
