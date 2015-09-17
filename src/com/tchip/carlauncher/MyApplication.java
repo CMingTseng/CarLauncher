@@ -12,18 +12,14 @@ import com.tchip.carlauncher.lib.filemanager.FavouritesManager;
 import com.tchip.carlauncher.lib.filemanager.FileIconResolver;
 import com.tchip.carlauncher.service.MusicServiceManager;
 import com.tchip.carlauncher.ui.activity.UserCenterActivity;
+import com.tchip.carlauncher.util.MyLog;
 
 public class MyApplication extends Application {
 	/**
 	 * 是否进入低功耗待机状态
 	 */
 	public static boolean isSleeping = false;
-	
-	/**
-	 * 是否有后台导航
-	 */
-	public static boolean isNavigating = false;
-	
+
 	/**
 	 * 休眠唤醒，需要启动录像
 	 */
@@ -39,6 +35,17 @@ public class MyApplication extends Application {
 	// Route Record
 	public static boolean isRouteRecord = false;
 
+	// Video Record
+	public static boolean isVideoReording = false;
+	public static boolean isPowerConnect = true;
+	public static boolean isVideoLock = false;
+	public static boolean isCrashed = false;
+	public static boolean shouldVideoRecordWhenChangeSize = false;
+
+	public static boolean shouldResetRecordWhenResume = false;
+	public static boolean isFirstLaunch = true;
+	public static boolean isMainForeground = true;
+
 	/**
 	 * SD卡取出
 	 */
@@ -50,7 +57,12 @@ public class MyApplication extends Application {
 		// 应用程序入口处调用,避免手机内存过小,杀死后台进程后通过历史intent进入Activity造成SpeechUtility对象为null
 		// 注意：此接口在非主进程调用会返回null对象，如需在非主进程使用语音功能，请增加参数：SpeechConstant.FORCE_LOGIN+"=true"
 		// 参数间使用“,”分隔。
-		SpeechUtility.createUtility(this, "appid=" + Constant.XUNFEI_APP_ID);
+		try {
+			SpeechUtility
+					.createUtility(this, "appid=" + Constant.XUNFEI_APP_ID);
+		} catch (Exception e) {
+			MyLog.e("[MyApplication]SpeechUtility.createUtility: Catch Exception!");
+		}
 		super.onCreate();
 
 		/*
@@ -66,7 +78,11 @@ public class MyApplication extends Application {
 		// SDKInitializer.initialize(Constant.Path.SD_CARD_MAP,
 		// getApplicationContext());
 		// } else {
-		SDKInitializer.initialize(getApplicationContext());
+		try {
+			SDKInitializer.initialize(getApplicationContext());
+		} catch (Exception e) {
+			MyLog.e("[MyApplication]SDKInitializer.initialize: Catch Exception!");
+		}
 		// }
 
 		// Music
@@ -75,16 +91,20 @@ public class MyApplication extends Application {
 	}
 
 	private void initPath() {
-		String ROOT = "";
-		if (Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED)) {
-			ROOT = Environment.getExternalStorageDirectory().getPath();
-		}
-		rootPath = ROOT + rootPath;
-		lrcPath = rootPath + lrcPath;
-		File lrcFile = new File(lrcPath);
-		if (lrcFile.exists()) {
-			lrcFile.mkdirs();
+		try {
+			String ROOT = "";
+			if (Environment.getExternalStorageState().equals(
+					Environment.MEDIA_MOUNTED)) {
+				ROOT = Environment.getExternalStorageDirectory().getPath();
+			}
+			rootPath = ROOT + rootPath;
+			lrcPath = rootPath + lrcPath;
+			File lrcFile = new File(lrcPath);
+			if (lrcFile.exists()) {
+				lrcFile.mkdirs();
+			}
+		} catch (Exception e) {
+			MyLog.e("[MyApplication]initPath: Catch Exception!");
 		}
 	}
 
@@ -112,19 +132,5 @@ public class MyApplication extends Application {
 			fileIconResolver = new FileIconResolver(getApplicationContext());
 		return fileIconResolver;
 	}
-
-	// Video Record
-	public static boolean isVideoReording = false;
-	public static boolean isPowerConnect = true;
-	public static boolean isVideoLock = false;
-	public static boolean isCrashed = false;
-	public static boolean shouldVideoRecordWhenChangeSize = false;
-	
-	public static boolean shouldResetRecordWhenResume = false;
-	public static boolean isFirstLaunch = true;
-
-	// 百度导航实例是否初始化成功
-	public static boolean isBaiduNaviInitialSuccess = false;
-	public static boolean isBaiduNaviAuthSuccess = false;
 
 }

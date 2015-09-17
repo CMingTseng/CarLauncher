@@ -37,18 +37,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -58,13 +55,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -110,7 +104,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoLockSmall;
 
 	private ImageView imageSignalLevel, image3G;
-	private ImageView imageNaviState;
 
 	private TelephonyManager Tel;
 	private int simState;
@@ -474,11 +467,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
 		imageNavi.setOnClickListener(new MyOnClickListener());
 
-		imageNaviState = (ImageView) findViewById(R.id.imageNaviState);
-		if (!Constant.Module.isNavigationBaidu) {
-			imageNaviState.setVisibility(View.GONE);
-		}
-
 		// 在线音乐
 		ImageView imageMusicOL = (ImageView) findViewById(R.id.imageMusicOL);
 		imageMusicOL.setOnClickListener(new MyOnClickListener());
@@ -590,133 +578,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		Intent intent = new Intent(MainActivity.this, SpeakService.class);
 		intent.putExtra("content", content);
 		startService(intent);
-	}
-
-	/**
-	 * 初始化导航实例
-	 */
-	private String mSDCardPath = null;
-	private static final String APP_FOLDER_NAME = "CarLauncher";
-
-	private void initialBaiduNaviInstance() {
-		if (initDirs()) {
-		}
-		initBaiduNavi();
-	}
-
-	private boolean initDirs() {
-		mSDCardPath = getSdcardDir();
-		if (mSDCardPath == null) {
-			return false;
-		}
-		File f = new File(mSDCardPath, APP_FOLDER_NAME);
-		if (!f.exists()) {
-			try {
-				f.mkdir();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return true;
-	}
-
-	String authinfo = null;
-	public static final String ROUTE_PLAN_NODE = "routePlanNode";
-
-	private void initBaiduNavi() {
-		MyLog.v("Navi Instance is Initialing...");
-		BaiduNaviManager.getInstance().setNativeLibraryPath(
-				mSDCardPath + "/BaiduNaviSDK_SO");
-		BaiduNaviManager.getInstance().init(this, mSDCardPath, APP_FOLDER_NAME,
-				new NaviInitListener() {
-					@Override
-					public void onAuthResult(int status, String msg) {
-						if (0 == status) {
-							authinfo = "Success!";
-							MyApplication.isBaiduNaviAuthSuccess = true;
-						} else {
-							authinfo = "Fail:" + msg;
-							MyApplication.isBaiduNaviAuthSuccess = false;
-						}
-
-						MyLog.v("Baidu Navi:Key auth " + authinfo);
-					}
-
-					public void initSuccess() {
-						// 导航初始化是异步的，需要一小段时间，以这个标志来识别引擎是否初始化成功，为true时候才能发起导航
-						MyApplication.isBaiduNaviInitialSuccess = true;
-						MyLog.v("Baidu Navi:Initial Success!");
-						refreshNaviState();
-					}
-
-					public void initStart() {
-						MyLog.v("Baidu Navi:Initial Start!");
-					}
-
-					public void initFailed() {
-						MyApplication.isBaiduNaviInitialSuccess = false;
-						MyLog.v("Baidu Navi:Initial Fail!");
-						refreshNaviState();
-					}
-				}, /* null */mTTSCallback);
-	}
-
-	BNOuterTTSPlayerCallback mTTSCallback = new BNOuterTTSPlayerCallback() {
-
-		@Override
-		public void stopTTS() {
-
-		}
-
-		@Override
-		public void resumeTTS() {
-
-		}
-
-		@Override
-		public void releaseTTSPlayer() {
-
-		}
-
-		@Override
-		public int playTTSText(String text, int arg1) {
-			startSpeak(text);
-			return 0;
-		}
-
-		@Override
-		public void phoneHangUp() {
-
-		}
-
-		@Override
-		public void phoneCalling() {
-
-		}
-
-		@Override
-		public void pauseTTS() {
-
-		}
-
-		@Override
-		public void initTTSPlayer() {
-
-		}
-
-		@Override
-		public int getTTSState() {
-			return 1;
-		}
-	};
-
-	private String getSdcardDir() {
-		if (Environment.getExternalStorageState().equalsIgnoreCase(
-				Environment.MEDIA_MOUNTED)) {
-			return Environment.getExternalStorageDirectory().toString();
-		}
-		return null;
 	}
 
 	/**
@@ -1013,7 +874,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
 					MyApplication.isVideoReording = false;
 					secondCount = -1; // 录制时间秒钟复位
-					textRecordTime.setText("00:00:00");
+					textRecordTime.setText("00:00");
 					textRecordTime.setVisibility(View.INVISIBLE);
 
 					if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
@@ -1110,53 +971,18 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageNavi:
 				if (!ClickUtil.isQuickClick(800)) {
-					if (Constant.Module.isNavigationBaidu) {
-						if (!MyApplication.isBaiduNaviAuthSuccess) {
-							MyLog.e("Navigation:Auth Fail");
-							if (NetworkUtil
-									.isNetworkConnected(getApplicationContext())) {
-								initialBaiduNaviInstance();
-							}
-							Toast.makeText(
-									getApplicationContext(),
-									getResources().getString(
-											R.string.hint_navi_auth_fail),
-									Toast.LENGTH_SHORT).show();
-						} else if (!MyApplication.isBaiduNaviInitialSuccess) {
-							if (NetworkUtil
-									.isNetworkConnected(getApplicationContext())) {
-								initialBaiduNaviInstance();
-							}
-							MyLog.e("Navigation:Initial Fail");
-							Toast.makeText(
-									getApplicationContext(),
-									getResources().getString(
-											R.string.hint_navi_init_fail),
-									Toast.LENGTH_SHORT).show();
-						} else {
-							MyLog.v("Navi Instance Already Initial Success");
-							Intent intentNavi = new Intent(MainActivity.this,
-									NavigationActivity.class);
-							startActivity(intentNavi);
-							overridePendingTransition(
-									R.anim.zms_translate_up_out,
-									R.anim.zms_translate_up_in);
-						}
-					} else {
-						// com.tchip.baidunavi
-						try {
-							ComponentName componentBaiduNavi;
-							componentBaiduNavi = new ComponentName(
-									"com.tchip.baidunavi",
-									"com.tchip.baidunavi.ui.activity.MainActivity");
-							Intent intentBaiduNavi = new Intent();
-							intentBaiduNavi
-									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							intentBaiduNavi.setComponent(componentBaiduNavi);
-							startActivity(intentBaiduNavi);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+					// com.tchip.baidunavi
+					try {
+						ComponentName componentBaiduNavi;
+						componentBaiduNavi = new ComponentName(
+								"com.tchip.baidunavi",
+								"com.tchip.baidunavi.ui.activity.MainActivity");
+						Intent intentBaiduNavi = new Intent();
+						intentBaiduNavi.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						intentBaiduNavi.setComponent(componentBaiduNavi);
+						startActivity(intentBaiduNavi);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 				break;
@@ -1238,9 +1064,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						intentVoiceChat = new Intent(MainActivity.this,
 								ChatActivity.class);
 					} else {
-						// 思必驰语音
-						// intentVoiceChat = new Intent(MainActivity.this,
-						// WakeUpCloudAsr.class);
 					}
 					startActivity(intentVoiceChat);
 					overridePendingTransition(R.anim.zms_translate_up_out,
@@ -1317,12 +1140,19 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void startOrStopRecord() {
 		if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
-			if (startRecorder() == 0) {
-				mRecordState = Constant.Record.STATE_RECORD_STARTED;
-				MyApplication.isVideoReording = true;
+			if (MyApplication.isSleeping) {
+				startSpeak("正在休眠，无法录像");
+			} else if (!MyApplication.isMainForeground) {
+				// 录像需切换到预览界面，否则无法录像
 			} else {
-				if (Constant.isDebug)
-					MyLog.e("Start Record Failed");
+				// 开始录像
+				if (startRecorder() == 0) {
+					mRecordState = Constant.Record.STATE_RECORD_STARTED;
+					MyApplication.isVideoReording = true;
+				} else {
+					if (Constant.isDebug)
+						MyLog.e("Start Record Failed");
+				}
 			}
 		} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
 			if (stopRecorder() == 0) {
@@ -1407,13 +1237,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					updateWifiTime++;
 					if (updateWifiTime > 5) {
 						shouldUpdateWifi = false;
-						if (!MyApplication.isBaiduNaviAuthSuccess
-								|| !MyApplication.isBaiduNaviInitialSuccess) {
-							MyLog.v("updateWifiThread:Initial Navigation!");
-							Message messageNavi = new Message();
-							messageNavi.what = 2;
-							updateWifiHandler.sendMessage(messageNavi);
-						}
 					}
 
 				}
@@ -1426,10 +1249,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (msg.what) {
 			case 1:
 				updateWiFiState();
-				break;
-
-			case 2:
-				initialBaiduNaviInstance();
 				break;
 
 			default:
@@ -1447,18 +1266,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 导航初始化情况
-	 */
-	private void refreshNaviState() {
-		if (MyApplication.isBaiduNaviAuthSuccess
-				&& MyApplication.isBaiduNaviInitialSuccess) {
-			imageNaviState.setImageResource(R.drawable.ui_main_navi_state_yes);
-		} else {
-			imageNaviState.setImageResource(R.drawable.ui_main_navi_state_no);
-		}
-	}
-
-	/**
 	 * 释放Camera
 	 */
 	private void releaseCameraZone() {
@@ -1472,12 +1279,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onPause() {
+		MyApplication.isMainForeground = false;
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
 
-		// TODO:
 		if (!MyApplication.isVideoReording) {
-			MyLog.v("[MainActivity]onPause, release() in case isSleeping");
+			MyLog.v("[MainActivity]onPause, releaseCameraZone() when not recording");
 			releaseCameraZone();
 		}
 
@@ -1486,6 +1293,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+		MyApplication.isMainForeground = true;
 		if (!MyApplication.isFirstLaunch) {
 			if (!MyApplication.isVideoReording
 					|| MyApplication.shouldResetRecordWhenResume) {
@@ -1509,26 +1317,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			MyApplication.isFirstLaunch = false;
 		}
 
-		MyLog.v("[MainActivity]isNavigating:" + MyApplication.isNavigating);
-
-		refreshNaviState();
-
 		// 更新录像界面按钮状态
 		refreshRecordButton();
 		setupRecordViews();
 
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
-		// 导航实例
-		if (Constant.Module.isNavigationBaidu) {
-			if (MyApplication.isBaiduNaviAuthSuccess) {
-				Log.v(Constant.TAG, "Navi Instance Already Initial Success");
-			} else if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-				initialBaiduNaviInstance();
-				Log.v(Constant.TAG, "Navi Instance is Initialing...");
-			}
-		}
 
 		// 初始化fm发射
 		initFmTransmit();
@@ -1695,6 +1489,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			return true;
 		} catch (Exception ex) {
 			closeCamera();
+			MyLog.e("[MainActivity]openCamera:Catch Exception!");
 			return false;
 		}
 	}
@@ -1712,6 +1507,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			return true;
 		} catch (Exception ex) {
 			mCamera = null;
+			MyLog.e("[MainActivity]closeCamera:Catch Exception!");
 			return false;
 		}
 	}
@@ -1814,6 +1610,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			/*
 			 * 异常原因：1.文件由用户手动删除
 			 */
+			MyLog.e("[MainActivity]deleteOldestUnlockVideo:Catch Exception!");
 			e.printStackTrace();
 			return true;
 		}
@@ -1862,24 +1659,28 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	public void RecursionCheckFile(File file) {
-		if (file.isFile()) {
-			if (!videoDb.isVideoExist(file.getName())) {
-				file.delete();
-				MyLog.v("[RecursionCheckFile] Delete Error File:"
-						+ file.getName());
-			}
-			return;
-		}
-		if (file.isDirectory()) {
-			File[] childFile = file.listFiles();
-			if (childFile == null || childFile.length == 0) {
-				// file.delete();
+		try {
+			if (file.isFile()) {
+				if (!videoDb.isVideoExist(file.getName())) {
+					file.delete();
+					MyLog.v("[RecursionCheckFile] Delete Error File:"
+							+ file.getName());
+				}
 				return;
 			}
-			for (File f : childFile) {
-				RecursionCheckFile(f);
+			if (file.isDirectory()) {
+				File[] childFile = file.listFiles();
+				if (childFile == null || childFile.length == 0) {
+					// file.delete();
+					return;
+				}
+				for (File f : childFile) {
+					RecursionCheckFile(f);
+				}
+				// file.delete();
 			}
-			// file.delete();
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]RecursionCheckFile:Catch Exception!");
 		}
 	}
 
@@ -1914,7 +1715,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int stopRecorder() {
 		secondCount = -1; // 录制时间秒钟复位
-		textRecordTime.setText("00:00:00");
+		textRecordTime.setText("00:00");
 		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
 			MyLog.d("Record Stop");
@@ -1998,45 +1799,53 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void setupRecorder() {
 		releaseRecorder();
-		mMyRecorder = new TachographRecorder();
-		mMyRecorder.setTachographCallback(this);
-		mMyRecorder.setCamera(mCamera);
-		mMyRecorder.setClientName(this.getPackageName());
-		if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
-			mMyRecorder.setVideoSize(1920, 1088); // 16倍数
-			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(9000000 * 2); // 8500000
-		} else {
-			mMyRecorder.setVideoSize(1280, 720);
-			mMyRecorder.setVideoFrameRate(30);
-			mMyRecorder.setVideoBiteRate(9000000); // 3500000
+		try {
+			mMyRecorder = new TachographRecorder();
+			mMyRecorder.setTachographCallback(this);
+			mMyRecorder.setCamera(mCamera);
+			mMyRecorder.setClientName(this.getPackageName());
+			if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
+				mMyRecorder.setVideoSize(1920, 1088); // 16倍数
+				mMyRecorder.setVideoFrameRate(30);
+				mMyRecorder.setVideoBiteRate(9000000 * 2); // 8500000
+			} else {
+				mMyRecorder.setVideoSize(1280, 720);
+				mMyRecorder.setVideoFrameRate(30);
+				mMyRecorder.setVideoBiteRate(9000000); // 3500000
+			}
+			if (mSecondaryState == Constant.Record.STATE_SECONDARY_ENABLE) {
+				mMyRecorder.setSecondaryVideoEnable(true);
+				mMyRecorder.setSecondaryVideoSize(320, 240);
+				mMyRecorder.setSecondaryVideoFrameRate(30);
+				mMyRecorder.setSecondaryVideoBiteRate(120000);
+			} else {
+				mMyRecorder.setSecondaryVideoEnable(false);
+			}
+			if (mIntervalState == Constant.Record.STATE_INTERVAL_5MIN) {
+				mMyRecorder.setVideoSeconds(5 * 60);
+			} else {
+				mMyRecorder.setVideoSeconds(3 * 60);
+			}
+			if (mOverlapState == Constant.Record.STATE_OVERLAP_FIVE) {
+				mMyRecorder.setVideoOverlap(5);
+			}
+			mMyRecorder.prepare();
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]setupRecorder: Catch Exception!");
 		}
-		if (mSecondaryState == Constant.Record.STATE_SECONDARY_ENABLE) {
-			mMyRecorder.setSecondaryVideoEnable(true);
-			mMyRecorder.setSecondaryVideoSize(320, 240);
-			mMyRecorder.setSecondaryVideoFrameRate(30);
-			mMyRecorder.setSecondaryVideoBiteRate(120000);
-		} else {
-			mMyRecorder.setSecondaryVideoEnable(false);
-		}
-		if (mIntervalState == Constant.Record.STATE_INTERVAL_5MIN) {
-			mMyRecorder.setVideoSeconds(5 * 60);
-		} else {
-			mMyRecorder.setVideoSeconds(3 * 60);
-		}
-		if (mOverlapState == Constant.Record.STATE_OVERLAP_FIVE) {
-			mMyRecorder.setVideoOverlap(5);
-		}
-		mMyRecorder.prepare();
 	}
 
 	private void releaseRecorder() {
-		if (mMyRecorder != null) {
-			mMyRecorder.stop();
-			mMyRecorder.close();
-			mMyRecorder.release();
-			mMyRecorder = null;
-			MyLog.d("Record Release");
+		try {
+			if (mMyRecorder != null) {
+				mMyRecorder.stop();
+				mMyRecorder.close();
+				mMyRecorder.release();
+				mMyRecorder = null;
+				MyLog.d("Record Release");
+			}
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]releaseRecorder: Catch Exception!");
 		}
 	}
 
@@ -2074,6 +1883,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		deleteOldestUnlockVideo();
 
 		if (type == 1) {
+			secondCount = -1; // 录制时间秒钟复位
+			textRecordTime.setText("00:00");
+
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
 			editor.commit();
@@ -2149,13 +1961,15 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private void initFmTransmit() {
 		// if (isFmTransmitOn())
-		{
+		try {
 			int freq = SettingUtil.getFmFrequceny(this);
 			// Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
 			if (freq >= 8750 && freq <= 10800)
 				SettingUtil.setFmFrequency(this, freq);
 			else
 				SettingUtil.setFmFrequency(this, 8750);
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]initFmTransmit: Catch Exception!");
 		}
 	}
 }

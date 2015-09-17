@@ -13,6 +13,7 @@
         <RelativeLayout
             android:id="@+id/layoutBack"
             android:layout_width="90dp"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" >
@@ -50,8 +51,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_toLeftOf="@id/layoutFace"
             android:layout_toRightOf="@id/layoutBack"
             android:background="#383838" >
@@ -75,7 +74,7 @@
                 android:singleLine="true"
                 android:textColor="#dddddd"
                 android:textColorHint="#cccccc"
-                android:textSize="24sp" />
+                android:textSize="30sp" />
         </LinearLayout>
     </RelativeLayout>
 

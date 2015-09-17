@@ -50,8 +50,8 @@ public class StorageUtil {
 			if (!file.exists()) {
 				return false;
 			}
-
 		} catch (Exception e) {
+			MyLog.e("[StorageUtil]isVideoCardExists:Catch Exception!");
 			return false;
 		}
 		return true;
@@ -72,11 +72,12 @@ public class StorageUtil {
 				return false;
 			}
 		} catch (Exception e) {
+			MyLog.e("[StorageUtil]isMapSDExists:Catch Exception!");
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 递归删除文件和文件夹
 	 * 
@@ -84,20 +85,24 @@ public class StorageUtil {
 	 *            要删除的根目录
 	 */
 	public static void RecursionDeleteFile(File file) {
-		if (file.isFile()) {
-			file.delete();
-			return;
-		}
-		if (file.isDirectory()) {
-			File[] childFile = file.listFiles();
-			if (childFile == null || childFile.length == 0) {
+		try {
+			if (file.isFile()) {
 				file.delete();
 				return;
 			}
-			for (File f : childFile) {
-				RecursionDeleteFile(f);
+			if (file.isDirectory()) {
+				File[] childFile = file.listFiles();
+				if (childFile == null || childFile.length == 0) {
+					file.delete();
+					return;
+				}
+				for (File f : childFile) {
+					RecursionDeleteFile(f);
+				}
+				file.delete();
 			}
-			file.delete();
+		} catch (Exception e) {
+			MyLog.e("[StorageUtil]RecursionDeleteFile:Catch Exception!");
 		}
 	}
 

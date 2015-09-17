@@ -142,15 +142,6 @@
                     android:text="@string/title_navigation"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
-
-                <ImageView
-                    android:id="@+id/imageNaviState"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/ui_main_navi_state_no" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -504,8 +495,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:text="00:00:00"
+        android:layout_marginTop="25dp"
+        android:text="00:00"
         android:textColor="#ff0000"
         android:textSize="18sp"
         android:visibility="gone" />
