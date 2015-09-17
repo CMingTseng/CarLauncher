@@ -401,7 +401,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="#000000"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutCopyMap"
@@ -409,7 +409,7 @@
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/ui_setting_item_bg"
                 android:clickable="true"
-                android:visibility="visible" >
+                android:visibility="gone" >
 
                 <ImageView
                     android:layout_width="@dimen/setting_item_image_height"
@@ -432,7 +432,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="#000000"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleStorage"
@@ -463,7 +463,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="#000000"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleApp"

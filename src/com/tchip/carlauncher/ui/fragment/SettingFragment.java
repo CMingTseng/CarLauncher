@@ -178,7 +178,7 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleApp);
 		layoutRippleApp.setOnClickListener(new MyOnClickListener());
 
-		// 拷贝地图
+		// 拷贝地图(GONE)
 		RelativeLayout layoutCopyMap = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutCopyMap);
 		layoutCopyMap.setOnClickListener(new MyOnClickListener());
