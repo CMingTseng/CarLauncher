@@ -42,8 +42,6 @@ public class SensorWatchService extends Service {
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		int sensorLevel = Integer.parseInt(sharedPreferences.getString(
 				"crashSensitive", Constant.GravitySensor.DEFAULT_SENSITIVE));
-		LIMIT_X = LIMIT_Y = LIMIT_Z = sensorLevel
-				* Constant.GravitySensor.VALUE;
 
 		SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// Using TYPE_ACCELEROMETER first if exit, then TYPE_GRAVITY
@@ -54,10 +52,12 @@ public class SensorWatchService extends Service {
 		SensorEventListener sensorEventListener = new SensorEventListener() {
 			@Override
 			public void onSensorChanged(SensorEvent event) {
-				if(MyApplication.isSleeping){
+				if (MyApplication.isSleeping) {
 					stopSelf();
 					return;
 				}
+				LIMIT_X = LIMIT_Y = LIMIT_Z = MyApplication.crashSensitive
+						* Constant.GravitySensor.VALUE;
 				valueX = event.values[AXIS_X];
 				valueY = event.values[AXIS_Y];
 				valueZ = event.values[AXIS_Z];
@@ -74,7 +74,7 @@ public class SensorWatchService extends Service {
 					crashFlag[2] = 1;
 					isCrash = true;
 				}
-				if (isCrash) {
+				if (isCrash && MyApplication.isCrashOn) {
 					// 当前录制视频加锁
 					if (MyApplication.isVideoReording
 							&& !MyApplication.isVideoLock) {
@@ -100,6 +100,12 @@ public class SensorWatchService extends Service {
 		// 尽量使用比较低的传感器采样率，这样可以让系统的负荷比较小，同时可以省电
 		sensorManager.registerListener(sensorEventListener, sensor,
 				SensorManager.SENSOR_DELAY_NORMAL);
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		// TODO Auto-generated method stub
+		return super.onStartCommand(intent, flags, startId);
 	}
 
 	private void startSpeak(String content) {

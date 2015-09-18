@@ -3,6 +3,8 @@ package com.tchip.carlauncher;
 import java.io.File;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -51,8 +53,16 @@ public class MyApplication extends Application {
 	 */
 	public static boolean isVideoCardEject = false;
 
+	/**
+	 * 碰撞侦测开关和级别
+	 */
+	public static boolean isCrashOn = false;
+	public static int crashSensitive = 4;
+
 	@Override
 	public void onCreate() {
+
+		initialCrashData();
 
 		// 应用程序入口处调用,避免手机内存过小,杀死后台进程后通过历史intent进入Activity造成SpeechUtility对象为null
 		// 注意：此接口在非主进程调用会返回null对象，如需在非主进程使用语音功能，请增加参数：SpeechConstant.FORCE_LOGIN+"=true"
@@ -88,6 +98,22 @@ public class MyApplication extends Application {
 		// Music
 		mServiceManager = new MusicServiceManager(this);
 		initPath();
+	}
+
+	/**
+	 * 初始化碰撞数据
+	 */
+	private void initialCrashData() {
+		try {
+			SharedPreferences sharedPreferences = getSharedPreferences(
+					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+			isCrashOn = sharedPreferences.getBoolean("crashOn", false);
+			crashSensitive = sharedPreferences.getInt("crashSensitive", 4);
+
+		} catch (Exception e) {
+			MyLog.e("[MyApplication]initialCrashData: Catch Exception!");
+		}
 	}
 
 	private void initPath() {

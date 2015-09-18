@@ -1,6 +1,7 @@
 package com.tchip.carlauncher.ui.activity;
 
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.view.SwitchButton;
@@ -54,6 +55,7 @@ public class SettingGravityActivity extends Activity {
 					boolean isChecked) {
 				editor.putBoolean("crashOn", isChecked);
 				editor.commit();
+				MyApplication.isCrashOn = isChecked;
 			}
 		});
 
@@ -61,8 +63,8 @@ public class SettingGravityActivity extends Activity {
 		layoutBack.setOnClickListener(new MyOnClickListener());
 
 		SeekBar gravitySeekBar = (SeekBar) findViewById(R.id.gravitySeekBar);
-		gravitySeekBar.setMax(9);
-		gravitySeekBar.setProgress(getGravityLevel()-1);
+		gravitySeekBar.setMax(6);
+		gravitySeekBar.setProgress(getGravityLevel() - 1);
 
 		gravitySeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -73,6 +75,7 @@ public class SettingGravityActivity extends Activity {
 						String strSensitive = "" + (seekBar.getProgress() + 1);
 						MyLog.v("[SettingGravity] Set crash sensitive:"
 								+ strSensitive);
+						MyApplication.crashSensitive = seekBar.getProgress() + 1;
 						editor.putString("crashSensitive", strSensitive);
 						editor.commit();
 					}
@@ -104,7 +107,7 @@ public class SettingGravityActivity extends Activity {
 	 */
 	private int getGravityLevel() {
 		String strSensitive = sharedPreferences
-				.getString("crashSensitive", "6");
+				.getString("crashSensitive", "4");
 		return Integer.parseInt(strSensitive);
 	}
 
