@@ -45,7 +45,7 @@
     <!-- System Setting Brightness -->
     <dimen name="setting_system_bright_text_size">20sp</dimen>
     <dimen name="setting_system_bright_item_height">80dp</dimen>
-    <dimen name="setting_system_bright_radio_margin">10dp</dimen>
+    <dimen name="setting_system_bright_radio_margin">15dp</dimen>
     <!-- File Manager -->
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="list_icon_size">50dp</dimen>

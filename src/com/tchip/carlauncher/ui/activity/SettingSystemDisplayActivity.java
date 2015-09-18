@@ -6,16 +6,20 @@ import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.MaterialSwitch;
 import com.tchip.carlauncher.view.NumberSeekBar;
+import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextClock;
@@ -27,11 +31,15 @@ public class SettingSystemDisplayActivity extends Activity {
 	private MaterialSwitch nightSwitch;
 	private Context context;
 	private RadioGroup screenOffGroup;
-	private RadioButton screenOff30Second, screenOff2min, screenOff5min,
+	private RadioButton screenOff30Second, screenOff1min, screenOff2min,
 			screenOff10min, screenOffNone;
 
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
+
+	private SwitchButton switchAutolight;
+
+	private RelativeLayout layoutSeekBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +81,44 @@ public class SettingSystemDisplayActivity extends Activity {
 					}
 				});
 
-		// 夜晚亮度自动降低Switch
-		nightSwitch = (MaterialSwitch) findViewById(R.id.nightSwitch);
-		nightSwitch.setChecked(sharedPreferences.getBoolean("brightAdjust",
-				false));
-		nightSwitch.setOnCheckListener(new MySwitchOnCheckListener());
-
 		// 屏幕关闭RadioGroup
 		iniRadioGroup();
+		boolean isAutoLightSwitchOn = isAutoLightSwitchOn();
+		layoutSeekBar = (RelativeLayout) findViewById(R.id.layoutSeekBar);
+		hideOrShowSeekBarLayout(isAutoLightSwitchOn);
+
+		switchAutolight = (SwitchButton) findViewById(R.id.switchAutolight);
+		switchAutolight.setChecked(isAutoLightSwitchOn);
+		switchAutolight
+				.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						// Settings.System.putString(getContentResolver(),
+						// Constant.FMTransmit.SETTING_ENABLE,
+						// isChecked ? "1" : "0");
+						editor.putBoolean("autoScreenLight", isChecked);
+						editor.commit();
+						hideOrShowSeekBarLayout(isChecked);
+						SettingUtil.SaveFileToNode(
+								SettingUtil.fileAutoLightSwitch,
+								(isChecked ? "1" : "0"));
+					}
+				});
+
+	}
+
+	private void hideOrShowSeekBarLayout(boolean isAutoLightSwitchOn) {
+		if (!isAutoLightSwitchOn) {
+			layoutSeekBar.setVisibility(View.VISIBLE);
+		} else {
+			layoutSeekBar.setVisibility(View.GONE);
+		}
+	}
+
+	private boolean isAutoLightSwitchOn() {
+		return sharedPreferences.getBoolean("autoScreenLight", true);
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -104,24 +142,29 @@ public class SettingSystemDisplayActivity extends Activity {
 		screenOffGroup
 				.setOnCheckedChangeListener(new MyRadioOnCheckedListener());
 		screenOff30Second = (RadioButton) findViewById(R.id.screenOff30Second);
+		screenOff1min = (RadioButton) findViewById(R.id.screenOff1min);
 		screenOff2min = (RadioButton) findViewById(R.id.screenOff2min);
-		screenOff5min = (RadioButton) findViewById(R.id.screenOff5min);
 		screenOff10min = (RadioButton) findViewById(R.id.screenOff10min);
 		screenOffNone = (RadioButton) findViewById(R.id.screenOffNone);
+
 		int nowScreenOffTime = SettingUtil.getScreenOffTime(context);
 		switch (nowScreenOffTime) {
 		case 30000:
 			screenOff30Second.setChecked(true);
 			break;
+
+		case 60000:
+			screenOff1min.setChecked(true);
+			break;
+
 		case 120000:
 			screenOff2min.setChecked(true);
 			break;
-		case 300000:
-			screenOff5min.setChecked(true);
-			break;
+
 		case 600000:
 			screenOff10min.setChecked(true);
 			break;
+
 		default:
 			screenOffNone.setChecked(true);
 			break;
@@ -135,11 +178,11 @@ public class SettingSystemDisplayActivity extends Activity {
 			case R.id.screenOff30Second:
 				SettingUtil.setScreenOffTime(context, 30000);
 				break;
+			case R.id.screenOff1min:
+				SettingUtil.setScreenOffTime(context, 60000);
+				break;
 			case R.id.screenOff2min:
 				SettingUtil.setScreenOffTime(context, 120000);
-				break;
-			case R.id.screenOff5min:
-				SettingUtil.setScreenOffTime(context, 300000);
 				break;
 			case R.id.screenOff10min:
 				SettingUtil.setScreenOffTime(context, 600000);
@@ -152,15 +195,6 @@ public class SettingSystemDisplayActivity extends Activity {
 			default:
 				break;
 			}
-		}
-	}
-
-	class MySwitchOnCheckListener implements MaterialSwitch.OnCheckListener {
-
-		@Override
-		public void onCheck(boolean check) {
-			editor.putBoolean("brightAdjust", check);
-			editor.commit();
 		}
 	}
 

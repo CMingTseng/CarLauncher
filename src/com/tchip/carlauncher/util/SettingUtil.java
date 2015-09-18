@@ -178,4 +178,28 @@ public class SettingUtil {
 
 		kl.disableKeyguard();
 	}
+
+	/**
+	 * Camera自动调节亮度节点
+	 * 
+	 * 1：开 0：关;默认打开
+	 */
+	public static File fileAutoLightSwitch = new File(
+			"sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
+
+	/**
+	 * 设置Camera自动调节亮度开关
+	 */
+	public static void setAutoLight(Context context, boolean isAutoLightOn) {
+		// Settings.System.putString(context.getContentResolver(),
+		// Constant.FMTransmit.SETTING_CHANNEL, "" + frequency);
+
+		if (isAutoLightOn) {
+			SaveFileToNode(fileAutoLightSwitch, "1");
+		} else {
+			SaveFileToNode(fileAutoLightSwitch, "0");
+		}
+		Log.v(Constant.TAG, "setAutoLight:" + isAutoLightOn);
+	}
+
 }

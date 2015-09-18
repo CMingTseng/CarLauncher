@@ -113,6 +113,7 @@ SharedPreferences-CarLauncher
 	(String)defaultNavi		默认导航(*BAIDU-GAODE)
 	
 	(boolean)brightAdjust	夜间自动开启护眼模式
+	(boolean)autoScreenLight	根据Camera调节亮度开关(true)
 	
 	----------------------------------------
 	[*Using]Music
