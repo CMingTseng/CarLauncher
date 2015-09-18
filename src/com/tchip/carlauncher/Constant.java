@@ -17,7 +17,7 @@ public interface Constant {
 		/**
 		 * 碰撞侦测默认灵敏度Level
 		 */
-		public static final String DEFAULT_SENSITIVE = "6";
+		public static final String DEFAULT_SENSITIVE = "4";
 
 		public static final float VALUE = 9.8f;
 	}
@@ -197,11 +197,6 @@ public interface Constant {
 		 * 本地音乐是否是系统音乐
 		 */
 		public static final boolean isLocalMusicSystem = true;
-
-		/**
-		 * 是否有亮度自动调整功能
-		 */
-		public static final boolean hasBrightAdjust = false;
 
 		/**
 		 * 天气界面是否有动画

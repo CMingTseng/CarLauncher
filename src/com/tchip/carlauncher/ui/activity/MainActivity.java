@@ -12,7 +12,6 @@ import com.tchip.carlauncher.lib.filemanager.FolderActivity;
 import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
-import com.tchip.carlauncher.service.BrightAdjustService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
@@ -366,12 +365,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 初始化服务
 	 */
 	private void initialService() {
-		// 亮度自动调整服务
-		if (Constant.Module.hasBrightAdjust) {
-			Intent intentBrightness = new Intent(this,
-					BrightAdjustService.class);
-			startService(intentBrightness);
-		}
 
 		// 轨迹记录服务
 		Intent intentRoute = new Intent(this, RouteRecordService.class);

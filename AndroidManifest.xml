@@ -317,7 +317,6 @@
         <service android:name="com.tchip.carlauncher.service.TrafficFetchService" />
         <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
         <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
-        <service android:name="com.tchip.carlauncher.service.BrightAdjustService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
