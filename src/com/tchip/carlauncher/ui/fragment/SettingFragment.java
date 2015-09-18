@@ -6,6 +6,7 @@ import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
 import com.tchip.carlauncher.ui.activity.SettingGravityActivity;
 import com.tchip.carlauncher.ui.activity.OfflineBaiduMapUpdateActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
+import com.tchip.carlauncher.ui.activity.SettingSystemUsbActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
 import com.tchip.carlauncher.ui.activity.UserCenterActivity;
@@ -143,10 +144,15 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleLocation);
 		layoutRippleLocation.setOnClickListener(new MyOnClickListener());
 
-		// 存储(GONE)
+		// 存储
 		RelativeLayout layoutRippleStorage = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleStorage);
 		layoutRippleStorage.setOnClickListener(new MyOnClickListener());
+
+		// USB连接设置
+		RelativeLayout layoutRippleUsb = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutRippleUsb);
+		layoutRippleUsb.setOnClickListener(new MyOnClickListener());
 
 		// 日期
 		RelativeLayout layoutRippleDate = (RelativeLayout) systemSettingView
@@ -261,10 +267,18 @@ public class SettingFragment extends Fragment {
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 				break;
-
+				
 			case R.id.layoutRippleStorage:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
+				break;
+
+			case R.id.layoutRippleUsb:
+				// startActivity(new Intent(
+				// "android.settings.STORAGE_USB_SETTINGS"));
+				Intent intentUsb = new Intent(context,
+						SettingSystemUsbActivity.class);
+				startActivity(intentUsb);
 				break;
 
 			case R.id.layoutRippleDate:

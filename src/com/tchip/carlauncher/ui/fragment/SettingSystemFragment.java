@@ -55,7 +55,7 @@ public class SettingSystemFragment extends Fragment {
 
 		// 存储(GONE)
 		RelativeLayout layoutRippleStorage = (RelativeLayout) systemSettingView
-				.findViewById(R.id.layoutRippleStorage);
+				.findViewById(R.id.layoutRippleUsb);
 		layoutRippleStorage.setOnClickListener(new MyOnClickListener());
 
 		// 日期
@@ -145,7 +145,7 @@ public class SettingSystemFragment extends Fragment {
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 				break;
-			case R.id.layoutRippleStorage:
+			case R.id.layoutRippleUsb:
 				startActivity(new Intent(
 						android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
 				break;
