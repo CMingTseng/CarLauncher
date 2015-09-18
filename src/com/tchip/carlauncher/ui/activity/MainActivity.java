@@ -225,7 +225,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(1000);
 					if (!MyApplication.isSleeping) {
 						Message message = new Message();
 						message.what = 1;
@@ -934,6 +934,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							startSpeak(getResources().getString(
 									R.string.hint_video_mute_off));
 							editor.putBoolean("videoVoice", true);
+							editor.commit();
 						}
 					} else if (mMuteState == Constant.Record.STATE_UNMUTE) {
 						if (setMute(true) == 0) {
@@ -941,9 +942,10 @@ public class MainActivity extends Activity implements TachographCallback,
 							startSpeak(getResources().getString(
 									R.string.hint_video_mute_on));
 							editor.putBoolean("videoVoice", false);
+							editor.commit();
 						}
 					}
-					editor.commit();
+
 					setupRecordViews();
 				}
 				break;
@@ -954,8 +956,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoCameraSmall:
 				if (!ClickUtil.isQuickClick(500)) {
 					takePhoto();
-					AudioPlayUtil.playAudio(getApplicationContext(),
-							FILE_TYPE_IMAGE);
+					// AudioPlayUtil.playAudio(getApplicationContext(),
+					// FILE_TYPE_IMAGE);
 				}
 				break;
 
@@ -1160,7 +1162,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				MyApplication.isVideoReording = false;
 			}
 		}
-		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+		// AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 		setupRecordViews();
 		if (Constant.isDebug) {
 			MyLog.v("MyApplication.isVideoReording:"
@@ -1354,7 +1356,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		mPathState = Constant.Record.STATE_PATH_ZERO;
 		mSecondaryState = Constant.Record.STATE_SECONDARY_DISABLE;
-		mOverlapState = Constant.Record.STATE_OVERLAP_FIVE;
+		mOverlapState = Constant.Record.STATE_OVERLAP_ZERO;
 	}
 
 	private void refreshRecordButton() {
@@ -1362,8 +1364,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		boolean videoVoice = sharedPreferences.getBoolean("videoVoice", true);
 		if (!videoVoice) {
 			mMuteState = Constant.Record.STATE_MUTE; // 不录音
+			setMute(true);
 		} else {
 			mMuteState = Constant.Record.STATE_UNMUTE;
+			setMute(false);
 		}
 
 		// 视频尺寸
@@ -1660,7 +1664,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public void RecursionCheckFile(File file) {
 		try {
-			if (file.isFile()) {
+			if (file.isFile() && !file.getName().endsWith(".jpg")) {
 				if (!videoDb.isVideoExist(file.getName())) {
 					file.delete();
 					MyLog.v("[RecursionCheckFile] Delete Error File:"
@@ -1880,9 +1884,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		 * [Path] 视频：/mnt/sdcard/tachograph/2015-07-01/2015-07-01_105536.mp4
 		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
 		 */
-		deleteOldestUnlockVideo();
 
 		if (type == 1) {
+			deleteOldestUnlockVideo();
 			secondCount = -1; // 录制时间秒钟复位
 			textRecordTime.setText("00:00");
 

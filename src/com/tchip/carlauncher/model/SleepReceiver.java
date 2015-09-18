@@ -3,6 +3,7 @@ package com.tchip.carlauncher.model;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 
@@ -80,6 +81,10 @@ public class SleepReceiver extends BroadcastReceiver {
 				}
 			} catch (Exception e) {
 				MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_ON");
+			} finally {
+				// 发送Home键，回到主界面
+				context.sendBroadcast(new Intent("com.tchip.powerKey")
+						.putExtra("value", "home"));
 			}
 		} else if (action.equals("com.tchip.SLEEP_OFF")) {
 			try {
