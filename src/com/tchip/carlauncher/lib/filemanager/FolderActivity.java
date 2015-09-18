@@ -154,12 +154,12 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		// drawerLayout.setFocusableInTouchMode(false);
 		// drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.END);
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayUseLogoEnabled(true);
-		getActionBar().setHomeAsUpIndicator(
-				getResources().getDrawable(
-						R.drawable.shape_file_manager_back_transparent));
+		// getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(false);
+		getActionBar().setDisplayUseLogoEnabled(false);
+		// getActionBar().setHomeAsUpIndicator(
+		// getResources().getDrawable(
+		//	R.drawable.shape_file_manager_back_transparent));
 
 		setupNavDrawer();
 		setupClipboardDrawer();

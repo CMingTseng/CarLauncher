@@ -192,7 +192,7 @@
     <string name="rate_per_sec">%1$s/s</string>
 
     <!-- File Manager -->
-    <string name="cannot_read_directory_s">无法读取目录 %s</string>
+    <string name="cannot_read_directory_s">未插入 %s</string>
     <string name="open_file_with_">打开 %s 为</string>
     <string name="size_s">大小: %s</string>
     <string name="folder">%d 条目</string>

@@ -69,11 +69,18 @@ public class BaseFileAdapter extends RobotoAdapter<File> {
 
 		if (file.isDirectory()) {
 			int files = FileUtils.getNumFilesInFolder(file);
-			if (files == 0)
-				tvFileDetails.setText(R.string.folder_empty);
-			else
+			if (files == 0) {
+				if (file.getAbsolutePath().equals("/storage/sdcard1")
+						|| file.getAbsolutePath().equals("/storage/sdcard2")
+						|| file.getAbsolutePath().equals("/storage/usbotg")) {
+					tvFileDetails.setText("未安装");
+				} else {
+					tvFileDetails.setText(R.string.folder_empty);
+				}
+			} else {
 				tvFileDetails.setText(getContext().getString(R.string.folder,
 						files));
+			}
 			imgIcon.setImageResource(FileUtils.getFileIconResource(file));
 		} else {
 			tvFileDetails.setText(getContext().getString(R.string.size_s,
