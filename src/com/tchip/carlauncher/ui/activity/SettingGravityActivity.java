@@ -72,11 +72,11 @@ public class SettingGravityActivity extends Activity {
 					public void onStopTrackingTouch(SeekBar seekBar) {
 						// SettingUtil.setFmFrequency(getApplicationContext(),
 						// (seekBar.getProgress() + 875) * 10);
-						String strSensitive = "" + (seekBar.getProgress() + 1);
+						int crashSensitive = seekBar.getProgress() + 1;
 						MyLog.v("[SettingGravity] Set crash sensitive:"
-								+ strSensitive);
-						MyApplication.crashSensitive = seekBar.getProgress() + 1;
-						editor.putString("crashSensitive", strSensitive);
+								+ crashSensitive);
+						MyApplication.crashSensitive = crashSensitive;
+						editor.putInt("crashSensitive", crashSensitive);
 						editor.commit();
 					}
 
@@ -106,9 +106,8 @@ public class SettingGravityActivity extends Activity {
 	 * 获取当前设置的碰撞等级
 	 */
 	private int getGravityLevel() {
-		String strSensitive = sharedPreferences
-				.getString("crashSensitive", "4");
-		return Integer.parseInt(strSensitive);
+		int crashSensitive = sharedPreferences.getInt("crashSensitive", 4);
+		return crashSensitive;
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

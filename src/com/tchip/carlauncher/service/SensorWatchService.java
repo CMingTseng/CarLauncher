@@ -9,7 +9,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,8 +39,6 @@ public class SensorWatchService extends Service {
 		super.onCreate();
 		SharedPreferences sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-		int sensorLevel = Integer.parseInt(sharedPreferences.getString(
-				"crashSensitive", Constant.GravitySensor.DEFAULT_SENSITIVE));
 
 		SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// Using TYPE_ACCELEROMETER first if exit, then TYPE_GRAVITY
@@ -54,6 +51,7 @@ public class SensorWatchService extends Service {
 			public void onSensorChanged(SensorEvent event) {
 				if (MyApplication.isSleeping) {
 					stopSelf();
+					MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
 					return;
 				}
 				LIMIT_X = LIMIT_Y = LIMIT_Z = MyApplication.crashSensitive

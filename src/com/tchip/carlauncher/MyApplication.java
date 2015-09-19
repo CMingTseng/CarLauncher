@@ -58,6 +58,7 @@ public class MyApplication extends Application {
 	 */
 	public static boolean isCrashOn = false;
 	public static int crashSensitive = 4;
+	private SharedPreferences sharedPreferences;
 
 	@Override
 	public void onCreate() {
@@ -105,14 +106,14 @@ public class MyApplication extends Application {
 	 */
 	private void initialCrashData() {
 		try {
-			SharedPreferences sharedPreferences = getSharedPreferences(
+			sharedPreferences = getSharedPreferences(
 					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
 			isCrashOn = sharedPreferences.getBoolean("crashOn", false);
 			crashSensitive = sharedPreferences.getInt("crashSensitive", 4);
-
 		} catch (Exception e) {
-			MyLog.e("[MyApplication]initialCrashData: Catch Exception!");
+			MyLog.e("[MyApplication]initialCrashData: Catch Exception!"
+					+ e.getMessage());
 		}
 	}
 

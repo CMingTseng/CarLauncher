@@ -17,7 +17,7 @@ public interface Constant {
 		/**
 		 * 碰撞侦测默认灵敏度Level
 		 */
-		public static final String DEFAULT_SENSITIVE = "4";
+		public static final int DEFAULT_SENSITIVE = 4;
 
 		public static final float VALUE = 9.8f;
 	}
