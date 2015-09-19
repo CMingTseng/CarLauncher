@@ -98,7 +98,7 @@ SharedPreferences-CarLauncher
 	(String)videoQuality	视频质量(LOW-MIDDLE-*HIGH)
 	(String)videoSize		视频尺寸(*720-1080)
 	(String)videoTime		视频长度(3-*5-10)
-	(String)crashSensitive	碰撞侦测灵敏度(1,2,3,*4,5,6,7)
+	(int)crashSensitive	碰撞侦测灵敏度(1,2,3,*4,5,6,7)
 	(boolean)crashOn		碰撞侦测开关(*false-true)
 	(boolean)videoVoice		是否录制声音
 	
@@ -114,6 +114,7 @@ SharedPreferences-CarLauncher
 	
 	(boolean)brightAdjust	夜间自动开启护眼模式
 	(boolean)autoScreenLight	根据Camera调节亮度开关(true)
+	(int)manulLightValue	手动亮度值，用以自动调节亮度关闭时重设背光值
 	
 	----------------------------------------
 	[*Using]Music

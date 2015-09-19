@@ -2,9 +2,6 @@ package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
 
-import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
-import com.baidu.navisdk.adapter.BaiduNaviManager;
-import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -16,7 +13,6 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
-import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.MyLog;
@@ -42,13 +38,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -153,6 +147,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
+		
+		// 初始化自动亮度开关
+		initialAutoLight();
 	}
 
 	/**
@@ -201,6 +198,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				MyLog.e("[MainActivity]AutoThread: Catch Exception!");
 			}
 		}
 	}
@@ -1319,8 +1317,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-		// 初始化fm发射
-		initFmTransmit();
+		// 初始化FM发射
+		initalFmTransmit();
 
 		super.onResume();
 	}
@@ -1952,15 +1950,13 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 启动时初始化fm发射
+	 * 启动时初始化FM发射频率节点
+	 * 
+	 * 频率范围：7600~10800:8750-10800
 	 */
-	// 频率节点 频率范围：7600~10800:8750-10800
-
-	private void initFmTransmit() {
-		// if (isFmTransmitOn())
+	private void initalFmTransmit() {
 		try {
 			int freq = SettingUtil.getFmFrequceny(this);
-			// Toast.makeText(this, "freq : " + freq, Toast.LENGTH_LONG).show();
 			if (freq >= 8750 && freq <= 10800)
 				SettingUtil.setFmFrequency(this, freq);
 			else
@@ -1969,4 +1965,22 @@ public class MainActivity extends Activity implements TachographCallback,
 			MyLog.e("[MainActivity]initFmTransmit: Catch Exception!");
 		}
 	}
+
+	/**
+	 * 初始化自动亮度节点
+	 */
+	private void initialAutoLight() {
+		try {
+			boolean autoScreenLight = sharedPreferences.getBoolean(
+					"autoScreenLight", true);
+			SettingUtil.setAutoLight(getApplicationContext(), autoScreenLight);
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]initialAutoLight: Catch Exception!");
+		}
+	}
+
+	// private String getCustomBuildVersion(){
+	// // ro.custom.build.version
+	// return SystemProperty.getProperty("ro.custom.build.version");
+	// }
 }

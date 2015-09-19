@@ -17,6 +17,8 @@ import android.app.PendingIntent.CanceledException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.PowerManager;
@@ -32,9 +34,21 @@ public class SettingUtil {
 	 * @param brightness
 	 */
 	public static void setBrightness(Context context, int brightness) {
-		if (brightness < 255 && brightness > 0)
-			Settings.System.putInt(context.getContentResolver(),
+		if (brightness < 255 && brightness > 0) {
+			boolean setSuccess = Settings.System.putInt(
+					context.getContentResolver(),
 					Settings.System.SCREEN_BRIGHTNESS, brightness);
+			MyLog.v("[SettingUtil]setBrightness: " + brightness + ", "
+					+ setSuccess);
+			
+			SharedPreferences sharedPreferences = context.getSharedPreferences(
+					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+			Editor editor = sharedPreferences.edit();
+
+			
+			editor.putInt("manulLightValue", brightness);
+			editor.commit();
+		}
 	}
 
 	public static int getBrightness(Context context) {
@@ -191,15 +205,12 @@ public class SettingUtil {
 	 * 设置Camera自动调节亮度开关
 	 */
 	public static void setAutoLight(Context context, boolean isAutoLightOn) {
-		// Settings.System.putString(context.getContentResolver(),
-		// Constant.FMTransmit.SETTING_CHANNEL, "" + frequency);
-
 		if (isAutoLightOn) {
 			SaveFileToNode(fileAutoLightSwitch, "1");
 		} else {
 			SaveFileToNode(fileAutoLightSwitch, "0");
 		}
-		Log.v(Constant.TAG, "setAutoLight:" + isAutoLightOn);
+		MyLog.v("[SettingUtil]setAutoLight:" + isAutoLightOn);
 	}
 
 }

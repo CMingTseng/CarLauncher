@@ -3,6 +3,7 @@ package com.tchip.carlauncher.ui.activity;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.Typefaces;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.MaterialSwitch;
 import com.tchip.carlauncher.view.NumberSeekBar;
@@ -10,12 +11,12 @@ import com.tchip.carlauncher.view.SwitchButton;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -66,7 +67,7 @@ public class SettingSystemDisplayActivity extends Activity {
 
 		// 亮度SeekBar
 		int color = Color.parseColor("#1E88E5");
-		NumberSeekBar brightSeekBar = (NumberSeekBar) findViewById(R.id.brightSeekBar);
+		final NumberSeekBar brightSeekBar = (NumberSeekBar) findViewById(R.id.brightSeekBar);
 		brightSeekBar.setBackgroundColor(color);
 		brightSeekBar.setShowNumberIndicator(true);
 		brightSeekBar.setMin(0);
@@ -87,6 +88,7 @@ public class SettingSystemDisplayActivity extends Activity {
 		layoutSeekBar = (RelativeLayout) findViewById(R.id.layoutSeekBar);
 		hideOrShowSeekBarLayout(isAutoLightSwitchOn);
 
+		// 亮度自动调节开关
 		switchAutolight = (SwitchButton) findViewById(R.id.switchAutolight);
 		switchAutolight.setChecked(isAutoLightSwitchOn);
 		switchAutolight
@@ -101,12 +103,23 @@ public class SettingSystemDisplayActivity extends Activity {
 						editor.putBoolean("autoScreenLight", isChecked);
 						editor.commit();
 						hideOrShowSeekBarLayout(isChecked);
-						SettingUtil.SaveFileToNode(
-								SettingUtil.fileAutoLightSwitch,
-								(isChecked ? "1" : "0"));
+
+						SettingUtil.setAutoLight(context, isChecked);
+
+						// 关闭自动亮度调节，重设亮度值
+						if (!isChecked) {
+							int manulLightValue = sharedPreferences.getInt(
+									"manulLightValue", 150) + 1;
+							if (manulLightValue > 255) {
+								manulLightValue = manulLightValue - 2;
+							}
+							MyLog.v("[SettingSystemDisplay]manulLightValue:"
+									+ manulLightValue);
+							SettingUtil.setBrightness(getApplicationContext(),
+									manulLightValue);
+						}
 					}
 				});
-
 	}
 
 	private void hideOrShowSeekBarLayout(boolean isAutoLightSwitchOn) {
