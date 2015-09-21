@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -42,6 +44,7 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.Clipboard.FileAction;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager.FolderAlreadyFavouriteException;
 import com.tchip.carlauncher.lib.filemanager.FileAdapter.OnFileSelectedListener;
+import com.tchip.carlauncher.model.DriveVideoDbHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +76,9 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 	// fragments
 	boolean preserveSelection = false;
 	FilePreviewCache thumbCache;
+
+	private DriveVideoDbHelper videoDb;
+	private Context context;
 
 	public AbsListView getListView() {
 		return listView;
@@ -122,6 +128,9 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 		setRetainInstance(true);
 
 		Log.d(LOG_TAG, "Fragment created");
+
+		context = getActivity().getApplicationContext();
+		videoDb = new DriveVideoDbHelper(context);
 
 		if (savedInstanceState != null) {
 			this.topVisibleItem = savedInstanceState.getInt(
@@ -645,26 +654,94 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 				.setPositiveButton(android.R.string.ok, null).show();
 	}
 
+	private boolean hasLockVideo(Collection<File> files) {
+		for (File file : files) {
+			if (file.isDirectory()) {
+				hasLockVideo(Arrays.asList(file.listFiles()));
+			} else if (file.getName().endsWith(".mp4")) {
+				int videoLock = videoDb.getLockStateByVideoName(file.getName());
+				if (1 == videoLock) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+	private boolean checkLockVideo(Collection<File> files) {
+		boolean flagHasLock = false;
+		for (File file : files) {
+			if (file.isDirectory()) {
+				hasLockVideo(Arrays.asList(file.listFiles()));
+			} else {
+				flagHasLock = hasLockVideo(files);
+			}
+		}
+		return flagHasLock;
+	}
+
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_delete:
-			new AlertDialog.Builder(getActivity())
-					.setMessage(
-							getString(R.string.delete_d_items_,
-									selectedFiles.size()))
-					.setPositiveButton(R.string.delete, new OnClickListener() {
+			// TODO:判断选中的文件里是否有加锁视频
+			boolean hasLockVideo = checkLockVideo(selectedFiles);
+			if (hasLockVideo) {
+				new AlertDialog.Builder(getActivity())
+						.setMessage("你选中了加锁视频，删除后无法恢复，是否删除？").setTitle("警告")
+						.setIcon(
+								getResources().getDrawable(
+										R.drawable.ui_file_manager_warnning))
+						.setPositiveButton(R.string.delete,
+								new OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							int n = FileUtils.deleteFiles(selectedFiles);
-							Toast.makeText(getActivity(),
-									getString(R.string._d_files_deleted, n),
-									Toast.LENGTH_SHORT).show();
-							refreshFolder();
-							finishActionMode(false);
-						}
-					}).setNegativeButton(android.R.string.cancel, null).show();
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										int n = FileUtils
+												.deleteFiles(selectedFiles);
+										Toast.makeText(
+												getActivity(),
+												getString(
+														R.string._d_files_deleted,
+														n), Toast.LENGTH_SHORT)
+												.show();
+										refreshFolder();
+										finishActionMode(false);
+									}
+								})
+						.setNegativeButton(android.R.string.cancel, null)
+						.show();
+			} else {
+				new AlertDialog.Builder(getActivity())
+						.setMessage(
+								getString(R.string.delete_d_items_,
+										selectedFiles.size()))
+						.setPositiveButton(R.string.delete,
+								new OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										int n = FileUtils
+												.deleteFiles(selectedFiles);
+										Toast.makeText(
+												getActivity(),
+												getString(
+														R.string._d_files_deleted,
+														n), Toast.LENGTH_SHORT)
+												.show();
+										refreshFolder();
+										finishActionMode(false);
+									}
+								})
+						.setNegativeButton(android.R.string.cancel, null)
+						.show();
+			}
 			return true;
 
 		case R.id.action_selectAll:
