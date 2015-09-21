@@ -1806,9 +1806,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		releaseRecorder();
 		try {
 			mMyRecorder = new TachographRecorder();
-			Toast.makeText(getApplicationContext(),
-					"Version:" + mMyRecorder.getVersionCode(),
-					Toast.LENGTH_SHORT).show();
 			mMyRecorder.setTachographCallback(this);
 			mMyRecorder.setCamera(mCamera);
 			mMyRecorder.setClientName(this.getPackageName());
@@ -1992,8 +1989,4 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	// private String getCustomBuildVersion(){
-	// // ro.custom.build.version
-	// return SystemProperty.getProperty("ro.custom.build.version");
-	// }
 }

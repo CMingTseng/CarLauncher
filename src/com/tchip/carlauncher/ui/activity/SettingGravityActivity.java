@@ -64,7 +64,7 @@ public class SettingGravityActivity extends Activity {
 
 		SeekBar gravitySeekBar = (SeekBar) findViewById(R.id.gravitySeekBar);
 		gravitySeekBar.setMax(6);
-		gravitySeekBar.setProgress(getGravityLevel() - 1);
+		gravitySeekBar.setProgress(getGravityLevel() - 2);
 
 		gravitySeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -72,7 +72,7 @@ public class SettingGravityActivity extends Activity {
 					public void onStopTrackingTouch(SeekBar seekBar) {
 						// SettingUtil.setFmFrequency(getApplicationContext(),
 						// (seekBar.getProgress() + 875) * 10);
-						int crashSensitive = seekBar.getProgress() + 1;
+						int crashSensitive = seekBar.getProgress() + 2;
 						MyLog.v("[SettingGravity] Set crash sensitive:"
 								+ crashSensitive);
 						MyApplication.crashSensitive = crashSensitive;
@@ -88,8 +88,6 @@ public class SettingGravityActivity extends Activity {
 					@Override
 					public void onProgressChanged(SeekBar seekBar,
 							int progress, boolean fromUser) {
-						// float frequency = (progress + 875.0f) / 10;
-						// textHint.setText("  " + frequency + "MHz");
 					}
 				});
 	}
@@ -106,7 +104,7 @@ public class SettingGravityActivity extends Activity {
 	 * 获取当前设置的碰撞等级
 	 */
 	private int getGravityLevel() {
-		int crashSensitive = sharedPreferences.getInt("crashSensitive", 4);
+		int crashSensitive = sharedPreferences.getInt("crashSensitive", 5);
 		return crashSensitive;
 	}
 
