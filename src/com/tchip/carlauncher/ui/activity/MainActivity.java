@@ -147,7 +147,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
-		
+
 		// 初始化自动亮度开关
 		initialAutoLight();
 	}
@@ -619,6 +619,38 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
+	 * 切换录像预览窗口的大小
+	 */
+	private void updateSurfaceState() {
+		if (!isSurfaceLarge) {
+			int widthFull = 854;
+			int heightFull = 480;
+			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
+					widthFull, heightFull));
+			isSurfaceLarge = true;
+
+			// 更新HorizontalScrollView阴影
+			imageShadowLeft.setVisibility(View.GONE);
+			imageShadowRight.setVisibility(View.GONE);
+
+			updateButtonState(true);
+		} else {
+			int widthSmall = 480;
+			int heightSmall = 270;
+			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
+					widthSmall, heightSmall));
+			isSurfaceLarge = false;
+
+			// 更新HorizontalScrollView阴影
+			hsvMain.scrollTo(0, 0);
+			imageShadowLeft.setVisibility(View.GONE);
+			imageShadowRight.setVisibility(View.VISIBLE);
+
+			updateButtonState(false);
+		}
+	}
+
+	/**
 	 * 更新录像大小按钮显示状态
 	 * 
 	 * @param isSurfaceLarge
@@ -810,34 +842,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.surfaceCamera:
-				if (!isSurfaceLarge) {
-					int widthFull = 854;
-					int heightFull = 480;
-					surfaceCamera
-							.setLayoutParams(new RelativeLayout.LayoutParams(
-									widthFull, heightFull));
-					isSurfaceLarge = true;
-
-					// 更新HorizontalScrollView阴影
-					imageShadowLeft.setVisibility(View.GONE);
-					imageShadowRight.setVisibility(View.GONE);
-
-					updateButtonState(true);
-				} else {
-					int widthSmall = 480;
-					int heightSmall = 270;
-					surfaceCamera
-							.setLayoutParams(new RelativeLayout.LayoutParams(
-									widthSmall, heightSmall));
-					isSurfaceLarge = false;
-
-					// 更新HorizontalScrollView阴影
-					hsvMain.scrollTo(0, 0);
-					imageShadowLeft.setVisibility(View.GONE);
-					imageShadowRight.setVisibility(View.VISIBLE);
-
-					updateButtonState(false);
-				}
+				updateSurfaceState();
 				break;
 
 			case R.id.smallVideoRecord:
@@ -1286,6 +1291,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+		// 按HOME键将预览区域还原为小窗口
+		if (isSurfaceLarge()) {
+			updateSurfaceState();
+		}
+
 		MyApplication.isMainForeground = true;
 		if (!MyApplication.isFirstLaunch) {
 			if (!MyApplication.isVideoReording
