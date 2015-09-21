@@ -34,19 +34,22 @@ public class SensorWatchService extends Service {
 	private int[] crashFlag = { 0, 0, 0 }; // {X-Flag, Y-Flag, Z-Flag}
 	private boolean isCrash = false;
 
+	private SensorManager sensorManager;
+	private SensorEventListener sensorEventListener;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		SharedPreferences sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
-		SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// Using TYPE_ACCELEROMETER first if exit, then TYPE_GRAVITY
 		Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 		if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
 			sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		}
-		SensorEventListener sensorEventListener = new SensorEventListener() {
+		sensorEventListener = new SensorEventListener() {
 			@Override
 			public void onSensorChanged(SensorEvent event) {
 				if (MyApplication.isSleeping) {
@@ -104,6 +107,12 @@ public class SensorWatchService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
 		return super.onStartCommand(intent, flags, startId);
+	}
+
+	@Override
+	public void onDestroy() {
+		sensorManager.unregisterListener(sensorEventListener);
+		super.onDestroy();
 	}
 
 	private void startSpeak(String content) {
