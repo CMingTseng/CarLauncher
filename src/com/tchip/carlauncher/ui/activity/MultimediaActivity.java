@@ -106,14 +106,18 @@ public class MultimediaActivity extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutImage:
-				ComponentName componentImage = new ComponentName(
-						"com.android.gallery3d",
-						"com.android.gallery3d.app.GalleryActivity");
-				Intent intentImage = new Intent();
-				intentImage.setComponent(componentImage);
-				intentImage.addCategory(Intent.CATEGORY_LAUNCHER);
-				intentImage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intentImage);
+				try {
+					ComponentName componentImage = new ComponentName(
+							"com.android.gallery3d",
+							"com.android.gallery3d.app.GalleryActivity");
+					Intent intentImage = new Intent();
+					intentImage.setComponent(componentImage);
+					intentImage.addCategory(Intent.CATEGORY_LAUNCHER);
+					intentImage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intentImage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutFace:
@@ -124,12 +128,16 @@ public class MultimediaActivity extends Activity {
 
 			case R.id.layoutMusic:
 				if (Constant.Module.isLocalMusicSystem) {
-					ComponentName componentMusic = new ComponentName(
-							"com.android.music",
-							"com.android.music.MusicBrowserActivity");
-					Intent intentMusic = new Intent();
-					intentMusic.setComponent(componentMusic);
-					startActivity(intentMusic);
+					try {
+						ComponentName componentMusic = new ComponentName(
+								"com.android.music",
+								"com.android.music.MusicBrowserActivity");
+						Intent intentMusic = new Intent();
+						intentMusic.setComponent(componentMusic);
+						startActivity(intentMusic);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				} else {
 					Intent intentMusic = new Intent(getApplicationContext(),
 							MusicMainContentActivity.class);
@@ -140,17 +148,20 @@ public class MultimediaActivity extends Activity {
 			case R.id.layoutVideo:
 				// intentVideo.setAction("android.intent.action.VIEW");
 				// intentVideo.addCategory("android.intent.category.LAUNCHER");
-
-				ComponentName componentVideo = new ComponentName(
-						"com.mediatek.videoplayer",
-						"com.mediatek.videoplayer.MovieListActivity");
-				Intent intentVideo = new Intent();
-				intentVideo.setComponent(componentVideo);
-				intentVideo.addCategory(Intent.CATEGORY_DEFAULT);
-				intentVideo.addCategory(Intent.CATEGORY_LAUNCHER);
-				intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-						| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-				startActivity(intentVideo);
+				try {
+					ComponentName componentVideo = new ComponentName(
+							"com.mediatek.videoplayer",
+							"com.mediatek.videoplayer.MovieListActivity");
+					Intent intentVideo = new Intent();
+					intentVideo.setComponent(componentVideo);
+					intentVideo.addCategory(Intent.CATEGORY_DEFAULT);
+					intentVideo.addCategory(Intent.CATEGORY_LAUNCHER);
+					intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+							| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+					startActivity(intentVideo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.btnBack:

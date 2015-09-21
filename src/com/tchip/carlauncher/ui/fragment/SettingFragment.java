@@ -174,7 +174,7 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleReset);
 		layoutRippleReset.setOnClickListener(new MyOnClickListener());
 
-		// 关于(GONE)
+		// 关于设备
 		RelativeLayout layoutRippleAbout = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleAbout);
 		layoutRippleAbout.setOnClickListener(new MyOnClickListener());
@@ -217,8 +217,12 @@ public class SettingFragment extends Fragment {
 
 			case R.id.layoutRippleWifi:
 				if (Constant.Module.isWifiSystem) {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_WIFI_SETTINGS));
+					try {
+						startActivity(new Intent(
+								android.provider.Settings.ACTION_WIFI_SETTINGS));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				} else {
 					Intent intentWifi = new Intent(context,
 							WifiListActivity.class);
@@ -238,15 +242,24 @@ public class SettingFragment extends Fragment {
 				// } catch (Exception e) {
 				// e.printStackTrace();
 				// }
-				startActivity(new Intent(
-						"android.settings.TETHER_WIFI_SETTINGS"));
+				try {
+					startActivity(new Intent(
+							"android.settings.TETHER_WIFI_SETTINGS"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutRippleTraffic:
 				// Intent intentTraffic = new Intent(context,
 				// TrafficStatActivity.class);
 				// startActivity(intentTraffic);
-				startActivity(new Intent("android.settings.DATA_USAGE_SETTINGS"));
+				try {
+					startActivity(new Intent(
+							"android.settings.DATA_USAGE_SETTINGS"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutGravity:
@@ -264,13 +277,21 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleLocation:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+				try {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
-				
+
 			case R.id.layoutRippleStorage:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
+				try {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutRippleUsb:
@@ -282,8 +303,12 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleDate:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_DATE_SETTINGS));
+				try {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_DATE_SETTINGS));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 				// ComponentName componentImage = new ComponentName(
 				// "com.android.settings", "com.android.settings.Settings");
@@ -301,22 +326,38 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleFm:
-				startActivity(new Intent("android.settings.FM_SETTINGS"));
+				try {
+					startActivity(new Intent("android.settings.FM_SETTINGS"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutRippleReset:
-				startActivity(new Intent(
-						"android.settings.BACKUP_AND_RESET_SETTINGS"));
+				try {
+					startActivity(new Intent(
+							"android.settings.BACKUP_AND_RESET_SETTINGS"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutRippleAbout:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS));
+				try {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutRippleApp:
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
+				try {
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			default:

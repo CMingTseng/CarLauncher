@@ -34,18 +34,17 @@ public class SettingUtil {
 	 * @param brightness
 	 */
 	public static void setBrightness(Context context, int brightness) {
-		if (brightness < 255 && brightness > 0) {
+		if (brightness < 256 && brightness > -1) {
 			boolean setSuccess = Settings.System.putInt(
 					context.getContentResolver(),
 					Settings.System.SCREEN_BRIGHTNESS, brightness);
 			MyLog.v("[SettingUtil]setBrightness: " + brightness + ", "
 					+ setSuccess);
-			
+
 			SharedPreferences sharedPreferences = context.getSharedPreferences(
 					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 			Editor editor = sharedPreferences.edit();
 
-			
 			editor.putInt("manulLightValue", brightness);
 			editor.commit();
 		}
@@ -53,8 +52,11 @@ public class SettingUtil {
 
 	public static int getBrightness(Context context) {
 		try {
-			return Settings.System.getInt(context.getContentResolver(),
+			int nowBrightness = Settings.System.getInt(
+					context.getContentResolver(),
 					Settings.System.SCREEN_BRIGHTNESS);
+			MyLog.v("[SettingUtil]nowBrightness:" + nowBrightness);
+			return nowBrightness;
 		} catch (SettingNotFoundException e) {
 			e.printStackTrace();
 			return 155;

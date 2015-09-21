@@ -123,23 +123,14 @@
             android:layout_height="@dimen/setting_system_bright_item_height"
             android:orientation="horizontal" >
 
-            <TextView
-                android:id="@+id/textBrightness"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="亮度"
-                android:textColor="#000000"
-                android:textSize="@dimen/setting_system_bright_text_size" />
-
-            <com.tchip.carlauncher.view.NumberSeekBar
+            <SeekBar
                 android:id="@+id/brightSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_toRightOf="@id/textBrightness" />
+                android:max="255"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
 
             <View
                 android:layout_width="match_parent"

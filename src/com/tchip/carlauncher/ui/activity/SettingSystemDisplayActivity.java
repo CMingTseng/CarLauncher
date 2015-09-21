@@ -23,6 +23,8 @@ import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextClock;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
@@ -66,21 +68,28 @@ public class SettingSystemDisplayActivity extends Activity {
 				+ "Font-Helvetica-Neue-LT-Pro.otf"));
 
 		// 亮度SeekBar
-		int color = Color.parseColor("#1E88E5");
-		final NumberSeekBar brightSeekBar = (NumberSeekBar) findViewById(R.id.brightSeekBar);
-		brightSeekBar.setBackgroundColor(color);
-		brightSeekBar.setShowNumberIndicator(true);
-		brightSeekBar.setMin(0);
+		SeekBar brightSeekBar = (SeekBar) findViewById(R.id.brightSeekBar);
 		brightSeekBar.setMax(255);
-		brightSeekBar.setValue(SettingUtil.getBrightness(context));
-		brightSeekBar
-				.setOnValueChangedListener(new NumberSeekBar.OnValueChangedListener() {
+		brightSeekBar.setProgress(SettingUtil.getBrightness(context));
+		brightSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-					@Override
-					public void onValueChanged(int value) {
-						SettingUtil.setBrightness(context, value);
-					}
-				});
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				 SettingUtil.setBrightness(context, seekBar.getProgress());
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				SettingUtil.setBrightness(context, progress);
+
+			}
+		});
 
 		// 屏幕关闭RadioGroup
 		iniRadioGroup();

@@ -1361,14 +1361,14 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void refreshRecordButton() {
-		// 录音,静音
-		boolean videoVoice = sharedPreferences.getBoolean("videoVoice", true);
-		if (!videoVoice) {
-			mMuteState = Constant.Record.STATE_MUTE; // 不录音
-			setMute(true);
-		} else {
+		// 录音,静音;默认不录音
+		boolean videoVoice = sharedPreferences.getBoolean("videoVoice", false);
+		if (videoVoice) {
 			mMuteState = Constant.Record.STATE_UNMUTE;
 			setMute(false);
+		} else {
+			mMuteState = Constant.Record.STATE_MUTE; // 不录音
+			setMute(true);
 		}
 
 		// 视频尺寸
@@ -1806,6 +1806,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		releaseRecorder();
 		try {
 			mMyRecorder = new TachographRecorder();
+			Toast.makeText(getApplicationContext(),
+					"Version:" + mMyRecorder.getVersionCode(),
+					Toast.LENGTH_SHORT).show();
 			mMyRecorder.setTachographCallback(this);
 			mMyRecorder.setCamera(mCamera);
 			mMyRecorder.setClientName(this.getPackageName());
