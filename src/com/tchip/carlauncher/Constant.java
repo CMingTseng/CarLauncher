@@ -19,7 +19,7 @@ public interface Constant {
 		 */
 		public static final int DEFAULT_SENSITIVE = 4;
 
-		public static final float VALUE = 9.8f;
+		public static final float VALUE = 4.9f; // 9.8f;
 	}
 
 	public static final class Record {

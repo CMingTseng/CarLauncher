@@ -67,10 +67,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
             android:background="@drawable/ui_file_remote_start"
-            android:drawableLeft="@drawable/ui_setting_camera_crash_sensitive"
             android:text="@string/setting_gravity_hint"
             android:textColor="#ffffff"
             android:textSize="25sp" />
@@ -80,8 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="120dp"
-            
+            android:layout_marginBottom="110dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp" />
 
@@ -95,50 +93,57 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="-5dp"
                 android:gravity="center_horizontal"
-                android:text="1\n|" />
+                android:text="0.5\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="8dp"
                 android:gravity="center_horizontal"
-                android:text="2\n|" />
+                android:text="1.0\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
-                android:text="3\n|" />
+                android:text="1.5\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
-                android:text="4\n|" />
+                android:text="2.0\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
-                android:text="5\n|" />
+                android:text="2.5\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
-                android:text=" 6\n |" />
+                android:text="3.0\n |" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
-                android:text=" 7\n |" />
+                android:text="3.5\n |" />
 
         </LinearLayout>
     </RelativeLayout>
