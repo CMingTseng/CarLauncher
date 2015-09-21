@@ -12,11 +12,7 @@ import com.tchip.carlauncher.Constant;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
-import android.app.PendingIntent;
-import android.app.PendingIntent.CanceledException;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.location.LocationManager;

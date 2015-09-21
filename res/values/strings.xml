@@ -279,6 +279,7 @@
     <string name="hint_video_size_1080">分辨率一零八零P</string>
     <string name="hint_video_time_5">视频分段五分钟</string>
     <string name="hint_video_time_3">视频分段三分钟</string>
+    <string name="hint_video_time_1">视频分段一分钟</string>
     <string name="hint_video_mute_off">录音</string>
     <string name="hint_video_mute_on">静音</string>
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>

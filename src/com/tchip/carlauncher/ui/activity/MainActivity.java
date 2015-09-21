@@ -902,13 +902,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoTime:
 				if (!ClickUtil.isQuickClick(800)) {
 					if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
-						if (setInterval(5 * 60) == 0) {
-							mIntervalState = Constant.Record.STATE_INTERVAL_5MIN;
-							editor.putString("videoTime", "5");
+						if (setInterval(1 * 60) == 0) {
+							mIntervalState = Constant.Record.STATE_INTERVAL_1MIN;
+							editor.putString("videoTime", "1");
 							startSpeak(getResources().getString(
-									R.string.hint_video_time_5));
+									R.string.hint_video_time_1));
 						}
-					} else if (mIntervalState == Constant.Record.STATE_INTERVAL_5MIN) {
+					} else if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
 						if (setInterval(3 * 60) == 0) {
 							mIntervalState = Constant.Record.STATE_INTERVAL_3MIN;
 							editor.putString("videoTime", "3");
@@ -1380,11 +1380,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 视频分段
-		String videoTimeStr = sharedPreferences.getString("videoTime", "5");
-		if ("3".equals(videoTimeStr)) {
-			mIntervalState = Constant.Record.STATE_INTERVAL_3MIN;
+		String videoTimeStr = sharedPreferences.getString("videoTime", "3");
+		if ("1".equals(videoTimeStr)) {
+			mIntervalState = Constant.Record.STATE_INTERVAL_1MIN;
 		} else {
-			mIntervalState = Constant.Record.STATE_INTERVAL_5MIN;
+			mIntervalState = Constant.Record.STATE_INTERVAL_3MIN;
 		}
 	}
 
@@ -1412,12 +1412,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 视频分段
-		if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
+		if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+			largeVideoTime.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_time_1));
+		} else if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
 			largeVideoTime.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_time_3));
-		} else if (mIntervalState == Constant.Record.STATE_INTERVAL_5MIN) {
-			largeVideoTime.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_time_5));
 		}
 
 		// 视频加锁
@@ -1829,8 +1829,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			} else {
 				mMyRecorder.setSecondaryVideoEnable(false);
 			}
-			if (mIntervalState == Constant.Record.STATE_INTERVAL_5MIN) {
-				mMyRecorder.setVideoSeconds(5 * 60);
+			if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+				mMyRecorder.setVideoSeconds(1 * 60);
 			} else {
 				mMyRecorder.setVideoSeconds(3 * 60);
 			}

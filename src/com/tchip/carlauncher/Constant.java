@@ -63,7 +63,8 @@ public interface Constant {
 
 		// 视频分段
 		public static final int STATE_INTERVAL_3MIN = 0;
-		public static final int STATE_INTERVAL_5MIN = 1;
+		public static final int STATE_INTERVAL_1MIN = 2;
+		// public static final int STATE_INTERVAL_5MIN = 1;
 
 		// 第二视图
 		public static final int STATE_SECONDARY_ENABLE = 0;
@@ -152,17 +153,17 @@ public interface Constant {
 		 * 主界面是否显示讯飞语音助手
 		 */
 		public static final boolean hasVoiceChat = false;
-		
+
 		/**
 		 * 主界面是否显示设置入口
 		 */
 		public static final boolean hasSetting = false;
-		
+
 		/**
 		 * 休眠时是否静音
 		 */
 		public static final boolean muteWhenSleep = false;
-		
+
 		/**
 		 * 导航是否是百度:true-百度 false-独立导航Demo(百度SDK)
 		 */
