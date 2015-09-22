@@ -50,18 +50,24 @@ public class SettingSystemUsbActivity extends Activity {
 				break;
 
 			case R.id.layoutStepOne:
-				startActivity(new Intent(
-						"android.settings.STORAGE_USB_SETTINGS"));
+				try {
+					startActivity(new Intent(
+							"android.settings.STORAGE_USB_SETTINGS"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutStepTwo:
-//				Intent intent = new Intent();
-//				ComponentName comp = new ComponentName("com.android.systemui",
-//						"com.android.systemui.usb.UsbStorageActivity");
-//				intent.setComponent(comp);
-//				startActivity(intent);
-				
-				sendBroadcast(new Intent("tchip.intent.action.ACTION_SYSTEMUI_USB"));
+				// Intent intent = new Intent();
+				// ComponentName comp = new
+				// ComponentName("com.android.systemui",
+				// "com.android.systemui.usb.UsbStorageActivity");
+				// intent.setComponent(comp);
+				// startActivity(intent);
+
+				sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_SYSTEMUI_USB"));
 				break;
 
 			default:

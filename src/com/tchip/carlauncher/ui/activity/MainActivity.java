@@ -38,6 +38,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
@@ -172,6 +173,11 @@ public class MainActivity extends Activity implements TachographCallback,
 					StorageUtil.RecursionDeleteFile(file);
 					MyLog.e("Delete video directory:tachograph !!!");
 
+					// 更新Media Database
+					sendBroadcast(new Intent(
+							Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+							Uri.parse("file://" + sdcardPath)));
+
 					editor.putBoolean("isFirstLaunch", false);
 					editor.commit();
 				} else {
@@ -276,11 +282,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		}
 	}
-	
+
 	/**
 	 * 更改录音/静音状态后重启录像
 	 */
-	public class StartRecordWhenChangeMuteThread implements Runnable{
+	public class StartRecordWhenChangeMuteThread implements Runnable {
 		@Override
 		public void run() {
 			try {
@@ -942,7 +948,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoMute:
 			case R.id.layoutVideoMute:
 				if (!ClickUtil.isQuickClick(800)) {
-					// TODO：切换分辨率录像停止，需要重置时间
+					// 切换录音/静音状态停止录像，需要重置时间
 					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
 
 					if (MyApplication.isVideoReording) {
@@ -1636,6 +1642,10 @@ public class MainActivity extends Activity implements TachographCallback,
 							MyLog.d("Delete Old Unlock Video:" + f.getName()
 									+ " Filed!!! Try:" + i);
 						}
+						// 更新Media Database
+						sendBroadcast(new Intent(
+								Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+								Uri.parse("file://" + sdcardPath)));
 					}
 					// 删除数据库记录
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
@@ -1650,6 +1660,11 @@ public class MainActivity extends Activity implements TachographCallback,
 						File file = new File(sdcardPath + "tachograph/");
 						StorageUtil.RecursionDeleteFile(file);
 						MyLog.e("!!! Delete tachograph/ Directory");
+						// 更新Media Database
+						sendBroadcast(new Intent(
+								Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+								Uri.parse("file://" + sdcardPath)));
+
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						intSdFree = (int) sdFree;
 						if (sdFree < sdTotal
@@ -1688,6 +1703,10 @@ public class MainActivity extends Activity implements TachographCallback,
 								MyLog.d("Delete Old lock Video:" + f.getName()
 										+ " Filed!!! Try:" + i);
 							}
+							// 更新Media Database
+							sendBroadcast(new Intent(
+									Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+									Uri.parse("file://" + sdcardPath)));
 						}
 						// 删除数据库记录
 						videoDb.deleteDriveVideoById(oldestVideoId);

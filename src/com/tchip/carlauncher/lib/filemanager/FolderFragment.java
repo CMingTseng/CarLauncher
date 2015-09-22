@@ -11,10 +11,12 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ActionMode;
@@ -674,7 +676,7 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_delete:
-			// TODO:判断选中的文件里是否有加锁视频
+			// 判断选中的文件里是否有加锁视频
 			flagLockVideo = 0;
 			hasLockVideo(selectedFiles);
 			MyLog.v("[FileManager]flagLockVideo,Lock Video Count:"
@@ -694,6 +696,7 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 											int which) {
 										int n = FileUtils
 												.deleteFiles(selectedFiles);
+
 										Toast.makeText(
 												getActivity(),
 												getString(
