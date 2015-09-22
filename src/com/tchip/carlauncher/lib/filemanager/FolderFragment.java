@@ -45,6 +45,7 @@ import com.tchip.carlauncher.lib.filemanager.Clipboard.FileAction;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager.FolderAlreadyFavouriteException;
 import com.tchip.carlauncher.lib.filemanager.FileAdapter.OnFileSelectedListener;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
+import com.tchip.carlauncher.util.MyLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -654,34 +655,19 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 				.setPositiveButton(android.R.string.ok, null).show();
 	}
 
-	private boolean hasLockVideo(Collection<File> files) {
+	private int flagLockVideo;
+
+	private void hasLockVideo(Collection<File> files) {
 		for (File file : files) {
 			if (file.isDirectory()) {
 				hasLockVideo(Arrays.asList(file.listFiles()));
 			} else if (file.getName().endsWith(".mp4")) {
 				int videoLock = videoDb.getLockStateByVideoName(file.getName());
-				if (1 == videoLock) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return false;
+				MyLog.v("[FileManager]hasLockVideo:" + file.getName()
+						+ " LOCK:" + videoLock);
+				flagLockVideo += videoLock;
 			}
 		}
-		return false;
-	}
-
-	private boolean checkLockVideo(Collection<File> files) {
-		boolean flagHasLock = false;
-		for (File file : files) {
-			if (file.isDirectory()) {
-				hasLockVideo(Arrays.asList(file.listFiles()));
-			} else {
-				flagHasLock = hasLockVideo(files);
-			}
-		}
-		return flagHasLock;
 	}
 
 	@Override
@@ -689,10 +675,14 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 		switch (item.getItemId()) {
 		case R.id.action_delete:
 			// TODO:判断选中的文件里是否有加锁视频
-			boolean hasLockVideo = checkLockVideo(selectedFiles);
-			if (hasLockVideo) {
+			flagLockVideo = 0;
+			hasLockVideo(selectedFiles);
+			MyLog.v("[FileManager]flagLockVideo,Lock Video Count:"
+					+ flagLockVideo);
+			if (flagLockVideo > 0) {
 				new AlertDialog.Builder(getActivity())
-						.setMessage("你选中了加锁视频，删除后无法恢复，是否删除？").setTitle("警告")
+						.setMessage("你选中了加锁视频，删除后无法恢复，是否删除？")
+						.setTitle("警告")
 						.setIcon(
 								getResources().getDrawable(
 										R.drawable.ui_file_manager_warnning))
