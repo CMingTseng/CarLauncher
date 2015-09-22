@@ -266,7 +266,25 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(1000);
+				Message message = new Message();
+				message.what = 1;
+				startRecordWhenChangeSize.sendMessage(message);
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 更改录音/静音状态后重启录像
+	 */
+	public class StartRecordWhenChangeMuteThread implements Runnable{
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(500);
 				Message message = new Message();
 				message.what = 1;
 				startRecordWhenChangeSize.sendMessage(message);
@@ -924,6 +942,16 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoMute:
 			case R.id.layoutVideoMute:
 				if (!ClickUtil.isQuickClick(800)) {
+					// TODO：切换分辨率录像停止，需要重置时间
+					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
+
+					if (MyApplication.isVideoReording) {
+						secondCount = -1; // 录制时间秒钟复位
+						textRecordTime.setText("00:00");
+						textRecordTime.setVisibility(View.INVISIBLE);
+						MyApplication.isVideoReording = false;
+						startOrStopRecord();
+					}
 					if (mMuteState == Constant.Record.STATE_MUTE) {
 						if (setMute(false) == 0) {
 							mMuteState = Constant.Record.STATE_UNMUTE;
@@ -943,6 +971,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 
 					setupRecordViews();
+
+					// 修改录音/静音后按需还原录像状态
+					if (MyApplication.shouldVideoRecordWhenChangeSize) {
+						new Thread(new StartRecordWhenChangeMuteThread())
+								.start();
+						MyApplication.shouldVideoRecordWhenChangeSize = false;
+					}
 				}
 				break;
 
@@ -1138,16 +1173,27 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 开启或关闭录像
-	 */
-	private void startOrStopRecord() {
-		if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
-			if (MyApplication.isSleeping) {
-				startSpeak("正在休眠，无法录像");
-			} else if (!MyApplication.isMainForeground) {
-				// 录像需切换到预览界面，否则无法录像
-			} else {
+	class RealRecordThread implements Runnable {
+
+		@Override
+		public void run() {
+			synchronized (realRecordHandler) {
+				try {
+					Thread.sleep(1000);
+				} catch (Exception e) {
+				} finally {
+					Message messageRealRecord = new Message();
+					messageRealRecord.what = 1;
+					realRecordHandler.sendMessage(messageRealRecord);
+				}
+			}
+		}
+	}
+
+	final Handler realRecordHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
 				// 开始录像
 				if (startRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STARTED;
@@ -1155,6 +1201,42 @@ public class MainActivity extends Activity implements TachographCallback,
 				} else {
 					if (Constant.isDebug)
 						MyLog.e("Start Record Failed");
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	/**
+	 * 开启或关闭录像
+	 */
+	private void startOrStopRecord() {
+		if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+			if (MyApplication.isSleeping) {
+				startSpeak("正在休眠，无法录像");
+			} else {
+				if (!MyApplication.isMainForeground) {
+					// 录像需切换到预览界面且点亮屏幕，否则无法录像
+					// 发送Home键，回到主界面
+					sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+							"value", "home"));
+					// 点亮屏幕
+					SettingUtil.lightScreen(getApplicationContext());
+
+					// 录像线程
+					new Thread(new RealRecordThread()).start();
+				} else {
+					// 直接开始录像
+					if (startRecorder() == 0) {
+						mRecordState = Constant.Record.STATE_RECORD_STARTED;
+						MyApplication.isVideoReording = true;
+					} else {
+						if (Constant.isDebug)
+							MyLog.e("Start Record Failed");
+					}
 				}
 			}
 		} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
