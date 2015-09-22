@@ -970,17 +970,22 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageNavi:
 				if (!ClickUtil.isQuickClick(800)) {
 					// com.tchip.baidunavi
-					try {
-						ComponentName componentBaiduNavi;
-						componentBaiduNavi = new ComponentName(
-								"com.tchip.baidunavi",
-								"com.tchip.baidunavi.ui.activity.MainActivity");
-						Intent intentBaiduNavi = new Intent();
-						intentBaiduNavi.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						intentBaiduNavi.setComponent(componentBaiduNavi);
-						startActivity(intentBaiduNavi);
-					} catch (Exception e) {
-						e.printStackTrace();
+					if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+						try {
+							ComponentName componentBaiduNavi;
+							componentBaiduNavi = new ComponentName(
+									"com.tchip.baidunavi",
+									"com.tchip.baidunavi.ui.activity.MainActivity");
+							Intent intentBaiduNavi = new Intent();
+							intentBaiduNavi
+									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							intentBaiduNavi.setComponent(componentBaiduNavi);
+							startActivity(intentBaiduNavi);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						NetworkUtil.noNetworkHint(getApplicationContext());
 					}
 				}
 				break;

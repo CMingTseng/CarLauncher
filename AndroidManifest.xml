@@ -327,15 +327,12 @@
             </intent-filter>
         </service>
         <!--
-            <service
-            android:name="com.baidu.navi.location.f"
-            android:enabled="true" />
-        -->
         <service android:name="com.tchip.carlauncher.service.MusicMediaService" >
             <intent-filter>
                 <action android:name="com.tchip.carlauncher.music.service.MusicMediaService" />
             </intent-filter>
         </service>
+        -->
     </application>
 
 </manifest>
