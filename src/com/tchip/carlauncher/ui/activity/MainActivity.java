@@ -13,6 +13,7 @@ import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.service.WeatherService;
+import com.tchip.carlauncher.util.AudioPlayUtil;
 import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.MyLog;
@@ -989,8 +990,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoCameraSmall:
 				if (!ClickUtil.isQuickClick(500)) {
 					takePhoto();
-					// AudioPlayUtil.playAudio(getApplicationContext(),
-					// FILE_TYPE_IMAGE);
+					AudioPlayUtil.playAudio(getApplicationContext(),
+							FILE_TYPE_IMAGE);
 				}
 				break;
 
@@ -1247,7 +1248,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				MyApplication.isVideoReording = false;
 			}
 		}
-		// AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 		setupRecordViews();
 		if (Constant.isDebug) {
 			MyLog.v("MyApplication.isVideoReording:"
