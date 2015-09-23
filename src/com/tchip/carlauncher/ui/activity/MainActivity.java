@@ -393,12 +393,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intentRoute);
 
 		// 碰撞侦测服务
-		boolean hasSensorWatchService = sharedPreferences.getBoolean("crashOn",
-				false);
-		if (hasSensorWatchService) {
-			Intent intentSensor = new Intent(this, SensorWatchService.class);
-			startService(intentSensor);
-		}
+		Intent intentSensor = new Intent(this, SensorWatchService.class);
+		startService(intentSensor);
 	}
 
 	private void initialCameraSurface() {
@@ -963,7 +959,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							mMuteState = Constant.Record.STATE_UNMUTE;
 							startSpeak(getResources().getString(
 									R.string.hint_video_mute_off));
-							editor.putBoolean("videoVoice", true);
+							editor.putBoolean("videoMute", false);
 							editor.commit();
 						}
 					} else if (mMuteState == Constant.Record.STATE_UNMUTE) {
@@ -971,7 +967,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							mMuteState = Constant.Record.STATE_MUTE;
 							startSpeak(getResources().getString(
 									R.string.hint_video_mute_on));
-							editor.putBoolean("videoVoice", false);
+							editor.putBoolean("videoMute", true);
 							editor.commit();
 						}
 					}
@@ -1451,18 +1447,18 @@ public class MainActivity extends Activity implements TachographCallback,
 		mPathState = Constant.Record.STATE_PATH_ZERO;
 		mSecondaryState = Constant.Record.STATE_SECONDARY_DISABLE;
 		mOverlapState = Constant.Record.STATE_OVERLAP_ZERO;
+
+		// 录音,静音;默认不录音
+		boolean videoMute = sharedPreferences.getBoolean("videoMute", true);
+		if (!videoMute) {
+			mMuteState = Constant.Record.STATE_UNMUTE;
+		} else {
+			mMuteState = Constant.Record.STATE_MUTE; // 不录音
+		}
+
 	}
 
 	private void refreshRecordButton() {
-		// 录音,静音;默认不录音
-		boolean videoVoice = sharedPreferences.getBoolean("videoVoice", false);
-		if (videoVoice) {
-			mMuteState = Constant.Record.STATE_UNMUTE;
-			setMute(false);
-		} else {
-			mMuteState = Constant.Record.STATE_MUTE; // 不录音
-			setMute(true);
-		}
 
 		// 视频尺寸
 		String videoSizeStr = sharedPreferences.getString("videoSize", "720");
@@ -1526,7 +1522,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					R.drawable.ui_camera_video_unlock));
 		}
 
-		// 静音
+		// 静音按钮
 		if (mMuteState == Constant.Record.STATE_MUTE) {
 			largeVideoMute.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_sound_off));
@@ -1749,6 +1745,13 @@ public class MainActivity extends Activity implements TachographCallback,
 				} else {
 					setDirectory(Constant.Path.SDCARD_1);
 				}
+
+				// 设置录像静音
+				if (mMuteState == Constant.Record.STATE_UNMUTE) {
+					setMute(false);
+				} else {
+					setMute(true);
+				}
 				return mMyRecorder.start();
 			}
 		}
@@ -1874,6 +1877,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 设置录像静音，需要已经初始化mMyRecorder
+	 * 
+	 * @param mute
+	 * @return
+	 */
 	private int setMute(boolean mute) {
 		if (mMyRecorder != null) {
 			return mMyRecorder.setMute(mute);
