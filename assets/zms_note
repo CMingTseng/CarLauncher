@@ -97,8 +97,8 @@ SharedPreferences-CarLauncher
 	(boolean)autoRecord		开机自动录像()
 	(String)videoQuality	视频质量(LOW-MIDDLE-*HIGH)
 	(String)videoSize		视频尺寸(*720-1080)
-	(String)videoTime		视频长度(3-*5-10)
-	(int)crashSensitive	碰撞侦测灵敏度(1,2,3,*4,5,6,7)
+	(String)videoTime		视频长度(1-*3)
+	(int)crashSensitive	碰撞侦测灵敏度(3,4,*5,6,7,8,9)
 	(boolean)crashOn		碰撞侦测开关(*false-true)
 	(boolean)videoVoice		是否录制声音
 	

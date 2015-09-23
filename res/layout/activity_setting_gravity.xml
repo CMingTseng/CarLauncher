@@ -67,8 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:layout_marginLeft="68dp"
-            android:layout_marginRight="68dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:background="@drawable/ui_file_remote_start"
             android:text="@string/setting_gravity_hint"
             android:textColor="#ffffff"
@@ -95,21 +95,13 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="-5dp"
                 android:gravity="center_horizontal"
-                android:text="0.8\n|" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_horizontal"
                 android:text="1.2\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="8dp"
                 android:gravity="center_horizontal"
                 android:text="1.6\n|" />
 
@@ -135,7 +127,7 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
-                android:text="2.8\n |" />
+                android:text="2.8\n|" />
 
             <TextView
                 android:layout_width="0dip"
@@ -144,6 +136,14 @@
                 android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
                 android:text="3.2\n |" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:gravity="center_horizontal"
+                android:text="3.6\n |" />
 
         </LinearLayout>
     </RelativeLayout>
