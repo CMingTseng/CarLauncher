@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -194,5 +195,9 @@ public class MultimediaActivity extends Activity {
 
 		// 更新最近播放音乐
 		updateRecentMusic();
+		
+		// 更新MediaStore
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+				Uri.parse("file://" + "/mnt/sdcard/tachograph")));
 	}
 }

@@ -174,11 +174,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					StorageUtil.RecursionDeleteFile(file);
 					MyLog.e("Delete video directory:tachograph !!!");
 
-					// 更新Media Database
-					sendBroadcast(new Intent(
-							Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-							Uri.parse("file://" + sdcardPath)));
-
 					editor.putBoolean("isFirstLaunch", false);
 					editor.commit();
 				} else {
@@ -1639,10 +1634,6 @@ public class MainActivity extends Activity implements TachographCallback,
 							MyLog.d("Delete Old Unlock Video:" + f.getName()
 									+ " Filed!!! Try:" + i);
 						}
-						// 更新Media Database
-						sendBroadcast(new Intent(
-								Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-								Uri.parse("file://" + sdcardPath)));
 					}
 					// 删除数据库记录
 					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
@@ -1657,10 +1648,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						File file = new File(sdcardPath + "tachograph/");
 						StorageUtil.RecursionDeleteFile(file);
 						MyLog.e("!!! Delete tachograph/ Directory");
-						// 更新Media Database
-						sendBroadcast(new Intent(
-								Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-								Uri.parse("file://" + sdcardPath)));
 
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						intSdFree = (int) sdFree;
@@ -1700,10 +1687,6 @@ public class MainActivity extends Activity implements TachographCallback,
 								MyLog.d("Delete Old lock Video:" + f.getName()
 										+ " Filed!!! Try:" + i);
 							}
-							// 更新Media Database
-							sendBroadcast(new Intent(
-									Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-									Uri.parse("file://" + sdcardPath)));
 						}
 						// 删除数据库记录
 						videoDb.deleteDriveVideoById(oldestVideoId);
