@@ -913,6 +913,7 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 					break;
 				}
 		}
+		allowShare = false;
 		menu.findItem(R.id.action_share).setVisible(allowShare);
 
 		return true;
