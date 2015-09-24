@@ -27,12 +27,14 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.lib.filemanager.Clipboard.ClipboardListener;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager.FavouritesListener;
 import com.tchip.carlauncher.lib.filemanager.NavDrawerAdapter.NavDrawerItem;
+import com.tchip.carlauncher.util.MyLog;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class FolderActivity extends Activity implements OnItemClickListener,
 		ClipboardListener, FavouritesListener {
+
 	public static class FolderNotOpenException extends Exception {
 
 	}
@@ -159,7 +161,7 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 		getActionBar().setDisplayUseLogoEnabled(false);
 		// getActionBar().setHomeAsUpIndicator(
 		// getResources().getDrawable(
-		//	R.drawable.shape_file_manager_back_transparent));
+		// R.drawable.shape_file_manager_back_transparent));
 
 		setupNavDrawer();
 		setupClipboardDrawer();
@@ -247,7 +249,13 @@ public class FolderActivity extends Activity implements OnItemClickListener,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			backToMain();
+			int pageIndex = getFragmentManager().getBackStackEntryCount();
+			MyLog.v("[FolderActivity]Count:" + pageIndex);
+			if (pageIndex > 0) {
+				goBack();
+			} else {
+				backToMain();
+			}
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
