@@ -15,6 +15,7 @@ import java.util.Date;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.MyLog;
 
 /**
@@ -81,7 +82,8 @@ public class SensorWatchService extends Service {
 							&& !MyApplication.isVideoLock) {
 						MyApplication.isVideoLock = true;
 						MyApplication.isCrashed = true;
-						startSpeak("检测到碰撞，视频加锁");
+						startSpeak(getResources().getString(
+								R.string.lock_video_in_case_crash));
 						MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
 								+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
 					}

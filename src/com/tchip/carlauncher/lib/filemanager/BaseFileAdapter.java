@@ -65,7 +65,12 @@ public class BaseFileAdapter extends RobotoAdapter<File> {
 				.getViewById(R.id.tvFileDetails);
 		ImageView imgIcon = viewHolder.getViewById(R.id.imgFileIcon);
 
-		tvFileName.setText(file.getName());
+		String strFileName = file.getName();
+		if ("sdcard0".equals(strFileName)) {
+			tvFileName.setText("internal");
+		} else {
+			tvFileName.setText(strFileName);
+		}
 
 		if (file.isDirectory()) {
 			int files = FileUtils.getNumFilesInFolder(file);
