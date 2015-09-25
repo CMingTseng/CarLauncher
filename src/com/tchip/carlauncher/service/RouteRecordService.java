@@ -112,26 +112,30 @@ public class RouteRecordService extends Service {
 	};
 
 	private void startRecordRoute() {
-
-		RoutePoint routePoint = new RoutePoint();
-		if (routeLng != 0.0 && routeLat != 0.0 && routeLng != 4.9E-324
-				&& routeLat != 4.9E-324) {
-			if (list.size() > 0
-					&& list.get(list.size() - 1).getLat() == routeLat
-					&& (list.get(list.size() - 1).getLng() == routeLng)) {
-				// 经纬度未改变
-				// MyLog.v("[RouteRecordService] Location is Not Change.");
-			} else {
-				routePoint.setLng(routeLng);
-				routePoint.setLat(routeLat);
-				MyLog.v("[RouteRecordService] Lat:" + routeLat + "-Lng:"
-						+ routeLng);
-				list.add(routePoint);
+		try {
+			RoutePoint routePoint = new RoutePoint();
+			if (routeLng != 0.0 && routeLat != 0.0 && routeLng != 4.9E-324
+					&& routeLat != 4.9E-324) {
+				if (list.size() > 0
+						&& list.get(list.size() - 1).getLat() == routeLat
+						&& (list.get(list.size() - 1).getLng() == routeLng)) {
+					// 经纬度未改变
+					// MyLog.v("[RouteRecordService] Location is Not Change.");
+				} else {
+					routePoint.setLng(routeLng);
+					routePoint.setLat(routeLat);
+					MyLog.v("[RouteRecordService] Lat:" + routeLat + "-Lng:"
+							+ routeLng);
+					list.add(routePoint);
+				}
 			}
-		}
-		// 1K轨迹点保存为1个文件
-		if (list.size() > 999 || MyApplication.isSleeping) {
-			saveRouteFile(list);
+			// 1K轨迹点保存为1个文件
+			if (list.size() > 999 || MyApplication.isSleeping) {
+				saveRouteFile(list);
+			}
+		} catch (Exception e) {
+			MyLog.e("[RouteRecordService]startRecordRoute catch exception:"
+					+ e.toString());
 		}
 	}
 
@@ -141,14 +145,19 @@ public class RouteRecordService extends Service {
 	 * @param list
 	 */
 	private void saveRouteFile(List<RoutePoint> list) {
-		if (list.size() >= 2) {
-			String saveString = adapter.setJsonString(list);
-			writeFileSdcard(getFilePath(), saveString);
-			MyLog.v("[RouteRecordService] save file with " + list.size()
-					+ " points");
-			list.clear();
-		} else {
-			MyLog.e("[RouteRecordService] list size is less than 2");
+		try {
+			if (list.size() >= 2) {
+				String saveString = adapter.setJsonString(list);
+				writeFileSdcard(getFilePath(), saveString);
+				MyLog.v("[RouteRecordService]saveRouteFile: save file with "
+						+ list.size() + " points");
+				list.clear();
+			} else {
+				MyLog.e("[RouteRecordService]saveRouteFile: list size is less than 2");
+			}
+		} catch (Exception e) {
+			MyLog.e("[RouteRecordService]saveRouteFile: catch exception:"
+					+ e.toString());
 		}
 	}
 
@@ -163,6 +172,8 @@ public class RouteRecordService extends Service {
 			fin.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			MyLog.e("[RouteRecordService]readFileSdcard catch exception:"
+					+ e.toString());
 		}
 		if (res.equals("")) {
 			res = " ";
@@ -185,6 +196,8 @@ public class RouteRecordService extends Service {
 			fout.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			MyLog.e("[RouteRecordService]writeFileSdcard catch exception:"
+					+ e.toString());
 		}
 	}
 

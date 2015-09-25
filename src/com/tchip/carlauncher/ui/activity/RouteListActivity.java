@@ -143,10 +143,9 @@ public class RouteListActivity extends Activity {
 					overridePendingTransition(R.anim.zms_translate_left_out,
 							R.anim.zms_translate_left_in);
 					break;
+
 				case 1:
 					// 删除
-					// File file = new File(ROUTE_PATH
-					// + routeAdapter.getItem(position));
 					File file = new File(ROUTE_PATH
 							+ fileNameList.get(position));
 					file.delete();
@@ -159,9 +158,8 @@ public class RouteListActivity extends Activity {
 						_db.deleteRouteDistanceByName(fileNameList
 								.get(position));
 					} catch (Exception e) {
-						Toast.makeText(getApplicationContext(), e.toString(),
-								Toast.LENGTH_SHORT).show();
-
+						MyLog.e("[RouteListActivity]onMenuItemClick,case 1 catch exception:"
+								+ e.toString());
 					}
 					Toast.makeText(getApplicationContext(), "轨迹已删除",
 							Toast.LENGTH_SHORT).show();
@@ -233,7 +231,7 @@ public class RouteListActivity extends Activity {
 				showRouteList("20");
 				tvFilterState.setText("轨迹未筛选");
 				break;
-				
+
 			case R.id.btnToMainFromRouteList:
 				backToMain();
 				break;
@@ -390,7 +388,7 @@ public class RouteListActivity extends Activity {
 	 * @param position
 	 */
 	private void DeleteUpdateList(int position) {
-		 routeAdapter.remove(routeAdapter.getItem(position));
+		routeAdapter.remove(routeAdapter.getItem(position));
 	}
 
 	@Override

@@ -148,19 +148,24 @@ public class WeatherService extends Service {
 	};
 
 	private void getWeather(String cityStr) {
-		int ret = 0;// 函数调用返回值
+		try {
+			int ret = 0;// 函数调用返回值
 
-		String text = cityStr + "天气";
-		MyLog.v("WeatherService:Get city:" + cityStr);
+			String text = cityStr + "天气";
+			MyLog.v("WeatherService:Get city:" + cityStr);
 
-		if (mTextUnderstander.isUnderstanding()) {
-			mTextUnderstander.cancel();
-			// showTip("取消");
-		} else {
-			ret = mTextUnderstander.understandText(text, textListener);
-			if (ret != 0) {
-				// showTip("语义理解失败,错误码:" + ret);
+			if (mTextUnderstander.isUnderstanding()) {
+				mTextUnderstander.cancel();
+				// showTip("取消");
+			} else {
+				ret = mTextUnderstander.understandText(text, textListener);
+				if (ret != 0) {
+					// showTip("语义理解失败,错误码:" + ret);
+				}
 			}
+		} catch (Exception e) {
+			MyLog.e("[WeatherService]getWeather catch exception:"
+					+ e.toString());
 		}
 	}
 

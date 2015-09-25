@@ -1212,42 +1212,47 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 开启或关闭录像
 	 */
 	private void startOrStopRecord() {
-		if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
-			if (MyApplication.isSleeping) {
-				startSpeak("正在休眠，无法录像");
-			} else {
-				if (!MyApplication.isMainForeground) {
-					// 录像需切换到预览界面且点亮屏幕，否则无法录像
-					// 发送Home键，回到主界面
-					sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-							"value", "home"));
-					// 点亮屏幕
-					SettingUtil.lightScreen(getApplicationContext());
-
-					// 录像线程
-					new Thread(new RealRecordThread()).start();
+		try {
+			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+				if (MyApplication.isSleeping) {
+					startSpeak("正在休眠，无法录像");
 				} else {
-					// 直接开始录像
-					if (startRecorder() == 0) {
-						mRecordState = Constant.Record.STATE_RECORD_STARTED;
-						MyApplication.isVideoReording = true;
+					if (!MyApplication.isMainForeground) {
+						// 录像需切换到预览界面且点亮屏幕，否则无法录像
+						// 发送Home键，回到主界面
+						sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "home"));
+						// 点亮屏幕
+						SettingUtil.lightScreen(getApplicationContext());
+
+						// 录像线程
+						new Thread(new RealRecordThread()).start();
 					} else {
-						if (Constant.isDebug)
-							MyLog.e("Start Record Failed");
+						// 直接开始录像
+						if (startRecorder() == 0) {
+							mRecordState = Constant.Record.STATE_RECORD_STARTED;
+							MyApplication.isVideoReording = true;
+						} else {
+							if (Constant.isDebug)
+								MyLog.e("Start Record Failed");
+						}
 					}
 				}
+			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+				if (stopRecorder() == 0) {
+					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					MyApplication.isVideoReording = false;
+				}
 			}
-		} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
-			if (stopRecorder() == 0) {
-				mRecordState = Constant.Record.STATE_RECORD_STOPPED;
-				MyApplication.isVideoReording = false;
+			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+			setupRecordViews();
+			if (Constant.isDebug) {
+				MyLog.v("MyApplication.isVideoReording:"
+						+ MyApplication.isVideoReording);
 			}
-		}
-		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
-		setupRecordViews();
-		if (Constant.isDebug) {
-			MyLog.v("MyApplication.isVideoReording:"
-					+ MyApplication.isVideoReording);
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]startOrStopRecord catch exception: "
+					+ e.toString());
 		}
 	}
 
@@ -1339,14 +1344,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		}
 	};
-
-	/**
-	 * 更新天气
-	 */
-	private void startWeatherService() {
-		Intent intent = new Intent(this, WeatherService.class);
-		startService(intent);
-	}
 
 	/**
 	 * 释放Camera
@@ -1701,7 +1698,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			/*
 			 * 异常原因：1.文件由用户手动删除
 			 */
-			MyLog.e("[MainActivity]deleteOldestUnlockVideo:Catch Exception!");
+			MyLog.e("[MainActivity]deleteOldestUnlockVideo:Catch Exception:"
+					+ e.toString());
 			e.printStackTrace();
 			return true;
 		}

@@ -367,7 +367,7 @@
     <string name="download_state_default">已下载:--</string>
 
     <!-- RouteShowActivity -->
-    <string name="no_route_file">轨迹文件不存在</string>
+    <string name="no_route_file">未找到对应轨迹文件</string>
     <string name="share_route_screenshot_to">分享轨迹图到</string>
     <string name="share_route">分享轨迹</string>
     <string name="route_point_less">轨迹点数目小于2个</string>

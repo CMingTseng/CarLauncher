@@ -50,6 +50,7 @@ import com.tchip.carlauncher.model.RouteDistance;
 import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.model.RoutePoint;
 import com.tchip.carlauncher.model.Typefaces;
+import com.tchip.carlauncher.util.MyLog;
 
 public class RouteShowActivity extends Activity {
 	private MapView mMapView;
@@ -122,7 +123,6 @@ public class RouteShowActivity extends Activity {
 		mBaiduMap = mMapView.getMap();
 		mBaiduMap.setOnMarkerClickListener(new MyOnMarkerClickListener());
 		addRouteToMap(filePath);
-
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -221,71 +221,78 @@ public class RouteShowActivity extends Activity {
 	 * @param path
 	 */
 	public void addRouteToMap(String path) {
-		// 初始化轨迹点
-		List<LatLng> points = getRoutePoints(path);
+		try {
+			// 初始化轨迹点
+			List<LatLng> points = getRoutePoints(path);
 
-		if (points.size() < 2) {
-			Toast.makeText(getApplicationContext(),
-					getResources().getString(R.string.route_point_less),
-					Toast.LENGTH_SHORT).show();
-			finish();
-		} else {
-			// 绘制轨迹
-			OverlayOptions ooPolyline = new PolylineOptions().width(5)
-					.color(0xAA0000FF).points(points);
-			mBaiduMap.addOverlay(ooPolyline);
+			if (points.size() < 2) {
+				Toast.makeText(getApplicationContext(),
+						getResources().getString(R.string.route_point_less),
+						Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				// 绘制轨迹
+				OverlayOptions ooPolyline = new PolylineOptions().width(5)
+						.color(0xAA0000FF).points(points);
+				mBaiduMap.addOverlay(ooPolyline);
 
-			// 定位地图到轨迹起点位置
-			MapStatusUpdate u1 = MapStatusUpdateFactory
-					.newLatLng(points.get(1));
-			mBaiduMap.setMapStatus(u1);
+				// 定位地图到轨迹起点位置
+				MapStatusUpdate u1 = MapStatusUpdateFactory.newLatLng(points
+						.get(1));
+				mBaiduMap.setMapStatus(u1);
 
-			MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(getZoomLevel());
-			mBaiduMap.animateMapStatus(msu);
+				MapStatusUpdate msu = MapStatusUpdateFactory
+						.zoomTo(getZoomLevel());
+				mBaiduMap.animateMapStatus(msu);
 
-			// 绘制起始点Marker
-			LatLng llStart = points.get(0);
-			LatLng llEnd = points.get(points.size() - 1);
-			OverlayOptions ooStart = new MarkerOptions().position(llStart)
-					.icon(iconStart).zIndex(9).draggable(true);
-			mMarkerStart = (Marker) (mBaiduMap.addOverlay(ooStart));
-			OverlayOptions ooEnd = new MarkerOptions().position(llEnd)
-					.icon(iconEnd).zIndex(9).draggable(true);
-			mMarkerEnd = (Marker) (mBaiduMap.addOverlay(ooEnd));
+				// 绘制起始点Marker
+				LatLng llStart = points.get(0);
+				LatLng llEnd = points.get(points.size() - 1);
+				OverlayOptions ooStart = new MarkerOptions().position(llStart)
+						.icon(iconStart).zIndex(9).draggable(true);
+				mMarkerStart = (Marker) (mBaiduMap.addOverlay(ooStart));
+				OverlayOptions ooEnd = new MarkerOptions().position(llEnd)
+						.icon(iconEnd).zIndex(9).draggable(true);
+				mMarkerEnd = (Marker) (mBaiduMap.addOverlay(ooEnd));
 
-			double linearDistance = 0.0; // 直线距离
-			double driveDistance = 0.0; // 轨迹距离
+				double linearDistance = 0.0; // 直线距离
+				double driveDistance = 0.0; // 轨迹距离
 
-			try { // 轨迹距离信息已保存，直接读取数据库
-				RouteDistance routeDistance = _db
-						.getRouteDistanceByName(filePath);
-				linearDistance = routeDistance.getLinear();
-				driveDistance = routeDistance.getDrive();
+				try { // 轨迹距离信息已保存，直接读取数据库
+					RouteDistance routeDistance = _db
+							.getRouteDistanceByName(filePath);
+					linearDistance = routeDistance.getLinear();
+					driveDistance = routeDistance.getDrive();
 
-			} catch (Exception e) {
-				linearDistance = DistanceUtil.getDistance(llStart, llEnd);
-				for (int i = 0; i < points.size() - 1; i++) {
-					driveDistance = driveDistance
-							+ DistanceUtil.getDistance(points.get(i),
-									points.get(i + 1));
+				} catch (Exception e) {
+					linearDistance = DistanceUtil.getDistance(llStart, llEnd);
+					for (int i = 0; i < points.size() - 1; i++) {
+						driveDistance = driveDistance
+								+ DistanceUtil.getDistance(points.get(i),
+										points.get(i + 1));
+					}
+					RouteDistance newRouteDistance = new RouteDistance(
+							filePath, linearDistance, driveDistance);
+					_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
+				} finally {
+					textDistance.setVisibility(View.VISIBLE);
+					textDistance.setText(getResources().getString(
+							R.string.linear_diatance)
+							+ ":"
+							+ (int) linearDistance
+							+ getResources().getString(R.string.meter)
+							+ getResources().getString(R.string.drive_distance)
+							+ (int) driveDistance
+							+ getResources().getString(R.string.meter));
+					textDistance.setTypeface(Typefaces.get(this,
+							Constant.Path.FONT
+									+ "Font-Helvetica-Neue-LT-Pro.otf"));
+					_db.close();
 				}
-				RouteDistance newRouteDistance = new RouteDistance(filePath,
-						linearDistance, driveDistance);
-				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
-			} finally {
-				textDistance.setVisibility(View.VISIBLE);
-				textDistance.setText(getResources().getString(
-						R.string.linear_diatance)
-						+ ":"
-						+ (int) linearDistance
-						+ getResources().getString(R.string.meter)
-						+ getResources().getString(R.string.drive_distance)
-						+ (int) driveDistance
-						+ getResources().getString(R.string.meter));
-				textDistance.setTypeface(Typefaces.get(this, Constant.Path.FONT
-						+ "Font-Helvetica-Neue-LT-Pro.otf"));
-				_db.close();
 			}
+		} catch (Exception e) {
+			MyLog.e("[RouteShowActivity]addRouteToMap catch exception:"
+					+ e.toString());
 		}
 	}
 
@@ -317,68 +324,77 @@ public class RouteShowActivity extends Activity {
 	 * @return
 	 */
 	public List<RoutePoint> optimizeRoutePoints(List<RoutePoint> inPoint) {
-		int size = inPoint.size();
-		int i;
-		if (size < 5) {
-			return inPoint;
-		} else {
-			// 经度优化
-			inPoint.get(0)
-					.setLat((3.0 * inPoint.get(0).getLat() + 2.0
-							* inPoint.get(1).getLat() + inPoint.get(2).getLat() - inPoint
-							.get(4).getLat()) / 5.0);
-			inPoint.get(1)
-					.setLat((4.0 * inPoint.get(0).getLat() + 3.0
-							* inPoint.get(1).getLat() + 2
-							* inPoint.get(2).getLat() + inPoint.get(3).getLat()) / 10.0);
+		try {
+			int size = inPoint.size();
+			int i;
+			if (size < 5) {
+				return inPoint;
+			} else {
+				// 经度优化
+				inPoint.get(0).setLat(
+						(3.0 * inPoint.get(0).getLat() + 2.0
+								* inPoint.get(1).getLat()
+								+ inPoint.get(2).getLat() - inPoint.get(4)
+								.getLat()) / 5.0);
+				inPoint.get(1).setLat(
+						(4.0 * inPoint.get(0).getLat() + 3.0
+								* inPoint.get(1).getLat() + 2
+								* inPoint.get(2).getLat() + inPoint.get(3)
+								.getLat()) / 10.0);
 
-			for (i = 2; i <= size - 3; i++) {
-				inPoint.get(i).setLat(
-						(inPoint.get(i - 2).getLat()
-								+ inPoint.get(i - 1).getLat()
-								+ inPoint.get(i).getLat()
-								+ inPoint.get(i + 1).getLat() + inPoint.get(
-								i + 2).getLat()) / 5.0);
+				for (i = 2; i <= size - 3; i++) {
+					inPoint.get(i).setLat(
+							(inPoint.get(i - 2).getLat()
+									+ inPoint.get(i - 1).getLat()
+									+ inPoint.get(i).getLat()
+									+ inPoint.get(i + 1).getLat() + inPoint
+									.get(i + 2).getLat()) / 5.0);
+				}
+				inPoint.get(size - 2).setLat(
+						(4.0 * inPoint.get(size - 1).getLat() + 3.0
+								* inPoint.get(size - 2).getLat() + 2
+								* inPoint.get(size - 3).getLat() + inPoint.get(
+								size - 4).getLat()) / 10.0);
+				inPoint.get(size - 1).setLat(
+						(3.0 * inPoint.get(size - 1).getLat() + 2.0
+								* inPoint.get(size - 2).getLat()
+								+ inPoint.get(size - 3).getLat() - inPoint.get(
+								size - 5).getLat()) / 5.0);
+
+				// 纬度优化
+				inPoint.get(0).setLng(
+						(3.0 * inPoint.get(0).getLng() + 2.0
+								* inPoint.get(1).getLng()
+								+ inPoint.get(2).getLng() - inPoint.get(4)
+								.getLng()) / 5.0);
+				inPoint.get(1).setLng(
+						(4.0 * inPoint.get(0).getLng() + 3.0
+								* inPoint.get(1).getLng() + 2
+								* inPoint.get(2).getLng() + inPoint.get(3)
+								.getLng()) / 10.0);
+
+				for (i = 2; i <= size - 3; i++) {
+					inPoint.get(i).setLng(
+							(inPoint.get(i - 2).getLng()
+									+ inPoint.get(i - 1).getLng()
+									+ inPoint.get(i).getLng()
+									+ inPoint.get(i + 1).getLng() + inPoint
+									.get(i + 2).getLng()) / 5.0);
+				}
+				inPoint.get(size - 2).setLng(
+						(4.0 * inPoint.get(size - 1).getLng() + 3.0
+								* inPoint.get(size - 2).getLng() + 2
+								* inPoint.get(size - 3).getLng() + inPoint.get(
+								size - 4).getLng()) / 10.0);
+				inPoint.get(size - 1).setLng(
+						(3.0 * inPoint.get(size - 1).getLng() + 2.0
+								* inPoint.get(size - 2).getLng()
+								+ inPoint.get(size - 3).getLng() - inPoint.get(
+								size - 5).getLng()) / 5.0);
 			}
-			inPoint.get(size - 2).setLat(
-					(4.0 * inPoint.get(size - 1).getLat() + 3.0
-							* inPoint.get(size - 2).getLat() + 2
-							* inPoint.get(size - 3).getLat() + inPoint.get(
-							size - 4).getLat()) / 10.0);
-			inPoint.get(size - 1).setLat(
-					(3.0 * inPoint.get(size - 1).getLat() + 2.0
-							* inPoint.get(size - 2).getLat()
-							+ inPoint.get(size - 3).getLat() - inPoint.get(
-							size - 5).getLat()) / 5.0);
-
-			// 纬度优化
-			inPoint.get(0)
-					.setLng((3.0 * inPoint.get(0).getLng() + 2.0
-							* inPoint.get(1).getLng() + inPoint.get(2).getLng() - inPoint
-							.get(4).getLng()) / 5.0);
-			inPoint.get(1)
-					.setLng((4.0 * inPoint.get(0).getLng() + 3.0
-							* inPoint.get(1).getLng() + 2
-							* inPoint.get(2).getLng() + inPoint.get(3).getLng()) / 10.0);
-
-			for (i = 2; i <= size - 3; i++) {
-				inPoint.get(i).setLng(
-						(inPoint.get(i - 2).getLng()
-								+ inPoint.get(i - 1).getLng()
-								+ inPoint.get(i).getLng()
-								+ inPoint.get(i + 1).getLng() + inPoint.get(
-								i + 2).getLng()) / 5.0);
-			}
-			inPoint.get(size - 2).setLng(
-					(4.0 * inPoint.get(size - 1).getLng() + 3.0
-							* inPoint.get(size - 2).getLng() + 2
-							* inPoint.get(size - 3).getLng() + inPoint.get(
-							size - 4).getLng()) / 10.0);
-			inPoint.get(size - 1).setLng(
-					(3.0 * inPoint.get(size - 1).getLng() + 2.0
-							* inPoint.get(size - 2).getLng()
-							+ inPoint.get(size - 3).getLng() - inPoint.get(
-							size - 5).getLng()) / 5.0);
+		} catch (Exception e) {
+			MyLog.e("[RouteShowActivity]optimizeRoutePoints catch exception:"
+					+ e.toString());
 		}
 		return inPoint;
 	}
