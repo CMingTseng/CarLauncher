@@ -13,6 +13,7 @@ import com.tchip.carlauncher.model.RouteList;
 import com.tchip.carlauncher.model.SwipeMenu;
 import com.tchip.carlauncher.model.SwipeMenuItem;
 import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.view.ButtonFlat;
 import com.tchip.carlauncher.view.SwipeMenuListView;
 import com.tchip.carlauncher.view.SwipeMenuListView.OnMenuItemClickListener;
@@ -55,6 +56,8 @@ public class RouteListActivity extends Activity {
 	private ArrayList<RouteList> routeArray;
 	private RouteListAdapter routeAdapter;
 
+	private String nowFilter = "20";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +78,7 @@ public class RouteListActivity extends Activity {
 		btnShowAll.setOnClickListener(new MyOnClickListener());
 
 		routeList = (SwipeMenuListView) findViewById(R.id.routeList);
-		showRouteList("20");
+		showRouteList(nowFilter);
 		tvFilterState.setText("轨迹未筛选");
 
 		Button btnToMainFromRouteList = (Button) findViewById(R.id.btnToMainFromRouteList);
@@ -135,6 +138,7 @@ public class RouteListActivity extends Activity {
 					Intent intent = new Intent(RouteListActivity.this,
 							RouteShowActivity.class);
 					intent.putExtra("filePath", fileNameList.get(position));
+					MyLog.v("[FileName]" + fileNameList.get(position));
 					startActivity(intent);
 					overridePendingTransition(R.anim.zms_translate_left_out,
 							R.anim.zms_translate_left_in);
@@ -146,7 +150,9 @@ public class RouteListActivity extends Activity {
 					File file = new File(ROUTE_PATH
 							+ fileNameList.get(position));
 					file.delete();
-					DeleteUpdateList(position);
+					// DeleteUpdateList(position);
+					// TODO:更新列表
+					showRouteList(nowFilter);
 					try { // 若数据库存在轨迹距离信息，同步删除
 						RouteDistanceDbHelper _db = new RouteDistanceDbHelper(
 								getApplicationContext());
@@ -227,6 +233,7 @@ public class RouteListActivity extends Activity {
 				showRouteList("20");
 				tvFilterState.setText("轨迹未筛选");
 				break;
+				
 			case R.id.btnToMainFromRouteList:
 				backToMain();
 				break;
@@ -234,6 +241,11 @@ public class RouteListActivity extends Activity {
 		}
 	}
 
+	/**
+	 * 显示筛选轨迹文件
+	 * 
+	 * @param datePrefix
+	 */
 	private void showRouteList(String datePrefix) {
 		try {
 			tvNoFile.setVisibility(View.GONE);
@@ -304,7 +316,7 @@ public class RouteListActivity extends Activity {
 			tvNoFile.setVisibility(View.VISIBLE); // 无轨迹文件
 			String strNoRouteFile = "暂无轨迹文件";
 			tvNoFile.setText(strNoRouteFile);
-			//startSpeak(strNoRouteFile);
+			// startSpeak(strNoRouteFile);
 			btnShowAll.setVisibility(View.INVISIBLE);
 			routeList.setVisibility(View.INVISIBLE);
 		}
@@ -327,6 +339,7 @@ public class RouteListActivity extends Activity {
 			tvFilterState.setText("显示" + year + "-" + strMonth + "-" + strDay
 					+ "轨迹");
 
+			nowFilter = strDate;
 			showRouteList(strDate);
 		}
 	}
@@ -377,7 +390,7 @@ public class RouteListActivity extends Activity {
 	 * @param position
 	 */
 	private void DeleteUpdateList(int position) {
-		routeAdapter.remove(routeAdapter.getItem(position));
+		 routeAdapter.remove(routeAdapter.getItem(position));
 	}
 
 	@Override
@@ -407,83 +420,6 @@ public class RouteListActivity extends Activity {
 		overridePendingTransition(R.anim.zms_translate_down_out,
 				R.anim.zms_translate_down_in);
 	}
-
-	// Swipe Menu START
-
-	// private void delete(ApplicationInfo item) {
-	// // delete app
-	// try {
-	// Intent intent = new Intent(Intent.ACTION_DELETE);
-	// intent.setData(Uri.fromParts("package", item.packageName, null));
-	// startActivity(intent);
-	// } catch (Exception e) {
-	// }
-	// }
-
-	// private void open(ApplicationInfo item) {
-	// // open app
-	// Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
-	// resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-	// resolveIntent.setPackage(item.packageName);
-	// List<ResolveInfo> resolveInfoList = getPackageManager()
-	// .queryIntentActivities(resolveIntent, 0);
-	// if (resolveInfoList != null && resolveInfoList.size() > 0) {
-	// ResolveInfo resolveInfo = resolveInfoList.get(0);
-	// String activityPackageName = resolveInfo.activityInfo.packageName;
-	// String className = resolveInfo.activityInfo.name;
-	//
-	// Intent intent = new Intent(Intent.ACTION_MAIN);
-	// intent.addCategory(Intent.CATEGORY_LAUNCHER);
-	// ComponentName componentName = new ComponentName(
-	// activityPackageName, className);
-	//
-	// intent.setComponent(componentName);
-	// startActivity(intent);
-	// }
-	// }
-
-	// class AppAdapter extends BaseAdapter {
-	//
-	// @Override
-	// public int getCount() {
-	// return mAppList.size();
-	// }
-	//
-	// @Override
-	// public ApplicationInfo getItem(int position) {
-	// return mAppList.get(position);
-	// }
-	//
-	// @Override
-	// public long getItemId(int position) {
-	// return position;
-	// }
-	//
-	// @Override
-	// public View getView(int position, View convertView, ViewGroup parent) {
-	// if (convertView == null) {
-	// convertView = View.inflate(getApplicationContext(),
-	// R.layout.item_list_app, null);
-	// new ViewHolder(convertView);
-	// }
-	// ViewHolder holder = (ViewHolder) convertView.getTag();
-	// ApplicationInfo item = getItem(position);
-	// holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
-	// holder.tv_name.setText(item.loadLabel(getPackageManager()));
-	// return convertView;
-	// }
-	//
-	// class ViewHolder {
-	// ImageView iv_icon;
-	// TextView tv_name;
-	//
-	// public ViewHolder(View view) {
-	// iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
-	// tv_name = (TextView) view.findViewById(R.id.tv_name);
-	// view.setTag(this);
-	// }
-	// }
-	// }
 
 	private int dp2px(int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
