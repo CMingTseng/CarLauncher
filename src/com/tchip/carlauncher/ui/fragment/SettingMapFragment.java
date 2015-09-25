@@ -3,7 +3,6 @@ package com.tchip.carlauncher.ui.fragment;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.MainActivity;
-import com.tchip.carlauncher.ui.activity.OfflineBaiduMapActivity;
 import com.tchip.carlauncher.ui.dialog.SettingMapNavigationDialog;
 import com.tchip.carlauncher.ui.dialog.SettingMapRouteRecordDialog;
 import com.tchip.carlauncher.ui.dialog.SettingMapRouteSmoothDialog;
@@ -159,9 +158,6 @@ public class SettingMapFragment extends Fragment {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutRippleOfflineMap:
-				Intent intentOffline = new Intent(getActivity(),
-						OfflineBaiduMapActivity.class);
-				startActivity(intentOffline);
 				break;
 			case R.id.layoutRippleNavi:
 				SettingMapNavigationDialog mapNavigationDialog = new SettingMapNavigationDialog(

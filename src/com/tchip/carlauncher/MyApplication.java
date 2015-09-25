@@ -1,19 +1,15 @@
 package com.tchip.carlauncher;
 
-import java.io.File;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
 import com.tchip.carlauncher.lib.filemanager.AppPreferences;
 import com.tchip.carlauncher.lib.filemanager.FavouritesManager;
 import com.tchip.carlauncher.lib.filemanager.FileIconResolver;
-import com.tchip.carlauncher.service.MusicServiceManager;
-import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 import com.tchip.carlauncher.util.MyLog;
 
 public class MyApplication extends Application {
@@ -29,7 +25,6 @@ public class MyApplication extends Application {
 
 	// Music
 	public static boolean mIsSleepClockSetting = false;
-	public static MusicServiceManager mServiceManager = null;
 	private static String rootPath = "/mymusic";
 	public static String lrcPath = "/lrc";
 	public static String nowPlayMusic = "";
@@ -95,10 +90,6 @@ public class MyApplication extends Application {
 			MyLog.e("[MyApplication]SDKInitializer.initialize: Catch Exception!");
 		}
 		// }
-
-		// Music
-		mServiceManager = new MusicServiceManager(this);
-		initPath();
 	}
 
 	/**
@@ -115,24 +106,6 @@ public class MyApplication extends Application {
 		} catch (Exception e) {
 			MyLog.e("[MyApplication]initialCrashData: Catch Exception!"
 					+ e.getMessage());
-		}
-	}
-
-	private void initPath() {
-		try {
-			String ROOT = "";
-			if (Environment.getExternalStorageState().equals(
-					Environment.MEDIA_MOUNTED)) {
-				ROOT = Environment.getExternalStorageDirectory().getPath();
-			}
-			rootPath = ROOT + rootPath;
-			lrcPath = rootPath + lrcPath;
-			File lrcFile = new File(lrcPath);
-			if (lrcFile.exists()) {
-				lrcFile.mkdirs();
-			}
-		} catch (Exception e) {
-			MyLog.e("[MyApplication]initPath: Catch Exception!");
 		}
 	}
 

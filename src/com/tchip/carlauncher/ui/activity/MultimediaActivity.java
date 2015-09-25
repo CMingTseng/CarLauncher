@@ -1,9 +1,7 @@
 package com.tchip.carlauncher.ui.activity;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.model.MusicInfo;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -22,8 +20,6 @@ import android.widget.TextView;
 
 public class MultimediaActivity extends Activity {
 
-	private TextView textRecent, textRecentHint;
-	private RelativeLayout layoutMusicRecent;
 
 	private SharedPreferences preferences;
 	private Editor editor;
@@ -56,11 +52,6 @@ public class MultimediaActivity extends Activity {
 		RelativeLayout layoutMusic = (RelativeLayout) findViewById(R.id.layoutMusic);
 		layoutMusic.setOnClickListener(new MyOnClickListener());
 
-		textRecent = (TextView) findViewById(R.id.textRecent);
-		textRecentHint = (TextView) findViewById(R.id.textRecentHint);
-		layoutMusicRecent = (RelativeLayout) findViewById(R.id.layoutMusicRecent);
-		updateRecentMusic();
-
 		// 视频
 		RelativeLayout layoutVideo = (RelativeLayout) findViewById(R.id.layoutVideo);
 		layoutVideo.setOnClickListener(new MyOnClickListener());
@@ -69,37 +60,6 @@ public class MultimediaActivity extends Activity {
 		Button btnToMainFromMultimedia = (Button) findViewById(R.id.btnBack);
 		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
 
-		// 搜索
-		// Button btnSearch = (Button) findViewById(R.id.btnSearch);
-		// btnSearch.setOnClickListener(new MyOnClickListener());
-	}
-
-	private void updateRecentMusic() {
-		String nowPlayMusic = MyApplication.nowPlayMusic;
-		if (MyApplication.mServiceManager != null
-				&& MyApplication.mServiceManager.getPlayState() == Constant.Music.MPS_PLAYING
-				&& nowPlayMusic != null && nowPlayMusic.trim().length() > 0) {
-			MusicInfo musicNow = MyApplication.mServiceManager.getCurMusic();
-			MyApplication.nowPlayMusic = musicNow.artist + "-"
-					+ musicNow.musicName;
-
-			textRecent.setText(MyApplication.nowPlayMusic);
-			layoutMusicRecent.setVisibility(View.VISIBLE);
-			textRecentHint.setText(getResources().getString(
-					R.string.music_play_now));
-
-			editor.putString("rencentMusicList", MyApplication.nowPlayMusic);
-			editor.commit();
-		} else {
-			nowPlayMusic = preferences.getString("rencentMusicList", "NULL");
-			if (!"NULL".equals(nowPlayMusic)) {
-				layoutMusicRecent.setVisibility(View.VISIBLE);
-				textRecent.setText(nowPlayMusic);
-				textRecentHint.setText(getResources().getString(
-						R.string.music_play_recent));
-			} else
-				layoutMusicRecent.setVisibility(View.INVISIBLE);
-		}
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -139,11 +99,7 @@ public class MultimediaActivity extends Activity {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				} else {
-					Intent intentMusic = new Intent(getApplicationContext(),
-							MusicMainContentActivity.class);
-					startActivity(intentMusic);
-				}
+				} 
 				break;
 
 			case R.id.layoutVideo:
@@ -192,9 +148,6 @@ public class MultimediaActivity extends Activity {
 		super.onResume();
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-		// 更新最近播放音乐
-		updateRecentMusic();
 		
 		// 更新MediaStore
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,

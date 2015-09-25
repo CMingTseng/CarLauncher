@@ -131,46 +131,6 @@
                         android:visibility="gone" />
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/layoutMusicRecent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <ImageView
-                        android:id="@+id/imageShadowRecent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:visibility="gone"
-                        android:src="@drawable/ui_media_music_shadow_recent" />
-
-                    <TextView
-                        android:id="@+id/textRecent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginLeft="10dp"
-                        android:maxEms="12"
-                        android:singleLine="true"
-                        android:text="Nothing&apos;s Gonna Change My Love For You"
-                        android:textColor="#ffffff"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/textRecentHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@id/textRecent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/music_play_now"
-                        android:textColor="#ffffff"
-                        android:textSize="18sp" />
-                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

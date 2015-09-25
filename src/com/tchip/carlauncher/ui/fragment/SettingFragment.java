@@ -4,7 +4,6 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
 import com.tchip.carlauncher.ui.activity.SettingGravityActivity;
-import com.tchip.carlauncher.ui.activity.OfflineBaiduMapUpdateActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemUsbActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
@@ -204,9 +203,6 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutCopyMap:
-				Intent intentCopyMap = new Intent(context,
-						OfflineBaiduMapUpdateActivity.class);
-				startActivity(intentCopyMap);
 				break;
 
 			case R.id.layoutRippleDisplay:
