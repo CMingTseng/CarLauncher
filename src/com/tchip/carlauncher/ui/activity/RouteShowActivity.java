@@ -17,6 +17,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,7 +27,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -51,6 +52,7 @@ import com.tchip.carlauncher.model.RouteDistanceDbHelper;
 import com.tchip.carlauncher.model.RoutePoint;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.util.MyLog;
+import com.tchip.carlauncher.view.AudioRecordDialog;
 
 public class RouteShowActivity extends Activity {
 	private MapView mMapView;
@@ -65,6 +67,8 @@ public class RouteShowActivity extends Activity {
 	public double mRouteLongitude = 0.0;
 
 	private final String ROUTE_PATH = Constant.RouteTrack.PATH;
+
+	// 当前轨迹的路径
 	private String filePath = "";
 	private RouteAdapter routeAdapter = new RouteAdapter();
 
@@ -77,6 +81,8 @@ public class RouteShowActivity extends Activity {
 	BitmapDescriptor iconEnd = BitmapDescriptorFactory
 			.fromResource(R.drawable.icon_en);
 
+	private AudioRecordDialog audioRecordDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,6 +94,8 @@ public class RouteShowActivity extends Activity {
 		_db = new RouteDistanceDbHelper(getApplicationContext());
 		sharedPreferences = getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+		audioRecordDialog = new AudioRecordDialog(RouteShowActivity.this);
 
 		btnShare = (Button) findViewById(R.id.btnShare);
 		btnShare.setOnClickListener(new MyOnClickListener());
@@ -112,17 +120,21 @@ public class RouteShowActivity extends Activity {
 
 		mMapView = (MapView) findViewById(R.id.routeMap);
 
-		// 去掉缩放控件和百度Logo
+		// 去掉百度Logo
 		int count = mMapView.getChildCount();
 		for (int i = 0; i < count; i++) {
 			View child = mMapView.getChildAt(i);
-			if (child instanceof ImageView || child instanceof ZoomControls) {
+			if (child instanceof ImageView) {
 				child.setVisibility(View.INVISIBLE);
+				// ((ImageView)
+				// child).setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
 			}
 		}
 		mBaiduMap = mMapView.getMap();
 		mBaiduMap.setOnMarkerClickListener(new MyOnMarkerClickListener());
-		addRouteToMap(filePath);
+		// addRouteToMap(filePath);
+		audioRecordDialog.showLoadDialog();
+		new Thread(new DrawRouteThread()).start();
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
@@ -215,85 +227,128 @@ public class RouteShowActivity extends Activity {
 		return routeAdapter.getJsonString(res);
 	}
 
+	private List<LatLng> points;
+	private double linearDistance = 0.0; // 直线距离
+	private double driveDistance = 0.0; // 轨迹距离
+	private LatLng llStart, llEnd;
+
+	public class DrawRouteThread implements Runnable {
+
+		@Override
+		public void run() {
+
+			// 初始化轨迹点
+			points = getRoutePoints(filePath);
+			llStart = points.get(0);
+			llEnd = points.get(points.size() - 1);
+
+			if (points.size() < 2) {
+				Message message = new Message();
+				message.what = 0;
+				drawRouteHandler.sendMessage(message);
+			} else {
+				Message message = new Message();
+				message.what = 1;
+				drawRouteHandler.sendMessage(message);
+			}
+
+			// 计算直线距离和行驶距离
+			try {
+				// 轨迹距离信息已保存，直接读取数据库
+				RouteDistance routeDistance = _db
+						.getRouteDistanceByName(filePath);
+				linearDistance = routeDistance.getLinear();
+				driveDistance = routeDistance.getDrive();
+			} catch (Exception e) {
+				linearDistance = DistanceUtil.getDistance(llStart, llEnd);
+				for (int i = 0; i < points.size() - 1; i++) {
+					driveDistance = driveDistance
+							+ DistanceUtil.getDistance(points.get(i),
+									points.get(i + 1));
+				}
+				RouteDistance newRouteDistance = new RouteDistance(filePath,
+						linearDistance, driveDistance);
+				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
+			} finally {
+				_db.close();
+				Message message = new Message();
+				message.what = 2;
+				drawRouteHandler.sendMessage(message);
+			}
+
+		}
+	}
+
+	final Handler drawRouteHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0:
+				Toast.makeText(getApplicationContext(),
+						getResources().getString(R.string.route_point_less),
+						Toast.LENGTH_SHORT).show();
+				finish();
+				break;
+
+			case 1:
+				try {
+					// 绘制轨迹
+					OverlayOptions ooPolyline = new PolylineOptions().width(5)
+							.color(0xAA0000FF).points(points);
+					mBaiduMap.addOverlay(ooPolyline);
+
+					// 定位地图到轨迹起点位置
+					MapStatusUpdate u1 = MapStatusUpdateFactory
+							.newLatLng(points.get(1));
+					mBaiduMap.setMapStatus(u1);
+
+					MapStatusUpdate msu = MapStatusUpdateFactory
+							.zoomTo(getZoomLevel());
+					mBaiduMap.animateMapStatus(msu);
+
+					// 绘制起始点Marker
+					OverlayOptions ooStart = new MarkerOptions()
+							.position(llStart).icon(iconStart).zIndex(9)
+							.draggable(true);
+					mMarkerStart = (Marker) (mBaiduMap.addOverlay(ooStart));
+					OverlayOptions ooEnd = new MarkerOptions().position(llEnd)
+							.icon(iconEnd).zIndex(9).draggable(true);
+					mMarkerEnd = (Marker) (mBaiduMap.addOverlay(ooEnd));
+				} catch (Exception e) {
+					MyLog.e("[RouteShowActivity]addRouteToMap catch exception:"
+							+ e.toString());
+				}
+
+				audioRecordDialog.dismissDialog();
+				break;
+
+			case 2:
+				textDistance.setVisibility(View.VISIBLE);
+				textDistance.setText(getResources().getString(
+						R.string.linear_diatance)
+						+ ":"
+						+ (int) linearDistance
+						+ getResources().getString(R.string.meter)
+						+ "，"
+						+ getResources().getString(R.string.drive_distance)
+						+ (int) driveDistance
+						+ getResources().getString(R.string.meter));
+				textDistance.setTypeface(Typefaces.get(getApplicationContext(),
+						Constant.Path.FONT + "Font-Helvetica-Neue-LT-Pro.otf"));
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
 	/**
 	 * 添加轨迹到地图
 	 * 
 	 * @param path
 	 */
 	public void addRouteToMap(String path) {
-		try {
-			// 初始化轨迹点
-			List<LatLng> points = getRoutePoints(path);
 
-			if (points.size() < 2) {
-				Toast.makeText(getApplicationContext(),
-						getResources().getString(R.string.route_point_less),
-						Toast.LENGTH_SHORT).show();
-				finish();
-			} else {
-				// 绘制轨迹
-				OverlayOptions ooPolyline = new PolylineOptions().width(5)
-						.color(0xAA0000FF).points(points);
-				mBaiduMap.addOverlay(ooPolyline);
-
-				// 定位地图到轨迹起点位置
-				MapStatusUpdate u1 = MapStatusUpdateFactory.newLatLng(points
-						.get(1));
-				mBaiduMap.setMapStatus(u1);
-
-				MapStatusUpdate msu = MapStatusUpdateFactory
-						.zoomTo(getZoomLevel());
-				mBaiduMap.animateMapStatus(msu);
-
-				// 绘制起始点Marker
-				LatLng llStart = points.get(0);
-				LatLng llEnd = points.get(points.size() - 1);
-				OverlayOptions ooStart = new MarkerOptions().position(llStart)
-						.icon(iconStart).zIndex(9).draggable(true);
-				mMarkerStart = (Marker) (mBaiduMap.addOverlay(ooStart));
-				OverlayOptions ooEnd = new MarkerOptions().position(llEnd)
-						.icon(iconEnd).zIndex(9).draggable(true);
-				mMarkerEnd = (Marker) (mBaiduMap.addOverlay(ooEnd));
-
-				double linearDistance = 0.0; // 直线距离
-				double driveDistance = 0.0; // 轨迹距离
-
-				try { // 轨迹距离信息已保存，直接读取数据库
-					RouteDistance routeDistance = _db
-							.getRouteDistanceByName(filePath);
-					linearDistance = routeDistance.getLinear();
-					driveDistance = routeDistance.getDrive();
-
-				} catch (Exception e) {
-					linearDistance = DistanceUtil.getDistance(llStart, llEnd);
-					for (int i = 0; i < points.size() - 1; i++) {
-						driveDistance = driveDistance
-								+ DistanceUtil.getDistance(points.get(i),
-										points.get(i + 1));
-					}
-					RouteDistance newRouteDistance = new RouteDistance(
-							filePath, linearDistance, driveDistance);
-					_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
-				} finally {
-					textDistance.setVisibility(View.VISIBLE);
-					textDistance.setText(getResources().getString(
-							R.string.linear_diatance)
-							+ ":"
-							+ (int) linearDistance
-							+ getResources().getString(R.string.meter)
-							+ getResources().getString(R.string.drive_distance)
-							+ (int) driveDistance
-							+ getResources().getString(R.string.meter));
-					textDistance.setTypeface(Typefaces.get(this,
-							Constant.Path.FONT
-									+ "Font-Helvetica-Neue-LT-Pro.otf"));
-					_db.close();
-				}
-			}
-		} catch (Exception e) {
-			MyLog.e("[RouteShowActivity]addRouteToMap catch exception:"
-					+ e.toString());
-		}
 	}
 
 	public List<LatLng> getRoutePoints(String fileName) {
@@ -445,13 +500,7 @@ public class RouteShowActivity extends Activity {
 	 * @return
 	 */
 	public int getOffset() {
-		String offsetStr = sharedPreferences.getString("routeSpan", "HIGH");
-		if ("LOW".equals(offsetStr))
-			return Constant.BaiduMap.ROUTE_POINT_OFFSET_LOW;
-		else if ("MIDDLE".equals(offsetStr))
-			return Constant.BaiduMap.ROUTE_POINT_OFFSET_MIDDLE;
-		else
-			return Constant.BaiduMap.ROUTE_POINT_OFFSET_HIGH;
+		return Constant.BaiduMap.ROUTE_POINT_OFFSET_DEFAULT;
 	}
 
 	@Override

@@ -363,6 +363,11 @@ public interface Constant {
 		 * 轨迹绘制取样精度：每5个点取1个
 		 */
 		public static final int ROUTE_POINT_OFFSET_LOW = 5;
+
+		/**
+		 * 轨迹绘制取样默认精度
+		 */
+		public static final int ROUTE_POINT_OFFSET_DEFAULT = ROUTE_POINT_OFFSET_MIDDLE;
 	}
 
 	/**

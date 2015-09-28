@@ -370,7 +370,7 @@
     <string name="no_route_file">未找到对应轨迹文件</string>
     <string name="share_route_screenshot_to">分享轨迹图到</string>
     <string name="share_route">分享轨迹</string>
-    <string name="route_point_less">轨迹点数目小于2个</string>
+    <string name="route_point_less">轨迹点数目少于2个，无法绘制</string>
     <string name="linear_diatance">直线距离</string>
     <string name="drive_distance">行驶距离</string>
     <string name="meter">米</string>
