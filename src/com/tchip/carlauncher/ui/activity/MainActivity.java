@@ -1278,14 +1278,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void lockOrUnlockVideo() {
 		if (!MyApplication.isVideoLock) {
-			if (MyApplication.isVideoLockSecond) {
-				MyApplication.isVideoLock = false;
-				MyApplication.isVideoLockSecond = false;
-				startSpeak(getResources().getString(R.string.video_unlock));
-			} else {
-				MyApplication.isVideoLock = true;
-				startSpeak(getResources().getString(R.string.video_lock));
-			}
+			MyApplication.isVideoLock = true;
+			startSpeak(getResources().getString(R.string.video_lock));
 		} else {
 			MyApplication.isVideoLock = false;
 			MyApplication.isVideoLockSecond = false;
@@ -1534,17 +1528,10 @@ public class MainActivity extends Activity implements TachographCallback,
 			largeVideoLock.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_lock));
 		} else {
-			if (MyApplication.isVideoLockSecond) {
-				smallVideoLock.setBackground(getResources().getDrawable(
-						R.drawable.ui_camera_video_lock));
-				largeVideoLock.setBackground(getResources().getDrawable(
-						R.drawable.ui_camera_video_lock));
-			} else {
-				smallVideoLock.setBackground(getResources().getDrawable(
-						R.drawable.ui_camera_video_unlock));
-				largeVideoLock.setBackground(getResources().getDrawable(
-						R.drawable.ui_camera_video_unlock));
-			}
+			smallVideoLock.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_unlock));
+			largeVideoLock.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_unlock));
 		}
 
 		// 静音按钮
@@ -2032,15 +2019,19 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (MyApplication.isVideoLock) {
 				videoLock = 1;
 				MyApplication.isVideoLock = false; // 还原
-				setupRecordViews(); // 更新录制按钮状态
-			} else if (MyApplication.isVideoLockSecond) {
-				videoLock = 1;
-				MyApplication.isVideoLockSecond = false;
-				setupRecordViews(); // 更新录制按钮状态
+				if (MyApplication.isVideoReording
+						&& MyApplication.isVideoLockSecond) {
+					MyApplication.isVideoLock = true;
+					MyApplication.isVideoLockSecond = false; // 不录像时修正加锁图标
+				}
 			}
+			setupRecordViews(); // 更新录制按钮状态
 			DriveVideo driveVideo = new DriveVideo(videoName, videoLock,
 					videoResolution);
 			videoDb.addDriveVideo(driveVideo);
+
+			MyLog.v("[onFileSave]videoLock:" + videoLock
+					+ ", isVideoLockSecond:" + MyApplication.isVideoLockSecond);
 		} else {
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.photo_save),
