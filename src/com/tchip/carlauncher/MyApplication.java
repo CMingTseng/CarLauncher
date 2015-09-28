@@ -36,6 +36,8 @@ public class MyApplication extends Application {
 	public static boolean isVideoReording = false;
 	public static boolean isPowerConnect = true;
 	public static boolean isVideoLock = false;
+	// 第二段视频加锁
+	public static boolean isVideoLockSecond = false;
 	public static boolean isCrashed = false;
 	public static boolean shouldVideoRecordWhenChangeSize = false;
 

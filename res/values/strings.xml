@@ -376,6 +376,7 @@
     <string name="meter">米</string>
     <string name="location_end">终点位置</string>
     <string name="location_start">起始位置</string>
+    <string name="route_is_loading">正在加载轨迹，请稍候...</string>
 
     <!-- TrafficChatActivity -->
     <string name="data_error">数据异常</string>

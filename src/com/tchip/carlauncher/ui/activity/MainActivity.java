@@ -228,6 +228,12 @@ public class MainActivity extends Activity implements TachographCallback,
 						message.what = 1;
 						backHandler.sendMessage(message);
 					}
+
+					// 修正标志：不对第二段视频加锁
+					if (!MyApplication.isVideoReording
+							&& MyApplication.isVideoLockSecond) {
+						MyApplication.isVideoLockSecond = false;
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -701,6 +707,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageVideoLock.what = 4;
 						updateRecordTimeHandler.sendMessage(messageVideoLock);
 					}
+
 					if (MyApplication.isVideoCardEject) {
 						// 录像时视频SD卡拔出停止录像
 						MyLog.e("SD card remove badly or power unconnected, stop record!");
@@ -729,6 +736,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
+
 						Message messageSecond = new Message();
 						messageSecond.what = 1;
 						updateRecordTimeHandler.sendMessage(messageSecond);
@@ -796,8 +804,19 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 4:
-				setupRecordViews();
 				MyApplication.isCrashed = false;
+
+				// 碰撞后判断是否需要加锁第二段视频
+				if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+					if (secondCount > 45) {
+						MyApplication.isVideoLockSecond = true;
+					}
+				} else if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
+					if (secondCount > 165) {
+						MyApplication.isVideoLockSecond = true;
+					}
+				}
+				setupRecordViews();
 				break;
 
 			case 5:
@@ -1259,10 +1278,17 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void lockOrUnlockVideo() {
 		if (!MyApplication.isVideoLock) {
-			MyApplication.isVideoLock = true;
-			startSpeak(getResources().getString(R.string.video_lock));
+			if (MyApplication.isVideoLockSecond) {
+				MyApplication.isVideoLock = false;
+				MyApplication.isVideoLockSecond = false;
+				startSpeak(getResources().getString(R.string.video_unlock));
+			} else {
+				MyApplication.isVideoLock = true;
+				startSpeak(getResources().getString(R.string.video_lock));
+			}
 		} else {
 			MyApplication.isVideoLock = false;
+			MyApplication.isVideoLockSecond = false;
 			startSpeak(getResources().getString(R.string.video_unlock));
 		}
 		setupRecordViews();
@@ -1364,6 +1390,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (!MyApplication.isVideoReording) {
 			MyLog.v("[MainActivity]onPause, releaseCameraZone() when not recording");
 			releaseCameraZone();
+			MyApplication.isVideoLockSecond = false;
 		}
 
 		super.onPause();
@@ -1507,10 +1534,17 @@ public class MainActivity extends Activity implements TachographCallback,
 			largeVideoLock.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_lock));
 		} else {
-			smallVideoLock.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_unlock));
-			largeVideoLock.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_unlock));
+			if (MyApplication.isVideoLockSecond) {
+				smallVideoLock.setBackground(getResources().getDrawable(
+						R.drawable.ui_camera_video_lock));
+				largeVideoLock.setBackground(getResources().getDrawable(
+						R.drawable.ui_camera_video_lock));
+			} else {
+				smallVideoLock.setBackground(getResources().getDrawable(
+						R.drawable.ui_camera_video_unlock));
+				largeVideoLock.setBackground(getResources().getDrawable(
+						R.drawable.ui_camera_video_unlock));
+			}
 		}
 
 		// 静音按钮
@@ -1998,6 +2032,10 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (MyApplication.isVideoLock) {
 				videoLock = 1;
 				MyApplication.isVideoLock = false; // 还原
+				setupRecordViews(); // 更新录制按钮状态
+			} else if (MyApplication.isVideoLockSecond) {
+				videoLock = 1;
+				MyApplication.isVideoLockSecond = false;
 				setupRecordViews(); // 更新录制按钮状态
 			}
 			DriveVideo driveVideo = new DriveVideo(videoName, videoLock,
