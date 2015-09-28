@@ -40,6 +40,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -222,7 +223,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(500);
+
 					if (!MyApplication.isSleeping) {
 						Message message = new Message();
 						message.what = 1;
@@ -256,6 +258,12 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApplication.shouldWakeRecord = false;
 					}
 				}
+
+				if (MyApplication.shouldCrashRecord) {
+					MyApplication.isVideoLock = true;
+					MyApplication.shouldCrashRecord = false;
+					new Thread(new RecordWhenCrash()).start();
+				}
 				break;
 
 			default:
@@ -263,6 +271,73 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		}
 	};
+
+	/**
+	 * 底层碰撞后录制一个视频线程
+	 */
+	public class RecordWhenCrash implements Runnable {
+
+		@Override
+		public void run() {
+			Message message = new Message();
+			message.what = 1;
+			recordWhenCrashHandler.sendMessage(message);
+		}
+	}
+
+	final Handler recordWhenCrashHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				recordOneVideoWhenCrash();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	private void recordOneVideoWhenCrash() {
+		try {
+			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+				if (!MyApplication.isMainForeground) {
+					// 录像需切换到预览界面且点亮屏幕，否则无法录像
+					// 发送Home键，回到主界面
+					sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+							"value", "home"));
+					// 点亮屏幕
+					SettingUtil.lightScreen(getApplicationContext());
+
+					// 录像线程
+					new Thread(new RealRecordThread()).start();
+				} else {
+					// 直接开始录像
+					if (startRecorder() == 0) {
+						mRecordState = Constant.Record.STATE_RECORD_STARTED;
+						MyApplication.isVideoReording = true;
+					} else {
+						if (Constant.isDebug)
+							MyLog.e("Start Record Failed");
+					}
+				}
+			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+				if (stopRecorder() == 0) {
+					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					MyApplication.isVideoReording = false;
+				}
+			}
+			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+			setupRecordViews();
+			if (Constant.isDebug) {
+				MyLog.v("MyApplication.isVideoReording:"
+						+ MyApplication.isVideoReording);
+			}
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]recordOneVideoWHenCrash catch exception: "
+					+ e.toString());
+		}
+	}
 
 	/**
 	 * 更改分辨率后重启录像
@@ -753,6 +828,39 @@ public class MainActivity extends Activity implements TachographCallback,
 				secondCount++;
 				textRecordTime.setText(DateUtil
 						.getFormatTimeBySecond(secondCount));
+
+				if (MyApplication.shouldStopWhenCrashVideoSave
+						&& MyApplication.isVideoReording) {
+					if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+						if (secondCount > 58) {
+							// 停止录像
+							startOrStopRecord();
+
+							// 熄灭屏幕,判断当前屏幕是否关闭
+							PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+							boolean isScreenOn = pm.isScreenOn();
+							if (!isScreenOn) {
+							} else {
+								sendBroadcast(new Intent("com.tchip.powerKey")
+										.putExtra("value", "power"));
+							}
+						}
+					} else if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
+						if (secondCount > 178) {
+							// 停止录像
+							startOrStopRecord();
+
+							// 熄灭屏幕,判断当前屏幕是否关闭
+							PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+							boolean isScreenOn = pm.isScreenOn();
+							if (!isScreenOn) {
+							} else {
+								sendBroadcast(new Intent("com.tchip.powerKey")
+										.putExtra("value", "power"));
+							}
+						}
+					}
+				}
 				break;
 
 			case 2:

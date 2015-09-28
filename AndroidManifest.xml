@@ -260,6 +260,7 @@
             <intent-filter>
                 <action android:name="com.tchip.SLEEP_ON" />
                 <action android:name="com.tchip.SLEEP_OFF" />
+                <action android:name="com.tchip.GSENSOR_CRASH" />
             </intent-filter>
         </receiver>
 

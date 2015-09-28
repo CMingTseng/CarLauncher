@@ -131,6 +131,17 @@ public class SleepReceiver extends BroadcastReceiver {
 			} catch (Exception e) {
 				MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_OFF");
 			}
+		} else if (action.equals("com.tchip.GSENSOR_CRASH")) {
+			// 休眠时碰撞侦测，接收到碰撞，亮屏录制一段视频，然后休眠
+
+			// 发送Home键，回到主界面
+			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+					"value", "home"));
+
+			// 点亮屏幕
+			SettingUtil.lightScreen(context);
+
+			MyApplication.shouldCrashRecord = true;
 		}
 	}
 

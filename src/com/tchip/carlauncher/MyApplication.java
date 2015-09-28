@@ -1,6 +1,5 @@
 package com.tchip.carlauncher;
 
-
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +22,16 @@ public class MyApplication extends Application {
 	 */
 	public static boolean shouldWakeRecord = false;
 
+	/**
+	 * 底层碰撞，需要启动录像
+	 */
+	public static boolean shouldCrashRecord = false;
+
+	/**
+	 * 录制底层碰撞视频后是否需要停止录像
+	 */
+	public static boolean shouldStopWhenCrashVideoSave = false;
+
 	// Music
 	public static boolean mIsSleepClockSetting = false;
 	private static String rootPath = "/mymusic";
@@ -42,6 +51,7 @@ public class MyApplication extends Application {
 	public static boolean shouldVideoRecordWhenChangeSize = false;
 
 	public static boolean shouldResetRecordWhenResume = false;
+
 	public static boolean isFirstLaunch = true;
 	public static boolean isMainForeground = true;
 
