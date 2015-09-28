@@ -142,6 +142,7 @@ public class SleepReceiver extends BroadcastReceiver {
 			SettingUtil.lightScreen(context);
 
 			MyApplication.shouldCrashRecord = true;
+			MyApplication.shouldStopWhenCrashVideoSave = true;
 		}
 	}
 

@@ -860,6 +860,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							}
 						}
 					}
+					MyApplication.shouldStopWhenCrashVideoSave = false;
 				}
 				break;
 
