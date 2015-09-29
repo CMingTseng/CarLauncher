@@ -225,12 +225,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				try {
 					Thread.sleep(500);
 
-					if (!MyApplication.isSleeping) {
-						Message message = new Message();
-						message.what = 1;
-						backHandler.sendMessage(message);
-					}
-
+					Message message = new Message();
+					message.what = 1;
+					backHandler.sendMessage(message);
 					// 修正标志：不对第二段视频加锁
 					if (!MyApplication.isVideoReording
 							&& MyApplication.isVideoLockSecond) {
@@ -798,7 +795,8 @@ public class MainActivity extends Activity implements TachographCallback,
 						updateRecordTimeHandler
 								.sendMessage(messagePowerUnconnect);
 						break;
-					} else if (MyApplication.isSleeping) {
+					} else if (MyApplication.isSleeping
+							&& !MyApplication.shouldStopWhenCrashVideoSave) {
 						// 进入低功耗休眠
 						MyLog.e("Stop Record:isSleeping = true");
 						Message messageSleep = new Message();
@@ -831,36 +829,20 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
-					if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
-						if (secondCount > 58) {
-							// 停止录像
-							startOrStopRecord();
+					if (secondCount > 30) {
+						// 停止录像
+						startOrStopRecord();
+						MyApplication.shouldStopWhenCrashVideoSave = false;
 
-							// 熄灭屏幕,判断当前屏幕是否关闭
-							PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-							boolean isScreenOn = pm.isScreenOn();
-							if (!isScreenOn) {
-							} else {
-								sendBroadcast(new Intent("com.tchip.powerKey")
-										.putExtra("value", "power"));
-							}
-						}
-					} else if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
-						if (secondCount > 178) {
-							// 停止录像
-							startOrStopRecord();
-
-							// 熄灭屏幕,判断当前屏幕是否关闭
-							PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-							boolean isScreenOn = pm.isScreenOn();
-							if (!isScreenOn) {
-							} else {
-								sendBroadcast(new Intent("com.tchip.powerKey")
-										.putExtra("value", "power"));
-							}
+						// 熄灭屏幕,判断当前屏幕是否关闭
+						PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+						boolean isScreenOn = pm.isScreenOn();
+						if (!isScreenOn) {
+						} else {
+							sendBroadcast(new Intent("com.tchip.powerKey")
+									.putExtra("value", "power"));
 						}
 					}
-					MyApplication.shouldStopWhenCrashVideoSave = false;
 				}
 				break;
 
@@ -1368,6 +1350,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
+					if (MyApplication.shouldStopWhenCrashVideoSave) {
+						MyApplication.shouldStopWhenCrashVideoSave = false;
+					}
 				}
 			}
 			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);

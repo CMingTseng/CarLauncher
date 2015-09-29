@@ -141,8 +141,12 @@ public class SleepReceiver extends BroadcastReceiver {
 			// 点亮屏幕
 			SettingUtil.lightScreen(context);
 
-			MyApplication.shouldCrashRecord = true;
-			MyApplication.shouldStopWhenCrashVideoSave = true;
+			if (MyApplication.shouldCrashRecord
+					|| MyApplication.shouldStopWhenCrashVideoSave) {
+			} else {
+				MyApplication.shouldCrashRecord = true;
+				MyApplication.shouldStopWhenCrashVideoSave = true;
+			}
 		}
 	}
 
