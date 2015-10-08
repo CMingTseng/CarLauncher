@@ -291,6 +291,51 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
+                android:background="#000000" />
+
+            <RelativeLayout
+                android:id="@+id/layoutRippleParking"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/ui_setting_item_bg"
+                android:clickable="true" >
+
+                <ImageView
+                    android:layout_width="@dimen/setting_item_image_height"
+                    android:layout_height="@dimen/setting_item_image_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/setting_item_image_margin_left"
+                    android:src="@drawable/ui_setting_map_route_onoff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/setting_item_text_margin_left"
+                    android:text="停车侦测"
+                    android:textColor="@color/setting_item_title_color"
+                    android:textSize="@dimen/setting_item_title_text_size" />
+
+                <com.tchip.carlauncher.view.SwitchButton
+                    android:id="@+id/switchParking"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/setting_item_content_marign_right"
+                    app:animationVelocity="8"
+                    app:measureFactor="1.5"
+                    app:offDrawable="@drawable/ios_off"
+                    app:onColor="#43d95d"
+                    app:thumbDrawable="@drawable/ios_thumb"
+                    app:thumb_marginBottom="-8dp"
+                    app:thumb_marginLeft="-5dp"
+                    app:thumb_marginRight="-5dp"
+                    app:thumb_marginTop="-2.5dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
                 android:background="#000000"
                 android:visibility="gone" />
 

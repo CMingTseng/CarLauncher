@@ -116,6 +116,8 @@ SharedPreferences-CarLauncher
 	(boolean)autoScreenLight	根据Camera调节亮度开关(true)
 	(int)manulLightValue	手动亮度值，用以自动调节亮度关闭时重设背光值
 	
+	(boolean)parkingOn		停车侦测开关(false)
+	
 	----------------------------------------
 	[*Using]Music
 	(String)rencentMusicList		最近（或正在）播放

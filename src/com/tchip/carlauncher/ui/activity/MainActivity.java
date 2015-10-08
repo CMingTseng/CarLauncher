@@ -149,8 +149,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
 
-		// 初始化自动亮度开关
-		initialAutoLight();
+		// 初始化节点状态
+		initialNodeState();
 	}
 
 	/**
@@ -1522,9 +1522,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-		// 初始化FM发射
-		initalFmTransmit();
-
 		super.onResume();
 	}
 
@@ -2178,11 +2175,20 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
+	 * 初始化节点状态
+	 */
+	private void initialNodeState() {
+		initialFmTransmit();
+		initialAutoLight();
+		initialParkingMonitor();
+	}
+
+	/**
 	 * 启动时初始化FM发射频率节点
 	 * 
 	 * 频率范围：7600~10800:8750-10800
 	 */
-	private void initalFmTransmit() {
+	private void initialFmTransmit() {
 		try {
 			int freq = SettingUtil.getFmFrequceny(this);
 			if (freq >= 8750 && freq <= 10800)
@@ -2204,6 +2210,20 @@ public class MainActivity extends Activity implements TachographCallback,
 			SettingUtil.setAutoLight(getApplicationContext(), autoScreenLight);
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]initialAutoLight: Catch Exception!");
+		}
+	}
+
+	/**
+	 * 初始化停车侦测开关
+	 */
+	private void initialParkingMonitor() {
+		try {
+			boolean isParkingMonitorOn = sharedPreferences.getBoolean(
+					"parkingOn", false);
+			SettingUtil.setParkingMonitor(getApplicationContext(),
+					isParkingMonitorOn);
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]initialParkingMonitor: Catch Exception!");
 		}
 	}
 

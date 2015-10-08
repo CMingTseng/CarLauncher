@@ -211,4 +211,32 @@ public class SettingUtil {
 		MyLog.v("[SettingUtil]setAutoLight:" + isAutoLightOn);
 	}
 
+	/**
+	 * 停车侦测开关节点
+	 * 
+	 * 2：打开
+	 * 
+	 * 3：关闭
+	 * 
+	 * 默认关闭
+	 */
+	public static File fileParkingMonitor = new File(
+			"sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
+
+	public static void setParkingMonitor(Context context, boolean isParkingOn) {
+		if (isParkingOn) {
+			SaveFileToNode(fileParkingMonitor, "2");
+		} else {
+			SaveFileToNode(fileParkingMonitor, "3");
+		}
+
+		SharedPreferences sharedPreferences = context.getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+
+		editor.putBoolean("parkingOn", isParkingOn);
+		editor.commit();
+		MyLog.v("[SettingUtil]setParkingMonitor:" + isParkingOn);
+	}
+
 }

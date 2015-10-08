@@ -10,6 +10,7 @@ import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
 import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 import com.tchip.carlauncher.ui.activity.WifiListActivity;
+import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.SwitchButton;
 
@@ -38,7 +39,7 @@ public class SettingFragment extends Fragment {
 	private BluetoothAdapter bluetoothAdapter;
 	private WifiManager wifiManager;
 
-	private SwitchButton switchWifi, switchBluetooth;
+	private SwitchButton switchWifi, switchBluetooth, switchParking;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,6 +117,19 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutGravity);
 		layoutGravity.setOnClickListener(new MyOnClickListener());
 
+		// 停车侦测开关
+		switchParking = (SwitchButton) systemSettingView
+				.findViewById(R.id.switchParking);
+		switchParking.setChecked(isParkingMonitorOn());
+		switchParking.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				SettingUtil.setParkingMonitor(context, isChecked);
+			}
+		});
+
 		// 蓝牙(GONE)
 		RelativeLayout layoutRippleBluetooth = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleBluetooth);
@@ -191,6 +205,15 @@ public class SettingFragment extends Fragment {
 		return systemSettingView;
 	}
 
+	/**
+	 * 停车侦测是否打开
+	 * 
+	 * @return
+	 */
+	private boolean isParkingMonitorOn() {
+		return preferences.getBoolean("parkingOn", false);
+	}
+	
 	class MyOnClickListener implements View.OnClickListener {
 
 		@Override
