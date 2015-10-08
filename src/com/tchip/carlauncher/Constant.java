@@ -367,7 +367,7 @@ public interface Constant {
 		/**
 		 * 轨迹绘制取样默认精度
 		 */
-		public static final int ROUTE_POINT_OFFSET_DEFAULT = ROUTE_POINT_OFFSET_MIDDLE;
+		public static final int ROUTE_POINT_OFFSET_DEFAULT = ROUTE_POINT_OFFSET_HIGH;
 	}
 
 	/**
