@@ -68,7 +68,7 @@ public class RouteRecordService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, false);
+		InitLocation(LocationMode.Device_Sensors, "bd09ll", scanSpan, false);
 		// 初始化路径
 		File filestoreMusic = new File(ROUTE_PATH);
 		if (!filestoreMusic.exists()) {
@@ -206,7 +206,7 @@ public class RouteRecordService extends Service {
 	 * @param tempMode
 	 *            LocationMode.Hight_Accuracy-高精度
 	 *            LocationMode.Battery_Saving-低功耗
-	 *            LocationMode.Device_Sensors-仅设备
+	 *            LocationMode.Device_Sensors-仅设备(GPS)
 	 * @param tempCoor
 	 *            gcj02-国测局加密经纬度坐标 bd09ll-百度加密经纬度坐标 bd09-百度加密墨卡托坐标
 	 * @param frequence
@@ -225,6 +225,7 @@ public class RouteRecordService extends Service {
 		option.setLocationMode(tempMode);
 		option.setCoorType(tempCoor);
 		option.setScanSpan(frequence);
+		option.setOpenGps(true);
 		option.setIsNeedAddress(isNeedAddress);
 		mLocationClient.setLocOption(option);
 
