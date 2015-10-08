@@ -36,7 +36,7 @@ public interface Constant {
 		/**
 		 * 开机自动录像延时
 		 */
-		public static final int autoRecordDelay = 3000;
+		public static final int autoRecordDelay = 2000;
 
 		/**
 		 * 录像保存到SD卡2 true:SD2 false:SD1

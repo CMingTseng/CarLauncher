@@ -1,6 +1,8 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
@@ -179,11 +181,11 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyLog.e("Video card not exist or isn't first launch");
 				}
 
-				// 检查并删除异常视频文件
-				if (StorageUtil.isVideoCardExists()
-						&& !MyApplication.isVideoReording) {
-					CheckErrorFile();
-				}
+				// 检查并删除异常视频文件，比较耗时阻塞线程
+				// if (StorageUtil.isVideoCardExists()
+				// && !MyApplication.isVideoReording) {
+				// CheckErrorFile();
+				// }
 
 				// 自动录像:如果已经在录像则不处理
 				if (Constant.Record.autoRecord
@@ -194,7 +196,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					autoHandler.sendMessage(message);
 				}
 				// 启动服务
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 				initialService();
 
 			} catch (InterruptedException e) {
@@ -1851,42 +1853,80 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 检查并删除异常视频文件：SD存在但数据库中不存在的文件
+	 * 检查并删除异常视频文件：SD存在但数据库中不存在的文件；视频文件较多时尤为耗时，需要启动线程
 	 */
 	private void CheckErrorFile() {
-		if (StorageUtil.isVideoCardExists()) {
+		MyLog.v("[CheckErrorFile]isVideoChecking:" + isVideoChecking);
+		if (StorageUtil.isVideoCardExists() && !isVideoChecking) {
+			new Thread(new CheckVideoThread()).start();
+		}
+	}
+
+	/**
+	 * 当前是否正在校验错误视频
+	 */
+	private boolean isVideoChecking = false;
+
+	private class CheckVideoThread implements Runnable {
+
+		@Override
+		public void run() {
+			MyLog.v("[CheckVideoThread]START:" + getTimeStr());
+			isVideoChecking = true;
 			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
 			if (Constant.Record.saveVideoToSD2) {
 				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 			}
 			File file = new File(sdcardPath + "tachograph/");
 			RecursionCheckFile(file);
+			MyLog.v("[CheckVideoThread]END:" + getTimeStr());
+			isVideoChecking = false;
 		}
+
+	}
+
+	private String getTimeStr() {
+		long nowTime = System.currentTimeMillis();
+		Date date = new Date(nowTime);
+		String strs = "";
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+			strs = sdf.format(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return strs;
 	}
 
 	public void RecursionCheckFile(File file) {
-		try {
-			if (file.isFile() && !file.getName().endsWith(".jpg")) {
-				if (!videoDb.isVideoExist(file.getName())) {
-					file.delete();
-					MyLog.v("[RecursionCheckFile] Delete Error File:"
-							+ file.getName());
-				}
-				return;
-			}
-			if (file.isDirectory()) {
-				File[] childFile = file.listFiles();
-				if (childFile == null || childFile.length == 0) {
-					// file.delete();
+		if (MyApplication.isVideoReording) {
+			// 开始录像，终止删除
+			return;
+		} else {
+			try {
+				if (file.isFile() && !file.getName().endsWith(".jpg")) {
+					if (!videoDb.isVideoExist(file.getName())) {
+						file.delete();
+						MyLog.v("[RecursionCheckFile] Delete Error File:"
+								+ file.getName());
+					}
 					return;
 				}
-				for (File f : childFile) {
-					RecursionCheckFile(f);
+				if (file.isDirectory()) {
+					File[] childFile = file.listFiles();
+					if (childFile == null || childFile.length == 0) {
+						// file.delete();
+						return;
+					}
+					for (File f : childFile) {
+						RecursionCheckFile(f);
+					}
+					// file.delete();
 				}
-				// file.delete();
+			} catch (Exception e) {
+				MyLog.e("[MainActivity]RecursionCheckFile:Catch Exception:"
+						+ e.toString());
 			}
-		} catch (Exception e) {
-			MyLog.e("[MainActivity]RecursionCheckFile:Catch Exception!");
 		}
 	}
 
@@ -2135,7 +2175,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyLog.d("[onFileSave] File Save, Type=" + type + ",Save path:" + path);
 
 		if (!MyApplication.isVideoReording) {
-			// 需要在当前视频存储到数据库之后，且当前未录像时再进行
+			// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
 			CheckErrorFile();
 		}
 	}
