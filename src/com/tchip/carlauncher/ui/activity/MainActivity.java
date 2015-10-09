@@ -1743,7 +1743,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			int i = 0;
-
 			while (i < 6) {
 				try {
 					if (!StorageUtil.isVideoCardExists()) {
@@ -1751,16 +1750,18 @@ public class MainActivity extends Activity implements TachographCallback,
 						i++;
 						MyLog.e("[RetryRecordWhenSDNotMountThread]No SD:try "
 								+ i);
+						if (i == 5) {
+							Message messageRetry = new Message();
+							messageRetry.what = 2;
+							startRecordHandler.sendMessage(messageRetry);
+							return;
+						}
 					} else {
 						// 开始录像
 						Message messageRecord = new Message();
 						messageRecord.what = 1;
 						startRecordHandler.sendMessage(messageRecord);
-					}
-					if (i == 5) {
-						Message messageRetry = new Message();
-						messageRetry.what = 2;
-						startRecordHandler.sendMessage(messageRetry);
+						return;
 					}
 
 				} catch (InterruptedException e) {

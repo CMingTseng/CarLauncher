@@ -153,13 +153,13 @@ public class SettingUtil {
 
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					Log.e(Constant.TAG, "FM Transmit:output error");
+					Log.e(Constant.TAG, "SaveFileToNode:output error");
 				}
 			} catch (IOException e) {
-				Log.e(Constant.TAG, "FM Transmit:IO Exception");
+				Log.e(Constant.TAG, "SaveFileToNode:IO Exception");
 			}
 		} else {
-			Log.e(Constant.TAG, "FM Transmit:File:" + file + "not exists");
+			Log.e(Constant.TAG, "SaveFileToNode:File:" + file + "not exists");
 		}
 	}
 
@@ -197,7 +197,7 @@ public class SettingUtil {
 	 * 1：开 0：关;默认打开
 	 */
 	public static File fileAutoLightSwitch = new File(
-			"sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
+			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
 
 	/**
 	 * 设置Camera自动调节亮度开关
@@ -221,7 +221,7 @@ public class SettingUtil {
 	 * 默认关闭
 	 */
 	public static File fileParkingMonitor = new File(
-			"sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
+			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
 
 	public static void setParkingMonitor(Context context, boolean isParkingOn) {
 		if (isParkingOn) {
