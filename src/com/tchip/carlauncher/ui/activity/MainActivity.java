@@ -261,7 +261,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (MyApplication.shouldCrashRecord) {
 					MyApplication.isVideoLock = true;
 					MyApplication.shouldCrashRecord = false;
-					new Thread(new RecordWhenCrash()).start();
+					new Thread(new RecordWhenCrashThread()).start();
 				}
 				break;
 
@@ -274,7 +274,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 底层碰撞后录制一个视频线程
 	 */
-	public class RecordWhenCrash implements Runnable {
+	public class RecordWhenCrashThread implements Runnable {
 
 		@Override
 		public void run() {
@@ -307,19 +307,9 @@ public class MainActivity extends Activity implements TachographCallback,
 							"value", "home"));
 					// 点亮屏幕
 					SettingUtil.lightScreen(getApplicationContext());
-
-					// 录像线程
-					new Thread(new RealRecordThread()).start();
-				} else {
-					// 直接开始录像
-					if (startRecorder() == 0) {
-						mRecordState = Constant.Record.STATE_RECORD_STARTED;
-						MyApplication.isVideoReording = true;
-					} else {
-						if (Constant.isDebug)
-							MyLog.e("Start Record Failed");
-					}
 				}
+				// 开始录像
+				new Thread(new StartRecordThread()).start();
 			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
@@ -976,7 +966,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoRecord:
 			case R.id.layoutVideoRecordSmall:
 				if (!ClickUtil.isQuickClick(1000)) {
-					startOrStopRecord();
+					if (StorageUtil.isVideoCardExists()) {
+						startOrStopRecord();
+					} else {
+						noVideoSDHint();
+					}
 				}
 				break;
 
@@ -1058,7 +1052,12 @@ public class MainActivity extends Activity implements TachographCallback,
 						textRecordTime.setText("00:00");
 						textRecordTime.setVisibility(View.INVISIBLE);
 						MyApplication.isVideoReording = false;
-						startOrStopRecord();
+
+						if (StorageUtil.isVideoCardExists()) {
+							startOrStopRecord();
+						} else {
+							noVideoSDHint();
+						}
 					}
 					if (mMuteState == Constant.Record.STATE_MUTE) {
 						if (setMute(false) == 0) {
@@ -1281,43 +1280,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	class RealRecordThread implements Runnable {
-
-		@Override
-		public void run() {
-			synchronized (realRecordHandler) {
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-				} finally {
-					Message messageRealRecord = new Message();
-					messageRealRecord.what = 1;
-					realRecordHandler.sendMessage(messageRealRecord);
-				}
-			}
-		}
-	}
-
-	final Handler realRecordHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				// 开始录像
-				if (startRecorder() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STARTED;
-					MyApplication.isVideoReording = true;
-				} else {
-					if (Constant.isDebug)
-						MyLog.e("Start Record Failed");
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
-
 	/**
 	 * 开启或关闭录像
 	 */
@@ -1334,19 +1296,9 @@ public class MainActivity extends Activity implements TachographCallback,
 								.putExtra("value", "home"));
 						// 点亮屏幕
 						SettingUtil.lightScreen(getApplicationContext());
-
-						// 录像线程
-						new Thread(new RealRecordThread()).start();
-					} else {
-						// 直接开始录像
-						if (startRecorder() == 0) {
-							mRecordState = Constant.Record.STATE_RECORD_STARTED;
-							MyApplication.isVideoReording = true;
-						} else {
-							if (Constant.isDebug)
-								MyLog.e("Start Record Failed");
-						}
 					}
+					// 开始录像
+					new Thread(new StartRecordThread()).start();
 				}
 			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
 				if (stopRecorder() == 0) {
@@ -1817,18 +1769,65 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	public int startRecorder() {
-		if (!StorageUtil.isVideoCardExists()) {
-			// SDCard2不存在
-			String strNoSD = getResources().getString(R.string.sd1_not_exist);
-			if (Constant.Record.saveVideoToSD2) {
-				strNoSD = getResources().getString(R.string.sd2_not_exist);
+	private class StartRecordThread implements Runnable {
+
+		@Override
+		public void run() {
+			int i = 0;
+
+			while (i < 6) {
+				try {
+					if (!StorageUtil.isVideoCardExists()) {
+						Thread.sleep(1000);
+						i++;
+						MyLog.e("[RetryRecordWhenSDNotMountThread]No SD:try "
+								+ i);
+					} else {
+						// 开始录像
+						Message messageRecord = new Message();
+						messageRecord.what = 1;
+						startRecordHandler.sendMessage(messageRecord);
+					}
+					if (i == 5) {
+						Message messageRetry = new Message();
+						messageRetry.what = 2;
+						startRecordHandler.sendMessage(messageRetry);
+					}
+
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-			audioRecordDialog.showErrorDialog(strNoSD);
-			new Thread(new dismissDialogThread()).start();
-			startSpeak(strNoSD);
-			return -1;
-		} else if (mMyRecorder != null) {
+		}
+
+	}
+
+	final Handler startRecordHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				if (startRecordTask() == 0) {
+					mRecordState = Constant.Record.STATE_RECORD_STARTED;
+					MyApplication.isVideoReording = true;
+				} else {
+					if (Constant.isDebug)
+						MyLog.e("Start Record Failed");
+				}
+				break;
+
+			case 2:
+				// SDCard2不存在
+				noVideoSDHint();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	public int startRecordTask() {
+		if (mMyRecorder != null) {
 			if (deleteOldestUnlockVideo()) {
 				textRecordTime.setVisibility(View.VISIBLE);
 				new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
@@ -1846,10 +1845,25 @@ public class MainActivity extends Activity implements TachographCallback,
 				} else {
 					setMute(true);
 				}
+
 				return mMyRecorder.start();
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * 视频SD卡不存在提示
+	 */
+	private void noVideoSDHint() {
+		String strNoSD = getResources().getString(R.string.sd1_not_exist);
+		if (Constant.Record.saveVideoToSD2) {
+			strNoSD = getResources().getString(R.string.sd2_not_exist);
+		}
+		audioRecordDialog.showErrorDialog(strNoSD);
+		new Thread(new dismissDialogThread()).start();
+		startSpeak(strNoSD);
+
 	}
 
 	/**
@@ -1988,13 +2002,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	public int takePhoto() {
 		if (!StorageUtil.isVideoCardExists()) {
 			// SDCard不存在
-			String strNoSD = getResources().getString(R.string.sd1_not_exist);
-			if (Constant.Record.saveVideoToSD2) {
-				strNoSD = getResources().getString(R.string.sd2_not_exist);
-			}
-			audioRecordDialog.showErrorDialog(strNoSD);
-			new Thread(new dismissDialogThread()).start();
-			startSpeak(strNoSD);
+			noVideoSDHint();
+
 			return -1;
 		} else if (mMyRecorder != null) {
 			return mMyRecorder.takePicture();
@@ -2080,6 +2089,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			if (mOverlapState == Constant.Record.STATE_OVERLAP_FIVE) {
 				mMyRecorder.setVideoOverlap(5);
+			} else {
+				mMyRecorder.setVideoOverlap(0);
 			}
 			mMyRecorder.prepare();
 		} catch (Exception e) {

@@ -14,6 +14,7 @@ public class ClickUtil {
 		long time = System.currentTimeMillis();
 		long timeD = time - lastClickTime;
 		if (0 < timeD && timeD < clickMinSpan) {
+			MyLog.v("[ClickUtil]isQuickClick:Click Too Quickly!");
 			return true;
 		}
 		lastClickTime = time;

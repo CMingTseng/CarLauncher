@@ -28,20 +28,16 @@ public class CardEjectReceiver extends BroadcastReceiver {
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			if (StorageUtil.isVideoCardExists()) {
 				MyApplication.isVideoCardEject = false;
-				
-				SharedPreferences sharedPreferences = context.getSharedPreferences(
-						Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+				SharedPreferences sharedPreferences = context
+						.getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+								Context.MODE_PRIVATE);
 				Editor editor = sharedPreferences.edit();
-				
+
 				if (sharedPreferences.getBoolean("isFirstLaunch", true)) {
-					// 初次启动清空录像文件夹
-					String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
-					if (Constant.Record.saveVideoToSD2) {
-						sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
-					}
-					
-					File file = new File(sdcardPath + "tachograph/");
-					StorageUtil.RecursionDeleteFile(file);
+
+					new Thread(new DeleteVideoDirThread()).start();
+
 					Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
 
 					editor.putBoolean("isFirstLaunch", false);
@@ -51,5 +47,20 @@ public class CardEjectReceiver extends BroadcastReceiver {
 				}
 			}
 		}
+	}
+
+	private class DeleteVideoDirThread implements Runnable {
+
+		@Override
+		public void run() {
+			// 初次启动清空录像文件夹
+			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
+			if (Constant.Record.saveVideoToSD2) {
+				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
+			}
+			File file = new File(sdcardPath + "tachograph/");
+			StorageUtil.RecursionDeleteFile(file);
+		}
+
 	}
 }
