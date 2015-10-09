@@ -616,37 +616,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		hsvMain = (HorizontalScrollView) findViewById(R.id.hsvMain);
 		hsvMain.setDrawingCacheEnabled(true);
-		if (Constant.Module.isHsvTouch) {
-			hsvMain.setOnTouchListener(new View.OnTouchListener() {
-
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					switch (event.getAction()) {
-					case MotionEvent.ACTION_MOVE:
-						View childFirst = ((HorizontalScrollView) v)
-								.getChildAt(0);
-
-						// 右侧阴影
-						if (v.getScrollX() + v.getWidth() + 20 >= childFirst
-								.getMeasuredWidth()) {
-							imageShadowRight.setVisibility(View.INVISIBLE);
-						} else {
-							imageShadowRight.setVisibility(View.VISIBLE);
-						}
-						// 左侧阴影
-						if (v.getScrollX() >= 20) {
-							imageShadowLeft.setVisibility(View.VISIBLE);
-						} else {
-							imageShadowLeft.setVisibility(View.INVISIBLE);
-						}
-						break;
-					default:
-						break;
-					}
-					return false;
-				}
-			});
-		}
 	}
 
 	private void startSpeak(String content) {

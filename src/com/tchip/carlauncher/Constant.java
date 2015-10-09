@@ -218,19 +218,6 @@ public interface Constant {
 		 * 语音模块是否是讯飞：true-讯飞 false-思必驰
 		 */
 		public static final boolean isVoiceXunfei = true;
-
-		/**
-		 * HorizontalScrollView是否有onTouch事件
-		 */
-		public static final boolean isHsvTouch = false;
-	}
-
-	/**
-	 * 思必驰
-	 */
-	public static final class AiSpeech {
-		public static final String API_KEY = "1437739850000406";// 添加您的APPKEY"1366851760000038 "1353458340
-		public static final String API_SECRET = "af227accdc76fad067bf622a1b13cfbb";// 添加您的SECRETKEY"ba312327c815536394f7eb6fd0b915c4"c0911ca544fa36fa47d5baccee1c58a0c936a4df
 	}
 
 	/**
