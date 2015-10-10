@@ -43,7 +43,7 @@
     <dimen name="weather_text_more_temp">20sp</dimen>
     <dimen name="chat_text_hint">30sp</dimen>
     <!-- System Setting Brightness -->
-    <dimen name="setting_system_bright_text_size">20sp</dimen>
+    <dimen name="setting_system_bright_text_size">25sp</dimen>
     <dimen name="setting_system_bright_item_height">80dp</dimen>
     <dimen name="setting_system_bright_radio_margin">15dp</dimen>
     <!-- File Manager -->
@@ -71,7 +71,7 @@
     <dimen name="ui_chat_speak_text_size">22sp</dimen>
 
     <!-- Setting Activity -->
-    <dimen name="setting_item_height">85dp</dimen>
+    <dimen name="setting_item_height">94dp</dimen>
     <dimen name="setting_item_image_height">40dp</dimen>
     <dimen name="setting_item_image_margin_left">60dp</dimen>
     <dimen name="setting_item_title_text_size">30sp</dimen>

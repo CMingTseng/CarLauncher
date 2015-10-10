@@ -11,13 +11,24 @@
         android:layout_height="93dp"
         android:background="@drawable/ui_setting_top_bar_bg" >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="音量设置"
+            android:textColor="@color/setting_item_title_color"
+            android:textSize="30sp" />
+
         <RelativeLayout
             android:id="@+id/layoutToSettingFromBright"
             android:layout_width="90dp"
-            android:background="@drawable/ui_back_arrow_bg_grey"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" >
+            android:layout_centerVertical="true"
+            android:background="@drawable/ui_back_arrow_bg_grey"
+            android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -42,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="MM月dd日"
-                 android:format24Hour="MM月dd日"
+                android:format24Hour="MM月dd日"
                 android:textColor="#8b8e8f"
                 android:textSize="15sp" />
 
@@ -95,11 +106,11 @@
             <SeekBar
                 android:id="@+id/volumeMedia"
                 android:layout_width="0dp"
-                android:max="15"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:layout_weight="12" />
+                android:layout_weight="12"
+                android:max="15" />
         </LinearLayout>
 
         <View
@@ -128,8 +139,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:max="15"
-                android:layout_weight="12" />
+                android:layout_weight="12"
+                android:max="15" />
         </LinearLayout>
 
         <View

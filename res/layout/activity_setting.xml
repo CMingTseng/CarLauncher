@@ -13,13 +13,24 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/ui_setting_top_bar_bg" >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/setting_item_image_margin_left"
+            android:text="设置"
+            android:textColor="@color/setting_item_title_color"
+            android:textSize="34sp" />
+
         <RelativeLayout
             android:id="@+id/btnToViceFromSetting"
             android:layout_width="90dp"
-            android:background="@drawable/ui_back_arrow_bg_grey"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" >
+            android:layout_centerVertical="true"
+            android:background="@drawable/ui_back_arrow_bg_grey"
+            android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -62,9 +73,9 @@
             android:id="@+id/textClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/layoutDate"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/layoutDate"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
             android:textColor="#ffffff"
@@ -77,8 +88,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:visibility="gone"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"

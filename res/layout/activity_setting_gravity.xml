@@ -19,7 +19,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/ui_back_arrow_bg_grey" >
+            android:background="@drawable/ui_back_arrow_bg_grey"
+            android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -31,12 +32,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/layoutBack"
+            android:layout_marginLeft="15dp"
             android:text="@string/title_setting_gravity"
-            android:textColor="#ffffff"
-            android:textSize="25sp" />
+            android:textColor="@color/setting_item_title_color"
+            android:textSize="30sp" />
 
         <com.tchip.carlauncher.view.SwitchButton
             android:id="@+id/switchGravity"
@@ -66,9 +67,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/ui_file_remote_start"
             android:text="@string/setting_gravity_hint"
             android:textColor="#ffffff"
@@ -92,59 +93,58 @@
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="-5dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="1.2\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="8dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="1.6\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="2.0\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="2.4\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="2.8\n|" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="3.2\n |" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="3.6\n |" />
-
         </LinearLayout>
     </RelativeLayout>
 

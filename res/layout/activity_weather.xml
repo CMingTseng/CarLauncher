@@ -22,6 +22,7 @@
             <RelativeLayout
                 android:id="@+id/layoutBack"
                 android:layout_width="90dp"
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true" >
@@ -41,6 +42,7 @@
 
             <TextClock
                 android:id="@+id/textWeek"
+                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/layoutBack"
@@ -122,7 +124,7 @@
                     android:gravity="center_vertical"
                     android:text="北京市"
                     android:textColor="#ffffff"
-                    android:textSize="16sp" >
+                    android:textSize="18sp" >
                 </TextView>
             </LinearLayout>
         </RelativeLayout>

@@ -129,6 +129,9 @@ public class SettingFragment extends Fragment {
 				SettingUtil.setParkingMonitor(context, isChecked);
 			}
 		});
+		RelativeLayout layoutRippleParking = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutRippleParking);
+		layoutRippleParking.setOnClickListener(new MyOnClickListener());
 
 		// 蓝牙(GONE)
 		RelativeLayout layoutRippleBluetooth = (RelativeLayout) systemSettingView
@@ -213,12 +216,16 @@ public class SettingFragment extends Fragment {
 	private boolean isParkingMonitorOn() {
 		return preferences.getBoolean("parkingOn", false);
 	}
-	
+
 	class MyOnClickListener implements View.OnClickListener {
 
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.layoutRippleParking:
+				switchParking.setChecked(!isParkingMonitorOn());
+				break;
+
 			case R.id.layoutUserCenter:
 				Intent intentUserCenter = new Intent(context,
 						UserCenterActivity.class);

@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="声音"
+                    android:text="音量"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
             </RelativeLayout>
