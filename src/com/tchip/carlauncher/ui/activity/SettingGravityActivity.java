@@ -63,16 +63,14 @@ public class SettingGravityActivity extends Activity {
 		layoutBack.setOnClickListener(new MyOnClickListener());
 
 		SeekBar gravitySeekBar = (SeekBar) findViewById(R.id.gravitySeekBar);
-		gravitySeekBar.setMax(6);
-		gravitySeekBar.setProgress(getGravityLevel() - 3);
+		gravitySeekBar.setMax(2);
+		gravitySeekBar.setProgress(getGravityLevel() - 1);
 
 		gravitySeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
-						// SettingUtil.setFmFrequency(getApplicationContext(),
-						// (seekBar.getProgress() + 875) * 10);
-						int crashSensitive = seekBar.getProgress() + 3;
+						int crashSensitive = seekBar.getProgress() + 1;
 						MyLog.v("[SettingGravity] Set crash sensitive:"
 								+ crashSensitive);
 						MyApplication.crashSensitive = crashSensitive;

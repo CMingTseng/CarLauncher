@@ -93,58 +93,28 @@
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="-5dp"
+                android:layout_marginLeft="40dp"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="1.2\n|" />
+                android:gravity="left"
+                android:text="高\n |"
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:text="1.6\n|" />
+                android:text="中\n|"
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginRight="40dp"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="2.0\n|" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="2.4\n|" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="2.8\n|" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="3.2\n |" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="3.6\n |" />
+                android:gravity="right"
+                android:text="低\n| "
+                android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>
 
