@@ -266,23 +266,33 @@ public class UserCenterActivity extends Activity {
 						.execute(httpPost);
 
 				int statusCode = httpResponse.getStatusLine().getStatusCode();
+				strResult = EntityUtils.toString(httpResponse.getEntity());
+
+				Message message = new Message();
+				message.what = 1;
+				userSignHandler.sendMessage(message);
+
 				if (statusCode == HttpURLConnection.HTTP_OK) {
-					strResult = EntityUtils.toString(httpResponse.getEntity());
+
 					MyLog.v("[UserCenter]userSign:" + strResult);
 					// {" status":0," msg":"\u53c2\u6570\u9519\u8bef"} 参数错误
 
-					Message message = new Message();
-					message.what = 1;
-					userSignHandler.sendMessage(message);
+					// Message message = new Message();
+					// message.what = 1;
+					// userSignHandler.sendMessage(message);
 				} else {
-					MyLog.e("[UserCenter]Err,StatusCode:" + statusCode);
+					strResult = EntityUtils.toString(httpResponse.getEntity()); // Test
+					MyLog.e("[UserCenter]Err,StatusCode:" + statusCode
+							+ ",StatusLine:"
+							+ httpResponse.getStatusLine().toString()
+							+ ",strResult:" + strResult);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				MyLog.e("[UserCenter]Exception:" + e.toString());
 			}
 		}
-
 	}
 
 	final Handler userSignHandler = new Handler() {
