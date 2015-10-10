@@ -256,13 +256,15 @@
                 <data android:scheme="file" />
             </intent-filter>
         </receiver>
+        <!--
         <receiver android:name="com.tchip.carlauncher.model.SleepReceiver" >
             <intent-filter>
                 <action android:name="com.tchip.SLEEP_ON" />
                 <action android:name="com.tchip.SLEEP_OFF" />
                 <action android:name="com.tchip.GSENSOR_CRASH" />
             </intent-filter>
-        </receiver>
+        </receiver>
+        -->
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />

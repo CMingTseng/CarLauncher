@@ -26,6 +26,7 @@ public class SleepReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		/*
 		this.context = context;
 		preferences = context.getSharedPreferences(
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -148,6 +149,7 @@ public class SleepReceiver extends BroadcastReceiver {
 				MyApplication.shouldStopWhenCrashVideoSave = true;
 			}
 		}
+		*/
 	}
 
 	/**
