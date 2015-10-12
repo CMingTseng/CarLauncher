@@ -2035,6 +2035,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void RecursionCheckFile(File file) {
 		if (MyApplication.isVideoReording) {
 			// 开始录像，终止删除
+			MyLog.v("[MainActivity]Stop RecursionCheckFile in case of isVideoReording == true");
 			return;
 		} else {
 			try {
