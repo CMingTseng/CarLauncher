@@ -185,14 +185,14 @@ public class MainActivity extends Activity implements TachographCallback,
 					context.sendBroadcast(new Intent("com.tchip.AIRPLANE_ON"));
 
 					// 熄灭屏幕,判断当前屏幕是否关闭
-					// PowerManager pm = (PowerManager) context
-					// .getSystemService(Context.POWER_SERVICE);
-					// boolean isScreenOn = pm.isScreenOn();
-					// if (!isScreenOn) {
-					// } else {
-					// context.sendBroadcast(new Intent("com.tchip.powerKey")
-					// .putExtra("value", "power"));
-					// }
+					PowerManager pm = (PowerManager) context
+							.getSystemService(Context.POWER_SERVICE);
+					boolean isScreenOn = pm.isScreenOn();
+					if (!isScreenOn) {
+					} else {
+						context.sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "power"));
+					}
 
 					// 关闭GPS
 					context.sendBroadcast(new Intent(

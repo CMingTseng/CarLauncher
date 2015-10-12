@@ -11,9 +11,19 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/ui_setting_top_bar_bg" >
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="用户中心"
+            android:textColor="@color/setting_item_title_color"
+            android:textSize="30sp" />
 
         <RelativeLayout
             android:id="@+id/layoutBack"
+            android:visibility="gone"
             android:layout_width="90dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
@@ -226,11 +236,13 @@
             android:id="@+id/layoutContentDefault"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" >
+            android:visibility="visible" >
 
             <TextView
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="25sp"
                 android:text="登录后关注微信公众号可使用更多功能" >
             </TextView>
         </RelativeLayout>

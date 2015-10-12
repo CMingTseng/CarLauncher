@@ -71,15 +71,4 @@ public class NetworkUtil {
 		return false;
 	}
 
-	/**
-	 * 获取设备IMEI
-	 * 
-	 * @param context
-	 * @return
-	 */
-	public String getImei(Context context) {
-		TelephonyManager telephonyManager = (TelephonyManager) context
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		return telephonyManager.getDeviceId();
-	}
 }

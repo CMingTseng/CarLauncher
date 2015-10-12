@@ -17,9 +17,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class SettingUtil {
@@ -237,6 +240,31 @@ public class SettingUtil {
 		editor.putBoolean("parkingOn", isParkingOn);
 		editor.commit();
 		MyLog.v("[SettingUtil]setParkingMonitor:" + isParkingOn);
+	}
+
+	/**
+	 * 获取Mac地址
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public String getLocalMacAddress(Context context) {
+		WifiManager wifi = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo info = wifi.getConnectionInfo();
+		return info.getMacAddress();
+	}
+
+	/**
+	 * 获取设备IMEI
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public String getImei(Context context) {
+		TelephonyManager telephonyManager = (TelephonyManager) context
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		return telephonyManager.getDeviceId();
 	}
 
 }

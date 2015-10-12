@@ -59,8 +59,9 @@ public class UserCenterActivity extends Activity {
 	}
 
 	private PannelState pannelState = PannelState.DEFAULT;
-
-	private static final String URL_PREFIX = "http://t-chip.com.cn/wechat/index.php/Home";
+	private static final String URL_PREFIX = "http://caixiaoxun.6655.la/wechat/index.php/Home";
+	// private static final String URL_PREFIX =
+	// "http://t-chip.com.cn/wechat/index.php/Home";
 	private static final String SUFFIX_USER_SIGN = "/Cllogin/register_user";
 	private static final String SUFFIX_USER_LOGIN = "/Cllogin/index";
 	private static final String SUFFIX_USER_QUERY = "/Cllogin/query";
@@ -193,10 +194,10 @@ public class UserCenterActivity extends Activity {
 				break;
 
 			case R.id.btnSign:
-				String userName = textSignUsername.getText().toString();
+				String userNameSign = textSignUsername.getText().toString();
 				String userPassOne = textSignPassOne.getText().toString();
 				String userPassTwo = textSignPassTwo.getText().toString();
-				if (userName == null || userName.trim().length() < 1) {
+				if (userNameSign == null || userNameSign.trim().length() < 1) {
 					Toast.makeText(getApplicationContext(), "请输入用户名",
 							Toast.LENGTH_SHORT).show();
 				} else if (userPassOne == null
@@ -212,17 +213,34 @@ public class UserCenterActivity extends Activity {
 					Toast.makeText(getApplicationContext(), "两次输入密码不一致",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					userSign(userName, userPassOne);
+					userSign(userNameSign, userPassOne);
 				}
 				break;
 
 			case R.id.btnSignReset:
+				textSignUsername.setText("");
+				textSignPassOne.setText("");
+				textSignPassTwo.setText("");
 				break;
 
 			case R.id.btnLogin:
+				String userNameLogin = textLoginUsername.getText().toString();
+				String userPassLogin = textLoginPass.getText().toString();
+				if (userNameLogin == null || userNameLogin.trim().length() < 1) {
+					Toast.makeText(getApplicationContext(), "请输入用户名",
+							Toast.LENGTH_SHORT).show();
+				} else if (userPassLogin == null
+						|| userPassLogin.trim().length() < 1) {
+					Toast.makeText(getApplicationContext(), "请输入密码",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					userLogin(userNameLogin, userPassLogin);
+				}
 				break;
 
 			case R.id.btnLoginReset:
+				textLoginUsername.setText("");
+				textLoginPass.setText("");
 				break;
 
 			default:
@@ -252,36 +270,42 @@ public class UserCenterActivity extends Activity {
 
 		@Override
 		public void run() {
+
 			String urlUserSign = URL_PREFIX + SUFFIX_USER_SIGN;
+			// 创建HttpClient实例
+			HttpClient httpClient = new DefaultHttpClient();
+
+			// 根据URL创建HttpPost实例
 			HttpPost httpPost = new HttpPost(urlUserSign);
 
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("username", Base64
-					.encodeToString(userName.getBytes(), Base64.DEFAULT)));
-			params.add(new BasicNameValuePair("password", Base64
-					.encodeToString(userPass.getBytes(), Base64.DEFAULT)));
+			String base64userName = Base64.encodeToString(userName.getBytes(),
+					Base64.DEFAULT);
+			String base64password = Base64.encodeToString(userPass.getBytes(),
+					Base64.DEFAULT);
+
+			params.add(new BasicNameValuePair("username", base64userName));
+			params.add(new BasicNameValuePair("password", base64password));
 			try {
 				httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-				HttpResponse httpResponse = new DefaultHttpClient()
-						.execute(httpPost);
+				HttpResponse httpResponse = httpClient.execute(httpPost);
 
 				int statusCode = httpResponse.getStatusLine().getStatusCode();
-				strResult = EntityUtils.toString(httpResponse.getEntity());
 
-				Message message = new Message();
-				message.what = 1;
-				userSignHandler.sendMessage(message);
-
+				MyLog.v("[UserCenter]statusCode:" + statusCode + ",strResult:"
+						+ strResult);
 				if (statusCode == HttpURLConnection.HTTP_OK) {
+					// 用户已注册:{" status":0," msg":"\u7528\u6237\u5df2\u6ce8\u518c"}
+					// 参数错误:\u53c2\u6570\u9519\u8bef
+
+					strResult = EntityUtils.toString(httpResponse.getEntity());
 
 					MyLog.v("[UserCenter]userSign:" + strResult);
-					// {" status":0," msg":"\u53c2\u6570\u9519\u8bef"} 参数错误
 
-					// Message message = new Message();
-					// message.what = 1;
-					// userSignHandler.sendMessage(message);
+					Message message = new Message();
+					message.what = 1;
+					userSignHandler.sendMessage(message);
 				} else {
-					strResult = EntityUtils.toString(httpResponse.getEntity()); // Test
 					MyLog.e("[UserCenter]Err,StatusCode:" + statusCode
 							+ ",StatusLine:"
 							+ httpResponse.getStatusLine().toString()
@@ -301,7 +325,8 @@ public class UserCenterActivity extends Activity {
 			switch (msg.what) {
 			case 1:
 				if (strResult != null && strResult.trim().length() > 0) {
-					textSignUsername.setText(strResult);
+
+					initialPannelLayout(PannelState.LOGIN); // 显示登录界面
 				}
 				break;
 
@@ -319,11 +344,87 @@ public class UserCenterActivity extends Activity {
 	 */
 	private void userLogin(String userName, String userPass) {
 		if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-
+			this.userName = userName;
+			this.userPass = userPass;
+			new Thread(new UserLoginThread()).start();
 		} else {
 			NetworkUtil.noNetworkHint(getApplicationContext());
 		}
 	}
+
+	private class UserLoginThread implements Runnable {
+
+		@Override
+		public void run() {
+			String urlUserLogin = URL_PREFIX + SUFFIX_USER_LOGIN;
+			// 创建HttpClient实例
+			HttpClient httpClient = new DefaultHttpClient();
+
+			// 根据URL创建HttpPost实例
+			HttpPost httpPost = new HttpPost(urlUserLogin);
+
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			String base64userName = Base64.encodeToString(userName.getBytes(),
+					Base64.DEFAULT);
+			String base64password = Base64.encodeToString(userPass.getBytes(),
+					Base64.DEFAULT);
+
+			params.add(new BasicNameValuePair("username", base64userName));
+			params.add(new BasicNameValuePair("password", base64password));
+			try {
+				httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+				HttpResponse httpResponse = httpClient.execute(httpPost);
+
+				int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+				MyLog.v("[UserCenter]statusCode:" + statusCode);
+				if (statusCode == HttpURLConnection.HTTP_OK) {
+					// 登录失败：{" status":0}
+					// 登录成功：{" status":1," id":"2"}
+
+					strResult = EntityUtils.toString(httpResponse.getEntity());
+
+					MyLog.v("[UserCenter]userLogin:" + strResult);
+
+					Message message = new Message();
+					message.what = 1;
+					userLoginHandler.sendMessage(message);
+				} else {
+					MyLog.e("[UserCenter]Err,StatusCode:" + statusCode
+							+ ",StatusLine:"
+							+ httpResponse.getStatusLine().toString()
+							+ ",strResult:" + strResult);
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				MyLog.e("[UserCenter]Exception:" + e.toString());
+			}
+		}
+
+	}
+
+	final Handler userLoginHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				Toast.makeText(getApplicationContext(), "登录成功",
+						Toast.LENGTH_SHORT).show();
+				break;
+
+			default:
+				break;
+			}
+		};
+	};
+
+	/**
+	 * 用户查询
+	 * 
+	 * 用户不存在：{" status":0," msg":"\u7528\u6237\u4e0d\u5b58\u5728"}
+	 * 
+	 * 用户已注册：{" status":1," id":"2"," msg":"\u7528\u6237\u5df2\u6ce8\u518c"}
+	 */
 
 	/**
 	 * 退出登录

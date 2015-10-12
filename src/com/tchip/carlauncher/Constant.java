@@ -177,7 +177,7 @@ public interface Constant {
 		/**
 		 * 是否有用户中心
 		 */
-		public static final boolean hasUserCenter = false;
+		public static final boolean hasUserCenter = true;
 
 		/**
 		 * 是否有电子狗
