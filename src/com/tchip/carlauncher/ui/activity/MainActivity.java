@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					.getSystemService(Context.AUDIO_SERVICE);
 
 			String action = intent.getAction();
-			MyLog.v("[SleepReceiver]action:" + action);
+			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals("com.tchip.SLEEP_ON")) {
 				try {
 					// 进入低功耗待机
@@ -279,6 +279,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			} else if (action.equals("com.tchip.GSENSOR_CRASH")) {
 				// 休眠时碰撞侦测，接收到碰撞，亮屏录制一段视频，然后休眠
+				MyLog.v("[GSENSOR_CRASH]Before State->shouldCrashRecord:"
+						+ MyApplication.shouldCrashRecord
+						+ ",shouldStopWhenCrashVideoSave:"
+						+ MyApplication.shouldStopWhenCrashVideoSave);
 
 				// 发送Home键，回到主界面
 				context.sendBroadcast(new Intent("com.tchip.powerKey")
@@ -421,6 +425,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void run() {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			Message message = new Message();
 			message.what = 1;
 			recordWhenCrashHandler.sendMessage(message);
@@ -466,7 +475,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						+ MyApplication.isVideoReording);
 			}
 		} catch (Exception e) {
-			MyLog.e("[MainActivity]recordOneVideoWHenCrash catch exception: "
+			MyLog.e("[MainActivity]recordOneVideoWhenCrash catch exception: "
 					+ e.toString());
 		}
 	}
