@@ -742,7 +742,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
-			synchronized (updateRecordTimeHandler) {
+		synchronized (updateRecordTimeHandler) {
 				do {
 					if (MyApplication.isCrashed) {
 						Message messageVideoLock = new Message();
@@ -756,7 +756,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						Message messageEject = new Message();
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
-						break;
+						return;
 					} else if (!MyApplication.isPowerConnect) {
 						// 电源断开
 						MyLog.e("Stop Record:Power is unconnected");
@@ -764,7 +764,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						messagePowerUnconnect.what = 3;
 						updateRecordTimeHandler
 								.sendMessage(messagePowerUnconnect);
-						break;
+						return;
 					} else if (MyApplication.isSleeping
 							&& !MyApplication.shouldStopWhenCrashVideoSave) {
 						// 进入低功耗休眠
@@ -772,7 +772,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						Message messageSleep = new Message();
 						messageSleep.what = 5;
 						updateRecordTimeHandler.sendMessage(messageSleep);
-						break;
+						return;
 					} else {
 						try {
 							Thread.sleep(1000);
@@ -2176,7 +2176,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
 			// CheckErrorFile(); // TEST
 		}
-
 	}
 
 	public void setup() {

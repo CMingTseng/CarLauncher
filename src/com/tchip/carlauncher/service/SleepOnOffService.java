@@ -63,10 +63,8 @@ public class SleepOnOffService extends Service {
 			String action = intent.getAction();
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals("com.tchip.SLEEP_ON")) {
-				startSpeak("下"); // TEST
 
 				try {
-
 					// 进入低功耗待机
 					MyApplication.isSleeping = true;
 
@@ -103,7 +101,6 @@ public class SleepOnOffService extends Service {
 				}
 			} else if (action.equals("com.tchip.SLEEP_OFF")) {
 				try {
-					startSpeak("上"); // TEST
 
 					// 取消低功耗待机
 					MyApplication.isSleeping = false;
@@ -112,8 +109,8 @@ public class SleepOnOffService extends Service {
 					MyApplication.shouldWakeRecord = true;
 
 					// 发送Home键，回到主界面
-//					context.sendBroadcast(new Intent("com.tchip.powerKey")
-//							.putExtra("value", "home"));
+					context.sendBroadcast(new Intent("com.tchip.powerKey")
+							.putExtra("value", "home"));
 
 					// 关闭飞行模式
 					context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
@@ -144,8 +141,8 @@ public class SleepOnOffService extends Service {
 						+ MyApplication.shouldStopWhenCrashVideoSave);
 
 				// 发送Home键，回到主界面
-//				context.sendBroadcast(new Intent("com.tchip.powerKey")
-//						.putExtra("value", "home"));
+				// context.sendBroadcast(new Intent("com.tchip.powerKey")
+				// .putExtra("value", "home"));
 
 				// 点亮屏幕
 				// SettingUtil.lightScreen(context);
