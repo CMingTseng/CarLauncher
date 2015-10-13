@@ -288,7 +288,8 @@
     <string name="sd1_not_exist">SD卡1不存在或未完成挂载</string>
     <string name="sd_remove_badly">SD卡异常或不存在，停止录像</string>
     <string name="stop_record_power_unconnect">电源断开，停止录像</string>
-    <string name="stop_record_sleep_on">进入休眠，停止录像</string>
+    <string name="stop_record_sleep_on">进入休眠</string>
+    <string name="stop_record_sleeping">正在休眠</string>
     <string name="photo_save">照片已保存</string>
     <string name="title_navigation">导航</string>
     <string name="title_chat">语音助手</string>

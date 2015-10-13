@@ -263,9 +263,8 @@
                 <action android:name="com.tchip.SLEEP_OFF" />
                 <action android:name="com.tchip.GSENSOR_CRASH" />
             </intent-filter>
-        </receiver>
+        </receiver>
         -->
-
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
         <service android:name="com.tchip.carlauncher.service.WeatherService" />
@@ -273,6 +272,7 @@
         <service android:name="com.tchip.carlauncher.service.TrafficFetchService" />
         <service android:name="com.tchip.carlauncher.service.TrafficFloatBarService" />
         <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
+        <service android:name="com.tchip.carlauncher.service.SleepOnOffService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
