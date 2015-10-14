@@ -111,6 +111,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ConnectivityManager connManager;
 	private NetworkInfo mWifi;
 
+	private PowerManager powerManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -124,13 +126,18 @@ public class MainActivity extends Activity implements TachographCallback,
 				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
+		// 视频数据库
 		videoDb = new DriveVideoDbHelper(getApplicationContext());
 
 		// Dialog
 		audioRecordDialog = new AudioRecordDialog(MainActivity.this);
 
+		// 获取屏幕状态
+		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
 		initialLayout();
 		initialCameraButton();
+
 		// 录像：配置参数，初始化布局
 		setupRecordDefaults();
 		setupRecordViews();
@@ -138,6 +145,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		MyListener = new MyPhoneStateListener();
 		Tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
 		// SIM卡状态
 		simState = Tel.getSimState();
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
@@ -148,14 +156,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 初始化节点状态
 		initialNodeState();
 
-		// ACC上下电侦测服务
-		Intent intentSleepOnOff = new Intent(MainActivity.this,
-				SleepOnOffService.class);
-		startService(intentSleepOnOff);
-
-		// 碰撞侦测服务
-		Intent intentSensor = new Intent(this, SensorWatchService.class);
-		startService(intentSensor);
+		// 初始化服务
+		initialService();
 
 		// 首次启动是否需要自动录像
 		if (1 == SettingUtil.getAccStatus()) {
@@ -179,7 +181,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * 2.自动录像
 	 * 
-	 * 3.初始化服务：轨迹记录，碰撞侦测
+	 * 3.初始化服务：轨迹记录
 	 */
 	public class AutoThread implements Runnable {
 
@@ -328,14 +330,18 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void recordOneVideoWhenCrash() {
 		try {
 			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
-				if (!MyApplication.isMainForeground) {
-					// 录像需切换到预览界面且点亮屏幕，否则无法录像
-					// 发送Home键，回到主界面
-					// sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-					// "value", "home"));
-					// 点亮屏幕
-					// SettingUtil.lightScreen(getApplicationContext());
+
+				// 点亮屏幕
+				if (!powerManager.isScreenOn()) {
+					SettingUtil.lightScreen(getApplicationContext());
 				}
+
+				if (!MyApplication.isMainForeground) {
+					// 发送Home键，回到主界面
+					sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+							"value", "home"));
+				}
+
 				// 开始录像
 				new Thread(new StartRecordThread()).start();
 			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
@@ -480,9 +486,18 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void initialService() {
 
+		// ACC上下电侦测服务
+		Intent intentSleepOnOff = new Intent(MainActivity.this,
+				SleepOnOffService.class);
+		startService(intentSleepOnOff);
+
 		// 轨迹记录服务
 		Intent intentRoute = new Intent(this, RouteRecordService.class);
 		startService(intentRoute);
+
+		// 碰撞侦测服务
+		Intent intentSensor = new Intent(this, SensorWatchService.class);
+		startService(intentSensor);
 	}
 
 	private void initialCameraSurface() {
@@ -815,8 +830,18 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
 					if (secondCount > 30) {
-						// 停止录像
-						startOrStopRecord();
+						// 停止录像 TODO:
+						if (stopRecorder() == 0) {
+							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+							MyApplication.isVideoReording = false;
+							setupRecordViews();
+						} else {
+							if (stopRecorder() == 0) {
+								mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+								MyApplication.isVideoReording = false;
+								setupRecordViews();
+							}
+						}
 						MyApplication.shouldStopWhenCrashVideoSave = false;
 
 						// 熄灭屏幕,判断当前屏幕是否关闭
@@ -909,7 +934,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 				// 如果此时屏幕为点亮状态，则不回收
-				PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 				boolean isScreenOn = powerManager.isScreenOn();
 				if (!isScreenOn) {
 					releaseCameraZone();
@@ -1291,13 +1315,15 @@ public class MainActivity extends Activity implements TachographCallback,
 					startSpeak(getResources().getString(
 							R.string.stop_record_sleeping));
 				} else {
+					// 点亮屏幕
+					if (!powerManager.isScreenOn()) {
+						SettingUtil.lightScreen(getApplicationContext());
+					}
+
 					if (!MyApplication.isMainForeground) {
-						// 录像需切换到预览界面且点亮屏幕，否则无法录像
 						// 发送Home键，回到主界面
-						// sendBroadcast(new Intent("com.tchip.powerKey")
-						// .putExtra("value", "home"));
-						// 点亮屏幕
-						// SettingUtil.lightScreen(getApplicationContext());
+						sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "home"));
 					}
 					// 开始录像
 					new Thread(new StartRecordThread()).start();
