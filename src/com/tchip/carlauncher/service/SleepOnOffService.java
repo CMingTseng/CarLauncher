@@ -101,9 +101,11 @@ public class SleepOnOffService extends Service {
 				}
 			} else if (action.equals("com.tchip.SLEEP_OFF")) {
 				try {
-
 					// 取消低功耗待机
 					MyApplication.isSleeping = false;
+
+					// 如果当前正在停车侦测录像，录满30S后不停止
+					MyApplication.shouldStopWhenCrashVideoSave = false;
 
 					// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
 					MyApplication.shouldWakeRecord = true;
