@@ -283,10 +283,10 @@
     <string name="hint_video_mute_off">录音</string>
     <string name="hint_video_mute_on">静音</string>
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
-    <string name="storage_full_cause_by_other">空间不足,请清理SD卡2</string>
-    <string name="sd2_not_exist">SD卡2不存在或未完成挂载</string>
-    <string name="sd1_not_exist">SD卡1不存在或未完成挂载</string>
-    <string name="sd_remove_badly">SD卡异常或不存在，停止录像</string>
+    <string name="storage_full_cause_by_other">空间不足,请清理存储卡2</string>
+    <string name="sd2_not_exist">存储卡二不存在，或未完成挂载</string>
+    <string name="sd1_not_exist">存储卡一不存在，或未完成挂载</string>
+    <string name="sd_remove_badly">存储卡异常，停止录像</string>
     <string name="stop_record_power_unconnect">电源断开，停止录像</string>
     <string name="stop_record_sleep_on">进入休眠</string>
     <string name="stop_record_sleeping">正在休眠</string>
@@ -385,8 +385,8 @@
     <string name="traffic_state">天流量情况（单位：MB）</string>
 
     <!-- UpdateMapActivity -->
-    <string name="sd_has_no_map">SD卡未检测到离线地图包</string>
-    <string name="sd_has_map">SD卡检测到%d个离线地图包</string>
+    <string name="sd_has_no_map">存储卡未检测到离线地图包</string>
+    <string name="sd_has_map">存储卡检测到%d个离线地图包</string>
     <string name="hint_import_is_cost_time">导入离线地图比较耗时，现在导入？</string>
     <string name="hint">提示</string>
     <string name="cancel">取消</string>

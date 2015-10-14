@@ -135,12 +135,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordDefaults();
 		setupRecordViews();
 
-		// 序列任务线程
-		new Thread(new AutoThread()).start();
-
-		// 后台线程
-		new Thread(new BackThread()).start();
-
 		// 3G信号
 		MyListener = new MyPhoneStateListener();
 		Tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -154,13 +148,38 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 初始化节点状态
 		initialNodeState();
 
+		// ACC上下电侦测服务
 		Intent intentSleepOnOff = new Intent(MainActivity.this,
 				SleepOnOffService.class);
 		startService(intentSleepOnOff);
+
+		// 碰撞侦测服务
+		Intent intentSensor = new Intent(this, SensorWatchService.class);
+		startService(intentSensor);
+
+		// 首次启动是否需要自动录像
+		if (1 == SettingUtil.getAccStatus()) {
+			// 序列任务线程
+			new Thread(new AutoThread()).start();
+		} else {
+			// ACC未连接,进入休眠
+			MyLog.v("[MainActivity]ACC Check:OFF, Send Broadcast:com.tchip.SLEEP_ON.");
+			sendBroadcast(new Intent("com.tchip.SLEEP_ON"));
+		}
+
+		// 后台线程
+		new Thread(new BackThread()).start();
+
 	}
 
 	/**
-	 * 序列任务线程，分步执行
+	 * 序列任务线程，分步执行：
+	 * 
+	 * 1.初次启动清空录像文件夹
+	 * 
+	 * 2.自动录像
+	 * 
+	 * 3.初始化服务：轨迹记录，碰撞侦测
 	 */
 	public class AutoThread implements Runnable {
 
@@ -175,9 +194,9 @@ public class MainActivity extends Activity implements TachographCallback,
 						sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 					}
 
-					File file = new File(sdcardPath + "tachograph/");
-					StorageUtil.RecursionDeleteFile(file);
-					MyLog.e("Delete video directory:tachograph !!!");
+					// File file = new File(sdcardPath + "tachograph/");
+					// StorageUtil.RecursionDeleteFile(file);
+					// MyLog.e("Delete video directory:tachograph !!!");
 
 					editor.putBoolean("isFirstLaunch", false);
 					editor.commit();
@@ -200,7 +219,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					autoHandler.sendMessage(message);
 				}
 				// 启动服务
-				// Thread.sleep(1000);
+				Thread.sleep(1000);
 				initialService();
 
 			} catch (InterruptedException e) {
@@ -312,10 +331,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!MyApplication.isMainForeground) {
 					// 录像需切换到预览界面且点亮屏幕，否则无法录像
 					// 发送Home键，回到主界面
-//					sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-//							"value", "home"));
+					// sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+					// "value", "home"));
 					// 点亮屏幕
-					//SettingUtil.lightScreen(getApplicationContext());
+					// SettingUtil.lightScreen(getApplicationContext());
 				}
 				// 开始录像
 				new Thread(new StartRecordThread()).start();
@@ -464,10 +483,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 轨迹记录服务
 		Intent intentRoute = new Intent(this, RouteRecordService.class);
 		startService(intentRoute);
-
-		// 碰撞侦测服务
-		Intent intentSensor = new Intent(this, SensorWatchService.class);
-		startService(intentSensor);
 	}
 
 	private void initialCameraSurface() {
@@ -742,7 +757,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			// 解决录像时，快速点击录像按钮两次，线程叠加跑秒过快的问题
-		synchronized (updateRecordTimeHandler) {
+			synchronized (updateRecordTimeHandler) {
 				do {
 					if (MyApplication.isCrashed) {
 						Message messageVideoLock = new Message();
@@ -893,7 +908,13 @@ public class MainActivity extends Activity implements TachographCallback,
 						setupRecordViews();
 					}
 				}
-				releaseCameraZone();
+				// 如果此时屏幕为点亮状态，则不回收
+				PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+				boolean isScreenOn = powerManager.isScreenOn();
+				if (!isScreenOn) {
+					releaseCameraZone();
+				}
+
 				MyApplication.shouldResetRecordWhenResume = true;
 
 				String strSleepOn = getResources().getString(
@@ -1273,10 +1294,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (!MyApplication.isMainForeground) {
 						// 录像需切换到预览界面且点亮屏幕，否则无法录像
 						// 发送Home键，回到主界面
-//						sendBroadcast(new Intent("com.tchip.powerKey")
-//								.putExtra("value", "home"));
+						// sendBroadcast(new Intent("com.tchip.powerKey")
+						// .putExtra("value", "home"));
 						// 点亮屏幕
-						//SettingUtil.lightScreen(getApplicationContext());
+						// SettingUtil.lightScreen(getApplicationContext());
 					}
 					// 开始录像
 					new Thread(new StartRecordThread()).start();
@@ -1648,7 +1669,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 删除最旧视频
+	 * 删除最旧视频，调用此函数的地方：
+	 * 
+	 * 1.开启录像 {@link #startRecordTask}
+	 * 
+	 * 2.文件保存回调{@link #onFileSave}
 	 */
 	private boolean deleteOldestUnlockVideo() {
 		try {
@@ -1754,6 +1779,15 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 录像线程， 调用此线程地方：
+	 * 
+	 * 1.首次启动录像
+	 * 
+	 * 2.ACC上电录像
+	 * 
+	 * 3.停车侦测，录制一个加锁视频
+	 */
 	private class StartRecordThread implements Runnable {
 
 		@Override
@@ -1762,6 +1796,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			while (i < 6) {
 				try {
 					if (!StorageUtil.isVideoCardExists()) {
+						// 如果是休眠状态，且不是停车侦测录像情况，避免线程执行过程中，ACC下电后仍然语音提醒“SD不存在”
+						if (!MyApplication.shouldStopWhenCrashVideoSave
+								&& MyApplication.isSleeping) {
+							return;
+						}
 						Thread.sleep(1000);
 						i++;
 						MyLog.e("[RetryRecordWhenSDNotMountThread]No SD:try "
@@ -1812,6 +1851,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
+	/**
+	 * 开启录像
+	 * 
+	 * @return 0:成功 -1:失败
+	 */
 	public int startRecordTask() {
 		if (mMyRecorder != null) {
 			if (deleteOldestUnlockVideo()) {
@@ -1849,7 +1893,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		audioRecordDialog.showErrorDialog(strNoSD);
 		new Thread(new dismissDialogThread()).start();
 		startSpeak(strNoSD);
-
 	}
 
 	/**
@@ -2174,7 +2217,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		if (!MyApplication.isVideoReording) {
 			// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
-			// CheckErrorFile(); // TEST
+			CheckErrorFile(); // TEST
 		}
 	}
 

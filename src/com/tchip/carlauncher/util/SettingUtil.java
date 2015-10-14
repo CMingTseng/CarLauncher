@@ -1,9 +1,12 @@
 package com.tchip.carlauncher.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -244,6 +247,41 @@ public class SettingUtil {
 		editor.putBoolean("parkingOn", isParkingOn);
 		editor.commit();
 		MyLog.v("[SettingUtil]setParkingMonitor:" + isParkingOn);
+	}
+
+	/**
+	 * ACC状态节点
+	 */
+	public static File fileAccStatus = new File(
+			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/acc_car_status");
+
+	/**
+	 * 获取ACC状态
+	 * 
+	 * @return 0:ACC下电
+	 * 
+	 *         1:ACC上电
+	 */
+	public static int getAccStatus() {
+		return getFileInt(fileAccStatus);
+	}
+
+	public static int getFileInt(File file) {
+
+		if (file.exists()) {
+			try {
+				InputStream is = new FileInputStream(file);
+				InputStreamReader fr = new InputStreamReader(is);
+				int ch = 0;
+				if ((ch = fr.read()) != -1)
+					return Integer.parseInt(String.valueOf((char) ch));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 
 	/**
