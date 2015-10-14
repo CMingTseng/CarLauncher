@@ -96,7 +96,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="高\n |"
+                android:text="低\n |"
                 android:textSize="20sp" />
 
             <TextView
@@ -113,7 +113,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="低\n| "
+                android:text="高\n| "
                 android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>

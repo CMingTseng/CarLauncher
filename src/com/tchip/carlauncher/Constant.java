@@ -17,9 +17,18 @@ public interface Constant {
 		/**
 		 * 碰撞侦测默认灵敏度Level
 		 */
-		public static final int DEFAULT_SENSITIVE = 2;
-
 		public static final float VALUE = 9.8f;
+
+		public static final int SENSITIVE_LOW = 0;
+		public static final int SENSITIVE_MIDDLE = 1;
+		public static final int SENSITIVE_HIGH = 2;
+		public static final int SENSITIVE_DEFAULT = SENSITIVE_MIDDLE;
+
+		public static final float VALUE_LOW = VALUE * 1.8f;
+		public static final float VALUE_MIDDLE = VALUE * 1.5f;
+		public static final float VALUE_HIGH = VALUE * 1;
+		public static final float VALUE_DEFAULT = VALUE_MIDDLE;
+
 	}
 
 	public static final class Record {

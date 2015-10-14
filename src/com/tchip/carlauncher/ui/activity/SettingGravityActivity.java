@@ -64,13 +64,13 @@ public class SettingGravityActivity extends Activity {
 
 		SeekBar gravitySeekBar = (SeekBar) findViewById(R.id.gravitySeekBar);
 		gravitySeekBar.setMax(2);
-		gravitySeekBar.setProgress(getGravityLevel() - 1);
+		gravitySeekBar.setProgress(getGravityLevel());
 
 		gravitySeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
-						int crashSensitive = seekBar.getProgress() + 1;
+						int crashSensitive = seekBar.getProgress();
 						MyLog.v("[SettingGravity] Set crash sensitive:"
 								+ crashSensitive);
 						MyApplication.crashSensitive = crashSensitive;
@@ -103,7 +103,7 @@ public class SettingGravityActivity extends Activity {
 	 */
 	private int getGravityLevel() {
 		int crashSensitive = sharedPreferences.getInt("crashSensitive",
-				Constant.GravitySensor.DEFAULT_SENSITIVE);
+				Constant.GravitySensor.SENSITIVE_DEFAULT);
 		return crashSensitive;
 	}
 

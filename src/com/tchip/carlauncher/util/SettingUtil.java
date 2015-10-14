@@ -333,4 +333,15 @@ public class SettingUtil {
 		return null;
 	}
 
+	public static float getGravityVauleBySensitive(int sensitive) {
+
+		if (sensitive == Constant.GravitySensor.SENSITIVE_LOW) {
+			return Constant.GravitySensor.VALUE_LOW;
+		} else if (sensitive == Constant.GravitySensor.SENSITIVE_MIDDLE) {
+			return Constant.GravitySensor.VALUE_MIDDLE;
+		} else {
+			return Constant.GravitySensor.VALUE_HIGH;
+		}
+
+	}
 }

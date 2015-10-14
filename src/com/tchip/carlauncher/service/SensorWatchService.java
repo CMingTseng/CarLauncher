@@ -17,6 +17,7 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.MyLog;
+import com.tchip.carlauncher.util.SettingUtil;
 
 /**
  * Created by AlexZhou on 2015/3/26. 11:06
@@ -58,37 +59,40 @@ public class SensorWatchService extends Service {
 					MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
 					return;
 				}
-				LIMIT_X = LIMIT_Y = LIMIT_Z = MyApplication.crashSensitive
-						* Constant.GravitySensor.VALUE;
-				valueX = event.values[AXIS_X];
-				valueY = event.values[AXIS_Y];
-				valueZ = event.values[AXIS_Z];
 
-				if (valueX > LIMIT_X || valueX < -LIMIT_X) {
-					crashFlag[0] = 1;
-					isCrash = true;
-				}
-				// if (valueY > LIMIT_Y || valueY < -LIMIT_Y) {
-				// crashFlag[1] = 1;
-				// isCrash = true;
-				// }
-				if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
-					crashFlag[2] = 1;
-					isCrash = true;
-				}
-				if (isCrash && MyApplication.isCrashOn) {
-					// 当前录制视频加锁
-					if (MyApplication.isVideoReording
-							&& !MyApplication.isVideoLock) {
-						MyApplication.isVideoLock = true;
-						MyApplication.isCrashed = true;
-						startSpeak(getResources().getString(
-								R.string.lock_video_in_case_crash));
-						MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
-								+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
+				if (MyApplication.isCrashOn) {
+					LIMIT_X = LIMIT_Y = LIMIT_Z = SettingUtil
+							.getGravityVauleBySensitive(MyApplication.crashSensitive);
+					valueX = event.values[AXIS_X];
+					valueY = event.values[AXIS_Y];
+					valueZ = event.values[AXIS_Z];
+
+					if (valueX > LIMIT_X || valueX < -LIMIT_X) {
+						crashFlag[0] = 1;
+						isCrash = true;
 					}
-					// 重置碰撞标志位
-					isCrash = false;
+					// if (valueY > LIMIT_Y || valueY < -LIMIT_Y) {
+					// crashFlag[1] = 1;
+					// isCrash = true;
+					// }
+					if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
+						crashFlag[2] = 1;
+						isCrash = true;
+					}
+					if (isCrash) {
+						// 当前录制视频加锁
+						if (MyApplication.isVideoReording
+								&& !MyApplication.isVideoLock) {
+							MyApplication.isVideoLock = true;
+							MyApplication.isCrashed = true;
+							startSpeak(getResources().getString(
+									R.string.lock_video_in_case_crash));
+							MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
+									+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
+						}
+						// 重置碰撞标志位
+						isCrash = false;
+					}
 				}
 			}
 

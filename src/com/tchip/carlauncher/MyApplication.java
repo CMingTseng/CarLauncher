@@ -64,7 +64,7 @@ public class MyApplication extends Application {
 	 * 碰撞侦测开关和级别
 	 */
 	public static boolean isCrashOn = false;
-	public static int crashSensitive = Constant.GravitySensor.DEFAULT_SENSITIVE;
+	public static int crashSensitive = Constant.GravitySensor.SENSITIVE_DEFAULT;
 	private SharedPreferences sharedPreferences;
 
 	@Override
@@ -114,7 +114,7 @@ public class MyApplication extends Application {
 
 			isCrashOn = sharedPreferences.getBoolean("crashOn", false);
 			crashSensitive = sharedPreferences.getInt("crashSensitive",
-					Constant.GravitySensor.DEFAULT_SENSITIVE);
+					Constant.GravitySensor.SENSITIVE_DEFAULT);
 		} catch (Exception e) {
 			MyLog.e("[MyApplication]initialCrashData: Catch Exception!"
 					+ e.getMessage());

@@ -283,7 +283,7 @@
     <string name="hint_video_mute_off">录音</string>
     <string name="hint_video_mute_on">静音</string>
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
-    <string name="storage_full_cause_by_other">空间不足,请清理存储卡2</string>
+    <string name="storage_full_cause_by_other">空间不足，请清理存储卡2</string>
     <string name="sd2_not_exist">存储卡二不存在，或未完成挂载</string>
     <string name="sd1_not_exist">存储卡一不存在，或未完成挂载</string>
     <string name="sd_remove_badly">存储卡异常，停止录像</string>
@@ -411,8 +411,8 @@
     <string name="title_fm_transmit">FM发射</string>
 
     <!-- SettingGravityActivity -->
-    <string name="title_setting_gravity">碰撞侦测</string>
-    <string name="setting_gravity_hint">设置合适的灵敏度：\n过高容易导致误判，过低则较难触发视频加锁</string>
+    <string name="title_setting_gravity">碰撞侦测灵敏度</string>
+    <string name="setting_gravity_hint">设置合适的灵敏度：\n过低较难触发视频加锁，过高则容易导致误判</string>
     <string name="lock_video_in_case_crash">视频加锁</string>
 
     <!-- WeChat -->
