@@ -143,20 +143,6 @@ public interface Constant {
 				+ "antibanding-values=off,50hz,60hz,auto";
 	}
 
-	/**
-	 * 微信
-	 */
-	public static final class WeChat {
-		public static final String APP_ID = "wx3dfcad129fd81333";
-		public static final String APP_SECRET = "a897114c079d32b36f3d4d4a20c5fc5f";
-	}
-
-	public static class ShowMsgActivity {
-		public static final String STitle = "showmsg_title";
-		public static final String SMessage = "showmsg_message";
-		public static final String BAThumbData = "showmsg_thumb_data";
-	}
-
 	public static final class Module {
 		/**
 		 * 主界面是否显示讯飞语音助手
