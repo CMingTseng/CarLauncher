@@ -348,9 +348,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
+
+					releaseCameraZone();
 				}
 			}
-			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 			setupRecordViews();
 			if (Constant.isDebug) {
 				MyLog.v("MyApplication.isVideoReording:"
@@ -835,23 +836,27 @@ public class MainActivity extends Activity implements TachographCallback,
 							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 							MyApplication.isVideoReording = false;
 							setupRecordViews();
+							releaseCameraZone();
 						} else {
 							if (stopRecorder() == 0) {
 								mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 								MyApplication.isVideoReording = false;
 								setupRecordViews();
+								releaseCameraZone();
 							}
 						}
+
 						MyApplication.shouldStopWhenCrashVideoSave = false;
 
 						// 熄灭屏幕,判断当前屏幕是否关闭
-						PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-						boolean isScreenOn = pm.isScreenOn();
-						if (!isScreenOn) {
-						} else {
-							sendBroadcast(new Intent("com.tchip.powerKey")
-									.putExtra("value", "power"));
-						}
+						// PowerManager pm = (PowerManager)
+						// getSystemService(Context.POWER_SERVICE);
+						// boolean isScreenOn = pm.isScreenOn();
+						// if (!isScreenOn) {
+						// } else {
+						// sendBroadcast(new Intent("com.tchip.powerKey")
+						// .putExtra("value", "power"));
+						// }
 					}
 				}
 				break;
@@ -862,11 +867,15 @@ public class MainActivity extends Activity implements TachographCallback,
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
 					setupRecordViews();
+
+					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
 						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApplication.isVideoReording = false;
 						setupRecordViews();
+
+						releaseCameraZone();
 					}
 				}
 
@@ -886,11 +895,15 @@ public class MainActivity extends Activity implements TachographCallback,
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
 					setupRecordViews();
+
+					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
 						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApplication.isVideoReording = false;
 						setupRecordViews();
+
+						releaseCameraZone();
 					}
 				}
 
@@ -926,11 +939,15 @@ public class MainActivity extends Activity implements TachographCallback,
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
 					setupRecordViews();
+
+					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
 						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApplication.isVideoReording = false;
 						setupRecordViews();
+
+						releaseCameraZone();
 					}
 				}
 				// 如果此时屏幕为点亮状态，则不回收
@@ -1119,8 +1136,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoCameraSmall:
 				if (!ClickUtil.isQuickClick(500)) {
 					takePhoto();
-					AudioPlayUtil.playAudio(getApplicationContext(),
-							FILE_TYPE_IMAGE);
 				}
 				break;
 
@@ -1335,9 +1350,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (MyApplication.shouldStopWhenCrashVideoSave) {
 						MyApplication.shouldStopWhenCrashVideoSave = false;
 					}
+
+					releaseCameraZone();
 				}
 			}
-			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 			setupRecordViews();
 			if (Constant.isDebug) {
 				MyLog.v("MyApplication.isVideoReording:"
@@ -1440,15 +1456,20 @@ public class MainActivity extends Activity implements TachographCallback,
 	};
 
 	/**
-	 * 释放Camera
+	 * 如果录像界面不在前台且未在录像，则释放Camera，防止出现熄屏时未在录像仍在预览功耗高的问题
+	 * 
+	 * 调用地方：在成功执行{@link #stopRecorder}之后
 	 */
 	private void releaseCameraZone() {
-		release();
-		// mHolder = null;
-		if (mCamera != null) {
-			mCamera.stopPreview();
+		if (!MyApplication.isMainForeground) {
+			release();
+			// mHolder = null;
+			if (mCamera != null) {
+				mCamera.stopPreview();
+			}
+			MyApplication.shouldResetRecordWhenResume = true;
+			MyLog.v("[Record]releaseCameraZone");
 		}
-		MyApplication.shouldResetRecordWhenResume = true;
 	}
 
 	@Override
@@ -1457,8 +1478,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
 
+		MyLog.v("[onPause]MyApplication.isVideoReording:"
+				+ MyApplication.isVideoReording);
+
 		if (!MyApplication.isVideoReording) {
-			MyLog.v("[MainActivity]onPause, releaseCameraZone() when not recording");
 			releaseCameraZone();
 			MyApplication.isVideoLockSecond = false;
 		}
@@ -1901,7 +1924,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				} else {
 					setMute(true);
 				}
-
+				AudioPlayUtil.playAudio(getApplicationContext(),
+						FILE_TYPE_VIDEO);
 				return mMyRecorder.start();
 			}
 		}
@@ -2035,6 +2059,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
 			MyLog.d("Record Stop");
+			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+
 			return mMyRecorder.stop();
 		}
 
@@ -2062,6 +2088,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			return -1;
 		} else if (mMyRecorder != null) {
+			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 			return mMyRecorder.takePicture();
 		}
 		return -1;
