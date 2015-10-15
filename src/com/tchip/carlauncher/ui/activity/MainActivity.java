@@ -286,6 +286,18 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (MyApplication.shouldCrashRecord) {
 					MyApplication.isVideoLock = true;
 					MyApplication.shouldCrashRecord = false;
+
+					// 点亮屏幕
+					if (!powerManager.isScreenOn()) {
+						SettingUtil.lightScreen(getApplicationContext());
+					}
+
+					if (!MyApplication.isMainForeground) {
+						// 发送Home键，回到主界面
+						sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "home"));
+					}
+
 					new Thread(new RecordWhenCrashThread()).start();
 				}
 				break;
