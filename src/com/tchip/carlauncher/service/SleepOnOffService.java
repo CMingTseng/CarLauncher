@@ -63,78 +63,78 @@ public class SleepOnOffService extends Service {
 			String action = intent.getAction();
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals("com.tchip.SLEEP_ON")) {
+				if (MyApplication.isSleeping) {
+				} else {
+					try {
+						// 进入低功耗待机
+						MyApplication.isSleeping = true;
 
-				try {
-					// 进入低功耗待机
-					MyApplication.isSleeping = true;
+						// 打开飞行模式
+						context.sendBroadcast(new Intent(
+								"com.tchip.AIRPLANE_ON"));
 
-					// 熄灭屏幕,判断当前屏幕是否关闭
-					boolean isScreenOn = powerManager.isScreenOn();
-					if (!isScreenOn) {
-					} else {
-						context.sendBroadcast(new Intent("com.tchip.powerKey")
-								.putExtra("value", "power"));
+						// 关闭GPS
+						context.sendBroadcast(new Intent(
+								"tchip.intent.action.ACTION_GPS_OFF"));
+
+						// 关闭FM发射，并保存休眠前状态
+						boolean fmStateBeforeSleep = SettingUtil
+								.isFmTransmitOn(context);
+						editor.putBoolean("fmStateBeforeSleep",
+								fmStateBeforeSleep);
+						editor.commit();
+						if (fmStateBeforeSleep) {
+							MyLog.v("[SleepReceiver]Sleep:close FM");
+							Settings.System.putString(
+									context.getContentResolver(),
+									Constant.FMTransmit.SETTING_ENABLE, "0");
+							SettingUtil.SaveFileToNode(
+									SettingUtil.nodeFmEnable, "0");
+						}
+
+					} catch (Exception e) {
+						MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_ON");
 					}
-
-					// 打开飞行模式
-					context.sendBroadcast(new Intent("com.tchip.AIRPLANE_ON"));
-
-					// 关闭GPS
-					context.sendBroadcast(new Intent(
-							"tchip.intent.action.ACTION_GPS_OFF"));
-
-					// 关闭FM发射，并保存休眠前状态
-					boolean fmStateBeforeSleep = SettingUtil
-							.isFmTransmitOn(context);
-					editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
-					editor.commit();
-					if (fmStateBeforeSleep) {
-						MyLog.v("[SleepReceiver]Sleep:close FM");
-						Settings.System.putString(context.getContentResolver(),
-								Constant.FMTransmit.SETTING_ENABLE, "0");
-						SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
-								"0");
-					}
-
-				} catch (Exception e) {
-					MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_ON");
 				}
 			} else if (action.equals("com.tchip.SLEEP_OFF")) {
-				try {
-					// 取消低功耗待机
-					MyApplication.isSleeping = false;
+				if (MyApplication.isSleeping) {
+					try {
+						// 取消低功耗待机
+						MyApplication.isSleeping = false;
 
-					// 如果当前正在停车侦测录像，录满30S后不停止
-					MyApplication.shouldStopWhenCrashVideoSave = false;
+						// 如果当前正在停车侦测录像，录满30S后不停止
+						MyApplication.shouldStopWhenCrashVideoSave = false;
 
-					// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
-					MyApplication.shouldWakeRecord = true;
+						// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
+						MyApplication.shouldWakeRecord = true;
 
-					// 发送Home键，回到主界面
-					context.sendBroadcast(new Intent("com.tchip.powerKey")
-							.putExtra("value", "home"));
+						// 发送Home键，回到主界面
+						context.sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "home"));
 
-					// 关闭飞行模式
-					context.sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
+						// 关闭飞行模式
+						context.sendBroadcast(new Intent(
+								"com.tchip.AIRPLANE_OFF"));
 
-					// 打开GPS
-					context.sendBroadcast(new Intent(
-							"tchip.intent.action.ACTION_GPS_ON"));
+						// 打开GPS
+						context.sendBroadcast(new Intent(
+								"tchip.intent.action.ACTION_GPS_ON"));
 
-					// 重置FM发射状态
-					boolean fmStateBeforeSleep = sharedPreferences.getBoolean(
-							"fmStateBeforeSleep", false);
-					if (fmStateBeforeSleep) {
-						MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
-						Settings.System.putString(context.getContentResolver(),
-								Constant.FMTransmit.SETTING_ENABLE, "1");
-						SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
-								"1");
+						// 重置FM发射状态
+						boolean fmStateBeforeSleep = sharedPreferences
+								.getBoolean("fmStateBeforeSleep", false);
+						if (fmStateBeforeSleep) {
+							MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
+							Settings.System.putString(
+									context.getContentResolver(),
+									Constant.FMTransmit.SETTING_ENABLE, "1");
+							SettingUtil.SaveFileToNode(
+									SettingUtil.nodeFmEnable, "1");
+						}
+					} catch (Exception e) {
+						MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_OFF");
 					}
-				} catch (Exception e) {
-					MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_OFF");
 				}
-
 			} else if (action.equals("com.tchip.GSENSOR_CRASH")) {
 				// 休眠时碰撞侦测，接收到碰撞，亮屏录制一段视频，然后休眠
 				MyLog.v("[GSENSOR_CRASH]Before State->shouldCrashRecord:"

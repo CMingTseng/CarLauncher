@@ -495,9 +495,24 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:text="00:00"
-        android:textColor="#ff0000"
-        android:textSize="18sp"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
+        android:shadowRadius="2.5"
+        android:text="00 : 00"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imageRecordingHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/textRecordTime"
+        android:layout_alignTop="@id/textRecordTime"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/textRecordTime"
+        android:src="@drawable/ui_main_video_recording"
         android:visibility="gone" />
 
     <RelativeLayout

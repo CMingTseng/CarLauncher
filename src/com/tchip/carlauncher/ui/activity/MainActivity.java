@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView imageWifiLevel; // WiFi状态图标
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
 
-	private ImageView imageShadowRight, imageShadowLeft;
+	private ImageView imageShadowRight, imageShadowLeft, imageRecordingHint;
 
 	private HorizontalScrollView hsvMain;
 
@@ -529,6 +529,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		initialCameraSurface();
 
 		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
+		textRecordTime.setTypeface(Typefaces.get(this, Constant.Path.FONT
+				+ "Font-Quartz-Regular.ttf"));
+		imageRecordingHint = (ImageView) findViewById(R.id.imageRecordingHint);
 
 		// 增大点击区域
 		layoutVideoSize = (LinearLayout) findViewById(R.id.layoutVideoSize);
@@ -842,8 +845,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
-					if (secondCount > 30) {
-						// 停止录像 TODO:
+					if (secondCount == 30) {
+						// 停止录像
 						if (stopRecorder() == 0) {
 							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 							MyApplication.isVideoReording = false;
@@ -861,14 +864,13 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApplication.shouldStopWhenCrashVideoSave = false;
 
 						// 熄灭屏幕,判断当前屏幕是否关闭
-						// PowerManager pm = (PowerManager)
-						// getSystemService(Context.POWER_SERVICE);
-						// boolean isScreenOn = pm.isScreenOn();
-						// if (!isScreenOn) {
-						// } else {
-						// sendBroadcast(new Intent("com.tchip.powerKey")
-						// .putExtra("value", "power"));
-						// }
+						PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+						boolean isScreenOn = pm.isScreenOn();
+						if (isScreenOn) {
+							sendBroadcast(new Intent("com.tchip.SLEEP_ON"));
+							// sendBroadcast(new Intent("com.tchip.powerKey")
+							// .putExtra("value", "power"));
+						}
 					}
 				}
 				break;
@@ -1044,7 +1046,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
 					MyApplication.isVideoReording = false;
 					secondCount = -1; // 录制时间秒钟复位
-					textRecordTime.setText("00:00");
+					textRecordTime.setText("00 : 00");
 					textRecordTime.setVisibility(View.INVISIBLE);
 
 					if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
@@ -1103,7 +1105,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 					if (MyApplication.isVideoReording) {
 						secondCount = -1; // 录制时间秒钟复位
-						textRecordTime.setText("00:00");
+						textRecordTime.setText("00 : 00");
 						textRecordTime.setVisibility(View.INVISIBLE);
 						MyApplication.isVideoReording = false;
 
@@ -1600,6 +1602,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 绘制录像按钮
+	 */
 	private void setupRecordViews() {
 		// 视频分辨率
 		if (mResolutionState == Constant.Record.STATE_RESOLUTION_720P) {
@@ -1616,11 +1621,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					R.drawable.ui_main_video_record));
 			smallVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_record));
+			imageRecordingHint.setVisibility(View.GONE);
 		} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
 			largeVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_pause));
 			smallVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_pause));
+			imageRecordingHint.setVisibility(View.VISIBLE);
 		}
 
 		// 视频分段
@@ -1895,6 +1902,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (startRecordTask() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STARTED;
 					MyApplication.isVideoReording = true;
+					setupRecordViews();
 				} else {
 					if (Constant.isDebug)
 						MyLog.e("Start Record Failed");
@@ -2067,7 +2075,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int stopRecorder() {
 		secondCount = -1; // 录制时间秒钟复位
-		textRecordTime.setText("00:00");
+		textRecordTime.setText("00 : 00");
 		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
 			MyLog.d("Record Stop");
@@ -2242,7 +2250,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (type == 1) {
 			deleteOldestUnlockVideo();
 			secondCount = -1; // 录制时间秒钟复位
-			textRecordTime.setText("00:00");
+			textRecordTime.setText("00 : 00");
 
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
