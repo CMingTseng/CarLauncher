@@ -4,7 +4,6 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
-import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
 import com.tchip.carlauncher.view.LayoutRipple;
 
 import android.content.Context;
@@ -133,9 +132,6 @@ public class SettingSystemFragment extends Fragment {
 						android.provider.Settings.ACTION_WIFI_SETTINGS));
 				break;
 			case R.id.layoutRippleTraffic:
-				Intent intentTraffic = new Intent(context,
-						TrafficStatActivity.class);
-				startActivity(intentTraffic);
 				break;
 			case R.id.layoutRippleBluetooth:
 				startActivity(new Intent(

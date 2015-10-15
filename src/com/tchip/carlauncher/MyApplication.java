@@ -33,10 +33,10 @@ public class MyApplication extends Application {
 	public static boolean shouldStopWhenCrashVideoSave = false;
 
 	// Music
-	public static boolean mIsSleepClockSetting = false;
-	private static String rootPath = "/mymusic";
-	public static String lrcPath = "/lrc";
-	public static String nowPlayMusic = "";
+	// public static boolean mIsSleepClockSetting = false;
+	// private static String rootPath = "/mymusic";
+	// public static String lrcPath = "/lrc";
+	// public static String nowPlayMusic = "";
 
 	// Route Record
 	public static boolean isRouteRecord = false;
@@ -48,11 +48,15 @@ public class MyApplication extends Application {
 	// 第二段视频加锁
 	public static boolean isVideoLockSecond = false;
 	public static boolean isCrashed = false;
+
+	// 存储更改视频分辨率前的录像状态
 	public static boolean shouldVideoRecordWhenChangeSize = false;
 
 	public static boolean shouldResetRecordWhenResume = false;
 
 	public static boolean isFirstLaunch = true;
+
+	// 录像界面是否可见
 	public static boolean isMainForeground = true;
 
 	/**

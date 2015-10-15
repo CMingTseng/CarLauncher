@@ -42,8 +42,7 @@ public class SensorWatchService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		SharedPreferences sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		MyLog.v("[SensorWatchService]onCreate");
 
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// Using TYPE_ACCELEROMETER first if exit, then TYPE_GRAVITY
@@ -111,13 +110,13 @@ public class SensorWatchService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
 		return super.onStartCommand(intent, flags, startId);
 	}
 
 	@Override
 	public void onDestroy() {
 		sensorManager.unregisterListener(sensorEventListener);
+		MyLog.v("[SensorWatchService]onDestroy");
 		super.onDestroy();
 	}
 

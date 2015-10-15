@@ -17,15 +17,10 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
@@ -46,9 +41,6 @@ public class RouteRecordService extends Service {
 	private final static double ERROR_CODE = 0.0;
 	private double routeLng, routeLat;
 
-	private SharedPreferences sharedPreferences;
-	private Editor editor;
-
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -57,12 +49,7 @@ public class RouteRecordService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
-		// Update Running State
-		sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-		editor = sharedPreferences.edit();
-
+		MyLog.v("[RouteRecordService]onCreate");
 	}
 
 	@Override
@@ -274,6 +261,7 @@ public class RouteRecordService extends Service {
 
 		// Update Running State
 		MyApplication.isRouteRecord = false;
+		MyLog.v("[RouteRecordService]onCreate");
 	}
 
 }

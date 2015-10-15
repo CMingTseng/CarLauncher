@@ -7,7 +7,6 @@ import com.tchip.carlauncher.ui.activity.SettingGravityActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemUsbActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
-import com.tchip.carlauncher.ui.activity.TrafficStatActivity;
 import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 import com.tchip.carlauncher.ui.activity.WifiListActivity;
 import com.tchip.carlauncher.util.SettingUtil;
