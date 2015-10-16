@@ -53,12 +53,11 @@ public class SensorWatchService extends Service {
 		sensorEventListener = new SensorEventListener() {
 			@Override
 			public void onSensorChanged(SensorEvent event) {
-				if (MyApplication.isSleeping) {
-					stopSelf();
-					MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
-					return;
-				}
-
+				// if (MyApplication.isSleeping) {
+				// stopSelf();
+				// MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
+				// return;
+				// }
 				if (MyApplication.isCrashOn) {
 					LIMIT_X = LIMIT_Y = LIMIT_Z = SettingUtil
 							.getGravityVauleBySensitive(MyApplication.crashSensitive);
