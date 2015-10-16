@@ -71,6 +71,10 @@ public class BaseFileAdapter extends RobotoAdapter<File> {
 		} else {
 			tvFileName.setText(strFileName);
 		}
+		
+		if("usbotg".equals(strFileName)){
+			view.setVisibility(View.INVISIBLE);
+		}
 
 		if (file.isDirectory()) {
 			int files = FileUtils.getNumFilesInFolder(file);

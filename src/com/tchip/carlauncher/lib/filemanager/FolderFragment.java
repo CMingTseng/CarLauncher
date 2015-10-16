@@ -342,14 +342,18 @@ public class FolderFragment extends Fragment implements OnItemClickListener,
 
 		case R.id.menu_navigate_up:
 			String newFolder = currentDir.getParent();
-			if (newFolder != null) {
-				Bundle args = new Bundle(1);
-				args.putString(EXTRA_DIR, newFolder);
-				FolderFragment fragment = new FolderFragment();
-				fragment.setArguments(args);
-				FolderActivity activity = (FolderActivity) getActivity();
-				activity.showFragment(fragment);
+			if ("/storage".equals(currentDir.getAbsolutePath())) {
+				getActivity().finish();
+			} else {
+				if (newFolder != null) {
+					Bundle args = new Bundle(1);
+					args.putString(EXTRA_DIR, newFolder);
+					FolderFragment fragment = new FolderFragment();
+					fragment.setArguments(args);
+					FolderActivity activity = (FolderActivity) getActivity();
+					activity.showFragment(fragment);
 
+				}
 			}
 			return true;
 
