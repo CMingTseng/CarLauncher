@@ -82,10 +82,11 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MainActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/main_loading"
             android:label="CarLauncher"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTranslucentThemeForMain" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -224,7 +225,7 @@
                 <action android:name="com.tchip.SLEEP_OFF" />
                 <action android:name="com.tchip.GSENSOR_CRASH" />
             </intent-filter>
-        </receiver>
+        </receiver>
         -->
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
