@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 public class MultimediaActivity extends Activity {
 
-
 	private SharedPreferences preferences;
 	private Editor editor;
 
@@ -90,16 +89,16 @@ public class MultimediaActivity extends Activity {
 			case R.id.layoutMusic:
 				if (Constant.Module.isLocalMusicSystem) {
 					try {
-						ComponentName componentMusic = new ComponentName(
-								"com.android.music",
-								"com.android.music.MusicBrowserActivity");
+						ComponentName componentMusic;
+						componentMusic = new ComponentName("cn.kuwo.kwmusichd",
+								"cn.kuwo.kwmusichd.WelcomeActivity");
 						Intent intentMusic = new Intent();
 						intentMusic.setComponent(componentMusic);
 						startActivity(intentMusic);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				} 
+				}
 				break;
 
 			case R.id.layoutVideo:
@@ -148,7 +147,7 @@ public class MultimediaActivity extends Activity {
 		super.onResume();
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-		
+
 		// 更新MediaStore
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
 				Uri.parse("file://" + "/mnt/sdcard/tachograph")));

@@ -253,7 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="流量使用情况"
+                    android:text="@string/tilte_traffic_status"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
             </RelativeLayout>
