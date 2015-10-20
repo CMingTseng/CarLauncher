@@ -99,7 +99,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoRecordSmall, layoutVideoCameraSmall,
 			layoutVideoLockSmall;
 
-	private ImageView imageSignalLevel, image3G;
+	private ImageView imageSignalLevel, image3GType;
 
 	private TelephonyManager Tel;
 	private int simState;
@@ -441,17 +441,17 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (state) {
 			case TelephonyManager.DATA_DISCONNECTED:// 网络断开
 				MyLog.v("3G TelephonyManager.DATA_DISCONNECTED");
-				image3G.setVisibility(View.GONE);
+				image3GType.setVisibility(View.GONE);
 				break;
 
 			case TelephonyManager.DATA_CONNECTING:// 网络正在连接
 				MyLog.v("3G TelephonyManager.DATA_CONNECTING");
-				image3G.setVisibility(View.VISIBLE);
+				image3GType.setVisibility(View.VISIBLE);
 				break;
 
 			case TelephonyManager.DATA_CONNECTED:// 网络连接上
 				MyLog.v("3G TelephonyManager.DATA_CONNECTED");
-				image3G.setVisibility(View.VISIBLE);
+				image3GType.setVisibility(View.VISIBLE);
 				break;
 			}
 		}
@@ -476,21 +476,26 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void update3GState(int signal) {
 		// imageSignalLevel,image3G.setVisibility(View.GONE);
 		simState = Tel.getSimState();
+		int networkType = Tel.getNetworkType();
 		MyLog.v("SIM State:" + simState);
 		if (simState == TelephonyManager.SIM_STATE_READY) {
 
 			imageSignalLevel.setBackground(getResources().getDrawable(
-					SignalUtil.get3GImageBySignal(signal)));
-			if (signal > 0 && signal < 31)
-				image3G.setVisibility(View.VISIBLE);
-			else
-				image3G.setVisibility(View.GONE);
+					SignalUtil.get3GLevelImageByGmsSignalStrength(signal)));
+			if (signal > 0 && signal < 31) {
+				image3GType.setVisibility(View.VISIBLE);
+				image3GType.setBackground(getResources().getDrawable(
+						SignalUtil.get3GTypeImageByNetworkType(networkType)));
+			} else {
+				image3GType.setVisibility(View.GONE);
+			}
 		} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
 				|| simState == TelephonyManager.SIM_STATE_ABSENT) {
-			image3G.setVisibility(View.GONE);
+			image3GType.setVisibility(View.GONE);
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_signal_no_signal));
 		}
+
 	}
 
 	/**
@@ -589,8 +594,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 3G状态信息
 		imageSignalLevel = (ImageView) findViewById(R.id.imageSignalLevel);
-		image3G = (ImageView) findViewById(R.id.image3G);
-		image3G.setVisibility(View.GONE);
+		image3GType = (ImageView) findViewById(R.id.image3GType);
+		image3GType.setVisibility(View.GONE);
 
 		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);

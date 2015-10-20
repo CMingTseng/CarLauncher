@@ -88,7 +88,7 @@
             android:layout_toLeftOf="@id/layoutWiFi" >
 
             <ImageView
-                android:id="@+id/image3G"
+                android:id="@+id/image3GType"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_qs_signal_full_3g" />

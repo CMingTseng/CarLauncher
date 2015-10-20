@@ -2,6 +2,7 @@ package com.tchip.carlauncher.util;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 
 import com.tchip.carlauncher.R;
 
@@ -74,8 +75,8 @@ public class SignalUtil {
 	public static final int SIGNAL_3G_MAX = 31;
 	public static final int SIGNAL_3G_LEVEL = 5;
 
-	public static int get3GImageBySignal(int signal) {
-		int signalLevel = calculate3GSignalLevel(signal);
+	public static int get3GLevelImageByGmsSignalStrength(int gmsSignalStrength) {
+		int signalLevel = calculate3GSignalLevel(gmsSignalStrength);
 		switch (signalLevel) {
 		case -1:
 			return R.drawable.ic_qs_signal_no_signal;
@@ -122,4 +123,78 @@ public class SignalUtil {
 			return -1;
 	}
 
+	/**
+	 * NETWORK_TYPE_UNKNOWN
+	 * 
+	 * NETWORK_TYPE_GPRS
+	 * 
+	 * NETWORK_TYPE_EDGE
+	 * 
+	 * NETWORK_TYPE_UMTS
+	 * 
+	 * NETWORK_TYPE_HSDPA
+	 * 
+	 * NETWORK_TYPE_HSUPA
+	 * 
+	 * NETWORK_TYPE_HSPA
+	 * 
+	 * NETWORK_TYPE_CDMA
+	 * 
+	 * NETWORK_TYPE_EVDO_0
+	 * 
+	 * NETWORK_TYPE_EVDO_A
+	 * 
+	 * NETWORK_TYPE_EVDO_B
+	 * 
+	 * NETWORK_TYPE_1xRTT
+	 * 
+	 * NETWORK_TYPE_IDEN
+	 * 
+	 * NETWORK_TYPE_LTE
+	 * 
+	 * NETWORK_TYPE_EHRPD
+	 * 
+	 * NETWORK_TYPE_HSPAP
+	 */
+	public static int get3GTypeImageByNetworkType(int networkType) {
+		switch (networkType) {
+		/***** 2G *****/
+		case TelephonyManager.NETWORK_TYPE_GPRS:
+			return R.drawable.ic_qs_signal_full_g; // G
+
+		case TelephonyManager.NETWORK_TYPE_CDMA:
+		case TelephonyManager.NETWORK_TYPE_1xRTT:
+			return R.drawable.ic_qs_signal_full_1x; // 1X
+		case TelephonyManager.NETWORK_TYPE_IDEN:
+		case TelephonyManager.NETWORK_TYPE_EDGE:
+			return R.drawable.ic_qs_signal_full_e; // E
+
+			/***** 3G *****/
+		case TelephonyManager.NETWORK_TYPE_EVDO_0:
+		case TelephonyManager.NETWORK_TYPE_EVDO_A:
+		case TelephonyManager.NETWORK_TYPE_EVDO_B:
+
+		case TelephonyManager.NETWORK_TYPE_HSDPA:
+		case TelephonyManager.NETWORK_TYPE_HSUPA:
+		case TelephonyManager.NETWORK_TYPE_HSPA:
+			return R.drawable.ic_qs_signal_full_h; // H
+
+		case TelephonyManager.NETWORK_TYPE_HSPAP:
+			return R.drawable.ic_qs_signal_full_h_plus; // H+
+
+		case TelephonyManager.NETWORK_TYPE_EHRPD: // 3.9G
+		case TelephonyManager.NETWORK_TYPE_UMTS:
+			return R.drawable.ic_qs_signal_full_3g;
+
+			/***** 4G *****/
+		case TelephonyManager.NETWORK_TYPE_LTE:
+			return R.drawable.ic_qs_signal_full_4g; // 4G
+
+			/***** Unknown *****/
+		case TelephonyManager.NETWORK_TYPE_UNKNOWN:
+		default:
+			return R.drawable.ic_qs_signal_full_null;
+		}
+
+	}
 }
