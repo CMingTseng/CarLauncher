@@ -149,6 +149,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity"
+            android:theme="@style/ThemeVolumeDialog"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.FileRemoteControlActivity"

@@ -21,6 +21,16 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="ThemeVolumeDialog" parent="@android:style/Animation.Dialog">
+        <item name="android:width">650dp</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <!-- File Manager -->
     <!-- Application theme. -->
     <!--
@@ -30,8 +40,9 @@
         <item name="android:windowBackground">@color/color_window_background</item>
         <item name="android:fastScrollThumbDrawable">@drawable/file_fast_scroll_handle</item>
         <item name="android:fastScrollTrackDrawable">@drawable/fast_scroll_track</item>
-    </style>
+    </style>
     -->
+
 
     <!-- Theme for translucent system bars -->
     <style name="AppTranslucentThemeForMain" parent="@android:style/Theme.Holo.Light">
