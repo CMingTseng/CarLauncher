@@ -177,7 +177,7 @@ public interface Constant {
 		/**
 		 * 是否有电子狗
 		 */
-		public static final boolean hasEDog = false;
+		public static final boolean hasEDog = true;
 
 		/**
 		 * 是否有拨号短信模块

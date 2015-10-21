@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -14,6 +16,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 public class SettingSystemVolumeActivity extends Activity {
 
 	private AudioManager audioManager;
+	private int secondCount = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +45,13 @@ public class SettingSystemVolumeActivity extends Activity {
 
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				// TODO Auto-generated method stub
-
+				secondCount = 1;
 			}
 		});
 
@@ -73,17 +74,56 @@ public class SettingSystemVolumeActivity extends Activity {
 
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				// TODO Auto-generated method stub
 
 			}
 		});
+
+		new Thread(new AutoFinishThread()).start();
 	}
+
+	/**
+	 * 无操作3秒后关闭音量调节界面
+	 */
+	class AutoFinishThread implements Runnable {
+
+		@Override
+		public void run() {
+			while (secondCount < 5) {
+				try {
+					Thread.sleep(1000);
+					secondCount++;
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				if (secondCount >= 3) {
+					Message messageFinish = new Message();
+					messageFinish.what = 1;
+					autoFinishHandler.sendMessage(messageFinish);
+				}
+			}
+
+		}
+	}
+
+	final Handler autoFinishHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				finish();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 }

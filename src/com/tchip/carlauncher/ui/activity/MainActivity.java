@@ -101,7 +101,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private ImageView imageSignalLevel, image3GType;
 
-	private TelephonyManager Tel;
+	private TelephonyManager telephonyManager;
 	private int simState;
 	private MyPhoneStateListener MyListener;
 
@@ -143,11 +143,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 3G信号
 		MyListener = new MyPhoneStateListener();
-		Tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
 		// SIM卡状态
-		simState = Tel.getSimState();
-		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		simState = telephonyManager.getSimState();
+		telephonyManager.listen(MyListener,
+				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 注册wifi消息处理器
 		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
@@ -431,8 +432,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		 */
 		@Override
 		public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+
+			update3GSignalStrength(signalStrength.getGsmSignalStrength());
+			update3GType();
+
 			super.onSignalStrengthsChanged(signalStrength);
-			update3GState(signalStrength.getGsmSignalStrength());
 		}
 
 		@Override
@@ -441,19 +445,18 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (state) {
 			case TelephonyManager.DATA_DISCONNECTED:// 网络断开
 				MyLog.v("3G TelephonyManager.DATA_DISCONNECTED");
-				image3GType.setVisibility(View.GONE);
 				break;
 
 			case TelephonyManager.DATA_CONNECTING:// 网络正在连接
 				MyLog.v("3G TelephonyManager.DATA_CONNECTING");
-				image3GType.setVisibility(View.VISIBLE);
 				break;
 
 			case TelephonyManager.DATA_CONNECTED:// 网络连接上
 				MyLog.v("3G TelephonyManager.DATA_CONNECTED");
-				image3GType.setVisibility(View.VISIBLE);
 				break;
 			}
+
+			update3GType();
 		}
 	}
 
@@ -473,29 +476,33 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * SIM_STATE_READY = 5:Ready
 	 * 
 	 */
-	private void update3GState(int signal) {
+	private void update3GSignalStrength(int signal) {
 		// imageSignalLevel,image3G.setVisibility(View.GONE);
-		simState = Tel.getSimState();
-		int networkType = Tel.getNetworkType();
-		MyLog.v("SIM State:" + simState);
+		simState = telephonyManager.getSimState();
+
+		MyLog.v("[update3GState]SIM State:" + simState);
 		if (simState == TelephonyManager.SIM_STATE_READY) {
 
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					SignalUtil.get3GLevelImageByGmsSignalStrength(signal)));
-			if (signal > 0 && signal < 31) {
-				image3GType.setVisibility(View.VISIBLE);
-				image3GType.setBackground(getResources().getDrawable(
-						SignalUtil.get3GTypeImageByNetworkType(networkType)));
-			} else {
-				image3GType.setVisibility(View.GONE);
-			}
 		} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
 				|| simState == TelephonyManager.SIM_STATE_ABSENT) {
-			image3GType.setVisibility(View.GONE);
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_signal_no_signal));
 		}
 
+	}
+
+	/**
+	 * 更新3G图标
+	 */
+	private void update3GType() {
+		int networkType = telephonyManager.getNetworkType();
+
+		MyLog.v("[update3Gtype]NetworkType:" + networkType);
+
+		image3GType.setBackground(getResources().getDrawable(
+				SignalUtil.get3GTypeImageByNetworkType(networkType)));
 	}
 
 	/**
@@ -1494,7 +1501,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	protected void onPause() {
 		MyApplication.isMainForeground = false;
 		// 3G信号
-		Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
+		telephonyManager.listen(MyListener, PhoneStateListener.LISTEN_NONE);
 
 		MyLog.v("[onPause]MyApplication.isVideoReording:"
 				+ MyApplication.isVideoReording);
@@ -1543,7 +1550,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordViews();
 
 		// 3G信号
-		Tel.listen(MyListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		telephonyManager.listen(MyListener,
+				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		super.onResume();
 	}
