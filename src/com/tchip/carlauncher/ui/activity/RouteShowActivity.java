@@ -239,41 +239,44 @@ public class RouteShowActivity extends Activity {
 
 			// 初始化轨迹点
 			points = getRoutePoints(filePath);
-			llStart = points.get(0);
-			llEnd = points.get(points.size() - 1);
+			if (points != null && points.size() > 0) {
+				llStart = points.get(0);
+				llEnd = points.get(points.size() - 1);
 
-			if (points.size() < 2) {
-				Message message = new Message();
-				message.what = 0;
-				drawRouteHandler.sendMessage(message);
-			} else {
-				Message message = new Message();
-				message.what = 1;
-				drawRouteHandler.sendMessage(message);
-			}
-
-			// 计算直线距离和行驶距离
-			try {
-				// 轨迹距离信息已保存，直接读取数据库
-				RouteDistance routeDistance = _db
-						.getRouteDistanceByName(filePath);
-				linearDistance = routeDistance.getLinear();
-				driveDistance = routeDistance.getDrive();
-			} catch (Exception e) {
-				linearDistance = DistanceUtil.getDistance(llStart, llEnd);
-				for (int i = 0; i < points.size() - 1; i++) {
-					driveDistance = driveDistance
-							+ DistanceUtil.getDistance(points.get(i),
-									points.get(i + 1));
+				if (points.size() < 2) {
+					Message message = new Message();
+					message.what = 0;
+					drawRouteHandler.sendMessage(message);
+				} else {
+					Message message = new Message();
+					message.what = 1;
+					drawRouteHandler.sendMessage(message);
 				}
-				RouteDistance newRouteDistance = new RouteDistance(filePath,
-						linearDistance, driveDistance);
-				_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
-			} finally {
-				_db.close();
-				Message message = new Message();
-				message.what = 2;
-				drawRouteHandler.sendMessage(message);
+
+				// 计算直线距离和行驶距离
+				try {
+					// 轨迹距离信息已保存，直接读取数据库
+					RouteDistance routeDistance = _db
+							.getRouteDistanceByName(filePath);
+					linearDistance = routeDistance.getLinear();
+					driveDistance = routeDistance.getDrive();
+				} catch (Exception e) {
+					linearDistance = DistanceUtil.getDistance(llStart, llEnd);
+					for (int i = 0; i < points.size() - 1; i++) {
+						driveDistance = driveDistance
+								+ DistanceUtil.getDistance(points.get(i),
+										points.get(i + 1));
+					}
+					RouteDistance newRouteDistance = new RouteDistance(
+							filePath, linearDistance, driveDistance);
+					_db.addRouteDistance(newRouteDistance); // 保存轨迹距离信息到数据库
+				} finally {
+					_db.close();
+					Message message = new Message();
+					message.what = 2;
+					drawRouteHandler.sendMessage(message);
+				}
+
 			}
 
 		}
@@ -352,22 +355,33 @@ public class RouteShowActivity extends Activity {
 	}
 
 	public List<LatLng> getRoutePoints(String fileName) {
-
-		List<RoutePoint> list = readFileSdcard(ROUTE_PATH + fileName);
-		if (sharedPreferences.getBoolean("routeSmooth", true)) {
-			list = optimizeRoutePoints(list); // 优化轨迹平滑度
-		}
-		List<LatLng> points = new ArrayList<LatLng>(list.size());
-		for (int i = 0; i < list.size(); i++) {
-			i = i + getOffset() - 1;
-			if (i < list.size()) {
-				points.add(new LatLng(list.get(i).getLat(), list.get(i)
-						.getLng()));
-			} else {
-				// 越界添加最后一个轨迹点
-				points.add(new LatLng(list.get(list.size() - 1).getLat(), list
-						.get(list.size() - 1).getLng()));
+		try {
+			List<RoutePoint> list = readFileSdcard(ROUTE_PATH + fileName);
+			if (sharedPreferences.getBoolean("routeSmooth", true)) {
+				list = optimizeRoutePoints(list); // 优化轨迹平滑度
 			}
+			if (list != null && list.size() > 0) {
+				points = new ArrayList<LatLng>(list.size());
+				for (int i = 0; i < list.size(); i++) {
+					i = i + getOffset() - 1;
+					if (i < list.size()) {
+						points.add(new LatLng(list.get(i).getLat(), list.get(i)
+								.getLng()));
+					} else {
+						// 越界添加最后一个轨迹点
+						points.add(new LatLng(list.get(list.size() - 1)
+								.getLat(), list.get(list.size() - 1).getLng()));
+					}
+				}
+
+			} else {
+				// 轨迹文件为空,添加一个(0.0, 0.0)避免空指针
+				points = new ArrayList<LatLng>(1);
+				points.add(new LatLng(0.0, 0.0));
+			}
+		} catch (Exception e) {
+			MyLog.e("[RouteShowActivity]getRoutePoints Catch Exception:"
+					+ e.toString());
 		}
 		return points;
 	}
