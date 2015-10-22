@@ -107,4 +107,26 @@ public class NetworkUtil {
 
 	}
 
+	/**
+	 * 外接蓝牙模块是否连接
+	 */
+	public static boolean isExtBluetoothConnected(Context context) {
+		String btStatus = "";
+
+		try {
+			btStatus = Settings.System.getString(context.getContentResolver(),
+					"bt_connect");
+
+		} catch (Exception e) {
+
+		}
+
+		if ("1".equals(btStatus)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 }

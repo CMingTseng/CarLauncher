@@ -192,9 +192,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
 				setAirplaneIcon(isAirplaneOn);
 			} else if (action.equals("com.tchip.BT_CONNECTED")) { // 外置蓝牙连接
-				setBluetoothIcon(2);
-			} else if (action.equals("com.tchip.BT_DISCONNECTED")) { // 外置蓝牙断开
 				setBluetoothIcon(1);
+			} else if (action.equals("com.tchip.BT_DISCONNECTED")) { // 外置蓝牙断开
+				setBluetoothIcon(0);
 			}
 		}
 
@@ -220,25 +220,25 @@ public class MainActivity extends Activity implements TachographCallback,
 		boolean isExtBluetoothOn = NetworkUtil
 				.isExtBluetoothOn(getApplicationContext());
 		if (isExtBluetoothOn) {
-			if (bluetoothState == 0) {
-				bluetoothState = 1;
+			if (bluetoothState == -1) {
+				bluetoothState = 0;
 			}
 		} else {
-			bluetoothState = 0;
+			bluetoothState = -1;
 		}
 
 		switch (bluetoothState) {
-		case 1: // 打开未连接
+		case 0: // 打开未连接
 			imageBluetooth.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_bluetooth_not_connected));
 			break;
 
-		case 2: // 打开并连接
+		case 1: // 打开并连接
 			imageBluetooth.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_bluetooth_on));
 			break;
 
-		case 0: // 关闭
+		case -1: // 关闭
 		default:
 			imageBluetooth.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_bluetooth_off));
@@ -1657,7 +1657,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 飞行模式
 		setAirplaneIcon(NetworkUtil.isAirplaneModeOn(getApplicationContext()));
 		// 外置蓝牙
-		setBluetoothIcon(0);
+		boolean isExtBluetoothConnected = NetworkUtil
+				.isExtBluetoothConnected(getApplicationContext());
+		if (isExtBluetoothConnected) {
+			setBluetoothIcon(1);
+		} else {
+			setBluetoothIcon(0);
+		}
 
 		super.onResume();
 	}
