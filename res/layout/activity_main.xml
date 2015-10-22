@@ -84,7 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:layout_toLeftOf="@id/layoutWiFi" >
 
             <ImageView
@@ -105,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-             android:layout_marginTop="5dp"
+            android:layout_marginTop="5dp"
             android:layout_toLeftOf="@id/layoutSignal" >
 
             <ImageView
@@ -113,6 +115,22 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_qs_airplane_off" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutBluetooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/layoutAirplane" >
+
+            <ImageView
+                android:id="@+id/imageBluetooth"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_qs_bluetooth_off" />
         </RelativeLayout>
     </RelativeLayout>
 

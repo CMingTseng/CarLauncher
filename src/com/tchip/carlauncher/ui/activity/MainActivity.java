@@ -107,6 +107,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private MyPhoneStateListener MyListener;
 
 	private ImageView imageAirplane; // 飞行模式图标
+	private ImageView imageBluetooth; // 外置蓝牙图标
 
 	private AudioRecordDialog audioRecordDialog;
 
@@ -176,20 +177,32 @@ public class MainActivity extends Activity implements TachographCallback,
 		new Thread(new BackThread()).start();
 	}
 
-	private AirplaneReceiver airplaneReceiver;
+	private NetworkStateReceiver networkStateReceiver;
 
-	private class AirplaneReceiver extends BroadcastReceiver {
+	/**
+	 * 监听飞行模式，外置蓝牙广播
+	 */
+	private class NetworkStateReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			boolean isAirplaneOn = intent.getBooleanExtra("state", false);
-			MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
-			setAirplaneIcon(isAirplaneOn);
+			if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
+				boolean isAirplaneOn = intent.getBooleanExtra("state", false);
+				MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
+				setAirplaneIcon(isAirplaneOn);
+			} else if (action.equals("com.tchip.BT_CONNECTED")) { // 外置蓝牙连接
+				setBluetoothIcon(2);
+			} else if (action.equals("com.tchip.BT_DISCONNECTED")) { // 外置蓝牙断开
+				setBluetoothIcon(1);
+			}
 		}
 
 	}
 
+	/**
+	 * 设置飞行模式图标
+	 */
 	private void setAirplaneIcon(boolean isAirplaneOn) {
 		if (isAirplaneOn) {
 			imageAirplane.setBackground(getResources().getDrawable(
@@ -197,6 +210,40 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else {
 			imageAirplane.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_airplane_off));
+		}
+	}
+
+	/**
+	 * 设置外置蓝牙图标
+	 */
+	private void setBluetoothIcon(int bluetoothState) {
+		boolean isExtBluetoothOn = NetworkUtil
+				.isExtBluetoothOn(getApplicationContext());
+		if (isExtBluetoothOn) {
+			if (bluetoothState == 0) {
+				bluetoothState = 1;
+			}
+		} else {
+			bluetoothState = 0;
+		}
+
+		switch (bluetoothState) {
+		case 1: // 打开未连接
+			imageBluetooth.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_bluetooth_not_connected));
+			break;
+
+		case 2: // 打开并连接
+			imageBluetooth.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_bluetooth_on));
+			break;
+
+		case 0: // 关闭
+		default:
+			imageBluetooth.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_bluetooth_off));
+			break;
+
 		}
 	}
 
@@ -632,6 +679,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 飞行模式图标
 		imageAirplane = (ImageView) findViewById(R.id.imageAirplane);
+
+		// 外置蓝牙图标
+		imageBluetooth = (ImageView) findViewById(R.id.imageBluetooth);
 
 		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
@@ -1544,8 +1594,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		telephonyManager.listen(MyListener, PhoneStateListener.LISTEN_NONE);
 
 		// 飞行模式
-		if (airplaneReceiver != null) {
-			unregisterReceiver(airplaneReceiver);
+		if (networkStateReceiver != null) {
+			unregisterReceiver(networkStateReceiver);
 		}
 
 		MyLog.v("[onPause]MyApplication.isVideoReording:"
@@ -1598,13 +1648,16 @@ public class MainActivity extends Activity implements TachographCallback,
 		telephonyManager.listen(MyListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
+		networkStateReceiver = new NetworkStateReceiver();
+		IntentFilter networkFilter = new IntentFilter();
+		networkFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		networkFilter.addAction("com.tchip.BT_CONNECTED");
+		networkFilter.addAction("com.tchip.BT_DISCONNECTED");
+		registerReceiver(networkStateReceiver, networkFilter);
 		// 飞行模式
-		airplaneReceiver = new AirplaneReceiver();
-		IntentFilter airplaneFilter = new IntentFilter();
-		airplaneFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-		registerReceiver(airplaneReceiver, airplaneFilter);
-
 		setAirplaneIcon(NetworkUtil.isAirplaneModeOn(getApplicationContext()));
+		// 外置蓝牙
+		setBluetoothIcon(0);
 
 		super.onResume();
 	}

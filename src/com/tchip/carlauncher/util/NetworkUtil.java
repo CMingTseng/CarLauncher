@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
@@ -82,6 +83,28 @@ public class NetworkUtil {
 		return android.provider.Settings.System.getInt(
 				context.getContentResolver(),
 				android.provider.Settings.Global.AIRPLANE_MODE_ON, 0) == 1;
+	}
+
+	/**
+	 * 外接蓝牙模块是否打开
+	 */
+	public static boolean isExtBluetoothOn(Context context) {
+		String btStatus = "";
+
+		try {
+			btStatus = Settings.System.getString(context.getContentResolver(),
+					"bt_enable");
+
+		} catch (Exception e) {
+
+		}
+
+		if ("1".equals(btStatus)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }
