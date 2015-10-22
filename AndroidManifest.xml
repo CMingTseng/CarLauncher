@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.10.22-15:15" >
+    android:versionName="2015.10.22-18:25" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -219,21 +219,14 @@
                 <data android:scheme="file" />
             </intent-filter>
         </receiver>
-        <!--
-        <receiver android:name="com.tchip.carlauncher.model.SleepReceiver" >
-            <intent-filter>
-                <action android:name="com.tchip.SLEEP_ON" />
-                <action android:name="com.tchip.SLEEP_OFF" />
-                <action android:name="com.tchip.GSENSOR_CRASH" />
-            </intent-filter>
-        </receiver>
-        -->
+
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
         <service android:name="com.tchip.carlauncher.service.WeatherService" />
         <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
         <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
         <service android:name="com.tchip.carlauncher.service.SleepOnOffService" />
+        <service android:name="com.tchip.carlauncher.service.FloatWindowService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

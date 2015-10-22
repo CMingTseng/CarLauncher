@@ -12,6 +12,7 @@ import com.tchip.carlauncher.lib.filemanager.FolderActivity;
 import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
+import com.tchip.carlauncher.service.FloatWindowService;
 import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SleepOnOffService;
@@ -81,7 +82,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView imageWifiLevel; // WiFi状态图标
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
 
-	private ImageView imageShadowRight, imageShadowLeft, imageRecordingHint;
+	private ImageView imageShadowRight, imageShadowLeft;
 
 	private HorizontalScrollView hsvMain;
 
@@ -615,7 +616,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
 		textRecordTime.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Quartz-Regular.ttf"));
-		imageRecordingHint = (ImageView) findViewById(R.id.imageRecordingHint);
 
 		// 增大点击区域
 		layoutVideoSize = (LinearLayout) findViewById(R.id.layoutVideoSize);
@@ -1496,6 +1496,22 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
+	 * 显示或隐藏录像提示悬浮窗
+	 */
+	private void setRecordHintFloatWindowVisible(boolean isVisible) {
+		MyLog.v("[MainActivity]setRecordHintFloatWindowVisible:" + isVisible);
+		if (isVisible) {
+			Intent intentFloatWindow = new Intent(MainActivity.this,
+					FloatWindowService.class);
+			startService(intentFloatWindow);
+		} else {
+			Intent intentFloatWindow = new Intent(MainActivity.this,
+					FloatWindowService.class);
+			stopService(intentFloatWindow);
+		}
+	}
+
+	/**
 	 * WiFi状态Receiver
 	 */
 	private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
@@ -1730,6 +1746,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 绘制录像按钮
 	 */
 	private void setupRecordViews() {
+		setRecordHintFloatWindowVisible(MyApplication.isVideoReording);
+
 		// 视频分辨率
 		if (mResolutionState == Constant.Record.STATE_RESOLUTION_720P) {
 			largeVideoSize.setBackground(getResources().getDrawable(
@@ -1745,13 +1763,11 @@ public class MainActivity extends Activity implements TachographCallback,
 					R.drawable.ui_main_video_record));
 			smallVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_record));
-			imageRecordingHint.setVisibility(View.GONE);
 		} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
 			largeVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_pause));
 			smallVideoRecord.setBackground(getResources().getDrawable(
 					R.drawable.ui_main_video_pause));
-			imageRecordingHint.setVisibility(View.VISIBLE);
 		}
 
 		// 视频分段

@@ -537,17 +537,6 @@
         android:textSize="22sp"
         android:visibility="invisible" />
 
-    <ImageView
-        android:id="@+id/imageRecordingHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/textRecordTime"
-        android:layout_alignTop="@id/textRecordTime"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@id/textRecordTime"
-        android:src="@drawable/ui_main_video_recording"
-        android:visibility="gone" />
-
     <RelativeLayout
         android:id="@+id/layoutLargeButton"
         android:layout_width="match_parent"
