@@ -19,27 +19,28 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 		MyLog.v("[PowerStateChangeReceiver]action:" + action);
 		if ("com.tchip.POWER_OFF".equals(action)) {
 			try {
-				MyApplication.isPowerConnect = false;
-
-				// 熄灭屏幕
-				context.sendBroadcast(new Intent("com.tchip.powerKey")
-						.putExtra("value", "power"));
-
-				String strHintDisconnect = "电源断开";
-				Toast.makeText(context, strHintDisconnect, Toast.LENGTH_SHORT)
-						.show();
-				Intent intentSpeak = new Intent(context, SpeakService.class);
-				intentSpeak.putExtra("content", strHintDisconnect);
-				context.startService(intentSpeak);
-
-				// 停止轨迹记录服务，保存轨迹
-				Intent intentRoute = new Intent(context,
-						RouteRecordService.class);
-				context.stopService(intentRoute);
-
-				// 发送关机广播
-				context.sendBroadcast(new Intent(
-						"tchip.intent.action.ACTION_POWER_OFF"));
+				// MyApplication.isPowerConnect = false;
+				//
+				// // 熄灭屏幕
+				// context.sendBroadcast(new Intent("com.tchip.powerKey")
+				// .putExtra("value", "power"));
+				//
+				// String strHintDisconnect = "电源断开";
+				// Toast.makeText(context, strHintDisconnect,
+				// Toast.LENGTH_SHORT)
+				// .show();
+				// Intent intentSpeak = new Intent(context, SpeakService.class);
+				// intentSpeak.putExtra("content", strHintDisconnect);
+				// context.startService(intentSpeak);
+				//
+				// // 停止轨迹记录服务，保存轨迹
+				// Intent intentRoute = new Intent(context,
+				// RouteRecordService.class);
+				// context.stopService(intentRoute);
+				//
+				// // 发送关机广播
+				// context.sendBroadcast(new Intent(
+				// "tchip.intent.action.ACTION_POWER_OFF"));
 			} catch (Exception e) {
 				MyLog.e("[PowerStateChangeReceiver]:Error occur when run com.tchip.POWER_OFF");
 			}
