@@ -285,6 +285,31 @@ public class SettingUtil {
 	}
 
 	/**
+	 * 电子狗电源开关节点
+	 * 
+	 * 1-打开
+	 * 
+	 * 0-关闭
+	 */
+	public static File fileEDogPower = new File(
+			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/edog_car_status");
+
+	/**
+	 * 设置电子狗电源开关
+	 * 
+	 * @param isEDogOn
+	 */
+	public static void setEDogEnable(boolean isEDogOn) {
+
+		MyLog.v("[SettingUtil]setEDogEnable:" + isEDogOn);
+		if (isEDogOn) {
+			SaveFileToNode(fileEDogPower, "1");
+		} else {
+			SaveFileToNode(fileEDogPower, "0");
+		}
+	}
+
+	/**
 	 * 获取Mac地址
 	 * 
 	 * @param context

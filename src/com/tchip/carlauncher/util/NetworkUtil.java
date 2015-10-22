@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
@@ -69,6 +70,18 @@ public class NetworkUtil {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 飞行模式是否打开
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean isAirplaneModeOn(Context context) {
+		return android.provider.Settings.System.getInt(
+				context.getContentResolver(),
+				android.provider.Settings.Global.AIRPLANE_MODE_ON, 0) == 1;
 	}
 
 }

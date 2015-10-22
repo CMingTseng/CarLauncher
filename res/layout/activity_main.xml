@@ -99,6 +99,21 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_qs_signal_no_signal" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutAirplane"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+             android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/layoutSignal" >
+
+            <ImageView
+                android:id="@+id/imageAirplane"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_qs_airplane_off" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <HorizontalScrollView
@@ -213,6 +228,31 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_edog"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp"
+                android:visibility="visible" >
+
+                <ImageView
+                    android:id="@+id/imageDialer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ui_main_dialer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_phone"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -385,31 +425,6 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_message"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/imageDialer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_dialer" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_phone"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>

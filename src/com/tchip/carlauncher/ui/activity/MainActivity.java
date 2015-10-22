@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.iflytek.cloud.Setting;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -105,6 +106,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	private int simState;
 	private MyPhoneStateListener MyListener;
 
+	private ImageView imageAirplane; // 飞行模式图标
+
 	private AudioRecordDialog audioRecordDialog;
 
 	private WifiManager wifiManager;
@@ -171,7 +174,30 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 后台线程
 		new Thread(new BackThread()).start();
+	}
 
+	private AirplaneReceiver airplaneReceiver;
+
+	private class AirplaneReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			boolean isAirplaneOn = intent.getBooleanExtra("state", false);
+			MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
+			setAirplaneIcon(isAirplaneOn);
+		}
+
+	}
+
+	private void setAirplaneIcon(boolean isAirplaneOn) {
+		if (isAirplaneOn) {
+			imageAirplane.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_airplane_on));
+		} else {
+			imageAirplane.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_airplane_off));
+		}
 	}
 
 	/**
@@ -604,6 +630,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		image3GType = (ImageView) findViewById(R.id.image3GType);
 		image3GType.setVisibility(View.GONE);
 
+		// 飞行模式图标
+		imageAirplane = (ImageView) findViewById(R.id.imageAirplane);
+
 		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
 		imageNavi.setOnClickListener(new MyOnClickListener());
@@ -656,11 +685,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageFmTransmit = (ImageView) findViewById(R.id.imageFmTransmit);
 		imageFmTransmit.setOnClickListener(new MyOnClickListener());
 
-		if (Constant.Module.hasDialer) {
-			// 拨号
-			ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
-			imageDialer.setOnClickListener(new MyOnClickListener());
+		// 拨号
+		ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
+		imageDialer.setOnClickListener(new MyOnClickListener());
 
+		if (Constant.Module.hasDialer) {
 			// 短信
 			ImageView imageMessage = (ImageView) findViewById(R.id.imageMessage);
 			imageMessage.setOnClickListener(new MyOnClickListener());
@@ -1214,14 +1243,24 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageEDog:
 				if (!ClickUtil.isQuickClick(800)) {
-					try {
-						ComponentName componentEDog = new ComponentName(
-								"entry.dsa2014", "entry.dsa2014.MainActivity");
-						Intent intentEDog = new Intent();
-						intentEDog.setComponent(componentEDog);
-						startActivity(intentEDog);
-					} catch (Exception e) {
-						e.printStackTrace();
+					if (1 == SettingUtil.getAccStatus()) {
+						SettingUtil.setEDogEnable(true);
+						try {
+							ComponentName componentEDog = new ComponentName(
+									"entry.dsa2014",
+									"entry.dsa2014.MainActivity");
+							Intent intentEDog = new Intent();
+							intentEDog.setComponent(componentEDog);
+							startActivity(intentEDog);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						SettingUtil.setEDogEnable(false);
+						String strNoAcc = "正在休眠";
+						Toast.makeText(getApplicationContext(), strNoAcc,
+								Toast.LENGTH_SHORT).show();
+						startSpeak(strNoAcc);
 					}
 				}
 				break;
@@ -1282,23 +1321,24 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageDialer:
-				// try {
-				// ComponentName componentDialer = new ComponentName(
-				// "com.android.dialer",
-				// "com.android.dialer.DialtactsActivity");
-				// Intent intentDialer = new Intent();
-				// intentDialer.setComponent(componentDialer);
-				// startActivity(intentDialer);
-				// } catch (Exception e) {
-				// e.printStackTrace();
-				// }
-				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentBTDialer = new Intent(MainActivity.this,
-							BluetoothDialerActivity.class);
-					startActivity(intentBTDialer);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
+				try {
+
+					ComponentName componentDialer = new ComponentName(
+							"com.goodocom.gocsdk",
+							"com.tchip.call.MainActivity");
+					Intent intentDialer = new Intent();
+					intentDialer.setComponent(componentDialer);
+					startActivity(intentDialer);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+				// if (!ClickUtil.isQuickClick(800)) {
+				// Intent intentBTDialer = new Intent(MainActivity.this,
+				// BluetoothDialerActivity.class);
+				// startActivity(intentBTDialer);
+				// overridePendingTransition(R.anim.zms_translate_up_out,
+				// R.anim.zms_translate_up_in);
+				// }
 				break;
 
 			case R.id.imageMessage:
@@ -1503,6 +1543,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		telephonyManager.listen(MyListener, PhoneStateListener.LISTEN_NONE);
 
+		// 飞行模式
+		if (airplaneReceiver != null) {
+			unregisterReceiver(airplaneReceiver);
+		}
+
 		MyLog.v("[onPause]MyApplication.isVideoReording:"
 				+ MyApplication.isVideoReording);
 
@@ -1552,6 +1597,14 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		telephonyManager.listen(MyListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+		// 飞行模式
+		airplaneReceiver = new AirplaneReceiver();
+		IntentFilter airplaneFilter = new IntentFilter();
+		airplaneFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		registerReceiver(airplaneReceiver, airplaneFilter);
+
+		setAirplaneIcon(NetworkUtil.isAirplaneModeOn(getApplicationContext()));
 
 		super.onResume();
 	}

@@ -77,6 +77,9 @@ public class SleepOnOffService extends Service {
 						context.sendBroadcast(new Intent(
 								"tchip.intent.action.ACTION_GPS_OFF"));
 
+						// 关闭电子狗电源
+						SettingUtil.setEDogEnable(false);
+
 						// 关闭FM发射，并保存休眠前状态
 						boolean fmStateBeforeSleep = SettingUtil
 								.isFmTransmitOn(context);
@@ -119,6 +122,9 @@ public class SleepOnOffService extends Service {
 						// 打开GPS
 						context.sendBroadcast(new Intent(
 								"tchip.intent.action.ACTION_GPS_ON"));
+
+						// 打开电子狗电源
+						SettingUtil.setEDogEnable(false);
 
 						// 重置FM发射状态
 						boolean fmStateBeforeSleep = sharedPreferences
