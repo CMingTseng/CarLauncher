@@ -87,17 +87,17 @@ public class MultimediaActivity extends Activity {
 				break;
 
 			case R.id.layoutMusic:
-				if (Constant.Module.isLocalMusicSystem) {
-					try {
-						ComponentName componentMusic;
-						componentMusic = new ComponentName("cn.kuwo.kwmusichd",
-								"cn.kuwo.kwmusichd.WelcomeActivity");
-						Intent intentMusic = new Intent();
-						intentMusic.setComponent(componentMusic);
-						startActivity(intentMusic);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+				try {
+					ComponentName componentMusic;
+					// 普通HD版："cn.kuwo.kwmusichd","cn.kuwo.kwmusichd.WelcomeActivity"
+					// 车载HD版："cn.kuwo.kwmusiccar","cn.kuwo.kwmusiccar.WelcomeActivity"
+					componentMusic = new ComponentName("cn.kuwo.kwmusiccar",
+							"cn.kuwo.kwmusiccar.WelcomeActivity");
+					Intent intentMusic = new Intent();
+					intentMusic.setComponent(componentMusic);
+					startActivity(intentMusic);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				break;
 
