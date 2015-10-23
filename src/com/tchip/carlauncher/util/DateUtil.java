@@ -43,7 +43,7 @@ public class DateUtil {
 			if (seconds < 10)
 				strTime = minutes + " : 0" + seconds;
 			else
-				strTime = "0" + minutes + " :" + seconds;
+				strTime = "0" + minutes + " : " + seconds;
 		} else if (secondCount < 3600) { // [10分,1时)
 			int minutes = secondCount / 60;
 			int seconds = secondCount % 60;

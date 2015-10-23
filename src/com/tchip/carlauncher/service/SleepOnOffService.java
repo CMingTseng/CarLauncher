@@ -124,7 +124,7 @@ public class SleepOnOffService extends Service {
 								"tchip.intent.action.ACTION_GPS_ON"));
 
 						// 打开电子狗电源
-						SettingUtil.setEDogEnable(false);
+						// SettingUtil.setEDogEnable(true);
 
 						// 重置FM发射状态
 						boolean fmStateBeforeSleep = sharedPreferences
