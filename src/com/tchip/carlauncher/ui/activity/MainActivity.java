@@ -2251,6 +2251,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			return -1;
 		} else if (mMyRecorder != null) {
+
+			// 设置保存路径，否则会保存到内部存储
+			if (Constant.Record.saveVideoToSD2) {
+				setDirectory(Constant.Path.SDCARD_2);
+			} else {
+				setDirectory(Constant.Path.SDCARD_1);
+			}
+
 			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 			return mMyRecorder.takePicture();
 		}
