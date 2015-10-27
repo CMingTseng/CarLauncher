@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private TelephonyManager telephonyManager;
 	private int simState;
-	private MyPhoneStateListener MyListener;
+	private MyPhoneStateListener myPhoneStateListener;
 
 	private ImageView imageAirplane; // 飞行模式图标
 	private ImageView imageBluetooth; // 外置蓝牙图标
@@ -147,12 +147,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordViews();
 
 		// 3G信号
-		MyListener = new MyPhoneStateListener();
+		myPhoneStateListener = new MyPhoneStateListener();
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
 		// SIM卡状态
 		simState = telephonyManager.getSimState();
-		telephonyManager.listen(MyListener,
+		telephonyManager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		// 注册wifi消息处理器
@@ -1610,7 +1610,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	protected void onPause() {
 		MyApplication.isMainForeground = false;
 		// 3G信号
-		telephonyManager.listen(MyListener, PhoneStateListener.LISTEN_NONE);
+		telephonyManager.listen(myPhoneStateListener,
+				PhoneStateListener.LISTEN_NONE);
 
 		// 飞行模式
 		if (networkStateReceiver != null) {
@@ -1664,9 +1665,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordViews();
 
 		// 3G信号
-		telephonyManager.listen(MyListener,
+		telephonyManager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-		
+
 		// WiFi信号
 		updateWiFiState();
 
