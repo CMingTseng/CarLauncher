@@ -1666,6 +1666,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 3G信号
 		telephonyManager.listen(MyListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		
+		// WiFi信号
+		updateWiFiState();
 
 		networkStateReceiver = new NetworkStateReceiver();
 		IntentFilter networkFilter = new IntentFilter();
