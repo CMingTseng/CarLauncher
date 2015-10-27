@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.iflytek.cloud.Setting;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -553,10 +552,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void update3GSignalStrength(int signal) {
 		// imageSignalLevel,image3G.setVisibility(View.GONE);
 		simState = telephonyManager.getSimState();
-
 		MyLog.v("[update3GState]SIM State:" + simState);
-		if (simState == TelephonyManager.SIM_STATE_READY) {
 
+		if (NetworkUtil.isAirplaneModeOn(getApplicationContext())) {
+			imageSignalLevel.setBackground(getResources().getDrawable(
+					R.drawable.ic_qs_signal_no_signal));
+		} else if (simState == TelephonyManager.SIM_STATE_READY) {
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					SignalUtil.get3GLevelImageByGmsSignalStrength(signal)));
 		} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
@@ -564,7 +565,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_signal_no_signal));
 		}
-
 	}
 
 	/**
