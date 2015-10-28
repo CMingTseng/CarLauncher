@@ -2049,6 +2049,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (startRecordTask() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STARTED;
 					MyApplication.isVideoReording = true;
+
+					textRecordTime.setVisibility(View.VISIBLE);
+					new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+
 					setupRecordViews();
 				} else {
 					if (Constant.isDebug)
@@ -2075,8 +2079,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	public int startRecordTask() {
 		if (mMyRecorder != null) {
 			if (deleteOldestUnlockVideo()) {
-				textRecordTime.setVisibility(View.VISIBLE);
-				new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+
 				MyLog.d("Record Start");
 				// 设置保存路径
 				if (Constant.Record.saveVideoToSD2) {
