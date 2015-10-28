@@ -93,6 +93,10 @@ public class SleepOnOffService extends Service {
 									Constant.FMTransmit.SETTING_ENABLE, "0");
 							SettingUtil.SaveFileToNode(
 									SettingUtil.nodeFmEnable, "0");
+
+							// 通知状态栏同步图标
+							sendBroadcast(new Intent(
+									"com.tchip.FM_CLOSE_CARLAUNCHER"));
 						}
 
 					} catch (Exception e) {
@@ -136,6 +140,10 @@ public class SleepOnOffService extends Service {
 									Constant.FMTransmit.SETTING_ENABLE, "1");
 							SettingUtil.SaveFileToNode(
 									SettingUtil.nodeFmEnable, "1");
+
+							// 通知状态栏同步图标
+							sendBroadcast(new Intent(
+									"com.tchip.FM_OPEN_CARLAUNCHER"));
 						}
 					} catch (Exception e) {
 						MyLog.e("[SleepReceiver]Error when run com.tchip.SLEEP_OFF");
