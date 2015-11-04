@@ -195,11 +195,6 @@ public interface Constant {
 		public static final boolean isLocalMusicSystem = true;
 
 		/**
-		 * 天气界面是否有动画
-		 */
-		public static final boolean hasWeatherAnimation = false;
-
-		/**
 		 * 是否有文件管理功能
 		 */
 		public static final boolean hasFileManager = true;

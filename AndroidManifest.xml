@@ -139,9 +139,6 @@
             android:name="com.tchip.carlauncher.ui.activity.RouteShowActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.WeatherActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity"
             android:screenOrientation="landscape" />
         <activity
@@ -222,7 +219,6 @@
 
         <service android:name="com.tchip.carlauncher.service.SpeakService" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
-        <service android:name="com.tchip.carlauncher.service.WeatherService" />
         <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
         <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
         <service android:name="com.tchip.carlauncher.service.SleepOnOffService" />

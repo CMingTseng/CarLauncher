@@ -2,7 +2,6 @@ package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.activity.WeatherActivity.UpdateWeatherThread;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceAccentDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakHourDialog;
 import com.tchip.carlauncher.ui.dialog.SettingVoiceSpeakWeatherDialog;

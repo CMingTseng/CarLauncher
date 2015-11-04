@@ -1245,8 +1245,16 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.layoutWeather:
 				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentWeather = new Intent(MainActivity.this,
-							WeatherActivity.class);
+					// Intent intentWeather = new Intent(MainActivity.this,
+					// WeatherActivity.class);
+					// startActivity(intentWeather);
+
+					ComponentName componentWeather;
+					componentWeather = new ComponentName("com.tchip.weather",
+							"com.tchip.weather.ui.activity.MainActivity");
+					Intent intentWeather = new Intent();
+					intentWeather.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intentWeather.setComponent(componentWeather);
 					startActivity(intentWeather);
 					overridePendingTransition(R.anim.zms_translate_down_out,
 							R.anim.zms_translate_down_in);
