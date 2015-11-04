@@ -83,6 +83,11 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleDisplay);
 		layoutRippleDisplay.setOnClickListener(new MyOnClickListener());
 
+		// 微密
+		RelativeLayout layoutWeme = (RelativeLayout) systemSettingView
+				.findViewById(R.id.layoutWeme);
+		layoutWeme.setOnClickListener(new MyOnClickListener());
+
 		// Wi-Fi
 		RelativeLayout layoutRippleWifi = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleWifi);
@@ -238,6 +243,20 @@ public class SettingFragment extends Fragment {
 				Intent intentDisplay = new Intent(context,
 						SettingSystemDisplayActivity.class);
 				startActivity(intentDisplay);
+				break;
+
+			case R.id.layoutWeme:
+				// 微密
+				try {
+					Intent intent = new Intent();
+					ComponentName comp = new ComponentName("com.mirrtalk.app",
+							"com.mirrtalk.app.MainActivity");
+					intent.setComponent(comp);
+					intent.setAction("android.intent.action.VIEW");
+					startActivityForResult(intent, 0);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			case R.id.layoutRippleWifi:

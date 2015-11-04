@@ -22,10 +22,10 @@
             <RelativeLayout
                 android:id="@+id/layoutBack"
                 android:layout_width="90dp"
-                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true" >
+                android:layout_centerVertical="true"
+                android:visibility="gone" >
 
                 <Button
                     android:id="@+id/btnToMainFromWeather"
@@ -42,9 +42,9 @@
 
             <TextClock
                 android:id="@+id/textWeek"
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/layoutBack"
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
@@ -626,7 +626,6 @@
                     android:textSize="@dimen/weather_text_more_temp" />
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/layoutDay6"
                 android:layout_width="0dp"
@@ -674,7 +673,6 @@
                     android:gravity="center"
                     android:text="25°"
                     android:textColor="#ffffff" />
-
 
                 <TextView
                     android:id="@+id/day6wind"
