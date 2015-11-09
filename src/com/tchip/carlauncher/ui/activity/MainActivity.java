@@ -1338,12 +1338,20 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageRouteTrack:
 				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentRouteTrack = new Intent(MainActivity.this,
-							RouteListActivity.class);
-					startActivity(intentRouteTrack);
+					try {
+						ComponentName componentDialer = new ComponentName(
+								"com.tchip.route",
+								"com.tchip.route.ui.activity.MainActivity");
+						Intent intentDialer = new Intent();
+						intentDialer.setComponent(componentDialer);
+						startActivity(intentDialer);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
 				}
+
 				break;
 
 			case R.id.imageFmTransmit:

@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.11.04-17:25" >
+    android:versionName="2015.11.09-15:35" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -131,12 +131,6 @@
             android:name="com.tchip.carlauncher.ui.activity.SettingActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.RouteListActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.RouteShowActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity"

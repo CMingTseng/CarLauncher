@@ -24,6 +24,17 @@
             android:layout_marginLeft="20dp"
             android:src="@drawable/ic_launcher" />
 
+        <TextView
+            android:id="@+id/textDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="距离5.5Km"
+            android:textColor="@color/setting_item_title_color"
+            android:textSize="25sp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,17 +65,6 @@
                 android:textColor="@color/setting_item_title_color"
                 android:textSize="18sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:text="距离5.5Km"
-            android:textColor="@color/setting_item_title_color"
-            android:textSize="25sp" />
     </RelativeLayout>
 
 </LinearLayout>
