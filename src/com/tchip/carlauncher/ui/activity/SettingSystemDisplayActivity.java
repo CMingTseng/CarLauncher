@@ -69,13 +69,13 @@ public class SettingSystemDisplayActivity extends Activity {
 
 		// 亮度SeekBar
 		SeekBar brightSeekBar = (SeekBar) findViewById(R.id.brightSeekBar);
-		brightSeekBar.setMax(255);
+		brightSeekBar.setMax(Constant.Setting.MAX_BRIGHTNESS);
 		brightSeekBar.setProgress(SettingUtil.getBrightness(context));
 		brightSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				 SettingUtil.setBrightness(context, seekBar.getProgress());
+				SettingUtil.setBrightness(context, seekBar.getProgress());
 			}
 
 			@Override
@@ -118,12 +118,16 @@ public class SettingSystemDisplayActivity extends Activity {
 						// 关闭自动亮度调节，重设亮度值
 						if (!isChecked) {
 							int manulLightValue = sharedPreferences.getInt(
-									"manulLightValue", 150) + 1;
-							if (manulLightValue > 255) {
-								manulLightValue = manulLightValue - 2;
-							}
+									"manulLightValue",
+									Constant.Setting.DEFAULT_BRIGHTNESS);
 							MyLog.v("[SettingSystemDisplay]manulLightValue:"
 									+ manulLightValue);
+							SettingUtil.setBrightness(getApplicationContext(),
+									manulLightValue - 1);
+							
+							SettingUtil.setBrightness(getApplicationContext(),
+									manulLightValue + 1);
+
 							SettingUtil.setBrightness(getApplicationContext(),
 									manulLightValue);
 						}

@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.11.12-14:25" >
+    android:versionName="2015.11.12-16:55" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -192,13 +192,6 @@
             android:exported="true"
             android:screenOrientation="landscape" />
 
-        <receiver android:name="com.tchip.carlauncher.model.PowerStateChangeReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-                <action android:name="com.tchip.POWER_OFF" />
-            </intent-filter>
-        </receiver>
         <receiver android:name="com.tchip.carlauncher.model.CardEjectReceiver" >
             <intent-filter android:priority="2147483647" >
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />

@@ -40,7 +40,7 @@ public class SettingUtil {
 	 * @param brightness
 	 */
 	public static void setBrightness(Context context, int brightness) {
-		if (brightness < 256 && brightness > -1) {
+		if (brightness <= Constant.Setting.MAX_BRIGHTNESS && brightness > -1) {
 			boolean setSuccess = Settings.System.putInt(
 					context.getContentResolver(),
 					Settings.System.SCREEN_BRIGHTNESS, brightness);
@@ -65,7 +65,7 @@ public class SettingUtil {
 			return nowBrightness;
 		} catch (SettingNotFoundException e) {
 			e.printStackTrace();
-			return 155;
+			return Constant.Setting.DEFAULT_BRIGHTNESS;
 		}
 	}
 

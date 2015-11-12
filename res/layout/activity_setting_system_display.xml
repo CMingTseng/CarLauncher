@@ -141,7 +141,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:max="255" />
+                android:max="196" />
 
             <View
                 android:layout_width="match_parent"

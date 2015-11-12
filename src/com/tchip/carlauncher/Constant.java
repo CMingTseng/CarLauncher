@@ -13,6 +13,19 @@ public interface Constant {
 	 */
 	public static final String TAG = "ZMS";
 
+	public static final class Setting {
+
+		/**
+		 * 最大亮度
+		 */
+		public static final int MAX_BRIGHTNESS = 196; // 255;
+
+		/**
+		 * 默认亮度
+		 */
+		public static final int DEFAULT_BRIGHTNESS = 180;
+	}
+
 	public static final class GravitySensor {
 		/**
 		 * 碰撞侦测默认灵敏度Level
