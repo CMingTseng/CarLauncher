@@ -116,8 +116,8 @@ public class RouteRecordService extends Service {
 					list.add(routePoint);
 				}
 			}
-			// 1K轨迹点保存为1个文件
-			if (list.size() > 999 || MyApplication.isSleeping) {
+			// 1W轨迹点保存为1个文件
+			if (list.size() > 9990 || MyApplication.isSleeping) {
 				saveRouteFile(list);
 			}
 		} catch (Exception e) {

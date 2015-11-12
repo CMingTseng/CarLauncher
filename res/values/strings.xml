@@ -257,7 +257,7 @@
     <string name="chat_hello_greet">你好，有什么可以帮您？</string>
     <string name="what_can_i_say">我可以说什么？</string>
     <string name="chat_no_answer">小天不知道怎么回答了</string>
-    <string name="hint_no_network">无网络链接</string>
+    <string name="hint_no_network">无网络</string>
     <string name="weather">天气</string>
     <string name="temperature">温度</string>
     <string name="start_navigation">正在导航</string>
@@ -284,8 +284,8 @@
     <string name="hint_video_mute_on">静音</string>
     <string name="storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
     <string name="storage_full_cause_by_other">空间不足，请清理存储卡2</string>
-    <string name="sd2_not_exist">存储卡二不存在，或未完成挂载</string>
-    <string name="sd1_not_exist">存储卡一不存在，或未完成挂载</string>
+    <string name="sd2_not_exist">存储卡二不存在</string>
+    <string name="sd1_not_exist">存储卡一不存在</string>
     <string name="sd_remove_badly">存储卡异常，停止录像</string>
     <string name="stop_record_power_unconnect">电源断开，停止录像</string>
     <string name="stop_record_sleep_on">进入休眠</string>
