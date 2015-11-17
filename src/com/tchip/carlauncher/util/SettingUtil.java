@@ -139,8 +139,9 @@ public class SettingUtil {
 					Constant.FMTransmit.SETTING_CHANNEL, "" + frequency);
 
 			SaveFileToNode(nodeFmChannel, String.valueOf(frequency));
-			Log.v(Constant.TAG, "FM Transmit:Set FM Frequency success:"
-					+ frequency / 100.0f + "MHz");
+			MyLog.v("[SettingUtil]:Set FM Frequency success:" + frequency
+					/ 100.0f + "MHz");
+
 		}
 	}
 

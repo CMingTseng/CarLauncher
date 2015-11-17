@@ -821,6 +821,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void updateSurfaceState() {
 		if (!isSurfaceLarge) {
+			// 16/9 = 1.7778
+			// 854/480 = 1.7791
 			int widthFull = 854;
 			int heightFull = 480;
 			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(

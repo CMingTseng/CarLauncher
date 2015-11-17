@@ -34,7 +34,7 @@ public class FmTransmitActivity extends Activity {
 	private SeekBar fmSeekBar;
 
 	private Button fmFreqDecrease, fmFreqIncrease;
-	
+
 	/*
 	 * 接受weather发送的消息广播
 	 */
@@ -47,7 +47,8 @@ public class FmTransmitActivity extends Activity {
 			if (action.equals("com.tchip.FM_OPEN_SYSTEMUI")) {
 				switchFm.setChecked(true);
 			} else if (action.equals("com.tchip.FM_CLOSE_SYSTEMUI")) {
-				switchFm.setChecked(false);;
+				switchFm.setChecked(false);
+				;
 			}
 		}
 	}
@@ -64,21 +65,22 @@ public class FmTransmitActivity extends Activity {
 
 		initialLayout();
 
-        fmReceiver = new FMReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.tchip.FM_OPEN_SYSTEMUI");
-        filter.addAction("com.tchip.FM_CLOSE_SYSTEMUI");
-        registerReceiver(fmReceiver, filter);
+		fmReceiver = new FMReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("com.tchip.FM_OPEN_SYSTEMUI");
+		filter.addAction("com.tchip.FM_CLOSE_SYSTEMUI");
+		registerReceiver(fmReceiver, filter);
 	}
 
-	protected void onDestory(){
+	protected void onDestory() {
 		super.onDestroy();
-		if(fmReceiver != null){
+		if (fmReceiver != null) {
 			unregisterReceiver(fmReceiver);
 		}
 	}
-	
+
 	private SwitchButton switchFm;
+
 	private void initialLayout() {
 		// 开关
 		switchFm = (SwitchButton) findViewById(R.id.switchFm);
@@ -101,8 +103,10 @@ public class FmTransmitActivity extends Activity {
 								: "0");
 				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable,
 						(isChecked ? "1" : "0"));
-				
-				sendBroadcast(new Intent(isChecked ? "com.tchip.FM_OPEN_CARLAUNCHER" : "com.tchip.FM_CLOSE_CARLAUNCHER"));
+
+				sendBroadcast(new Intent(
+						isChecked ? "com.tchip.FM_OPEN_CARLAUNCHER"
+								: "com.tchip.FM_CLOSE_CARLAUNCHER"));
 
 			}
 		});
@@ -176,10 +180,12 @@ public class FmTransmitActivity extends Activity {
 	private void setFmFrequencySmallDeIncrease(boolean deincrease) {
 		int nowFrequency = SettingUtil.getFmFrequceny(this)
 				+ (deincrease ? 10 : -10); // 当前频率
-		fmSeekBar.setProgress(nowFrequency / 10 - 875);
-		textHint.setText("  " + nowFrequency / 100.0f + "MHz");
+		if (nowFrequency >= 8750 && nowFrequency <= 10800) {
+			fmSeekBar.setProgress(nowFrequency / 10 - 875);
+			textHint.setText("  " + nowFrequency / 100.0f + "MHz");
 
-		SettingUtil.setFmFrequency(this, nowFrequency);
+			SettingUtil.setFmFrequency(this, nowFrequency);
+		}
 	}
 
 	/**
