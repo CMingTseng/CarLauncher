@@ -1358,9 +1358,18 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageFmTransmit:
 				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentFmTransmit = new Intent(MainActivity.this,
-							FmTransmitActivity.class);
-					startActivity(intentFmTransmit);
+					try {
+						ComponentName componentFM = new ComponentName(
+								"com.tchip.fmtransmit",
+								"com.tchip.fmtransmit.ui.activity.MainActivity");
+						Intent intentFM = new Intent();
+						intentFM.setComponent(componentFM);
+						startActivity(intentFM);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
 				}

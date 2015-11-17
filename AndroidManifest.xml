@@ -186,12 +186,6 @@
             android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
 
-        <!-- android:launchMode="singleTask" -->
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.FmTransmitActivity"
-            android:exported="true"
-            android:screenOrientation="landscape" />
-
         <receiver android:name="com.tchip.carlauncher.model.CardEjectReceiver" >
             <intent-filter android:priority="2147483647" >
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />
