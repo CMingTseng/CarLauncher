@@ -7,7 +7,6 @@ import java.util.Date;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.lib.filemanager.FolderActivity;
 import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
@@ -1368,8 +1367,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
-					
+
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
 				}
@@ -1377,9 +1375,17 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageFileExplore:
 				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentFileExplore = new Intent(MainActivity.this,
-							FolderActivity.class);
-					startActivity(intentFileExplore);
+					try {
+						ComponentName componentFile = new ComponentName(
+								"com.tchip.filemanager",
+								"com.tchip.filemanager.ui.activity.MainActivity");
+						Intent intentFile = new Intent();
+						intentFile.setComponent(componentFile);
+						startActivity(intentFile);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 					overridePendingTransition(R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);
 				}

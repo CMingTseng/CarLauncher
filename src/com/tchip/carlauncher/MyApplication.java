@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
-import com.tchip.carlauncher.lib.filemanager.AppPreferences;
-import com.tchip.carlauncher.lib.filemanager.FavouritesManager;
-import com.tchip.carlauncher.lib.filemanager.FileIconResolver;
 import com.tchip.carlauncher.util.MyLog;
 
 public class MyApplication extends Application {
@@ -123,31 +120,6 @@ public class MyApplication extends Application {
 			MyLog.e("[MyApplication]initialCrashData: Catch Exception!"
 					+ e.getMessage());
 		}
-	}
-
-	// File Manager
-	AppPreferences appPreferences = null;
-	FavouritesManager favouritesManager = null;
-	FileIconResolver fileIconResolver = null;
-
-	public AppPreferences getAppPreferences() {
-		if (appPreferences == null)
-			appPreferences = AppPreferences
-					.loadPreferences(getApplicationContext());
-
-		return appPreferences;
-	}
-
-	public FavouritesManager getFavouritesManager() {
-		if (favouritesManager == null)
-			favouritesManager = new FavouritesManager(getApplicationContext());
-		return favouritesManager;
-	}
-
-	public FileIconResolver getFileIconResolver() {
-		if (fileIconResolver == null)
-			fileIconResolver = new FileIconResolver(getApplicationContext());
-		return fileIconResolver;
 	}
 
 }
