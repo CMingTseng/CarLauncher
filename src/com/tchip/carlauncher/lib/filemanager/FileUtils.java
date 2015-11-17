@@ -520,20 +520,28 @@ public class FileUtils {
 			return null;
 	}
 
+	/**
+	 * 是否是媒体文件夹，需要特殊显示预览图
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public static boolean isMediaDirectory(File file) {
-		try {
-			String path = file.getCanonicalPath();
-			for (String directory : new String[] { Environment.DIRECTORY_DCIM,
-					Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PICTURES }) {
-				if (path.startsWith(Environment
-						.getExternalStoragePublicDirectory(directory)
-						.getAbsolutePath()))
-					return true;
-			}
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+
+		return false;
+		// try {
+		// String path = file.getCanonicalPath();
+		// for (String directory : new String[] { Environment.DIRECTORY_DCIM,
+		// Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PICTURES }) {
+		// if (path.startsWith(Environment
+		// .getExternalStoragePublicDirectory(directory)
+		// .getAbsolutePath()))
+		// return true;
+		// }
+		// return false;
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// return false;
+		// }
 	}
 }
