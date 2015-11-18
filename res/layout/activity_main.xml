@@ -636,6 +636,22 @@
                 android:layout_height="70dp"
                 android:background="@drawable/ui_camera_shoot" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutCameraSwitch"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:padding="15dp" >
+
+            <ImageView
+                android:id="@+id/imageCameraSwitch"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/ui_camera_switch" />
+        </LinearLayout>
     </RelativeLayout>
 
     <ImageView

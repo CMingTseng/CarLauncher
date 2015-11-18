@@ -99,6 +99,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoRecordSmall, layoutVideoCameraSmall,
 			layoutVideoLockSmall;
 
+	/**
+	 * 前后摄像头切换
+	 */
+	private LinearLayout layoutCameraSwitch;
+	private ImageView imageCameraSwitch;
+
 	private ImageView imageSignalLevel, image3GType;
 
 	private TelephonyManager telephonyManager;
@@ -644,6 +650,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoLockSmall = (LinearLayout) findViewById(R.id.layoutVideoLockSmall);
 		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
 
+		// 前后摄像头切换
+		layoutCameraSwitch = (LinearLayout) findViewById(R.id.layoutCameraSwitch);
+		layoutCameraSwitch.setOnClickListener(new MyOnClickListener());
+
 		// 天气预报和时钟,状态图标
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
@@ -811,6 +821,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 拍照
 		largeVideoCamera = (ImageView) findViewById(R.id.largeVideoCamera);
 		largeVideoCamera.setOnClickListener(new MyOnClickListener());
+
+		// 切换前后图标
+		imageCameraSwitch = (ImageView) findViewById(R.id.imageCameraSwitch);
+		imageCameraSwitch.setOnClickListener(new MyOnClickListener());
 
 		updateButtonState(isSurfaceLarge());
 	}
@@ -1242,6 +1256,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!ClickUtil.isQuickClick(500)) {
 					takePhoto();
 				}
+				break;
+
+			case R.id.imageCameraSwitch:
+			case R.id.layoutCameraSwitch:
+				sendBroadcast(new Intent("com.tchip.showUVC"));
 				break;
 
 			case R.id.layoutWeather:
