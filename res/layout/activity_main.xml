@@ -626,7 +626,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
             android:layout_marginBottom="20dp"
             android:padding="15dp" >
 
@@ -642,7 +643,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="20dp"
             android:padding="15dp" >
 
