@@ -35,7 +35,7 @@ public class SettingFragment extends Fragment {
 	private Context context;
 	private SharedPreferences preferences;
 	private Editor editor;
-	private BluetoothAdapter bluetoothAdapter;
+	// private BluetoothAdapter bluetoothAdapter;
 	private WifiManager wifiManager;
 
 	private SwitchButton switchWifi, switchBluetooth, switchParking;
@@ -138,26 +138,27 @@ public class SettingFragment extends Fragment {
 		layoutRippleParking.setOnClickListener(new MyOnClickListener());
 
 		// 蓝牙(GONE)
-		RelativeLayout layoutRippleBluetooth = (RelativeLayout) systemSettingView
-				.findViewById(R.id.layoutRippleBluetooth);
-		layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
-
-		switchBluetooth = (SwitchButton) systemSettingView
-				.findViewById(R.id.switchBluetooth);
-		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
-		switchBluetooth
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						if (isChecked)
-							bluetoothAdapter.enable();
-						else
-							bluetoothAdapter.disable();
-					}
-				});
+		// RelativeLayout layoutRippleBluetooth = (RelativeLayout)
+		// systemSettingView
+		// .findViewById(R.id.layoutRippleBluetooth);
+		// layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
+		//
+		// switchBluetooth = (SwitchButton) systemSettingView
+		// .findViewById(R.id.switchBluetooth);
+		// bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		// switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
+		// switchBluetooth
+		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		//
+		// @Override
+		// public void onCheckedChanged(CompoundButton buttonView,
+		// boolean isChecked) {
+		// if (isChecked)
+		// bluetoothAdapter.enable();
+		// else
+		// bluetoothAdapter.disable();
+		// }
+		// });
 
 		// 位置信息
 		RelativeLayout layoutRippleLocation = (RelativeLayout) systemSettingView
@@ -433,7 +434,7 @@ public class SettingFragment extends Fragment {
 		super.onResume();
 		// TODO:应该启动新线程
 		switchWifi.setChecked(wifiManager.isWifiEnabled());
-		switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
+		// switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
 	}
 
 }
