@@ -1852,12 +1852,15 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 静音按钮
-		if (mMuteState == Constant.Record.STATE_MUTE) {
-			largeVideoMute.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_sound_off));
-		} else if (mMuteState == Constant.Record.STATE_UNMUTE) {
+		boolean videoMute = sharedPreferences.getBoolean("videoMute", true);
+		if (!videoMute) {
+			mMuteState = Constant.Record.STATE_UNMUTE;
 			largeVideoMute.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_sound_on));
+		} else {
+			mMuteState = Constant.Record.STATE_MUTE; // 不录音
+			largeVideoMute.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_sound_off));
 		}
 
 	}
@@ -2141,11 +2144,16 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				// 设置录像静音
-				if (mMuteState == Constant.Record.STATE_UNMUTE) {
+				boolean videoMute = sharedPreferences.getBoolean("videoMute",
+						true);
+				if (!videoMute) {
+					mMuteState = Constant.Record.STATE_UNMUTE;
 					setMute(false);
 				} else {
+					mMuteState = Constant.Record.STATE_MUTE; // 不录音
 					setMute(true);
 				}
+
 				AudioPlayUtil.playAudio(getApplicationContext(),
 						FILE_TYPE_VIDEO);
 				return mMyRecorder.start();
