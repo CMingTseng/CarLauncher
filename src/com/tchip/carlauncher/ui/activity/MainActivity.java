@@ -20,6 +20,8 @@ import com.tchip.carlauncher.util.ClickUtil;
 import com.tchip.carlauncher.util.DateUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.NetworkUtil;
+import com.tchip.carlauncher.util.OpenUtil;
+import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.util.SignalUtil;
@@ -322,6 +324,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
+	/**
+	 * 后台线程，用以监测是否需要录制碰撞加锁视频(停车侦测)
+	 */
 	public class BackThread implements Runnable {
 
 		@Override
@@ -1264,224 +1269,55 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.layoutWeather:
-				if (!ClickUtil.isQuickClick(800)) {
-					// Intent intentWeather = new Intent(MainActivity.this,
-					// WeatherActivity.class);
-					// startActivity(intentWeather);
-
-					ComponentName componentWeather;
-					componentWeather = new ComponentName("com.tchip.weather",
-							"com.tchip.weather.ui.activity.MainActivity");
-					Intent intentWeather = new Intent();
-					intentWeather.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intentWeather.setComponent(componentWeather);
-					startActivity(intentWeather);
-					overridePendingTransition(R.anim.zms_translate_down_out,
-							R.anim.zms_translate_down_in);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEATHER);
 				break;
 
 			case R.id.imageNavi:
-				if (!ClickUtil.isQuickClick(800)) {
-					// com.tchip.baidunavi
-					if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-						try {
-							ComponentName componentBaiduNavi;
-							componentBaiduNavi = new ComponentName(
-									"com.tchip.baidunavi",
-									"com.tchip.baidunavi.ui.activity.MainActivity");
-							Intent intentBaiduNavi = new Intent();
-							intentBaiduNavi
-									.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							intentBaiduNavi.setComponent(componentBaiduNavi);
-							startActivity(intentBaiduNavi);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					} else {
-						NetworkUtil.noNetworkHint(getApplicationContext());
-					}
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.BAIDUNAVI);
 				break;
 
 			case R.id.imageMusicOL:
-				if (!ClickUtil.isQuickClick(800)) {
-					try {
-						ComponentName componentMusic;
-						// 普通HD版："cn.kuwo.kwmusichd","cn.kuwo.kwmusichd.WelcomeActivity"
-						// 车载HD版："cn.kuwo.kwmusiccar","cn.kuwo.kwmusiccar.WelcomeActivity"
-						componentMusic = new ComponentName(
-								"cn.kuwo.kwmusiccar",
-								"cn.kuwo.kwmusiccar.WelcomeActivity");
-						Intent intentMusic = new Intent();
-						intentMusic.setComponent(componentMusic);
-						startActivity(intentMusic);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MUSIC);
 				break;
 
 			case R.id.imageEDog:
-				if (!ClickUtil.isQuickClick(800)) {
-					if (1 == SettingUtil.getAccStatus()) {
-						SettingUtil.setEDogEnable(true);
-						try {
-							ComponentName componentEDog = new ComponentName(
-									"entry.dsa2014",
-									"entry.dsa2014.MainActivity");
-							Intent intentEDog = new Intent();
-							intentEDog.setComponent(componentEDog);
-							startActivity(intentEDog);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					} else {
-						SettingUtil.setEDogEnable(false);
-						String strNoAcc = "正在休眠";
-						Toast.makeText(getApplicationContext(), strNoAcc,
-								Toast.LENGTH_SHORT).show();
-						startSpeak(strNoAcc);
-					}
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.EDOG);
 				break;
 
 			case R.id.imageMultimedia:
-				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentMultimedia = new Intent(MainActivity.this,
-							MultimediaActivity.class);
-					startActivity(intentMultimedia);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MULTIMEDIA);
 				break;
 
 			case R.id.imageRouteTrack:
-				if (!ClickUtil.isQuickClick(800)) {
-					try {
-						ComponentName componentDialer = new ComponentName(
-								"com.tchip.route",
-								"com.tchip.route.ui.activity.MainActivity");
-						Intent intentDialer = new Intent();
-						intentDialer.setComponent(componentDialer);
-						startActivity(intentDialer);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
-
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.ROUTE);
 				break;
 
 			case R.id.imageFmTransmit:
-				if (!ClickUtil.isQuickClick(800)) {
-					try {
-						ComponentName componentFM = new ComponentName(
-								"com.tchip.fmtransmit",
-								"com.tchip.fmtransmit.ui.activity.MainActivity");
-						Intent intentFM = new Intent();
-						intentFM.setComponent(componentFM);
-						startActivity(intentFM);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.FMTRANSMIT);
 				break;
 
 			case R.id.imageFileExplore:
-				if (!ClickUtil.isQuickClick(800)) {
-					try {
-						ComponentName componentFile = new ComponentName(
-								"com.tchip.filemanager",
-								"com.tchip.filemanager.ui.activity.MainActivity");
-						Intent intentFile = new Intent();
-						intentFile.setComponent(componentFile);
-						startActivity(intentFile);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.FILEEXPLORER);
 				break;
 
 			case R.id.imageVoiceChat:
-				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentVoiceChat;
-					if (Constant.Module.isVoiceXunfei) {
-						// 讯飞语音
-						intentVoiceChat = new Intent(MainActivity.this,
-								ChatActivity.class);
-					} else {
-					}
-					startActivity(intentVoiceChat);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.CHAT);
 				break;
 
 			case R.id.imageDialer:
-				try {
-
-					ComponentName componentDialer = new ComponentName(
-							"com.goodocom.gocsdk",
-							"com.tchip.call.MainActivity");
-					Intent intentDialer = new Intent();
-					intentDialer.setComponent(componentDialer);
-					startActivity(intentDialer);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				// if (!ClickUtil.isQuickClick(800)) {
-				// Intent intentBTDialer = new Intent(MainActivity.this,
-				// BluetoothDialerActivity.class);
-				// startActivity(intentBTDialer);
-				// overridePendingTransition(R.anim.zms_translate_up_out,
-				// R.anim.zms_translate_up_in);
-				// }
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.DIALER);
 				break;
 
 			case R.id.imageMessage:
-				if (!ClickUtil.isQuickClick(800)) {
-					try {
-						ComponentName componentMessage = new ComponentName(
-								"com.android.mms",
-								"com.android.mms.ui.BootActivity");
-						Intent intentMessage = new Intent();
-						intentMessage.setComponent(componentMessage);
-						startActivity(intentMessage);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MMS);
 				break;
 
 			case R.id.imageSetting:
-				if (!ClickUtil.isQuickClick(800)) {
-					Intent intentSetting = new Intent(MainActivity.this,
-							SettingActivity.class);
-					startActivity(intentSetting);
-					overridePendingTransition(R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.SETTING);
 				break;
 
 			case R.id.layoutWiFi:
-				if (!ClickUtil.isQuickClick(800)) {
-					if (Constant.Module.isWifiSystem) {
-						startActivity(new Intent(
-								android.provider.Settings.ACTION_WIFI_SETTINGS));
-					} else {
-						Intent intentWiFi = new Intent(MainActivity.this,
-								WifiListActivity.class);
-						startActivity(intentWiFi);
-					}
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WIFI);
 				break;
 
 			default:
@@ -1783,7 +1619,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void refreshRecordButton() {
-
 		// 视频尺寸
 		String videoSizeStr = sharedPreferences.getString("videoSize", "720");
 		if ("1080".equals(videoSizeStr)) {
@@ -1905,9 +1740,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			mCamera.lock();
 
 			// 设置系统Camera参数
-			// Camera.Parameters para = mCamera.getParameters();
-			// para.unflatten(Constant.CAMERA_PARAMS);
-			// mCamera.setParameters(para);
+			Camera.Parameters para = mCamera.getParameters();
+			para.unflatten(Constant.Record.CAMERA_PARAMS);
+			mCamera.setParameters(para);
 
 			mCamera.setPreviewDisplay(mHolder);
 			mCamera.startPreview();
@@ -1957,8 +1792,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
 			int intSdFree = (int) sdFree;
 			MyLog.v("[deleteOldestUnlockVideo] sdFree:" + intSdFree);
-			while (sdFree < sdTotal * Constant.Record.SD_MIN_FREE_PERCENT
-					|| intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
+			while (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
 				// 删除较旧未加锁视频文件
 				if (oldestUnlockVideoId != -1) {
@@ -1981,6 +1815,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				} else {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
+
+						if (MyApplication.isVideoReording) {
+							// TODO:停止录像
+							// stopRecorder();
+						}
 						/**
 						 * 有一种情况：数据库中无视频信息。导致的原因：
 						 * 1：升级时选Download的话，不会清理USB存储空间，应用数据库被删除； 2：应用被清除数据
@@ -1992,9 +1831,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						intSdFree = (int) sdFree;
-						if (sdFree < sdTotal
-								* Constant.Record.SD_MIN_FREE_PERCENT
-								|| intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
+						if (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
 							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							MyLog.e("Storage is full...");
 
@@ -2052,9 +1889,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 录像线程， 调用此线程地方：
 	 * 
-	 * 1.首次启动录像
+	 * 1.首次启动录像{@link AutoThread }
 	 * 
-	 * 2.ACC上电录像
+	 * 2.ACC上电录像 {@link BackThread}
 	 * 
 	 * 3.停车侦测，录制一个加锁视频
 	 */
@@ -2283,6 +2120,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
+	/**
+	 * 停止录像
+	 * 
+	 * @return
+	 */
 	public int stopRecorder() {
 		secondCount = -1; // 录制时间秒钟复位
 		textRecordTime.setText("00 : 00");
@@ -2297,6 +2139,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 设置视频分段
+	 * 
+	 * @param seconds
+	 * @return
+	 */
 	public int setInterval(int seconds) {
 		if (mMyRecorder != null) {
 			return mMyRecorder.setVideoSeconds(seconds);
@@ -2304,6 +2152,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 设置视频重叠
+	 * 
+	 * @param seconds
+	 * @return
+	 */
 	public int setOverlap(int seconds) {
 		if (mMyRecorder != null) {
 			return mMyRecorder.setVideoOverlap(seconds);
@@ -2311,6 +2165,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 拍照
+	 * 
+	 * @return
+	 */
 	public int takePhoto() {
 		if (!StorageUtil.isVideoCardExists()) {
 			// SDCard不存在
@@ -2332,6 +2191,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 设置保存路径
+	 * 
+	 * @param dir
+	 * @return
+	 */
 	public int setDirectory(String dir) {
 		if (mMyRecorder != null) {
 			return mMyRecorder.setDirectory(dir);
@@ -2352,6 +2217,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
+	/**
+	 * 设置分辨率
+	 * 
+	 * @param state
+	 * @return
+	 */
 	public int setResolution(int state) {
 		if (state != mResolutionState) {
 			mResolutionState = state;
@@ -2440,6 +2311,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			Toast.makeText(getApplicationContext(), "视频保存失败",
 					Toast.LENGTH_SHORT).show();
 			MyLog.e("Record Error : ERROR_SAVE_VIDEO_FAIL");
+
+			// 视频保存失败，原因：存储空间不足，清空文件夹，视频被删掉
+			if (stopRecorder() == 0) {
+				mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+				MyApplication.isVideoReording = false;
+				setupRecordViews();
+				releaseCameraZone();
+			}
 			break;
 
 		case TachographCallback.ERROR_SAVE_IMAGE_FAIL:
@@ -2456,19 +2335,23 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 文件保存回调
+	 * 
+	 * @param type
+	 *            0-图片 1-视频
+	 * 
+	 * @param path
+	 *            视频：/mnt/sdcard/tachograph/2015-07-01/2015-07-01_105536.mp4
+	 *            图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
+	 */
 	@Override
 	public void onFileSave(int type, String path) {
-		/**
-		 * [Type] 0-图片 1-视频
-		 * 
-		 * [Path] 视频：/mnt/sdcard/tachograph/2015-07-01/2015-07-01_105536.mp4
-		 * 图片:/mnt/sdcard/tachograph/camera_shot/2015-07-01_105536.jpg
-		 */
-
 		if (type == 1) {
-			deleteOldestUnlockVideo();
 			secondCount = -1; // 录制时间秒钟复位
 			textRecordTime.setText("00 : 00");
+
+			deleteOldestUnlockVideo();
 
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");

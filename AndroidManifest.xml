@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.11.20-18:40" >
+    android:versionName="2015.11.24-19:30" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -178,8 +178,8 @@
 
         <provider
             android:name="com.tchip.carlauncher.model.DriveVideoProvider"
-            android:exported="true"
-            android:authorities="com.tchip.carlauncher.model.DriveVideoProvider" />
+            android:authorities="com.tchip.carlauncher.model.DriveVideoProvider"
+            android:exported="true" />
 
         <receiver android:name="com.tchip.carlauncher.model.CardEjectReceiver" >
             <intent-filter android:priority="2147483647" >
