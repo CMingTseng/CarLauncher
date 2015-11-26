@@ -53,6 +53,9 @@ public class OpenUtil {
 		/** 天气 **/
 		WEATHER,
 
+		/** 微密 **/
+		WEME,
+
 		/** Wi-Fi **/
 		WIFI
 	}
@@ -273,16 +276,38 @@ public class OpenUtil {
 			}
 			break;
 
+		case WEME:
+			try {
+				// 打开GPS
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON"));
+
+				Intent intent = new Intent();
+				ComponentName comp = new ComponentName("com.mirrtalk.app",
+						"com.mirrtalk.app.MainActivity");
+				intent.setComponent(comp);
+				intent.setAction("android.intent.action.VIEW");
+				activity.startActivity(intent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
 		case WIFI:
 			if (!ClickUtil.isQuickClick(800)) {
 				if (Constant.Module.isWifiSystem) {
-					activity.startActivity(new Intent(
-							android.provider.Settings.ACTION_WIFI_SETTINGS));
+					try {
+						activity.startActivity(new Intent(
+								android.provider.Settings.ACTION_WIFI_SETTINGS));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				} else {
 					Intent intentWiFi = new Intent(activity,
 							WifiListActivity.class);
 					activity.startActivity(intentWiFi);
 				}
+
 			}
 			break;
 

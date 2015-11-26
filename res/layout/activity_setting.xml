@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#000000" >
+    android:background="@color/setting_item_separator" >
 
     <RelativeLayout
         android:id="@+id/layoutTop"
@@ -11,7 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/ui_setting_top_bar_bg" >
+        android:background="@color/setting_title_bg" >
 
         <TextView
             android:layout_width="wrap_content"

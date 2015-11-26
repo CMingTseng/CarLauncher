@@ -9,6 +9,8 @@ import com.tchip.carlauncher.ui.activity.SettingSystemUsbActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 import com.tchip.carlauncher.ui.activity.WifiListActivity;
+import com.tchip.carlauncher.util.OpenUtil;
+import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.SwitchButton;
@@ -248,31 +250,11 @@ public class SettingFragment extends Fragment {
 
 			case R.id.layoutWeme:
 				// 微密
-				try {
-					Intent intent = new Intent();
-					ComponentName comp = new ComponentName("com.mirrtalk.app",
-							"com.mirrtalk.app.MainActivity");
-					intent.setComponent(comp);
-					intent.setAction("android.intent.action.VIEW");
-					startActivityForResult(intent, 0);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.WEME);
 				break;
 
 			case R.id.layoutRippleWifi:
-				if (Constant.Module.isWifiSystem) {
-					try {
-						startActivity(new Intent(
-								android.provider.Settings.ACTION_WIFI_SETTINGS));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					Intent intentWifi = new Intent(context,
-							WifiListActivity.class);
-					startActivity(intentWifi);
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.WIFI);
 				break;
 
 			case R.id.layoutWifiAp:

@@ -17,15 +17,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutVideoAutoRecord"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="gone" >
 
@@ -67,14 +69,16 @@
             <View
                 android:id="@+id/lineUserCenter"
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutUserCenter"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -96,14 +100,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleDisplay"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -125,14 +132,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleSound"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -154,14 +163,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutWeme"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -183,14 +194,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleWifi"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -228,14 +241,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutWifiAp"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="visible" >
 
@@ -259,14 +274,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleTraffic"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="visible" >
 
@@ -289,17 +306,19 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
-                android:visibility="visible" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleLocation"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
-                android:visibility="visible" >
+                android:visibility="gone" >
 
                 <ImageView
                     android:layout_width="37dp"
@@ -320,14 +339,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutGravity"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="visible" >
 
@@ -350,14 +371,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleParking"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -395,15 +418,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleFm"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="gone" >
 
@@ -426,15 +451,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleBluetooth"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="gone" >
 
@@ -473,15 +500,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutCopyMap"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="gone" >
 
@@ -504,15 +533,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleStorage"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="visible" >
 
@@ -535,15 +566,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleUsb"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="visible" >
 
@@ -566,15 +599,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleApp"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="gone" >
 
@@ -597,15 +632,17 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000"
+               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleDate"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true" >
 
                 <ImageView
@@ -627,14 +664,16 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#000000" />
+                android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_marginLeft="@dimen/setting_item_separator_margin"
+                android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutRippleReset"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="gone" >
 
@@ -659,7 +698,7 @@
                 android:id="@+id/layoutRippleAbout"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:background="@drawable/ui_setting_item_bg"
+                android:background="@color/setting_item_bg"
                 android:clickable="true"
                 android:visibility="visible" >
 
