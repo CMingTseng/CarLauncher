@@ -136,6 +136,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private PowerManager powerManager;
 
+	private String strRecordStop = "停止录像";
+	private String strRecordStart = "开始录像";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1145,6 +1148,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoRecordSmall:
 				if (!ClickUtil.isQuickClick(1000)) {
 					if (StorageUtil.isVideoCardExists()) {
+						if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+							startSpeak(strRecordStart);
+						} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+							startSpeak(strRecordStop);
+						}
 						startOrStopRecord();
 					} else {
 						noVideoSDHint();
