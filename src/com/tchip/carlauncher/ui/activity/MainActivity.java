@@ -57,6 +57,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -2586,6 +2587,23 @@ public class MainActivity extends Activity implements TachographCallback,
 				SettingUtil.setFmFrequency(this, freq);
 			else
 				SettingUtil.setFmFrequency(this, 8750);
+
+			boolean isFmOn = SettingUtil.isFmTransmitOn(MainActivity.this);
+			if (isFmOn) {
+				Settings.System.putString(getContentResolver(),
+						Constant.FMTransmit.SETTING_ENABLE, "1");
+				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
+
+				// 通知状态栏同步图标
+				sendBroadcast(new Intent("com.tchip.FM_OPEN_CARLAUNCHER"));
+			} else {
+				Settings.System.putString(getContentResolver(),
+						Constant.FMTransmit.SETTING_ENABLE, "0");
+				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
+
+				// 通知状态栏同步图标
+				sendBroadcast(new Intent("com.tchip.FM_CLOSE_CARLAUNCHER"));
+			}
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]initFmTransmit: Catch Exception!");
 		}
