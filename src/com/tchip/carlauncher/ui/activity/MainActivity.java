@@ -2499,8 +2499,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			// exifHeader.setValue(Tag.DATETIMEORIGINAL, "2015:05:55 05:55:55");
 			exifHeader.setValue(Tag.ORIENTATION, "1"); // 浏览模式/方向:上/左
 			exifHeader.setValue(Tag.APERTUREVALUE, "22/10"); // 光圈：2.2
-			exifHeader.setValue(Tag.FOCALLENGTH, (3 + new Random().nextInt(5))
-					+ "/2"); // 焦距：3.5mm
+			exifHeader.setValue(Tag.FOCALLENGTH, "7/2"); // 焦距：3.5mm
 			exifHeader.setValue(Tag.WHITEBALANCE, "0"); // 白平衡：自动
 			exifHeader.setValue(Tag.ISOSPEEDRATINGS, "100"); // ISO感光度：100
 			exifHeader.setValue(Tag.EXPOSURETIME, "1/30"); // 曝光时间：1/30
