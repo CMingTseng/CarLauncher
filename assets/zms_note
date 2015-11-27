@@ -64,8 +64,8 @@ SharedPreferences-CarLauncher
 	----------------------------------------
 	[*Using]Baidu LBS
 	(String)cityName	城市名(格式：中山市)
-	(String)latitude	经度
-	(String)longitude	纬度
+	(String)latitude	纬度
+	(String)longitude	经度
 	(String)altitude	海拔(格式：78.0)
 	(String)addrStr		当前位置(格式：广东省中山市中山市市辖区紫竹横街11号)
 	(String)lbsTime		位置更新时间(格式：2015-05-11	21:19:28)

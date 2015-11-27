@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.11.26-16:40" >
+    android:versionName="2015.11.26-20:40" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -46,7 +46,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" /> -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    
     <!-- Launcher Permission -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />

@@ -1,8 +1,19 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+import java.util.SortedMap;
+
+import net.sourceforge.jheader.App1Header;
+import net.sourceforge.jheader.App1Header.Tag;
+import net.sourceforge.jheader.ExifFormatException;
+import net.sourceforge.jheader.JpegFormatException;
+import net.sourceforge.jheader.JpegHeaders;
+import net.sourceforge.jheader.TagFormatException;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
@@ -31,13 +42,13 @@ import com.tchip.tachograph.TachographRecorder;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -1782,6 +1793,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private boolean deleteOldestUnlockVideo() {
 		try {
+			deleteEmptyDirectory();
 			String sdcardPath = Constant.Path.SDCARD_1 + File.separator;// "/storage/sdcard1/";
 			if (Constant.Record.saveVideoToSD2) {
 				sdcardPath = Constant.Path.SDCARD_2 + File.separator;// "/storage/sdcard2/";
@@ -1884,6 +1896,26 @@ public class MainActivity extends Activity implements TachographCallback,
 			e.printStackTrace();
 			return true;
 		}
+	}
+
+	/**
+	 * 删除空文件夹
+	 */
+	private void deleteEmptyDirectory() {
+		File fileRoot = new File(Constant.Path.SDCARD_2 + File.separator
+				+ "tachograph/");
+		File[] listFileDate = fileRoot.listFiles();
+		for (File file : listFileDate) {
+			if (file.isDirectory()) {
+				int numberChild = file.listFiles().length;
+				if (numberChild == 0) {
+					file.delete();
+					MyLog.v("[deleteEmptyDirectory]Delete Directory:"
+							+ file.getName() + ",Length:" + numberChild);
+				}
+			}
+		}
+
 	}
 
 	/**
@@ -2382,6 +2414,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.photo_save),
 					Toast.LENGTH_SHORT).show();
+
+			writeExif(path);
 		}
 
 		// 更新Media Database
@@ -2393,6 +2427,108 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
 			CheckErrorFile(); // TEST
 		}
+	}
+
+	/**
+	 * 写入EXIF信息
+	 * 
+	 * @param imagePath
+	 */
+	private void writeExif(String imagePath) {
+		// Android Way
+		try {
+			ExifInterface exif = new ExifInterface(imagePath);
+			// // 经度
+			// String strLongitude = sharedPreferences.getString("longitude",
+			// "0.00");
+			// double intLongitude = Double.parseDouble(strLongitude);
+			// exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strLongitude);
+			// exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,
+			// intLongitude > 0.0f ? "E" : "W");
+			// // 纬度
+			// String strLatitude = sharedPreferences
+			// .getString("latitude", "0.00");
+			// double intLatitude = Double.parseDouble(strLatitude);
+			// exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strLongitude);
+			// exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,
+			// intLatitude > 0.0f ? "N" : "S");
+			// exif.setAttribute(ExifInterface.TAG_ORIENTATION, ""
+			// + ExifInterface.ORIENTATION_NORMAL);
+
+			exif.setAttribute(ExifInterface.TAG_MAKE, "zenlane");
+			// 型号/机型
+			exif.setAttribute(ExifInterface.TAG_MODEL, "X755");
+
+			// exif.setAttribute(ExifInterface.TAG_FLASH, "1/30"); // 闪光灯
+			// exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, "5/1"); // 焦距
+			// exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE,
+			// ExifInterface.WHITEBALANCE_AUTO+"/1"); // 白平衡
+			// exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, "1/30"); //
+			// // 曝光时间
+			// exif.setAttribute(ExifInterface.TAG_ISO, "100"); // 感光度
+			// exif.setAttribute(ExifInterface.TAG_APERTURE, "2/1"); // 光圈
+
+			exif.saveAttributes();
+		} catch (Exception e) {
+			MyLog.e("[Android]Set Attribute Catch Exception:" + e.toString());
+			e.printStackTrace();
+		}
+
+		// JpegHeaders Way
+		try {
+			JpegHeaders jpegHeaders = new JpegHeaders(imagePath);
+			App1Header exifHeader = jpegHeaders.getApp1Header();
+
+			// 遍历显示EXIF
+			// SortedMap tags = exifHeader.getTags();
+			// for (Map.Entry entry : tags.entrySet()) {
+			// System.out.println(entry.getKey() + "[" + entry.getKey().name
+			// + "]:" + entry.getValue());
+			// }
+
+			// 修改EXIF
+			// exifHeader.setValue(Tag.DATETIMEORIGINAL, "2015:05:55 05:55:55");
+			exifHeader.setValue(Tag.ORIENTATION, "1"); // 浏览模式/方向:上/左
+			exifHeader.setValue(Tag.APERTUREVALUE, "22/10"); // 光圈：2.2
+			exifHeader.setValue(Tag.FOCALLENGTH, (3 + new Random().nextInt(5))
+					+ "/2"); // 焦距：3.5mm
+			exifHeader.setValue(Tag.WHITEBALANCE, "0"); // 白平衡：自动
+			exifHeader.setValue(Tag.ISOSPEEDRATINGS, "100"); // ISO感光度：100
+			exifHeader.setValue(Tag.EXPOSURETIME, "1/30"); // 曝光时间：1/30
+			// 曝光补偿:EV值每增加1.0，相当于摄入的光线量增加一倍，如果照片过亮，要减小EV值，EV值每减小1.0，相当于摄入的光线量减小一倍
+			exifHeader.setValue(Tag.EXPOSUREBIASVALUE,
+					(1 + new Random().nextInt(10)) + "/10");
+			exifHeader.setValue(Tag.METERINGMODE, "1"); // 测光模式：平均
+			exifHeader.setValue(Tag.SATURATION,
+					"" + (5 + new Random().nextInt(10))); // 饱和度：5-15
+
+			exifHeader.setValue(Tag.FLASH, "0"); // 闪光灯：未使用
+
+			// 保存,参数：是否保存原文件为.old
+			jpegHeaders.save(false);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			MyLog.e("[JpegHeaders]Set Attribute Error,FileNotFoundException:"
+					+ e.toString());
+		} catch (ExifFormatException e) {
+			e.printStackTrace();
+			MyLog.e("[JpegHeaders]Set Attribute Error,ExifFormatException:"
+					+ e.toString());
+		} catch (TagFormatException e) {
+			e.printStackTrace();
+			MyLog.e("[JpegHeaders]Set Attribute Error,TagFormatException:"
+					+ e.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+			MyLog.e("[JpegHeaders]Set Attribute Error,IOException:"
+					+ e.toString());
+		} catch (JpegFormatException e) {
+			e.printStackTrace();
+			MyLog.e("[JpegHeaders]Set Attribute Error,JpegFormatException:"
+					+ e.toString());
+		}
+
 	}
 
 	public void setup() {

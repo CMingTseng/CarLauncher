@@ -17,7 +17,10 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -41,6 +44,9 @@ public class RouteRecordService extends Service {
 	private final static double ERROR_CODE = 0.0;
 	private double routeLng, routeLat;
 
+	private SharedPreferences sharedPreferences;
+	private Editor editor;
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -50,6 +56,10 @@ public class RouteRecordService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		MyLog.v("[RouteRecordService]onCreate");
+
+		sharedPreferences = getSharedPreferences(
+				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		editor = sharedPreferences.edit();
 	}
 
 	@Override
@@ -114,6 +124,10 @@ public class RouteRecordService extends Service {
 					MyLog.v("[RouteRecordService] Lat:" + routeLat + "-Lng:"
 							+ routeLng);
 					list.add(routePoint);
+
+					editor.putString("longitude", "" + routeLng);
+					editor.putString("latitude", "" + routeLat);
+					editor.commit();
 				}
 			}
 			// 1W轨迹点保存为1个文件
