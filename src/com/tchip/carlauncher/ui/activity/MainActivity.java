@@ -1539,6 +1539,11 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+
+		// 触摸声音
+		Settings.System.putString(getContentResolver(),
+				Settings.System.SOUND_EFFECTS_ENABLED, "1");
+
 		// 按HOME键将预览区域还原为小窗口
 		if (isSurfaceLarge()) {
 			updateSurfaceState();
@@ -2447,22 +2452,22 @@ public class MainActivity extends Activity implements TachographCallback,
 		// Android Way
 		try {
 			ExifInterface exif = new ExifInterface(imagePath);
-			// // 经度
-			// String strLongitude = sharedPreferences.getString("longitude",
-			// "0.00");
-			// double intLongitude = Double.parseDouble(strLongitude);
-			// exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strLongitude);
-			// exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,
-			// intLongitude > 0.0f ? "E" : "W");
-			// // 纬度
-			// String strLatitude = sharedPreferences
-			// .getString("latitude", "0.00");
-			// double intLatitude = Double.parseDouble(strLatitude);
-			// exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strLongitude);
-			// exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,
-			// intLatitude > 0.0f ? "N" : "S");
-			// exif.setAttribute(ExifInterface.TAG_ORIENTATION, ""
-			// + ExifInterface.ORIENTATION_NORMAL);
+			// 经度
+			String strLongitude = sharedPreferences.getString("longitude",
+					"0.00");
+			double intLongitude = Double.parseDouble(strLongitude);
+			exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strLongitude);
+			exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,
+					intLongitude > 0.0f ? "E" : "W");
+			// 纬度
+			String strLatitude = sharedPreferences
+					.getString("latitude", "0.00");
+			double intLatitude = Double.parseDouble(strLatitude);
+			exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strLongitude);
+			exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,
+					intLatitude > 0.0f ? "N" : "S");
+			exif.setAttribute(ExifInterface.TAG_ORIENTATION, ""
+					+ ExifInterface.ORIENTATION_NORMAL);
 
 			exif.setAttribute(ExifInterface.TAG_MAKE, "zenlane");
 			// 型号/机型
