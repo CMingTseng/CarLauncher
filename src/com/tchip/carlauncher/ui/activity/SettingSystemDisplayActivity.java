@@ -124,7 +124,7 @@ public class SettingSystemDisplayActivity extends Activity {
 									+ manulLightValue);
 							SettingUtil.setBrightness(getApplicationContext(),
 									manulLightValue - 1);
-							
+
 							SettingUtil.setBrightness(getApplicationContext(),
 									manulLightValue + 1);
 
@@ -144,7 +144,8 @@ public class SettingSystemDisplayActivity extends Activity {
 	}
 
 	private boolean isAutoLightSwitchOn() {
-		return sharedPreferences.getBoolean("autoScreenLight", true);
+		return sharedPreferences.getBoolean("autoScreenLight",
+				Constant.Setting.AUTO_BRIGHT_DEFAULT_ON);
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

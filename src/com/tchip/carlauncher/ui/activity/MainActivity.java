@@ -2635,7 +2635,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void initialAutoLight() {
 		try {
 			boolean autoScreenLight = sharedPreferences.getBoolean(
-					"autoScreenLight", true);
+					"autoScreenLight", Constant.Setting.AUTO_BRIGHT_DEFAULT_ON);
 			SettingUtil.setAutoLight(getApplicationContext(), autoScreenLight);
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]initialAutoLight: Catch Exception!");

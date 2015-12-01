@@ -24,6 +24,11 @@ public interface Constant {
 		 * 默认亮度
 		 */
 		public static final int DEFAULT_BRIGHTNESS = 180;
+
+		/**
+		 * Camera自动调节亮度是否打开
+		 */
+		public static final boolean AUTO_BRIGHT_DEFAULT_ON = false;
 	}
 
 	public static final class GravitySensor {
