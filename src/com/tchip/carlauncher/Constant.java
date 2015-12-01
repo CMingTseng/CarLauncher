@@ -56,6 +56,11 @@ public interface Constant {
 		public static final boolean autoRecord = true;
 
 		/**
+		 * 默认是否静音
+		 */
+		public static final boolean muteDefault = false;
+
+		/**
 		 * 开机自动录像延时
 		 */
 		public static final int autoRecordDelay = 2500;

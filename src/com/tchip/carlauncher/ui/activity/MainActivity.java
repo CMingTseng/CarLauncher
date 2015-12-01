@@ -1633,12 +1633,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		mSecondaryState = Constant.Record.STATE_SECONDARY_DISABLE;
 		mOverlapState = Constant.Record.STATE_OVERLAP_ZERO;
 
-		// 录音,静音;默认不录音
-		boolean videoMute = sharedPreferences.getBoolean("videoMute", true);
-		if (!videoMute) {
-			mMuteState = Constant.Record.STATE_UNMUTE;
-		} else {
+		// 录音,静音;默认录音
+		boolean videoMute = sharedPreferences.getBoolean("videoMute",
+				Constant.Record.muteDefault);
+		if (videoMute) {
 			mMuteState = Constant.Record.STATE_MUTE; // 不录音
+		} else {
+			mMuteState = Constant.Record.STATE_UNMUTE;
 		}
 
 	}
@@ -1712,15 +1713,16 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		// 静音按钮
-		boolean videoMute = sharedPreferences.getBoolean("videoMute", true);
-		if (!videoMute) {
-			mMuteState = Constant.Record.STATE_UNMUTE;
-			largeVideoMute.setBackground(getResources().getDrawable(
-					R.drawable.ui_camera_video_sound_on));
-		} else {
+		boolean videoMute = sharedPreferences.getBoolean("videoMute",
+				Constant.Record.muteDefault);
+		if (videoMute) {
 			mMuteState = Constant.Record.STATE_MUTE; // 不录音
 			largeVideoMute.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_sound_off));
+		} else {
+			mMuteState = Constant.Record.STATE_UNMUTE;
+			largeVideoMute.setBackground(getResources().getDrawable(
+					R.drawable.ui_camera_video_sound_on));
 		}
 
 	}
@@ -2028,13 +2030,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				// 设置录像静音
 				boolean videoMute = sharedPreferences.getBoolean("videoMute",
-						true);
-				if (!videoMute) {
-					mMuteState = Constant.Record.STATE_UNMUTE;
-					setMute(false);
-				} else {
+						Constant.Record.muteDefault);
+				if (videoMute) {
 					mMuteState = Constant.Record.STATE_MUTE; // 不录音
 					setMute(true);
+				} else {
+					mMuteState = Constant.Record.STATE_UNMUTE;
+					setMute(false);
 				}
 
 				AudioPlayUtil.playAudio(getApplicationContext(),
