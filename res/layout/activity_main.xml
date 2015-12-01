@@ -47,8 +47,8 @@
                 android:id="@+id/textDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:format12Hour="MM月dd日"
-                android:format24Hour="MM月dd日"
+                android:format12Hour="yy年MM月dd日"
+                android:format24Hour="yy年MM月dd日"
                 android:textColor="#ffe1c5"
                 android:textSize="25sp" />
 
@@ -57,8 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:format12Hour="EEEE"
-                android:format24Hour="EEEE"
+                android:format12Hour="E"
+                android:format24Hour="E"
                 android:textColor="#ffe1c5"
                 android:textSize="25sp" />
         </LinearLayout>
