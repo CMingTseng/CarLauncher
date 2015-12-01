@@ -28,6 +28,11 @@ public interface Constant {
 
 	public static final class GravitySensor {
 		/**
+		 * 碰撞侦测是否默认打开
+		 */
+		public static final boolean DEFAULT_ON = true;
+
+		/**
 		 * 碰撞侦测默认灵敏度Level
 		 */
 		public static final float VALUE = 9.8f;
@@ -59,6 +64,11 @@ public interface Constant {
 		 * 默认是否静音
 		 */
 		public static final boolean muteDefault = false;
+
+		/**
+		 * 停车侦测录像是否加锁
+		 */
+		public static final boolean parkVideoLock = false;
 
 		/**
 		 * 开机自动录像延时

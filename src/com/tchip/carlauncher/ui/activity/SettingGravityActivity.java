@@ -94,7 +94,8 @@ public class SettingGravityActivity extends Activity {
 	 * 碰撞侦测是否打开
 	 */
 	private boolean isGravityOn() {
-		boolean isGravityOn = sharedPreferences.getBoolean("crashOn", false);
+		boolean isGravityOn = sharedPreferences.getBoolean("crashOn",
+				Constant.GravitySensor.DEFAULT_ON);
 		return isGravityOn;
 	}
 

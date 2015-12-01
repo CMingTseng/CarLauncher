@@ -187,6 +187,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 首次启动是否需要自动录像
 		if (1 == SettingUtil.getAccStatus()) {
+			// 关闭飞行模式
+			sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
+			
 			// 序列任务线程
 			new Thread(new AutoThread()).start();
 		} else {
@@ -381,8 +384,11 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
+				// 停车侦测录像
 				if (MyApplication.shouldCrashRecord) {
-					MyApplication.isVideoLock = true;
+					if (Constant.Record.parkVideoLock) { // 是否需要加锁
+						MyApplication.isVideoLock = true;
+					}
 					MyApplication.shouldCrashRecord = false;
 
 					// 点亮屏幕

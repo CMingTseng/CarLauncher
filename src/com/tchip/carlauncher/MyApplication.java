@@ -64,7 +64,7 @@ public class MyApplication extends Application {
 	/**
 	 * 碰撞侦测开关和级别
 	 */
-	public static boolean isCrashOn = false;
+	public static boolean isCrashOn = Constant.GravitySensor.DEFAULT_ON; // 默认打开
 	public static int crashSensitive = Constant.GravitySensor.SENSITIVE_DEFAULT;
 	private SharedPreferences sharedPreferences;
 
@@ -113,7 +113,8 @@ public class MyApplication extends Application {
 			sharedPreferences = getSharedPreferences(
 					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
-			isCrashOn = sharedPreferences.getBoolean("crashOn", false);
+			isCrashOn = sharedPreferences.getBoolean("crashOn",
+					Constant.GravitySensor.DEFAULT_ON);
 			crashSensitive = sharedPreferences.getInt("crashSensitive",
 					Constant.GravitySensor.SENSITIVE_DEFAULT);
 		} catch (Exception e) {
