@@ -71,6 +71,11 @@ public interface Constant {
 		public static final boolean parkVideoLock = false;
 
 		/**
+		 * 停车侦测是否默认打开
+		 */
+		public static final boolean parkDefaultOn = true;
+
+		/**
 		 * 开机自动录像延时
 		 */
 		public static final int autoRecordDelay = 2500;

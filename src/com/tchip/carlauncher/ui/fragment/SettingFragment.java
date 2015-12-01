@@ -221,7 +221,8 @@ public class SettingFragment extends Fragment {
 	 * @return
 	 */
 	private boolean isParkingMonitorOn() {
-		return preferences.getBoolean("parkingOn", false);
+		return preferences.getBoolean("parkingOn",
+				Constant.Record.parkDefaultOn);
 	}
 
 	class MyOnClickListener implements View.OnClickListener {

@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (1 == SettingUtil.getAccStatus()) {
 			// 关闭飞行模式
 			sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
-			
+
 			// 序列任务线程
 			new Thread(new AutoThread()).start();
 		} else {
@@ -2648,7 +2648,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void initialParkingMonitor() {
 		try {
 			boolean isParkingMonitorOn = sharedPreferences.getBoolean(
-					"parkingOn", false);
+					"parkingOn", Constant.Record.parkDefaultOn);
 			SettingUtil.setParkingMonitor(getApplicationContext(),
 					isParkingMonitorOn);
 		} catch (Exception e) {
