@@ -193,7 +193,7 @@ public interface Constant {
 		public static final boolean muteWhenSleep = false;
 
 		/**
-		 * 导航是否是百度:true-百度 false-独立导航Demo(百度SDK)
+		 * 导航是否是百度:true-(自写百度SDK导航) false-图吧导航
 		 */
 		public static final boolean isNavigationBaidu = false;
 

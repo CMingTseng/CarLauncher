@@ -17,9 +17,6 @@ import android.widget.Toast;
 public class OpenUtil {
 
 	public enum MODULE_TYPE {
-		/** 导航 **/
-		BAIDUNAVI,
-
 		/** 语音助手 **/
 		CHAT,
 
@@ -30,7 +27,7 @@ public class OpenUtil {
 		EDOG,
 
 		/** 文件管理 **/
-		FILEEXPLORER,
+		FILE_EXPLORER,
 
 		/** FM发射 **/
 		FMTRANSMIT,
@@ -43,6 +40,12 @@ public class OpenUtil {
 
 		/** 在线音乐 **/
 		MUSIC,
+
+		/** 导航:百度SDK **/
+		NAVI_BAIDU_SDK,
+
+		/** 导航：图吧 **/
+		NAVI_TUBA,
 
 		/** 轨迹 **/
 		ROUTE,
@@ -62,30 +65,6 @@ public class OpenUtil {
 
 	public static void openModule(Activity activity, MODULE_TYPE moduleTye) {
 		switch (moduleTye) {
-		case BAIDUNAVI:
-			if (!ClickUtil.isQuickClick(800)) {
-				if (NetworkUtil.isNetworkConnected(activity)) {
-					try {
-						ComponentName componentBaiduNavi;
-						componentBaiduNavi = new ComponentName(
-								"com.tchip.baidunavi",
-								"com.tchip.baidunavi.ui.activity.MainActivity");
-						Intent intentBaiduNavi = new Intent();
-						intentBaiduNavi.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						intentBaiduNavi.setComponent(componentBaiduNavi);
-						activity.startActivity(intentBaiduNavi);
-						activity.overridePendingTransition(
-								R.anim.zms_translate_up_out,
-								R.anim.zms_translate_up_in);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					NetworkUtil.noNetworkHint(activity);
-				}
-			}
-			break;
-
 		case CHAT:
 			if (!ClickUtil.isQuickClick(800)) {
 				Intent intentVoiceChat;
@@ -144,7 +123,7 @@ public class OpenUtil {
 			}
 			break;
 
-		case FILEEXPLORER:
+		case FILE_EXPLORER:
 			if (!ClickUtil.isQuickClick(800)) {
 				try {
 					ComponentName componentFile = new ComponentName(
@@ -219,6 +198,50 @@ public class OpenUtil {
 					Intent intentMusic = new Intent();
 					intentMusic.setComponent(componentMusic);
 					activity.startActivity(intentMusic);
+					activity.overridePendingTransition(
+							R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			break;
+
+		case NAVI_BAIDU_SDK:
+			if (!ClickUtil.isQuickClick(800)) {
+				if (NetworkUtil.isNetworkConnected(activity)) {
+					try {
+						ComponentName componentBaiduNavi;
+						componentBaiduNavi = new ComponentName(
+								"com.tchip.baidunavi",
+								"com.tchip.baidunavi.ui.activity.MainActivity");
+						Intent intentBaiduNavi = new Intent();
+						intentBaiduNavi.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						intentBaiduNavi.setComponent(componentBaiduNavi);
+						activity.startActivity(intentBaiduNavi);
+						activity.overridePendingTransition(
+								R.anim.zms_translate_up_out,
+								R.anim.zms_translate_up_in);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					NetworkUtil.noNetworkHint(activity);
+				}
+			}
+			break;
+
+		case NAVI_TUBA:
+			if (!ClickUtil.isQuickClick(800)) {
+				try {
+					ComponentName componentBaiduNavi;
+					componentBaiduNavi = new ComponentName(
+							"com.mapbar.android.carnavi",
+							"com.mapbar.android.carnavi.activity.LoadingActivity");
+					Intent intentTubaNavi = new Intent();
+					intentTubaNavi.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intentTubaNavi.setComponent(componentBaiduNavi);
+					activity.startActivity(intentTubaNavi);
 					activity.overridePendingTransition(
 							R.anim.zms_translate_up_out,
 							R.anim.zms_translate_up_in);

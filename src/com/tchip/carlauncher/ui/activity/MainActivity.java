@@ -1299,7 +1299,13 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageNavi:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.BAIDUNAVI);
+				if (Constant.Module.isNavigationBaidu) {
+					OpenUtil.openModule(MainActivity.this,
+							MODULE_TYPE.NAVI_BAIDU_SDK);
+				} else {
+					OpenUtil.openModule(MainActivity.this,
+							MODULE_TYPE.NAVI_TUBA);
+				}
 				break;
 
 			case R.id.imageMusicOL:
@@ -1323,7 +1329,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageFileExplore:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.FILEEXPLORER);
+				OpenUtil.openModule(MainActivity.this,
+						MODULE_TYPE.FILE_EXPLORER);
 				break;
 
 			case R.id.imageVoiceChat:
