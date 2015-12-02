@@ -25,6 +25,12 @@ public class CardEjectReceiver extends BroadcastReceiver {
 			if (!StorageUtil.isVideoCardExists()) {
 				MyApplication.isVideoCardEject = true;
 			}
+
+			// 规避播放音乐时拔SD,media-server died,从而导致主界面录像预览卡死问题
+			// 但会导致播放网络音乐拔SD卡,同样关掉酷我
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "music_kuwo"));
+
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			if (StorageUtil.isVideoCardExists()) {
 				MyApplication.isVideoCardEject = false;

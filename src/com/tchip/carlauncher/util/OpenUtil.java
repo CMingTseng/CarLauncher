@@ -210,6 +210,10 @@ public class OpenUtil {
 		case NAVI_BAIDU_SDK:
 			if (!ClickUtil.isQuickClick(800)) {
 				if (NetworkUtil.isNetworkConnected(activity)) {
+					// 打开GPS
+					activity.sendBroadcast(new Intent(
+							"tchip.intent.action.ACTION_GPS_ON"));
+
 					try {
 						ComponentName componentBaiduNavi;
 						componentBaiduNavi = new ComponentName(
@@ -233,6 +237,9 @@ public class OpenUtil {
 
 		case NAVI_TUBA:
 			if (!ClickUtil.isQuickClick(800)) {
+				// 打开GPS
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON"));
 				try {
 					ComponentName componentBaiduNavi;
 					componentBaiduNavi = new ComponentName(
