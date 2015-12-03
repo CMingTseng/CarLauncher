@@ -166,10 +166,6 @@
             android:name="com.tchip.carlauncher.ui.activity.TrafficChartActivity"
             android:label="应用详情"
             android:screenOrientation="landscape" />
-        <!-- WiFi 列表 -->
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.WifiListActivity"
-            android:screenOrientation="landscape" />
 
         <!-- 蓝牙列表 -->
         <activity

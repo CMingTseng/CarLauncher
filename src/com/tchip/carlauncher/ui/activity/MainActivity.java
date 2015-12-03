@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
-import java.util.SortedMap;
 
 import net.sourceforge.jheader.App1Header;
 import net.sourceforge.jheader.App1Header.Tag;
@@ -393,6 +392,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 					// 点亮屏幕
 					if (!powerManager.isScreenOn()) {
+						// TODO:Hide below line
 						SettingUtil.lightScreen(getApplicationContext());
 					}
 
@@ -401,6 +401,21 @@ public class MainActivity extends Activity implements TachographCallback,
 						sendBroadcast(new Intent("com.tchip.powerKey")
 								.putExtra("value", "home"));
 					}
+
+					// TODO:初始化Camera
+					// 重置预览区域
+					// if (mCamera == null) {
+					// setup();
+					// } else {
+					// try {
+					// mCamera.lock();
+					// mCamera.setPreviewDisplay(mHolder);
+					// mCamera.startPreview();
+					// mCamera.unlock();
+					// } catch (Exception e) {
+					// // e.printStackTrace();
+					// }
+					// }
 
 					new Thread(new RecordWhenCrashThread()).start();
 				}
@@ -419,6 +434,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void run() {
+			MyLog.v("[Thread]run RecordWhenCrashThread");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -434,7 +450,40 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				recordOneVideoWhenCrash();
+				try {
+					if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+
+						// 点亮屏幕
+						if (!powerManager.isScreenOn()) {
+							// TODO:Hide below line
+							SettingUtil.lightScreen(getApplicationContext());
+						}
+
+						if (!MyApplication.isMainForeground) {
+							// 发送Home键，回到主界面
+							sendBroadcast(new Intent("com.tchip.powerKey")
+									.putExtra("value", "home"));
+						}
+
+						// 开始录像
+						new Thread(new StartRecordThread()).start();
+					} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+						if (stopRecorder() == 0) {
+							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+							MyApplication.isVideoReording = false;
+
+							releaseCameraZone();
+						}
+					}
+					setupRecordViews();
+					if (Constant.isDebug) {
+						MyLog.v("MyApplication.isVideoReording:"
+								+ MyApplication.isVideoReording);
+					}
+				} catch (Exception e) {
+					MyLog.e("[MainActivity]recordOneVideoWhenCrash catch exception: "
+							+ e.toString());
+				}
 				break;
 
 			default:
@@ -442,42 +491,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		}
 	};
-
-	private void recordOneVideoWhenCrash() {
-		try {
-			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
-
-				// 点亮屏幕
-				if (!powerManager.isScreenOn()) {
-					SettingUtil.lightScreen(getApplicationContext());
-				}
-
-				if (!MyApplication.isMainForeground) {
-					// 发送Home键，回到主界面
-					sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-							"value", "home"));
-				}
-
-				// 开始录像
-				new Thread(new StartRecordThread()).start();
-			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
-				if (stopRecorder() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
-					MyApplication.isVideoReording = false;
-
-					releaseCameraZone();
-				}
-			}
-			setupRecordViews();
-			if (Constant.isDebug) {
-				MyLog.v("MyApplication.isVideoReording:"
-						+ MyApplication.isVideoReording);
-			}
-		} catch (Exception e) {
-			MyLog.e("[MainActivity]recordOneVideoWhenCrash catch exception: "
-					+ e.toString());
-		}
-	}
 
 	/**
 	 * 更改分辨率后重启录像
@@ -730,13 +743,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageEDog = (ImageView) findViewById(R.id.imageEDog);
 		imageEDog.setOnClickListener(new MyOnClickListener());
 
-		RelativeLayout layoutEDog = (RelativeLayout) findViewById(R.id.layoutEDog);
-		if (Constant.Module.hasEDog) {
-			layoutEDog.setVisibility(View.VISIBLE);
-		} else {
-			layoutEDog.setVisibility(View.GONE);
-		}
-
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
 		imageMultimedia.setOnClickListener(new MyOnClickListener());
@@ -744,23 +750,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 文件管理
 		ImageView imageFileExplore = (ImageView) findViewById(R.id.imageFileExplore);
 		imageFileExplore.setOnClickListener(new MyOnClickListener());
-
-		RelativeLayout layoutFileExplore = (RelativeLayout) findViewById(R.id.layoutFileExplore);
-		if (Constant.Module.hasFileManager) {
-			layoutFileExplore.setVisibility(View.VISIBLE);
-		} else {
-			layoutFileExplore.setVisibility(View.GONE);
-		}
-
-		// 语音助手
-		ImageView imageVoiceChat = (ImageView) findViewById(R.id.imageVoiceChat);
-		imageVoiceChat.setOnClickListener(new MyOnClickListener());
-		RelativeLayout layoutVoiceChat = (RelativeLayout) findViewById(R.id.layoutVoiceChat);
-		if (Constant.Module.hasVoiceChat) {
-			layoutVoiceChat.setVisibility(View.VISIBLE);
-		} else {
-			layoutVoiceChat.setVisibility(View.GONE);
-		}
 
 		// 行驶轨迹
 		ImageView imageRouteTrack = (ImageView) findViewById(R.id.imageRouteTrack);
@@ -783,12 +772,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 设置
 		ImageView imageSetting = (ImageView) findViewById(R.id.imageSetting);
 		imageSetting.setOnClickListener(new MyOnClickListener());
-		RelativeLayout layoutSetting = (RelativeLayout) findViewById(R.id.layoutSetting);
-		if (Constant.Module.hasSetting) {
-			layoutSetting.setVisibility(View.VISIBLE);
-		} else {
-			layoutSetting.setVisibility(View.GONE);
-		}
 
 		// HorizontalScrollView，左右两侧阴影
 		imageShadowLeft = (ImageView) findViewById(R.id.imageShadowLeft);
@@ -1331,10 +1314,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.imageFileExplore:
 				OpenUtil.openModule(MainActivity.this,
 						MODULE_TYPE.FILE_EXPLORER);
-				break;
-
-			case R.id.imageVoiceChat:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.CHAT);
 				break;
 
 			case R.id.imageDialer:

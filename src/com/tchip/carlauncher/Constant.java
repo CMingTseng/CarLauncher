@@ -178,29 +178,9 @@ public interface Constant {
 
 	public static final class Module {
 		/**
-		 * 主界面是否显示讯飞语音助手
-		 */
-		public static final boolean hasVoiceChat = false;
-
-		/**
-		 * 主界面是否显示设置入口
-		 */
-		public static final boolean hasSetting = false;
-
-		/**
-		 * 休眠时是否静音
-		 */
-		public static final boolean muteWhenSleep = false;
-
-		/**
 		 * 导航是否是百度:true-(自写百度SDK导航) false-图吧导航
 		 */
 		public static final boolean isNavigationBaidu = false;
-
-		/**
-		 * 拔掉电源熄灭屏幕
-		 */
-		public static final boolean autoCloseScreen = false;
 
 		/**
 		 * 是否有用户中心
@@ -208,39 +188,9 @@ public interface Constant {
 		public static final boolean hasUserCenter = false;
 
 		/**
-		 * 是否有电子狗
-		 */
-		public static final boolean hasEDog = true;
-
-		/**
 		 * 是否有拨号短信模块
 		 */
 		public static final boolean hasDialer = false;
-
-		/**
-		 * 在线音乐是酷我还是酷狗
-		 */
-		public static final boolean isOnlineMusicKuwo = true;
-
-		/**
-		 * 本地音乐是否是系统音乐
-		 */
-		public static final boolean isLocalMusicSystem = true;
-
-		/**
-		 * 是否有文件管理功能
-		 */
-		public static final boolean hasFileManager = true;
-
-		/**
-		 * WiFi设置是否使用系统
-		 */
-		public static final boolean isWifiSystem = true;
-
-		/**
-		 * 语音模块是否是讯飞：true-讯飞 false-思必驰
-		 */
-		public static final boolean isVoiceXunfei = true;
 	}
 
 	/**
@@ -256,14 +206,6 @@ public interface Constant {
 		 * 系统设置：FM发射频率
 		 */
 		public static final String SETTING_CHANNEL = "fm_transmitter_channel";
-
-		public static final int CHANNEL_LOW = 8750;
-		public static final int CHANNEL_MIDDLE = 9750;
-		public static final int CHANNEL_HIGH = 10750;
-
-		public static final String HINT_LOW = "87.5";
-		public static final String HINT_MIDDLE = "97.5";
-		public static final String HINT_HIGH = "107.5";
 	}
 
 	/**
@@ -294,11 +236,6 @@ public interface Constant {
 
 		public static final String SDCARD_1 = "/storage/sdcard1";
 		public static final String SDCARD_2 = "/storage/sdcard2";
-
-		/**
-		 * 音乐背景图片目录
-		 */
-		public static final String MUSIC_IMAGE = "MusicBackground";
 
 		/**
 		 * 字体目录
@@ -358,26 +295,6 @@ public interface Constant {
 	public static final class BaiduMap {
 		public static final String API_KEY = "Tycks4ezX3hSXfRtu7TvCVTl";
 		public static final String MCODE = "6B:40:B2:47:13:F5:6A:F7:40:6A:89:84:46:53:33:47:AD:DC:C1:0C;com.tchip.carlauncher";
-
-		/**
-		 * 轨迹绘制取样精度：每1个点取1个
-		 */
-		public static final int ROUTE_POINT_OFFSET_HIGH = 1;
-
-		/**
-		 * 轨迹绘制取样精度：每2个点取1个
-		 */
-		public static final int ROUTE_POINT_OFFSET_MIDDLE = 2;
-
-		/**
-		 * 轨迹绘制取样精度：每5个点取1个
-		 */
-		public static final int ROUTE_POINT_OFFSET_LOW = 5;
-
-		/**
-		 * 轨迹绘制取样默认精度
-		 */
-		public static final int ROUTE_POINT_OFFSET_DEFAULT = ROUTE_POINT_OFFSET_HIGH;
 	}
 
 	/**
@@ -385,51 +302,6 @@ public interface Constant {
 	 */
 	public static final String SHARED_PREFERENCES_NAME = "CarLauncher";
 	public static final String SHARED_PREFERENCES_SPEECH_NAME = "speech";
-
-	public static final class Music {
-
-		public static final String BROADCAST_NAME = "com.tchip.carlauncher.music.broadcast";
-		public static final String SERVICE_NAME = "com.tchip.carlauncher.music.service.MusicMediaService";
-		public static final String BROADCAST_QUERY_COMPLETE_NAME = "com.tchip.carlauncher.music.querycomplete.broadcast";
-		public static final String BROADCAST_CHANGEBG = "com.tchip.carlauncher.music.changebg";
-		public static final String BROADCAST_SHAKE = "com.tchip.carlauncher.music.shake";
-		public static final String SHAKE_ON_OFF = "SHAKE_ON_OFF"; // 是否开启了振动模式
-		public static final String SP_NAME = "com.tchip.carlauncher.music_preference";
-		public static final String SP_BG_PATH = "bg_path";
-		public static final String SP_SHAKE_CHANGE_SONG = "shake_change_song";
-		public static final String SP_AUTO_DOWNLOAD_LYRIC = "auto_download_lyric";
-		public static final String SP_FILTER_SIZE = "filter_size";
-		public static final String SP_FILTER_TIME = "filter_time";
-		public static final int REFRESH_PROGRESS_EVENT = 0x100;
-		// 播放状态
-		public static final int MPS_NOFILE = -1; // 无音乐文件
-		public static final int MPS_INVALID = 0; // 当前音乐文件无效
-		public static final int MPS_PREPARE = 1; // 准备就绪
-		public static final int MPS_PLAYING = 2; // 播放中
-		public static final int MPS_PAUSE = 3; // 暂停
-		// 播放模式
-		public static final int MPM_LIST_LOOP_PLAY = 0; // 列表循环
-		public static final int MPM_ORDER_PLAY = 1; // 顺序播放
-		public static final int MPM_RANDOM_PLAY = 2; // 随机播放
-		public static final int MPM_SINGLE_LOOP_PLAY = 3; // 单曲循环
-
-		public static final String PLAY_STATE_NAME = "PLAY_STATE_NAME";
-		public static final String PLAY_MUSIC_INDEX = "PLAY_MUSIC_INDEX";
-
-		// 歌手和专辑列表点击都会进入MyMusic 此时要传递参数表明是从哪里进入的
-		public static final String FROM = "from";
-		public static final int START_FROM_ARTIST = 1;
-		public static final int START_FROM_ALBUM = 2;
-		public static final int START_FROM_LOCAL = 3;
-		public static final int START_FROM_FOLDER = 4;
-		public static final int START_FROM_FAVORITE = 5;
-
-		public static final int FOLDER_TO_MYMUSIC = 6;
-		public static final int ALBUM_TO_MYMUSIC = 7;
-		public static final int ARTIST_TO_MYMUSIC = 8;
-
-		public static final int MENU_BACKGROUND = 9;
-	}
 
 	/**
 	 * 设置条目点击波纹速度

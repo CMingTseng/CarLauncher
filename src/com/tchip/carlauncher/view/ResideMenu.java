@@ -92,11 +92,7 @@ public class ResideMenu extends FrameLayout {
 			layoutDialer.setVisibility(View.GONE);
 			layoutMessage.setVisibility(View.GONE);
 		}
-		if (Constant.Module.isVoiceXunfei) {
-			layoutMusic.setVisibility(View.VISIBLE);
-		} else {
-			layoutMusic.setVisibility(View.GONE);
-		}
+		layoutMusic.setVisibility(View.VISIBLE);
 	}
 
 	/**

@@ -68,11 +68,8 @@ public class OpenUtil {
 		case CHAT:
 			if (!ClickUtil.isQuickClick(800)) {
 				Intent intentVoiceChat;
-				if (Constant.Module.isVoiceXunfei) {
-					// 讯飞语音
-					intentVoiceChat = new Intent(activity, ChatActivity.class);
-				} else {
-				}
+				// 讯飞语音
+				intentVoiceChat = new Intent(activity, ChatActivity.class);
 				activity.startActivity(intentVoiceChat);
 				activity.overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
@@ -325,17 +322,11 @@ public class OpenUtil {
 
 		case WIFI:
 			if (!ClickUtil.isQuickClick(800)) {
-				if (Constant.Module.isWifiSystem) {
-					try {
-						activity.startActivity(new Intent(
-								android.provider.Settings.ACTION_WIFI_SETTINGS));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					Intent intentWiFi = new Intent(activity,
-							WifiListActivity.class);
-					activity.startActivity(intentWiFi);
+				try {
+					activity.startActivity(new Intent(
+							android.provider.Settings.ACTION_WIFI_SETTINGS));
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
 			}

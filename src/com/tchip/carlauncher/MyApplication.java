@@ -9,64 +9,68 @@ import com.iflytek.cloud.SpeechUtility;
 import com.tchip.carlauncher.util.MyLog;
 
 public class MyApplication extends Application {
-	/**
-	 * 是否进入低功耗待机状态
-	 */
+	/** 是否处于低功耗待机状态 **/
 	public static boolean isSleeping = false;
 
-	/**
-	 * 休眠唤醒，需要启动录像
-	 */
+	/** 休眠唤醒：需要启动录像 **/
 	public static boolean shouldWakeRecord = false;
 
-	/**
-	 * 底层碰撞，需要启动录像
-	 */
+	/** 底层碰撞：需要启动录像 **/
 	public static boolean shouldCrashRecord = false;
 
-	/**
-	 * 录制底层碰撞视频后是否需要停止录像
-	 */
+	/** 录制底层碰撞视频后是否需要停止录像 **/
 	public static boolean shouldStopWhenCrashVideoSave = false;
 
-	// Music
-	// public static boolean mIsSleepClockSetting = false;
-	// private static String rootPath = "/mymusic";
-	// public static String lrcPath = "/lrc";
-	// public static String nowPlayMusic = "";
-
-	// Route Record
+	/** 是否正在记录轨迹 **/
 	public static boolean isRouteRecord = false;
 
-	// Video Record
+	/** 是否正在录像 **/
 	public static boolean isVideoReording = false;
-	public static boolean isPowerConnect = true;
+
+	/** 当前视频片段是否加锁 **/
 	public static boolean isVideoLock = false;
-	// 第二段视频加锁
+
+	/** 第二段视频加锁 **/
 	public static boolean isVideoLockSecond = false;
+
+	/** 电源是否连接 **/
+	public static boolean isPowerConnect = true;
+
+	/** 侦测到碰撞 **/
 	public static boolean isCrashed = false;
 
-	// 存储更改视频分辨率前的录像状态
+	/** 存储更改视频分辨率前的录像状态 **/
 	public static boolean shouldVideoRecordWhenChangeSize = false;
+
+	/** SD卡取出 **/
+	public static boolean isVideoCardEject = false;
+
+	/** 碰撞侦测开关:默认打开 **/
+	public static boolean isCrashOn = Constant.GravitySensor.DEFAULT_ON;
+
+	/** 碰撞侦测级别 **/
+	public static int crashSensitive = Constant.GravitySensor.SENSITIVE_DEFAULT;
+
+	private SharedPreferences sharedPreferences;
 
 	public static boolean shouldResetRecordWhenResume = false;
 
+	/** 是否初次启动 **/
 	public static boolean isFirstLaunch = true;
 
-	// 录像界面是否可见
+	/** 录像界面是否可见 **/
 	public static boolean isMainForeground = true;
 
-	/**
-	 * SD卡取出
-	 */
-	public static boolean isVideoCardEject = false;
+	public enum CameraState {
+		/** 未初始化 **/
+		NULL,
 
-	/**
-	 * 碰撞侦测开关和级别
-	 */
-	public static boolean isCrashOn = Constant.GravitySensor.DEFAULT_ON; // 默认打开
-	public static int crashSensitive = Constant.GravitySensor.SENSITIVE_DEFAULT;
-	private SharedPreferences sharedPreferences;
+		/** 已初始化，预览或录像 **/
+		OKAY
+	}
+
+	/** 录像窗口状态 **/
+	private CameraState cameraState = CameraState.OKAY;
 
 	@Override
 	public void onCreate() {
