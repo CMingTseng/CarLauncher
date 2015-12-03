@@ -34,7 +34,6 @@ import com.tchip.carlauncher.util.OpenUtil;
 import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
-import com.tchip.carlauncher.util.SignalUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
@@ -603,7 +602,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					R.drawable.ic_qs_signal_no_signal));
 		} else if (simState == TelephonyManager.SIM_STATE_READY) {
 			imageSignalLevel.setBackground(getResources().getDrawable(
-					SignalUtil.get3GLevelImageByGmsSignalStrength(signal)));
+					NetworkUtil.get3GLevelImageByGmsSignalStrength(signal)));
 		} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
 				|| simState == TelephonyManager.SIM_STATE_ABSENT) {
 			imageSignalLevel.setBackground(getResources().getDrawable(
@@ -620,7 +619,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyLog.v("[update3Gtype]NetworkType:" + networkType);
 
 		image3GType.setBackground(getResources().getDrawable(
-				SignalUtil.get3GTypeImageByNetworkType(networkType)));
+				NetworkUtil.get3GTypeImageByNetworkType(networkType)));
 	}
 
 	/**
@@ -1115,7 +1114,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
-			imageWifiLevel.setImageResource(SignalUtil
+			imageWifiLevel.setImageResource(NetworkUtil
 					.getWifiImageBySignal(level));
 
 		} else {
@@ -1774,6 +1773,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 关闭Camera
+	 * 
+	 * @return
+	 */
 	private boolean closeCamera() {
 		if (mCamera == null)
 			return true;
@@ -1790,140 +1794,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			MyLog.e("[MainActivity]closeCamera:Catch Exception!");
 			return false;
 		}
-	}
-
-	/**
-	 * 删除最旧视频，调用此函数的地方：
-	 * 
-	 * 1.开启录像 {@link #startRecordTask}
-	 * 
-	 * 2.文件保存回调{@link #onFileSave}
-	 */
-	private boolean deleteOldestUnlockVideo() {
-		try {
-			deleteEmptyDirectory();
-			String sdcardPath = Constant.Path.SDCARD_1 + File.separator;// "/storage/sdcard1/";
-			if (Constant.Record.saveVideoToSD2) {
-				sdcardPath = Constant.Path.SDCARD_2 + File.separator;// "/storage/sdcard2/";
-			}
-			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
-
-			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-			float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
-			int intSdFree = (int) sdFree;
-			MyLog.v("[deleteOldestUnlockVideo] sdFree:" + intSdFree);
-			while (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
-				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
-				// 删除较旧未加锁视频文件
-				if (oldestUnlockVideoId != -1) {
-					String oldestUnlockVideoName = videoDb
-							.getVideNameById(oldestUnlockVideoId);
-					File f = new File(sdcardPath + "tachograph/"
-							+ oldestUnlockVideoName.split("_")[0]
-							+ File.separator + oldestUnlockVideoName);
-					if (f.exists() && f.isFile()) {
-						MyLog.d("Delete Old Unlock Video:" + f.getName());
-						int i = 0;
-						while (!f.delete() && i < 5) {
-							i++;
-							MyLog.d("Delete Old Unlock Video:" + f.getName()
-									+ " Filed!!! Try:" + i);
-						}
-					}
-					// 删除数据库记录
-					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
-				} else {
-					int oldestVideoId = videoDb.getOldestVideoId();
-					if (oldestVideoId == -1) {
-
-						if (MyApplication.isVideoReording) {
-							// TODO:停止录像
-							// stopRecorder();
-						}
-						/**
-						 * 有一种情况：数据库中无视频信息。导致的原因：
-						 * 1：升级时选Download的话，不会清理USB存储空间，应用数据库被删除； 2：应用被清除数据
-						 * 这种情况下旧视频无法直接删除， 此时如果满存储，需要直接删除
-						 */
-						File file = new File(sdcardPath + "tachograph/");
-						StorageUtil.RecursionDeleteFile(file);
-						MyLog.e("!!! Delete tachograph/ Directory");
-
-						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-						intSdFree = (int) sdFree;
-						if (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
-							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
-							MyLog.e("Storage is full...");
-
-							String strNoStorage = getResources().getString(
-									R.string.storage_full_cause_by_other);
-
-							audioRecordDialog.showErrorDialog(strNoStorage);
-							// new Thread(new dismissDialogThread()).start();
-							startSpeak(strNoStorage);
-
-							return false;
-						}
-					} else {
-						// 提示用户清理空间，删除较旧的视频（加锁）
-						String strStorageFull = getResources().getString(
-								R.string.storage_full_and_delete_lock);
-						startSpeak(strStorageFull);
-						Toast.makeText(getApplicationContext(), strStorageFull,
-								Toast.LENGTH_SHORT).show();
-
-						String oldestVideoName = videoDb
-								.getVideNameById(oldestVideoId);
-						File f = new File(sdcardPath + "tachograph/"
-								+ oldestVideoName.split("_")[0]
-								+ File.separator + oldestVideoName);
-						if (f.exists() && f.isFile()) {
-							MyLog.d("Delete Old lock Video:" + f.getName());
-							int i = 0;
-							while (!f.delete() && i < 5) {
-								i++;
-								MyLog.d("Delete Old lock Video:" + f.getName()
-										+ " Filed!!! Try:" + i);
-							}
-						}
-						// 删除数据库记录
-						videoDb.deleteDriveVideoById(oldestVideoId);
-					}
-				}
-				// 更新剩余空间
-				sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-				intSdFree = (int) sdFree;
-			}
-			return true;
-		} catch (Exception e) {
-			/*
-			 * 异常原因：1.文件由用户手动删除
-			 */
-			MyLog.e("[MainActivity]deleteOldestUnlockVideo:Catch Exception:"
-					+ e.toString());
-			e.printStackTrace();
-			return true;
-		}
-	}
-
-	/**
-	 * 删除空文件夹
-	 */
-	private void deleteEmptyDirectory() {
-		File fileRoot = new File(Constant.Path.SDCARD_2 + File.separator
-				+ "tachograph/");
-		File[] listFileDate = fileRoot.listFiles();
-		for (File file : listFileDate) {
-			if (file.isDirectory()) {
-				int numberChild = file.listFiles().length;
-				if (numberChild == 0) {
-					file.delete();
-					MyLog.v("[deleteEmptyDirectory]Delete Directory:"
-							+ file.getName() + ",Length:" + numberChild);
-				}
-			}
-		}
-
 	}
 
 	/**
@@ -2010,7 +1880,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	public int startRecordTask() {
 		if (mMyRecorder != null) {
-			if (deleteOldestUnlockVideo()) {
+			if (StorageUtil.deleteOldestUnlockVideo(MainActivity.this)) {
 
 				MyLog.d("Record Start");
 				// 设置保存路径
@@ -2071,64 +1941,18 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void run() {
-			MyLog.v("[CheckVideoThread]START:" + getTimeStr());
+			MyLog.v("[CheckVideoThread]START:" + DateUtil.getTimeStr("mm:ss"));
 			isVideoChecking = true;
 			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
 			if (Constant.Record.saveVideoToSD2) {
 				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 			}
 			File file = new File(sdcardPath + "tachograph/");
-			RecursionCheckFile(file);
-			MyLog.v("[CheckVideoThread]END:" + getTimeStr());
+			StorageUtil.RecursionCheckFile(MainActivity.this, file);
+			MyLog.v("[CheckVideoThread]END:" + DateUtil.getTimeStr("mm:ss"));
 			isVideoChecking = false;
 		}
 
-	}
-
-	private String getTimeStr() {
-		long nowTime = System.currentTimeMillis();
-		Date date = new Date(nowTime);
-		String strs = "";
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
-			strs = sdf.format(date);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return strs;
-	}
-
-	public void RecursionCheckFile(File file) {
-		if (MyApplication.isVideoReording) {
-			// 开始录像，终止删除
-			MyLog.v("[MainActivity]Stop RecursionCheckFile in case of isVideoReording == true");
-			return;
-		} else {
-			try {
-				if (file.isFile() && !file.getName().endsWith(".jpg")) {
-					if (!videoDb.isVideoExist(file.getName())) {
-						file.delete();
-						MyLog.v("[RecursionCheckFile] Delete Error File:"
-								+ file.getName());
-					}
-					return;
-				}
-				if (file.isDirectory()) {
-					File[] childFile = file.listFiles();
-					if (childFile == null || childFile.length == 0) {
-						// file.delete();
-						return;
-					}
-					for (File f : childFile) {
-						RecursionCheckFile(f);
-					}
-					// file.delete();
-				}
-			} catch (Exception e) {
-				MyLog.e("[MainActivity]RecursionCheckFile:Catch Exception:"
-						+ e.toString());
-			}
-		}
 	}
 
 	public class dismissDialogThread implements Runnable {
@@ -2391,7 +2215,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			secondCount = -1; // 录制时间秒钟复位
 			textRecordTime.setText("00 : 00");
 
-			deleteOldestUnlockVideo();
+			StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
 
 			String videoName = path.split("/")[5];
 			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.WifiInfo;
-import com.tchip.carlauncher.util.SignalUtil;
+import com.tchip.carlauncher.util.NetworkUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		this.wifiArray = wifiArray;
 		layoutInflater = LayoutInflater.from(context);
 		wifiArray = new ArrayList<WifiInfo>();
-		nowWifiBssid = SignalUtil.getConnectWifiBssid(context);
+		nowWifiBssid = NetworkUtil.getConnectWifiBssid(context);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class WiFiInfoAdapter extends BaseAdapter {
 
 		// WiFi Signal Level
 		int level = wifiArray.get(position).getSignal();
-		viewHolder.imageSignal.setImageResource(SignalUtil
+		viewHolder.imageSignal.setImageResource(NetworkUtil
 				.getWifiImageBySignal(level));
 
 		String wifiName = wifiArray.get(position).getName();
@@ -113,8 +113,8 @@ public class WiFiInfoAdapter extends BaseAdapter {
 		// 剔除只有BSSID最后两位不同的同名WiFi
 		for (int i = 0; i < wifiArray.size(); i++) {
 			WifiInfo wifiInfo = wifiArray.get(i);
-			if ( wifiBssid.substring(0, 13) == wifiInfo.getMacAddress()
-							.substring(0, 13)) {
+			if (wifiBssid.substring(0, 13) == wifiInfo.getMacAddress()
+					.substring(0, 13)) {
 				wifiArray.remove(position);
 			}
 		}

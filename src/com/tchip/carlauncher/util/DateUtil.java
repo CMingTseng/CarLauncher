@@ -1,5 +1,8 @@
 package com.tchip.carlauncher.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class DateUtil {
 
 	public static String getWeekStrByInt(int week) {
@@ -124,5 +127,25 @@ public class DateUtil {
 		}
 		return strTime;
 
+	}
+
+	/**
+	 * 获取格式化系统时间
+	 * 
+	 * @param patten
+	 *            格式，如："mm:ss"
+	 * @return
+	 */
+	public static String getTimeStr(String patten) {
+		long nowTime = System.currentTimeMillis();
+		Date date = new Date(nowTime);
+		String strs = "";
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(patten);
+			strs = sdf.format(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return strs;
 	}
 }
