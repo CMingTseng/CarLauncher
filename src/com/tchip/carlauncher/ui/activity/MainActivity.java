@@ -2184,11 +2184,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
 				mMyRecorder.setVideoSize(1920, 1088); // 16倍数
 				mMyRecorder.setVideoFrameRate(30);
-				mMyRecorder.setVideoBiteRate(9000000 * 2); // 8500000
+				mMyRecorder.setVideoBiteRate(5500000 * 2); // 8500000
 			} else {
 				mMyRecorder.setVideoSize(1280, 720);
 				mMyRecorder.setVideoFrameRate(30);
-				mMyRecorder.setVideoBiteRate(9000000); // 3500000
+				mMyRecorder.setVideoBiteRate(5500000); // 3500000
 			}
 			if (mSecondaryState == Constant.Record.STATE_SECONDARY_ENABLE) {
 				mMyRecorder.setSecondaryVideoEnable(true);
