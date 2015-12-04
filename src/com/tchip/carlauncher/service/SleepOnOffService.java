@@ -5,6 +5,8 @@ import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.util.MyLog;
+import com.tchip.carlauncher.util.OpenUtil;
+import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 
 import android.app.Service;
@@ -89,11 +91,14 @@ public class SleepOnOffService extends Service {
 				accOffCount = 0;
 				new Thread(new GoingParkMonitorThread()).start();
 
+				// 关闭轨迹记录服务
+				stopRouteRecordService();
+
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApplication.isAccOn = true;
-				if (MyApplication.isSleeping) {
-					deviceWake();
-				}
+				deviceWake();
+				// 开启轨迹记录服务
+				startRouteRecordService();
 
 			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) {
 				deviceCrash();
@@ -158,7 +163,7 @@ public class SleepOnOffService extends Service {
 					Toast.LENGTH_SHORT).show();
 			MyLog.e("[SleepOnOffService]deviceSleep.");
 			startSpeak(strSleepOn);
-			
+
 			startSpeak("进入休眠");
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
@@ -198,49 +203,48 @@ public class SleepOnOffService extends Service {
 	 * 唤醒
 	 */
 	private void deviceWake() {
-		if (MyApplication.isSleeping) {
-			try {
-				// 取消低功耗待机
-				MyApplication.isSleeping = false;
-				// 通知其他应用取消休眠
-				context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF));
+		// if (MyApplication.isSleeping) {
+		try {
+			// 取消低功耗待机
+			MyApplication.isSleeping = false;
+			// 通知其他应用取消休眠
+			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF));
 
-				// 如果当前正在停车侦测录像，录满30S后不停止
-				MyApplication.shouldStopWhenCrashVideoSave = false;
+			// 如果当前正在停车侦测录像，录满30S后不停止
+			MyApplication.shouldStopWhenCrashVideoSave = false;
 
-				// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
-				MyApplication.shouldWakeRecord = true;
+			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
+			MyApplication.shouldWakeRecord = true;
 
-				// 发送Home键，回到主界面
-				context.sendBroadcast(new Intent("com.tchip.powerKey")
-						.putExtra("value", "home"));
+			// 发送Home键，回到主界面
+			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+					"value", "home"));
 
-				// 关闭飞行模式
-				context.sendBroadcast(new Intent(
-						Constant.Broadcast.AIRPLANE_OFF));
+			// 关闭飞行模式
+			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF));
 
-				// 打开GPS
-				context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON));
+			// 打开GPS
+			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON));
 
-				// 打开电子狗电源
-				// SettingUtil.setEDogEnable(true);
+			// 打开电子狗电源
+			// SettingUtil.setEDogEnable(true);
 
-				// 重置FM发射状态
-				boolean fmStateBeforeSleep = sharedPreferences.getBoolean(
-						"fmStateBeforeSleep", false);
-				if (fmStateBeforeSleep) {
-					MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
-					Settings.System.putString(context.getContentResolver(),
-							Constant.FMTransmit.SETTING_ENABLE, "1");
-					SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
+			// 重置FM发射状态
+			boolean fmStateBeforeSleep = sharedPreferences.getBoolean(
+					"fmStateBeforeSleep", false);
+			if (fmStateBeforeSleep) {
+				MyLog.v("[SleepReceiver]WakeUp:open FM Transmit");
+				Settings.System.putString(context.getContentResolver(),
+						Constant.FMTransmit.SETTING_ENABLE, "1");
+				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
 
-					// 通知状态栏同步图标
-					sendBroadcast(new Intent("com.tchip.FM_OPEN_CARLAUNCHER"));
-				}
-			} catch (Exception e) {
-				MyLog.e("[SleepReceiver]Error when run deviceWake");
+				// 通知状态栏同步图标
+				sendBroadcast(new Intent("com.tchip.FM_OPEN_CARLAUNCHER"));
 			}
+		} catch (Exception e) {
+			MyLog.e("[SleepReceiver]Error when run deviceWake");
 		}
+		// }
 	}
 
 	/**
@@ -267,6 +271,34 @@ public class SleepOnOffService extends Service {
 				MyApplication.shouldCrashRecord = true;
 				MyApplication.shouldStopWhenCrashVideoSave = true;
 			}
+		}
+	}
+
+	/**
+	 * 开启轨迹记录服务
+	 */
+	private void startRouteRecordService() {
+		try {
+			Intent intentRoute = new Intent();
+			intentRoute.setClassName("com.tchip.route",
+					"com.tchip.route.service.RouteRecordService");
+			startService(intentRoute);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 关闭轨迹记录服务
+	 */
+	private void stopRouteRecordService() {
+		try {
+			Intent intentRoute = new Intent();
+			intentRoute.setClassName("com.tchip.route",
+					"com.tchip.route.service.RouteRecordService");
+			context.stopService(intentRoute);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

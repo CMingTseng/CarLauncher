@@ -19,7 +19,6 @@ import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.model.Typefaces;
 import com.tchip.carlauncher.service.FloatWindowService;
-import com.tchip.carlauncher.service.RouteRecordService;
 import com.tchip.carlauncher.service.SensorWatchService;
 import com.tchip.carlauncher.service.SleepOnOffService;
 import com.tchip.carlauncher.service.SpeakService;
@@ -185,6 +184,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (1 == SettingUtil.getAccStatus()) {
 			// 关闭飞行模式
 			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF));
+
+			// 打开GPS
+			sendBroadcast(new Intent(Constant.Broadcast.GPS_ON));
 
 			// 序列任务线程
 			new Thread(new AutoThread()).start();
@@ -439,10 +441,43 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				// ACC下电拍照
 				if (MyApplication.shouldTakePhotoWhenAccOff) {
-					takePhotoWhenAccOff();
 					MyApplication.shouldTakePhotoWhenAccOff = false;
 					MyApplication.shouldSendPathToDSA = true;
+					new Thread(new TakePhotoWhenAccOffThread()).start();
 				}
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	/**
+	 * ACC下电拍照线程
+	 */
+	public class TakePhotoWhenAccOffThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(2000);
+				Message messageTakePhotoWhenAccOff = new Message();
+				messageTakePhotoWhenAccOff.what = 1;
+				takePhotoWhenAccOffHandler
+						.sendMessage(messageTakePhotoWhenAccOff);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	final Handler takePhotoWhenAccOffHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				takePhotoWhenAccOff();
 				break;
 
 			default:
@@ -656,10 +691,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		Intent intentSleepOnOff = new Intent(MainActivity.this,
 				SleepOnOffService.class);
 		startService(intentSleepOnOff);
-
-		// 轨迹记录服务
-		Intent intentRoute = new Intent(this, RouteRecordService.class);
-		startService(intentRoute);
 
 		// 碰撞侦测服务
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
@@ -949,9 +980,9 @@ public class MainActivity extends Activity implements TachographCallback,
 						updateRecordTimeHandler
 								.sendMessage(messagePowerUnconnect);
 						return;
-					} else if (MyApplication.isSleeping
+					} else if (!MyApplication.isAccOn
 							&& !MyApplication.shouldStopWhenCrashVideoSave) {
-						// 进入低功耗休眠
+						// ACC下电停止录像
 						MyLog.e("Stop Record:isSleeping = true");
 						Message messageSleep = new Message();
 						messageSleep.what = 5;
@@ -2077,8 +2108,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * ACC下电拍照
 	 */
 	public int takePhotoWhenAccOff() {
-		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
-		return mMyRecorder.takePicture();
+		if (mMyRecorder != null) {
+			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
+			return mMyRecorder.takePicture();
+		}
+		return -1;
 	}
 
 	/**

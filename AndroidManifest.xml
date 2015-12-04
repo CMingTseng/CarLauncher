@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.12.04-11:20" >
+    android:versionName="2015.12.04-16:30" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -194,7 +194,6 @@
             android:exported="true" />
         <service android:name="com.tchip.carlauncher.service.LocationService" />
         <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
-        <service android:name="com.tchip.carlauncher.service.RouteRecordService" />
         <service android:name="com.tchip.carlauncher.service.SleepOnOffService" />
         <service android:name="com.tchip.carlauncher.service.FloatWindowService" />
         <service
