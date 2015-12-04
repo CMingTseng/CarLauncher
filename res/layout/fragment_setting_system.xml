@@ -17,7 +17,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -69,7 +69,7 @@
             <View
                 android:id="@+id/lineUserCenter"
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -100,7 +100,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -132,7 +132,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -163,14 +163,16 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
+                android:visibility="gone"
                 android:background="@color/setting_item_separator" />
 
             <RelativeLayout
                 android:id="@+id/layoutWeme"
                 android:layout_width="fill_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@color/setting_item_bg"
                 android:clickable="true" >
@@ -194,7 +196,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -241,7 +243,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -274,7 +276,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -306,7 +308,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -339,7 +341,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -371,7 +373,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator" />
@@ -418,7 +420,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -451,7 +453,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -500,7 +502,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -533,7 +535,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -566,7 +568,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -599,7 +601,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"
@@ -632,7 +634,7 @@
 
             <View
                 android:layout_width="fill_parent"
-               android:layout_height="@dimen/setting_item_separator_height"
+                android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
                 android:background="@color/setting_item_separator"

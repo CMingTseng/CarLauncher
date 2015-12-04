@@ -12,11 +12,20 @@ public class MyApplication extends Application {
 	/** 是否处于低功耗待机状态 **/
 	public static boolean isSleeping = false;
 
+	/** ACC是否连接 **/
+	public static boolean isAccOn = true;
+
 	/** 休眠唤醒：需要启动录像 **/
 	public static boolean shouldWakeRecord = false;
 
 	/** 底层碰撞：需要启动录像 **/
 	public static boolean shouldCrashRecord = false;
+	
+	/** ACC下电:拍照 **/
+	public static boolean shouldTakePhotoWhenAccOff = false;
+	
+	/** ACC拍照后,在onFileSave中传Path给DSA **/
+	public static boolean shouldSendPathToDSA = false;
 
 	/** 录制底层碰撞视频后是否需要停止录像 **/
 	public static boolean shouldStopWhenCrashVideoSave = false;

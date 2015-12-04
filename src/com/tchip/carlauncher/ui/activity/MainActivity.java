@@ -3,8 +3,6 @@ package com.tchip.carlauncher.ui.activity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 import net.sourceforge.jheader.App1Header;
@@ -186,14 +184,25 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 首次启动是否需要自动录像
 		if (1 == SettingUtil.getAccStatus()) {
 			// 关闭飞行模式
-			sendBroadcast(new Intent("com.tchip.AIRPLANE_OFF"));
+			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF));
 
 			// 序列任务线程
 			new Thread(new AutoThread()).start();
 		} else {
 			// ACC未连接,进入休眠
+			MyApplication.isSleeping = true;
 			MyLog.v("[MainActivity]ACC Check:OFF, Send Broadcast:com.tchip.SLEEP_ON.");
-			sendBroadcast(new Intent("com.tchip.SLEEP_ON"));
+			// 通知其他应用进入休眠
+			sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON));
+
+			// 打开飞行模式
+			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON));
+
+			// 关闭GPS
+			sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF));
+
+			// 关闭电子狗电源
+			SettingUtil.setEDogEnable(false);
 		}
 
 		// 后台线程
@@ -214,9 +223,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				boolean isAirplaneOn = intent.getBooleanExtra("state", false);
 				MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
 				setAirplaneIcon(isAirplaneOn);
-			} else if (action.equals("com.tchip.BT_CONNECTED")) { // 外置蓝牙连接
+			} else if (action.equals(Constant.Broadcast.BT_CONNECTED)) {
 				setBluetoothIcon(1);
-			} else if (action.equals("com.tchip.BT_DISCONNECTED")) { // 外置蓝牙断开
+			} else if (action.equals(Constant.Broadcast.BT_DISCONNECTED)) {
 				setBluetoothIcon(0);
 			}
 		}
@@ -366,6 +375,15 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/**
+	 * 后台线程的Handler,监测：
+	 * 
+	 * 1.是否需要休眠唤醒
+	 * 
+	 * 2.停车守卫侦测，启动录像
+	 * 
+	 * 3.ACC下电，拍照
+	 */
 	final Handler backHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -417,6 +435,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					// }
 
 					new Thread(new RecordWhenCrashThread()).start();
+				}
+
+				// ACC下电拍照
+				if (MyApplication.shouldTakePhotoWhenAccOff) {
+					takePhotoWhenAccOff();
+					MyApplication.shouldTakePhotoWhenAccOff = false;
+					MyApplication.shouldSendPathToDSA = true;
 				}
 				break;
 
@@ -1084,13 +1109,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				MyApplication.shouldResetRecordWhenResume = true;
-
-				String strSleepOn = getResources().getString(
-						R.string.stop_record_sleep_on);
-				Toast.makeText(getApplicationContext(), strSleepOn,
-						Toast.LENGTH_SHORT).show();
-				MyLog.e("Record Stop:sleep on.");
-				startSpeak(strSleepOn);
 
 				// audioRecordDialog.showErrorDialog(strSleepOn);
 				// new Thread(new dismissDialogThread()).start();
@@ -2056,6 +2074,14 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
+	 * ACC下电拍照
+	 */
+	public int takePhotoWhenAccOff() {
+		AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
+		return mMyRecorder.takePicture();
+	}
+
+	/**
 	 * 设置保存路径
 	 * 
 	 * @param dir
@@ -2211,7 +2237,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	@Override
 	public void onFileSave(int type, String path) {
-		if (type == 1) {
+		if (type == 1) { // 视频
 			secondCount = -1; // 录制时间秒钟复位
 			textRecordTime.setText("00 : 00");
 
@@ -2242,12 +2268,23 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			MyLog.v("[onFileSave]videoLock:" + videoLock
 					+ ", isVideoLockSecond:" + MyApplication.isVideoLockSecond);
-		} else {
+		} else { // 图片
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.photo_save),
 					Toast.LENGTH_SHORT).show();
 
 			writeExif(path);
+
+			if (MyApplication.shouldSendPathToDSA) {
+				MyApplication.shouldSendPathToDSA = false;
+				String[] picPaths = new String[2]; // 第一张保存前置的图片路径
+													// ；第二张保存后置的，如无可以为空
+				picPaths[0] = path;
+				picPaths[1] = "";
+				Intent intent = new Intent(Constant.Broadcast.SEND_PIC_PATH);
+				intent.putExtra("picture", picPaths);
+				sendBroadcast(intent);
+			}
 		}
 
 		// 更新Media Database

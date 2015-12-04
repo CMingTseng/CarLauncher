@@ -13,6 +13,70 @@ public interface Constant {
 	 */
 	public static final String TAG = "ZMS";
 
+	/**
+	 * 广播
+	 */
+	public static final class Broadcast {
+		/** ACC上电 **/
+		public static final String ACC_ON = "com.tchip.ACC_ON";
+
+		/** ACC下电 **/
+		public static final String ACC_OFF = "com.tchip.ACC_OFF";
+
+		/** 进入休眠 **/
+		public static final String SLEEP_ON = "com.tchip.SLEEP_ON";
+
+		/** 取消休眠 **/
+		public static final String SLEEP_OFF = "com.tchip.SLEEP_OFF";
+
+		/** 停车守卫:发生碰撞 **/
+		public static final String GSENSOR_CRASH = "com.tchip.GSENSOR_CRASH";
+
+		/** 打开飞行模式 **/
+		public static final String AIRPLANE_ON = "com.tchip.AIRPLANE_ON";
+
+		/** 关闭飞行模式 **/
+		public static final String AIRPLANE_OFF = "com.tchip.AIRPLANE_OFF";
+
+		/** 打开GPS **/
+		public static final String GPS_ON = "tchip.intent.action.ACTION_GPS_ON";
+
+		/** 关闭GPS **/
+		public static final String GPS_OFF = "tchip.intent.action.ACTION_GPS_OFF";
+
+		/** 外置蓝牙连接 **/
+		public static final String BT_CONNECTED = "com.tchip.BT_CONNECTED";
+
+		/** 外置蓝牙断开 **/
+		public static final String BT_DISCONNECTED = "com.tchip.BT_DISCONNECTED";
+
+		/**
+		 * 行车记录仪抓拍到图片之后发送以下广播,DSA接收
+		 * 
+		 * String[] picPaths = new String[2]; //第一张保存前置的图片路径 ；第二张保存后置的，如无可以为空
+		 * 
+		 * Intent intent = new Intent("com.action.http.post.picture");
+		 * 
+		 * intent.putExtra("picture", picPaths);
+		 * 
+		 * sendBroadcast(intent);
+		 * 
+		 */
+		public static final String SEND_PIC_PATH = "com.action.http.post.picture";
+
+		/**
+		 * DSA接收到广播之后进行图片的上传成功之后返回广播：
+		 * 
+		 * Intent intent = new Intent("dsa.action.http.picture.result");
+		 * 
+		 * intent.putExtra("result",1); // 0失败 1成功
+		 * 
+		 * sendBroadcast(intent);
+		 */
+		public static final String GET_PIC_RESULT = "dsa.action.http.picture.result";
+
+	}
+
 	public static final class Setting {
 
 		/**
