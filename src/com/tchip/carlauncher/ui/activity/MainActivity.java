@@ -1685,12 +1685,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void refreshRecordButton() {
-		// 视频尺寸
-		String videoSizeStr = sharedPreferences.getString("videoSize", "720");
-		if ("1080".equals(videoSizeStr)) {
-			mResolutionState = Constant.Record.STATE_RESOLUTION_1080P;
-		} else {
+		// 视频尺寸，默认1080P
+		String videoSizeStr = sharedPreferences.getString("videoSize", "1080");
+		if ("720".equals(videoSizeStr)) {
 			mResolutionState = Constant.Record.STATE_RESOLUTION_720P;
+		} else {
+			mResolutionState = Constant.Record.STATE_RESOLUTION_1080P;
 		}
 
 		// 视频分段
