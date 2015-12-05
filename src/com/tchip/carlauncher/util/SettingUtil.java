@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,9 +23,7 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.location.LocationManager;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
@@ -284,6 +283,37 @@ public class SettingUtil {
 			}
 		}
 		return 0;
+	}
+
+	/**
+	 * 获取背光亮度值
+	 */
+	public static int getLCDValue() {
+		/** 背光值节点 **/
+		File fileLCDValue = new File("/sys/class/leds/lcd-backlight/brightness");
+
+		String strValue = "";
+		if (fileLCDValue.exists()) {
+			try {
+				InputStreamReader read = new InputStreamReader(
+						new FileInputStream(fileLCDValue), "utf-8");
+				BufferedReader bufferedReader = new BufferedReader(read);
+				String lineTXT = null;
+				while ((lineTXT = bufferedReader.readLine()) != null) {
+					strValue += lineTXT.toString();
+				}
+				read.close();
+
+				return Integer.parseInt(strValue);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				MyLog.e("[SettingUtil]getLCDValue: FileNotFoundException");
+			} catch (IOException e) {
+				e.printStackTrace();
+				MyLog.e("[SettingUtil]getLCDValue: IOException");
+			}
+		}
+		return -5;
 	}
 
 	/**

@@ -431,7 +431,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					// 点亮屏幕
 					if (!powerManager.isScreenOn()) {
 						// TODO:Hide below line
-						SettingUtil.lightScreen(getApplicationContext());
+						// SettingUtil.lightScreen(getApplicationContext());
 					}
 
 					if (!MyApplication.isMainForeground) {
@@ -561,7 +561,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						// 点亮屏幕
 						if (!powerManager.isScreenOn()) {
 							// TODO:Hide below line
-							SettingUtil.lightScreen(getApplicationContext());
+							// SettingUtil.lightScreen(getApplicationContext());
 						}
 
 						if (!MyApplication.isMainForeground) {
@@ -1944,6 +1944,14 @@ public class MainActivity extends Activity implements TachographCallback,
 					new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
 
 					setupRecordViews();
+
+					if (MyApplication.isVideoReording
+							&& MyApplication.shouldStopWhenCrashVideoSave) {
+						MyLog.v("[CrashRecord]LCD:" + SettingUtil.getLCDValue());
+						// TODO:发送PowerKey,将假熄屏更改为真熄屏
+						sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "power_speech"));
+					}
 				} else {
 					if (Constant.isDebug)
 						MyLog.e("Start Record Failed");

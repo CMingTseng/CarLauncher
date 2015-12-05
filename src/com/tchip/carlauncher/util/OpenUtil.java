@@ -1,12 +1,10 @@
 package com.tchip.carlauncher.util;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.activity.ChatActivity;
 import com.tchip.carlauncher.ui.activity.MultimediaActivity;
 import com.tchip.carlauncher.ui.activity.SettingActivity;
-import com.tchip.carlauncher.ui.activity.WifiListActivity;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -20,11 +18,17 @@ public class OpenUtil {
 		/** 语音助手 **/
 		CHAT,
 
+		/** 设备测试 **/
+		DEVICE_TEST,
+
 		/** 拨号 **/
 		DIALER,
 
 		/** 电子狗 **/
 		EDOG,
+
+		/** 工程模式 **/
+		ENGINEER_MODE,
 
 		/** 文件管理 **/
 		FILE_EXPLORER,
@@ -55,7 +59,10 @@ public class OpenUtil {
 
 		/** 设置 **/
 		SETTING,
-		
+
+		/** 系统设置 **/
+		SETTING_SYSTEM,
+
 		/** 视频 **/
 		VIDEO,
 
@@ -82,6 +89,18 @@ public class OpenUtil {
 			}
 			break;
 
+		case DEVICE_TEST:
+			try {
+				Intent intentDeviceTest = new Intent(Intent.ACTION_VIEW);
+				intentDeviceTest.setClassName("com.DeviceTest",
+						"com.DeviceTest.DeviceTest");
+				intentDeviceTest.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				activity.startActivity(intentDeviceTest);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
 		case DIALER:
 			try {
 				ComponentName componentDialer = new ComponentName(
@@ -93,6 +112,18 @@ public class OpenUtil {
 						R.anim.zms_translate_up_in);
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+			break;
+
+		case ENGINEER_MODE:
+			try {
+				Intent intentEngineerMode = new Intent(Intent.ACTION_VIEW);
+				intentEngineerMode.setClassName("com.mediatek.engineermode",
+						"com.mediatek.engineermode.EngineerMode");
+				intentEngineerMode.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				activity.startActivity(intentEngineerMode);
+			} catch (Exception e) {
+
 			}
 			break;
 
@@ -303,7 +334,19 @@ public class OpenUtil {
 						R.anim.zms_translate_up_in);
 			}
 			break;
-			
+
+		case SETTING_SYSTEM:
+			try {
+				ComponentName componentSetting = new ComponentName(
+						"com.android.settings", "com.android.settings.Settings");
+				Intent intentSetting = new Intent();
+				intentSetting.setComponent(componentSetting);
+				activity.startActivity(intentSetting);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
 		case VIDEO:
 			try {
 				ComponentName componentVideo = new ComponentName(

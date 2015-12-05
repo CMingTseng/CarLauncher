@@ -15,7 +15,7 @@ public class MyApplication extends Application {
 	/** ACC是否连接 **/
 	public static boolean isAccOn = true;
 
-	/** 插入路录像卡：需要启动录像 **/
+	/** 插入录像卡：需要启动录像 **/
 	public static boolean shouldMountRecord = false;
 
 	/** 休眠唤醒：需要启动录像 **/

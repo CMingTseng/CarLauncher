@@ -2,6 +2,8 @@ package com.tchip.carlauncher.ui.activity;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.OpenUtil;
+import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -35,9 +37,9 @@ public class MagicActivity extends Activity {
 		layoutMagic = (RelativeLayout) findViewById(R.id.layoutMagic);
 		layoutBack = (RelativeLayout) findViewById(R.id.layoutBack);
 		layoutBack.setOnClickListener(new MyOnClickListener());
-		btnBack = (Button)findViewById(R.id.btnBack);
+		btnBack = (Button) findViewById(R.id.btnBack);
 		btnBack.setOnClickListener(new MyOnClickListener());
-		
+
 		textPass = (EditText) findViewById(R.id.textPass);
 		btnGo = (Button) findViewById(R.id.btnGo);
 		btnGo.setOnClickListener(new MyOnClickListener());
@@ -68,27 +70,17 @@ public class MagicActivity extends Activity {
 				break;
 
 			case R.id.btnDeviceTest:
-				Intent intentDeviceTest = new Intent(Intent.ACTION_VIEW);
-				intentDeviceTest.setClassName("com.DeviceTest",
-						"com.DeviceTest.DeviceTest");
-				intentDeviceTest.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intentDeviceTest);
+				OpenUtil.openModule(MagicActivity.this, MODULE_TYPE.DEVICE_TEST);
 				break;
 
 			case R.id.btnEngineerMode:
-				Intent intentEngineerMode = new Intent(Intent.ACTION_VIEW);
-				intentEngineerMode.setClassName("com.mediatek.engineermode",
-						"com.mediatek.engineermode.EngineerMode");
-				intentEngineerMode.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intentEngineerMode);
+				OpenUtil.openModule(MagicActivity.this,
+						MODULE_TYPE.ENGINEER_MODE);
 				break;
 
 			case R.id.btnSystemSetting:
-				ComponentName componentSetting = new ComponentName(
-						"com.android.settings", "com.android.settings.Settings");
-				Intent intentSetting = new Intent();
-				intentSetting.setComponent(componentSetting);
-				startActivity(intentSetting);
+				OpenUtil.openModule(MagicActivity.this,
+						MODULE_TYPE.SETTING_SYSTEM);
 				break;
 
 			case R.id.layoutBack:
