@@ -402,6 +402,25 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
+				if (MyApplication.shouldMountRecord) {
+					MyApplication.shouldMountRecord = false;
+					if (MyApplication.isAccOn) {
+						// 点亮屏幕
+						if (!powerManager.isScreenOn()) {
+							// TODO:Hide below line
+							SettingUtil.lightScreen(getApplicationContext());
+						}
+
+						if (!MyApplication.isMainForeground) {
+							// 发送Home键，回到主界面
+							sendBroadcast(new Intent("com.tchip.powerKey")
+									.putExtra("value", "home"));
+						}
+
+						new Thread(new RecordWhenMountThread()).start();
+					}
+				}
+
 				// 停车侦测录像
 				if (MyApplication.shouldCrashRecord) {
 					if (Constant.Record.parkVideoLock) { // 是否需要加锁
@@ -487,6 +506,26 @@ public class MainActivity extends Activity implements TachographCallback,
 	};
 
 	/**
+	 * 插入录像卡录制一个视频线程
+	 */
+	public class RecordWhenMountThread implements Runnable {
+
+		@Override
+		public void run() {
+			MyLog.v("[Thread]run RecordWhenMountThread");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Message message = new Message();
+			message.what = 1;
+			recordWhenEventHappenHandler.sendMessage(message);
+		}
+
+	}
+
+	/**
 	 * 底层碰撞后录制一个视频线程
 	 */
 	public class RecordWhenCrashThread implements Runnable {
@@ -501,11 +540,18 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			Message message = new Message();
 			message.what = 1;
-			recordWhenCrashHandler.sendMessage(message);
+			recordWhenEventHappenHandler.sendMessage(message);
 		}
 	}
 
-	final Handler recordWhenCrashHandler = new Handler() {
+	/**
+	 * 以下事件发生时录制视频：
+	 * 
+	 * 1.停车守卫：底层碰撞
+	 * 
+	 * 2.插入视频卡
+	 */
+	final Handler recordWhenEventHappenHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -526,19 +572,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 						// 开始录像
 						new Thread(new StartRecordThread()).start();
-					} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
-						if (stopRecorder() == 0) {
-							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
-							MyApplication.isVideoReording = false;
-
-							releaseCameraZone();
-						}
 					}
 					setupRecordViews();
-					if (Constant.isDebug) {
-						MyLog.v("MyApplication.isVideoReording:"
-								+ MyApplication.isVideoReording);
-					}
+					MyLog.v("MyApplication.isVideoReording:"
+							+ MyApplication.isVideoReording);
 				} catch (Exception e) {
 					MyLog.e("[MainActivity]recordOneVideoWhenCrash catch exception: "
 							+ e.toString());
@@ -1852,7 +1889,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * 2.ACC上电录像 {@link BackThread}
 	 * 
-	 * 3.停车侦测，录制一个加锁视频
+	 * 3.停车侦测，录制一个30s视频
+	 * 
+	 * 4.TODO:插卡自动录像
 	 */
 	private class StartRecordThread implements Runnable {
 

@@ -2,9 +2,11 @@ package com.tchip.carlauncher.model;
 
 import java.io.File;
 
-import com.baidu.mapapi.map.Stroke;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.service.SpeakService;
+import com.tchip.carlauncher.ui.activity.MainActivity;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.StorageUtil;
 
 import android.content.BroadcastReceiver;
@@ -12,12 +14,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.util.Log;
 
 public class CardEjectReceiver extends BroadcastReceiver {
 
+	private Context context;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		this.context = context;
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_MEDIA_EJECT)
 				|| action.equals(Intent.ACTION_MEDIA_BAD_REMOVAL)
@@ -32,6 +38,13 @@ public class CardEjectReceiver extends BroadcastReceiver {
 					"value", "music_kuwo"));
 
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
+
+			// 插入录像卡自动录像
+			if ("/storage/sdcard2".equals(intent.getData().getPath())
+					&& MyApplication.isAccOn) {
+				MyApplication.shouldMountRecord = true;
+			}
+
 			if (StorageUtil.isVideoCardExists()) {
 				MyApplication.isVideoCardEject = false;
 
@@ -69,4 +82,11 @@ public class CardEjectReceiver extends BroadcastReceiver {
 		}
 
 	}
+
+	private void startSpeak(String content) {
+		Intent intent = new Intent(context, SpeakService.class);
+		intent.putExtra("content", content);
+		context.startService(intent);
+	}
+
 }

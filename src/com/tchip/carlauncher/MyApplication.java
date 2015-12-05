@@ -15,15 +15,18 @@ public class MyApplication extends Application {
 	/** ACC是否连接 **/
 	public static boolean isAccOn = true;
 
+	/** 插入路录像卡：需要启动录像 **/
+	public static boolean shouldMountRecord = false;
+
 	/** 休眠唤醒：需要启动录像 **/
 	public static boolean shouldWakeRecord = false;
 
 	/** 底层碰撞：需要启动录像 **/
 	public static boolean shouldCrashRecord = false;
-	
+
 	/** ACC下电:拍照 **/
 	public static boolean shouldTakePhotoWhenAccOff = false;
-	
+
 	/** ACC拍照后,在onFileSave中传Path给DSA **/
 	public static boolean shouldSendPathToDSA = false;
 
