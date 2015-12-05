@@ -91,14 +91,13 @@ public class SleepOnOffService extends Service {
 				accOffCount = 0;
 				new Thread(new GoingParkMonitorThread()).start();
 
-				// 关闭轨迹记录服务
-				stopRouteRecordService();
+				stopExternalService();
 
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApplication.isAccOn = true;
 				deviceWake();
-				// 开启轨迹记录服务
-				startRouteRecordService();
+
+				startExternalService();
 
 			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) {
 				deviceCrash();
@@ -275,28 +274,51 @@ public class SleepOnOffService extends Service {
 	}
 
 	/**
-	 * 开启轨迹记录服务
+	 * 开启外部服务：
+	 * 
+	 * 1.轨迹记录
+	 * 
+	 * 2.天气播报
 	 */
-	private void startRouteRecordService() {
+	private void startExternalService() {
 		try {
+			// 轨迹记录
 			Intent intentRoute = new Intent();
 			intentRoute.setClassName("com.tchip.route",
 					"com.tchip.route.service.RouteRecordService");
 			startService(intentRoute);
+
+			// 天气播报
+			Intent intentWeather = new Intent();
+			intentWeather.setClassName("com.tchip.weather",
+					"com.tchip.weather.service.TimeTickService");
+			startService(intentWeather);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	/**
-	 * 关闭轨迹记录服务
+	 * 关闭外部服务：
+	 * 
+	 * 1.轨迹记录
+	 * 
+	 * 2.天气播报
 	 */
-	private void stopRouteRecordService() {
+	private void stopExternalService() {
 		try {
+			// 轨迹记录
 			Intent intentRoute = new Intent();
 			intentRoute.setClassName("com.tchip.route",
 					"com.tchip.route.service.RouteRecordService");
-			context.stopService(intentRoute);
+			stopService(intentRoute);
+
+			// 天气播报
+			Intent intentWeather = new Intent();
+			intentWeather.setClassName("com.tchip.weather",
+					"com.tchip.weather.service.TimeTickService");
+			stopService(intentWeather);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
