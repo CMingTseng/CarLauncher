@@ -275,6 +275,7 @@ public class NetworkUtil {
 	 * NETWORK_TYPE_HSPAP
 	 */
 	public static int get3GTypeImageByNetworkType(int networkType) {
+		MyLog.v("[NetworkUtil]get3GTypeImageByNetworkType:"+networkType);
 		switch (networkType) {
 		/***** 2G *****/
 		case TelephonyManager.NETWORK_TYPE_GPRS:

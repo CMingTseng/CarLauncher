@@ -2,6 +2,8 @@ package com.tchip.carlauncher.ui.activity;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.OpenUtil;
+import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -66,18 +68,8 @@ public class MultimediaActivity extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.layoutImage:
-				try {
-					ComponentName componentImage = new ComponentName(
-							"com.android.gallery3d",
-							"com.android.gallery3d.app.GalleryActivity");
-					Intent intentImage = new Intent();
-					intentImage.setComponent(componentImage);
-					intentImage.addCategory(Intent.CATEGORY_LAUNCHER);
-					intentImage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intentImage);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(MultimediaActivity.this,
+						MODULE_TYPE.GALLERY);
 				break;
 
 			case R.id.layoutFace:
@@ -87,37 +79,13 @@ public class MultimediaActivity extends Activity {
 				break;
 
 			case R.id.layoutMusic:
-				try {
-					ComponentName componentMusic;
-					// 普通HD版："cn.kuwo.kwmusichd","cn.kuwo.kwmusichd.WelcomeActivity"
-					// 车载HD版："cn.kuwo.kwmusiccar","cn.kuwo.kwmusiccar.WelcomeActivity"
-					componentMusic = new ComponentName("cn.kuwo.kwmusiccar",
-							"cn.kuwo.kwmusiccar.WelcomeActivity");
-					Intent intentMusic = new Intent();
-					intentMusic.setComponent(componentMusic);
-					startActivity(intentMusic);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(MultimediaActivity.this, MODULE_TYPE.MUSIC);
 				break;
 
 			case R.id.layoutVideo:
 				// intentVideo.setAction("android.intent.action.VIEW");
 				// intentVideo.addCategory("android.intent.category.LAUNCHER");
-				try {
-					ComponentName componentVideo = new ComponentName(
-							"com.mediatek.videoplayer",
-							"com.mediatek.videoplayer.MovieListActivity");
-					Intent intentVideo = new Intent();
-					intentVideo.setComponent(componentVideo);
-					intentVideo.addCategory(Intent.CATEGORY_DEFAULT);
-					intentVideo.addCategory(Intent.CATEGORY_LAUNCHER);
-					intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-							| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-					startActivity(intentVideo);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(MultimediaActivity.this, MODULE_TYPE.VIDEO);
 				break;
 
 			case R.id.btnBack:

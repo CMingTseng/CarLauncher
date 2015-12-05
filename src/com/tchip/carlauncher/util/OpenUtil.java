@@ -32,6 +32,9 @@ public class OpenUtil {
 		/** FM发射 **/
 		FMTRANSMIT,
 
+		/** 图库 **/
+		GALLERY,
+
 		/** 短信 **/
 		MMS,
 
@@ -52,6 +55,9 @@ public class OpenUtil {
 
 		/** 设置 **/
 		SETTING,
+		
+		/** 视频 **/
+		VIDEO,
 
 		/** 天气 **/
 		WEATHER,
@@ -153,6 +159,21 @@ public class OpenUtil {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+			break;
+
+		case GALLERY:
+			try {
+				ComponentName componentImage = new ComponentName(
+						"com.android.gallery3d",
+						"com.android.gallery3d.app.GalleryActivity");
+				Intent intentImage = new Intent();
+				intentImage.setComponent(componentImage);
+				intentImage.addCategory(Intent.CATEGORY_LAUNCHER);
+				intentImage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				activity.startActivity(intentImage);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			break;
 
@@ -280,6 +301,23 @@ public class OpenUtil {
 				activity.startActivity(intentSetting);
 				activity.overridePendingTransition(R.anim.zms_translate_up_out,
 						R.anim.zms_translate_up_in);
+			}
+			break;
+			
+		case VIDEO:
+			try {
+				ComponentName componentVideo = new ComponentName(
+						"com.mediatek.videoplayer",
+						"com.mediatek.videoplayer.MovieListActivity");
+				Intent intentVideo = new Intent();
+				intentVideo.setComponent(componentVideo);
+				intentVideo.addCategory(Intent.CATEGORY_DEFAULT);
+				intentVideo.addCategory(Intent.CATEGORY_LAUNCHER);
+				intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+						| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				activity.startActivity(intentVideo);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			break;
 
