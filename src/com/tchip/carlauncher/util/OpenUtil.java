@@ -51,6 +51,9 @@ public class OpenUtil {
 		/** 导航:百度SDK **/
 		NAVI_BAIDU_SDK,
 
+		/** 导航:高德地图 **/
+		NAVI_GAODE,
+
 		/** 导航：图吧 **/
 		NAVI_TUBA,
 
@@ -284,19 +287,41 @@ public class OpenUtil {
 			}
 			break;
 
+		case NAVI_GAODE:
+			if (!ClickUtil.isQuickClick(800)) {
+				// 打开GPS
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON"));
+				try {
+					ComponentName componentGaode;
+					componentGaode = new ComponentName("com.autonavi.minimap",
+							"com.autonavi.map.activity.SplashActivity");
+					Intent intentGaode = new Intent();
+					intentGaode.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intentGaode.setComponent(componentGaode);
+					activity.startActivity(intentGaode);
+					activity.overridePendingTransition(
+							R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			break;
+
 		case NAVI_TUBA:
 			if (!ClickUtil.isQuickClick(800)) {
 				// 打开GPS
 				activity.sendBroadcast(new Intent(
 						"tchip.intent.action.ACTION_GPS_ON"));
 				try {
-					ComponentName componentBaiduNavi;
-					componentBaiduNavi = new ComponentName(
+					ComponentName componentTuba;
+					componentTuba = new ComponentName(
 							"com.mapbar.android.carnavi",
 							"com.mapbar.android.carnavi.activity.LoadingActivity");
 					Intent intentTubaNavi = new Intent();
 					intentTubaNavi.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intentTubaNavi.setComponent(componentBaiduNavi);
+					intentTubaNavi.setComponent(componentTuba);
 					activity.startActivity(intentTubaNavi);
 					activity.overridePendingTransition(
 							R.anim.zms_translate_up_out,

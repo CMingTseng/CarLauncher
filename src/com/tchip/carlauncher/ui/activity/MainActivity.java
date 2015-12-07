@@ -1367,13 +1367,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageNavi:
-				if (Constant.Module.isNavigationBaidu) {
-					OpenUtil.openModule(MainActivity.this,
-							MODULE_TYPE.NAVI_BAIDU_SDK);
-				} else {
-					OpenUtil.openModule(MainActivity.this,
-							MODULE_TYPE.NAVI_TUBA);
-				}
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.NAVI_GAODE);
 				break;
 
 			case R.id.imageMusicOL:
