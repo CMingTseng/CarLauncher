@@ -51,6 +51,15 @@ public interface Constant {
 		public static final String BT_DISCONNECTED = "com.tchip.BT_DISCONNECTED";
 
 		/**
+		 * 语音命令
+		 * 
+		 * context.sendBroadcast(new
+		 * Intent("com.tchip.SPEECH_COMMAND").putExtra("command",
+		 * "take_photo"));
+		 */
+		public static final String SPEECH_COMMAND = "com.tchip.SPEECH_COMMAND";
+
+		/**
 		 * 行车记录仪抓拍到图片之后发送以下广播,DSA接收
 		 * 
 		 * String[] picPaths = new String[2]; //第一张保存前置的图片路径 ；第二张保存后置的，如无可以为空

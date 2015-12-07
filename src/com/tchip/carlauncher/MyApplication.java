@@ -24,6 +24,9 @@ public class MyApplication extends Application {
 	/** 底层碰撞：需要启动录像 **/
 	public static boolean shouldCrashRecord = false;
 
+	/** 语音拍照 **/
+	public static boolean shouldTakeVoicePhoto = false;
+
 	/** ACC下电:拍照 **/
 	public static boolean shouldTakePhotoWhenAccOff = false;
 

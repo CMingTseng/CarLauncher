@@ -3,10 +3,7 @@ package com.tchip.carlauncher.service;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.util.MyLog;
-import com.tchip.carlauncher.util.OpenUtil;
-import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 
 import android.app.Service;
@@ -16,7 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.AudioManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -60,6 +56,7 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.ACC_ON);
 		filter.addAction(Constant.Broadcast.ACC_OFF);
 		filter.addAction(Constant.Broadcast.GSENSOR_CRASH);
+		filter.addAction(Constant.Broadcast.SPEECH_COMMAND);
 		registerReceiver(sleepOnOffReceiver, filter);
 
 	}
@@ -90,17 +87,32 @@ public class SleepOnOffService extends Service {
 
 				accOffCount = 0;
 				new Thread(new GoingParkMonitorThread()).start();
-
 				stopExternalService();
 
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApplication.isAccOn = true;
 				deviceWake();
-
 				startExternalService();
 
 			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) {
 				deviceCrash();
+
+			} else if (action.equals(Constant.Broadcast.SPEECH_COMMAND)) {
+				String command = intent.getExtras().getString("command");
+				if ("take_photo".equals(command)) {
+					// 语言拍照
+					MyApplication.shouldTakeVoicePhoto = true;
+					
+					// 发送Home键，回到主界面
+					context.sendBroadcast(new Intent("com.tchip.powerKey")
+							.putExtra("value", "home"));
+
+					// 确保屏幕点亮
+					if (!powerManager.isScreenOn()) {
+						SettingUtil.lightScreen(getApplicationContext());
+					}
+					
+				}
 			}
 		}
 	}

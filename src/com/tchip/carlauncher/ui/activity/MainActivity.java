@@ -464,6 +464,13 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyApplication.shouldSendPathToDSA = true;
 					new Thread(new TakePhotoWhenAccOffThread()).start();
 				}
+
+				// 语音拍照
+				if (MyApplication.shouldTakeVoicePhoto) {
+					MyApplication.shouldTakeVoicePhoto = false;
+					// TODO:
+					new Thread(new TakeVoicePhotoThread()).start();
+				}
 				break;
 
 			default:
@@ -471,6 +478,21 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 		}
 	};
+
+	public class TakeVoicePhotoThread implements Runnable {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(1000);
+				Message messageTakePhotoWhenAccOff = new Message();
+				messageTakePhotoWhenAccOff.what = 1;
+				takePhotoWhenAccOffHandler
+						.sendMessage(messageTakePhotoWhenAccOff);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * ACC下电拍照线程
@@ -2150,6 +2172,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	public int takePhotoWhenAccOff() {
 		if (mMyRecorder != null) {
+			setDirectory(Constant.Path.SDCARD_2);
 			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 			return mMyRecorder.takePicture();
 		}
