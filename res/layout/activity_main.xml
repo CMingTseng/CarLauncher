@@ -178,10 +178,10 @@
 
             <RelativeLayout
                 android:id="@+id/layoutVoiceChat"
-                android:visibility="gone"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="5dp"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/imageVoiceChat"
@@ -310,7 +310,7 @@
                     android:id="@+id/imageNearSearch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_near_search" />
+                    android:src="@drawable/ic_launcher" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -359,7 +359,7 @@
                     android:id="@+id/imageRoutePlan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_route_plan" />
+                    android:src="@drawable/ic_launcher" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -450,9 +450,9 @@
 
             <RelativeLayout
                 android:id="@+id/layoutSetting"
-                android:visibility="gone"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size" >
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/imageSetting"
