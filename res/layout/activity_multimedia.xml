@@ -38,6 +38,7 @@
             android:background="@drawable/ui_multimedia_video" />
 
         <TextView
+            android:id="@+id/textVideo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/imageVideo"
@@ -59,6 +60,7 @@
             android:background="@drawable/ui_multimedia_image" />
 
         <TextView
+            android:id="@+id/textGallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/imageGallery"

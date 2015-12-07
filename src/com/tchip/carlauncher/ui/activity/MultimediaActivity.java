@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MultimediaActivity extends Activity {
 
@@ -42,21 +43,28 @@ public class MultimediaActivity extends Activity {
 		ImageView imageGallery = (ImageView) findViewById(R.id.imageGallery);
 		imageGallery.setOnClickListener(new MyOnClickListener());
 
+		TextView textGallery = (TextView) findViewById(R.id.textGallery);
+		textGallery.setOnClickListener(new MyOnClickListener());
+
 		// 视频
 		ImageView imageVideo = (ImageView) findViewById(R.id.imageVideo);
 		imageVideo.setOnClickListener(new MyOnClickListener());
 
+		TextView textVideo = (TextView) findViewById(R.id.textVideo);
+		textVideo.setOnClickListener(new MyOnClickListener());
 	}
 
 	class MyOnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.textGallery:
 			case R.id.imageGallery:
 				OpenUtil.openModule(MultimediaActivity.this,
 						MODULE_TYPE.GALLERY);
 				break;
 
+			case R.id.textVideo:
 			case R.id.imageVideo:
 				OpenUtil.openModule(MultimediaActivity.this, MODULE_TYPE.VIDEO);
 				break;

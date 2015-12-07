@@ -83,9 +83,9 @@
     <dimen name="setting_tab_image">70px</dimen>
     <dimen name="setting_tab_text">25px</dimen>
     <dimen name="ui_topbar_height">95dp</dimen>
-    
+
     <!-- WeChat -->
-    
+
     <dimen name="LargeTextSize">16dp</dimen>
     <dimen name="BasicTextSize">15dp</dimen>
     <dimen name="TitleTextSize">18dp</dimen>
