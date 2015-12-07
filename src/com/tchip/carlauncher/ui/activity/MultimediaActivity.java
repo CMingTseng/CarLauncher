@@ -6,7 +6,6 @@ import com.tchip.carlauncher.util.OpenUtil;
 import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -16,9 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 public class MultimediaActivity extends Activity {
 
@@ -42,24 +39,12 @@ public class MultimediaActivity extends Activity {
 
 	private void initLayout() {
 		// 图片
-		RelativeLayout layoutImage = (RelativeLayout) findViewById(R.id.layoutImage);
-		layoutImage.setOnClickListener(new MyOnClickListener());
-
-		// 人脸检测
-		RelativeLayout imageSearch = (RelativeLayout) findViewById(R.id.layoutFace);
-		imageSearch.setOnClickListener(new MyOnClickListener());
-
-		// 音乐
-		RelativeLayout layoutMusic = (RelativeLayout) findViewById(R.id.layoutMusic);
-		layoutMusic.setOnClickListener(new MyOnClickListener());
+		ImageView imageGallery = (ImageView) findViewById(R.id.imageGallery);
+		imageGallery.setOnClickListener(new MyOnClickListener());
 
 		// 视频
-		RelativeLayout layoutVideo = (RelativeLayout) findViewById(R.id.layoutVideo);
-		layoutVideo.setOnClickListener(new MyOnClickListener());
-
-		// 返回
-		Button btnToMainFromMultimedia = (Button) findViewById(R.id.btnBack);
-		btnToMainFromMultimedia.setOnClickListener(new MyOnClickListener());
+		ImageView imageVideo = (ImageView) findViewById(R.id.imageVideo);
+		imageVideo.setOnClickListener(new MyOnClickListener());
 
 	}
 
@@ -67,29 +52,13 @@ public class MultimediaActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.layoutImage:
+			case R.id.imageGallery:
 				OpenUtil.openModule(MultimediaActivity.this,
 						MODULE_TYPE.GALLERY);
 				break;
 
-			case R.id.layoutFace:
-				Intent intentFaceDetect = new Intent(getApplicationContext(),
-						FaceDetectActivity.class);
-				startActivity(intentFaceDetect);
-				break;
-
-			case R.id.layoutMusic:
-				OpenUtil.openModule(MultimediaActivity.this, MODULE_TYPE.MUSIC);
-				break;
-
-			case R.id.layoutVideo:
-				// intentVideo.setAction("android.intent.action.VIEW");
-				// intentVideo.addCategory("android.intent.category.LAUNCHER");
+			case R.id.imageVideo:
 				OpenUtil.openModule(MultimediaActivity.this, MODULE_TYPE.VIDEO);
-				break;
-
-			case R.id.btnBack:
-				backToMain();
 				break;
 			}
 		}

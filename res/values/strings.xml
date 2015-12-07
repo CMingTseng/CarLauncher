@@ -308,7 +308,7 @@
     <string name="music_play_now">正在播放</string>
     <string name="music_play_recent">最近播放</string>
     <string name="music">音乐</string>
-    <string name="picture">图库</string>
+    <string name="picture">图片</string>
     <string name="video">视频</string>
 
     <!-- NavigationActivity -->

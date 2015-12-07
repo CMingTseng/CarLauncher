@@ -60,7 +60,7 @@
     <dimen name="ui_main_hsv_item_size">200dp</dimen>
 
     <!-- Multimedia Activity -->
-    <dimen name="ui_media_text_item_size">45sp</dimen>
+    <dimen name="ui_media_text_item_size">35sp</dimen>
 
     <!-- Near Search Activity -->
     <dimen name="ui_near_item_height">185dp</dimen>

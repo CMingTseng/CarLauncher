@@ -1385,7 +1385,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageMultimedia:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.GALLERY);
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MULTIMEDIA);
 				break;
 
 			case R.id.imageRouteTrack:
