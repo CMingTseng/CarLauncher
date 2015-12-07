@@ -33,6 +33,9 @@ public class OpenUtil {
 		/** 文件管理 **/
 		FILE_EXPLORER,
 
+		/** 文件管理(MTK) **/
+		FILE_MANAGER_MTK,
+
 		/** FM发射 **/
 		FMTRANSMIT,
 
@@ -166,6 +169,24 @@ public class OpenUtil {
 					ComponentName componentFile = new ComponentName(
 							"com.tchip.filemanager",
 							"com.tchip.filemanager.ui.activity.MainActivity");
+					Intent intentFile = new Intent();
+					intentFile.setComponent(componentFile);
+					activity.startActivity(intentFile);
+					activity.overridePendingTransition(
+							R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			break;
+
+		case FILE_MANAGER_MTK:
+			if (!ClickUtil.isQuickClick(800)) {
+				try {
+					ComponentName componentFile = new ComponentName(
+							"com.mediatek.filemanager",
+							"com.mediatek.filemanager.FileManagerOperationActivity");
 					Intent intentFile = new Intent();
 					intentFile.setComponent(componentFile);
 					activity.startActivity(intentFile);

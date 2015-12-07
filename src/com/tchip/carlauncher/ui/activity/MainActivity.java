@@ -1392,7 +1392,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageFileExplore:
 				OpenUtil.openModule(MainActivity.this,
-						MODULE_TYPE.FILE_EXPLORER);
+						MODULE_TYPE.FILE_MANAGER_MTK);
 				break;
 
 			case R.id.imageDialer:
