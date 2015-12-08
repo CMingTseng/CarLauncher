@@ -58,7 +58,6 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.GSENSOR_CRASH);
 		filter.addAction(Constant.Broadcast.SPEECH_COMMAND);
 		registerReceiver(sleepOnOffReceiver, filter);
-
 	}
 
 	private SleepOnOffReceiver sleepOnOffReceiver;
@@ -102,7 +101,7 @@ public class SleepOnOffService extends Service {
 				if ("take_photo".equals(command)) {
 					// 语言拍照
 					MyApplication.shouldTakeVoicePhoto = true;
-					
+
 					// 发送Home键，回到主界面
 					context.sendBroadcast(new Intent("com.tchip.powerKey")
 							.putExtra("value", "home"));
@@ -111,7 +110,7 @@ public class SleepOnOffService extends Service {
 					if (!powerManager.isScreenOn()) {
 						SettingUtil.lightScreen(getApplicationContext());
 					}
-					
+
 				}
 			}
 		}

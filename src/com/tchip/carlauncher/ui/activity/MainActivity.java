@@ -719,13 +719,21 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (NetworkUtil.isAirplaneModeOn(getApplicationContext())) {
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_signal_no_signal));
+			image3GType.setVisibility(View.GONE);
 		} else if (simState == TelephonyManager.SIM_STATE_READY) {
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					NetworkUtil.get3GLevelImageByGmsSignalStrength(signal)));
+
+			if (signal > 31 || signal < 0) {
+				image3GType.setVisibility(View.GONE);
+			} else {
+				image3GType.setVisibility(View.VISIBLE);
+			}
 		} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
 				|| simState == TelephonyManager.SIM_STATE_ABSENT) {
 			imageSignalLevel.setBackground(getResources().getDrawable(
 					R.drawable.ic_qs_signal_no_signal));
+			image3GType.setVisibility(View.GONE);
 		}
 	}
 
@@ -737,8 +745,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		MyLog.v("[update3Gtype]NetworkType:" + networkType);
 
-		image3GType.setBackground(getResources().getDrawable(
-				NetworkUtil.get3GTypeImageByNetworkType(networkType)));
+		// image3GType.setBackground(getResources().getDrawable(
+		// NetworkUtil.get3GTypeImageByNetworkType(networkType)));
 	}
 
 	/**
@@ -1632,7 +1640,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
-
 		// 触摸声音
 		Settings.System.putString(getContentResolver(),
 				Settings.System.SOUND_EFFECTS_ENABLED, "1");
@@ -2172,7 +2179,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	public int takePhotoWhenAccOff() {
 		if (mMyRecorder != null) {
-			setDirectory(Constant.Path.SDCARD_2);
+			// 如果录像卡不存在，则会保存到内部存储
+			if (StorageUtil.isVideoCardExists()) {
+				setDirectory(Constant.Path.SDCARD_2);
+			}
 			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 			return mMyRecorder.takePicture();
 		}
