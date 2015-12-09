@@ -71,7 +71,7 @@ public class SleepOnOffService extends Service {
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals(Constant.Broadcast.ACC_OFF)) {
 				MyApplication.isAccOn = false;
-				startSpeak("九十秒后进入停车守卫");
+				startSpeak("九十秒后启动停车守卫");
 
 				// 发送Home键，回到主界面
 				context.sendBroadcast(new Intent("com.tchip.powerKey")
