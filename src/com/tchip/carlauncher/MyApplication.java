@@ -9,6 +9,7 @@ import com.iflytek.cloud.SpeechUtility;
 import com.tchip.carlauncher.util.MyLog;
 
 public class MyApplication extends Application {
+
 	/** 是否处于低功耗待机状态 **/
 	public static boolean isSleeping = false;
 
@@ -59,6 +60,9 @@ public class MyApplication extends Application {
 
 	/** SD卡取出 **/
 	public static boolean isVideoCardEject = false;
+
+	/** 蓝牙是否正在播放音乐 **/
+	public static boolean isBTPlayMusic = false;
 
 	/** 碰撞侦测开关:默认打开 **/
 	public static boolean isCrashOn = Constant.GravitySensor.DEFAULT_ON;

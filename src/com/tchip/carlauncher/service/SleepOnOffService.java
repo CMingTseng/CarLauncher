@@ -57,6 +57,8 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.ACC_OFF);
 		filter.addAction(Constant.Broadcast.GSENSOR_CRASH);
 		filter.addAction(Constant.Broadcast.SPEECH_COMMAND);
+		filter.addAction(Constant.Broadcast.BT_MUSIC_PLAYING);
+		filter.addAction(Constant.Broadcast.BT_MUSIC_STOPED);
 		registerReceiver(sleepOnOffReceiver, filter);
 	}
 
@@ -112,6 +114,13 @@ public class SleepOnOffService extends Service {
 					}
 
 				}
+			} else if (action.equals(Constant.Broadcast.BT_MUSIC_PLAYING)) {
+
+				MyApplication.isBTPlayMusic = true;
+
+			} else if (action.equals(Constant.Broadcast.BT_MUSIC_STOPED)) {
+
+				MyApplication.isBTPlayMusic = false;
 			}
 		}
 	}

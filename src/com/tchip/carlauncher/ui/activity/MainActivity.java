@@ -1641,8 +1641,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	protected void onResume() {
 		// 触摸声音
-		Settings.System.putString(getContentResolver(),
-				Settings.System.SOUND_EFFECTS_ENABLED, "1");
+		if (!MyApplication.isBTPlayMusic) {
+			Settings.System.putString(getContentResolver(),
+					Settings.System.SOUND_EFFECTS_ENABLED, "1");
+		}
 
 		// 按HOME键将预览区域还原为小窗口
 		if (isSurfaceLarge()) {

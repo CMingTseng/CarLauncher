@@ -50,6 +50,12 @@ public interface Constant {
 		/** 外置蓝牙断开 **/
 		public static final String BT_DISCONNECTED = "com.tchip.BT_DISCONNECTED";
 
+		/** 蓝牙音乐播放 **/
+		public static final String BT_MUSIC_PLAYING = "com.tchip.BT_MUSIC_PLAYING";
+
+		/** 蓝牙音乐停止 **/
+		public static final String BT_MUSIC_STOPED = "com.tchip.BT_MUSIC_STOPED";
+
 		/**
 		 * 语音命令
 		 * 
