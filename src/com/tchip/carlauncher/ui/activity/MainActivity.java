@@ -385,6 +385,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 2.停车守卫侦测，启动录像
 	 * 
 	 * 3.ACC下电，拍照
+	 * 
+	 * 4.插入录像卡，若ACC在，启动录像
 	 */
 	final Handler backHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -407,7 +409,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (MyApplication.isAccOn) {
 						// 点亮屏幕
 						if (!powerManager.isScreenOn()) {
-							// TODO:Hide below line
 							SettingUtil.lightScreen(getApplicationContext());
 						}
 
@@ -428,32 +429,11 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 					MyApplication.shouldCrashRecord = false;
 
-					// 点亮屏幕
-					if (!powerManager.isScreenOn()) {
-						// TODO:Hide below line
-						// SettingUtil.lightScreen(getApplicationContext());
-					}
-
 					if (!MyApplication.isMainForeground) {
 						// 发送Home键，回到主界面
 						sendBroadcast(new Intent("com.tchip.powerKey")
 								.putExtra("value", "home"));
 					}
-
-					// TODO:初始化Camera
-					// 重置预览区域
-					// if (mCamera == null) {
-					// setup();
-					// } else {
-					// try {
-					// mCamera.lock();
-					// mCamera.setPreviewDisplay(mHolder);
-					// mCamera.startPreview();
-					// mCamera.unlock();
-					// } catch (Exception e) {
-					// // e.printStackTrace();
-					// }
-					// }
 
 					new Thread(new RecordWhenCrashThread()).start();
 				}
@@ -468,7 +448,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				// 语音拍照
 				if (MyApplication.shouldTakeVoicePhoto) {
 					MyApplication.shouldTakeVoicePhoto = false;
-					// TODO:
 					new Thread(new TakeVoicePhotoThread()).start();
 				}
 				break;
@@ -485,8 +464,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			try {
 				Thread.sleep(1000);
 				Message messageTakePhotoWhenAccOff = new Message();
-				messageTakePhotoWhenAccOff.what = 1;
-				takePhotoWhenAccOffHandler
+				messageTakePhotoWhenAccOff.what = 2;
+				takePhotoWhenEventHappenHandler
 						.sendMessage(messageTakePhotoWhenAccOff);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -505,7 +484,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				Thread.sleep(2000);
 				Message messageTakePhotoWhenAccOff = new Message();
 				messageTakePhotoWhenAccOff.what = 1;
-				takePhotoWhenAccOffHandler
+				takePhotoWhenEventHappenHandler
 						.sendMessage(messageTakePhotoWhenAccOff);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -514,11 +493,22 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	}
 
-	final Handler takePhotoWhenAccOffHandler = new Handler() {
+	/**
+	 * 处理需要拍照事件：
+	 * 
+	 * 1.ACC_OFF，拍照给DSA
+	 * 
+	 * 2.语音拍照
+	 */
+	final Handler takePhotoWhenEventHappenHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
 				takePhotoWhenAccOff();
+				break;
+
+			case 2:
+				takePhotoWhenVoiceCommand();
 				break;
 
 			default:
@@ -579,12 +569,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			case 1:
 				try {
 					if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
-
-						// 点亮屏幕
-						if (!powerManager.isScreenOn()) {
-							// TODO:Hide below line
-							// SettingUtil.lightScreen(getApplicationContext());
-						}
 
 						if (!MyApplication.isMainForeground) {
 							// 发送Home键，回到主界面
@@ -1689,8 +1673,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		networkStateReceiver = new NetworkStateReceiver();
 		IntentFilter networkFilter = new IntentFilter();
 		networkFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-		networkFilter.addAction("com.tchip.BT_CONNECTED");
-		networkFilter.addAction("com.tchip.BT_DISCONNECTED");
+		networkFilter.addAction(Constant.Broadcast.BT_CONNECTED);
+		networkFilter.addAction(Constant.Broadcast.BT_DISCONNECTED);
 		registerReceiver(networkStateReceiver, networkFilter);
 		// 飞行模式
 		setAirplaneIcon(NetworkUtil.isAirplaneModeOn(getApplicationContext()));
@@ -1916,7 +1900,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * 3.停车侦测，录制一个30s视频
 	 * 
-	 * 4.TODO:插卡自动录像
+	 * 4.插卡自动录像
 	 */
 	private class StartRecordThread implements Runnable {
 
@@ -2179,16 +2163,33 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * ACC下电拍照
 	 */
-	public int takePhotoWhenAccOff() {
+	public void takePhotoWhenAccOff() {
 		if (mMyRecorder != null) {
 			// 如果录像卡不存在，则会保存到内部存储
 			if (StorageUtil.isVideoCardExists()) {
 				setDirectory(Constant.Path.SDCARD_2);
 			}
 			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
-			return mMyRecorder.takePicture();
+			mMyRecorder.takePicture();
+
+			// 熄屏
+			sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value",
+					"power_speech"));
 		}
-		return -1;
+	}
+
+	/**
+	 * 语音拍照
+	 */
+	public void takePhotoWhenVoiceCommand() {
+		if (mMyRecorder != null) {
+			// 如果录像卡不存在，则会保存到内部存储
+			if (StorageUtil.isVideoCardExists()) {
+				setDirectory(Constant.Path.SDCARD_2);
+			}
+			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
+			mMyRecorder.takePicture();
+		}
 	}
 
 	/**

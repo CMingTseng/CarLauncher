@@ -320,11 +320,13 @@ public class SleepOnOffService extends Service {
 	}
 
 	/**
-	 * 关闭外部服务：
+	 * 关闭外部应用与服务：
 	 * 
-	 * 1.轨迹记录
+	 * 1.轨迹记录服务
 	 * 
-	 * 2.天气播报
+	 * 2.天气播报服务
+	 * 
+	 * 3.酷我音乐
 	 */
 	private void stopExternalService() {
 		try {
@@ -339,6 +341,23 @@ public class SleepOnOffService extends Service {
 			intentWeather.setClassName("com.tchip.weather",
 					"com.tchip.weather.service.TimeTickService");
 			stopService(intentWeather);
+
+			// 酷我音乐
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "cn.kuwo.kwmusiccar"));
+
+			// 高德地图
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.autonavi.minimap"));
+
+			// 天气
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.tchip.weather"));
+
+			// 图库
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.android.gallery3d"));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
