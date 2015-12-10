@@ -740,7 +740,15 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 初始化服务
+	 * 初始化服务:
+	 * 
+	 * 1.ACC上下电侦测服务
+	 * 
+	 * 2.碰撞侦测服务
+	 * 
+	 * 3.轨迹记录服务
+	 * 
+	 * 4.天气播报服务
 	 */
 	private void initialService() {
 
@@ -752,6 +760,18 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 碰撞侦测服务
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
+
+		// 轨迹记录
+		Intent intentRoute = new Intent();
+		intentRoute.setClassName("com.tchip.route",
+				"com.tchip.route.service.RouteRecordService");
+		startService(intentRoute);
+
+		// 天气播报
+		Intent intentWeather = new Intent();
+		intentWeather.setClassName("com.tchip.weather",
+				"com.tchip.weather.service.TimeTickService");
+		startService(intentWeather);
 	}
 
 	private void initialCameraSurface() {
