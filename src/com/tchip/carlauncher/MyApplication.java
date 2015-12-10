@@ -80,6 +80,11 @@ public class MyApplication extends Application {
 	/** 录像界面是否可见 **/
 	public static boolean isMainForeground = true;
 
+	/**
+	 * 正在处理ACC休眠拍照
+	 */
+	public static boolean isAccOffPhotoTaking = false;
+
 	public enum CameraState {
 		/** 未初始化 **/
 		NULL,
@@ -89,7 +94,7 @@ public class MyApplication extends Application {
 	}
 
 	/** 录像窗口状态 **/
-	private CameraState cameraState = CameraState.OKAY;
+	public static CameraState cameraState = CameraState.OKAY;
 
 	@Override
 	public void onCreate() {

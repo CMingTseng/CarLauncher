@@ -14,6 +14,7 @@ import net.sourceforge.jheader.TagFormatException;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.MyApplication.CameraState;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.DriveVideo;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
@@ -83,7 +84,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private boolean isSurfaceLarge = false;
 
 	private ImageView smallVideoRecord, smallVideoLock, smallVideoCamera;
-	private RelativeLayout layoutLargeButton, layoutMap;
+	private RelativeLayout layoutLargeButton;
 	private TextView textRecordTime;
 
 	private ImageView imageWifiLevel; // WiFi状态图标
@@ -487,7 +488,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1500);
 				Message messageTakePhotoWhenAccOff = new Message();
 				messageTakePhotoWhenAccOff.what = 1;
 				takePhotoWhenEventHappenHandler
@@ -1623,6 +1624,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			MyApplication.shouldResetRecordWhenResume = true;
 			MyLog.v("[Record]releaseCameraZone");
 		}
+		MyApplication.cameraState = CameraState.NULL;
 	}
 
 	@Override
@@ -1869,6 +1871,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyLog.v("[Record]surfaceDestroyed");
 	}
 
+	/**
+	 * 打开摄像头
+	 * 
+	 * @return
+	 */
 	private boolean openCamera() {
 		if (mCamera != null) {
 			closeCamera();
@@ -1889,7 +1896,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			return true;
 		} catch (Exception ex) {
 			closeCamera();
-			MyLog.e("[MainActivity]openCamera:Catch Exception!");
+			MyLog.e("[Record]openCamera:Catch Exception!");
 			return false;
 		}
 	}
@@ -2191,13 +2198,17 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	public void takePhotoWhenAccOff() {
 		if (mMyRecorder != null) {
-			// 如果录像卡不存在，则会保存到内部存储
-			if (StorageUtil.isVideoCardExists()) {
-				setDirectory(Constant.Path.SDCARD_2);
-			}
-			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
-			mMyRecorder.takePicture();
 
+			if (!MyApplication.isAccOffPhotoTaking) {
+				MyApplication.isAccOffPhotoTaking = true;
+				// 如果录像卡不存在，则会保存到内部存储
+				if (StorageUtil.isVideoCardExists()) {
+					setDirectory(Constant.Path.SDCARD_2);
+				}
+				AudioPlayUtil.playAudio(getApplicationContext(),
+						FILE_TYPE_IMAGE);
+				mMyRecorder.takePicture();
+			}
 			// 熄屏
 			sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value",
 					"power_speech"));
@@ -2315,8 +2326,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]setupRecorder: Catch Exception!");
 		}
+
+		MyApplication.cameraState = CameraState.OKAY;
 	}
 
+	/**
+	 * 释放Recorder
+	 */
 	private void releaseRecorder() {
 		try {
 			if (mMyRecorder != null) {
@@ -2421,6 +2437,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				Intent intent = new Intent(Constant.Broadcast.SEND_PIC_PATH);
 				intent.putExtra("picture", picPaths);
 				sendBroadcast(intent);
+
+				MyApplication.isAccOffPhotoTaking = false;
 			}
 		}
 

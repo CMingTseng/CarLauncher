@@ -1,8 +1,5 @@
 package com.tchip.carlauncher.service;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -67,8 +64,6 @@ public class SleepOnOffService extends Service {
 
 	private SleepOnOffReceiver sleepOnOffReceiver;
 
-	private Timer sleepTimer;
-
 	public class SleepOnOffReceiver extends BroadcastReceiver {
 
 		@Override
@@ -77,27 +72,7 @@ public class SleepOnOffService extends Service {
 			String action = intent.getAction();
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals(Constant.Broadcast.ACC_OFF)) {
-				MyApplication.isAccOn = false;
-				startSpeak("九十秒后启动停车守卫");
-
-				// 发送Home键，回到主界面
-				context.sendBroadcast(new Intent("com.tchip.powerKey")
-						.putExtra("value", "home"));
-
-				// 确保屏幕点亮
-				if (!powerManager.isScreenOn()) {
-					SettingUtil.lightScreen(getApplicationContext());
-				}
-
-				MyApplication.shouldTakePhotoWhenAccOff = true;
-
-				accOffCount = 0;
-				// new Thread(new GoingParkMonitorThread()).start();
-
-				sleepTimer = new Timer();
-				sleepTimer.schedule(new SleepTimerTask(), 1000, 1000);
-
-				stopExternalService();
+				deviceAccOff();
 
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApplication.isAccOn = true;
@@ -134,51 +109,6 @@ public class SleepOnOffService extends Service {
 		}
 	}
 
-	class SleepTimerTask extends TimerTask {
-
-		@Override
-		public void run() {
-			synchronized (sleepHandler) {
-				accOffCount++;
-
-				if (accOffCount >= TIME_BEFORE_SLEEP) {
-					sleepTimer.cancel();
-					Message messageSleep = new Message();
-					messageSleep.what = 1;
-					sleepHandler.sendMessage(messageSleep);
-				}
-
-				if (accOffCount % 5 == 0) {
-					// 杀死语音
-					Message messageKillSpeech = new Message();
-					messageKillSpeech.what = 2;
-					sleepHandler.sendMessage(messageKillSpeech);
-				}
-			}
-		}
-	}
-
-	final Handler sleepHandler = new Handler() {
-		public void handleMessage(Message msg) {
-
-			switch (msg.what) {
-			case 1:
-				deviceSleep();
-				break;
-
-			case 2:
-				context.sendBroadcast(new Intent(
-						Constant.Broadcast.AISPEECH_OFF));
-				break;
-
-			default:
-				break;
-			}
-
-		}
-
-	};
-
 	/**
 	 * 90s后进入停车侦测守卫模式，期间如果ACC上电则取消
 	 */
@@ -208,10 +138,12 @@ public class SleepOnOffService extends Service {
 			case 1:
 				if (!MyApplication.isAccOn) {
 					accOffCount++;
-					startSpeak("" + accOffCount);
 				} else {
 					accOffCount = 0;
 				}
+
+				// TODO: Delete below lines
+				MyLog.v("[ParkingMonitor]accOffCount:" + accOffCount);
 
 				if (accOffCount >= TIME_BEFORE_SLEEP && !MyApplication.isAccOn
 						&& !MyApplication.isSleeping) {
@@ -227,7 +159,39 @@ public class SleepOnOffService extends Service {
 	};
 
 	/**
-	 * 休眠
+	 * ACC下电广播触发
+	 */
+	private void deviceAccOff() {
+		MyApplication.isAccOn = false;
+		startSpeak("九十秒后启动停车守卫");
+
+		// if (MyApplication.shouldTakePhotoWhenAccOff
+		// || MyApplication.shouldSendPathToDSA) {
+		// // 已经在走拍照流程，不需要再次激活,Bug:不会熄屏
+		// } else {
+
+		if (!MyApplication.isMainForeground) {
+			// 发送Home键，回到主界面
+			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+					"value", "home"));
+
+			// 确保屏幕点亮
+			if (!powerManager.isScreenOn()) {
+				SettingUtil.lightScreen(getApplicationContext());
+			}
+		}
+
+		MyApplication.shouldTakePhotoWhenAccOff = true;
+
+		new Thread(new GoingParkMonitorThread()).start();
+
+		stopExternalService();
+		// }
+		accOffCount = 0;
+	}
+
+	/**
+	 * 休眠广播触发
 	 */
 	private void deviceSleep() {
 		try {
@@ -237,8 +201,6 @@ public class SleepOnOffService extends Service {
 					Toast.LENGTH_SHORT).show();
 			MyLog.e("[SleepOnOffService]deviceSleep.");
 			startSpeak(strSleepOn);
-
-			startSpeak("进入休眠");
 
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
@@ -260,7 +222,7 @@ public class SleepOnOffService extends Service {
 			editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
 			editor.commit();
 			if (fmStateBeforeSleep) {
-				MyLog.v("[SleepReceiver]Sleep:close FM");
+				MyLog.v("[SleepReceiver]Sleep: close FM");
 				Settings.System.putString(context.getContentResolver(),
 						Constant.FMTransmit.SETTING_ENABLE, "0");
 				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
@@ -275,7 +237,7 @@ public class SleepOnOffService extends Service {
 	}
 
 	/**
-	 * 唤醒
+	 * 唤醒广播触发
 	 */
 	private void deviceWake() {
 		// if (MyApplication.isSleeping) {
@@ -323,7 +285,7 @@ public class SleepOnOffService extends Service {
 	}
 
 	/**
-	 * 停车守卫:侦测到碰撞
+	 * 停车守卫:侦测到碰撞广播触发
 	 */
 	private void deviceCrash() {
 		if (MyApplication.isSleeping) {
