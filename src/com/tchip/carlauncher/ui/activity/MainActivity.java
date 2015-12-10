@@ -182,6 +182,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 首次启动是否需要自动录像
 		if (1 == SettingUtil.getAccStatus()) {
+			// 同步ACC状态
+			MyApplication.isAccOn = true;
+
 			// 关闭飞行模式
 			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF));
 
@@ -191,6 +194,9 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 序列任务线程
 			new Thread(new AutoThread()).start();
 		} else {
+			// 同步ACC状态
+			MyApplication.isAccOn = false;
+
 			// ACC未连接,进入休眠
 			MyApplication.isSleeping = true;
 			MyLog.v("[MainActivity]ACC Check:OFF, Send Broadcast:com.tchip.SLEEP_ON.");

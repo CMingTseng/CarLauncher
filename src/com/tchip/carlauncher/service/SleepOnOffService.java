@@ -1,5 +1,8 @@
 package com.tchip.carlauncher.service;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
@@ -64,6 +67,8 @@ public class SleepOnOffService extends Service {
 
 	private SleepOnOffReceiver sleepOnOffReceiver;
 
+	private Timer sleepTimer;
+
 	public class SleepOnOffReceiver extends BroadcastReceiver {
 
 		@Override
@@ -87,7 +92,11 @@ public class SleepOnOffService extends Service {
 				MyApplication.shouldTakePhotoWhenAccOff = true;
 
 				accOffCount = 0;
-				new Thread(new GoingParkMonitorThread()).start();
+				// new Thread(new GoingParkMonitorThread()).start();
+
+				sleepTimer = new Timer();
+				sleepTimer.schedule(new SleepTimerTask(), 1000, 1000);
+
 				stopExternalService();
 
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
@@ -125,6 +134,51 @@ public class SleepOnOffService extends Service {
 		}
 	}
 
+	class SleepTimerTask extends TimerTask {
+
+		@Override
+		public void run() {
+			synchronized (sleepHandler) {
+				accOffCount++;
+
+				if (accOffCount >= TIME_BEFORE_SLEEP) {
+					sleepTimer.cancel();
+					Message messageSleep = new Message();
+					messageSleep.what = 1;
+					sleepHandler.sendMessage(messageSleep);
+				}
+
+				if (accOffCount % 5 == 0) {
+					// 杀死语音
+					Message messageKillSpeech = new Message();
+					messageKillSpeech.what = 2;
+					sleepHandler.sendMessage(messageKillSpeech);
+				}
+			}
+		}
+	}
+
+	final Handler sleepHandler = new Handler() {
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+			case 1:
+				deviceSleep();
+				break;
+
+			case 2:
+				context.sendBroadcast(new Intent(
+						Constant.Broadcast.AISPEECH_OFF));
+				break;
+
+			default:
+				break;
+			}
+
+		}
+
+	};
+
 	/**
 	 * 90s后进入停车侦测守卫模式，期间如果ACC上电则取消
 	 */
@@ -154,6 +208,7 @@ public class SleepOnOffService extends Service {
 			case 1:
 				if (!MyApplication.isAccOn) {
 					accOffCount++;
+					startSpeak("" + accOffCount);
 				} else {
 					accOffCount = 0;
 				}
@@ -184,6 +239,7 @@ public class SleepOnOffService extends Service {
 			startSpeak(strSleepOn);
 
 			startSpeak("进入休眠");
+
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
 
