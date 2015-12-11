@@ -1092,7 +1092,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
-					if (secondCount == Constant.Record.parkVideoLength) {
+					if (secondCount > Constant.Record.parkVideoLength) {
+						MyApplication.shouldStopWhenCrashVideoSave = false;
+
 						// 停止录像
 						if (stopRecorder() == 0) {
 							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
@@ -1108,11 +1110,9 @@ public class MainActivity extends Activity implements TachographCallback,
 							}
 						}
 
-						MyApplication.shouldStopWhenCrashVideoSave = false;
-
 						// 熄灭屏幕,判断当前屏幕是否关闭
-						PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-						boolean isScreenOn = pm.isScreenOn();
+						PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+						boolean isScreenOn = powerManager.isScreenOn();
 						if (isScreenOn) {
 							sendBroadcast(new Intent("com.tchip.SLEEP_ON"));
 							// sendBroadcast(new Intent("com.tchip.powerKey")
@@ -1549,12 +1549,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (wifi_state) {
 			case WifiManager.WIFI_STATE_ENABLED:
 				updateWiFiState();
-				new Thread(new updateWifiThread()).start();
+				new Thread(new updateNetworkIconThread()).start();
 				break;
 
 			case WifiManager.WIFI_STATE_ENABLING:
 				updateWiFiState();
-				new Thread(new updateWifiThread()).start();
+				new Thread(new updateNetworkIconThread()).start();
 				break;
 
 			case WifiManager.WIFI_STATE_DISABLING:
@@ -1568,12 +1568,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	};
 
 	/**
-	 * 更新wifi图标
+	 * 更新wifi图标和3G图标
 	 */
-	public class updateWifiThread implements Runnable {
+	public class updateNetworkIconThread implements Runnable {
 		@Override
 		public void run() {
-			synchronized (updateWifiHandler) {
+			synchronized (updateNetworkIconHandler) {
 				int updateWifiTime = 1;
 				boolean shouldUpdateWifi = true;
 				while (shouldUpdateWifi) {
@@ -1585,7 +1585,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyLog.v("updateWifiThread:Refresh Wifi! " + updateWifiTime);
 					Message messageWifi = new Message();
 					messageWifi.what = 1;
-					updateWifiHandler.sendMessage(messageWifi);
+					updateNetworkIconHandler.sendMessage(messageWifi);
 					updateWifiTime++;
 					if (updateWifiTime > 5) {
 						shouldUpdateWifi = false;
@@ -1596,11 +1596,29 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	final Handler updateWifiHandler = new Handler() {
+	final Handler updateNetworkIconHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
 				updateWiFiState();
+
+				// 3G TODO:
+				simState = telephonyManager.getSimState();
+				MyLog.v("[update3GState]SIM State:" + simState);
+
+				if (NetworkUtil.isAirplaneModeOn(getApplicationContext())) {
+					imageSignalLevel.setBackground(getResources().getDrawable(
+							R.drawable.ic_qs_signal_no_signal));
+					image3GType.setVisibility(View.GONE);
+				} else if (simState == TelephonyManager.SIM_STATE_READY) {
+
+				} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
+						|| simState == TelephonyManager.SIM_STATE_ABSENT) {
+					imageSignalLevel.setBackground(getResources().getDrawable(
+							R.drawable.ic_qs_signal_no_signal));
+					image3GType.setVisibility(View.GONE);
+				}
+
 				break;
 
 			default:
@@ -1755,7 +1773,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else {
 			mMuteState = Constant.Record.STATE_UNMUTE;
 		}
-
 	}
 
 	private void refreshRecordButton() {

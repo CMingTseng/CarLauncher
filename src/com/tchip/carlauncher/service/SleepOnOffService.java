@@ -228,6 +228,9 @@ public class SleepOnOffService extends Service {
 		// 关闭GPS
 		context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF));
 
+		// 关闭电子狗电源
+		SettingUtil.setEDogEnable(false);
+
 		// 关闭FM发射，并保存休眠前状态
 		boolean fmStateBeforeSleep = SettingUtil.isFmTransmitOn(context);
 		editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
@@ -247,7 +250,7 @@ public class SleepOnOffService extends Service {
 	 * 休眠广播触发
 	 */
 	private void deviceSleep() {
-		try {
+		try { 
 			String strSleepOn = getResources().getString(
 					R.string.device_going_sleep);
 			MyLog.e("[SleepOnOffService]deviceSleep.");
@@ -255,9 +258,6 @@ public class SleepOnOffService extends Service {
 
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
-
-			// 关闭电子狗电源
-			SettingUtil.setEDogEnable(false);
 
 			// 退出轨迹
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
