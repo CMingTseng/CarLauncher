@@ -1092,7 +1092,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
-					if (secondCount == 30) {
+					if (secondCount == Constant.Record.parkVideoLength) {
 						// 停止录像
 						if (stopRecorder() == 0) {
 							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
@@ -1931,7 +1931,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * 2.ACC上电录像 {@link BackThread}
 	 * 
-	 * 3.停车侦测，录制一个30s视频
+	 * 3.停车侦测，录制一个视频,时长:{@link Constant.Record.parkVideoLength}
 	 * 
 	 * 4.插卡自动录像
 	 */
@@ -2368,11 +2368,19 @@ public class MainActivity extends Activity implements TachographCallback,
 			Toast.makeText(getApplicationContext(), "图片保存失败",
 					Toast.LENGTH_SHORT).show();
 			MyLog.e("Record Error : ERROR_SAVE_IMAGE_FAIL");
+
+			if (MyApplication.shouldSendPathToDSA) {
+				MyApplication.shouldSendPathToDSA = false;
+
+				MyApplication.isAccOffPhotoTaking = false;
+			}
+
 			break;
 
 		case TachographCallback.ERROR_RECORDER_CLOSED:
 			MyLog.e("Record Error : ERROR_RECORDER_CLOSED");
 			break;
+
 		default:
 			break;
 		}

@@ -158,6 +158,11 @@ public interface Constant {
 		public static final boolean parkVideoLock = false;
 
 		/**
+		 * 停车侦测录像时长(s)
+		 */
+		public static final int parkVideoLength = 60;
+
+		/**
 		 * 停车侦测是否默认打开
 		 */
 		public static final boolean parkDefaultOn = true;

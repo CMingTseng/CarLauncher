@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.widget.Toast;
 
@@ -25,12 +26,13 @@ public class SleepOnOffService extends Service {
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
 	private PowerManager powerManager;
+	private WakeLock wakeLock;
 
 	/** ACC断开的时间:秒 **/
 	private int accOffCount = 0;
 
 	/** ACC断开进入深度休眠之前的时间:秒 **/
-	private final int TIME_BEFORE_SLEEP = 90;
+	private final int TIME_BEFORE_SLEEP = 70;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -60,6 +62,37 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.BT_MUSIC_PLAYING);
 		filter.addAction(Constant.Broadcast.BT_MUSIC_STOPED);
 		registerReceiver(sleepOnOffReceiver, filter);
+
+	}
+
+	/**
+	 * 获取休眠锁
+	 * 
+	 * PARTIAL_WAKE_LOCK
+	 * 
+	 * SCREEN_DIM_WAKE_LOCK
+	 * 
+	 * FULL_WAKE_LOCK
+	 * 
+	 * ON_AFTER_RELEASE
+	 */
+	private void acquireWakeLock() {
+		if (wakeLock == null) {
+			wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+					this.getClass().getCanonicalName());
+		}
+		wakeLock.acquire();
+
+	}
+
+	/**
+	 * 释放休眠锁
+	 */
+	private void releaseWakeLock() {
+		if (wakeLock != null && wakeLock.isHeld()) {
+			wakeLock.release();
+			wakeLock = null;
+		}
 	}
 
 	private SleepOnOffReceiver sleepOnOffReceiver;
@@ -124,6 +157,7 @@ public class SleepOnOffService extends Service {
 						Message message = new Message();
 						message.what = 1;
 						goingParkMonitorHandler.sendMessage(message);
+
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -136,6 +170,7 @@ public class SleepOnOffService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
+
 				if (!MyApplication.isAccOn) {
 					accOffCount++;
 				} else {
@@ -183,11 +218,29 @@ public class SleepOnOffService extends Service {
 
 		MyApplication.shouldTakePhotoWhenAccOff = true;
 
+		acquireWakeLock();
 		new Thread(new GoingParkMonitorThread()).start();
 
 		stopExternalService();
 		// }
 		accOffCount = 0;
+
+		// 关闭GPS
+		context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF));
+
+		// 关闭FM发射，并保存休眠前状态
+		boolean fmStateBeforeSleep = SettingUtil.isFmTransmitOn(context);
+		editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
+		editor.commit();
+		if (fmStateBeforeSleep) {
+			MyLog.v("[SleepReceiver]Sleep: close FM");
+			Settings.System.putString(context.getContentResolver(),
+					Constant.FMTransmit.SETTING_ENABLE, "0");
+			SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
+
+			// 通知状态栏同步图标
+			sendBroadcast(new Intent("com.tchip.FM_CLOSE_CARLAUNCHER"));
+		}
 	}
 
 	/**
@@ -197,42 +250,32 @@ public class SleepOnOffService extends Service {
 		try {
 			String strSleepOn = getResources().getString(
 					R.string.device_going_sleep);
-			Toast.makeText(getApplicationContext(), strSleepOn,
-					Toast.LENGTH_SHORT).show();
 			MyLog.e("[SleepOnOffService]deviceSleep.");
-			startSpeak(strSleepOn);
+			// startSpeak(strSleepOn);
 
 			// 进入低功耗待机
 			MyApplication.isSleeping = true;
 
-			// 通知其他应用进入休眠
-			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON));
+			// 关闭电子狗电源
+			SettingUtil.setEDogEnable(false);
+
+			// 退出轨迹
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.tchip.route"));
+
+		} catch (Exception e) {
+			MyLog.e("[SleepReceiver]Error when run deviceSleep");
+		} finally {
+			// 重置ACC下电拍照标志
+			MyApplication.isAccOffPhotoTaking = false;
 
 			// 打开飞行模式
 			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON));
 
-			// 关闭GPS
-			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF));
+			// 通知其他应用进入休眠
+			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON));
 
-			// 关闭电子狗电源
-			SettingUtil.setEDogEnable(false);
-
-			// 关闭FM发射，并保存休眠前状态
-			boolean fmStateBeforeSleep = SettingUtil.isFmTransmitOn(context);
-			editor.putBoolean("fmStateBeforeSleep", fmStateBeforeSleep);
-			editor.commit();
-			if (fmStateBeforeSleep) {
-				MyLog.v("[SleepReceiver]Sleep: close FM");
-				Settings.System.putString(context.getContentResolver(),
-						Constant.FMTransmit.SETTING_ENABLE, "0");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
-
-				// 通知状态栏同步图标
-				sendBroadcast(new Intent("com.tchip.FM_CLOSE_CARLAUNCHER"));
-			}
-
-		} catch (Exception e) {
-			MyLog.e("[SleepReceiver]Error when run deviceSleep");
+			releaseWakeLock();
 		}
 	}
 
@@ -348,7 +391,7 @@ public class SleepOnOffService extends Service {
 	 */
 	private void stopExternalService() {
 		try {
-			// 轨迹记录
+			// 轨迹记录服务
 			Intent intentRoute = new Intent();
 			intentRoute.setClassName("com.tchip.route",
 					"com.tchip.route.service.RouteRecordService");
@@ -368,13 +411,13 @@ public class SleepOnOffService extends Service {
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.autonavi.minimap"));
 
-			// 天气
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.tchip.weather"));
-
 			// 图库
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.android.gallery3d"));
+
+			// 天气
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.tchip.weather"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
