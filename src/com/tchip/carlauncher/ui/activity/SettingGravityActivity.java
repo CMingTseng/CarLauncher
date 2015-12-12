@@ -37,8 +37,8 @@ public class SettingGravityActivity extends Activity {
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_setting_gravity);
 
-		sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
 		initialLayout();

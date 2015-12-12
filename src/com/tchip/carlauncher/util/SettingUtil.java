@@ -48,10 +48,10 @@ public class SettingUtil {
 					+ setSuccess);
 
 			SharedPreferences sharedPreferences = context.getSharedPreferences(
-					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+					Constant.MySP.NAME, Context.MODE_PRIVATE);
 			Editor editor = sharedPreferences.edit();
 
-			editor.putInt("manulLightValue", brightness);
+			editor.putInt(Constant.MySP.STR_MANUL_LIGHT_VALUE, brightness);
 			editor.commit();
 		}
 	}
@@ -242,10 +242,10 @@ public class SettingUtil {
 		}
 
 		SharedPreferences sharedPreferences = context.getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+				Constant.MySP.NAME, Context.MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit();
 
-		editor.putBoolean("parkingOn", isParkingOn);
+		editor.putBoolean(Constant.MySP.STR_PARKING_ON, isParkingOn);
 		editor.commit();
 		MyLog.v("[SettingUtil]setParkingMonitor:" + isParkingOn);
 	}

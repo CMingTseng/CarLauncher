@@ -144,7 +144,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		setContentView(R.layout.activity_main);
 
 		sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+				Constant.MySP.NAME, Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
 		// 视频数据库

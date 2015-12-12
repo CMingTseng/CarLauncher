@@ -189,7 +189,7 @@ public class ChatActivity extends FragmentActivity implements OnClickListener {
 		tvHint = (TextView) findViewById(R.id.tvHint);
 
 		mSharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+				Constant.MySP.NAME, Context.MODE_PRIVATE);
 
 		drawable = new CircularProgressDrawable.Builder()
 				.setRingWidth(

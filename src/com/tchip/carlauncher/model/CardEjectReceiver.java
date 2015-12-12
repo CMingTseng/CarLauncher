@@ -46,7 +46,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 				MyApplication.isVideoCardEject = false;
 
 				SharedPreferences sharedPreferences = context
-						.getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+						.getSharedPreferences(Constant.MySP.NAME,
 								Context.MODE_PRIVATE);
 				Editor editor = sharedPreferences.edit();
 

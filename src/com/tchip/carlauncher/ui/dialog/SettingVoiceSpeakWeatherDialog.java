@@ -59,8 +59,8 @@ public class SettingVoiceSpeakWeatherDialog extends android.app.Dialog {
 	}
 
 	private void iniRadioGroup() {
-		sharedPreferences = context.getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		sharedPreferences = context.getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 		speakWeatherGroup = (RadioGroup) findViewById(R.id.speakWeatherGroup);
 		speakWeatherGroup

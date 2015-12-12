@@ -36,8 +36,8 @@ public class SettingMapFragment extends Fragment {
 			Bundle savedInstanceState) {
 		mapSettingView = inflater.inflate(R.layout.fragment_setting_map,
 				container, false);
-		preferences = getActivity().getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		preferences = getActivity().getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 
 		// 离线地图管理

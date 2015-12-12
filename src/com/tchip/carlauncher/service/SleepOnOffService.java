@@ -45,8 +45,8 @@ public class SleepOnOffService extends Service {
 
 		context = getApplicationContext();
 
-		sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
 		powerManager = (PowerManager) context
@@ -198,12 +198,10 @@ public class SleepOnOffService extends Service {
 	 */
 	private void deviceAccOff() {
 		MyApplication.isAccOn = false;
-		startSpeak("九十秒后启动停车守卫");
 
-		// if (MyApplication.shouldTakePhotoWhenAccOff
-		// || MyApplication.shouldSendPathToDSA) {
-		// // 已经在走拍照流程，不需要再次激活,Bug:不会熄屏
-		// } else {
+		if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON, true)) {
+			startSpeak("九十秒后启动停车守卫");
+		}
 
 		if (!MyApplication.isMainForeground) {
 			// 发送Home键，回到主界面
@@ -222,7 +220,7 @@ public class SleepOnOffService extends Service {
 		new Thread(new GoingParkMonitorThread()).start();
 
 		stopExternalService();
-		// }
+
 		accOffCount = 0;
 
 		// 关闭GPS
@@ -250,7 +248,7 @@ public class SleepOnOffService extends Service {
 	 * 休眠广播触发
 	 */
 	private void deviceSleep() {
-		try { 
+		try {
 			String strSleepOn = getResources().getString(
 					R.string.device_going_sleep);
 			MyLog.e("[SleepOnOffService]deviceSleep.");

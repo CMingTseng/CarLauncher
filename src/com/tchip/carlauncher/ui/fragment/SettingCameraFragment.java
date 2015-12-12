@@ -36,8 +36,8 @@ public class SettingCameraFragment extends Fragment {
 		cameraSettingView = inflater.inflate(R.layout.fragment_setting_camera,
 				container, false);
 
-		preferences = getActivity().getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		preferences = getActivity().getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 
 		// 开机自动录像

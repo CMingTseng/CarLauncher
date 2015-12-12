@@ -166,16 +166,16 @@
                 android:layout_height="@dimen/setting_item_separator_height"
                 android:layout_marginLeft="@dimen/setting_item_separator_margin"
                 android:layout_marginRight="@dimen/setting_item_separator_margin"
-                android:visibility="gone"
-                android:background="@color/setting_item_separator" />
+                android:background="@color/setting_item_separator"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layoutWeme"
                 android:layout_width="fill_parent"
-                android:visibility="gone"
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@color/setting_item_bg"
-                android:clickable="true" >
+                android:clickable="true"
+                android:visibility="gone" >
 
                 <ImageView
                     android:layout_width="35dp"
@@ -397,7 +397,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/setting_item_text_margin_left"
-                    android:text="停车侦测"
+                    android:text="停车守卫"
                     android:textColor="@color/setting_item_title_color"
                     android:textSize="@dimen/setting_item_title_text_size" />
 

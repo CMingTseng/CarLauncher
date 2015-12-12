@@ -36,7 +36,7 @@ public class LocationService extends Service {
 
 		InitLocation(LocationMode.Hight_Accuracy, "bd09ll", scanSpan, true);
 
-		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+		preferences = getSharedPreferences(Constant.MySP.NAME,
 				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 	}

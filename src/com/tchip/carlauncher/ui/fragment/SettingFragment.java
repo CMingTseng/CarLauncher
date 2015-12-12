@@ -49,22 +49,23 @@ public class SettingFragment extends Fragment {
 				container, false);
 		context = getActivity();
 
-		preferences = getActivity().getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		preferences = getActivity().getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 
 		// 开机自动录像(GONE)
 		SwitchButton switchAutoRecord = (SwitchButton) systemSettingView
 				.findViewById(R.id.switchAutoRecord);
-		switchAutoRecord
-				.setChecked(preferences.getBoolean("autoRecord", false));
+		switchAutoRecord.setChecked(preferences.getBoolean(
+				Constant.MySP.STR_AUTO_RECORD, false));
 		switchAutoRecord
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
-						editor.putBoolean("autoRecord", isChecked);
+						editor.putBoolean(Constant.MySP.STR_AUTO_RECORD,
+								isChecked);
 						editor.commit();
 					}
 				});
@@ -221,7 +222,7 @@ public class SettingFragment extends Fragment {
 	 * @return
 	 */
 	private boolean isParkingMonitorOn() {
-		return preferences.getBoolean("parkingOn",
+		return preferences.getBoolean(Constant.MySP.STR_PARKING_ON,
 				Constant.Record.parkDefaultOn);
 	}
 

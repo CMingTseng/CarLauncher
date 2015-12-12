@@ -54,8 +54,8 @@ public class SettingSystemDisplayActivity extends Activity {
 
 		context = getApplicationContext();
 
-		sharedPreferences = getSharedPreferences(
-				Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
 		// 返回

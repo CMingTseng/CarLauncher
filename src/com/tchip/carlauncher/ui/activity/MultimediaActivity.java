@@ -32,8 +32,7 @@ public class MultimediaActivity extends Activity {
 
 		setContentView(R.layout.activity_multimedia);
 
-		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
-				MODE_PRIVATE);
+		preferences = getSharedPreferences(Constant.MySP.NAME, MODE_PRIVATE);
 		editor = preferences.edit();
 		initLayout();
 	}

@@ -14,6 +14,23 @@ public interface Constant {
 	public static final String TAG = "ZMS";
 
 	/**
+	 * SharedPreferences名称
+	 */
+	public static final class MySP {
+		/** 名称 **/
+		public static final String NAME = "CarLauncher";
+
+		/** 是否开机自动录像[boolean:true] **/
+		public static final String STR_AUTO_RECORD = "autoRecord";
+
+		/** 停车侦测是否打开[boolean:true] **/
+		public static final String STR_PARKING_ON = "parkingOn";
+
+		/** 手动设置的亮度[int] **/
+		public static final String STR_MANUL_LIGHT_VALUE = "manulLightValue";
+	}
+
+	/**
 	 * 广播
 	 */
 	public static final class Broadcast {
@@ -383,12 +400,6 @@ public interface Constant {
 		public static final String API_KEY = "Tycks4ezX3hSXfRtu7TvCVTl";
 		public static final String MCODE = "6B:40:B2:47:13:F5:6A:F7:40:6A:89:84:46:53:33:47:AD:DC:C1:0C;com.tchip.carlauncher";
 	}
-
-	/**
-	 * SharedPreferences名称
-	 */
-	public static final String SHARED_PREFERENCES_NAME = "CarLauncher";
-	public static final String SHARED_PREFERENCES_SPEECH_NAME = "speech";
 
 	/**
 	 * 设置条目点击波纹速度

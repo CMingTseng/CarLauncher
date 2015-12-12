@@ -77,7 +77,7 @@ public class UserCenterActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_user_center);
 
-		preferences = getSharedPreferences(Constant.SHARED_PREFERENCES_NAME,
+		preferences = getSharedPreferences(Constant.MySP.NAME,
 				Context.MODE_PRIVATE);
 		editor = preferences.edit();
 

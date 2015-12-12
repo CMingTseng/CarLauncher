@@ -24,7 +24,7 @@ public class MyApplication extends Application {
 
 	/** 底层碰撞：需要启动录像 **/
 	public static boolean shouldCrashRecord = false;
-	
+
 	/** 录制底层碰撞视频后是否需要停止录像 **/
 	public static boolean shouldStopWhenCrashVideoSave = false;
 
@@ -138,8 +138,8 @@ public class MyApplication extends Application {
 	 */
 	private void initialCrashData() {
 		try {
-			sharedPreferences = getSharedPreferences(
-					Constant.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+			sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
+					Context.MODE_PRIVATE);
 
 			isCrashOn = sharedPreferences.getBoolean("crashOn",
 					Constant.GravitySensor.DEFAULT_ON);
