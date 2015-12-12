@@ -232,6 +232,13 @@ public class MainActivity extends Activity implements TachographCallback,
 				boolean isAirplaneOn = intent.getBooleanExtra("state", false);
 				MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
 				setAirplaneIcon(isAirplaneOn);
+				if (isAirplaneOn) {
+					imageSignalLevel.setBackground(getResources().getDrawable(
+							R.drawable.ic_qs_signal_no_signal));
+					image3GType.setVisibility(View.GONE);
+				} else {
+					new Thread(new updateNetworkIconThread()).start();
+				}
 			} else if (action.equals(Constant.Broadcast.BT_CONNECTED)) {
 				setBluetoothIcon(1);
 			} else if (action.equals(Constant.Broadcast.BT_DISCONNECTED)) {
@@ -1576,7 +1583,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				boolean shouldUpdateWifi = true;
 				while (shouldUpdateWifi) {
 					try {
-						Thread.sleep(2500);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -1645,6 +1652,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onPause() {
+		MyLog.v("[Main]onPause");
 		MyApplication.isMainForeground = false;
 		// 3G信号
 		telephonyManager.listen(myPhoneStateListener,
@@ -1668,6 +1676,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+		MyLog.v("[Main]onResume");
 		// 触摸声音
 		if (!MyApplication.isBTPlayMusic) {
 			Settings.System.putString(getContentResolver(),
@@ -1735,8 +1744,14 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
+		MyLog.v("[Main]onStop");
+		super.onStop();
+	}
 
+	@Override
+	protected void onDestroy() {
+		MyLog.v("[Main]onDestroy");
 		// 释放录像区域
 		release();
 
