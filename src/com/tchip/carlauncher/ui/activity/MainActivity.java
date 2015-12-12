@@ -1092,9 +1092,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
-					if (secondCount > Constant.Record.parkVideoLength) {
-						MyApplication.shouldStopWhenCrashVideoSave = false;
-
+					if (secondCount == Constant.Record.parkVideoLength) {
 						// 停止录像
 						if (stopRecorder() == 0) {
 							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
@@ -2056,8 +2054,11 @@ public class MainActivity extends Activity implements TachographCallback,
 					setMute(false);
 				}
 
-				AudioPlayUtil.playAudio(getApplicationContext(),
-						FILE_TYPE_VIDEO);
+				// 停车守卫播放录音
+				if (!MyApplication.shouldStopWhenCrashVideoSave) {
+					AudioPlayUtil.playAudio(getApplicationContext(),
+							FILE_TYPE_VIDEO);
+				}
 				return mMyRecorder.start();
 			}
 		}
@@ -2150,7 +2151,14 @@ public class MainActivity extends Activity implements TachographCallback,
 		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
 			MyLog.d("Record Stop");
-			AudioPlayUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
+
+			// 停车守卫不播放声音
+			if (MyApplication.shouldStopWhenCrashVideoSave) {
+				MyApplication.shouldStopWhenCrashVideoSave = false;
+			} else {
+				AudioPlayUtil.playAudio(getApplicationContext(),
+						FILE_TYPE_VIDEO);
+			}
 
 			return mMyRecorder.stop();
 		}

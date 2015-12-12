@@ -160,7 +160,7 @@ public interface Constant {
 		/**
 		 * 停车侦测录像时长(s)
 		 */
-		public static final int parkVideoLength = 60;
+		public static final int parkVideoLength = 30;
 
 		/**
 		 * 停车侦测是否默认打开

@@ -24,6 +24,9 @@ public class MyApplication extends Application {
 
 	/** 底层碰撞：需要启动录像 **/
 	public static boolean shouldCrashRecord = false;
+	
+	/** 录制底层碰撞视频后是否需要停止录像 **/
+	public static boolean shouldStopWhenCrashVideoSave = false;
 
 	/** 语音拍照 **/
 	public static boolean shouldTakeVoicePhoto = false;
@@ -33,9 +36,6 @@ public class MyApplication extends Application {
 
 	/** ACC拍照后,在onFileSave中传Path给DSA **/
 	public static boolean shouldSendPathToDSA = false;
-
-	/** 录制底层碰撞视频后是否需要停止录像 **/
-	public static boolean shouldStopWhenCrashVideoSave = false;
 
 	/** 是否正在记录轨迹 **/
 	public static boolean isRouteRecord = false;
