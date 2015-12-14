@@ -143,8 +143,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
 
-		sharedPreferences = getSharedPreferences(
-				Constant.MySP.NAME, Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
 		// 视频数据库
@@ -1037,6 +1037,25 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private int secondCount = -1;
 
+	/**
+	 * 录制时间秒钟复位:
+	 * 
+	 * 1.停止录像{@link #stopRecorder()}
+	 * 
+	 * 2.录像过程中更改录像分辨率
+	 * 
+	 * 3.录像过程中更改静音状态
+	 * 
+	 * 4.录像保存{@link #onFileSave(int, String)}
+	 * 
+	 * 5.视频保存失败{@link #onError(int)}
+	 * 
+	 */
+	private void resetRecordTimeText() {
+		secondCount = -1;
+		textRecordTime.setText("00 : 00");
+	}
+
 	public class updateRecordTimeThread implements Runnable {
 
 		@Override
@@ -1295,8 +1314,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					// 切换分辨率录像停止，需要重置时间
 					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
 					MyApplication.isVideoReording = false;
-					secondCount = -1; // 录制时间秒钟复位
-					textRecordTime.setText("00 : 00");
+					resetRecordTimeText();
 					textRecordTime.setVisibility(View.INVISIBLE);
 
 					if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
@@ -1354,8 +1372,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyApplication.shouldVideoRecordWhenChangeSize = MyApplication.isVideoReording;
 
 					if (MyApplication.isVideoReording) {
-						secondCount = -1; // 录制时间秒钟复位
-						textRecordTime.setText("00 : 00");
+						resetRecordTimeText();
 						textRecordTime.setVisibility(View.INVISIBLE);
 						MyApplication.isVideoReording = false;
 
@@ -2161,8 +2178,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	public int stopRecorder() {
-		secondCount = -1; // 录制时间秒钟复位
-		textRecordTime.setText("00 : 00");
+
+		resetRecordTimeText();
+
 		textRecordTime.setVisibility(View.INVISIBLE);
 		if (mMyRecorder != null) {
 			MyLog.d("Record Stop");
@@ -2391,11 +2409,13 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void onError(int error) {
 		switch (error) {
 		case TachographCallback.ERROR_SAVE_VIDEO_FAIL:
+
 			Toast.makeText(getApplicationContext(), "视频保存失败",
 					Toast.LENGTH_SHORT).show();
 			MyLog.e("Record Error : ERROR_SAVE_VIDEO_FAIL");
 
 			// 视频保存失败，原因：存储空间不足，清空文件夹，视频被删掉
+			resetRecordTimeText();
 			if (stopRecorder() == 0) {
 				mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 				MyApplication.isVideoReording = false;
@@ -2439,8 +2459,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public void onFileSave(int type, String path) {
 		if (type == 1) { // 视频
-			secondCount = -1; // 录制时间秒钟复位
-			textRecordTime.setText("00 : 00");
+
+			resetRecordTimeText();
 
 			StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
 
