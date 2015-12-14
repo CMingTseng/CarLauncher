@@ -3,8 +3,6 @@ package com.tchip.carlauncher.adapter;
 import java.util.ArrayList;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.fragment.SettingCameraFragment;
-import com.tchip.carlauncher.view.SampleFragment;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
