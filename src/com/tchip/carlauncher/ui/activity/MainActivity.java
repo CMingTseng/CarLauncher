@@ -1112,6 +1112,24 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
+				// 处理时间过界情况
+				switch (mIntervalState) {
+				case Constant.Record.STATE_INTERVAL_3MIN:
+					if (secondCount > 185) {
+						secondCount = 0;
+					}
+					break;
+
+				case Constant.Record.STATE_INTERVAL_1MIN:
+					if (secondCount > 65) {
+						secondCount = 0;
+					}
+					break;
+
+				default:
+					break;
+				}
+
 				secondCount++;
 				textRecordTime.setText(DateUtil
 						.getFormatTimeBySecond(secondCount));
