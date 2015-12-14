@@ -40,7 +40,7 @@
         <item name="android:windowBackground">@color/color_window_background</item>
         <item name="android:fastScrollThumbDrawable">@drawable/file_fast_scroll_handle</item>
         <item name="android:fastScrollTrackDrawable">@drawable/fast_scroll_track</item>
-    </style>
+    </style>
     -->
 
 

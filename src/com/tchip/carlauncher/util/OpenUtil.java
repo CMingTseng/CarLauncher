@@ -4,9 +4,7 @@ import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.activity.ChatActivity;
 import com.tchip.carlauncher.ui.activity.MultimediaActivity;
-import com.tchip.carlauncher.ui.activity.SettingActivity;
-import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
-import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
+import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -76,12 +74,15 @@ public class OpenUtil {
 
 		/** 流量使用情况 **/
 		SETTING_DATA_USAGE,
-		
+
 		/** 日期和时间 **/
 		SETTING_DATE,
 
 		/** 显示设置 **/
 		SETTING_DISPLAY,
+
+		/** FM发射设置 **/
+		SETTING_FM,
 
 		/** 位置 **/
 		SETTING_LOCATION,
@@ -92,8 +93,14 @@ public class OpenUtil {
 		/** 备份和重置 **/
 		SETTING_RESET,
 
+		/** 存储设置 **/
+		SETTING_STORAGE,
+
 		/** 系统设置 **/
 		SETTING_SYSTEM,
+
+		/** 用户中心 **/
+		SETTING_USER_CENTER,
 
 		/** 视频 **/
 		VIDEO,
@@ -402,11 +409,12 @@ public class OpenUtil {
 
 		case SETTING:
 			if (!ClickUtil.isQuickClick(800)) {
-				Intent intentSetting = new Intent(activity,
-						SettingActivity.class);
-				activity.startActivity(intentSetting);
-				activity.overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
+				ComponentName componentDialer = new ComponentName(
+						"com.tchip.carsetting",
+						"com.tchip.carsetting.ui.activity.MainActivity");
+				Intent intentDialer = new Intent();
+				intentDialer.setComponent(componentDialer);
+				activity.startActivity(intentDialer);
 			}
 			break;
 
@@ -436,7 +444,7 @@ public class OpenUtil {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case SETTING_DATE:
 			try {
 				activity.startActivity(new Intent(
@@ -446,10 +454,13 @@ public class OpenUtil {
 			}
 			break;
 
-		case SETTING_DISPLAY:
-			Intent intentDisplay = new Intent(activity,
-					SettingSystemDisplayActivity.class);
-			activity.startActivity(intentDisplay);
+		case SETTING_FM:
+			try {
+				activity.startActivity(new Intent(
+						"android.settings.FM_SETTINGS"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			break;
 
 		case SETTING_LOCATION:
@@ -461,18 +472,19 @@ public class OpenUtil {
 			}
 			break;
 
-		case SETTING_VOLUME:
-			// startActivity(new Intent(
-			// android.provider.Settings.ACTION_SOUND_SETTINGS));
-			Intent intentVolume = new Intent(activity,
-					SettingSystemVolumeActivity.class);
-			activity.startActivity(intentVolume);
-			break;
-
 		case SETTING_RESET:
 			try {
 				activity.startActivity(new Intent(
 						"android.settings.BACKUP_AND_RESET_SETTINGS"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case SETTING_STORAGE:
+			try {
+				activity.startActivity(new Intent(
+						android.provider.Settings.ACTION_MEMORY_CARD_SETTINGS));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -488,6 +500,12 @@ public class OpenUtil {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			break;
+
+		case SETTING_USER_CENTER:
+			Intent intentUserCenter = new Intent(activity,
+					UserCenterActivity.class);
+			activity.startActivity(intentUserCenter);
 			break;
 
 		case VIDEO:

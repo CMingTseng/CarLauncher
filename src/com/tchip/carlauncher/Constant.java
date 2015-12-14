@@ -74,11 +74,20 @@ public interface Constant {
 		public static final String BT_MUSIC_STOPED = "com.tchip.BT_MUSIC_STOPED";
 
 		/**
-		 * 语音命令
+		 * 设置同步广播,Extra:content
 		 * 
-		 * context.sendBroadcast(new
-		 * Intent("com.tchip.SPEECH_COMMAND").putExtra("command",
-		 * "take_photo"));
+		 * 1.停车守卫开关：parkOn,parkOff
+		 * 
+		 * 2.碰撞侦测，开关：crashOn,crashOff;灵敏度:crashLow,crashMiddle,crashHigh
+		 * 
+		 */
+		public static final String SETTING_SYNC = "com.tchip.SETTING_SYNC";
+
+		/**
+		 * 语音命令,Extra:command
+		 * 
+		 * 1.语音拍照：take_photo
+		 * 
 		 */
 		public static final String SPEECH_COMMAND = "com.tchip.SPEECH_COMMAND";
 

@@ -61,6 +61,7 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.SPEECH_COMMAND);
 		filter.addAction(Constant.Broadcast.BT_MUSIC_PLAYING);
 		filter.addAction(Constant.Broadcast.BT_MUSIC_STOPED);
+		filter.addAction(Constant.Broadcast.SETTING_SYNC);
 		registerReceiver(sleepOnOffReceiver, filter);
 
 	}
@@ -132,12 +133,45 @@ public class SleepOnOffService extends Service {
 
 				}
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_PLAYING)) {
-
 				MyApplication.isBTPlayMusic = true;
 
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_STOPED)) {
-
 				MyApplication.isBTPlayMusic = false;
+
+			} else if (action.equals(Constant.Broadcast.SETTING_SYNC)) {
+				String content = intent.getExtras().getString("content");
+				if ("parkOn".equals(content)) { // 停车守卫:开
+					editor.putBoolean(Constant.MySP.STR_PARKING_ON, true);
+					editor.commit();
+
+				} else if ("parkOff".equals(content)) { // 停车守卫:关
+					editor.putBoolean(Constant.MySP.STR_PARKING_ON, false);
+					editor.commit();
+
+				} else if ("crashOn".equals(content)) { // 碰撞侦测:开
+					editor.putBoolean("crashOn", true);
+					editor.commit();
+
+				} else if ("crashOff".equals(content)) { // 碰撞侦测:关
+					editor.putBoolean("crashOn", false);
+					editor.commit();
+
+				} else if ("crashLow".equals(content)) { // 碰撞侦测灵敏度:低
+					MyApplication.crashSensitive = 0;
+					editor.putInt("crashSensitive", 0);
+					editor.commit();
+
+				} else if ("crashMiddle".equals(content)) { // 碰撞侦测灵敏度:中
+					MyApplication.crashSensitive = 1;
+					editor.putInt("crashSensitive", 1);
+					editor.commit();
+
+				} else if ("crashHigh".equals(content)) { // 碰撞侦测灵敏度:高
+					MyApplication.crashSensitive = 2;
+					editor.putInt("crashSensitive", 2);
+					editor.commit();
+
+				}
 			}
 		}
 	}
