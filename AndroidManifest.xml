@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.12.12-13:20" >
+    android:versionName="2015.12.14-10:30" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -106,18 +106,6 @@
             android:name="com.tchip.carlauncher.ui.activity.SettingGravityActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.BluetoothActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.bluetooth.ClientSocketActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.OfflineBaiduMapUpdateActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.bluetooth.DiscoveryActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.tchip.carlauncher.ui.activity.MultimediaActivity"
             android:screenOrientation="landscape" />
         <activity
@@ -144,33 +132,12 @@
             android:screenOrientation="landscape"
             android:theme="@style/ThemeVolumeDialog" />
         <activity
-            android:name="com.tchip.carlauncher.ui.activity.FileRemoteControlActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.VideoListActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.tchip.carlauncher.ui.activity.FaceDetectActivity"
             android:screenOrientation="landscape" />
 
         <!-- User Center -->
         <activity
             android:name="com.tchip.carlauncher.ui.activity.UserCenterActivity"
-            android:screenOrientation="landscape" />
-
-        <!-- Traffic Stats 流量 -->
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.TrafficStatActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.TrafficChartActivity"
-            android:label="应用详情"
-            android:screenOrientation="landscape" />
-
-        <!-- 蓝牙列表 -->
-        <activity
-            android:name="com.tchip.carlauncher.ui.activity.BluetoothListActivity"
             android:screenOrientation="landscape" />
 
         <provider

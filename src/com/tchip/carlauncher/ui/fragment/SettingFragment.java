@@ -2,23 +2,23 @@ package com.tchip.carlauncher.ui.fragment;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.ui.activity.BluetoothListActivity;
 import com.tchip.carlauncher.ui.activity.SettingGravityActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemDisplayActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemUsbActivity;
 import com.tchip.carlauncher.ui.activity.SettingSystemVolumeActivity;
 import com.tchip.carlauncher.ui.activity.UserCenterActivity;
-import com.tchip.carlauncher.ui.activity.WifiListActivity;
+import com.tchip.carlauncher.ui.activity.MainActivity.updateNetworkIconThread;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.OpenUtil;
 import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.view.LayoutRipple;
 import com.tchip.carlauncher.view.SwitchButton;
 
-import android.bluetooth.BluetoothAdapter;
-import android.content.ComponentName;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
@@ -40,7 +40,10 @@ public class SettingFragment extends Fragment {
 	// private BluetoothAdapter bluetoothAdapter;
 	private WifiManager wifiManager;
 
-	private SwitchButton switchWifi, switchBluetooth, switchParking;
+	private SwitchButton switchWifi, switchParking;
+
+	/** WiFi状态监听器 **/
+	private IntentFilter wifiIntentFilter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,11 +89,6 @@ public class SettingFragment extends Fragment {
 				.findViewById(R.id.layoutRippleDisplay);
 		layoutRippleDisplay.setOnClickListener(new MyOnClickListener());
 
-		// 微密
-		RelativeLayout layoutWeme = (RelativeLayout) systemSettingView
-				.findViewById(R.id.layoutWeme);
-		layoutWeme.setOnClickListener(new MyOnClickListener());
-
 		// Wi-Fi
 		RelativeLayout layoutRippleWifi = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleWifi);
@@ -108,6 +106,13 @@ public class SettingFragment extends Fragment {
 				wifiManager.setWifiEnabled(isChecked);
 			}
 		});
+
+		wifiIntentFilter = new IntentFilter();
+		wifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		// wifiIntentFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+		wifiIntentFilter.setPriority(Integer.MAX_VALUE);
+		// 注册wifi消息处理器
+		context.registerReceiver(wifiIntentReceiver, wifiIntentFilter);
 
 		// 热点共享
 		RelativeLayout layoutWifiAp = (RelativeLayout) systemSettingView
@@ -139,29 +144,6 @@ public class SettingFragment extends Fragment {
 		RelativeLayout layoutRippleParking = (RelativeLayout) systemSettingView
 				.findViewById(R.id.layoutRippleParking);
 		layoutRippleParking.setOnClickListener(new MyOnClickListener());
-
-		// 蓝牙(GONE)
-		// RelativeLayout layoutRippleBluetooth = (RelativeLayout)
-		// systemSettingView
-		// .findViewById(R.id.layoutRippleBluetooth);
-		// layoutRippleBluetooth.setOnClickListener(new MyOnClickListener());
-		//
-		// switchBluetooth = (SwitchButton) systemSettingView
-		// .findViewById(R.id.switchBluetooth);
-		// bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		// switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
-		// switchBluetooth
-		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// if (isChecked)
-		// bluetoothAdapter.enable();
-		// else
-		// bluetoothAdapter.disable();
-		// }
-		// });
 
 		// 位置信息
 		RelativeLayout layoutRippleLocation = (RelativeLayout) systemSettingView
@@ -245,14 +227,7 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleDisplay:
-				Intent intentDisplay = new Intent(context,
-						SettingSystemDisplayActivity.class);
-				startActivity(intentDisplay);
-				break;
-
-			case R.id.layoutWeme:
-				// 微密
-				OpenUtil.openModule(getActivity(), MODULE_TYPE.WEME);
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_DISPLAY);
 				break;
 
 			case R.id.layoutRippleWifi:
@@ -260,35 +235,12 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutWifiAp:
-				// try {
-				// Intent intent = new Intent();
-				// ComponentName comp = new ComponentName(
-				// "com.android.settings",
-				// "com.android.settings.TetherSettings");
-				// intent.setComponent(comp);
-				// intent.setAction("android.intent.action.VIEW");
-				// startActivityForResult(intent, 0);
-				// } catch (Exception e) {
-				// e.printStackTrace();
-				// }
-				try {
-					startActivity(new Intent(
-							"android.settings.TETHER_WIFI_SETTINGS"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.WIFI_AP);
 				break;
 
 			case R.id.layoutRippleTraffic:
-				// Intent intentTraffic = new Intent(context,
-				// TrafficStatActivity.class);
-				// startActivity(intentTraffic);
-				try {
-					startActivity(new Intent(
-							"android.settings.DATA_USAGE_SETTINGS"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(),
+						MODULE_TYPE.SETTING_DATA_USAGE);
 				break;
 
 			case R.id.layoutGravity:
@@ -297,21 +249,8 @@ public class SettingFragment extends Fragment {
 				startActivity(intentGravity);
 				break;
 
-			case R.id.layoutRippleBluetooth:
-				// startActivity(new Intent(
-				// android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
-				Intent intentBluetooth = new Intent(context,
-						BluetoothListActivity.class);
-				startActivity(intentBluetooth);
-				break;
-
 			case R.id.layoutRippleLocation:
-				try {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_LOCATION);
 				break;
 
 			case R.id.layoutRippleStorage:
@@ -332,26 +271,11 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleDate:
-				try {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_DATE_SETTINGS));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				// ComponentName componentImage = new ComponentName(
-				// "com.android.settings", "com.android.settings.Settings");
-				// Intent intentImage = new Intent();
-				// intentImage.setComponent(componentImage);
-				// startActivity(intentImage);
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_DATE);
 				break;
 
 			case R.id.layoutRippleSound:
-				// startActivity(new Intent(
-				// android.provider.Settings.ACTION_SOUND_SETTINGS));
-				Intent intentVolume = new Intent(context,
-						SettingSystemVolumeActivity.class);
-				startActivity(intentVolume);
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_VOLUME);
 				break;
 
 			case R.id.layoutRippleFm:
@@ -363,30 +287,15 @@ public class SettingFragment extends Fragment {
 				break;
 
 			case R.id.layoutRippleReset:
-				try {
-					startActivity(new Intent(
-							"android.settings.BACKUP_AND_RESET_SETTINGS"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_RESET);
 				break;
 
 			case R.id.layoutRippleAbout:
-				try {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_ABOUT);
 				break;
 
 			case R.id.layoutRippleApp:
-				try {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				OpenUtil.openModule(getActivity(), MODULE_TYPE.SETTING_APP);
 				break;
 
 			default:
@@ -413,12 +322,48 @@ public class SettingFragment extends Fragment {
 		});
 	}
 
+	/**
+	 * WiFi状态Receiver
+	 */
+	private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int wifi_state = intent.getIntExtra("wifi_state", 0);
+
+			switch (wifi_state) {
+			case WifiManager.WIFI_STATE_ENABLED:
+			case WifiManager.WIFI_STATE_ENABLING:
+			case WifiManager.WIFI_STATE_DISABLING:
+			case WifiManager.WIFI_STATE_DISABLED:
+			case WifiManager.WIFI_STATE_UNKNOWN:
+				switchWifi.setChecked(wifiManager.isWifiEnabled());
+				break;
+			}
+		}
+	};
+
 	@Override
 	public void onResume() {
+		MyLog.v("[SettingFragment]onResume");
 		super.onResume();
-		// TODO:应该启动新线程
-		switchWifi.setChecked(wifiManager.isWifiEnabled());
-		// switchBluetooth.setChecked(bluetoothAdapter.isEnabled());
+	}
+
+	@Override
+	public void onPause() {
+		MyLog.v("[SettingFragment]onPause");
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		MyLog.v("[SettingFragment]onPause");
+
+		// 取消注册wifi消息处理器
+		if (wifiIntentReceiver != null) {
+			context.unregisterReceiver(wifiIntentReceiver);
+		}
+
+		super.onDestroy();
 	}
 
 }
