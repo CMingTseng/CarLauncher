@@ -172,9 +172,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		telephonyManager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-		// 注册wifi消息处理器
-		registerReceiver(wifiIntentReceiver, wifiIntentFilter);
-
 		// 初始化节点状态
 		initialNodeState();
 
@@ -1693,6 +1690,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		telephonyManager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_NONE);
 
+		// 取消注册wifi消息处理器
+		if (wifiIntentReceiver != null) {
+			unregisterReceiver(wifiIntentReceiver);
+		}
+
 		// 飞行模式
 		if (networkStateReceiver != null) {
 			unregisterReceiver(networkStateReceiver);
@@ -1711,70 +1713,77 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
-		MyLog.v("[Main]onResume");
-		// 触摸声音
-		if (!MyApplication.isBTPlayMusic) {
-			Settings.System.putString(getContentResolver(),
-					Settings.System.SOUND_EFFECTS_ENABLED, "1");
-		}
+		try {
+			MyLog.v("[Main]onResume");
+			// 触摸声音
+			if (!MyApplication.isBTPlayMusic) {
+				Settings.System.putString(getContentResolver(),
+						Settings.System.SOUND_EFFECTS_ENABLED, "1");
+			}
 
-		// 按HOME键将预览区域还原为小窗口
-		if (isSurfaceLarge()) {
-			updateSurfaceState();
-		}
+			// 按HOME键将预览区域还原为小窗口
+			if (isSurfaceLarge()) {
+				updateSurfaceState();
+			}
 
-		MyApplication.isMainForeground = true;
-		if (!MyApplication.isFirstLaunch) {
-			if (!MyApplication.isVideoReording
-					|| MyApplication.shouldResetRecordWhenResume) {
-				MyApplication.shouldResetRecordWhenResume = false;
-				// 重置预览区域
-				if (mCamera == null) {
-					// mHolder = holder;
-					setup();
-				} else {
-					try {
-						mCamera.lock();
-						mCamera.setPreviewDisplay(mHolder);
-						mCamera.startPreview();
-						mCamera.unlock();
-					} catch (Exception e) {
-						// e.printStackTrace();
+			MyApplication.isMainForeground = true;
+			if (!MyApplication.isFirstLaunch) {
+				if (!MyApplication.isVideoReording
+						|| MyApplication.shouldResetRecordWhenResume) {
+					MyApplication.shouldResetRecordWhenResume = false;
+					// 重置预览区域
+					if (mCamera == null) {
+						// mHolder = holder;
+						setup();
+					} else {
+						try {
+							mCamera.lock();
+							mCamera.setPreviewDisplay(mHolder);
+							mCamera.startPreview();
+							mCamera.unlock();
+						} catch (Exception e) {
+							// e.printStackTrace();
+						}
 					}
 				}
+			} else {
+				MyApplication.isFirstLaunch = false;
 			}
-		} else {
-			MyApplication.isFirstLaunch = false;
+
+			// 更新录像界面按钮状态
+			refreshRecordButton();
+			setupRecordViews();
+
+			// 3G信号
+			telephonyManager.listen(myPhoneStateListener,
+					PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+			// 注册wifi消息处理器
+			registerReceiver(wifiIntentReceiver, wifiIntentFilter);
+			// WiFi信号
+			updateWiFiState();
+
+			networkStateReceiver = new NetworkStateReceiver();
+			IntentFilter networkFilter = new IntentFilter();
+			networkFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+			networkFilter.addAction(Constant.Broadcast.BT_CONNECTED);
+			networkFilter.addAction(Constant.Broadcast.BT_DISCONNECTED);
+			registerReceiver(networkStateReceiver, networkFilter);
+			// 飞行模式
+			setAirplaneIcon(NetworkUtil
+					.isAirplaneModeOn(getApplicationContext()));
+			// 外置蓝牙
+			boolean isExtBluetoothConnected = NetworkUtil
+					.isExtBluetoothConnected(getApplicationContext());
+			if (isExtBluetoothConnected) {
+				setBluetoothIcon(1);
+			} else {
+				setBluetoothIcon(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			MyLog.e("[Main]onResume catch Exception:" + e.toString());
 		}
-
-		// 更新录像界面按钮状态
-		refreshRecordButton();
-		setupRecordViews();
-
-		// 3G信号
-		telephonyManager.listen(myPhoneStateListener,
-				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
-		// WiFi信号
-		updateWiFiState();
-
-		networkStateReceiver = new NetworkStateReceiver();
-		IntentFilter networkFilter = new IntentFilter();
-		networkFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-		networkFilter.addAction(Constant.Broadcast.BT_CONNECTED);
-		networkFilter.addAction(Constant.Broadcast.BT_DISCONNECTED);
-		registerReceiver(networkStateReceiver, networkFilter);
-		// 飞行模式
-		setAirplaneIcon(NetworkUtil.isAirplaneModeOn(getApplicationContext()));
-		// 外置蓝牙
-		boolean isExtBluetoothConnected = NetworkUtil
-				.isExtBluetoothConnected(getApplicationContext());
-		if (isExtBluetoothConnected) {
-			setBluetoothIcon(1);
-		} else {
-			setBluetoothIcon(0);
-		}
-
 		super.onResume();
 	}
 
@@ -1789,11 +1798,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyLog.v("[Main]onDestroy");
 		// 释放录像区域
 		release();
-
-		// 取消注册wifi消息处理器
-		if (wifiIntentReceiver != null) {
-			unregisterReceiver(wifiIntentReceiver);
-		}
 
 		super.onDestroy();
 	}
@@ -2476,66 +2480,75 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	@Override
 	public void onFileSave(int type, String path) {
-		if (type == 1) { // 视频
+		try {
+			if (type == 1) { // 视频
 
-			resetRecordTimeText();
+				resetRecordTimeText();
 
-			StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
+				StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
 
-			String videoName = path.split("/")[5];
-			editor.putString("sdcardPath", "/mnt/" + path.split("/")[2] + "/");
-			editor.commit();
-			int videoResolution = 720;
-			int videoLock = 0;
+				String videoName = path.split("/")[5];
+				editor.putString("sdcardPath", "/mnt/" + path.split("/")[2]
+						+ "/");
+				editor.commit();
+				int videoResolution = 720;
+				int videoLock = 0;
 
-			if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
-				videoResolution = 1080;
-			}
-			if (MyApplication.isVideoLock) {
-				videoLock = 1;
-				MyApplication.isVideoLock = false; // 还原
-				if (MyApplication.isVideoReording
-						&& MyApplication.isVideoLockSecond) {
-					MyApplication.isVideoLock = true;
-					MyApplication.isVideoLockSecond = false; // 不录像时修正加锁图标
+				if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
+					videoResolution = 1080;
+				}
+				if (MyApplication.isVideoLock) {
+					videoLock = 1;
+					MyApplication.isVideoLock = false; // 还原
+					if (MyApplication.isVideoReording
+							&& MyApplication.isVideoLockSecond) {
+						MyApplication.isVideoLock = true;
+						MyApplication.isVideoLockSecond = false; // 不录像时修正加锁图标
+					}
+				}
+				setupRecordViews(); // 更新录制按钮状态
+				DriveVideo driveVideo = new DriveVideo(videoName, videoLock,
+						videoResolution);
+				videoDb.addDriveVideo(driveVideo);
+
+				MyLog.v("[onFileSave]videoLock:" + videoLock
+						+ ", isVideoLockSecond:"
+						+ MyApplication.isVideoLockSecond);
+			} else { // 图片
+				Toast.makeText(getApplicationContext(),
+						getResources().getString(R.string.photo_save),
+						Toast.LENGTH_SHORT).show();
+
+				writeExif(path);
+
+				if (MyApplication.shouldSendPathToDSA) {
+					MyApplication.shouldSendPathToDSA = false;
+					String[] picPaths = new String[2]; // 第一张保存前置的图片路径
+														// ；第二张保存后置的，如无可以为空
+					picPaths[0] = path;
+					picPaths[1] = "";
+					Intent intent = new Intent(Constant.Broadcast.SEND_PIC_PATH);
+					intent.putExtra("picture", picPaths);
+					sendBroadcast(intent);
+
+					MyApplication.isAccOffPhotoTaking = false;
 				}
 			}
-			setupRecordViews(); // 更新录制按钮状态
-			DriveVideo driveVideo = new DriveVideo(videoName, videoLock,
-					videoResolution);
-			videoDb.addDriveVideo(driveVideo);
 
-			MyLog.v("[onFileSave]videoLock:" + videoLock
-					+ ", isVideoLockSecond:" + MyApplication.isVideoLockSecond);
-		} else { // 图片
-			Toast.makeText(getApplicationContext(),
-					getResources().getString(R.string.photo_save),
-					Toast.LENGTH_SHORT).show();
+			// 更新Media Database
+			sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+					Uri.parse("file://" + path)));
+			MyLog.d("[onFileSave] File Save, Type=" + type + ",Save path:"
+					+ path);
 
-			writeExif(path);
-
-			if (MyApplication.shouldSendPathToDSA) {
-				MyApplication.shouldSendPathToDSA = false;
-				String[] picPaths = new String[2]; // 第一张保存前置的图片路径
-													// ；第二张保存后置的，如无可以为空
-				picPaths[0] = path;
-				picPaths[1] = "";
-				Intent intent = new Intent(Constant.Broadcast.SEND_PIC_PATH);
-				intent.putExtra("picture", picPaths);
-				sendBroadcast(intent);
-
-				MyApplication.isAccOffPhotoTaking = false;
+			if (!MyApplication.isVideoReording) {
+				// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
+				CheckErrorFile(); // TEST
 			}
-		}
 
-		// 更新Media Database
-		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-				Uri.parse("file://" + path)));
-		MyLog.d("[onFileSave] File Save, Type=" + type + ",Save path:" + path);
-
-		if (!MyApplication.isVideoReording) {
-			// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
-			CheckErrorFile(); // TEST
+		} catch (Exception e) {
+			e.printStackTrace();
+			MyLog.e("[Main]onFileSave catch Exception:" + e.toString());
 		}
 	}
 
