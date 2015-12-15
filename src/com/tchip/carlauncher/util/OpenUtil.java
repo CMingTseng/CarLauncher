@@ -171,31 +171,22 @@ public class OpenUtil {
 
 		case EDOG:
 			if (!ClickUtil.isQuickClick(800)) {
-				if (1 == SettingUtil.getAccStatus()) {
-					// 打开GPS
-					activity.sendBroadcast(new Intent(
-							"tchip.intent.action.ACTION_GPS_ON"));
+				// 打开GPS
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON"));
 
-					SettingUtil.setEDogEnable(true);
-					try {
-						ComponentName componentEDog = new ComponentName(
-								"entry.dsa2014", "entry.dsa2014.MainActivity");
-						Intent intentEDog = new Intent();
-						intentEDog.setComponent(componentEDog);
-						activity.startActivity(intentEDog);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					activity.overridePendingTransition(
-							R.anim.zms_translate_up_out,
-							R.anim.zms_translate_up_in);
-				} else {
-					SettingUtil.setEDogEnable(false);
-					String strNoAcc = "正在休眠";
-					Toast.makeText(activity, strNoAcc, Toast.LENGTH_SHORT)
-							.show();
-					startSpeak(activity, strNoAcc);
+				// SettingUtil.setEDogEnable(true);
+				try {
+					ComponentName componentEDog = new ComponentName(
+							"entry.dsa2014", "entry.dsa2014.MainActivity");
+					Intent intentEDog = new Intent();
+					intentEDog.setComponent(componentEDog);
+					activity.startActivity(intentEDog);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+				activity.overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 			}
 			break;
 
