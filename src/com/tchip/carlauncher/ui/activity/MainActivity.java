@@ -906,10 +906,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			imageMessage.setOnClickListener(new MyOnClickListener());
 		}
 
-		// 设置
-		ImageView imageSetting = (ImageView) findViewById(R.id.imageSetting);
-		imageSetting.setOnClickListener(new MyOnClickListener());
-
 		// HorizontalScrollView，左右两侧阴影
 		imageShadowLeft = (ImageView) findViewById(R.id.imageShadowLeft);
 		imageShadowRight = (ImageView) findViewById(R.id.imageShadowRight);
@@ -1479,10 +1475,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageMessage:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MMS);
-				break;
-
-			case R.id.imageSetting:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.SETTING);
 				break;
 
 			case R.id.layoutWiFi:

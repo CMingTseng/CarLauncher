@@ -84,7 +84,7 @@ public class SensorWatchService extends Service {
 							MyApplication.isVideoLock = true;
 							MyApplication.isCrashed = true;
 							startSpeak(getResources().getString(
-									R.string.lock_video_in_case_crash));
+									R.string.video_lock));
 							MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
 									+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
 						}

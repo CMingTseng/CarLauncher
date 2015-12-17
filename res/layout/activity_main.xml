@@ -177,32 +177,6 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/layoutVoiceChat"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/imageVoiceChat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_voice_chat" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_chat"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >
@@ -303,31 +277,6 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/imageNearSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_launcher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_near_search"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >
 
                 <ImageView
@@ -345,31 +294,6 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_drive_route"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/imageRoutePlan"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_launcher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_route_plan"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -444,31 +368,6 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_message"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/layoutSetting"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/imageSetting"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_setting" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_setting"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
