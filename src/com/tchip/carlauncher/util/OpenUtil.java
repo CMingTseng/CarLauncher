@@ -2,15 +2,12 @@ package com.tchip.carlauncher.util;
 
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.service.SpeakService;
-import com.tchip.carlauncher.ui.activity.ChatActivity;
 import com.tchip.carlauncher.ui.activity.MultimediaActivity;
-import com.tchip.carlauncher.ui.activity.UserCenterActivity;
 
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 public class OpenUtil {
 
@@ -121,14 +118,6 @@ public class OpenUtil {
 	public static void openModule(Activity activity, MODULE_TYPE moduleTye) {
 		switch (moduleTye) {
 		case CHAT:
-			if (!ClickUtil.isQuickClick(800)) {
-				Intent intentVoiceChat;
-				// 讯飞语音
-				intentVoiceChat = new Intent(activity, ChatActivity.class);
-				activity.startActivity(intentVoiceChat);
-				activity.overridePendingTransition(R.anim.zms_translate_up_out,
-						R.anim.zms_translate_up_in);
-			}
 			break;
 
 		case DEVICE_TEST:
@@ -494,9 +483,14 @@ public class OpenUtil {
 			break;
 
 		case SETTING_USER_CENTER:
-			Intent intentUserCenter = new Intent(activity,
-					UserCenterActivity.class);
-			activity.startActivity(intentUserCenter);
+			if (!ClickUtil.isQuickClick(800)) {
+				ComponentName componentDialer = new ComponentName(
+						"com.tchip.usercenter",
+						"com.tchip.usercenter.ui.activity.MainActivity");
+				Intent intentDialer = new Intent();
+				intentDialer.setComponent(componentDialer);
+				activity.startActivity(intentDialer);
+			}
 			break;
 
 		case VIDEO:

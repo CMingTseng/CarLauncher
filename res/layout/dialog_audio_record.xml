@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/imageRecord"
-            android:src="@drawable/icon_volume_1" />
+            android:src="@drawable/ic_launcher" />
 
         <ImageView
             android:id="@+id/imageError"

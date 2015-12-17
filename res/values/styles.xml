@@ -31,19 +31,6 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <!-- File Manager -->
-    <!-- Application theme. -->
-    <!--
-    <style name="AppTheme" parent="AppBaseTheme">
-        <item name="android:actionBarStyle">@style/actionbarStyle</item>
-        <item name="android:actionModeBackground">@color/accent_color</item>
-        <item name="android:windowBackground">@color/color_window_background</item>
-        <item name="android:fastScrollThumbDrawable">@drawable/file_fast_scroll_handle</item>
-        <item name="android:fastScrollTrackDrawable">@drawable/fast_scroll_track</item>
-    </style>
-    -->
-
-
     <!-- Theme for translucent system bars -->
     <style name="AppTranslucentThemeForMain" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowActionBarOverlay">true</item>
@@ -76,29 +63,6 @@
 
     <style name="CustomActionBarSizeTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarSize">80dp</item>
-    </style>
-
-    <!-- Switch Button -->
-    <style name="MD">
-        <item name="animationVelocity">6</item>
-        <item name="insetBottom">16dp</item>
-        <item name="insetTop">16dp</item>
-        <item name="insetLeft">16dp</item>
-        <item name="insetRight">16dp</item>
-        <item name="measureFactor">1.4</item>
-        <item name="offDrawable">@drawable/md_back_off</item>
-        <item name="onDrawable">@drawable/md_back_on</item>
-        <item name="thumbDrawable">@drawable/md_thumb</item>
-        <item name="thumb_margin">-17dp</item>
-    </style>
-
-    <style name="SwitchButtonStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:paddingRight">0dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">0dp</item>
     </style>
 
     <style name="MyVolumeDialog" parent="@android:style/Theme.Holo.Light.Dialog">

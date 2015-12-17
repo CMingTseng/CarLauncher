@@ -31,32 +31,34 @@ public class ApkInstaller {
 	public void install() {
 		final Dialog dialog = new Dialog(mActivity, R.style.dialog);
 		LayoutInflater inflater = mActivity.getLayoutInflater();
-		View alertDialogView = inflater.inflate(R.layout.superman_alertdialog,
-				null);
-		dialog.setContentView(alertDialogView);
-		Button okButton = (Button) alertDialogView.findViewById(R.id.ok);
-		Button cancelButton = (Button) alertDialogView
-				.findViewById(R.id.cancel);
-		TextView comeText = (TextView) alertDialogView.findViewById(R.id.title);
-		comeText.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
-		// 确认
-		okButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-				String url = SpeechUtility.getUtility().getComponentUrl();
-				String assetsApk = "SpeechService.apk";
-				processInstall(mActivity, url, assetsApk);
-			}
-		});
-		// 取消
-		cancelButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
-		dialog.show();
+		// View alertDialogView =
+		// inflater.inflate(R.layout.superman_alertdialog,
+		// null);
+		// dialog.setContentView(alertDialogView);
+		// Button okButton = (Button) alertDialogView.findViewById(R.id.ok);
+		// Button cancelButton = (Button) alertDialogView
+		// .findViewById(R.id.cancel);
+		// TextView comeText = (TextView)
+		// alertDialogView.findViewById(R.id.title);
+		// comeText.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
+		// // 确认
+		// okButton.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// dialog.dismiss();
+		// String url = SpeechUtility.getUtility().getComponentUrl();
+		// String assetsApk = "SpeechService.apk";
+		// processInstall(mActivity, url, assetsApk);
+		// }
+		// });
+		// // 取消
+		// cancelButton.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// dialog.dismiss();
+		// }
+		// });
+		// dialog.show();
 		WindowManager windowManager = mActivity.getWindowManager();
 		Display display = windowManager.getDefaultDisplay();
 		WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();

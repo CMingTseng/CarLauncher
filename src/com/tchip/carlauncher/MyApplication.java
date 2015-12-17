@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.iflytek.cloud.SpeechUtility;
 import com.tchip.carlauncher.util.MyLog;
 
@@ -112,25 +111,6 @@ public class MyApplication extends Application {
 		}
 		super.onCreate();
 
-		/*
-		 * 百度地图SDK初始化
-		 * 
-		 * 初始化全局 context，指定 sdcard 路径，若采用默认路径，请使用initialize(Context context)
-		 * 重载函数 参数:
-		 * 
-		 * sdcardPath - sd 卡路径，请确保该路径能正常使用 context - 必须是 application context，SDK
-		 * 各组件中需要用到。
-		 */
-		// if (isMapSDExists()) {
-		// SDKInitializer.initialize(Constant.Path.SD_CARD_MAP,
-		// getApplicationContext());
-		// } else {
-		try {
-			SDKInitializer.initialize(getApplicationContext());
-		} catch (Exception e) {
-			MyLog.e("[MyApplication]SDKInitializer.initialize: Catch Exception!");
-		}
-		// }
 	}
 
 	/**
