@@ -3,6 +3,7 @@ package com.tchip.carlauncher.service;
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 
@@ -19,7 +20,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
-import android.widget.Toast;
 
 public class SleepOnOffService extends Service {
 	private Context context;
@@ -28,11 +28,17 @@ public class SleepOnOffService extends Service {
 	private PowerManager powerManager;
 	private WakeLock wakeLock;
 
+	/** ACC断开进入预备模式的时间:秒 **/
+	private int preSleepCount = 0;
+
+	/** 预备模式的时间:秒 **/
+	private final int TIME_SLEEP_CONFIRM = 2;
+
 	/** ACC断开的时间:秒 **/
 	private int accOffCount = 0;
 
 	/** ACC断开进入深度休眠之前的时间:秒 **/
-	private final int TIME_BEFORE_SLEEP = 70;
+	private final int TIME_SLEEP_GOING = 70;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -106,28 +112,49 @@ public class SleepOnOffService extends Service {
 			String action = intent.getAction();
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals(Constant.Broadcast.ACC_OFF)) {
-				deviceAccOff();
+				MyApplication.isAccOn = false;
+
+				MyApplication.isSleepConfirm = true;
+				preSleepCount = 0;
+				new Thread(new PreSleepThread()).start();
 
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApplication.isAccOn = true;
+
+				preSleepCount = 0;
+				MyApplication.isSleepConfirm = false;
+
 				deviceWake();
 				startExternalService();
 
-			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) {
-				deviceCrash();
+			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) { // 停车守卫:侦测到碰撞广播触发
+				if (MyApplication.isSleeping) {
+					MyLog.v("[GSENSOR_CRASH]Before State->shouldCrashRecord:"
+							+ MyApplication.shouldCrashRecord
+							+ ",shouldStopWhenCrashVideoSave:"
+							+ MyApplication.shouldStopWhenCrashVideoSave);
+
+					// context.sendBroadcast(new Intent("com.tchip.powerKey")
+					// .putExtra("value", "home")); // 发送Home键，回到主界面
+					// SettingUtil.lightScreen(context); // 点亮屏幕
+
+					if (MyApplication.shouldCrashRecord
+							|| MyApplication.shouldStopWhenCrashVideoSave) {
+					} else {
+						MyApplication.shouldCrashRecord = true;
+						MyApplication.shouldStopWhenCrashVideoSave = true;
+					}
+				}
 
 			} else if (action.equals(Constant.Broadcast.SPEECH_COMMAND)) {
 				String command = intent.getExtras().getString("command");
 				if ("take_photo".equals(command)) {
-					// 语言拍照
-					MyApplication.shouldTakeVoicePhoto = true;
+					MyApplication.shouldTakeVoicePhoto = true; // 语言拍照
 
-					// 发送Home键，回到主界面
 					context.sendBroadcast(new Intent("com.tchip.powerKey")
-							.putExtra("value", "home"));
+							.putExtra("value", "home")); // 发送Home键，回到主界面
 
-					// 确保屏幕点亮
-					if (!powerManager.isScreenOn()) {
+					if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 						SettingUtil.lightScreen(getApplicationContext());
 					}
 
@@ -177,6 +204,60 @@ public class SleepOnOffService extends Service {
 	}
 
 	/**
+	 * 预备休眠线程
+	 */
+	public class PreSleepThread implements Runnable {
+
+		@Override
+		public void run() {
+			synchronized (preSleepHandler) {
+				/** 激发条件:1.ACC下电 2.未进入休眠 **/
+				while (MyApplication.isSleepConfirm && !MyApplication.isAccOn
+						&& !MyApplication.isSleeping) {
+					try {
+						Thread.sleep(1000);
+						Message message = new Message();
+						message.what = 1;
+						preSleepHandler.sendMessage(message);
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+	}
+
+	final Handler preSleepHandler = new Handler() {
+
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				if (!MyApplication.isAccOn) {
+					preSleepCount++;
+				} else {
+					preSleepCount = 0;
+				}
+				MyLog.v("[ParkingMonitor]preSleepCount:" + preSleepCount);
+
+				if (preSleepCount == TIME_SLEEP_CONFIRM
+						&& !MyApplication.isAccOn && !MyApplication.isSleeping) {
+					preSleepCount = 0;
+
+					MyApplication.isSleepConfirm = false;
+					deviceAccOff();
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
+	};
+
+	/**
 	 * 90s后进入停车侦测守卫模式，期间如果ACC上电则取消
 	 */
 	public class GoingParkMonitorThread implements Runnable {
@@ -204,21 +285,17 @@ public class SleepOnOffService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-
 				if (!MyApplication.isAccOn) {
 					accOffCount++;
 				} else {
 					accOffCount = 0;
 				}
-
-				// TODO: Delete below lines
 				MyLog.v("[ParkingMonitor]accOffCount:" + accOffCount);
 
-				if (accOffCount >= TIME_BEFORE_SLEEP && !MyApplication.isAccOn
+				if (accOffCount >= TIME_SLEEP_GOING && !MyApplication.isAccOn
 						&& !MyApplication.isSleeping) {
 					deviceSleep();
 				}
-
 				break;
 
 			default:
@@ -228,22 +305,18 @@ public class SleepOnOffService extends Service {
 	};
 
 	/**
-	 * ACC下电广播触发
+	 * 执行90秒任务
 	 */
 	private void deviceAccOff() {
-		MyApplication.isAccOn = false;
-
 		if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON, true)) {
-			startSpeak("九十秒后启动停车守卫");
+			HintUtil.speakVoice(context, "九十秒后启动停车守卫");
 		}
 
 		if (!MyApplication.isMainForeground) {
 			// 发送Home键，回到主界面
 			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
 					"value", "home"));
-
-			// 确保屏幕点亮
-			if (!powerManager.isScreenOn()) {
+			if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 				SettingUtil.lightScreen(getApplicationContext());
 			}
 		}
@@ -254,14 +327,10 @@ public class SleepOnOffService extends Service {
 		new Thread(new GoingParkMonitorThread()).start();
 
 		stopExternalService();
+		accOffCount = 0; // TODO:Why?
 
-		accOffCount = 0;
-
-		// 关闭GPS
-		context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF));
-
-		// 关闭电子狗电源
-		SettingUtil.setEDogEnable(false);
+		context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF)); // 关闭GPS
+		SettingUtil.setEDogEnable(false); // 关闭电子狗电源
 
 		// 关闭FM发射，并保存休眠前状态
 		boolean fmStateBeforeSleep = SettingUtil.isFmTransmitOn(context);
@@ -272,9 +341,7 @@ public class SleepOnOffService extends Service {
 			Settings.System.putString(context.getContentResolver(),
 					Constant.FMTransmit.SETTING_ENABLE, "0");
 			SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
-
-			// 通知状态栏同步图标
-			sendBroadcast(new Intent("com.tchip.FM_CLOSE_CARLAUNCHER"));
+			sendBroadcast(new Intent("com.tchip.FM_CLOSE_CARLAUNCHER")); // 通知状态栏同步图标
 		}
 	}
 
@@ -283,29 +350,18 @@ public class SleepOnOffService extends Service {
 	 */
 	private void deviceSleep() {
 		try {
-			String strSleepOn = getResources().getString(
-					R.string.device_going_sleep);
 			MyLog.e("[SleepOnOffService]deviceSleep.");
-			// startSpeak(strSleepOn);
+			MyApplication.isSleeping = true; // 进入低功耗待机
 
-			// 进入低功耗待机
-			MyApplication.isSleeping = true;
-
-			// 退出轨迹
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.tchip.route"));
+					"value", "com.tchip.route")); // 退出轨迹
 
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceSleep");
 		} finally {
-			// 重置ACC下电拍照标志
-			MyApplication.isAccOffPhotoTaking = false;
-
-			// 打开飞行模式
-			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON));
-
-			// 通知其他应用进入休眠
-			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON));
+			MyApplication.isAccOffPhotoTaking = false; // 重置ACC下电拍照标志
+			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON)); // 打开飞行模式
+			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON)); // 通知其他应用进入休眠
 
 			releaseWakeLock();
 		}
@@ -315,7 +371,6 @@ public class SleepOnOffService extends Service {
 	 * 唤醒广播触发
 	 */
 	private void deviceWake() {
-		// if (MyApplication.isSleeping) {
 		try {
 			// 取消低功耗待机
 			MyApplication.isSleeping = false;
@@ -328,18 +383,12 @@ public class SleepOnOffService extends Service {
 			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
 			MyApplication.shouldWakeRecord = true;
 
-			// 发送Home键，回到主界面
 			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-					"value", "home"));
+					"value", "home")); // 发送Home键，回到主界面
+			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
+			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
 
-			// 关闭飞行模式
-			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF));
-
-			// 打开GPS
-			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON));
-
-			// 打开电子狗电源
-			// SettingUtil.setEDogEnable(true);
+			// SettingUtil.setEDogEnable(true); // 打开电子狗电源
 
 			// 重置FM发射状态
 			boolean fmStateBeforeSleep = sharedPreferences.getBoolean(
@@ -355,34 +404,6 @@ public class SleepOnOffService extends Service {
 			}
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceWake");
-		}
-		// }
-	}
-
-	/**
-	 * 停车守卫:侦测到碰撞广播触发
-	 */
-	private void deviceCrash() {
-		if (MyApplication.isSleeping) {
-			// 休眠时碰撞侦测，接收到碰撞，亮屏录制一段视频，然后休眠
-			MyLog.v("[GSENSOR_CRASH]Before State->shouldCrashRecord:"
-					+ MyApplication.shouldCrashRecord
-					+ ",shouldStopWhenCrashVideoSave:"
-					+ MyApplication.shouldStopWhenCrashVideoSave);
-
-			// 发送Home键，回到主界面
-			// context.sendBroadcast(new Intent("com.tchip.powerKey")
-			// .putExtra("value", "home"));
-
-			// 点亮屏幕
-			// SettingUtil.lightScreen(context);
-
-			if (MyApplication.shouldCrashRecord
-					|| MyApplication.shouldStopWhenCrashVideoSave) {
-			} else {
-				MyApplication.shouldCrashRecord = true;
-				MyApplication.shouldStopWhenCrashVideoSave = true;
-			}
 		}
 	}
 
@@ -456,19 +477,13 @@ public class SleepOnOffService extends Service {
 		}
 	}
 
-	private void startSpeak(String content) {
-		Intent intent = new Intent(getApplicationContext(), SpeakService.class);
-		intent.putExtra("content", content);
-		startService(intent);
-	}
-
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
-
 		if (sleepOnOffReceiver != null) {
 			unregisterReceiver(sleepOnOffReceiver);
 		}
+
+		super.onDestroy();
 	}
 
 }

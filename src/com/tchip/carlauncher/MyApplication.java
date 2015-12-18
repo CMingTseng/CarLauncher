@@ -14,6 +14,9 @@ public class MyApplication extends Application {
 
 	/** ACC是否连接 **/
 	public static boolean isAccOn = true;
+	
+	/** 正在执行休眠确认 **/
+	public static boolean isSleepConfirm = false;
 
 	/** 插入录像卡：需要启动录像 **/
 	public static boolean shouldMountRecord = false;
@@ -29,7 +32,7 @@ public class MyApplication extends Application {
 
 	/** 语音拍照 **/
 	public static boolean shouldTakeVoicePhoto = false;
-
+	
 	/** ACC下电:拍照 **/
 	public static boolean shouldTakePhotoWhenAccOff = false;
 
@@ -84,7 +87,7 @@ public class MyApplication extends Application {
 	 */
 	public static boolean isAccOffPhotoTaking = false;
 
-	public enum CameraState {
+	public static enum CameraState {
 		/** 未初始化 **/
 		NULL,
 
@@ -94,6 +97,23 @@ public class MyApplication extends Application {
 
 	/** 录像窗口状态 **/
 	public static CameraState cameraState = CameraState.OKAY;
+	
+	public static enum SLEEP_STATE {
+		/** 未休眠：ACC连接 **/
+		SLEEP_NONE,
+		
+		/** ACC刚断开的2秒 **/
+		SLEEP_CONFIRM,
+		
+		/** 执行90秒线程，过后休眠 **/
+		SLEEP_GOING,
+		
+		/** 休眠中 **/
+		SLEEPING
+	}
+	
+	/** 休眠状态 **/
+	public static SLEEP_STATE sleepState = SLEEP_STATE.SLEEP_NONE;
 
 	@Override
 	public void onCreate() {
