@@ -1001,9 +1001,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * 3.录像过程中更改静音状态
 	 * 
-	 * 4.录像保存{@link #onFileSave(int, String)}
-	 * 
-	 * 5.视频保存失败{@link #onError(int)}
+	 * 4.视频保存失败{@link #onError(int)}
 	 * 
 	 */
 	private void resetRecordTimeText() {
@@ -2354,6 +2352,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	@Override
+	public void onRecordingTick(long second) {
+	}
+
+	@Override
 	public void onError(int error) {
 		switch (error) {
 		case TachographCallback.ERROR_SAVE_VIDEO_FAIL:
@@ -2395,7 +2397,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 文件保存回调
+	 * 文件保存回调，注意：存在延时，不能用作重置录像跑秒时间
 	 * 
 	 * @param type
 	 *            0-图片 1-视频
@@ -2408,9 +2410,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void onFileSave(int type, String path) {
 		try {
 			if (type == 1) { // 视频
-
-				resetRecordTimeText();
-
 				StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
 
 				String videoName = path.split("/")[5];
