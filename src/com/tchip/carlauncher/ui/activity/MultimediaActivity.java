@@ -1,14 +1,11 @@
 package com.tchip.carlauncher.ui.activity;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.OpenUtil;
 import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -20,8 +17,6 @@ import android.widget.TextView;
 
 public class MultimediaActivity extends Activity {
 
-	private SharedPreferences preferences;
-	private Editor editor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +26,6 @@ public class MultimediaActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_multimedia);
-
-		preferences = getSharedPreferences(Constant.MySP.NAME, MODE_PRIVATE);
-		editor = preferences.edit();
 		initLayout();
 	}
 

@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
-import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
@@ -30,12 +29,8 @@ public class NetworkUtil {
 	public static void noNetworkHint(Context context) {
 		String strNoNetwork = context.getResources().getString(
 				R.string.hint_no_network);
-
-		Intent intent = new Intent(context, SpeakService.class);
-		intent.putExtra("content", strNoNetwork);
-		context.startService(intent);
-
-		Toast.makeText(context, strNoNetwork, Toast.LENGTH_SHORT).show();
+		HintUtil.speakVoice(context, strNoNetwork);
+		HintUtil.showToast(context, strNoNetwork);
 	}
 
 	/**
@@ -91,11 +86,9 @@ public class NetworkUtil {
 	 */
 	public static boolean isExtBluetoothOn(Context context) {
 		String btStatus = "";
-
 		try {
 			btStatus = Settings.System.getString(context.getContentResolver(),
 					"bt_enable");
-
 		} catch (Exception e) {
 
 		}

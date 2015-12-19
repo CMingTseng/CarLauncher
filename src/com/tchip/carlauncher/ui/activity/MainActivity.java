@@ -1,16 +1,6 @@
 package com.tchip.carlauncher.ui.activity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Random;
-
-import net.sourceforge.jheader.App1Header;
-import net.sourceforge.jheader.App1Header.Tag;
-import net.sourceforge.jheader.ExifFormatException;
-import net.sourceforge.jheader.JpegFormatException;
-import net.sourceforge.jheader.JpegHeaders;
-import net.sourceforge.jheader.TagFormatException;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
@@ -42,7 +32,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.hardware.Camera;
-import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -96,7 +85,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView largeVideoSize, largeVideoTime, largeVideoLock,
 			largeVideoMute, largeVideoRecord, largeVideoCamera;
 	private SurfaceHolder mHolder;
-	private TachographRecorder mMyRecorder;
+	private TachographRecorder carRecorder;
 	private Camera mCamera;
 
 	private int mResolutionState, mRecordState, mIntervalState, mPathState,
@@ -154,12 +143,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		telephonyManager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-		initialLayout(); // 初始化布局
-		initialCameraButton(); // 初始化相机按钮
-		initialNodeState(); // 初始化节点状态
-		initialService(); // 初始化服务
-		setupRecordDefaults(); // 初始化录像参数
-		setupRecordViews(); // 初始化录像布局
+		initialLayout();
+		initialCameraButton();
+		SettingUtil.initialNodeState(MainActivity.this);
+		initialService();
+		setupRecordDefaults();
+		setupRecordViews();
 
 		// 首次启动是否需要自动录像
 		if (1 == SettingUtil.getAccStatus()) {
@@ -540,14 +529,12 @@ public class MainActivity extends Activity implements TachographCallback,
 				try {
 					if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
 
-						if (!MyApplication.isMainForeground) {
-							// 发送Home键，回到主界面
+						if (!MyApplication.isMainForeground) { // 发送Home键，回到主界面
 							sendBroadcast(new Intent("com.tchip.powerKey")
 									.putExtra("value", "home"));
 						}
 
-						// 开始录像
-						new Thread(new StartRecordThread()).start();
+						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 					setupRecordViews();
 					MyLog.v("MyApplication.isVideoReording:"
@@ -1046,28 +1033,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				// 处理时间过界情况
-				switch (mIntervalState) {
-				case Constant.Record.STATE_INTERVAL_3MIN:
-					if (secondCount > 185) {
-						secondCount = 0;
-					}
-					break;
-
-				case Constant.Record.STATE_INTERVAL_1MIN:
-					if (secondCount > 65) {
-						secondCount = 0;
-					}
-					break;
-
-				default:
-					break;
-				}
-
-				secondCount++;
-				textRecordTime.setText(DateUtil
-						.getFormatTimeBySecond(secondCount));
-
+				// 处理停车守卫录像
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
 					if (secondCount == Constant.Record.parkVideoLength) {
@@ -1085,7 +1051,6 @@ public class MainActivity extends Activity implements TachographCallback,
 								releaseCameraZone();
 							}
 						}
-
 						// 熄灭屏幕,判断当前屏幕是否关闭
 						PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 						boolean isScreenOn = powerManager.isScreenOn();
@@ -1096,6 +1061,29 @@ public class MainActivity extends Activity implements TachographCallback,
 						}
 					}
 				}
+
+				// 处理时间过界情况
+				switch (mIntervalState) {
+				case Constant.Record.STATE_INTERVAL_3MIN:
+					if (secondCount > 180) {
+						secondCount = 0;
+					}
+					break;
+
+				case Constant.Record.STATE_INTERVAL_1MIN:
+					if (secondCount > 60) {
+						secondCount = 0;
+					}
+					break;
+
+				default:
+					break;
+				}
+
+				secondCount++;
+				textRecordTime.setText(DateUtil
+						.getFormatTimeBySecond(secondCount));
+
 				break;
 
 			case 2:
@@ -1118,8 +1106,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				String strVideoCardEject = getResources().getString(
 						R.string.sd_remove_badly);
-				Toast.makeText(getApplicationContext(), strVideoCardEject,
-						Toast.LENGTH_SHORT).show();
+				HintUtil.showToast(MainActivity.this, strVideoCardEject);
+
 				MyLog.e("CardEjectReceiver:Video SD Removed");
 				HintUtil.speakVoice(MainActivity.this, strVideoCardEject);
 				audioRecordDialog.showErrorDialog(strVideoCardEject);
@@ -1146,10 +1134,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				String strPowerUnconnect = getResources().getString(
 						R.string.stop_record_power_unconnect);
-				Toast.makeText(getApplicationContext(), strPowerUnconnect,
-						Toast.LENGTH_SHORT).show();
-				MyLog.e("Record Stop:power unconnect.");
+				HintUtil.showToast(MainActivity.this, strPowerUnconnect);
 				HintUtil.speakVoice(MainActivity.this, strPowerUnconnect);
+				
+				MyLog.e("Record Stop:power unconnect.");
 				audioRecordDialog.showErrorDialog(strPowerUnconnect);
 				new Thread(new dismissDialogThread()).start();
 				break;
@@ -1231,18 +1219,19 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoRecord:
 			case R.id.layoutVideoRecordSmall:
 				if (!ClickUtil.isQuickClick(1000)) {
-					if (StorageUtil.isVideoCardExists()) {
-						if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+					if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+						if (StorageUtil.isVideoCardExists()) {
 							HintUtil.speakVoice(MainActivity.this,
 									strRecordStart);
-						} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
-							HintUtil.speakVoice(MainActivity.this,
-									strRecordStop);
+							startOrStopRecord();
+						} else {
+							noVideoSDHint();
 						}
+					} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+						HintUtil.speakVoice(MainActivity.this, strRecordStop);
 						startOrStopRecord();
-					} else {
-						noVideoSDHint();
 					}
+
 				}
 				break;
 
@@ -1964,7 +1953,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return 0:成功 -1:失败
 	 */
 	public int startRecordTask() {
-		if (mMyRecorder != null) {
+		if (carRecorder != null) {
 			if (StorageUtil.deleteOldestUnlockVideo(MainActivity.this)) {
 				MyLog.d("Record Start");
 				setDirectory(Constant.Path.SDCARD_2); // 设置保存路径
@@ -1983,7 +1972,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!MyApplication.shouldStopWhenCrashVideoSave) { // 停车守卫播放录音
 					HintUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 				}
-				return mMyRecorder.start();
+				return carRecorder.start();
 			}
 		}
 		return -1;
@@ -2064,16 +2053,15 @@ public class MainActivity extends Activity implements TachographCallback,
 	public int stopRecorder() {
 		resetRecordTimeText();
 		textRecordTime.setVisibility(View.INVISIBLE);
-		if (mMyRecorder != null) {
+		if (carRecorder != null) {
 			MyLog.d("Record Stop");
-
 			// 停车守卫不播放声音
 			if (MyApplication.shouldStopWhenCrashVideoSave) {
 				MyApplication.shouldStopWhenCrashVideoSave = false;
 			} else {
 				HintUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 			}
-			return mMyRecorder.stop();
+			return carRecorder.stop();
 		}
 		return -1;
 	}
@@ -2085,8 +2073,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	public int setInterval(int seconds) {
-		if (mMyRecorder != null) {
-			return mMyRecorder.setVideoSeconds(seconds);
+		if (carRecorder != null) {
+			return carRecorder.setVideoSeconds(seconds);
 		}
 		return -1;
 	}
@@ -2098,10 +2086,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	public int setOverlap(int seconds) {
-		if (mMyRecorder != null) {
-			return mMyRecorder.setVideoOverlap(seconds);
-		}
-		return -1;
+		return (carRecorder != null) ? carRecorder.setVideoOverlap(seconds)
+				: -1;
 	}
 
 	/**
@@ -2113,10 +2099,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (!StorageUtil.isVideoCardExists()) {
 			noVideoSDHint(); // SDCard不存在
 			return -1;
-		} else if (mMyRecorder != null) {
+		} else if (carRecorder != null) {
 			setDirectory(Constant.Path.SDCARD_2); // 设置保存路径，否则会保存到内部存储
 			HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
-			return mMyRecorder.takePicture();
+			return carRecorder.takePicture();
 		}
 		return -1;
 	}
@@ -2125,8 +2111,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * ACC下电拍照
 	 */
 	public void takePhotoWhenAccOff() {
-		if (mMyRecorder != null) {
-
+		if (carRecorder != null) {
 			if (!MyApplication.isAccOffPhotoTaking) {
 				MyApplication.isAccOffPhotoTaking = true;
 				// 如果录像卡不存在，则会保存到内部存储
@@ -2134,7 +2119,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					setDirectory(Constant.Path.SDCARD_2);
 				}
 				HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
-				mMyRecorder.takePicture();
+				carRecorder.takePicture();
 			}
 			sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value",
 					"power_speech")); // 熄屏
@@ -2145,13 +2130,13 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 语音拍照
 	 */
 	public void takePhotoWhenVoiceCommand() {
-		if (mMyRecorder != null) {
+		if (carRecorder != null) {
 			// 如果录像卡不存在，则会保存到内部存储
 			if (StorageUtil.isVideoCardExists()) {
 				setDirectory(Constant.Path.SDCARD_2);
 			}
 			HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
-			mMyRecorder.takePicture();
+			carRecorder.takePicture();
 		}
 	}
 
@@ -2162,8 +2147,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	public int setDirectory(String dir) {
-		if (mMyRecorder != null) {
-			return mMyRecorder.setDirectory(dir);
+		if (carRecorder != null) {
+			return carRecorder.setDirectory(dir);
 		}
 		return -1;
 	}
@@ -2175,8 +2160,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	private int setMute(boolean mute) {
-		if (mMyRecorder != null) {
-			return mMyRecorder.setMute(mute);
+		if (carRecorder != null) {
+			return carRecorder.setMute(mute);
 		}
 		return -1;
 	}
@@ -2200,15 +2185,15 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	public int setSecondary(int state) {
 		if (state == Constant.Record.STATE_SECONDARY_DISABLE) {
-			if (mMyRecorder != null) {
-				return mMyRecorder.setSecondaryVideoEnable(false);
+			if (carRecorder != null) {
+				return carRecorder.setSecondaryVideoEnable(false);
 			}
 		} else if (state == Constant.Record.STATE_SECONDARY_ENABLE) {
-			if (mMyRecorder != null) {
-				mMyRecorder.setSecondaryVideoSize(320, 240);
-				mMyRecorder.setSecondaryVideoFrameRate(30);
-				mMyRecorder.setSecondaryVideoBiteRate(120000);
-				return mMyRecorder.setSecondaryVideoEnable(true);
+			if (carRecorder != null) {
+				carRecorder.setSecondaryVideoSize(320, 240);
+				carRecorder.setSecondaryVideoFrameRate(30);
+				carRecorder.setSecondaryVideoBiteRate(120000);
+				return carRecorder.setSecondaryVideoEnable(true);
 			}
 		}
 		return -1;
@@ -2217,38 +2202,38 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void setupRecorder() {
 		releaseRecorder();
 		try {
-			mMyRecorder = new TachographRecorder();
-			mMyRecorder.setTachographCallback(this);
-			mMyRecorder.setCamera(mCamera);
-			mMyRecorder.setClientName(this.getPackageName());
+			carRecorder = new TachographRecorder();
+			carRecorder.setTachographCallback(this);
+			carRecorder.setCamera(mCamera);
+			carRecorder.setClientName(this.getPackageName());
 			if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
-				mMyRecorder.setVideoSize(1920, 1088); // 16倍数
-				mMyRecorder.setVideoFrameRate(30);
-				mMyRecorder.setVideoBiteRate(5500000 * 2); // 8500000
+				carRecorder.setVideoSize(1920, 1088); // 16倍数
+				carRecorder.setVideoFrameRate(30);
+				carRecorder.setVideoBiteRate(5500000 * 2); // 8500000
 			} else {
-				mMyRecorder.setVideoSize(1280, 720);
-				mMyRecorder.setVideoFrameRate(30);
-				mMyRecorder.setVideoBiteRate(5500000); // 3500000
+				carRecorder.setVideoSize(1280, 720);
+				carRecorder.setVideoFrameRate(30);
+				carRecorder.setVideoBiteRate(5500000); // 3500000
 			}
 			if (mSecondaryState == Constant.Record.STATE_SECONDARY_ENABLE) {
-				mMyRecorder.setSecondaryVideoEnable(true);
-				mMyRecorder.setSecondaryVideoSize(320, 240);
-				mMyRecorder.setSecondaryVideoFrameRate(30);
-				mMyRecorder.setSecondaryVideoBiteRate(120000);
+				carRecorder.setSecondaryVideoEnable(true);
+				carRecorder.setSecondaryVideoSize(320, 240);
+				carRecorder.setSecondaryVideoFrameRate(30);
+				carRecorder.setSecondaryVideoBiteRate(120000);
 			} else {
-				mMyRecorder.setSecondaryVideoEnable(false);
+				carRecorder.setSecondaryVideoEnable(false);
 			}
 			if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
-				mMyRecorder.setVideoSeconds(1 * 60);
+				carRecorder.setVideoSeconds(1 * 60);
 			} else {
-				mMyRecorder.setVideoSeconds(3 * 60);
+				carRecorder.setVideoSeconds(3 * 60);
 			}
 			if (mOverlapState == Constant.Record.STATE_OVERLAP_FIVE) {
-				mMyRecorder.setVideoOverlap(5);
+				carRecorder.setVideoOverlap(5);
 			} else {
-				mMyRecorder.setVideoOverlap(0);
+				carRecorder.setVideoOverlap(0);
 			}
-			mMyRecorder.prepare();
+			carRecorder.prepare();
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]setupRecorder: Catch Exception!");
 		}
@@ -2261,11 +2246,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	 */
 	private void releaseRecorder() {
 		try {
-			if (mMyRecorder != null) {
-				mMyRecorder.stop();
-				mMyRecorder.close();
-				mMyRecorder.release();
-				mMyRecorder = null;
+			if (carRecorder != null) {
+				carRecorder.stop();
+				carRecorder.close();
+				carRecorder.release();
+				carRecorder = null;
 				MyLog.d("Record Release");
 			}
 		} catch (Exception e) {
@@ -2274,16 +2259,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	@Override
-	public void onRecordingTick(long second) {
-	}
-
-	@Override
 	public void onError(int error) {
 		switch (error) {
 		case TachographCallback.ERROR_SAVE_VIDEO_FAIL:
-
-			Toast.makeText(getApplicationContext(), "视频保存失败",
-					Toast.LENGTH_SHORT).show();
+			HintUtil.showToast(MainActivity.this, "视频保存失败");
 			MyLog.e("Record Error : ERROR_SAVE_VIDEO_FAIL");
 
 			// 视频保存失败，原因：存储空间不足，清空文件夹，视频被删掉
@@ -2297,8 +2276,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			break;
 
 		case TachographCallback.ERROR_SAVE_IMAGE_FAIL:
-			Toast.makeText(getApplicationContext(), "图片保存失败",
-					Toast.LENGTH_SHORT).show();
+			HintUtil.showToast(MainActivity.this, "图片保存失败");
 			MyLog.e("Record Error : ERROR_SAVE_IMAGE_FAIL");
 
 			if (MyApplication.shouldSendPathToDSA) {
@@ -2306,7 +2284,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				MyApplication.isAccOffPhotoTaking = false;
 			}
-
 			break;
 
 		case TachographCallback.ERROR_RECORDER_CLOSED:
@@ -2316,6 +2293,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onFileStart(int type, String path) {
+
 	}
 
 	/**
@@ -2362,11 +2344,10 @@ public class MainActivity extends Activity implements TachographCallback,
 						+ ", isVideoLockSecond:"
 						+ MyApplication.isVideoLockSecond);
 			} else { // 图片
-				Toast.makeText(getApplicationContext(),
-						getResources().getString(R.string.photo_save),
-						Toast.LENGTH_SHORT).show();
+				HintUtil.showToast(MainActivity.this,
+						getResources().getString(R.string.photo_save));
 
-				writeExif(path);
+				StorageUtil.writeImageExif(MainActivity.this, path);
 
 				if (MyApplication.shouldSendPathToDSA) {
 					MyApplication.shouldSendPathToDSA = false;
@@ -2392,112 +2373,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
 				CheckErrorFile(); // TEST
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			MyLog.e("[Main]onFileSave catch Exception:" + e.toString());
 		}
-	}
-
-	/**
-	 * 写入EXIF信息
-	 * 
-	 * @param imagePath
-	 */
-	private void writeExif(String imagePath) {
-		// Android Way
-		try {
-			ExifInterface exif = new ExifInterface(imagePath);
-			// 经度
-			String strLongitude = sharedPreferences.getString("longitude",
-					"0.00");
-			double intLongitude = Double.parseDouble(strLongitude);
-			exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strLongitude);
-			exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,
-					intLongitude > 0.0f ? "E" : "W");
-			// 纬度
-			String strLatitude = sharedPreferences
-					.getString("latitude", "0.00");
-			double intLatitude = Double.parseDouble(strLatitude);
-			exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strLongitude);
-			exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,
-					intLatitude > 0.0f ? "N" : "S");
-			exif.setAttribute(ExifInterface.TAG_ORIENTATION, ""
-					+ ExifInterface.ORIENTATION_NORMAL);
-
-			exif.setAttribute(ExifInterface.TAG_MAKE, "zenlane");
-			// 型号/机型
-			exif.setAttribute(ExifInterface.TAG_MODEL, "X755");
-
-			// exif.setAttribute(ExifInterface.TAG_FLASH, "1/30"); // 闪光灯
-			// exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, "5/1"); // 焦距
-			// exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE,
-			// ExifInterface.WHITEBALANCE_AUTO+"/1"); // 白平衡
-			// exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, "1/30"); //
-			// // 曝光时间
-			// exif.setAttribute(ExifInterface.TAG_ISO, "100"); // 感光度
-			// exif.setAttribute(ExifInterface.TAG_APERTURE, "2/1"); // 光圈
-
-			exif.saveAttributes();
-		} catch (Exception e) {
-			MyLog.e("[Android]Set Attribute Catch Exception:" + e.toString());
-			e.printStackTrace();
-		}
-
-		// JpegHeaders Way
-		try {
-			JpegHeaders jpegHeaders = new JpegHeaders(imagePath);
-			App1Header exifHeader = jpegHeaders.getApp1Header();
-
-			// 遍历显示EXIF
-			// SortedMap tags = exifHeader.getTags();
-			// for (Map.Entry entry : tags.entrySet()) {
-			// System.out.println(entry.getKey() + "[" + entry.getKey().name
-			// + "]:" + entry.getValue());
-			// }
-
-			// 修改EXIF
-			// exifHeader.setValue(Tag.DATETIMEORIGINAL, "2015:05:55 05:55:55");
-			exifHeader.setValue(Tag.ORIENTATION, "1"); // 浏览模式/方向:上/左
-			exifHeader.setValue(Tag.APERTUREVALUE, "22/10"); // 光圈：2.2
-			exifHeader.setValue(Tag.FOCALLENGTH, "7/2"); // 焦距：3.5mm
-			exifHeader.setValue(Tag.WHITEBALANCE, "0"); // 白平衡：自动
-			exifHeader.setValue(Tag.ISOSPEEDRATINGS, "100"); // ISO感光度：100
-			exifHeader.setValue(Tag.EXPOSURETIME, "1/30"); // 曝光时间：1/30
-			// 曝光补偿:EV值每增加1.0，相当于摄入的光线量增加一倍，如果照片过亮，要减小EV值，EV值每减小1.0，相当于摄入的光线量减小一倍
-			exifHeader.setValue(Tag.EXPOSUREBIASVALUE,
-					(1 + new Random().nextInt(10)) + "/10");
-			exifHeader.setValue(Tag.METERINGMODE, "1"); // 测光模式：平均
-			exifHeader.setValue(Tag.SATURATION,
-					"" + (5 + new Random().nextInt(10))); // 饱和度：5-15
-
-			exifHeader.setValue(Tag.FLASH, "0"); // 闪光灯：未使用
-
-			// 保存,参数：是否保存原文件为.old
-			jpegHeaders.save(false);
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			MyLog.e("[JpegHeaders]Set Attribute Error,FileNotFoundException:"
-					+ e.toString());
-		} catch (ExifFormatException e) {
-			e.printStackTrace();
-			MyLog.e("[JpegHeaders]Set Attribute Error,ExifFormatException:"
-					+ e.toString());
-		} catch (TagFormatException e) {
-			e.printStackTrace();
-			MyLog.e("[JpegHeaders]Set Attribute Error,TagFormatException:"
-					+ e.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-			MyLog.e("[JpegHeaders]Set Attribute Error,IOException:"
-					+ e.toString());
-		} catch (JpegFormatException e) {
-			e.printStackTrace();
-			MyLog.e("[JpegHeaders]Set Attribute Error,JpegFormatException:"
-					+ e.toString());
-		}
-
 	}
 
 	public void setup() {
@@ -2515,15 +2394,15 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// 如果视频全屏预览开启，返回关闭
-			if (isSurfaceLarge()) {
+
+			if (isSurfaceLarge()) { // 如果视频全屏预览开启，返回关闭
 				int widthSmall = 480;
 				int heightSmall = 270;
 				surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
 						widthSmall, heightSmall));
 				isSurfaceLarge = false;
-				// 更新HorizontalScrollView阴影
-				hsvMain.scrollTo(0, 0);
+
+				hsvMain.scrollTo(0, 0); // 更新HorizontalScrollView阴影
 				imageShadowLeft.setVisibility(View.GONE);
 				imageShadowRight.setVisibility(View.VISIBLE);
 
@@ -2532,76 +2411,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
-	}
-
-	/**
-	 * 初始化节点状态
-	 */
-	private void initialNodeState() {
-		initialFmTransmit();
-		initialAutoLight();
-		initialParkingMonitor();
-	}
-
-	/**
-	 * 启动时初始化FM发射频率节点
-	 * 
-	 * 频率范围：7600~10800:8750-10800
-	 */
-	private void initialFmTransmit() {
-		try {
-			int freq = SettingUtil.getFmFrequceny(this);
-			if (freq >= 8750 && freq <= 10800)
-				SettingUtil.setFmFrequency(this, freq);
-			else
-				SettingUtil.setFmFrequency(this, 8750);
-
-			boolean isFmOn = SettingUtil.isFmTransmitOn(MainActivity.this);
-			if (isFmOn) {
-				Settings.System.putString(getContentResolver(),
-						Constant.FMTransmit.SETTING_ENABLE, "1");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
-
-				// 通知状态栏同步图标
-				sendBroadcast(new Intent("com.tchip.FM_OPEN_CARLAUNCHER"));
-			} else {
-				Settings.System.putString(getContentResolver(),
-						Constant.FMTransmit.SETTING_ENABLE, "0");
-				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "0");
-
-				// 通知状态栏同步图标
-				sendBroadcast(new Intent("com.tchip.FM_CLOSE_CARLAUNCHER"));
-			}
-		} catch (Exception e) {
-			MyLog.e("[MainActivity]initFmTransmit: Catch Exception!");
-		}
-	}
-
-	/**
-	 * 初始化自动亮度节点
-	 */
-	private void initialAutoLight() {
-		try {
-			boolean autoScreenLight = sharedPreferences.getBoolean(
-					"autoScreenLight", Constant.Setting.AUTO_BRIGHT_DEFAULT_ON);
-			SettingUtil.setAutoLight(getApplicationContext(), autoScreenLight);
-		} catch (Exception e) {
-			MyLog.e("[MainActivity]initialAutoLight: Catch Exception!");
-		}
-	}
-
-	/**
-	 * 初始化停车侦测开关
-	 */
-	private void initialParkingMonitor() {
-		try {
-			boolean isParkingMonitorOn = sharedPreferences.getBoolean(
-					"parkingOn", Constant.Record.parkDefaultOn);
-			SettingUtil.setParkingMonitor(getApplicationContext(),
-					isParkingMonitorOn);
-		} catch (Exception e) {
-			MyLog.e("[MainActivity]initialParkingMonitor: Catch Exception!");
-		}
 	}
 
 }

@@ -18,6 +18,7 @@ import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
 import com.tchip.carlauncher.lib.iflytek.ApkInstaller;
 import com.tchip.carlauncher.lib.iflytek.TtsSettings;
+import com.tchip.carlauncher.util.MyLog;
 
 /**
  * Created by AlexZhou on 2015/4/21. 9:45
@@ -68,8 +69,7 @@ public class SpeakService extends Service {
 
 		// mInstaller = new ApkInstaller(SpeakService.this);
 
-		// 设置参数
-		setParam();
+		setParam(); // 设置参数
 		int code = mTts.startSpeaking(content, mTtsListener);
 		if (code != ErrorCode.SUCCESS) {
 			if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
@@ -87,7 +87,7 @@ public class SpeakService extends Service {
 	private InitListener mTtsInitListener = new InitListener() {
 		@Override
 		public void onInit(int code) {
-			Log.d(TAG, "InitListener init() code = " + code);
+			MyLog.d("InitListener init() code = " + code);
 			if (code != ErrorCode.SUCCESS) {
 				// 初始化失败,错误码： code
 			} else {
@@ -148,8 +148,7 @@ public class SpeakService extends Service {
 	};
 
 	private void setParam() {
-		// 清空参数
-		mTts.setParameter(SpeechConstant.PARAMS, null);
+		mTts.setParameter(SpeechConstant.PARAMS, null); // 清空参数
 		// 设置合成
 		if (mEngineType.equals(SpeechConstant.TYPE_CLOUD)) {
 			mTts.setParameter(SpeechConstant.ENGINE_TYPE,

@@ -1,12 +1,10 @@
 package com.tchip.carlauncher.util;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.activity.MultimediaActivity;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 
 public class OpenUtil {
@@ -570,12 +568,6 @@ public class OpenUtil {
 		default:
 			break;
 		}
-	}
-
-	private static void startSpeak(Context context, String content) {
-		Intent intent = new Intent(context, SpeakService.class);
-		intent.putExtra("content", content);
-		context.startService(intent);
 	}
 
 }
