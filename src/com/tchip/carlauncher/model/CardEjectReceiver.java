@@ -70,10 +70,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 		@Override
 		public void run() {
 			// 初次启动清空录像文件夹
-			String sdcardPath = Constant.Path.SDCARD_1 + File.separator; // "/storage/sdcard1/";
-			if (Constant.Record.saveVideoToSD2) {
-				sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
-			}
+			String sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 			File file = new File(sdcardPath + "tachograph/");
 			StorageUtil.RecursionDeleteFile(file);
 		}

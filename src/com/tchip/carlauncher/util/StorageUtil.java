@@ -49,10 +49,7 @@ public class StorageUtil {
 	 */
 	public static boolean isVideoCardExists() {
 		try {
-			String pathVideo = Constant.Path.SDCARD_1 + "/tachograph/";
-			if (Constant.Record.saveVideoToSD2) {
-				pathVideo = Constant.Path.SDCARD_2 + "/tachograph/";
-			}
+			String pathVideo = Constant.Path.SDCARD_2 + "/tachograph/";
 			File fileVideo = new File(pathVideo);
 			fileVideo.mkdirs();
 			File file = new File(pathVideo);
@@ -148,11 +145,7 @@ public class StorageUtil {
 			AudioRecordDialog audioRecordDialog = new AudioRecordDialog(context);
 
 			StorageUtil.deleteEmptyVideoDirectory();
-			String sdcardPath = Constant.Path.SDCARD_1 + File.separator;// "/storage/sdcard1/";
-			if (Constant.Record.saveVideoToSD2) {
-				sdcardPath = Constant.Path.SDCARD_2 + File.separator;// "/storage/sdcard2/";
-			}
-			// sharedPreferences.getString("sdcardPath","/mnt/sdcard2");
+			String sdcardPath = Constant.Path.SDCARD_2 + File.separator;// "/storage/sdcard2/";
 
 			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 			// float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);

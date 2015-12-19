@@ -199,11 +199,6 @@ public interface Constant {
 		public static final int autoRecordDelay = 2500;
 
 		/**
-		 * 录像保存到SD卡2 true:SD2 false:SD1
-		 */
-		public static final boolean saveVideoToSD2 = true;
-
-		/**
 		 * 循环录像保留空间(单位：字节B)
 		 */
 		public static final long SD_MIN_FREE_STORAGE = 500 * 1024 * 1024; // 500M
