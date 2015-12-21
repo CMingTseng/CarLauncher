@@ -148,6 +148,10 @@ public class SleepOnOffService extends Service {
 
 					if (MyApplication.shouldCrashRecord
 							|| MyApplication.shouldStopWhenCrashVideoSave) {
+						if (powerManager.isScreenOn()) {
+							// sendBroadcast(new Intent("com.tchip.powerKey")
+							// .putExtra("value", "power_speech"));
+						}
 					} else {
 						MyApplication.shouldCrashRecord = true;
 						MyApplication.shouldStopWhenCrashVideoSave = true;

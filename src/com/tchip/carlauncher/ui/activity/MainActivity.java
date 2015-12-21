@@ -527,6 +527,9 @@ public class MainActivity extends Activity implements TachographCallback,
 							sendBroadcast(new Intent("com.tchip.powerKey")
 									.putExtra("value", "home"));
 						}
+
+						setInterval(3 * 60); // TODO
+
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 					setupRecordViews();
@@ -1022,20 +1025,34 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
 					if (secondCount == Constant.Record.parkVideoLength) {
+						String videoTimeStr = sharedPreferences.getString(
+								"videoTime", "3");
+						mIntervalState = "1".equals(videoTimeStr) ? Constant.Record.STATE_INTERVAL_1MIN
+								: Constant.Record.STATE_INTERVAL_3MIN;
+
 						// 停止录像
 						if (stopRecorder() == 0) {
 							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 							MyApplication.isVideoReording = false;
+
+							setInterval(("1".equals(videoTimeStr)) ? 1 * 60
+									: 3 * 60); // 重设视频分段
+
 							setupRecordViews();
 							releaseCameraZone();
 						} else {
 							if (stopRecorder() == 0) {
 								mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 								MyApplication.isVideoReording = false;
+
+								setInterval(("1".equals(videoTimeStr)) ? 1 * 60
+										: 3 * 60); // 重设视频分段
+
 								setupRecordViews();
 								releaseCameraZone();
 							}
 						}
+
 						// 熄灭屏幕,判断当前屏幕是否关闭
 						PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 						boolean isScreenOn = powerManager.isScreenOn();

@@ -55,7 +55,7 @@ public class SensorWatchService extends Service {
 				// MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
 				// return;
 				// }
-				if (MyApplication.isCrashOn) {
+				if (MyApplication.isAccOn && MyApplication.isCrashOn) {
 					LIMIT_X = LIMIT_Y = LIMIT_Z = SettingUtil
 							.getGravityVauleBySensitive(MyApplication.crashSensitive);
 					valueX = event.values[AXIS_X];
@@ -138,13 +138,13 @@ public class SensorWatchService extends Service {
 		switch (axis) {
 		case AXIS_X:
 			return valueX;
-			
+
 		case AXIS_Y:
 			return valueY;
-			
+
 		case AXIS_Z:
 			return valueZ;
-			
+
 		default:
 			return 0f;
 		}
