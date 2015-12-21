@@ -79,14 +79,17 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView largeVideoTime;
 	/** 前后切换 **/
 	private ImageView imageCameraSwitch;
+	/** 前后摄像头切换 **/
 	private LinearLayout layoutCameraSwitch;
 
 	private IntentFilter wifiIntentFilter; // WiFi状态监听器
 	private ImageView imageWifiLevel; // WiFi状态图标
 	private ImageView imageShadowRight, imageShadowLeft;
 	private ImageView imageSignalLevel, image3GType;
-	private ImageView imageAirplane; // 飞行模式图标
-	private ImageView imageBluetooth; // 外置蓝牙图标
+	/** 飞行模式图标 **/
+	private ImageView imageAirplane;
+	/** 外置蓝牙图标 **/
+	private ImageView imageBluetooth;
 
 	private RelativeLayout layoutLargeButton;
 	private TextView textRecordTime;
@@ -287,13 +290,12 @@ public class MainActivity extends Activity implements TachographCallback,
 					message.what = 1;
 					autoHandler.sendMessage(message);
 				}
-				// 启动服务
 				Thread.sleep(1000);
 				initialService();
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				MyLog.e("[MainActivity]AutoThread: Catch Exception!");
+				MyLog.e("[Main]AutoThread: Catch Exception!");
 			}
 		}
 	}
@@ -366,17 +368,13 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (MyApplication.shouldMountRecord) {
 					MyApplication.shouldMountRecord = false;
 					if (MyApplication.isAccOn) {
-						// 点亮屏幕
-						if (!powerManager.isScreenOn()) {
+						if (!powerManager.isScreenOn()) { // 点亮屏幕
 							SettingUtil.lightScreen(getApplicationContext());
 						}
-
-						if (!MyApplication.isMainForeground) {
-							// 发送Home键，回到主界面
+						if (!MyApplication.isMainForeground) { // 发送Home键，回到主界面
 							sendBroadcast(new Intent("com.tchip.powerKey")
 									.putExtra("value", "home"));
 						}
-
 						new Thread(new RecordWhenMountThread()).start();
 					}
 				}
@@ -387,13 +385,10 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApplication.isVideoLock = true;
 					}
 					MyApplication.shouldCrashRecord = false;
-
-					if (!MyApplication.isMainForeground) {
-						// 发送Home键，回到主界面
+					if (!MyApplication.isMainForeground) { // 发送Home键，回到主界面
 						sendBroadcast(new Intent("com.tchip.powerKey")
 								.putExtra("value", "home"));
 					}
-
 					new Thread(new RecordWhenCrashThread()).start();
 				}
 
@@ -533,7 +528,6 @@ public class MainActivity extends Activity implements TachographCallback,
 							sendBroadcast(new Intent("com.tchip.powerKey")
 									.putExtra("value", "home"));
 						}
-
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 					setupRecordViews();
@@ -609,7 +603,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			update3GSignalStrength(signalStrength.getGsmSignalStrength());
 			update3GType();
-
 			super.onSignalStrengthsChanged(signalStrength);
 		}
 
@@ -770,7 +763,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoLockSmall = (LinearLayout) findViewById(R.id.layoutVideoLockSmall);
 		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
 
-		// 前后摄像头切换
 		layoutCameraSwitch = (LinearLayout) findViewById(R.id.layoutCameraSwitch);
 		layoutCameraSwitch.setOnClickListener(new MyOnClickListener());
 
@@ -806,8 +798,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		image3GType = (ImageView) findViewById(R.id.image3GType);
 		image3GType.setVisibility(View.GONE);
 
-		imageAirplane = (ImageView) findViewById(R.id.imageAirplane); // 飞行模式图标
-		imageBluetooth = (ImageView) findViewById(R.id.imageBluetooth); // 外置蓝牙图标
+		imageAirplane = (ImageView) findViewById(R.id.imageAirplane);
+		imageBluetooth = (ImageView) findViewById(R.id.imageBluetooth);
 
 		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);

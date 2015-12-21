@@ -4,6 +4,8 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
+import com.tchip.carlauncher.util.OpenUtil;
+import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 
 import android.app.Service;
@@ -30,8 +32,14 @@ public class SleepOnOffService extends Service {
 	/** ACC断开进入预备模式的时间:秒 **/
 	private int preSleepCount = 0;
 
-	/** 预备模式的时间:秒 **/
+	/** 预备睡眠模式的时间:秒 **/
 	private final int TIME_SLEEP_CONFIRM = 2;
+
+	/** ACC连接进入预备模式的时间:秒 **/
+	private int preWakeCount = 0;
+
+	/** 预备唤醒模式的时间:秒 **/
+	private final int TIME_WAKE_CONFIRM = 2;
 
 	/** ACC断开的时间:秒 **/
 	private int accOffCount = 0;
@@ -49,7 +57,6 @@ public class SleepOnOffService extends Service {
 		super.onCreate();
 
 		context = getApplicationContext();
-
 		sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
 				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
@@ -113,19 +120,23 @@ public class SleepOnOffService extends Service {
 			if (action.equals(Constant.Broadcast.ACC_OFF)) {
 				MyApplication.isAccOn = false;
 
-				MyApplication.isSleepConfirm = true;
 				preSleepCount = 0;
-				new Thread(new PreSleepThread()).start();
+				MyApplication.isSleepConfirm = true;
 
+				preWakeCount = 0;
+				MyApplication.isWakeConfirm = false;
+
+				new Thread(new PreSleepThread()).start();
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApplication.isAccOn = true;
 
 				preSleepCount = 0;
 				MyApplication.isSleepConfirm = false;
 
-				deviceWake();
-				startExternalService();
+				preWakeCount = 0;
+				MyApplication.isWakeConfirm = true;
 
+				new Thread(new PreWakeThread()).start();
 			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) { // 停车守卫:侦测到碰撞广播触发
 				if (MyApplication.isSleeping) {
 					MyLog.v("[GSENSOR_CRASH]Before State->shouldCrashRecord:"
@@ -148,7 +159,7 @@ public class SleepOnOffService extends Service {
 			} else if (action.equals(Constant.Broadcast.SPEECH_COMMAND)) {
 				String command = intent.getExtras().getString("command");
 				if ("take_photo".equals(command)) {
-					MyApplication.shouldTakeVoicePhoto = true; // 语言拍照
+					MyApplication.shouldTakeVoicePhoto = true; // 语音拍照
 
 					context.sendBroadcast(new Intent("com.tchip.powerKey")
 							.putExtra("value", "home")); // 发送Home键，回到主界面
@@ -202,9 +213,54 @@ public class SleepOnOffService extends Service {
 		}
 	}
 
-	/**
-	 * 预备休眠线程
-	 */
+	/** 预备唤醒(ACC_ON)线程 **/
+	public class PreWakeThread implements Runnable {
+
+		@Override
+		public void run() {
+			synchronized (preWakeHandler) {
+				/** 激发条件:1.ACC上电 **/
+				while (MyApplication.isWakeConfirm && MyApplication.isAccOn) {
+					try {
+						Thread.sleep(1000);
+						Message message = new Message();
+						message.what = 1;
+						preWakeHandler.sendMessage(message);
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+	}
+
+	private final Handler preWakeHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				if (MyApplication.isAccOn) {
+					preWakeCount++;
+				} else {
+					preWakeCount = 0;
+				}
+				MyLog.v("[ParkingMonitor]preWakeCount:" + preWakeCount);
+
+				if (preWakeCount == TIME_WAKE_CONFIRM && MyApplication.isAccOn) {
+					MyApplication.isWakeConfirm = false;
+					preWakeCount = 0;
+					deviceWake();
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	/** 预备休眠线程 **/
 	public class PreSleepThread implements Runnable {
 
 		@Override
@@ -242,9 +298,8 @@ public class SleepOnOffService extends Service {
 
 				if (preSleepCount == TIME_SLEEP_CONFIRM
 						&& !MyApplication.isAccOn && !MyApplication.isSleeping) {
-					preSleepCount = 0;
-
 					MyApplication.isSleepConfirm = false;
+					preSleepCount = 0;
 					deviceAccOff();
 				}
 				break;
@@ -307,6 +362,7 @@ public class SleepOnOffService extends Service {
 	 * 执行90秒任务
 	 */
 	private void deviceAccOff() {
+		accOffCount = 0;
 		if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON, true)) {
 			HintUtil.speakVoice(context, "九十秒后启动停车守卫");
 		}
@@ -326,7 +382,6 @@ public class SleepOnOffService extends Service {
 		new Thread(new GoingParkMonitorThread()).start();
 
 		stopExternalService();
-		accOffCount = 0; // TODO:Why?
 
 		context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF)); // 关闭GPS
 		SettingUtil.setEDogEnable(false); // 关闭电子狗电源
@@ -371,13 +426,10 @@ public class SleepOnOffService extends Service {
 	 */
 	private void deviceWake() {
 		try {
-			// 取消低功耗待机
-			MyApplication.isSleeping = false;
-			// 通知其他应用取消休眠
-			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF));
+			MyApplication.isSleeping = false; // 取消低功耗待机
+			startExternalService();
 
-			// 如果当前正在停车侦测录像，录满30S后不停止
-			MyApplication.shouldStopWhenCrashVideoSave = false;
+			MyApplication.shouldStopWhenCrashVideoSave = false; // 如果当前正在停车侦测录像，录满30S后不停止
 
 			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
 			MyApplication.shouldWakeRecord = true;
@@ -386,6 +438,7 @@ public class SleepOnOffService extends Service {
 					"value", "home")); // 发送Home键，回到主界面
 			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
 			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
+			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF)); // 通知其他应用取消休眠
 
 			// SettingUtil.setEDogEnable(true); // 打开电子狗电源
 
@@ -397,9 +450,7 @@ public class SleepOnOffService extends Service {
 				Settings.System.putString(context.getContentResolver(),
 						Constant.FMTransmit.SETTING_ENABLE, "1");
 				SettingUtil.SaveFileToNode(SettingUtil.nodeFmEnable, "1");
-
-				// 通知状态栏同步图标
-				sendBroadcast(new Intent("com.tchip.FM_OPEN_CARLAUNCHER"));
+				sendBroadcast(new Intent("com.tchip.FM_OPEN_CARLAUNCHER")); // 通知状态栏同步图标
 			}
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceWake");
@@ -455,21 +506,17 @@ public class SleepOnOffService extends Service {
 					"com.tchip.weather.service.TimeTickService");
 			stopService(intentWeather);
 
-			// 酷我音乐
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "cn.kuwo.kwmusiccar"));
+					"value", "cn.kuwo.kwmusiccar")); // 酷我音乐
 
-			// 高德地图
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.autonavi.minimap"));
+					"value", "com.autonavi.minimap")); // 高德地图
 
-			// 图库
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.android.gallery3d"));
+					"value", "com.android.gallery3d")); // 图库
 
-			// 天气
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.tchip.weather"));
+					"value", "com.tchip.weather")); // 天气
 
 		} catch (Exception e) {
 			e.printStackTrace();

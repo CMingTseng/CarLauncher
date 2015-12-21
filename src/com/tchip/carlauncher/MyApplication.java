@@ -17,6 +17,9 @@ public class MyApplication extends Application {
 	
 	/** 正在执行休眠确认 **/
 	public static boolean isSleepConfirm = false;
+	
+	/** 正在执行唤醒确认 **/
+	public static boolean isWakeConfirm = false;
 
 	/** 插入录像卡：需要启动录像 **/
 	public static boolean shouldMountRecord = false;
