@@ -1019,6 +1019,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1: // 处理停车守卫录像
+				secondCount++;
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
 					if (secondCount == Constant.Record.parkVideoLength) {
@@ -1047,7 +1048,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
-				secondCount++;
 				switch (mIntervalState) { // 重置时间
 				case Constant.Record.STATE_INTERVAL_3MIN:
 					if (secondCount >= 180) {
