@@ -1866,8 +1866,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							startRecordHandler.sendMessage(messageRetry);
 							return;
 						}
-					} else {
-						// 开始录像
+					} else { // 开始录像
 						Message messageRecord = new Message();
 						messageRecord.what = 1;
 						startRecordHandler.sendMessage(messageRecord);
@@ -1902,7 +1901,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						}
 					}
 				} else {
-						MyLog.e("Start Record Failed");
+					MyLog.e("Start Record Failed");
 				}
 				break;
 
@@ -2042,10 +2041,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	public int setInterval(int seconds) {
-		if (carRecorder != null) {
-			return carRecorder.setVideoSeconds(seconds);
-		}
-		return -1;
+		return (carRecorder != null) ? carRecorder.setVideoSeconds(seconds)
+				: -1;
 	}
 
 	/**
@@ -2079,25 +2076,23 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (carRecorder != null) {
 			if (!MyApplication.isAccOffPhotoTaking) {
 				MyApplication.isAccOffPhotoTaking = true;
-				// 如果录像卡不存在，则会保存到内部存储
 				if (StorageUtil.isVideoCardExists()) {
-					setDirectory(Constant.Path.SDCARD_2);
+					setDirectory(Constant.Path.SDCARD_2); // 如果录像卡不存在，则会保存到内部存储
 				}
 				HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 				carRecorder.takePicture();
 			}
-			sendBroadcast(new Intent("com.tchip.powerKey").putExtra("value",
-					"power_speech")); // 熄屏
+			if (powerManager.isScreenOn()) {
+				sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
+						"value", "power_speech")); // 熄屏
+			}
 		}
 	}
 
-	/**
-	 * 语音拍照
-	 */
+	/** 语音拍照 **/
 	public void takePhotoWhenVoiceCommand() {
 		if (carRecorder != null) {
-			// 如果录像卡不存在，则会保存到内部存储
-			if (StorageUtil.isVideoCardExists()) {
+			if (StorageUtil.isVideoCardExists()) { // 如果录像卡不存在，则会保存到内部存储
 				setDirectory(Constant.Path.SDCARD_2);
 			}
 			HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
