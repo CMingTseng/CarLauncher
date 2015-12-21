@@ -1,9 +1,7 @@
 package com.tchip.carlauncher.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,7 +11,6 @@ import android.os.IBinder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.MyLog;
@@ -141,10 +138,13 @@ public class SensorWatchService extends Service {
 		switch (axis) {
 		case AXIS_X:
 			return valueX;
+			
 		case AXIS_Y:
 			return valueY;
+			
 		case AXIS_Z:
 			return valueZ;
+			
 		default:
 			return 0f;
 		}

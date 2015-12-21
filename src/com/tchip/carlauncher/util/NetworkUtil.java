@@ -1,16 +1,13 @@
 package com.tchip.carlauncher.util;
 
 import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.service.SpeakService;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 
 public class NetworkUtil {
 

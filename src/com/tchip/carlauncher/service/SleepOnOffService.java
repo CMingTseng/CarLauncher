@@ -2,7 +2,6 @@ package com.tchip.carlauncher.service;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
-import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;

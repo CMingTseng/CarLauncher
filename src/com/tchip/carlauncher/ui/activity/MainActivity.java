@@ -57,36 +57,47 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements TachographCallback,
 		Callback {
 
 	private SharedPreferences sharedPreferences;
 	private Editor editor;
-
 	private DriveVideoDbHelper videoDb;
 
-	private SurfaceView surfaceCamera;
-	private boolean isSurfaceLarge = false;
+	/** 录像按钮 **/
+	private ImageView smallVideoRecord, largeVideoRecord;
+	/** 拍照按钮 **/
+	private ImageView smallVideoCamera, largeVideoCamera;
+	/** 加锁按钮 **/
+	private ImageView smallVideoLock, largeVideoLock;
+	/** 静音按钮 **/
+	private ImageView largeVideoMute;
+	/** 视频尺寸 **/
+	private ImageView largeVideoSize;
+	/** 视频分段 **/
+	private ImageView largeVideoTime;
+	/** 前后切换 **/
+	private ImageView imageCameraSwitch;
+	private LinearLayout layoutCameraSwitch;
 
-	private ImageView smallVideoRecord, smallVideoLock, smallVideoCamera;
+	private IntentFilter wifiIntentFilter; // WiFi状态监听器
+	private ImageView imageWifiLevel; // WiFi状态图标
+	private ImageView imageShadowRight, imageShadowLeft;
+	private ImageView imageSignalLevel, image3GType;
+	private ImageView imageAirplane; // 飞行模式图标
+	private ImageView imageBluetooth; // 外置蓝牙图标
+
 	private RelativeLayout layoutLargeButton;
 	private TextView textRecordTime;
 
-	private ImageView imageWifiLevel; // WiFi状态图标
-	private IntentFilter wifiIntentFilter; // WiFi状态监听器
-
-	private ImageView imageShadowRight, imageShadowLeft;
-
 	private HorizontalScrollView hsvMain;
 
-	// Record
-	private ImageView largeVideoSize, largeVideoTime, largeVideoLock,
-			largeVideoMute, largeVideoRecord, largeVideoCamera;
+	private Camera mCamera;
+	private SurfaceView surfaceCamera;
 	private SurfaceHolder mHolder;
 	private TachographRecorder carRecorder;
-	private Camera mCamera;
+	private boolean isSurfaceLarge = false;
 
 	private int mResolutionState, mRecordState, mIntervalState, mPathState,
 			mSecondaryState, mOverlapState, mMuteState;
@@ -96,25 +107,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			layoutVideoRecordSmall, layoutVideoCameraSmall,
 			layoutVideoLockSmall;
 
-	/** 前后摄像头切换 **/
-	private LinearLayout layoutCameraSwitch;
-	private ImageView imageCameraSwitch;
-
-	private ImageView imageSignalLevel, image3GType;
+	private AudioRecordDialog audioRecordDialog;
 
 	private TelephonyManager telephonyManager;
 	private int simState;
 	private MyPhoneStateListener myPhoneStateListener;
-
-	private ImageView imageAirplane; // 飞行模式图标
-	private ImageView imageBluetooth; // 外置蓝牙图标
-
-	private AudioRecordDialog audioRecordDialog;
-
 	private WifiManager wifiManager;
 	private ConnectivityManager connManager;
 	private NetworkInfo mWifi;
-
 	private PowerManager powerManager;
 
 	private String strRecordStop = "停止录像";
@@ -806,11 +806,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		image3GType = (ImageView) findViewById(R.id.image3GType);
 		image3GType.setVisibility(View.GONE);
 
-		// 飞行模式图标
-		imageAirplane = (ImageView) findViewById(R.id.imageAirplane);
-
-		// 外置蓝牙图标
-		imageBluetooth = (ImageView) findViewById(R.id.imageBluetooth);
+		imageAirplane = (ImageView) findViewById(R.id.imageAirplane); // 飞行模式图标
+		imageBluetooth = (ImageView) findViewById(R.id.imageBluetooth); // 外置蓝牙图标
 
 		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
@@ -991,15 +988,13 @@ public class MainActivity extends Activity implements TachographCallback,
 						updateRecordTimeHandler.sendMessage(messageVideoLock);
 					}
 
-					if (MyApplication.isVideoCardEject) {
-						// 录像时视频SD卡拔出停止录像
+					if (MyApplication.isVideoCardEject) { // 录像时视频SD卡拔出停止录像
 						MyLog.e("SD card remove badly or power unconnected, stop record!");
 						Message messageEject = new Message();
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						return;
-					} else if (!MyApplication.isPowerConnect) {
-						// 电源断开
+					} else if (!MyApplication.isPowerConnect) { // 电源断开
 						MyLog.e("Stop Record:Power is unconnected");
 						Message messagePowerUnconnect = new Message();
 						messagePowerUnconnect.what = 3;
@@ -1007,8 +1002,7 @@ public class MainActivity extends Activity implements TachographCallback,
 								.sendMessage(messagePowerUnconnect);
 						return;
 					} else if (!MyApplication.isAccOn
-							&& !MyApplication.shouldStopWhenCrashVideoSave) {
-						// ACC下电停止录像
+							&& !MyApplication.shouldStopWhenCrashVideoSave) { // ACC下电停止录像
 						MyLog.e("Stop Record:isSleeping = true");
 						Message messageSleep = new Message();
 						messageSleep.what = 5;
@@ -1032,8 +1026,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	final Handler updateRecordTimeHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case 1:
-				// 处理停车守卫录像
+			case 1: // 处理停车守卫录像
 				if (MyApplication.shouldStopWhenCrashVideoSave
 						&& MyApplication.isVideoReording) {
 					if (secondCount == Constant.Record.parkVideoLength) {
@@ -1062,16 +1055,16 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
-				// 处理时间过界情况
-				switch (mIntervalState) {
+				secondCount++;
+				switch (mIntervalState) { // 重置时间
 				case Constant.Record.STATE_INTERVAL_3MIN:
-					if (secondCount > 180) {
+					if (secondCount >= 180) {
 						secondCount = 0;
 					}
 					break;
 
 				case Constant.Record.STATE_INTERVAL_1MIN:
-					if (secondCount > 60) {
+					if (secondCount >= 60) {
 						secondCount = 0;
 					}
 					break;
@@ -1080,26 +1073,22 @@ public class MainActivity extends Activity implements TachographCallback,
 					break;
 				}
 
-				secondCount++;
 				textRecordTime.setText(DateUtil
 						.getFormatTimeBySecond(secondCount));
 
 				break;
 
-			case 2:
-				// SD卡异常移除：停止录像
+			case 2: // SD卡异常移除：停止录像
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
 					setupRecordViews();
-
 					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
 						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApplication.isVideoReording = false;
 						setupRecordViews();
-
 						releaseCameraZone();
 					}
 				}
@@ -1114,8 +1103,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				new Thread(new dismissDialogThread()).start();
 				break;
 
-			case 3:
-				// 电源断开，停止录像
+			case 3: // 电源断开，停止录像
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
@@ -1136,7 +1124,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						R.string.stop_record_power_unconnect);
 				HintUtil.showToast(MainActivity.this, strPowerUnconnect);
 				HintUtil.speakVoice(MainActivity.this, strPowerUnconnect);
-				
+
 				MyLog.e("Record Stop:power unconnect.");
 				audioRecordDialog.showErrorDialog(strPowerUnconnect);
 				new Thread(new dismissDialogThread()).start();
@@ -1158,8 +1146,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				setupRecordViews();
 				break;
 
-			case 5:
-				// 进入休眠，停止录像
+			case 5: // 进入休眠，停止录像
 				if (stopRecorder() == 0) {
 					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApplication.isVideoReording = false;
@@ -1478,15 +1465,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordViews();
 	}
 
-	/**
-	 * WiFi状态Receiver
-	 */
+	/** WiFi状态Receiver **/
 	private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int wifi_state = intent.getIntExtra("wifi_state", 0);
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
-					.getConnectionInfo().getRssi();// Math.abs()
+					.getConnectionInfo().getRssi(); // Math.abs()
 			updateWiFiState();
 			MyLog.v("wifiIntentReceiver, Wifi Level:" + level);
 
@@ -1496,16 +1481,14 @@ public class MainActivity extends Activity implements TachographCallback,
 				new Thread(new updateNetworkIconThread()).start();
 				break;
 
-			case WifiManager.WIFI_STATE_ENABLING:
-				updateWiFiState();
-				new Thread(new updateNetworkIconThread()).start();
-				break;
-
-			case WifiManager.WIFI_STATE_DISABLING:
-				// quickWifi.setImageResource(R.drawable.quick_icon_wifi_offing);
 			case WifiManager.WIFI_STATE_DISABLED:
 			case WifiManager.WIFI_STATE_UNKNOWN:
 				updateWiFiState();
+				break;
+
+			case WifiManager.WIFI_STATE_ENABLING:
+			case WifiManager.WIFI_STATE_DISABLING:
+			default:
 				break;
 			}
 		}
@@ -1545,24 +1528,20 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (msg.what) {
 			case 1:
 				updateWiFiState();
-
 				// 3G TODO:
 				simState = telephonyManager.getSimState();
 				MyLog.v("[update3GState]SIM State:" + simState);
-
 				if (NetworkUtil.isAirplaneModeOn(getApplicationContext())) {
 					imageSignalLevel.setBackground(getResources().getDrawable(
 							R.drawable.ic_qs_signal_no_signal));
 					image3GType.setVisibility(View.GONE);
 				} else if (simState == TelephonyManager.SIM_STATE_READY) {
-
 				} else if (simState == TelephonyManager.SIM_STATE_UNKNOWN
 						|| simState == TelephonyManager.SIM_STATE_ABSENT) {
 					imageSignalLevel.setBackground(getResources().getDrawable(
 							R.drawable.ic_qs_signal_no_signal));
 					image3GType.setVisibility(View.GONE);
 				}
-
 				break;
 
 			default:

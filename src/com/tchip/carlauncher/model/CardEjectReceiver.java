@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApplication;
-import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.util.StorageUtil;
 
 import android.content.BroadcastReceiver;
@@ -16,11 +15,8 @@ import android.util.Log;
 
 public class CardEjectReceiver extends BroadcastReceiver {
 
-	private Context context;
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		this.context = context;
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_MEDIA_EJECT)
 				|| action.equals(Intent.ACTION_MEDIA_BAD_REMOVAL)
@@ -35,7 +31,6 @@ public class CardEjectReceiver extends BroadcastReceiver {
 					"value", "music_kuwo"));
 
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
-
 			// 插入录像卡自动录像
 			if ("/storage/sdcard2".equals(intent.getData().getPath())
 					&& MyApplication.isAccOn) {
@@ -51,9 +46,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 				Editor editor = sharedPreferences.edit();
 
 				if (sharedPreferences.getBoolean("isFirstLaunch", true)) {
-
 					new Thread(new DeleteVideoDirThread()).start();
-
 					Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
 
 					editor.putBoolean("isFirstLaunch", false);
@@ -74,13 +67,6 @@ public class CardEjectReceiver extends BroadcastReceiver {
 			File file = new File(sdcardPath + "tachograph/");
 			StorageUtil.RecursionDeleteFile(file);
 		}
-
-	}
-
-	private void startSpeak(String content) {
-		Intent intent = new Intent(context, SpeakService.class);
-		intent.putExtra("content", content);
-		context.startService(intent);
 	}
 
 }
