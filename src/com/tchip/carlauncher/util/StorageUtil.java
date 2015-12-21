@@ -54,11 +54,7 @@ public class StorageUtil {
 		return blockSize * availableBlocks;
 	}
 
-	/**
-	 * 录像SD卡是否存在
-	 * 
-	 * @return
-	 */
+	/** 录像SD卡是否存在 **/
 	public static boolean isVideoCardExists() {
 		try {
 			String pathVideo = Constant.Path.SDCARD_2 + "/tachograph/";
@@ -75,11 +71,7 @@ public class StorageUtil {
 		return true;
 	}
 
-	/**
-	 * 地图SD卡是否存在
-	 * 
-	 * @return
-	 */
+	/** 地图SD卡是否存在 **/
 	public boolean isMapSDExists() {
 		try {
 			String pathVideo = Constant.Path.SD_CARD_MAP + "/BaiduMapSDK/";
@@ -105,7 +97,9 @@ public class StorageUtil {
 	public static void RecursionDeleteFile(File file) {
 		try {
 			if (file.isFile()) {
-				file.delete();
+				if (!file.getName().startsWith(".")) { // 不删除正在录制的视频
+					file.delete();
+				}
 				return;
 			}
 			if (file.isDirectory()) {
@@ -124,9 +118,7 @@ public class StorageUtil {
 		}
 	}
 
-	/**
-	 * 删除空视频文件夹
-	 */
+	/** 删除空视频文件夹 **/
 	public static void deleteEmptyVideoDirectory() {
 		File fileRoot = new File(Constant.Path.SDCARD_2 + File.separator
 				+ "tachograph/");
@@ -148,7 +140,7 @@ public class StorageUtil {
 	 * 
 	 * 1.开启录像 {@link MainActivity#startRecordTask}
 	 * 
-	 * 2.文件保存回调{@link #onFileSave}
+	 * 2.文件保存回调{@link MainActivity#onFileSave}
 	 */
 	public static boolean deleteOldestUnlockVideo(Context context) {
 		try {
@@ -189,8 +181,7 @@ public class StorageUtil {
 					if (oldestVideoId == -1) {
 
 						if (MyApplication.isVideoReording) {
-							// TODO:停止录像
-							// stopRecorder();
+							// stopRecorder(); // TODO:停止录像
 						}
 						/**
 						 * 有一种情况：数据库中无视频信息。导致的原因：
@@ -214,7 +205,7 @@ public class StorageUtil {
 
 							audioRecordDialog.showErrorDialog(strNoStorage);
 							// new Thread(new dismissDialogThread()).start();
-							startSpeak(context, strNoStorage);
+							HintUtil.speakVoice(context, strNoStorage);
 
 							return false;
 						}
@@ -223,7 +214,7 @@ public class StorageUtil {
 						String strStorageFull = context.getResources()
 								.getString(
 										R.string.storage_full_and_delete_lock);
-						startSpeak(context, strStorageFull);
+						HintUtil.speakVoice(context, strStorageFull);
 						Toast.makeText(context, strStorageFull,
 								Toast.LENGTH_SHORT).show();
 
@@ -242,8 +233,7 @@ public class StorageUtil {
 										+ f.getName() + " Filed!!! Try:" + i);
 							}
 						}
-						// 删除数据库记录
-						videoDb.deleteDriveVideoById(oldestVideoId);
+						videoDb.deleteDriveVideoById(oldestVideoId); // 删除数据库记录
 					}
 				}
 				// 更新剩余空间
@@ -262,49 +252,37 @@ public class StorageUtil {
 		}
 	}
 
-	private static void startSpeak(Context context, String content) {
-		Intent intent = new Intent(context, SpeakService.class);
-		intent.putExtra("content", content);
-		context.startService(intent);
-	}
-
 	/**
 	 * 删除数据库中不存在的错误视频文件
 	 * 
 	 * @param file
 	 */
 	public static void RecursionCheckFile(Context context, File file) {
-		if (MyApplication.isVideoReording) {
-			// 开始录像，终止删除
-			MyLog.v("[StorageUtil]RecursionCheckFile-Stop in case of isVideoReording == true");
-			return;
-		} else {
-			// 视频数据库
-			DriveVideoDbHelper videoDb = new DriveVideoDbHelper(context);
-			try {
-				if (file.isFile() && !file.getName().endsWith(".jpg")) {
-					if (!videoDb.isVideoExist(file.getName())) {
-						file.delete();
-						MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File:"
-								+ file.getName());
-					}
+		DriveVideoDbHelper videoDb = new DriveVideoDbHelper(context); // 视频数据库
+		try {
+			if (file.isFile() && !file.getName().endsWith(".jpg")
+					&& !file.getName().startsWith(".")) {
+				if (!videoDb.isVideoExist(file.getName())) {
+					file.delete();
+					MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File:"
+							+ file.getName());
+				}
+				return;
+			}
+			if (file.isDirectory()) {
+				File[] childFile = file.listFiles();
+				if (childFile == null || childFile.length == 0) {
+					// file.delete();
 					return;
 				}
-				if (file.isDirectory()) {
-					File[] childFile = file.listFiles();
-					if (childFile == null || childFile.length == 0) {
-						// file.delete();
-						return;
-					}
-					for (File f : childFile) {
-						RecursionCheckFile(context, f);
-					}
-					// file.delete();
+				for (File f : childFile) {
+					RecursionCheckFile(context, f);
 				}
-			} catch (Exception e) {
-				MyLog.e("[StorageUtil]RecursionCheckFile-Catch Exception:"
-						+ e.toString());
+				// file.delete();
 			}
+		} catch (Exception e) {
+			MyLog.e("[StorageUtil]RecursionCheckFile-Catch Exception:"
+					+ e.toString());
 		}
 	}
 
@@ -338,9 +316,8 @@ public class StorageUtil {
 			exif.setAttribute(ExifInterface.TAG_ORIENTATION, ""
 					+ ExifInterface.ORIENTATION_NORMAL);
 
-			exif.setAttribute(ExifInterface.TAG_MAKE, "zenlane");
-			// 型号/机型
-			exif.setAttribute(ExifInterface.TAG_MODEL, "X755");
+			exif.setAttribute(ExifInterface.TAG_MAKE, "zenlane"); // 品牌
+			exif.setAttribute(ExifInterface.TAG_MODEL, "X755"); // 型号/机型
 
 			// exif.setAttribute(ExifInterface.TAG_FLASH, "1/30"); // 闪光灯
 			// exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, "5/1"); // 焦距

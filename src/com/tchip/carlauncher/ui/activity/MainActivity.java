@@ -262,8 +262,8 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			try {
 				// 初次启动清空录像文件夹
-				if (StorageUtil.isVideoCardExists()
-						&& sharedPreferences.getBoolean("isFirstLaunch", true)) {
+				if (sharedPreferences.getBoolean("isFirstLaunch", true)
+						&& StorageUtil.isVideoCardExists()) {
 					String sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 
 					// File file = new File(sdcardPath + "tachograph/");
@@ -276,11 +276,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyLog.e("Video card not exist or isn't first launch");
 				}
 
-				// 检查并删除异常视频文件，比较耗时阻塞线程
-				// if (StorageUtil.isVideoCardExists()
-				// && !MyApplication.isVideoReording) {
-				// CheckErrorFile();
-				// }
+				// 检查并删除异常视频文件
+				if (StorageUtil.isVideoCardExists()) {
+					CheckErrorFile();
+				}
 
 				// 自动录像:如果已经在录像则不处理
 				if (Constant.Record.autoRecord
@@ -330,8 +329,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				message.what = 1;
 				backHandler.sendMessage(message);
 				// 修正标志：不对第二段视频加锁
-				if (!MyApplication.isVideoReording
-						&& MyApplication.isVideoLockSecond) {
+				if (MyApplication.isVideoLockSecond
+						&& !MyApplication.isVideoReording) {
 					MyApplication.isVideoLockSecond = false;
 				}
 			}
@@ -1854,8 +1853,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				try {
 					if (!StorageUtil.isVideoCardExists()) {
 						// 如果是休眠状态，且不是停车侦测录像情况，避免线程执行过程中，ACC下电后仍然语音提醒“SD不存在”
-						if (!MyApplication.shouldStopWhenCrashVideoSave
-								&& MyApplication.isSleeping) {
+						if (MyApplication.isSleeping
+								&& !MyApplication.shouldStopWhenCrashVideoSave) {
 							return;
 						}
 						Thread.sleep(1000);
@@ -1874,7 +1873,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						startRecordHandler.sendMessage(messageRecord);
 						return;
 					}
-
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -1898,12 +1896,12 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (MyApplication.isVideoReording
 							&& MyApplication.shouldStopWhenCrashVideoSave) {
 						MyLog.v("[CrashRecord]LCD:" + SettingUtil.getLCDValue());
-						// TODO:发送PowerKey,将假熄屏更改为真熄屏
-						sendBroadcast(new Intent("com.tchip.powerKey")
-								.putExtra("value", "power_speech"));
+						if (powerManager.isScreenOn()) { // 发送PowerKey,将假熄屏更改为真熄屏
+							sendBroadcast(new Intent("com.tchip.powerKey")
+									.putExtra("value", "power_speech"));
+						}
 					}
 				} else {
-					if (Constant.isDebug)
 						MyLog.e("Start Record Failed");
 				}
 				break;
@@ -1960,11 +1958,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 检查并删除异常视频文件：SD存在但数据库中不存在的文件；视频文件较多时尤为耗时，需要启动线程
+	 * 检查并删除异常视频文件：SD存在但数据库中不存在的文件
 	 */
 	private void CheckErrorFile() {
 		MyLog.v("[CheckErrorFile]isVideoChecking:" + isVideoChecking);
-		if (StorageUtil.isVideoCardExists() && !isVideoChecking) {
+		if (!isVideoChecking && StorageUtil.isVideoCardExists()) {
 			new Thread(new CheckVideoThread()).start();
 		}
 	}
@@ -2019,7 +2017,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 停止录像
 	 * 
-	 * @return
+	 * @return 是否成功
 	 */
 	public int stopRecorder() {
 		resetRecordTimeText();
@@ -2061,11 +2059,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				: -1;
 	}
 
-	/**
-	 * 拍照
-	 * 
-	 * @return
-	 */
+	/** 拍照 **/
 	public int takePhoto() {
 		if (!StorageUtil.isVideoCardExists()) {
 			noVideoSDHint(); // SDCard不存在
