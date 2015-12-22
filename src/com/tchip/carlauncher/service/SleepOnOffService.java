@@ -93,6 +93,8 @@ public class SleepOnOffService extends Service {
 					this.getClass().getCanonicalName());
 		}
 		wakeLock.acquire();
+		
+		MyLog.v("[SleepOnOff]WakeLock acquire");
 
 	}
 
@@ -104,6 +106,7 @@ public class SleepOnOffService extends Service {
 			wakeLock.release();
 			wakeLock = null;
 		}
+		MyLog.v("[SleepOnOff]WakeLock release");
 	}
 
 	private SleepOnOffReceiver sleepOnOffReceiver;
@@ -127,6 +130,7 @@ public class SleepOnOffService extends Service {
 				new Thread(new PreSleepThread()).start();
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
 				MyApp.isAccOn = true;
+				MyApp.isAccOffPhotoTaking = false; // 重置ACC下电拍照标志
 
 				preSleepCount = 0;
 				MyApp.isSleepConfirm = false;
@@ -157,7 +161,6 @@ public class SleepOnOffService extends Service {
 						MyApp.shouldStopWhenCrashVideoSave = true;
 					}
 				}
-
 			} else if (action.equals(Constant.Broadcast.SPEECH_COMMAND)) {
 				String command = intent.getExtras().getString("command");
 				if ("take_photo".equals(command)) {
@@ -165,11 +168,9 @@ public class SleepOnOffService extends Service {
 
 					context.sendBroadcast(new Intent("com.tchip.powerKey")
 							.putExtra("value", "home")); // 发送Home键，回到主界面
-
 					if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 						SettingUtil.lightScreen(getApplicationContext());
 					}
-
 				}
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_PLAYING)) {
 				MyApp.isBTPlayMusic = true;

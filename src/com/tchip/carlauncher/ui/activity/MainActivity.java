@@ -1954,9 +1954,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
-	/**
-	 * 视频SD卡不存在提示
-	 */
+	/** 视频SD卡不存在提示 **/
 	private void noVideoSDHint() {
 		String strNoSD = getResources().getString(R.string.sd2_not_exist);
 		audioRecordDialog.showErrorDialog(strNoSD);
@@ -1964,9 +1962,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		HintUtil.speakVoice(MainActivity.this, strNoSD);
 	}
 
-	/**
-	 * 检查并删除异常视频文件：SD存在但数据库中不存在的文件
-	 */
+	/** 检查并删除异常视频文件：SD存在但数据库中不存在的文件 **/
 	private void CheckErrorFile() {
 		MyLog.v("[CheckErrorFile]isVideoChecking:" + isVideoChecking);
 		if (!isVideoChecking && StorageUtil.isVideoCardExists()) {
@@ -2077,9 +2073,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
-	/**
-	 * ACC下电拍照
-	 */
+	/** ACC下电拍照 **/
 	public void takePhotoWhenAccOff() {
 		if (carRecorder != null) {
 			if (!MyApp.isAccOffPhotoTaking) {
