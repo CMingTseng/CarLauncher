@@ -19,13 +19,13 @@ public class XunFeiErrorCodeUtil {
 
 		case ErrorCode.ERROR_NETWORK_TIMEOUT:
 			return "网络超时";
-			
+
 		case ErrorCode.ERROR_NO_NETWORK:
 			return "无网络链接";
-			
+
 		case ErrorCode.ERROR_NET_EXPECTION:
 			return "网络异常";
-			
+
 		case ErrorCode.ERROR_NO_SPPECH:
 			return "未说话";
 

@@ -1,7 +1,7 @@
 package com.tchip.carlauncher.model;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.util.MyLog;

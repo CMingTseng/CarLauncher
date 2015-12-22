@@ -3,7 +3,7 @@ package com.tchip.carlauncher.model;
 import java.io.File;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.util.StorageUtil;
 
 import android.content.BroadcastReceiver;
@@ -22,7 +22,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 				|| action.equals(Intent.ACTION_MEDIA_BAD_REMOVAL)
 				|| action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
 			if (!StorageUtil.isVideoCardExists()) {
-				MyApplication.isVideoCardEject = true;
+				MyApp.isVideoCardEject = true;
 			}
 
 			// 规避播放音乐时拔SD,media-server died,从而导致主界面录像预览卡死问题
@@ -33,12 +33,12 @@ public class CardEjectReceiver extends BroadcastReceiver {
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			// 插入录像卡自动录像
 			if ("/storage/sdcard2".equals(intent.getData().getPath())
-					&& MyApplication.isAccOn) {
-				MyApplication.shouldMountRecord = true;
+					&& MyApp.isAccOn) {
+				MyApp.shouldMountRecord = true;
 			}
 
 			if (StorageUtil.isVideoCardExists()) {
-				MyApplication.isVideoCardEject = false;
+				MyApp.isVideoCardEject = false;
 
 				SharedPreferences sharedPreferences = context
 						.getSharedPreferences(Constant.MySP.NAME,

@@ -13,7 +13,7 @@ import net.sourceforge.jheader.TagFormatException;
 import net.sourceforge.jheader.App1Header.Tag;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
 import com.tchip.carlauncher.service.SpeakService;
@@ -180,7 +180,7 @@ public class StorageUtil {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
 
-						if (MyApplication.isVideoReording) {
+						if (MyApp.isVideoReording) {
 							// stopRecorder(); // TODO:停止录像
 						}
 						/**

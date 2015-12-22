@@ -11,7 +11,7 @@ import android.os.IBinder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
@@ -55,9 +55,9 @@ public class SensorWatchService extends Service {
 				// MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
 				// return;
 				// }
-				if (MyApplication.isAccOn && MyApplication.isCrashOn) {
+				if (MyApp.isAccOn && MyApp.isCrashOn) {
 					LIMIT_X = LIMIT_Y = LIMIT_Z = SettingUtil
-							.getGravityVauleBySensitive(MyApplication.crashSensitive);
+							.getGravityVauleBySensitive(MyApp.crashSensitive);
 					valueX = event.values[AXIS_X];
 					valueY = event.values[AXIS_Y];
 					valueZ = event.values[AXIS_Z];
@@ -76,10 +76,9 @@ public class SensorWatchService extends Service {
 					}
 					if (isCrash) {
 						// 当前录制视频加锁
-						if (MyApplication.isVideoReording
-								&& !MyApplication.isVideoLock) {
-							MyApplication.isVideoLock = true;
-							MyApplication.isCrashed = true;
+						if (MyApp.isVideoReording && !MyApp.isVideoLock) {
+							MyApp.isVideoLock = true;
+							MyApp.isCrashed = true;
 							startSpeak(getResources().getString(
 									R.string.video_lock));
 							MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"

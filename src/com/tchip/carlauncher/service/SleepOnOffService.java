@@ -1,7 +1,7 @@
 package com.tchip.carlauncher.service;
 
 import com.tchip.carlauncher.Constant;
-import com.tchip.carlauncher.MyApplication;
+import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
@@ -116,52 +116,52 @@ public class SleepOnOffService extends Service {
 			String action = intent.getAction();
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals(Constant.Broadcast.ACC_OFF)) {
-				MyApplication.isAccOn = false;
+				MyApp.isAccOn = false;
 
 				preSleepCount = 0;
-				MyApplication.isSleepConfirm = true;
+				MyApp.isSleepConfirm = true;
 
 				preWakeCount = 0;
-				MyApplication.isWakeConfirm = false;
+				MyApp.isWakeConfirm = false;
 
 				new Thread(new PreSleepThread()).start();
 			} else if (action.equals(Constant.Broadcast.ACC_ON)) {
-				MyApplication.isAccOn = true;
+				MyApp.isAccOn = true;
 
 				preSleepCount = 0;
-				MyApplication.isSleepConfirm = false;
+				MyApp.isSleepConfirm = false;
 
 				preWakeCount = 0;
-				MyApplication.isWakeConfirm = true;
+				MyApp.isWakeConfirm = true;
 
 				new Thread(new PreWakeThread()).start();
 			} else if (action.equals(Constant.Broadcast.GSENSOR_CRASH)) { // 停车守卫:侦测到碰撞广播触发
-				if (MyApplication.isSleeping) {
+				if (MyApp.isSleeping) {
 					MyLog.v("[GSENSOR_CRASH]Before State->shouldCrashRecord:"
-							+ MyApplication.shouldCrashRecord
+							+ MyApp.shouldCrashRecord
 							+ ",shouldStopWhenCrashVideoSave:"
-							+ MyApplication.shouldStopWhenCrashVideoSave);
+							+ MyApp.shouldStopWhenCrashVideoSave);
 
 					// context.sendBroadcast(new Intent("com.tchip.powerKey")
 					// .putExtra("value", "home")); // 发送Home键，回到主界面
 					// SettingUtil.lightScreen(context); // 点亮屏幕
 
-					if (MyApplication.shouldCrashRecord
-							|| MyApplication.shouldStopWhenCrashVideoSave) {
+					if (MyApp.shouldCrashRecord
+							|| MyApp.shouldStopWhenCrashVideoSave) {
 						if (powerManager.isScreenOn()) {
 							// sendBroadcast(new Intent("com.tchip.powerKey")
 							// .putExtra("value", "power_speech"));
 						}
 					} else {
-						MyApplication.shouldCrashRecord = true;
-						MyApplication.shouldStopWhenCrashVideoSave = true;
+						MyApp.shouldCrashRecord = true;
+						MyApp.shouldStopWhenCrashVideoSave = true;
 					}
 				}
 
 			} else if (action.equals(Constant.Broadcast.SPEECH_COMMAND)) {
 				String command = intent.getExtras().getString("command");
 				if ("take_photo".equals(command)) {
-					MyApplication.shouldTakeVoicePhoto = true; // 语音拍照
+					MyApp.shouldTakeVoicePhoto = true; // 语音拍照
 
 					context.sendBroadcast(new Intent("com.tchip.powerKey")
 							.putExtra("value", "home")); // 发送Home键，回到主界面
@@ -172,10 +172,10 @@ public class SleepOnOffService extends Service {
 
 				}
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_PLAYING)) {
-				MyApplication.isBTPlayMusic = true;
+				MyApp.isBTPlayMusic = true;
 
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_STOPED)) {
-				MyApplication.isBTPlayMusic = false;
+				MyApp.isBTPlayMusic = false;
 
 			} else if (action.equals(Constant.Broadcast.SETTING_SYNC)) {
 				String content = intent.getExtras().getString("content");
@@ -196,17 +196,17 @@ public class SleepOnOffService extends Service {
 					editor.commit();
 
 				} else if ("crashLow".equals(content)) { // 碰撞侦测灵敏度:低
-					MyApplication.crashSensitive = 0;
+					MyApp.crashSensitive = 0;
 					editor.putInt("crashSensitive", 0);
 					editor.commit();
 
 				} else if ("crashMiddle".equals(content)) { // 碰撞侦测灵敏度:中
-					MyApplication.crashSensitive = 1;
+					MyApp.crashSensitive = 1;
 					editor.putInt("crashSensitive", 1);
 					editor.commit();
 
 				} else if ("crashHigh".equals(content)) { // 碰撞侦测灵敏度:高
-					MyApplication.crashSensitive = 2;
+					MyApp.crashSensitive = 2;
 					editor.putInt("crashSensitive", 2);
 					editor.commit();
 
@@ -222,7 +222,7 @@ public class SleepOnOffService extends Service {
 		public void run() {
 			synchronized (preWakeHandler) {
 				/** 激发条件:1.ACC上电 **/
-				while (MyApplication.isWakeConfirm && MyApplication.isAccOn) {
+				while (MyApp.isWakeConfirm && MyApp.isAccOn) {
 					try {
 						Thread.sleep(1000);
 						Message message = new Message();
@@ -242,15 +242,15 @@ public class SleepOnOffService extends Service {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (MyApplication.isAccOn) {
+				if (MyApp.isAccOn) {
 					preWakeCount++;
 				} else {
 					preWakeCount = 0;
 				}
 				MyLog.v("[ParkingMonitor]preWakeCount:" + preWakeCount);
 
-				if (preWakeCount == TIME_WAKE_CONFIRM && MyApplication.isAccOn) {
-					MyApplication.isWakeConfirm = false;
+				if (preWakeCount == TIME_WAKE_CONFIRM && MyApp.isAccOn) {
+					MyApp.isWakeConfirm = false;
 					preWakeCount = 0;
 					deviceWake();
 				}
@@ -269,8 +269,8 @@ public class SleepOnOffService extends Service {
 		public void run() {
 			synchronized (preSleepHandler) {
 				/** 激发条件:1.ACC下电 2.未进入休眠 **/
-				while (MyApplication.isSleepConfirm && !MyApplication.isAccOn
-						&& !MyApplication.isSleeping) {
+				while (MyApp.isSleepConfirm && !MyApp.isAccOn
+						&& !MyApp.isSleeping) {
 					try {
 						Thread.sleep(1000);
 						Message message = new Message();
@@ -291,16 +291,16 @@ public class SleepOnOffService extends Service {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (!MyApplication.isAccOn) {
+				if (!MyApp.isAccOn) {
 					preSleepCount++;
 				} else {
 					preSleepCount = 0;
 				}
 				MyLog.v("[ParkingMonitor]preSleepCount:" + preSleepCount);
 
-				if (preSleepCount == TIME_SLEEP_CONFIRM
-						&& !MyApplication.isAccOn && !MyApplication.isSleeping) {
-					MyApplication.isSleepConfirm = false;
+				if (preSleepCount == TIME_SLEEP_CONFIRM && !MyApp.isAccOn
+						&& !MyApp.isSleeping) {
+					MyApp.isSleepConfirm = false;
 					preSleepCount = 0;
 					deviceAccOff();
 				}
@@ -322,7 +322,7 @@ public class SleepOnOffService extends Service {
 		public void run() {
 			synchronized (goingParkMonitorHandler) {
 				/** 激发条件:1.ACC下电 2.未进入休眠 **/
-				while (!MyApplication.isAccOn && !MyApplication.isSleeping) {
+				while (!MyApp.isAccOn && !MyApp.isSleeping) {
 					try {
 						Thread.sleep(1000);
 						Message message = new Message();
@@ -341,15 +341,15 @@ public class SleepOnOffService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (!MyApplication.isAccOn) {
+				if (!MyApp.isAccOn) {
 					accOffCount++;
 				} else {
 					accOffCount = 0;
 				}
 				MyLog.v("[ParkingMonitor]accOffCount:" + accOffCount);
 
-				if (accOffCount >= TIME_SLEEP_GOING && !MyApplication.isAccOn
-						&& !MyApplication.isSleeping) {
+				if (accOffCount >= TIME_SLEEP_GOING && !MyApp.isAccOn
+						&& !MyApp.isSleeping) {
 					deviceSleep();
 				}
 				break;
@@ -369,7 +369,7 @@ public class SleepOnOffService extends Service {
 			HintUtil.speakVoice(context, "九十秒后启动停车守卫");
 		}
 
-		if (!MyApplication.isMainForeground) {
+		if (!MyApp.isMainForeground) {
 			// 发送Home键，回到主界面
 			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
 					"value", "home"));
@@ -378,7 +378,7 @@ public class SleepOnOffService extends Service {
 			}
 		}
 
-		MyApplication.shouldTakePhotoWhenAccOff = true;
+		MyApp.shouldTakePhotoWhenAccOff = true;
 
 		acquireWakeLock();
 		new Thread(new GoingParkMonitorThread()).start();
@@ -407,7 +407,7 @@ public class SleepOnOffService extends Service {
 	private void deviceSleep() {
 		try {
 			MyLog.e("[SleepOnOffService]deviceSleep.");
-			MyApplication.isSleeping = true; // 进入低功耗待机
+			MyApp.isSleeping = true; // 进入低功耗待机
 
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.tchip.route")); // 退出轨迹
@@ -415,7 +415,7 @@ public class SleepOnOffService extends Service {
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceSleep");
 		} finally {
-			MyApplication.isAccOffPhotoTaking = false; // 重置ACC下电拍照标志
+			MyApp.isAccOffPhotoTaking = false; // 重置ACC下电拍照标志
 			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON)); // 打开飞行模式
 			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON)); // 通知其他应用进入休眠
 
@@ -428,13 +428,13 @@ public class SleepOnOffService extends Service {
 	 */
 	private void deviceWake() {
 		try {
-			MyApplication.isSleeping = false; // 取消低功耗待机
+			MyApp.isSleeping = false; // 取消低功耗待机
 			startExternalService();
 
-			MyApplication.shouldStopWhenCrashVideoSave = false; // 如果当前正在停车侦测录像，录满30S后不停止
+			MyApp.shouldStopWhenCrashVideoSave = false; // 如果当前正在停车侦测录像，录满30S后不停止
 
 			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
-			MyApplication.shouldWakeRecord = true;
+			MyApp.shouldWakeRecord = true;
 
 			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
 					"value", "home")); // 发送Home键，回到主界面

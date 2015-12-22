@@ -17,23 +17,15 @@ import com.tchip.carlauncher.lib.iflytek.ApkInstaller;
 import com.tchip.carlauncher.lib.iflytek.TtsSettings;
 import com.tchip.carlauncher.util.MyLog;
 
-/**
- * Created by AlexZhou on 2015/4/21. 9:45
- */
 public class SpeakService extends Service {
 
-	private static String TAG = SpeakService.class.getSimpleName();
 	private SpeechSynthesizer mTts; // 语音合成对象
 	private String voicer = "xiaoyan"; // 默认发音人
 	// private String[] cloudVoicersEntries;
 	// private String[] cloudVoicersValue;
-	private int mPercentForBuffering = 0; // 缓冲进度
-	private int mPercentForPlaying = 0; // 播放进度
 	// private RadioGroup mRadioGroup; // 云端/本地单选按钮
-	// 引擎类型： TYPE_CLOUD TYPE_LOCAL
-	private String mEngineType = SpeechConstant.TYPE_LOCAL;
-	// 语音+安装助手类
-	ApkInstaller mInstaller;
+	private String mEngineType = SpeechConstant.TYPE_LOCAL; // TYPE_CLOUD,TYPE_LOCAL
+	ApkInstaller mInstaller; // 语音+安装助手类
 
 	private SharedPreferences mSharedPreferences;
 	private String content = "";
@@ -57,10 +49,8 @@ public class SpeakService extends Service {
 				content = extras.getString("content");
 			}
 		} catch (Exception e) {
-			//
 		}
-		// 初始化合成对象
-		mTts = SpeechSynthesizer.createSynthesizer(this, mTtsInitListener);
+		mTts = SpeechSynthesizer.createSynthesizer(this, mTtsInitListener); // 初始化合成对象
 		mSharedPreferences = getSharedPreferences(TtsSettings.PREFER_NAME,
 				Context.MODE_PRIVATE);
 
@@ -71,22 +61,19 @@ public class SpeakService extends Service {
 		if (code != ErrorCode.SUCCESS) {
 			if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
 				// 未安装则跳转到提示安装页面 mInstaller.install();
-			} else {
-				// 语音合成失败,错误码:code
+			} else { // 语音合成失败,错误码:code
 			}
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	/**
-	 * 初始化监听。
-	 */
+	/** 初始化监听 **/
 	private InitListener mTtsInitListener = new InitListener() {
 		@Override
 		public void onInit(int code) {
 			MyLog.d("InitListener init() code = " + code);
-			if (code != ErrorCode.SUCCESS) {
-				// 初始化失败,错误码： code
+			if (code != ErrorCode.SUCCESS) { // 初始化失败,错误码： code
+
 			} else {
 				// 初始化成功，之后可以调用startSpeaking方法
 				// 注：有的开发者在onCreate方法中创建完合成对象之后马上就调用startSpeaking进行合成，
@@ -96,42 +83,32 @@ public class SpeakService extends Service {
 		}
 	};
 
-	/**
-	 * 合成回调监听。
-	 */
+	/** 合成回调监听 **/
 	private SynthesizerListener mTtsListener = new SynthesizerListener() {
 		@Override
-		public void onSpeakBegin() {
-			// 开始播放
+		public void onSpeakBegin() { // 开始播放
 		}
 
 		@Override
-		public void onSpeakPaused() {
-			// 暂停播放
+		public void onSpeakPaused() { // 暂停播放
 		}
 
 		@Override
-		public void onSpeakResumed() {
-			// 继续播放
+		public void onSpeakResumed() { // 继续播放
 		}
 
 		@Override
 		public void onBufferProgress(int percent, int beginPos, int endPos,
-				String info) {
-			// 合成进度
-			mPercentForBuffering = percent;
+				String info) { // 合成进度
 		}
 
 		@Override
-		public void onSpeakProgress(int percent, int beginPos, int endPos) {
-			// 播放进度
-			mPercentForPlaying = percent;
+		public void onSpeakProgress(int percent, int beginPos, int endPos) { // 播放进度
 		}
 
 		@Override
-		public void onCompleted(SpeechError error) {
+		public void onCompleted(SpeechError error) { // 播放完成
 			if (error == null) {
-				// 播放完成
 				content = "";
 				stopSelf();
 			} else if (error != null) {
@@ -150,8 +127,7 @@ public class SpeakService extends Service {
 		if (mEngineType.equals(SpeechConstant.TYPE_CLOUD)) {
 			mTts.setParameter(SpeechConstant.ENGINE_TYPE,
 					SpeechConstant.TYPE_CLOUD);
-			// 设置发音人
-			mTts.setParameter(SpeechConstant.VOICE_NAME, voicer);
+			mTts.setParameter(SpeechConstant.VOICE_NAME, voicer); // 设置发音人
 
 		} else {
 			mTts.setParameter(SpeechConstant.ENGINE_TYPE,
@@ -160,17 +136,13 @@ public class SpeakService extends Service {
 			mTts.setParameter(SpeechConstant.VOICE_NAME, "");
 
 		}
-		// 设置语速
 		mTts.setParameter(SpeechConstant.SPEED,
-				mSharedPreferences.getString("speed_preference", "50"));
-		// 设置音调
+				mSharedPreferences.getString("speed_preference", "50")); // 设置语速
 		mTts.setParameter(SpeechConstant.PITCH,
-				mSharedPreferences.getString("pitch_preference", "50"));
-		// 设置音量
+				mSharedPreferences.getString("pitch_preference", "50")); // 设置音调
 		mTts.setParameter(SpeechConstant.VOLUME,
-				mSharedPreferences.getString("volume_preference", "50"));
-		// 设置播放器音频流类型
+				mSharedPreferences.getString("volume_preference", "50")); // 设置音量
 		mTts.setParameter(SpeechConstant.STREAM_TYPE,
-				mSharedPreferences.getString("stream_preference", "3"));
+				mSharedPreferences.getString("stream_preference", "3")); // 设置播放器音频流类型
 	}
 }

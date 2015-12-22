@@ -115,7 +115,7 @@ public class NetworkUtil {
 			return false;
 		}
 	}
-	
+
 	public static final int WIFI_MIN_RSSI = -100;
 	public static final int WIFI_MAX_RSSI = -55;
 	public static final int WIFI_RSSI_LEVELS = 5;
@@ -265,7 +265,7 @@ public class NetworkUtil {
 	 * NETWORK_TYPE_HSPAP
 	 */
 	public static int get3GTypeImageByNetworkType(int networkType) {
-		MyLog.v("[NetworkUtil]get3GTypeImageByNetworkType:"+networkType);
+		MyLog.v("[NetworkUtil]get3GTypeImageByNetworkType:" + networkType);
 		switch (networkType) {
 		/***** 2G *****/
 		case TelephonyManager.NETWORK_TYPE_GPRS:

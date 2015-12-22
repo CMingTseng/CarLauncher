@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 public class MultimediaActivity extends Activity {
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

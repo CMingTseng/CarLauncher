@@ -16,7 +16,7 @@ public class HintUtil {
 		AudioManager audioManager = (AudioManager) context
 				.getSystemService(Context.AUDIO_SERVICE);
 		MediaPlayer mediaPlayer;
-		
+
 		if (audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) > 0) {
 			if (type == com.tchip.tachograph.TachographCallback.FILE_TYPE_IMAGE) {
 				mediaPlayer = MediaPlayer.create(context, R.raw.camera_image);
