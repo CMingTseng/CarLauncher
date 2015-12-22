@@ -81,9 +81,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView imageCameraSwitch;
 	/** 前后摄像头切换 **/
 	private LinearLayout layoutCameraSwitch;
-
-	private IntentFilter wifiIntentFilter; // WiFi状态监听器
-	private ImageView imageWifiLevel; // WiFi状态图标
+	/** WiFi状态监听器 **/
+	private IntentFilter wifiIntentFilter;
+	/** WiFi状态图标 **/
+	private ImageView imageWifiLevel;
 	private ImageView imageShadowRight, imageShadowLeft;
 	private ImageView imageSignalLevel, image3GType;
 	/** 飞行模式图标 **/
@@ -149,7 +150,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		initialLayout();
 		initialCameraButton();
 		SettingUtil.initialNodeState(MainActivity.this);
-		initialService();
 		setupRecordDefaults();
 		setupRecordViews();
 
@@ -159,7 +159,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
 			sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
 
-			new Thread(new AutoThread()).start(); // 序列任务线程
+			// new Thread(new AutoThread()).start(); // 序列任务线程
+			initialService();
 		} else {
 			MyApp.isAccOn = false; // 同步ACC状态
 			MyApp.isSleeping = true; // ACC未连接,进入休眠
@@ -1944,7 +1945,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 				resetRecordTimeText();
 
-				if (!MyApp.shouldStopWhenCrashVideoSave) { // 停车守卫播放录音
+				if (!MyApp.shouldStopWhenCrashVideoSave) { // 停车守卫不播放录音
 					HintUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
 				}
 				return carRecorder.start();
