@@ -963,6 +963,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * 
 	 * 4.视频保存失败{@link #onError(int)}
 	 * 
+	 * 5.开始录像{@link #startRecordTask()}
+	 * 
 	 */
 	private void resetRecordTimeText() {
 		secondCount = -1;
@@ -1953,6 +1955,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					mMuteState = Constant.Record.STATE_UNMUTE;
 					setMute(false);
 				}
+				resetRecordTimeText();
 
 				if (!MyApplication.shouldStopWhenCrashVideoSave) { // 停车守卫播放录音
 					HintUtil.playAudio(getApplicationContext(), FILE_TYPE_VIDEO);
