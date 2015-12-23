@@ -43,7 +43,7 @@ public class SleepOnOffService extends Service {
 	private int accOffCount = 0;
 
 	/** ACC断开进入深度休眠之前的时间:秒 **/
-	private final int TIME_SLEEP_GOING = 70;
+	private final int TIME_SLEEP_GOING = 85;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -88,25 +88,10 @@ public class SleepOnOffService extends Service {
 	 * ON_AFTER_RELEASE
 	 */
 	private void acquireWakeLock() {
-		if (wakeLock == null) {
-			wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-					this.getClass().getCanonicalName());
-		}
-		wakeLock.acquire();
-
+		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+				this.getClass().getCanonicalName());
+		wakeLock.acquire(90 * 1000);
 		MyLog.v("[SleepOnOff]WakeLock acquire");
-
-	}
-
-	/**
-	 * 释放休眠锁
-	 */
-	private void releaseWakeLock() {
-		if (wakeLock != null && wakeLock.isHeld()) {
-			wakeLock.release();
-			wakeLock = null;
-		}
-		MyLog.v("[SleepOnOff]WakeLock release");
 	}
 
 	private SleepOnOffReceiver sleepOnOffReceiver;
@@ -420,7 +405,6 @@ public class SleepOnOffService extends Service {
 			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON)); // 打开飞行模式
 			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON)); // 通知其他应用进入休眠
 
-			releaseWakeLock();
 		}
 	}
 

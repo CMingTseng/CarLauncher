@@ -92,7 +92,7 @@ public interface Constant {
 		public static final String SPEECH_COMMAND = "com.tchip.SPEECH_COMMAND";
 
 		/** 杀死语音 **/
-		public static final String AISPEECH_OFF = "com.tchip.AISPEECH_OFF";
+		public static final String AISPEECH_OFF = "com.tchip.aiSpeechSleep"; // "com.tchip.AISPEECH_OFF";
 
 		/**
 		 * 行车记录仪抓拍到图片之后发送以下广播,DSA接收

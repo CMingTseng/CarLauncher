@@ -272,9 +272,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyLog.e("Video card not exist or isn't first launch");
 				}
 
-				if (StorageUtil.isVideoCardExists()) {
-					CheckErrorFile(); // 检查并删除异常视频文件
-				}
+				// if (StorageUtil.isVideoCardExists()) {
+				// CheckErrorFile(); // 检查并删除异常视频文件
+				// }
 
 				// 自动录像:如果已经在录像则不处理
 				if (Constant.Record.autoRecord && !MyApp.isVideoReording) {
@@ -296,7 +296,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				startOrStopRecord();
+				startRecord();
 				break;
 
 			default:
@@ -1404,9 +1404,39 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 开启或关闭录像
-	 */
+	/** 启动录像 **/
+	private void startRecord() {
+		try {
+			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+				if (MyApp.isSleeping) {
+					HintUtil.speakVoice(MainActivity.this, getResources()
+							.getString(R.string.stop_record_sleeping));
+				} else {
+					if (!powerManager.isScreenOn()) { // 点亮屏幕
+						SettingUtil.lightScreen(getApplicationContext());
+					}
+
+					if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
+						sendBroadcast(new Intent("com.tchip.powerKey")
+								.putExtra("value", "home"));
+					}
+					new Thread(new StartRecordThread()).start(); // 开始录像
+				}
+			} else {
+				MyLog.v("[startRecord]Already record yet");
+			}
+			setupRecordViews();
+			if (Constant.isDebug) {
+				MyLog.v("MyApplication.isVideoReording:"
+						+ MyApp.isVideoReording);
+			}
+		} catch (Exception e) {
+			MyLog.e("[MainActivity]startOrStopRecord catch exception: "
+					+ e.toString());
+		}
+	}
+
+	/** 开启或关闭录像 **/
 	private void startOrStopRecord() {
 		try {
 			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
