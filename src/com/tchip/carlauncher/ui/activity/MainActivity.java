@@ -159,8 +159,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
 			sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
 
-			// new Thread(new AutoThread()).start(); // 序列任务线程
-			initialService();
+			new Thread(new AutoThread()).start(); // 序列任务线程
 		} else {
 			MyApp.isAccOn = false; // 同步ACC状态
 			MyApp.isSleeping = true; // ACC未连接,进入休眠
@@ -286,7 +285,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 				Thread.sleep(1000);
 				initialService();
-
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				MyLog.e("[Main]AutoThread: Catch Exception!");
@@ -2255,11 +2253,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void onFileStart(int type, String path) {
-
 	}
 
 	/**

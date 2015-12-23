@@ -37,7 +37,7 @@ public class SleepOnOffService extends Service {
 	private int preWakeCount = 0;
 
 	/** 预备唤醒模式的时间:秒 **/
-	private final int TIME_WAKE_CONFIRM = 2;
+	private final int TIME_WAKE_CONFIRM = 1;
 
 	/** ACC断开的时间:秒 **/
 	private int accOffCount = 0;
@@ -93,7 +93,7 @@ public class SleepOnOffService extends Service {
 					this.getClass().getCanonicalName());
 		}
 		wakeLock.acquire();
-		
+
 		MyLog.v("[SleepOnOff]WakeLock acquire");
 
 	}
@@ -466,6 +466,8 @@ public class SleepOnOffService extends Service {
 	 * 1.轨迹记录
 	 * 
 	 * 2.天气播报
+	 * 
+	 * 3.碰撞侦测服务
 	 */
 	private void startExternalService() {
 		try {
@@ -480,6 +482,10 @@ public class SleepOnOffService extends Service {
 			intentWeather.setClassName("com.tchip.weather",
 					"com.tchip.weather.service.TimeTickService");
 			startService(intentWeather);
+
+			// 碰撞侦测服务
+			Intent intentCrash = new Intent(context, SensorWatchService.class);
+			startService(intentCrash);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -494,6 +500,8 @@ public class SleepOnOffService extends Service {
 	 * 2.天气播报服务
 	 * 
 	 * 3.酷我音乐
+	 * 
+	 * 4.碰撞侦测服务
 	 */
 	private void stopExternalService() {
 		try {
@@ -508,6 +516,10 @@ public class SleepOnOffService extends Service {
 			intentWeather.setClassName("com.tchip.weather",
 					"com.tchip.weather.service.TimeTickService");
 			stopService(intentWeather);
+
+			// 碰撞侦测服务
+			Intent intentCrash = new Intent(context, SensorWatchService.class);
+			stopService(intentCrash);
 
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "cn.kuwo.kwmusiccar")); // 酷我音乐
