@@ -97,14 +97,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private HorizontalScrollView hsvMain;
 
-	private Camera mCamera;
+	private Camera camera;
 	private SurfaceView surfaceCamera;
-	private SurfaceHolder mHolder;
+	private SurfaceHolder surfaceHolder;
 	private TachographRecorder carRecorder;
 	private boolean isSurfaceLarge = false;
 
-	private int mResolutionState, mRecordState, mIntervalState, mPathState,
-			mSecondaryState, mOverlapState, mMuteState;
+	private int resolutionState, recordState, intervalState, pathState,
+			secondaryState, overlapState, muteState;
 
 	private LinearLayout layoutVideoSize, layoutVideoTime, layoutVideoLock,
 			layoutVideoMute, layoutVideoRecord, layoutVideoCamera,
@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private MyPhoneStateListener myPhoneStateListener;
 	private WifiManager wifiManager;
 	private ConnectivityManager connManager;
-	private NetworkInfo mWifi;
+	private NetworkInfo networkInfoWifi;
 	private PowerManager powerManager;
 
 	private String strRecordStop = "停止录像";
@@ -152,6 +152,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		SettingUtil.initialNodeState(MainActivity.this);
 		setupRecordDefaults();
 		setupRecordViews();
+
+		// ACC上下电侦测服务
+		Intent intentSleepOnOff = new Intent(MainActivity.this,
+				SleepOnOffService.class);
+		startService(intentSleepOnOff);
 
 		// 首次启动是否需要自动录像
 		if (1 == SettingUtil.getAccStatus()) {
@@ -510,7 +515,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (msg.what) {
 			case 1:
 				try {
-					if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 
 						if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
 							sendBroadcast(new Intent("com.tchip.powerKey")
@@ -674,21 +679,13 @@ public class MainActivity extends Activity implements TachographCallback,
 	/**
 	 * 初始化服务:
 	 * 
-	 * 1.ACC上下电侦测服务
+	 * 1.碰撞侦测服务
 	 * 
-	 * 2.碰撞侦测服务
+	 * 2.轨迹记录服务
 	 * 
-	 * 3.轨迹记录服务
-	 * 
-	 * 4.天气播报服务
+	 * 3.天气播报服务
 	 */
 	private void initialService() {
-
-		// ACC上下电侦测服务
-		Intent intentSleepOnOff = new Intent(MainActivity.this,
-				SleepOnOffService.class);
-		startService(intentSleepOnOff);
-
 		// 碰撞侦测服务
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
@@ -1016,12 +1013,12 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (secondCount == Constant.Record.parkVideoLength) {
 						String videoTimeStr = sharedPreferences.getString(
 								"videoTime", "3");
-						mIntervalState = "1".equals(videoTimeStr) ? Constant.Record.STATE_INTERVAL_1MIN
+						intervalState = "1".equals(videoTimeStr) ? Constant.Record.STATE_INTERVAL_1MIN
 								: Constant.Record.STATE_INTERVAL_3MIN;
 
 						// 停止录像
 						if (stopRecorder() == 0) {
-							mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+							recordState = Constant.Record.STATE_RECORD_STOPPED;
 							MyApp.isVideoReording = false;
 
 							setInterval(("1".equals(videoTimeStr)) ? 1 * 60
@@ -1031,7 +1028,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							releaseCameraZone();
 						} else {
 							if (stopRecorder() == 0) {
-								mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+								recordState = Constant.Record.STATE_RECORD_STOPPED;
 								MyApp.isVideoReording = false;
 
 								setInterval(("1".equals(videoTimeStr)) ? 1 * 60
@@ -1053,7 +1050,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
-				switch (mIntervalState) { // 重置时间
+				switch (intervalState) { // 重置时间
 				case Constant.Record.STATE_INTERVAL_3MIN:
 					if (secondCount >= 180) {
 						secondCount = 0;
@@ -1077,13 +1074,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 2: // SD卡异常移除：停止录像
 				if (stopRecorder() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
 					setupRecordViews();
 					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApp.isVideoReording = false;
 						setupRecordViews();
 						releaseCameraZone();
@@ -1102,14 +1099,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 3: // 电源断开，停止录像
 				if (stopRecorder() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
 					setupRecordViews();
 
 					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApp.isVideoReording = false;
 						setupRecordViews();
 
@@ -1131,11 +1128,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				MyApp.isCrashed = false;
 
 				// 碰撞后判断是否需要加锁第二段视频
-				if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+				if (intervalState == Constant.Record.STATE_INTERVAL_1MIN) {
 					if (secondCount > 45) {
 						MyApp.isVideoLockSecond = true;
 					}
-				} else if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
+				} else if (intervalState == Constant.Record.STATE_INTERVAL_3MIN) {
 					if (secondCount > 165) {
 						MyApp.isVideoLockSecond = true;
 					}
@@ -1145,13 +1142,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 5: // 进入休眠，停止录像
 				if (stopRecorder() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
 					setupRecordViews();
 					releaseCameraZone();
 				} else {
 					if (stopRecorder() == 0) {
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
 						MyApp.isVideoReording = false;
 						setupRecordViews();
 						releaseCameraZone();
@@ -1178,9 +1175,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void updateWiFiState() {
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		networkInfoWifi = connManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		if (wifiManager.isWifiEnabled() && mWifi.isConnected()) {
+		if (wifiManager.isWifiEnabled() && networkInfoWifi.isConnected()) {
 			int level = ((WifiManager) getSystemService(WIFI_SERVICE))
 					.getConnectionInfo().getRssi();// Math.abs()
 			imageWifiLevel.setImageResource(NetworkUtil
@@ -1203,7 +1201,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoRecord:
 			case R.id.layoutVideoRecordSmall:
 				if (!ClickUtil.isQuickClick(1000)) {
-					if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 						if (StorageUtil.isVideoCardExists()) {
 							HintUtil.speakVoice(MainActivity.this,
 									strRecordStart);
@@ -1211,7 +1209,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						} else {
 							noVideoSDHint();
 						}
-					} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+					} else if (recordState == Constant.Record.STATE_RECORD_STARTED) {
 						HintUtil.speakVoice(MainActivity.this, strRecordStop);
 						startOrStopRecord();
 					}
@@ -1237,16 +1235,16 @@ public class MainActivity extends Activity implements TachographCallback,
 					resetRecordTimeText();
 					textRecordTime.setVisibility(View.INVISIBLE);
 
-					if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
+					if (resolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
 						setResolution(Constant.Record.STATE_RESOLUTION_720P);
 						editor.putString("videoSize", "720");
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
 						HintUtil.speakVoice(MainActivity.this, getResources()
 								.getString(R.string.hint_video_size_720));
-					} else if (mResolutionState == Constant.Record.STATE_RESOLUTION_720P) {
+					} else if (resolutionState == Constant.Record.STATE_RESOLUTION_720P) {
 						setResolution(Constant.Record.STATE_RESOLUTION_1080P);
 						editor.putString("videoSize", "1080");
-						mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
 						HintUtil.speakVoice(MainActivity.this, getResources()
 								.getString(R.string.hint_video_size_1080));
 					}
@@ -1265,18 +1263,18 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoTime:
 			case R.id.layoutVideoTime:
 				if (!ClickUtil.isQuickClick(800)) {
-					if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
+					if (intervalState == Constant.Record.STATE_INTERVAL_3MIN) {
 						if (setInterval(1 * 60) == 0) {
-							mIntervalState = Constant.Record.STATE_INTERVAL_1MIN;
+							intervalState = Constant.Record.STATE_INTERVAL_1MIN;
 							editor.putString("videoTime", "1");
 							HintUtil.speakVoice(
 									MainActivity.this,
 									getResources().getString(
 											R.string.hint_video_time_1));
 						}
-					} else if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+					} else if (intervalState == Constant.Record.STATE_INTERVAL_1MIN) {
 						if (setInterval(3 * 60) == 0) {
-							mIntervalState = Constant.Record.STATE_INTERVAL_3MIN;
+							intervalState = Constant.Record.STATE_INTERVAL_3MIN;
 							editor.putString("videoTime", "3");
 							HintUtil.speakVoice(
 									MainActivity.this,
@@ -1306,9 +1304,9 @@ public class MainActivity extends Activity implements TachographCallback,
 							noVideoSDHint();
 						}
 					}
-					if (mMuteState == Constant.Record.STATE_MUTE) {
+					if (muteState == Constant.Record.STATE_MUTE) {
 						if (setMute(false) == 0) {
-							mMuteState = Constant.Record.STATE_UNMUTE;
+							muteState = Constant.Record.STATE_UNMUTE;
 							HintUtil.speakVoice(
 									MainActivity.this,
 									getResources().getString(
@@ -1316,9 +1314,9 @@ public class MainActivity extends Activity implements TachographCallback,
 							editor.putBoolean("videoMute", false);
 							editor.commit();
 						}
-					} else if (mMuteState == Constant.Record.STATE_UNMUTE) {
+					} else if (muteState == Constant.Record.STATE_UNMUTE) {
 						if (setMute(true) == 0) {
-							mMuteState = Constant.Record.STATE_MUTE;
+							muteState = Constant.Record.STATE_MUTE;
 							HintUtil.speakVoice(
 									MainActivity.this,
 									getResources().getString(
@@ -1407,7 +1405,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	/** 启动录像 **/
 	private void startRecord() {
 		try {
-			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+			if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 				if (MyApp.isSleeping) {
 					HintUtil.speakVoice(MainActivity.this, getResources()
 							.getString(R.string.stop_record_sleeping));
@@ -1439,7 +1437,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	/** 开启或关闭录像 **/
 	private void startOrStopRecord() {
 		try {
-			if (mRecordState == Constant.Record.STATE_RECORD_STOPPED) {
+			if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 				if (MyApp.isSleeping) {
 					HintUtil.speakVoice(MainActivity.this, getResources()
 							.getString(R.string.stop_record_sleeping));
@@ -1454,9 +1452,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 					new Thread(new StartRecordThread()).start(); // 开始录像
 				}
-			} else if (mRecordState == Constant.Record.STATE_RECORD_STARTED) {
+			} else if (recordState == Constant.Record.STATE_RECORD_STARTED) {
 				if (stopRecorder() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
 					if (MyApp.shouldStopWhenCrashVideoSave) {
 						MyApp.shouldStopWhenCrashVideoSave = false;
@@ -1585,9 +1583,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void releaseCameraZone() {
 		if (!MyApp.isMainForeground) {
 			release();
-			// mHolder = null;
-			if (mCamera != null) {
-				mCamera.stopPreview();
+			// surfaceHolder = null;
+			if (camera != null) {
+				camera.stopPreview();
 			}
 			MyApp.shouldResetRecordWhenResume = true;
 			MyLog.v("[Record]releaseCameraZone");
@@ -1640,15 +1638,15 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (!MyApp.isFirstLaunch) {
 				if (!MyApp.isVideoReording || MyApp.shouldResetRecordWhenResume) {
 					MyApp.shouldResetRecordWhenResume = false;
-					if (mCamera == null) { // 重置预览区域
-						// mHolder = holder;
+					if (camera == null) { // 重置预览区域
+						// surfaceHolder = holder;
 						setup();
 					} else {
 						try {
-							mCamera.lock();
-							mCamera.setPreviewDisplay(mHolder);
-							mCamera.startPreview();
-							mCamera.unlock();
+							camera.lock();
+							camera.setPreviewDisplay(surfaceHolder);
+							camera.startPreview();
+							camera.unlock();
 						} catch (Exception e) {
 							// e.printStackTrace();
 						}
@@ -1708,29 +1706,29 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void setupRecordDefaults() {
 		refreshRecordButton();
 
-		mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+		recordState = Constant.Record.STATE_RECORD_STOPPED;
 		MyApp.isVideoReording = false;
 
-		mPathState = Constant.Record.STATE_PATH_ZERO;
-		mSecondaryState = Constant.Record.STATE_SECONDARY_DISABLE;
-		mOverlapState = Constant.Record.STATE_OVERLAP_ZERO;
+		pathState = Constant.Record.STATE_PATH_ZERO;
+		secondaryState = Constant.Record.STATE_SECONDARY_DISABLE;
+		overlapState = Constant.Record.STATE_OVERLAP_ZERO;
 
 		// 录音,静音;默认录音
 		boolean videoMute = sharedPreferences.getBoolean("videoMute",
 				Constant.Record.muteDefault);
-		mMuteState = videoMute ? Constant.Record.STATE_MUTE
+		muteState = videoMute ? Constant.Record.STATE_MUTE
 				: Constant.Record.STATE_UNMUTE;
 	}
 
 	private void refreshRecordButton() {
 		// 视频尺寸，默认1080P
 		String videoSizeStr = sharedPreferences.getString("videoSize", "1080");
-		mResolutionState = "720".equals(videoSizeStr) ? Constant.Record.STATE_RESOLUTION_720P
+		resolutionState = "720".equals(videoSizeStr) ? Constant.Record.STATE_RESOLUTION_720P
 				: Constant.Record.STATE_RESOLUTION_1080P;
 
 		// 视频分段
 		String videoTimeStr = sharedPreferences.getString("videoTime", "3");
-		mIntervalState = "1".equals(videoTimeStr) ? Constant.Record.STATE_INTERVAL_1MIN
+		intervalState = "1".equals(videoTimeStr) ? Constant.Record.STATE_INTERVAL_1MIN
 				: Constant.Record.STATE_INTERVAL_3MIN;
 	}
 
@@ -1742,10 +1740,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				MyApp.isVideoReording);
 
 		// 视频分辨率
-		if (mResolutionState == Constant.Record.STATE_RESOLUTION_720P) {
+		if (resolutionState == Constant.Record.STATE_RESOLUTION_720P) {
 			largeVideoSize.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_size_720));
-		} else if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
+		} else if (resolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
 			largeVideoSize.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_size_1080));
 		}
@@ -1759,10 +1757,10 @@ public class MainActivity extends Activity implements TachographCallback,
 						: R.drawable.ui_main_video_record));
 
 		// 视频分段
-		if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+		if (intervalState == Constant.Record.STATE_INTERVAL_1MIN) {
 			largeVideoTime.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_time_1));
-		} else if (mIntervalState == Constant.Record.STATE_INTERVAL_3MIN) {
+		} else if (intervalState == Constant.Record.STATE_INTERVAL_3MIN) {
 			largeVideoTime.setBackground(getResources().getDrawable(
 					R.drawable.ui_camera_video_time_3));
 		}
@@ -1778,7 +1776,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 静音按钮
 		boolean videoMute = sharedPreferences.getBoolean("videoMute",
 				Constant.Record.muteDefault);
-		mMuteState = videoMute ? Constant.Record.STATE_MUTE
+		muteState = videoMute ? Constant.Record.STATE_MUTE
 				: Constant.Record.STATE_UNMUTE;
 		largeVideoMute.setBackground(getResources().getDrawable(
 				videoMute ? R.drawable.ui_camera_video_sound_off
@@ -1788,22 +1786,22 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		// mHolder = holder;
+		// surfaceHolder = holder;
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		MyLog.v("[Record]surfaceCreated");
 
-		if (mCamera == null) {
-			mHolder = holder;
+		if (camera == null) {
+			surfaceHolder = holder;
 			setup();
 		} else {
 			try {
-				mCamera.lock();
-				mCamera.setPreviewDisplay(mHolder);
-				mCamera.startPreview();
-				mCamera.unlock();
+				camera.lock();
+				camera.setPreviewDisplay(surfaceHolder);
+				camera.startPreview();
+				camera.unlock();
 			} catch (Exception e) {
 				// e.printStackTrace();
 			}
@@ -1821,22 +1819,22 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	private boolean openCamera() {
-		if (mCamera != null) {
+		if (camera != null) {
 			closeCamera();
 		}
 		try {
 			MyLog.v("[Record] Camera.open");
-			mCamera = Camera.open(0);
-			mCamera.lock();
+			camera = Camera.open(0);
+			camera.lock();
 
 			// 设置系统Camera参数
-			Camera.Parameters para = mCamera.getParameters();
+			Camera.Parameters para = camera.getParameters();
 			para.unflatten(Constant.Record.CAMERA_PARAMS);
-			mCamera.setParameters(para);
+			camera.setParameters(para);
 
-			mCamera.setPreviewDisplay(mHolder);
-			mCamera.startPreview();
-			mCamera.unlock();
+			camera.setPreviewDisplay(surfaceHolder);
+			camera.startPreview();
+			camera.unlock();
 			return true;
 		} catch (Exception ex) {
 			closeCamera();
@@ -1851,18 +1849,18 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	private boolean closeCamera() {
-		if (mCamera == null)
+		if (camera == null)
 			return true;
 		try {
-			mCamera.lock();
-			mCamera.stopPreview();
-			mCamera.setPreviewDisplay(null);
-			mCamera.release();
-			mCamera.unlock();
-			mCamera = null;
+			camera.lock();
+			camera.stopPreview();
+			camera.setPreviewDisplay(null);
+			camera.release();
+			camera.unlock();
+			camera = null;
 			return true;
 		} catch (Exception ex) {
-			mCamera = null;
+			camera = null;
 			MyLog.e("[MainActivity]closeCamera:Catch Exception!");
 			return false;
 		}
@@ -1920,7 +1918,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			switch (msg.what) {
 			case 1:
 				if (startRecordTask() == 0) {
-					mRecordState = Constant.Record.STATE_RECORD_STARTED;
+					recordState = Constant.Record.STATE_RECORD_STARTED;
 					MyApp.isVideoReording = true;
 
 					textRecordTime.setVisibility(View.VISIBLE);
@@ -1965,10 +1963,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				boolean videoMute = sharedPreferences.getBoolean("videoMute",
 						Constant.Record.muteDefault);
 				if (videoMute) {
-					mMuteState = Constant.Record.STATE_MUTE; // 不录音
+					muteState = Constant.Record.STATE_MUTE; // 不录音
 					setMute(true);
 				} else {
-					mMuteState = Constant.Record.STATE_UNMUTE;
+					muteState = Constant.Record.STATE_UNMUTE;
 					setMute(false);
 				}
 				resetRecordTimeText();
@@ -2144,7 +2142,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	/**
-	 * 设置录像静音，需要已经初始化mMyRecorder
+	 * 设置录像静音，需要已经初始化carRecorder
 	 * 
 	 * @param mute
 	 * @return
@@ -2163,8 +2161,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @return
 	 */
 	public int setResolution(int state) {
-		if (state != mResolutionState) {
-			mResolutionState = state;
+		if (state != resolutionState) {
+			resolutionState = state;
 			release();
 			if (openCamera()) {
 				setupRecorder();
@@ -2181,8 +2179,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else if (state == Constant.Record.STATE_SECONDARY_ENABLE) {
 			if (carRecorder != null) {
 				carRecorder.setSecondaryVideoSize(320, 240);
-				carRecorder.setSecondaryVideoFrameRate(30);
-				carRecorder.setSecondaryVideoBiteRate(120000);
+				carRecorder
+						.setSecondaryVideoFrameRate(Constant.Record.FRAME_RATE);
+				carRecorder
+						.setSecondaryVideoBiteRate(Constant.Record.BIT_RATE_240P);
 				return carRecorder.setSecondaryVideoEnable(true);
 			}
 		}
@@ -2194,31 +2194,33 @@ public class MainActivity extends Activity implements TachographCallback,
 		try {
 			carRecorder = new TachographRecorder();
 			carRecorder.setTachographCallback(this);
-			carRecorder.setCamera(mCamera);
+			carRecorder.setCamera(camera);
 			carRecorder.setClientName(this.getPackageName());
-			if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
+			if (resolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
 				carRecorder.setVideoSize(1920, 1088); // 16倍数
-				carRecorder.setVideoFrameRate(30);
-				carRecorder.setVideoBiteRate(5500000 * 2); // 8500000
+				carRecorder.setVideoFrameRate(Constant.Record.FRAME_RATE);
+				carRecorder.setVideoBiteRate(Constant.Record.BIT_RATE_1080P);
 			} else {
 				carRecorder.setVideoSize(1280, 720);
-				carRecorder.setVideoFrameRate(30);
-				carRecorder.setVideoBiteRate(5500000); // 3500000
+				carRecorder.setVideoFrameRate(Constant.Record.FRAME_RATE);
+				carRecorder.setVideoBiteRate(Constant.Record.BIT_RATE_720P);
 			}
-			if (mSecondaryState == Constant.Record.STATE_SECONDARY_ENABLE) {
+			if (secondaryState == Constant.Record.STATE_SECONDARY_ENABLE) {
 				carRecorder.setSecondaryVideoEnable(true);
 				carRecorder.setSecondaryVideoSize(320, 240);
-				carRecorder.setSecondaryVideoFrameRate(30);
-				carRecorder.setSecondaryVideoBiteRate(120000);
+				carRecorder
+						.setSecondaryVideoFrameRate(Constant.Record.FRAME_RATE);
+				carRecorder
+						.setSecondaryVideoBiteRate(Constant.Record.BIT_RATE_240P);
 			} else {
 				carRecorder.setSecondaryVideoEnable(false);
 			}
-			if (mIntervalState == Constant.Record.STATE_INTERVAL_1MIN) {
+			if (intervalState == Constant.Record.STATE_INTERVAL_1MIN) {
 				carRecorder.setVideoSeconds(1 * 60);
 			} else {
 				carRecorder.setVideoSeconds(3 * 60);
 			}
-			if (mOverlapState == Constant.Record.STATE_OVERLAP_FIVE) {
+			if (overlapState == Constant.Record.STATE_OVERLAP_FIVE) {
 				carRecorder.setVideoOverlap(5);
 			} else {
 				carRecorder.setVideoOverlap(0);
@@ -2258,7 +2260,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 视频保存失败，原因：存储空间不足，清空文件夹，视频被删掉
 			resetRecordTimeText();
 			if (stopRecorder() == 0) {
-				mRecordState = Constant.Record.STATE_RECORD_STOPPED;
+				recordState = Constant.Record.STATE_RECORD_STOPPED;
 				MyApp.isVideoReording = false;
 				setupRecordViews();
 				releaseCameraZone();
@@ -2308,7 +2310,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				int videoResolution = 720;
 				int videoLock = 0;
 
-				if (mResolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
+				if (resolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
 					videoResolution = 1080;
 				}
 				if (MyApp.isVideoLock) {

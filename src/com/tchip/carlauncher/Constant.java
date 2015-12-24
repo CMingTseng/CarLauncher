@@ -3,19 +3,13 @@ package com.tchip.carlauncher;
 import android.os.Environment;
 
 public interface Constant {
-	/**
-	 * Debug：打印Log
-	 */
+	/** Debug：打印Log **/
 	public static final boolean isDebug = true;
 
-	/**
-	 * 日志Tag
-	 */
+	/** 日志Tag **/
 	public static final String TAG = "ZMS";
 
-	/**
-	 * SharedPreferences名称
-	 */
+	/** SharedPreferences **/
 	public static final class MySP {
 		/** 名称 **/
 		public static final String NAME = "CarLauncher";
@@ -30,9 +24,7 @@ public interface Constant {
 		public static final String STR_MANUL_LIGHT_VALUE = "manulLightValue";
 	}
 
-	/**
-	 * 广播
-	 */
+	/** 广播 **/
 	public static final class Broadcast {
 		/** ACC上电 **/
 		public static final String ACC_ON = "com.tchip.ACC_ON";
@@ -79,7 +71,6 @@ public interface Constant {
 		 * 1.停车守卫开关：parkOn,parkOff
 		 * 
 		 * 2.碰撞侦测，开关：crashOn,crashOff;灵敏度:crashLow,crashMiddle,crashHigh
-		 * 
 		 */
 		public static final String SETTING_SYNC = "com.tchip.SETTING_SYNC";
 
@@ -87,7 +78,6 @@ public interface Constant {
 		 * 语音命令,Extra:command
 		 * 
 		 * 1.语音拍照：take_photo
-		 * 
 		 */
 		public static final String SPEECH_COMMAND = "com.tchip.SPEECH_COMMAND";
 
@@ -104,7 +94,6 @@ public interface Constant {
 		 * intent.putExtra("picture", picPaths);
 		 * 
 		 * sendBroadcast(intent);
-		 * 
 		 */
 		public static final String SEND_PIC_PATH = "com.action.http.post.picture";
 
@@ -123,31 +112,21 @@ public interface Constant {
 
 	public static final class Setting {
 
-		/**
-		 * 最大亮度
-		 */
+		/** 最大亮度 **/
 		public static final int MAX_BRIGHTNESS = 196; // 255;
 
-		/**
-		 * 默认亮度
-		 */
+		/** 默认亮度 **/
 		public static final int DEFAULT_BRIGHTNESS = 180;
 
-		/**
-		 * Camera自动调节亮度是否打开
-		 */
+		/** Camera自动调节亮度是否打开 **/
 		public static final boolean AUTO_BRIGHT_DEFAULT_ON = false;
 	}
 
 	public static final class GravitySensor {
-		/**
-		 * 碰撞侦测是否默认打开
-		 */
+		/** 碰撞侦测是否默认打开 **/
 		public static final boolean DEFAULT_ON = true;
 
-		/**
-		 * 碰撞侦测默认灵敏度Level
-		 */
+		/** 碰撞侦测默认灵敏度Level **/
 		public static final float VALUE = 9.8f;
 
 		public static final int SENSITIVE_LOW = 0;
@@ -163,45 +142,41 @@ public interface Constant {
 	}
 
 	public static final class Record {
-		/**
-		 * 是否包含录像模块，去掉可用作其他平台做对比测试
-		 */
+		/** 是否包含录像模块，去掉可用作其他平台做对比测试 **/
 		public static final boolean hasCamera = true;
 
-		/**
-		 * 是否开机自动录像
-		 */
+		/** 是否开机自动录像 **/
 		public static final boolean autoRecord = true;
 
-		/**
-		 * 默认是否静音
-		 */
+		/** 默认是否静音 **/
 		public static final boolean muteDefault = false;
 
-		/**
-		 * 停车侦测录像是否加锁
-		 */
+		/** 停车侦测录像是否加锁 **/
 		public static final boolean parkVideoLock = false;
 
-		/**
-		 * 停车侦测录像时长(s)
-		 */
+		/** 停车侦测录像时长(s) **/
 		public static final int parkVideoLength = 60;
 
-		/**
-		 * 停车侦测是否默认打开
-		 */
+		/** 停车侦测是否默认打开 **/
 		public static final boolean parkDefaultOn = true;
 
-		/**
-		 * 开机自动录像延时
-		 */
+		/** 开机自动录像延时 **/
 		public static final int autoRecordDelay = 2500;
 
-		/**
-		 * 循环录像保留空间(单位：字节B)
-		 */
+		/** 循环录像保留空间(单位：字节B) **/
 		public static final long SD_MIN_FREE_STORAGE = 500 * 1024 * 1024; // 500M
+
+		/** 比特率240P **/
+		public static final int BIT_RATE_240P = 120 * 1000;
+		
+		/** 比特率720P **/
+		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000
+
+		/** 比特率1080P **/
+		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000
+
+		/** 帧率 **/
+		public static final int FRAME_RATE = 30; // 24
 
 		// 分辨率
 		public static final int STATE_RESOLUTION_720P = 0;
@@ -214,7 +189,6 @@ public interface Constant {
 		// 视频分段
 		public static final int STATE_INTERVAL_3MIN = 0;
 		public static final int STATE_INTERVAL_1MIN = 2;
-		// public static final int STATE_INTERVAL_5MIN = 1;
 
 		// 第二视图
 		public static final int STATE_SECONDARY_ENABLE = 0;
@@ -234,9 +208,7 @@ public interface Constant {
 		public static final int STATE_MUTE = 0;
 		public static final int STATE_UNMUTE = 1;
 
-		/**
-		 * 相机参数
-		 */
+		/** 系统相机参数 **/
 		public static final String CAMERA_PARAMS = "zoom=0;fb-smooth-level-max=4;max-num-detected-faces-hw=15;"
 				+ "cap-mode=normal;whitebalance=auto;afeng-min-focus-step=0;"
 				+ "preview-format-values=yuv420sp,yuv420p,yuv420i-yyuvyy-3plane;"
