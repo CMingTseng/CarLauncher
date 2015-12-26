@@ -191,7 +191,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
 				boolean isAirplaneOn = intent.getBooleanExtra("state", false);
-				MyLog.v("[AirplaneReceiver]State:" + isAirplaneOn);
+				MyLog.v("[Main]AirplaneReceiver, isAirplaneOn:" + isAirplaneOn);
 				setAirplaneIcon(isAirplaneOn);
 				if (isAirplaneOn) {
 					imageSignalLevel.setBackground(getResources().getDrawable(
@@ -1424,10 +1424,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				MyLog.v("[startRecord]Already record yet");
 			}
 			setupRecordViews();
-			if (Constant.isDebug) {
-				MyLog.v("MyApplication.isVideoReording:"
-						+ MyApp.isVideoReording);
-			}
+			MyLog.v("MyApplication.isVideoReording:" + MyApp.isVideoReording);
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]startOrStopRecord catch exception: "
 					+ e.toString());
@@ -1463,10 +1460,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			}
 			setupRecordViews();
-			if (Constant.isDebug) {
-				MyLog.v("MyApplication.isVideoReording:"
-						+ MyApp.isVideoReording);
-			}
+			MyLog.v("MyApplication.isVideoReording:" + MyApp.isVideoReording);
 		} catch (Exception e) {
 			MyLog.e("[MainActivity]startOrStopRecord catch exception: "
 					+ e.toString());
@@ -1534,7 +1528,8 @@ public class MainActivity extends Activity implements TachographCallback,
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					MyLog.v("updateWifiThread:Refresh Wifi! " + updateWifiTime);
+					MyLog.v("[Main]updateWifiThread:Refresh Wifi! "
+							+ updateWifiTime);
 					Message messageWifi = new Message();
 					messageWifi.what = 1;
 					updateNetworkIconHandler.sendMessage(messageWifi);
@@ -1542,7 +1537,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (updateWifiTime > 5) {
 						shouldUpdateWifi = false;
 					}
-
 				}
 			}
 		}
@@ -2128,12 +2122,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 设置保存路径
-	 * 
-	 * @param dir
-	 * @return
-	 */
+	/** 设置保存路径 **/
 	public int setDirectory(String dir) {
 		if (carRecorder != null) {
 			return carRecorder.setDirectory(dir);
@@ -2141,12 +2130,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
-	/**
-	 * 设置录像静音，需要已经初始化carRecorder
-	 * 
-	 * @param mute
-	 * @return
-	 */
+	/** 设置录像静音，需要已经初始化carRecorder **/
 	private int setMute(boolean mute) {
 		if (carRecorder != null) {
 			return carRecorder.setMute(mute);
@@ -2233,9 +2217,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyApp.cameraState = CameraState.OKAY;
 	}
 
-	/**
-	 * 释放Recorder
-	 */
+	/** 释放Recorder **/
 	private void releaseRecorder() {
 		try {
 			if (carRecorder != null) {
@@ -2307,12 +2289,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				editor.putString("sdcardPath", "/mnt/" + path.split("/")[2]
 						+ "/");
 				editor.commit();
-				int videoResolution = 720;
+				int videoResolution = (resolutionState == Constant.Record.STATE_RESOLUTION_720P) ? 720
+						: 1080;
 				int videoLock = 0;
 
-				if (resolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
-					videoResolution = 1080;
-				}
 				if (MyApp.isVideoLock) {
 					videoLock = 1;
 					MyApp.isVideoLock = false; // 还原
@@ -2351,8 +2331,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			// 更新Media Database
 			sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
 					Uri.parse("file://" + path)));
-			MyLog.d("[onFileSave] File Save, Type=" + type + ",Save path:"
-					+ path);
+			MyLog.d("[onFileSave]Type=" + type + ",Save path:" + path);
 
 			if (!MyApp.isVideoReording) {
 				// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
@@ -2379,7 +2358,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-
 			if (isSurfaceLarge()) { // 如果视频全屏预览开启，返回关闭
 				int widthSmall = 480;
 				int heightSmall = 270;

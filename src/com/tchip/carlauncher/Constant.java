@@ -170,10 +170,10 @@ public interface Constant {
 		public static final int BIT_RATE_240P = 120 * 1000;
 		
 		/** 比特率720P **/
-		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000
+		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000, MTK:9000 * 1000
 
 		/** 比特率1080P **/
-		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000
+		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000, MTK:17000 * 1000
 
 		/** 帧率 **/
 		public static final int FRAME_RATE = 30; // 24
