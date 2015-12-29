@@ -989,6 +989,13 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageSleep.what = 5;
 						updateRecordTimeHandler.sendMessage(messageSleep);
 						return;
+					} else if (MyApp.shouldStopRecordFromVoice) {
+						MyApp.shouldStopRecordFromVoice = false;
+						Message messageStopRecordFromVoice = new Message();
+						messageStopRecordFromVoice.what = 6;
+						updateRecordTimeHandler
+								.sendMessage(messageStopRecordFromVoice);
+						return;
 					} else {
 						try {
 							Thread.sleep(1000);
@@ -1161,6 +1168,25 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				MyApp.shouldResetRecordWhenResume = true;
+				break;
+
+			case 6:// 语音命令：停止录像
+				if (stopRecorder() == 0) {
+					recordState = Constant.Record.STATE_RECORD_STOPPED;
+					MyApp.isVideoReording = false;
+					setupRecordViews();
+
+					releaseCameraZone();
+				} else {
+					if (stopRecorder() == 0) {
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
+						MyApp.isVideoReording = false;
+						setupRecordViews();
+
+						releaseCameraZone();
+					}
+				}
+
 				break;
 
 			default:

@@ -35,6 +35,9 @@ public class MyApp extends Application {
 
 	/** 语音拍照 **/
 	public static boolean shouldTakeVoicePhoto = false;
+	
+	/** 语音停止录像 **/
+	public static boolean shouldStopRecordFromVoice = false;
 
 	/** ACC下电:拍照 **/
 	public static boolean shouldTakePhotoWhenAccOff = false;

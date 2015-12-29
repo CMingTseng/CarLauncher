@@ -156,6 +156,16 @@ public class SleepOnOffService extends Service {
 					if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 						SettingUtil.lightScreen(getApplicationContext());
 					}
+				} else if ("open_dvr".equals(command)) {
+					if (MyApp.isAccOn && !MyApp.isVideoReording) {
+						MyApp.shouldMountRecord = true;
+					}
+
+				} else if ("close_dvr".equals(command)) {
+					if (MyApp.isVideoReording) {
+						MyApp.shouldStopRecordFromVoice = true;
+					}
+
 				}
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_PLAYING)) {
 				MyApp.isBTPlayMusic = true;

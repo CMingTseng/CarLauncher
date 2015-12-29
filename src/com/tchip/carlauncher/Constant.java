@@ -78,6 +78,10 @@ public interface Constant {
 		 * 语音命令,Extra:command
 		 * 
 		 * 1.语音拍照：take_photo
+		 * 
+		 * 2.语音开始录像：open_dvr
+		 * 
+		 * 3.语音停止录像：close_dvr
 		 */
 		public static final String SPEECH_COMMAND = "com.tchip.SPEECH_COMMAND";
 
