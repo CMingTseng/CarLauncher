@@ -3,7 +3,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="com.tchip"
     android:versionCode="2"
-    android:versionName="2015.12.24-18:25" >
+    android:versionName="2015.12.29-14:00" >
 
     <uses-sdk
         android:minSdkVersion="19"

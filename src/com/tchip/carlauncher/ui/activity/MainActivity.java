@@ -1248,7 +1248,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoLock:
 			case R.id.layoutVideoLockSmall:
 				if (!ClickUtil.isQuickClick(800)) {
-					lockOrUnlockVideo();
+					if (MyApp.isVideoReording) {
+						lockOrUnlockVideo();
+					} else {
+						HintUtil.showToast(MainActivity.this, "未录像");
+					}
 				}
 				break;
 
