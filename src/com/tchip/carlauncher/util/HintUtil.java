@@ -28,7 +28,10 @@ public class HintUtil {
 	}
 
 	public static void speakVoice(Context context, String content) {
-		Intent intent = new Intent(context, SpeakService.class);
+
+		Intent intent = new Intent();
+		intent.setClassName("com.tchip.weather",
+				"com.tchip.weather.service.SpeakService");
 		intent.putExtra("content", content);
 		context.startService(intent);
 	}

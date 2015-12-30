@@ -318,6 +318,7 @@ public interface Constant {
 		public static final String SD_CARD = Environment
 				.getExternalStorageDirectory().getPath();
 
+		public static final String SDCARD_0 = "/storage/sdcard0";
 		public static final String SDCARD_1 = "/storage/sdcard1";
 		public static final String SDCARD_2 = "/storage/sdcard2";
 
