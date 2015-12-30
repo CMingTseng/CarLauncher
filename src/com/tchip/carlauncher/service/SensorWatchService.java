@@ -13,6 +13,7 @@ import java.util.Date;
 
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.R;
+import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 
@@ -79,8 +80,10 @@ public class SensorWatchService extends Service {
 						if (MyApp.isVideoReording && !MyApp.isVideoLock) {
 							MyApp.isVideoLock = true;
 							MyApp.isCrashed = true;
-							startSpeak(getResources().getString(
-									R.string.video_lock));
+							HintUtil.speakVoice(
+									getApplicationContext(),
+									getResources().getString(
+											R.string.video_lock));
 							MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
 									+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
 						}
@@ -113,12 +116,6 @@ public class SensorWatchService extends Service {
 		sensorManager.unregisterListener(sensorEventListener);
 		MyLog.v("[SensorWatchService]onDestroy");
 		super.onDestroy();
-	}
-
-	private void startSpeak(String content) {
-		Intent intent = new Intent(getApplicationContext(), SpeakService.class);
-		intent.putExtra("content", content);
-		startService(intent);
 	}
 
 	@Override

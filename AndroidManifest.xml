@@ -59,15 +59,6 @@
         android:label="CarLauncher"
         android:largeHeap="true"
         android:theme="@android:style/Theme.Holo.Light" >
-
-        <!-- 讯飞语音 -->
-        <meta-data
-            android:name="IFLYTEK_APPKEY"
-            android:value="5531bef5" />
-        <meta-data
-            android:name="IFLYTEK_CHANNEL"
-            android:value="Android_Demo" />
-
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MainActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
@@ -105,9 +96,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.tchip.carlauncher.service.SpeakService"
-            android:exported="true" />
         <service android:name="com.tchip.carlauncher.service.SensorWatchService" />
         <service android:name="com.tchip.carlauncher.service.SleepOnOffService" />
         <service android:name="com.tchip.carlauncher.service.FloatWindowService" />

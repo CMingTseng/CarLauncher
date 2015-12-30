@@ -16,7 +16,6 @@ import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.model.DriveVideoDbHelper;
-import com.tchip.carlauncher.service.SpeakService;
 import com.tchip.carlauncher.ui.activity.MainActivity;
 import com.tchip.carlauncher.view.AudioRecordDialog;
 
