@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    coreApp="true"
     package="com.tchip.carlauncher"
-    android:sharedUserId="com.tchip"
+    android:sharedUserId="android.uid.system"
     android:versionCode="2"
-    android:versionName="2015.12.29-14:00" >
+    android:versionName="2015.12.30-20:10" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -19,14 +20,10 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
