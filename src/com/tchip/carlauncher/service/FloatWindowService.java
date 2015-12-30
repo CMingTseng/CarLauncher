@@ -78,26 +78,6 @@ public class FloatWindowService extends Service {
 				.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 		MyLog.i("Width/2--->" + imageRecordingHint.getMeasuredWidth() / 2);
 		MyLog.i("Height/2--->" + imageRecordingHint.getMeasuredHeight() / 2);
-		// 设置监听浮动窗口的触摸移动
-		/*
-		 * imageRecordingHint.setOnTouchListener(new OnTouchListener() {
-		 * 
-		 * @Override public boolean onTouch(View v, MotionEvent event) { //
-		 * getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标 wmParams.x = (int) event.getRawX()
-		 * - imageRecordingHint.getMeasuredWidth() / 2; MyLog.i("RawX" +
-		 * event.getRawX()); MyLog.i("X" + event.getX()); // 减25为状态栏的高度
-		 * wmParams.y = (int) event.getRawY() -
-		 * imageRecordingHint.getMeasuredHeight() / 2 - 25; MyLog.i("RawY" +
-		 * event.getRawY()); MyLog.i("Y" + event.getY()); // 刷新
-		 * mWindowManager.updateViewLayout(mFloatLayout, wmParams); return
-		 * false; // 此处必须返回false，否则OnClickListener获取不到监听 } });
-		 * 
-		 * imageRecordingHint.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) {
-		 * Toast.makeText(FloatWindowService.this, "onClick",
-		 * Toast.LENGTH_SHORT).show(); } });
-		 */
 	}
 
 	@Override

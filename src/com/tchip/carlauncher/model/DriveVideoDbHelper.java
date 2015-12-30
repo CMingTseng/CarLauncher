@@ -76,7 +76,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 
 		DriveVideo driveVideo = new DriveVideo(cursor.getInt(0),
 				cursor.getString(1), cursor.getInt(2), cursor.getInt(3));
-		
+
 		db.close();
 		cursor.close();
 
@@ -96,7 +96,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 
 		DriveVideo driveVideo = new DriveVideo(cursor.getInt(0),
 				cursor.getString(1), cursor.getInt(2), cursor.getInt(3));
-		
+
 		db.close();
 		cursor.close();
 
@@ -138,15 +138,15 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 			int videoLock = cursor
 					.getInt(cursor.getColumnIndex(VIDEO_COL_LOCK));
-			
+
 			db.close();
 			cursor.close();
-			
+
 			return videoLock;
 		} else {
 			db.close();
 			cursor.close();
-			
+
 			return 0;
 		}
 	}
@@ -171,7 +171,7 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 				driveVideoList.add(driveVideo);
 			} while (cursor.moveToNext());
 		}
-		
+
 		db.close();
 		cursor.close();
 
@@ -215,15 +215,15 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			int id = cursor.getInt(cursor.getColumnIndex(VIDEO_COL_ID));
-			
+
 			db.close();
 			cursor.close();
-			
+
 			return id;
 		} else {
 			db.close();
 			cursor.close();
-			
+
 			return -1;
 		}
 	}
@@ -240,15 +240,15 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			int id = cursor.getInt(cursor.getColumnIndex(VIDEO_COL_ID));
-			
+
 			db.close();
 			cursor.close();
-			
+
 			return id;
 		} else {
 			db.close();
 			cursor.close();
-			
+
 			return -1;
 		}
 	}
@@ -263,15 +263,15 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 			String videoName = cursor.getString(cursor
 					.getColumnIndex(VIDEO_COL_NAME));
-			
+
 			db.close();
 			cursor.close();
-			
+
 			return videoName;
 		} else {
 			db.close();
 			cursor.close();
-			
+
 			return "";
 		}
 	}

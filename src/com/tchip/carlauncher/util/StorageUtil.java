@@ -200,7 +200,7 @@ public class StorageUtil {
 							String strNoStorage = context
 									.getResources()
 									.getString(
-											R.string.storage_full_cause_by_other);
+											R.string.hint_storage_full_cause_by_other);
 
 							audioRecordDialog.showErrorDialog(strNoStorage);
 							// new Thread(new dismissDialogThread()).start();
@@ -210,9 +210,10 @@ public class StorageUtil {
 						}
 					} else {
 						// 提示用户清理空间，删除较旧的视频（加锁）
-						String strStorageFull = context.getResources()
+						String strStorageFull = context
+								.getResources()
 								.getString(
-										R.string.storage_full_and_delete_lock);
+										R.string.hint_storage_full_and_delete_lock);
 						HintUtil.speakVoice(context, strStorageFull);
 						Toast.makeText(context, strStorageFull,
 								Toast.LENGTH_SHORT).show();

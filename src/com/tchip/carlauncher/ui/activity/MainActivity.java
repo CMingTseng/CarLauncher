@@ -1095,7 +1095,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				String strVideoCardEject = getResources().getString(
-						R.string.sd_remove_badly);
+						R.string.hint_sd_remove_badly);
 				HintUtil.showToast(MainActivity.this, strVideoCardEject);
 
 				MyLog.e("CardEjectReceiver:Video SD Removed");
@@ -1122,7 +1122,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				String strPowerUnconnect = getResources().getString(
-						R.string.stop_record_power_unconnect);
+						R.string.hint_stop_record_power_unconnect);
 				HintUtil.showToast(MainActivity.this, strPowerUnconnect);
 				HintUtil.speakVoice(MainActivity.this, strPowerUnconnect);
 
@@ -1438,7 +1438,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 				if (MyApp.isSleeping) {
 					HintUtil.speakVoice(MainActivity.this, getResources()
-							.getString(R.string.stop_record_sleeping));
+							.getString(R.string.hint_stop_record_sleeping));
 				} else {
 					if (!powerManager.isScreenOn()) { // 点亮屏幕
 						SettingUtil.lightScreen(getApplicationContext());
@@ -1467,7 +1467,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 				if (MyApp.isSleeping) {
 					HintUtil.speakVoice(MainActivity.this, getResources()
-							.getString(R.string.stop_record_sleeping));
+							.getString(R.string.hint_stop_record_sleeping));
 				} else {
 					if (!powerManager.isScreenOn()) { // 点亮屏幕
 						SettingUtil.lightScreen(getApplicationContext());
@@ -1504,12 +1504,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (!MyApp.isVideoLock) {
 			MyApp.isVideoLock = true;
 			HintUtil.speakVoice(MainActivity.this,
-					getResources().getString(R.string.video_lock));
+					getResources().getString(R.string.hint_video_lock));
 		} else {
 			MyApp.isVideoLock = false;
 			MyApp.isVideoLockSecond = false;
 			HintUtil.speakVoice(MainActivity.this,
-					getResources().getString(R.string.video_unlock));
+					getResources().getString(R.string.hint_video_unlock));
 		}
 		setupRecordViews();
 	}
@@ -2006,7 +2006,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	/** 视频SD卡不存在提示 **/
 	private void noVideoSDHint() {
-		String strNoSD = getResources().getString(R.string.sd2_not_exist);
+		String strNoSD = getResources().getString(R.string.hint_sd2_not_exist);
 		audioRecordDialog.showErrorDialog(strNoSD);
 		new Thread(new dismissDialogThread()).start();
 		HintUtil.speakVoice(MainActivity.this, strNoSD);
@@ -2340,7 +2340,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						+ ", isVideoLockSecond:" + MyApp.isVideoLockSecond);
 			} else { // 图片
 				HintUtil.showToast(MainActivity.this,
-						getResources().getString(R.string.photo_save));
+						getResources().getString(R.string.hint_photo_save));
 
 				StorageUtil.writeImageExif(MainActivity.this, path);
 

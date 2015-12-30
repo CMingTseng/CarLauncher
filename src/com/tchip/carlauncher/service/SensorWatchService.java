@@ -51,11 +51,6 @@ public class SensorWatchService extends Service {
 		sensorEventListener = new SensorEventListener() {
 			@Override
 			public void onSensorChanged(SensorEvent event) {
-				// if (MyApplication.isSleeping) {
-				// stopSelf();
-				// MyLog.v("[SensorWatchService]stopSelf in case of isSleeping = true");
-				// return;
-				// }
 				if (MyApp.isAccOn && MyApp.isCrashOn) {
 					LIMIT_X = LIMIT_Y = LIMIT_Z = SettingUtil
 							.getGravityVauleBySensitive(MyApp.crashSensitive);
@@ -67,10 +62,6 @@ public class SensorWatchService extends Service {
 						crashFlag[0] = 1;
 						isCrash = true;
 					}
-					// if (valueY > LIMIT_Y || valueY < -LIMIT_Y) {
-					// crashFlag[1] = 1;
-					// isCrash = true;
-					// }
 					if (valueZ > LIMIT_Z || valueZ < -LIMIT_Z) {
 						crashFlag[2] = 1;
 						isCrash = true;
@@ -83,7 +74,7 @@ public class SensorWatchService extends Service {
 							HintUtil.speakVoice(
 									getApplicationContext(),
 									getResources().getString(
-											R.string.video_lock));
+											R.string.hint_video_lock));
 							MyLog.v("[SensorWarchService] Crashed -> isVideoLock = true;X:"
 									+ valueX + ",Y:" + valueY + ",Z:" + valueZ);
 						}

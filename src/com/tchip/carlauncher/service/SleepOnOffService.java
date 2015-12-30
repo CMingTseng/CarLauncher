@@ -2,6 +2,7 @@ package com.tchip.carlauncher.service;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
+import com.tchip.carlauncher.R;
 import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
@@ -362,7 +363,10 @@ public class SleepOnOffService extends Service {
 	private void deviceAccOff() {
 		accOffCount = 0;
 		if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON, true)) {
-			HintUtil.speakVoice(context, "九十秒后启动停车守卫");
+			HintUtil.speakVoice(
+					context,
+					getResources().getString(
+							R.string.hint_start_park_monitor_after_90));
 		}
 
 		if (!MyApp.isMainForeground) {

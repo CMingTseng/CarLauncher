@@ -172,12 +172,16 @@ public interface Constant {
 
 		/** 比特率240P **/
 		public static final int BIT_RATE_240P = 120 * 1000;
-		
+
 		/** 比特率720P **/
-		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000, MTK:9000 * 1000
+		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000,
+																// MTK:9000 *
+																// 1000
 
 		/** 比特率1080P **/
-		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000, MTK:17000 * 1000
+		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000,
+																// MTK:17000 *
+																// 1000
 
 		/** 帧率 **/
 		public static final int FRAME_RATE = 30; // 24
@@ -261,19 +265,10 @@ public interface Constant {
 	}
 
 	public static final class Module {
-		/**
-		 * 导航是否是百度:true-(自写百度SDK导航) false-图吧导航
-		 */
+		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;
 
-		/**
-		 * 是否有用户中心
-		 */
-		public static final boolean hasUserCenter = false;
-
-		/**
-		 * 是否有拨号短信模块
-		 */
+		/** 是否有拨号短信模块 **/
 		public static final boolean hasDialer = false;
 	}
 
@@ -281,31 +276,11 @@ public interface Constant {
 	 * FM发射
 	 */
 	public static final class FMTransmit {
-		/**
-		 * 系统设置：FM发射开关
-		 */
+		/** 系统设置：FM发射开关 **/
 		public static final String SETTING_ENABLE = "fm_transmitter_enable";
 
-		/**
-		 * 系统设置：FM发射频率
-		 */
+		/** 系统设置：FM发射频率 **/
 		public static final String SETTING_CHANNEL = "fm_transmitter_channel";
-	}
-
-	/**
-	 * 行驶轨迹
-	 */
-	public static final class RouteTrack {
-		/**
-		 * 存储位置
-		 */
-		public static final String PATH = Environment
-				.getExternalStorageDirectory().getPath() + "/Route/";
-
-		/**
-		 * 扩展名
-		 */
-		public static final String EXTENSION = ".art"; // Auto Route Track
 	}
 
 	/**
@@ -327,63 +302,11 @@ public interface Constant {
 		 */
 		public static final String FONT = "fonts/";
 
-		/**
-		 * 百度离线地图子级目录
-		 */
+		/** 百度离线地图子级目录 **/
 		public static final String BAIDU_OFFLINE_SUB = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
 
-		/**
-		 * 百度离线地图，存储卡位置
-		 */
+		/** 百度离线地图，存储卡位置 **/
 		public static final String SD_CARD_MAP = "/storage/sdcard1";
 	}
 
-	public static final class MagicCode {
-
-		/**
-		 * 进入MagicActivity的密码
-		 */
-		public static final String PASSWORD = "55555";
-
-		/**
-		 * 启动测试应用命令:DeviceTest
-		 */
-		public static final String DEVICE_TEST = "*#86*#";
-
-		/**
-		 * 启动工程模式：EngineerMode
-		 */
-		public static final String ENGINEER_MODE = "*#*#3646633#*#*";
-
-		/**
-		 * 启动系统设置:Setting
-		 */
-		public static final String SETTING = "*#7388464#*";
-	}
-
-	/**
-	 * FACE++ SDK
-	 */
-	public static final class FacePlusPlus {
-		public static final String API_KEY = "543e743fa43f0550c2977995f3ff2222";
-		public static final String API_SECRET = "IEpqaPm-wa-eznyZfKhvwW8rEGgzLxRk";
-	}
-
-	/**
-	 * 讯飞语音SDK
-	 */
-	public static final String XUNFEI_APP_ID = "5531bef5";
-
-	/**
-	 * 百度地图SDK
-	 */
-	public static final class BaiduMap {
-		public static final String API_KEY = "Tycks4ezX3hSXfRtu7TvCVTl";
-		public static final String MCODE = "6B:40:B2:47:13:F5:6A:F7:40:6A:89:84:46:53:33:47:AD:DC:C1:0C;com.tchip.carlauncher";
-	}
-
-	/**
-	 * 设置条目点击波纹速度
-	 */
-	public static final int SETTING_ITEM_RIPPLE_SPEED = 80;
 }
