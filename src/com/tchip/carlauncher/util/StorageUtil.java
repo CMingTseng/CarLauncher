@@ -261,10 +261,14 @@ public class StorageUtil {
 		DriveVideoDbHelper videoDb = new DriveVideoDbHelper(context); // 视频数据库
 		try {
 			if (file.isFile() && !file.getName().endsWith(".jpg")) {
-				if (!videoDb.isVideoExist(file.getName())) {
-					file.delete();
-					MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File:"
-							+ file.getName());
+				if (MyApp.isVideoReording && file.getName().startsWith(".")) {
+
+				} else {
+					if (!videoDb.isVideoExist(file.getName())) {
+						file.delete();
+						MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File:"
+								+ file.getName());
+					}
 				}
 				return;
 			}

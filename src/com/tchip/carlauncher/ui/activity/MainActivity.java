@@ -579,7 +579,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				startOrStopRecord();
+				startRecord();
 				break;
 
 			default:
@@ -1231,13 +1231,13 @@ public class MainActivity extends Activity implements TachographCallback,
 						if (StorageUtil.isVideoCardExists()) {
 							HintUtil.speakVoice(MainActivity.this,
 									strRecordStart);
-							startOrStopRecord();
+							startRecord();
 						} else {
 							noVideoSDHint();
 						}
 					} else if (recordState == Constant.Record.STATE_RECORD_STARTED) {
 						HintUtil.speakVoice(MainActivity.this, strRecordStop);
-						startOrStopRecord();
+						stopRecord();
 					}
 
 				}
@@ -1329,7 +1329,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApp.isVideoReording = false;
 
 						if (StorageUtil.isVideoCardExists()) {
-							startOrStopRecord();
+							startRecord();
 						} else {
 							noVideoSDHint();
 						}
@@ -1461,25 +1461,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 开启或关闭录像 **/
-	private void startOrStopRecord() {
+	/** 停止录像 **/
+	private void stopRecord() {
 		try {
-			if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
-				if (MyApp.isSleeping) {
-					HintUtil.speakVoice(MainActivity.this, getResources()
-							.getString(R.string.hint_stop_record_sleeping));
-				} else {
-					if (!powerManager.isScreenOn()) { // 点亮屏幕
-						SettingUtil.lightScreen(getApplicationContext());
-					}
-
-					if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
-						sendBroadcast(new Intent("com.tchip.powerKey")
-								.putExtra("value", "home"));
-					}
-					new Thread(new StartRecordThread()).start(); // 开始录像
-				}
-			} else if (recordState == Constant.Record.STATE_RECORD_STARTED) {
+			if (recordState == Constant.Record.STATE_RECORD_STARTED) {
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1490,10 +1475,8 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			}
 			setupRecordViews();
-			MyLog.v("MyApplication.isVideoReording:" + MyApp.isVideoReording);
 		} catch (Exception e) {
-			MyLog.e("[MainActivity]startOrStopRecord catch exception: "
-					+ e.toString());
+			e.printStackTrace();
 		}
 	}
 
@@ -2133,6 +2116,14 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 				HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
 				carRecorder.takePicture();
+
+				if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON,
+						true)) {
+					HintUtil.speakVoice(
+							getApplicationContext(),
+							getResources().getString(
+									R.string.hint_start_park_monitor_after_90));
+				}
 			}
 			if (powerManager.isScreenOn()) {
 				sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
@@ -2297,6 +2288,11 @@ public class MainActivity extends Activity implements TachographCallback,
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void onFileStart(int type, String path) {
+		
 	}
 
 	/**

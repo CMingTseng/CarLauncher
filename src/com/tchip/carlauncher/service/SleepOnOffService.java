@@ -362,12 +362,6 @@ public class SleepOnOffService extends Service {
 	 */
 	private void deviceAccOff() {
 		accOffCount = 0;
-		if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON, true)) {
-			HintUtil.speakVoice(
-					context,
-					getResources().getString(
-							R.string.hint_start_park_monitor_after_90));
-		}
 
 		if (!MyApp.isMainForeground) {
 			// 发送Home键，回到主界面
@@ -527,9 +521,6 @@ public class SleepOnOffService extends Service {
 
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.android.gallery3d")); // 图库
-
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.tchip.weather")); // 天气
 
 		} catch (Exception e) {
 			e.printStackTrace();
