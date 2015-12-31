@@ -51,6 +51,7 @@
 
     <application
         android:name="com.tchip.carlauncher.MyApp"
+        android:persistent="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="CarLauncher"
