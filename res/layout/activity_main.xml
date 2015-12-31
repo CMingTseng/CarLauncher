@@ -433,7 +433,7 @@
         android:shadowDx="1.5"
         android:shadowDy="1.5"
         android:shadowRadius="2.5"
-        android:text="00 : 00"
+        android:text="@string/default_record_time"
         android:textColor="#ffffff"
         android:textSize="22sp"
         android:visibility="invisible" />

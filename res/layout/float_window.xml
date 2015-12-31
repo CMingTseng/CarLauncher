@@ -22,7 +22,7 @@
         android:shadowDx="1.5"
         android:shadowDy="1.5"
         android:shadowRadius="2.0"
-        android:text="REC"
+        android:text="@string/short_record"
         android:textColor="#ffffff"
         android:textSize="20sp" />
 
