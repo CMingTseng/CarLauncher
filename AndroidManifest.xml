@@ -4,7 +4,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="android.uid.system"
     android:versionCode="2"
-    android:versionName="2015.12.30-20:10" >
+    android:versionName="2016.01.06-15:15" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.INJECT_EVENTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -51,11 +52,11 @@
 
     <application
         android:name="com.tchip.carlauncher.MyApp"
-        android:persistent="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="CarLauncher"
         android:largeHeap="true"
+        android:persistent="true"
         android:theme="@android:style/Theme.Holo.Light" >
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MainActivity"

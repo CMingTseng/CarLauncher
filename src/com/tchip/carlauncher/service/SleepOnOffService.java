@@ -7,6 +7,7 @@ import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 
+import android.app.Instrumentation;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
+import android.view.KeyEvent;
 
 public class SleepOnOffService extends Service {
 	private Context context;
@@ -152,8 +154,7 @@ public class SleepOnOffService extends Service {
 				if ("take_photo".equals(command)) {
 					MyApp.shouldTakeVoicePhoto = true; // 语音拍照
 
-					context.sendBroadcast(new Intent("com.tchip.powerKey")
-							.putExtra("value", "home")); // 发送Home键，回到主界面
+					sendKeyCode(KeyEvent.KEYCODE_HOME); // 发送Home键，回到主界面
 					if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 						SettingUtil.lightScreen(getApplicationContext());
 					}
@@ -365,8 +366,7 @@ public class SleepOnOffService extends Service {
 
 		if (!MyApp.isMainForeground) {
 			// 发送Home键，回到主界面
-			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-					"value", "home"));
+			sendKeyCode(KeyEvent.KEYCODE_HOME);
 			if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 				SettingUtil.lightScreen(getApplicationContext());
 			}
@@ -429,8 +429,7 @@ public class SleepOnOffService extends Service {
 			// MainActivity,BackThread的Handler启动AutoThread,启动录像和服务
 			MyApp.shouldWakeRecord = true;
 
-			context.sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-					"value", "home")); // 发送Home键，回到主界面
+			sendKeyCode(KeyEvent.KEYCODE_HOME); // 发送Home键，回到主界面
 			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
 			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
 			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF)); // 通知其他应用取消休眠
@@ -482,6 +481,19 @@ public class SleepOnOffService extends Service {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void sendKeyCode(final int keyCode) {
+		new Thread() {
+			public void run() {
+				try {
+					Instrumentation inst = new Instrumentation();
+					inst.sendKeyDownUpSync(keyCode);
+				} catch (Exception e) {
+					MyLog.e("Exception when sendPointerSync:" + e.toString());
+				}
+			}
+		}.start();
 	}
 
 	/**

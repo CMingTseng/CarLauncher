@@ -34,7 +34,7 @@ public class MyApp extends Application {
 
 	/** 语音拍照 **/
 	public static boolean shouldTakeVoicePhoto = false;
-	
+
 	/** 语音停止录像 **/
 	public static boolean shouldStopRecordFromVoice = false;
 
@@ -87,10 +87,11 @@ public class MyApp extends Application {
 	/** 录像界面是否可见 **/
 	public static boolean isMainForeground = true;
 
-	/**
-	 * 正在处理ACC休眠拍照
-	 */
+	/** 正在处理ACC休眠拍照 **/
 	public static boolean isAccOffPhotoTaking = false;
+
+	/** 当前正在录像的视频名称 **/
+	public static String nowRecordVideoName = "";
 
 	public static enum CameraState {
 		/** 未初始化 **/

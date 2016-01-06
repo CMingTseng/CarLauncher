@@ -179,18 +179,6 @@ public class StorageUtil {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
 
-						if (MyApp.isVideoReording) {
-							// stopRecorder(); // TODO:停止录像
-						}
-						/**
-						 * 有一种情况：数据库中无视频信息。导致的原因：
-						 * 1：升级时选Download的话，不会清理USB存储空间，应用数据库被删除； 2：应用被清除数据
-						 * 这种情况下旧视频无法直接删除， 此时如果满存储，需要直接删除
-						 */
-						File file = new File(sdcardPath + "tachograph/");
-						StorageUtil.RecursionDeleteFile(file);
-						MyLog.e("[StorageUtil]!!! Delete tachograph/ Directory");
-
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						intSdFree = (int) sdFree;
 						if (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
@@ -260,14 +248,16 @@ public class StorageUtil {
 	public static void RecursionCheckFile(Context context, File file) {
 		DriveVideoDbHelper videoDb = new DriveVideoDbHelper(context); // 视频数据库
 		try {
-			if (file.isFile() && !file.getName().endsWith(".jpg")) {
-				if (MyApp.isVideoReording && file.getName().startsWith(".")) {
+			String fileName = file.getName();
+			if (file.isFile() && !fileName.endsWith(".jpg")) {
+				if (MyApp.isVideoReording && fileName.startsWith(".")) {
+					// TODO:Delete file start with dot but not the recording one
 
 				} else {
-					if (!videoDb.isVideoExist(file.getName())) {
+					if (!videoDb.isVideoExist(fileName)) {
 						file.delete();
 						MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File:"
-								+ file.getName());
+								+ fileName);
 					}
 				}
 				return;

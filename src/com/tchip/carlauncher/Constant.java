@@ -4,7 +4,7 @@ import android.os.Environment;
 
 public interface Constant {
 	/** Debug：打印Log **/
-	public static final boolean isDebug = true;
+	public static final boolean isDebug = false;
 
 	/** 日志Tag **/
 	public static final String TAG = "ZMS";

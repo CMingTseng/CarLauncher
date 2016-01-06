@@ -25,6 +25,7 @@ import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -277,9 +278,9 @@ public class MainActivity extends Activity implements TachographCallback,
 					MyLog.e("Video card not exist or isn't first launch");
 				}
 
-				// if (StorageUtil.isVideoCardExists()) {
-				// CheckErrorFile(); // 检查并删除异常视频文件
-				// }
+				if (StorageUtil.isVideoCardExists()) {
+					CheckErrorFile(); // 检查并删除异常视频文件
+				}
 
 				// 自动录像:如果已经在录像则不处理
 				if (Constant.Record.autoRecord && !MyApp.isVideoReording) {
@@ -363,14 +364,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				if (MyApp.shouldMountRecord) {
 					MyApp.shouldMountRecord = false;
-					if (MyApp.isAccOn) {
-						if (!powerManager.isScreenOn()) { // 点亮屏幕
-							SettingUtil.lightScreen(getApplicationContext());
-						}
-						if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
-							sendBroadcast(new Intent("com.tchip.powerKey")
-									.putExtra("value", "home"));
-						}
+					if (MyApp.isAccOn && !MyApp.isVideoReording) {
 						new Thread(new RecordWhenMountThread()).start();
 					}
 				}
@@ -381,8 +375,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 					MyApp.shouldCrashRecord = false;
 					if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
-						sendBroadcast(new Intent("com.tchip.powerKey")
-								.putExtra("value", "home"));
+						sendKeyCode(KeyEvent.KEYCODE_HOME);
 					}
 					new Thread(new RecordWhenCrashThread()).start();
 				}
@@ -518,8 +511,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 
 						if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
-							sendBroadcast(new Intent("com.tchip.powerKey")
-									.putExtra("value", "home"));
+							sendKeyCode(KeyEvent.KEYCODE_HOME);
 						}
 
 						setInterval(3 * 60); // 防止在分段一分钟的时候，停车守卫录出1分和0秒两段视频
@@ -1445,8 +1437,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 
 					if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
-						sendBroadcast(new Intent("com.tchip.powerKey")
-								.putExtra("value", "home"));
+						sendKeyCode(KeyEvent.KEYCODE_HOME);
 					}
 					new Thread(new StartRecordThread()).start(); // 开始录像
 				}
@@ -1888,6 +1879,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void run() {
+
+			CheckErrorFile();
 			int i = 0;
 			while (i < 6) {
 				try {
@@ -1936,8 +1929,7 @@ public class MainActivity extends Activity implements TachographCallback,
 							&& MyApp.shouldStopWhenCrashVideoSave) {
 						MyLog.v("[CrashRecord]LCD:" + SettingUtil.getLCDValue());
 						if (powerManager.isScreenOn()) { // 发送PowerKey,将假熄屏更改为真熄屏
-							sendBroadcast(new Intent("com.tchip.powerKey")
-									.putExtra("value", "power_speech"));
+							sendKeyCode(KeyEvent.KEYCODE_POWER);
 						}
 					}
 				} else {
@@ -2126,8 +2118,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			}
 			if (powerManager.isScreenOn()) {
-				sendBroadcast(new Intent("com.tchip.powerKey").putExtra(
-						"value", "power_speech")); // 熄屏
+				sendKeyCode(KeyEvent.KEYCODE_POWER); // 熄屏
 			}
 		}
 	}
@@ -2289,10 +2280,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			break;
 		}
 	}
-	
+
 	@Override
 	public void onFileStart(int type, String path) {
-		
+
+		if (type == 1) {
+			MyApp.nowRecordVideoName = path.split("/")[5];
+		}
+
 	}
 
 	/**
@@ -2309,6 +2304,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void onFileSave(int type, String path) {
 		try {
 			if (type == 1) { // 视频
+
 				StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
 
 				String videoName = path.split("/")[5];
@@ -2359,10 +2355,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					Uri.parse("file://" + path)));
 			MyLog.d("[onFileSave]Type=" + type + ",Save path:" + path);
 
-			if (!MyApp.isVideoReording) {
-				// 需要在当前视频存储到数据库之后，且当前未录像时再进行;当行车视频较多时，该操作比较耗时
-				CheckErrorFile(); // TEST
-			}
+			CheckErrorFile(); // 执行onFileSave时，此file已经不隐藏，下个正在录的为隐藏
 		} catch (Exception e) {
 			e.printStackTrace();
 			MyLog.e("[Main]onFileSave catch Exception:" + e.toString());
@@ -2400,6 +2393,19 @@ public class MainActivity extends Activity implements TachographCallback,
 			return true;
 		} else
 			return super.onKeyDown(keyCode, event);
+	}
+
+	private void sendKeyCode(final int keyCode) {
+		new Thread() {
+			public void run() {
+				try {
+					Instrumentation inst = new Instrumentation();
+					inst.sendKeyDownUpSync(keyCode);
+				} catch (Exception e) {
+					MyLog.e("Exception when sendPointerSync:" + e.toString());
+				}
+			}
+		}.start();
 	}
 
 }
