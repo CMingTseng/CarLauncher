@@ -683,10 +683,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		startService(intentSensor);
 
 		// 轨迹记录
-		Intent intentRoute = new Intent();
-		intentRoute.setClassName("com.tchip.route",
-				"com.tchip.route.service.RouteRecordService");
-		startService(intentRoute);
+		if (Constant.Module.hasRoute) {
+			Intent intentRoute = new Intent();
+			intentRoute.setClassName("com.tchip.route",
+					"com.tchip.route.service.RouteRecordService");
+			startService(intentRoute);
+		}
 
 		// 天气播报
 		Intent intentWeather = new Intent();
@@ -803,6 +805,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 行驶轨迹
 		ImageView imageRouteTrack = (ImageView) findViewById(R.id.imageRouteTrack);
 		imageRouteTrack.setOnClickListener(new MyOnClickListener());
+		RelativeLayout layoutRoute = (RelativeLayout) findViewById(R.id.layoutRoute);
+		layoutRoute.setVisibility(Constant.Module.hasRoute ? View.VISIBLE
+				: View.GONE);
 
 		// FM发射
 		ImageView imageFmTransmit = (ImageView) findViewById(R.id.imageFmTransmit);
@@ -817,6 +822,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			ImageView imageMessage = (ImageView) findViewById(R.id.imageMessage);
 			imageMessage.setOnClickListener(new MyOnClickListener());
 		}
+
+		// 微密
+		RelativeLayout layoutWeme = (RelativeLayout) findViewById(R.id.layoutWeme);
+		layoutWeme.setVisibility(Constant.Module.hasWeme ? View.VISIBLE
+				: View.GONE);
+		ImageView imageWeme = (ImageView) findViewById(R.id.imageWeme);
+		imageWeme.setOnClickListener(new MyOnClickListener());
 
 		// HorizontalScrollView，左右两侧阴影
 		imageShadowLeft = (ImageView) findViewById(R.id.imageShadowLeft);
@@ -1412,6 +1424,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageMessage:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MMS);
+				break;
+
+			case R.id.imageWeme:
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEME);
 				break;
 
 			case R.id.layoutWiFi:

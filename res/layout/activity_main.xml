@@ -275,15 +275,16 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutFileExplore"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
                 android:layout_marginRight="5dp" >
 
                 <ImageView
-                    android:id="@+id/imageRouteTrack"
+                    android:id="@+id/imageFileExplore"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_route_track" />
+                    android:src="@drawable/ui_main_filemanager" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -293,7 +294,7 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="@string/title_drive_route"
+                    android:text="@string/title_file_manager"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
@@ -323,16 +324,16 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/layoutFileExplore"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:id="@+id/layoutRoute"
                 android:layout_marginRight="5dp" >
 
                 <ImageView
-                    android:id="@+id/imageFileExplore"
+                    android:id="@+id/imageRouteTrack"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_filemanager" />
+                    android:src="@drawable/ui_main_route_track" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -342,7 +343,34 @@
                     android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
-                    android:text="@string/title_file_manager"
+                    android:text="@string/title_drive_route"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutWeme"
+                android:layout_width="@dimen/ui_main_hsv_item_size"
+                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_marginRight="5dp"
+                android:background="#ffffff" >
+
+                <ImageView
+                    android:id="@+id/imageWeme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ui_main_weme" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_weme"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>

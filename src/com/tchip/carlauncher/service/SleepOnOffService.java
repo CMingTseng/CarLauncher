@@ -403,8 +403,10 @@ public class SleepOnOffService extends Service {
 			MyLog.e("[SleepOnOffService]deviceSleep.");
 			MyApp.isSleeping = true; // 进入低功耗待机
 
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.tchip.route")); // 退出轨迹
+			if (Constant.Module.hasRoute) {
+				context.sendBroadcast(new Intent("com.tchip.KILL_APP")
+						.putExtra("value", "com.tchip.route")); // 退出轨迹
+			}
 
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceSleep");
@@ -463,10 +465,12 @@ public class SleepOnOffService extends Service {
 	private void startExternalService() {
 		try {
 			// 轨迹记录
-			Intent intentRoute = new Intent();
-			intentRoute.setClassName("com.tchip.route",
-					"com.tchip.route.service.RouteRecordService");
-			startService(intentRoute);
+			if (Constant.Module.hasRoute) {
+				Intent intentRoute = new Intent();
+				intentRoute.setClassName("com.tchip.route",
+						"com.tchip.route.service.RouteRecordService");
+				startService(intentRoute);
+			}
 
 			// 天气播报
 			Intent intentWeather = new Intent();
@@ -510,10 +514,12 @@ public class SleepOnOffService extends Service {
 	private void stopExternalService() {
 		try {
 			// 轨迹记录服务
-			Intent intentRoute = new Intent();
-			intentRoute.setClassName("com.tchip.route",
-					"com.tchip.route.service.RouteRecordService");
-			stopService(intentRoute);
+			if (Constant.Module.hasRoute) {
+				Intent intentRoute = new Intent();
+				intentRoute.setClassName("com.tchip.route",
+						"com.tchip.route.service.RouteRecordService");
+				stopService(intentRoute);
+			}
 
 			// 天气播报
 			Intent intentWeather = new Intent();

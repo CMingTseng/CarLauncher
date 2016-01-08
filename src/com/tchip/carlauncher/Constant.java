@@ -270,6 +270,12 @@ public interface Constant {
 
 		/** 是否有拨号短信模块 **/
 		public static final boolean hasDialer = false;
+
+		/** 是否有微密 **/
+		public static final boolean hasWeme = true;
+
+		/** 是否有行车轨迹 **/
+		public static final boolean hasRoute = false;
 	}
 
 	/**
