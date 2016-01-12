@@ -472,7 +472,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			Message message = new Message();
 			message.what = 1;
-			recordWhenEventHappenHandler.sendMessage(message);
+			recordWhenMountHandler.sendMessage(message);
 		}
 
 	}
@@ -492,18 +492,16 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			Message message = new Message();
 			message.what = 1;
-			recordWhenEventHappenHandler.sendMessage(message);
+			recordWhenCrashHandler.sendMessage(message);
 		}
 	}
 
 	/**
 	 * 以下事件发生时录制视频：
 	 * 
-	 * 1.停车守卫：底层碰撞
-	 * 
-	 * 2.插入视频卡
+	 * 停车守卫：底层碰撞
 	 */
-	final Handler recordWhenEventHappenHandler = new Handler() {
+	final Handler recordWhenCrashHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -515,6 +513,36 @@ public class MainActivity extends Activity implements TachographCallback,
 						}
 
 						setInterval(3 * 60); // 防止在分段一分钟的时候，停车守卫录出1分和0秒两段视频
+
+						new Thread(new StartRecordThread()).start(); // 开始录像
+					}
+					setupRecordViews();
+					MyLog.v("[Record]isVideoReording:" + MyApp.isVideoReording);
+				} catch (Exception e) {
+					MyLog.e("[EventRecord]recordWhenEventHappenHandler catch exception: "
+							+ e.toString());
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	/**
+	 * 插入视频卡时录制视频：
+	 */
+	final Handler recordWhenMountHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				try {
+					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
+
+						if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
+							sendKeyCode(KeyEvent.KEYCODE_HOME);
+						}
 
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
