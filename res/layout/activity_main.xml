@@ -7,15 +7,15 @@
 
     <SurfaceView
         android:id="@+id/surfaceCamera"
-        android:layout_width="480dp"
-        android:layout_height="270dp"
+        android:layout_width="@dimen/ui_main_surface_width"
+        android:layout_height="@dimen/ui_main_surface_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:id="@+id/layoutWeather"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="@dimen/ui_main_surface_height"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/surfaceCamera"
@@ -28,18 +28,19 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="65dp"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
+            android:singleLine="true"
             android:textColor="#ffe1c5"
-            android:textSize="83sp" />
+            android:textSize="@dimen/ui_main_clock_text_size" />
 
         <LinearLayout
             android:id="@+id/layoutDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginLeft="17dp"
             android:orientation="horizontal" >
 
@@ -50,17 +51,17 @@
                 android:format12Hour="yy年MM月dd日"
                 android:format24Hour="yy年MM月dd日"
                 android:textColor="#ffe1c5"
-                android:textSize="25sp" />
+                android:textSize="@dimen/ui_main_date_text_size" />
 
             <TextClock
                 android:id="@+id/textWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="10dp"
                 android:format12Hour="E"
                 android:format24Hour="E"
                 android:textColor="#ffe1c5"
-                android:textSize="25sp" />
+                android:textSize="@dimen/ui_main_date_text_size" />
         </LinearLayout>
 
         <LinearLayout
@@ -134,26 +135,27 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <HorizontalScrollView
+    <com.tchip.carlauncher.view.MyScrollView
         android:id="@+id/hsvMain"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="@dimen/ui_main_hsv_height"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/surfaceCamera" >
+        android:layout_below="@id/surfaceCamera"
+        android:scrollbars="none" >
 
         <LinearLayout
             android:id="@+id/layoutBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="@dimen/ui_main_hsv_item_margin"
+            android:layout_marginTop="@dimen/ui_main_hsv_item_margin"
             android:orientation="horizontal" >
 
             <RelativeLayout
                 android:id="@+id/layoutMap"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:background="#ffffff" >
 
                 <ImageView
@@ -179,7 +181,7 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageMusicOL"
@@ -204,7 +206,7 @@
                 android:id="@+id/layoutEDog"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageEDog"
@@ -228,7 +230,7 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:visibility="visible" >
 
                 <ImageView
@@ -253,7 +255,7 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageMultimedia"
@@ -278,7 +280,7 @@
                 android:id="@+id/layoutFileExplore"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageFileExplore"
@@ -302,7 +304,7 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageFmTransmit"
@@ -324,10 +326,10 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutRoute"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:id="@+id/layoutRoute"
-                android:layout_marginRight="5dp" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageRouteTrack"
@@ -352,7 +354,7 @@
                 android:id="@+id/layoutWeme"
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:background="#ffffff" >
 
                 <ImageView
@@ -378,7 +380,7 @@
             <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_size"
                 android:layout_height="@dimen/ui_main_hsv_item_size"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:visibility="gone" >
 
                 <ImageView
@@ -400,7 +402,7 @@
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
         </LinearLayout>
-    </HorizontalScrollView>
+    </com.tchip.carlauncher.view.MyScrollView>
 
     <LinearLayout
         android:id="@+id/layoutVideoRecordSmall"
@@ -408,7 +410,7 @@
         android:layout_height="100dp"
         android:layout_alignBottom="@+id/surfaceCamera"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="190dp"
+        android:layout_marginLeft="209dp"
         android:padding="15dp" >
 
         <ImageView
@@ -590,7 +592,7 @@
         android:layout_height="@dimen/ui_main_hsv_item_size"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/ui_main_hsv_item_margin"
         android:src="@drawable/ui_main_hsv_shadow_left"
         android:visibility="gone" />
 
@@ -600,7 +602,8 @@
         android:layout_height="@dimen/ui_main_hsv_item_size"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="5dp"
-        android:src="@drawable/ui_main_hsv_shadow_right" />
+        android:layout_marginBottom="@dimen/ui_main_hsv_item_margin"
+        android:src="@drawable/ui_main_hsv_shadow_right"
+        android:visibility="gone" />
 
 </RelativeLayout>

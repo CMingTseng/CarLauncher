@@ -21,6 +21,8 @@ import com.tchip.carlauncher.util.OpenUtil.MODULE_TYPE;
 import com.tchip.carlauncher.util.SettingUtil;
 import com.tchip.carlauncher.util.StorageUtil;
 import com.tchip.carlauncher.view.AudioRecordDialog;
+import com.tchip.carlauncher.view.MyScrollView;
+import com.tchip.carlauncher.view.MyScrollViewListener;
 import com.tchip.tachograph.TachographCallback;
 import com.tchip.tachograph.TachographRecorder;
 
@@ -96,7 +98,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private RelativeLayout layoutLargeButton;
 	private TextView textRecordTime;
 
-	private HorizontalScrollView hsvMain;
+	private MyScrollView hsvMain;
 
 	private Camera camera;
 	private SurfaceView surfaceCamera;
@@ -862,8 +864,24 @@ public class MainActivity extends Activity implements TachographCallback,
 		imageShadowLeft = (ImageView) findViewById(R.id.imageShadowLeft);
 		imageShadowRight = (ImageView) findViewById(R.id.imageShadowRight);
 
-		hsvMain = (HorizontalScrollView) findViewById(R.id.hsvMain);
+		hsvMain = (MyScrollView) findViewById(R.id.hsvMain);
 		hsvMain.setDrawingCacheEnabled(true);
+		hsvMain.setMyScrollViewListener(new MyScrollViewListener() {
+
+			@Override
+			public void onScrollChanged(MyScrollView scrollView, int x, int y,
+					int oldx, int oldy) {
+
+				MyLog.v("x:" + x + ",oldx:" + oldx + ",isScroll:"
+						+ hsvMain.isScroll() + ",getScrollX:"
+						+ hsvMain.getScrollX());
+
+				if (!hsvMain.isScroll()) {
+					hsvMain.fancyScroll(hsvMain.getScrollX());
+				}
+
+			}
+		});
 	}
 
 	/**
@@ -923,7 +941,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	private void updateSurfaceState() {
 		if (!isSurfaceLarge) {
 			// 16/9 = 1.7778;854/480 = 1.7791
-			int widthFull = 854;
+			int widthFull = 854; // 854;
 			int heightFull = 480;
 			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
 					widthFull, heightFull));
@@ -935,8 +953,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			updateButtonState(true);
 		} else {
-			int widthSmall = 480;
-			int heightSmall = 270;
+			int widthSmall = 517; // 480
+			int heightSmall = 291; // 270
 			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
 					widthSmall, heightSmall));
 			isSurfaceLarge = false;
