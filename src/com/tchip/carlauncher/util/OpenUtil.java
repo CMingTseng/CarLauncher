@@ -110,7 +110,10 @@ public class OpenUtil {
 		WIFI,
 
 		/** Wi-Fi热点 **/
-		WIFI_AP
+		WIFI_AP,
+
+		/** 喜马拉雅 */
+		XIMALAYA
 	}
 
 	public static void openModule(Activity activity, MODULE_TYPE moduleTye) {
@@ -560,6 +563,21 @@ public class OpenUtil {
 			try {
 				activity.startActivity(new Intent(
 						"android.settings.TETHER_WIFI_SETTINGS"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case XIMALAYA:
+			try {
+				Intent intent = new Intent();
+
+				ComponentName comp = new ComponentName(
+						"com.ximalaya.ting.android",
+						"com.ximalaya.ting.android.activity.login.WelcomeActivity");
+				intent.setComponent(comp);
+				intent.setAction("android.intent.action.VIEW");
+				activity.startActivity(intent);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

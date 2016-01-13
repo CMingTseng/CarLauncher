@@ -265,6 +265,9 @@ public interface Constant {
 	}
 
 	public static final class Module {
+		/** 是否是公版软件 */
+		private static final boolean isPublic = true;
+
 		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;
 
@@ -272,7 +275,10 @@ public interface Constant {
 		public static final boolean hasDialer = false;
 
 		/** 是否有微密 **/
-		public static final boolean hasWeme = true;
+		public static final boolean hasWeme = isPublic;
+
+		/** 是否有网络电台 */
+		public static final boolean hasOnlineFM = isPublic;
 
 		/** 是否有行车轨迹 **/
 		public static final boolean hasRoute = false;

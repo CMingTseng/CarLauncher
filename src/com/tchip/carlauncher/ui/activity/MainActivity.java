@@ -123,9 +123,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private NetworkInfo networkInfoWifi;
 	private PowerManager powerManager;
 
-	private String strRecordStop = "停止录像";
-	private String strRecordStart = "开始录像";
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -823,6 +820,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageEDog = (ImageView) findViewById(R.id.imageEDog);
 		imageEDog.setOnClickListener(new MyOnClickListener());
 
+		// 网络电台：喜马拉雅
+		RelativeLayout layoutXimalaya = (RelativeLayout) findViewById(R.id.layoutXimalaya);
+		layoutXimalaya.setVisibility(Constant.Module.hasOnlineFM ? View.VISIBLE
+				: View.GONE);
+		ImageView imageXimalaya = (ImageView) findViewById(R.id.imageXimalaya);
+		imageXimalaya.setOnClickListener(new MyOnClickListener());
+
 		// 多媒体
 		ImageView imageMultimedia = (ImageView) findViewById(R.id.imageMultimedia);
 		imageMultimedia.setOnClickListener(new MyOnClickListener());
@@ -1268,14 +1272,17 @@ public class MainActivity extends Activity implements TachographCallback,
 				if (!ClickUtil.isQuickClick(1000)) {
 					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 						if (StorageUtil.isVideoCardExists()) {
-							HintUtil.speakVoice(MainActivity.this,
-									strRecordStart);
+							HintUtil.speakVoice(
+									MainActivity.this,
+									getResources().getString(
+											R.string.hint_record_start));
 							startRecord();
 						} else {
 							noVideoSDHint();
 						}
 					} else if (recordState == Constant.Record.STATE_RECORD_STARTED) {
-						HintUtil.speakVoice(MainActivity.this, strRecordStop);
+						HintUtil.speakVoice(MainActivity.this, getResources()
+								.getString(R.string.hint_record_stop));
 						stopRecord();
 					}
 
@@ -1434,6 +1441,10 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageEDog:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.EDOG);
+				break;
+
+			case R.id.imageXimalaya:
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.XIMALAYA);
 				break;
 
 			case R.id.imageMultimedia:

@@ -8,6 +8,7 @@
     <string name="title_navigation">导航</string>
     <string name="title_music_online">在线音乐</string>
     <string name="title_edog">电子狗</string>
+    <string name="title_ximalaya">网络电台</string>
     <string name="title_multimedia">多媒体</string>
     <string name="title_drive_route">行车轨迹</string>
     <string name="title_file_manager">文件管理</string>
@@ -37,6 +38,8 @@
     <string name="hint_photo_save">照片已保存</string>
     <string name="hint_storage_full_and_delete_lock">空间不足，将清理加锁视频</string>
     <string name="hint_storage_full_cause_by_other">空间不足，请清理存储卡2</string>
+    <string name="hint_record_start">开始录像</string>
+    <string name="hint_record_stop">停止录像</string>
     <string name="default_record_time">00 : 00</string>
     <string name="short_record">REC</string>
 

@@ -226,6 +226,31 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutXimalaya"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
+
+                <ImageView
+                    android:id="@+id/imageXimalaya"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ui_main_fmol" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_ximalaya"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="@dimen/ui_main_hsv_item_width"
                 android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
@@ -358,7 +383,7 @@
                     android:id="@+id/imageWeme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/ui_main_weme" />
+                    android:background="@drawable/ui_main_ximalaya" />
 
                 <TextView
                     android:layout_width="wrap_content"
