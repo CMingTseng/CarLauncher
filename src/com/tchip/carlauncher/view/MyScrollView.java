@@ -46,10 +46,15 @@ public class MyScrollView extends HorizontalScrollView {
 		return isScroll;
 	}
 
-	public void fancyScroll(int x) {
+	public void fancyScroll(int x, boolean isSmooth) {
 		int showItemId = x / 185;
 		int span = x % 185;
-		scrollTo((185 + 2) * (span > 92 ? showItemId + 1 : showItemId), 0);
+		if (isSmooth) {
+			smoothScrollTo((185 + 2)
+					* (span > 92 ? showItemId + 1 : showItemId), 0);
+		} else {
+			scrollTo((185 + 2) * (span > 92 ? showItemId + 1 : showItemId), 0);
+		}
 		MyLog.v("fancyScroll,x:" + currentX + ",showItemId:" + showItemId
 				+ ",showItemSpan" + span);
 	}
@@ -69,7 +74,7 @@ public class MyScrollView extends HorizontalScrollView {
 
 		case MotionEvent.ACTION_UP:
 			isScroll = false;
-			fancyScroll(currentX);
+			fancyScroll(currentX, false);
 			break;
 
 		default:

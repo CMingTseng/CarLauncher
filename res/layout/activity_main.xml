@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="@dimen/ui_main_clock_margin_top"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
             android:singleLine="true"
@@ -153,8 +153,8 @@
 
             <RelativeLayout
                 android:id="@+id/layoutMap"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:background="#ffffff" >
 
@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ui_main_navi" />
+                    android:background="@drawable/ui_main_navi" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -179,15 +179,15 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageMusicOL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_musicol" />
+                    android:background="@drawable/ui_main_musicol" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -204,15 +204,15 @@
 
             <RelativeLayout
                 android:id="@+id/layoutEDog"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageEDog"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_edog" />
+                    android:background="@drawable/ui_main_edog" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -228,8 +228,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:visibility="visible" >
 
@@ -237,7 +237,7 @@
                     android:id="@+id/imageDialer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_dialer" />
+                    android:background="@drawable/ui_main_dialer" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -253,15 +253,15 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageMultimedia"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_multimedia" />
+                    android:background="@drawable/ui_main_multimedia" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -278,15 +278,15 @@
 
             <RelativeLayout
                 android:id="@+id/layoutFileExplore"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageFileExplore"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_filemanager" />
+                    android:background="@drawable/ui_main_filemanager" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -302,15 +302,15 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageFmTransmit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_fm" />
+                    android:background="@drawable/ui_main_fm" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -327,15 +327,15 @@
 
             <RelativeLayout
                 android:id="@+id/layoutRoute"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageRouteTrack"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_route_track" />
+                    android:background="@drawable/ui_main_route_track" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -352,8 +352,8 @@
 
             <RelativeLayout
                 android:id="@+id/layoutWeme"
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:background="#ffffff" >
 
@@ -362,7 +362,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ui_main_weme" />
+                    android:background="@drawable/ui_main_weme" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -378,8 +378,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_size"
-                android:layout_height="@dimen/ui_main_hsv_item_size"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
                 android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
                 android:visibility="gone" >
 
@@ -387,7 +387,7 @@
                     android:id="@+id/imageMessage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ui_main_message" />
+                    android:background="@drawable/ui_main_message" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -585,25 +585,5 @@
                 android:background="@drawable/ui_camera_switch" />
         </LinearLayout>
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imageShadowLeft"
-        android:layout_width="88dp"
-        android:layout_height="@dimen/ui_main_hsv_item_size"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="@dimen/ui_main_hsv_item_margin"
-        android:src="@drawable/ui_main_hsv_shadow_left"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/imageShadowRight"
-        android:layout_width="88dp"
-        android:layout_height="@dimen/ui_main_hsv_item_size"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/ui_main_hsv_item_margin"
-        android:src="@drawable/ui_main_hsv_shadow_right"
-        android:visibility="gone" />
 
 </RelativeLayout>

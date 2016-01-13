@@ -88,7 +88,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	private IntentFilter wifiIntentFilter;
 	/** WiFi状态图标 **/
 	private ImageView imageWifiLevel;
-	private ImageView imageShadowRight, imageShadowLeft;
 	private ImageView imageSignalLevel, image3GType;
 	/** 飞行模式图标 **/
 	private ImageView imageAirplane;
@@ -860,10 +859,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageWeme = (ImageView) findViewById(R.id.imageWeme);
 		imageWeme.setOnClickListener(new MyOnClickListener());
 
-		// HorizontalScrollView，左右两侧阴影
-		imageShadowLeft = (ImageView) findViewById(R.id.imageShadowLeft);
-		imageShadowRight = (ImageView) findViewById(R.id.imageShadowRight);
-
 		hsvMain = (MyScrollView) findViewById(R.id.hsvMain);
 		hsvMain.setDrawingCacheEnabled(true);
 		hsvMain.setMyScrollViewListener(new MyScrollViewListener() {
@@ -877,7 +872,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						+ hsvMain.getScrollX());
 
 				if (!hsvMain.isScroll()) {
-					hsvMain.fancyScroll(hsvMain.getScrollX());
+					hsvMain.fancyScroll(hsvMain.getScrollX(), true);
 				}
 
 			}
@@ -947,22 +942,16 @@ public class MainActivity extends Activity implements TachographCallback,
 					widthFull, heightFull));
 			isSurfaceLarge = true;
 
-			// 更新HorizontalScrollView阴影
-			imageShadowLeft.setVisibility(View.GONE);
-			imageShadowRight.setVisibility(View.GONE);
-
 			updateButtonState(true);
 		} else {
-			int widthSmall = 517; // 480
-			int heightSmall = 291; // 270
+			int widthSmall = 480; // 480
+			int heightSmall = 270; // 270
 			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
 					widthSmall, heightSmall));
 			isSurfaceLarge = false;
 
 			// 更新HorizontalScrollView阴影
 			hsvMain.scrollTo(0, 0);
-			imageShadowLeft.setVisibility(View.GONE);
-			imageShadowRight.setVisibility(View.VISIBLE);
 
 			updateButtonState(false);
 		}
@@ -2447,8 +2436,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				isSurfaceLarge = false;
 
 				hsvMain.scrollTo(0, 0); // 更新HorizontalScrollView阴影
-				imageShadowLeft.setVisibility(View.GONE);
-				imageShadowRight.setVisibility(View.VISIBLE);
 
 				updateButtonState(false);
 			}

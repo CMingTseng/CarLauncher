@@ -184,7 +184,7 @@ public interface Constant {
 																// 1000
 
 		/** 帧率 **/
-		public static final int FRAME_RATE = 24; // 30
+		public static final int FRAME_RATE = 30; // 24
 
 		// 分辨率
 		public static final int STATE_RESOLUTION_720P = 0;
@@ -221,13 +221,13 @@ public interface Constant {
 				+ "cap-mode=normal;whitebalance=auto;afeng-min-focus-step=0;"
 				+ "preview-format-values=yuv420sp,yuv420p,yuv420i-yyuvyy-3plane;"
 				+ "rotation=0;jpeg-thumbnail-quality=100;preview-format=yuv420sp;"
-				+ "iso-speed=auto;hue-values=low,middle,high;preview-frame-rate=24;"
+				+ "iso-speed=auto;hue-values=low,middle,high;preview-frame-rate=30;"
 				+ "jpeg-thumbnail-width=160;"
 				+ "scene-mode-values=auto,portrait,landscape,night,night-portrait,theatre,beach,snow,sunset,steadyphoto,fireworks,sports,party,candlelight,hdr;"
-				+ "video-size=1920x1088;preview-fps-range-values=(5000,15000);"
+				+ "video-size=1920x1088;preview-fps-range-values=(5000,60000);"
 				+ "contrast-values=low,middle,high;"
 				+ "preview-size-values=176x144,320x240,352x288,480x320,480x368,640x480,720x480,800x480,800x600,864x480,960x540,1280x720;"
-				+ "auto-whitebalance-lock=false;preview-fps-range=5000,15000;"
+				+ "auto-whitebalance-lock=false;preview-fps-range=5000,60000;"
 				+ "antibanding=auto;min-exposure-compensation=-3;max-num-focus-areas=1;"
 				+ "vertical-view-angle=49;fb-smooth-level-min=-4;eng-focus-fullscan-frame-interval=0;"
 				+ "fb-skin-color=0;brightness_value=17;video-stabilization-supported=true;"
