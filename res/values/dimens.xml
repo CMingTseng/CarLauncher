@@ -65,6 +65,7 @@
     <dimen name="ui_main_surface_width">480dp</dimen>
     <dimen name="ui_main_clock_text_size">80sp</dimen>
     <dimen name="ui_main_clock_margin_top">55dp</dimen>
+    <dimen name="ui_main_clock_margin_left">10dp</dimen>
     <dimen name="ui_main_date_text_size">25sp</dimen>
 
     <!-- Multimedia Activity -->

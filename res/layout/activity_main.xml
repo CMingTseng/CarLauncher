@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/ui_main_clock_margin_left"
             android:layout_marginTop="@dimen/ui_main_clock_margin_top"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
-            android:layout_marginLeft="17dp"
+            android:layout_marginLeft="15dp"
             android:orientation="horizontal" >
 
             <TextClock
