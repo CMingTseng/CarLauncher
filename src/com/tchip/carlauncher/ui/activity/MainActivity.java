@@ -944,8 +944,8 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			updateButtonState(true);
 		} else {
-			int widthSmall = 480; // 480
-			int heightSmall = 270; // 270
+			int widthSmall = 490; // 480
+			int heightSmall = 276; // 270
 			surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
 					widthSmall, heightSmall));
 			isSurfaceLarge = false;

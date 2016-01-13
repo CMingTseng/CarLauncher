@@ -58,15 +58,15 @@
     <dimen name="ui_main_hsv_text_size">23sp</dimen>
     <dimen name="ui_main_hsv_text_margin_bottom">10dp</dimen>
     <dimen name="ui_main_hsv_item_width">185dp</dimen>
-    <dimen name="ui_main_hsv_item_height">206dp</dimen>
+    <dimen name="ui_main_hsv_item_height">200dp</dimen>
     <dimen name="ui_main_hsv_item_margin">2dp</dimen>
-    <dimen name="ui_main_hsv_height">210dp</dimen>
-    <dimen name="ui_main_surface_height">270dp</dimen>
-    <dimen name="ui_main_surface_width">480dp</dimen>
-    <dimen name="ui_main_clock_text_size">80sp</dimen>
-    <dimen name="ui_main_clock_margin_top">55dp</dimen>
-    <dimen name="ui_main_clock_margin_left">10dp</dimen>
-    <dimen name="ui_main_date_text_size">25sp</dimen>
+    <dimen name="ui_main_hsv_height">204dp</dimen>
+    <dimen name="ui_main_surface_height">276dp</dimen>
+    <dimen name="ui_main_surface_width">490dp</dimen>
+    <dimen name="ui_main_clock_text_size">77sp</dimen>
+    <dimen name="ui_main_clock_margin_top">60dp</dimen>
+    <dimen name="ui_main_clock_margin_left">15dp</dimen>
+    <dimen name="ui_main_date_text_size">24sp</dimen>
 
     <!-- Multimedia Activity -->
     <dimen name="ui_media_text_item_size">35sp</dimen>

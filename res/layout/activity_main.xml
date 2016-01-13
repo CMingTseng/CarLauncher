@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/ui_main_clock_margin_left"
             android:orientation="horizontal" >
 
             <TextClock
@@ -155,14 +155,12 @@
                 android:id="@+id/layoutMap"
                 android:layout_width="@dimen/ui_main_hsv_item_width"
                 android:layout_height="@dimen/ui_main_hsv_item_height"
-                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
-                android:background="#ffffff" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageNavi"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
                     android:background="@drawable/ui_main_navi" />
 
                 <TextView
@@ -354,14 +352,12 @@
                 android:id="@+id/layoutWeme"
                 android:layout_width="@dimen/ui_main_hsv_item_width"
                 android:layout_height="@dimen/ui_main_hsv_item_height"
-                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
-                android:background="#ffffff" >
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
 
                 <ImageView
                     android:id="@+id/imageWeme"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
                     android:background="@drawable/ui_main_weme" />
 
                 <TextView
