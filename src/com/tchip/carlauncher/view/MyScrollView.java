@@ -1,5 +1,6 @@
 package com.tchip.carlauncher.view;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.util.MyLog;
 
 import android.content.Context;
@@ -47,40 +48,45 @@ public class MyScrollView extends HorizontalScrollView {
 	}
 
 	public void fancyScroll(int x, boolean isSmooth) {
-		int showItemId = x / 185;
-		int span = x % 185;
-		if (isSmooth) {
-			smoothScrollTo((185 + 2)
-					* (span > 92 ? showItemId + 1 : showItemId), 0);
-		} else {
-			scrollTo((185 + 2) * (span > 92 ? showItemId + 1 : showItemId), 0);
+		if (Constant.Module.isIconAtom) {
+			int showItemId = x / 185;
+			int span = x % 185;
+			if (isSmooth) {
+				smoothScrollTo((185 + 2)
+						* (span > 92 ? showItemId + 1 : showItemId), 0);
+			} else {
+				scrollTo((185 + 2) * (span > 92 ? showItemId + 1 : showItemId),
+						0);
+			}
+			MyLog.v("fancyScroll,x:" + currentX + ",showItemId:" + showItemId
+					+ ",showItemSpan" + span);
+
 		}
-		MyLog.v("fancyScroll,x:" + currentX + ",showItemId:" + showItemId
-				+ ",showItemSpan" + span);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			isScroll = true;
-			MyLog.v("MyScrollView: ACTION_DOWN");
-			break;
+		if (Constant.Module.isIconAtom) {
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				isScroll = true;
+				MyLog.v("MyScrollView: ACTION_DOWN");
+				break;
 
-		case MotionEvent.ACTION_MOVE:
-			isScroll = true;
-			MyLog.v("MyScrollView: ACTION_MOVE,currentX:" + currentX);
-			break;
+			case MotionEvent.ACTION_MOVE:
+				isScroll = true;
+				MyLog.v("MyScrollView: ACTION_MOVE,currentX:" + currentX);
+				break;
 
-		case MotionEvent.ACTION_UP:
-			isScroll = false;
-			fancyScroll(currentX, false);
-			break;
+			case MotionEvent.ACTION_UP:
+				isScroll = false;
+				fancyScroll(currentX, false);
+				break;
 
-		default:
-			break;
+			default:
+				break;
+			}
 		}
-
 		return super.onTouchEvent(event);
 	}
 }

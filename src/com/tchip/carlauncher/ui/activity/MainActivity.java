@@ -865,22 +865,25 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		hsvMain = (MyScrollView) findViewById(R.id.hsvMain);
 		hsvMain.setDrawingCacheEnabled(true);
-		hsvMain.setMyScrollViewListener(new MyScrollViewListener() {
+		if (Constant.Module.isIconAtom) {
+			hsvMain.setMyScrollViewListener(new MyScrollViewListener() {
 
-			@Override
-			public void onScrollChanged(MyScrollView scrollView, int x, int y,
-					int oldx, int oldy) {
+				@Override
+				public void onScrollChanged(MyScrollView scrollView, int x,
+						int y, int oldx, int oldy) {
 
-				MyLog.v("x:" + x + ",oldx:" + oldx + ",isScroll:"
-						+ hsvMain.isScroll() + ",getScrollX:"
-						+ hsvMain.getScrollX());
+					MyLog.v("x:" + x + ",oldx:" + oldx + ",isScroll:"
+							+ hsvMain.isScroll() + ",getScrollX:"
+							+ hsvMain.getScrollX());
 
-				if (!hsvMain.isScroll()) {
-					hsvMain.fancyScroll(hsvMain.getScrollX(), true);
+					if (!hsvMain.isScroll()) {
+						hsvMain.fancyScroll(hsvMain.getScrollX(), true);
+					}
+
 				}
+			});
 
-			}
-		});
+		}
 	}
 
 	/**
@@ -1684,6 +1687,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	protected void onResume() {
 		try {
 			MyLog.v("[Main]onResume");
+			hsvMain.smoothScrollTo(0, 0);
 
 			if (!MyApp.isBTPlayMusic) { // 触摸声音
 				Settings.System.putString(getContentResolver(),

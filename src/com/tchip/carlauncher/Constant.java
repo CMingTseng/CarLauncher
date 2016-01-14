@@ -4,7 +4,7 @@ import android.os.Environment;
 
 public interface Constant {
 	/** Debug：打印Log **/
-	public static final boolean isDebug = false;
+	public static final boolean isDebug = true;
 
 	/** 日志Tag **/
 	public static final String TAG = "ZMS";
@@ -289,6 +289,9 @@ public interface Constant {
 
 		/** 是否有行车轨迹 **/
 		public static final boolean hasRoute = false;
+
+		/** 图标是否以块为单位移动 */
+		public static final boolean isIconAtom = false;
 	}
 
 	/**
