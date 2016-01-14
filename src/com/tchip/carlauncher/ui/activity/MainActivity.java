@@ -2410,6 +2410,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 					MyApp.isAccOffPhotoTaking = false;
 				}
+
+				// 通知语音
+				Intent intentImageSave = new Intent(
+						Constant.Broadcast.ACTION_IMAGE_SAVE);
+				intentImageSave.putExtra("path", path);
+				sendBroadcast(intentImageSave);
+
 			}
 
 			// 更新Media Database

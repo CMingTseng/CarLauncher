@@ -112,6 +112,13 @@ public interface Constant {
 		 */
 		public static final String GET_PIC_RESULT = "dsa.action.http.picture.result";
 
+		/**
+		 * 照片保存广播
+		 * 
+		 * Extra:path
+		 */
+		public static final String ACTION_IMAGE_SAVE = "tchip.intent.action.ACTION_IMAGE_SAVE";
+
 	}
 
 	public static final class Setting {
@@ -266,7 +273,7 @@ public interface Constant {
 
 	public static final class Module {
 		/** 是否是公版软件 */
-		private static final boolean isPublic = true;
+		private static final boolean isPublic = false;
 
 		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;
