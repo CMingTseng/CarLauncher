@@ -4,7 +4,7 @@
     package="com.tchip.carlauncher"
     android:sharedUserId="android.uid.system"
     android:versionCode="2"
-    android:versionName="2016.01.14-18:40" >
+    android:versionName="2016.01.15-16:15" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -61,7 +61,6 @@
         <activity
             android:name="com.tchip.carlauncher.ui.activity.MainActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
-            android:icon="@drawable/main_loading"
             android:label="CarLauncher"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
