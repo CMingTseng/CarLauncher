@@ -736,6 +736,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoRecord.setOnClickListener(new MyOnClickListener());
 
 		layoutVideoCamera = (LinearLayout) findViewById(R.id.layoutVideoCamera);
+		layoutVideoCamera
+				.setVisibility(Constant.Module.hasCameraSwitch ? View.GONE
+						: View.VISIBLE);
 		layoutVideoCamera.setOnClickListener(new MyOnClickListener());
 
 		layoutVideoRecordSmall = (LinearLayout) findViewById(R.id.layoutVideoRecordSmall);
@@ -748,6 +751,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
 
 		layoutCameraSwitch = (LinearLayout) findViewById(R.id.layoutCameraSwitch);
+		layoutCameraSwitch
+				.setVisibility(Constant.Module.hasCameraSwitch ? View.VISIBLE
+						: View.GONE);
 		layoutCameraSwitch.setOnClickListener(new MyOnClickListener());
 
 		// 天气预报和时钟,状态图标

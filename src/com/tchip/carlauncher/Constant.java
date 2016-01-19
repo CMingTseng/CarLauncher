@@ -287,6 +287,9 @@ public interface Constant {
 		/** 是否有网络电台 */
 		public static final boolean hasOnlineFM = isPublic;
 
+		/** 是否有前后摄像切换图标 */
+		public static final boolean hasCameraSwitch = isPublic;
+
 		/** 是否有行车轨迹 */
 		public static final boolean hasRoute = false;
 
