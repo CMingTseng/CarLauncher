@@ -10,106 +10,109 @@ import android.content.Intent;
 public class OpenUtil {
 
 	public enum MODULE_TYPE {
-		/** 语音助手 **/
+		/** 语音助手 */
 		CHAT,
 
-		/** 设备测试 **/
+		/** 设备测试 */
 		DEVICE_TEST,
 
-		/** 拨号 **/
+		/** 拨号 */
 		DIALER,
 
-		/** 电子狗 **/
+		/** 电子狗 */
 		EDOG,
 
-		/** 工程模式 **/
+		/** 工程模式 */
 		ENGINEER_MODE,
 
-		/** 文件管理 **/
+		/** 文件管理 */
 		FILE_EXPLORER,
 
-		/** 文件管理(MTK) **/
+		/** 文件管理(MTK) */
 		FILE_MANAGER_MTK,
 
-		/** FM发射 **/
+		/** FM发射 */
 		FMTRANSMIT,
 
-		/** 图库 **/
+		/** 图库 */
 		GALLERY,
 
-		/** 短信 **/
+		/** 短信 */
 		MMS,
 
-		/** 多媒体 **/
+		/** 多媒体 */
 		MULTIMEDIA,
 
-		/** 在线音乐 **/
+		/** 在线音乐 */
 		MUSIC,
 
-		/** 导航:百度SDK **/
+		/** 导航:百度SDK */
 		NAVI_BAIDU_SDK,
 
-		/** 导航:高德地图 **/
+		/** 导航:高德地图 */
 		NAVI_GAODE,
 
-		/** 导航：图吧 **/
+		/** 导航：图吧 */
 		NAVI_TUBA,
 
-		/** 轨迹 **/
+		/** 轨迹 */
 		ROUTE,
 
-		/** 设置 **/
+		/** 设置 */
 		SETTING,
 
-		/** 关于 **/
+		/** 关于 */
 		SETTING_ABOUT,
 
-		/** 应用 **/
+		/** 应用 */
 		SETTING_APP,
 
-		/** 流量使用情况 **/
+		/** 流量使用情况 */
 		SETTING_DATA_USAGE,
 
-		/** 日期和时间 **/
+		/** 日期和时间 */
 		SETTING_DATE,
 
-		/** 显示设置 **/
+		/** 显示设置 */
 		SETTING_DISPLAY,
 
-		/** FM发射设置 **/
+		/** FM发射设置 */
 		SETTING_FM,
 
-		/** 位置 **/
+		/** 位置 */
 		SETTING_LOCATION,
 
-		/** 音量设置 **/
+		/** 音量设置 */
 		SETTING_VOLUME,
 
-		/** 备份和重置 **/
+		/** 备份和重置 */
 		SETTING_RESET,
 
-		/** 存储设置 **/
+		/** 存储设置 */
 		SETTING_STORAGE,
 
-		/** 系统设置 **/
+		/** 系统设置 */
 		SETTING_SYSTEM,
 
-		/** 用户中心 **/
+		/** 用户中心 */
 		SETTING_USER_CENTER,
 
-		/** 视频 **/
+		/** 视频 */
 		VIDEO,
 
-		/** 天气 **/
+		/** 天气 */
 		WEATHER,
 
-		/** 微密 **/
+		/** 微信助手 */
+		WECHAT,
+
+		/** 微密 */
 		WEME,
 
-		/** Wi-Fi **/
+		/** Wi-Fi */
 		WIFI,
 
-		/** Wi-Fi热点 **/
+		/** Wi-Fi热点 */
 		WIFI_AP,
 
 		/** 喜马拉雅 */
@@ -524,7 +527,25 @@ public class OpenUtil {
 					activity.overridePendingTransition(
 							R.anim.zms_translate_down_out,
 							R.anim.zms_translate_down_in);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			break;
 
+		case WECHAT:
+			if (!ClickUtil.isQuickClick(800)) {
+				try {
+					ComponentName componentWechat;
+					componentWechat = new ComponentName("com.txznet.webchat",
+							"com.txznet.webchat.ui.AppStartActivity");
+					Intent intentWechat = new Intent();
+					intentWechat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intentWechat.setComponent(componentWechat);
+					activity.startActivity(intentWechat);
+					activity.overridePendingTransition(
+							R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -533,9 +554,8 @@ public class OpenUtil {
 
 		case WEME:
 			try {
-				// 打开GPS
 				activity.sendBroadcast(new Intent(
-						"tchip.intent.action.ACTION_GPS_ON"));
+						"tchip.intent.action.ACTION_GPS_ON")); // 打开GPS
 
 				Intent intent = new Intent();
 				ComponentName comp = new ComponentName("com.mirrtalk.app",
@@ -543,6 +563,8 @@ public class OpenUtil {
 				intent.setComponent(comp);
 				intent.setAction("android.intent.action.VIEW");
 				activity.startActivity(intent);
+				activity.overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -578,6 +600,8 @@ public class OpenUtil {
 				intent.setComponent(comp);
 				intent.setAction("android.intent.action.VIEW");
 				activity.startActivity(intent);
+				activity.overridePendingTransition(R.anim.zms_translate_up_out,
+						R.anim.zms_translate_up_in);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

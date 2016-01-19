@@ -8,117 +8,117 @@ import com.tchip.carlauncher.util.MyLog;
 
 public class MyApp extends Application {
 
-	/** 是否处于低功耗待机状态 **/
+	/** 是否处于低功耗待机状态 */
 	public static boolean isSleeping = false;
 
-	/** ACC是否连接 **/
+	/** ACC是否连接 */
 	public static boolean isAccOn = true;
 
-	/** 正在执行休眠确认 **/
+	/** 正在执行休眠确认 */
 	public static boolean isSleepConfirm = false;
 
-	/** 正在执行唤醒确认 **/
+	/** 正在执行唤醒确认 */
 	public static boolean isWakeConfirm = false;
 
-	/** 插入录像卡：需要启动录像 **/
+	/** 插入录像卡：需要启动录像 */
 	public static boolean shouldMountRecord = false;
 
-	/** 休眠唤醒：需要启动录像 **/
+	/** 休眠唤醒：需要启动录像 */
 	public static boolean shouldWakeRecord = false;
 
-	/** 底层碰撞：需要启动录像 **/
+	/** 底层碰撞：需要启动录像 */
 	public static boolean shouldCrashRecord = false;
 
-	/** 录制底层碰撞视频后是否需要停止录像 **/
+	/** 录制底层碰撞视频后是否需要停止录像 */
 	public static boolean shouldStopWhenCrashVideoSave = false;
 
-	/** 语音拍照 **/
+	/** 语音拍照 */
 	public static boolean shouldTakeVoicePhoto = false;
 
-	/** 语音停止录像 **/
+	/** 语音停止录像 */
 	public static boolean shouldStopRecordFromVoice = false;
 
-	/** ACC下电:拍照 **/
+	/** ACC下电:拍照 */
 	public static boolean shouldTakePhotoWhenAccOff = false;
 
-	/** ACC拍照后,在onFileSave中传Path给DSA **/
+	/** ACC拍照后,在onFileSave中传Path给DSA */
 	public static boolean shouldSendPathToDSA = false;
 
-	/** 是否正在记录轨迹 **/
+	/** 是否正在记录轨迹 */
 	public static boolean isRouteRecord = false;
 
-	/** 是否正在录像 **/
+	/** 是否正在录像 */
 	public static boolean isVideoReording = false;
 
-	/** 当前视频片段是否加锁 **/
+	/** 当前视频片段是否加锁 */
 	public static boolean isVideoLock = false;
 
-	/** 第二段视频加锁 **/
+	/** 第二段视频加锁 */
 	public static boolean isVideoLockSecond = false;
 
-	/** 电源是否连接 **/
+	/** 电源是否连接 */
 	public static boolean isPowerConnect = true;
 
-	/** 侦测到碰撞 **/
+	/** 侦测到碰撞 */
 	public static boolean isCrashed = false;
 
-	/** 存储更改视频分辨率前的录像状态 **/
+	/** 存储更改视频分辨率前的录像状态 */
 	public static boolean shouldVideoRecordWhenChangeSize = false;
 
-	/** SD卡取出 **/
+	/** SD卡取出 */
 	public static boolean isVideoCardEject = false;
 
-	/** 蓝牙是否正在播放音乐 **/
+	/** 蓝牙是否正在播放音乐 */
 	public static boolean isBTPlayMusic = false;
 
-	/** 碰撞侦测开关:默认打开 **/
+	/** 碰撞侦测开关:默认打开 */
 	public static boolean isCrashOn = Constant.GravitySensor.DEFAULT_ON;
 
-	/** 碰撞侦测级别 **/
+	/** 碰撞侦测级别 */
 	public static int crashSensitive = Constant.GravitySensor.SENSITIVE_DEFAULT;
 
 	private SharedPreferences sharedPreferences;
 
 	public static boolean shouldResetRecordWhenResume = false;
 
-	/** 是否初次启动 **/
+	/** 是否初次启动 */
 	public static boolean isFirstLaunch = true;
 
-	/** 录像界面是否可见 **/
+	/** 录像界面是否可见 */
 	public static boolean isMainForeground = true;
 
-	/** 正在处理ACC休眠拍照 **/
+	/** 正在处理ACC休眠拍照 */
 	public static boolean isAccOffPhotoTaking = false;
 
-	/** 当前正在录像的视频名称 **/
+	/** 当前正在录像的视频名称 */
 	public static String nowRecordVideoName = "";
 
 	public static enum CameraState {
-		/** 未初始化 **/
+		/** 未初始化 */
 		NULL,
 
-		/** 已初始化，预览或录像 **/
+		/** 已初始化，预览或录像 */
 		OKAY
 	}
 
-	/** 录像窗口状态 **/
+	/** 录像窗口状态 */
 	public static CameraState cameraState = CameraState.OKAY;
 
 	public static enum SLEEP_STATE {
-		/** 未休眠：ACC连接 **/
+		/** 未休眠：ACC连接 */
 		SLEEP_NONE,
 
-		/** ACC刚断开的2秒 **/
+		/** ACC刚断开的2秒 */
 		SLEEP_CONFIRM,
 
-		/** 执行90秒线程，过后休眠 **/
+		/** 执行90秒线程，过后休眠 */
 		SLEEP_GOING,
 
-		/** 休眠中 **/
+		/** 休眠中 */
 		SLEEPING
 	}
 
-	/** 休眠状态 **/
+	/** 休眠状态 */
 	public static SLEEP_STATE sleepState = SLEEP_STATE.SLEEP_NONE;
 
 	@Override
@@ -129,9 +129,7 @@ public class MyApp extends Application {
 
 	}
 
-	/**
-	 * 初始化碰撞数据
-	 */
+	/** 初始化碰撞数据 */
 	private void initialCrashData() {
 		try {
 			sharedPreferences = getSharedPreferences(Constant.MySP.NAME,

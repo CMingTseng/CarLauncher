@@ -69,30 +69,30 @@ public class MainActivity extends Activity implements TachographCallback,
 	private Editor editor;
 	private DriveVideoDbHelper videoDb;
 
-	/** 录像按钮 **/
+	/** 录像按钮 */
 	private ImageView smallVideoRecord, largeVideoRecord;
-	/** 拍照按钮 **/
+	/** 拍照按钮 */
 	private ImageView smallVideoCamera, largeVideoCamera;
-	/** 加锁按钮 **/
+	/** 加锁按钮 */
 	private ImageView smallVideoLock, largeVideoLock;
-	/** 静音按钮 **/
+	/** 静音按钮 */
 	private ImageView largeVideoMute;
-	/** 视频尺寸 **/
+	/** 视频尺寸 */
 	private ImageView largeVideoSize;
-	/** 视频分段 **/
+	/** 视频分段 */
 	private ImageView largeVideoTime;
-	/** 前后切换 **/
+	/** 前后切换 */
 	private ImageView imageCameraSwitch;
-	/** 前后摄像头切换 **/
+	/** 前后摄像头切换 */
 	private LinearLayout layoutCameraSwitch;
-	/** WiFi状态监听器 **/
+	/** WiFi状态监听器 */
 	private IntentFilter wifiIntentFilter;
-	/** WiFi状态图标 **/
+	/** WiFi状态图标 */
 	private ImageView imageWifiLevel;
 	private ImageView imageSignalLevel, image3GType;
-	/** 飞行模式图标 **/
+	/** 飞行模式图标 */
 	private ImageView imageAirplane;
-	/** 外置蓝牙图标 **/
+	/** 外置蓝牙图标 */
 	private ImageView imageBluetooth;
 
 	private RelativeLayout layoutLargeButton;
@@ -181,9 +181,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private NetworkStateReceiver networkStateReceiver;
 
-	/**
-	 * 监听飞行模式，外置蓝牙广播
-	 */
+	/** 监听飞行模式，外置蓝牙广播 */
 	private class NetworkStateReceiver extends BroadcastReceiver {
 
 		@Override
@@ -209,14 +207,14 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	}
 
-	/** 设置飞行模式图标 **/
+	/** 设置飞行模式图标 */
 	private void setAirplaneIcon(boolean isAirplaneOn) {
 		imageAirplane.setBackground(getResources().getDrawable(
 				isAirplaneOn ? R.drawable.ic_qs_airplane_on
 						: R.drawable.ic_qs_airplane_off));
 	}
 
-	/** 设置外置蓝牙图标 **/
+	/** 设置外置蓝牙图标 */
 	private void setBluetoothIcon(int bluetoothState) {
 		boolean isExtBluetoothOn = NetworkUtil
 				.isExtBluetoothOn(getApplicationContext());
@@ -310,9 +308,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
-	/**
-	 * 后台线程，用以监测是否需要录制碰撞加锁视频(停车侦测)
-	 */
+	/** 后台线程，用以监测是否需要录制碰撞加锁视频(停车侦测) */
 	public class BackThread implements Runnable {
 
 		@Override
@@ -412,9 +408,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * ACC下电拍照线程
-	 */
+	/** ACC下电拍照线程 */
 	public class TakePhotoWhenAccOffThread implements Runnable {
 
 		@Override
@@ -456,9 +450,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
-	/**
-	 * 插入录像卡录制一个视频线程
-	 */
+	/** 插入录像卡录制一个视频线程 */
 	public class RecordWhenMountThread implements Runnable {
 
 		@Override
@@ -476,9 +468,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	}
 
-	/**
-	 * 底层碰撞后录制一个视频线程
-	 */
+	/** 底层碰撞后录制一个视频线程 */
 	public class RecordWhenCrashThread implements Runnable {
 
 		@Override
@@ -529,9 +519,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
-	/**
-	 * 插入视频卡时录制视频：
-	 */
+	/** 插入视频卡时录制视频 */
 	final Handler recordWhenMountHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -559,9 +547,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
-	/**
-	 * 更改分辨率后重启录像
-	 */
+	/** 更改分辨率后重启录像 */
 	public class StartRecordWhenChangeSizeThread implements Runnable {
 
 		@Override
@@ -577,9 +563,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 更改录音/静音状态后重启录像
-	 */
+	/** 更改录音/静音状态后重启录像 */
 	public class StartRecordWhenChangeMuteThread implements Runnable {
 		@Override
 		public void run() {
@@ -609,9 +593,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	private class MyPhoneStateListener extends PhoneStateListener {
 
-		/**
-		 * 更新3G信号强度
-		 */
+		/** 更新3G信号强度 */
 		@Override
 		public void onSignalStrengthsChanged(SignalStrength signalStrength) {
 
@@ -683,9 +665,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 更新3G图标
-	 */
+	/** 更新3G图标 */
 	private void update3GType() {
 		int networkType = telephonyManager.getNetworkType();
 
@@ -730,9 +710,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		surfaceCamera.getHolder().addCallback(this);
 	}
 
-	/**
-	 * 初始化布局
-	 */
+	/** 初始化布局 */
 	private void initialLayout() {
 		// 录像窗口
 		initialCameraSurface();
@@ -855,6 +833,13 @@ public class MainActivity extends Activity implements TachographCallback,
 			imageMessage.setOnClickListener(new MyOnClickListener());
 		}
 
+		// 微信助手
+		RelativeLayout layoutWechat = (RelativeLayout) findViewById(R.id.layoutWechat);
+		layoutWechat.setVisibility(Constant.Module.hasWechat ? View.VISIBLE
+				: View.GONE);
+		ImageView imageWechat = (ImageView) findViewById(R.id.imageWechat);
+		imageWechat.setOnClickListener(new MyOnClickListener());
+
 		// 微密
 		RelativeLayout layoutWeme = (RelativeLayout) findViewById(R.id.layoutWeme);
 		layoutWeme.setVisibility(Constant.Module.hasWeme ? View.VISIBLE
@@ -885,9 +870,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 初始化录像按钮
-	 */
+	/** 初始化录像按钮 */
 	private void initialCameraButton() {
 		// ********** 小视图 **********
 		// 录制
@@ -936,9 +919,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		updateButtonState(isSurfaceLarge());
 	}
 
-	/**
-	 * 切换录像预览窗口的大小
-	 */
+	/** 切换录像预览窗口的大小 */
 	private void updateSurfaceState() {
 		if (!isSurfaceLarge) {
 			// 16/9 = 1.7778;854/480 = 1.7791
@@ -1240,9 +1221,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
-	/**
-	 * 更新WiF状态
-	 */
+	/** 更新WiF状态 */
 	private void updateWiFiState() {
 		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -1478,6 +1457,10 @@ public class MainActivity extends Activity implements TachographCallback,
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEME);
 				break;
 
+			case R.id.imageWechat:
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WECHAT);
+				break;
+
 			case R.id.layoutWiFi:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WIFI);
 				break;
@@ -1488,7 +1471,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 启动录像 **/
+	/** 启动录像 */
 	private void startRecord() {
 		try {
 			if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
@@ -1516,7 +1499,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 停止录像 **/
+	/** 停止录像 */
 	private void stopRecord() {
 		try {
 			if (recordState == Constant.Record.STATE_RECORD_STARTED) {
@@ -1535,9 +1518,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/**
-	 * 加锁或加锁视频
-	 */
+	/** 加锁或加锁视频 */
 	private void lockOrUnlockVideo() {
 		if (!MyApp.isVideoLock) {
 			MyApp.isVideoLock = true;
@@ -1552,7 +1533,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordViews();
 	}
 
-	/** WiFi状态Receiver **/
+	/** WiFi状态Receiver */
 	private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -1581,9 +1562,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	};
 
-	/**
-	 * 更新wifi图标和3G图标
-	 */
+	/** 更新wifi图标和3G图标 */
 	public class updateNetworkIconThread implements Runnable {
 		@Override
 		public void run() {
@@ -2043,7 +2022,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
-	/** 视频SD卡不存在提示 **/
+	/** 视频SD卡不存在提示 */
 	private void noVideoSDHint() {
 		String strNoSD = getResources().getString(R.string.hint_sd2_not_exist);
 		audioRecordDialog.showErrorDialog(strNoSD);
@@ -2051,7 +2030,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		HintUtil.speakVoice(MainActivity.this, strNoSD);
 	}
 
-	/** 检查并删除异常视频文件：SD存在但数据库中不存在的文件 **/
+	/** 检查并删除异常视频文件：SD存在但数据库中不存在的文件 */
 	private void CheckErrorFile() {
 		MyLog.v("[CheckErrorFile]isVideoChecking:" + isVideoChecking);
 		if (!isVideoChecking && StorageUtil.isVideoCardExists()) {
@@ -2059,7 +2038,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 当前是否正在校验错误视频 **/
+	/** 当前是否正在校验错误视频 */
 	private boolean isVideoChecking = false;
 
 	private class CheckVideoThread implements Runnable {
@@ -2149,7 +2128,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				: -1;
 	}
 
-	/** 拍照 **/
+	/** 拍照 */
 	public int takePhoto() {
 		if (!StorageUtil.isVideoCardExists()) {
 			noVideoSDHint(); // SDCard不存在
@@ -2162,7 +2141,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
-	/** ACC下电拍照 **/
+	/** ACC下电拍照 */
 	public void takePhotoWhenAccOff() {
 		if (carRecorder != null) {
 			if (!MyApp.isAccOffPhotoTaking) {
@@ -2187,7 +2166,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 语音拍照 **/
+	/** 语音拍照 */
 	public void takePhotoWhenVoiceCommand() {
 		if (carRecorder != null) {
 			if (StorageUtil.isVideoCardExists()) { // 如果录像卡不存在，则会保存到内部存储
@@ -2198,7 +2177,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 设置保存路径 **/
+	/** 设置保存路径 */
 	public int setDirectory(String dir) {
 		if (carRecorder != null) {
 			return carRecorder.setDirectory(dir);
@@ -2206,7 +2185,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		return -1;
 	}
 
-	/** 设置录像静音，需要已经初始化carRecorder **/
+	/** 设置录像静音，需要已经初始化carRecorder */
 	private int setMute(boolean mute) {
 		if (carRecorder != null) {
 			return carRecorder.setMute(mute);
@@ -2293,7 +2272,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyApp.cameraState = CameraState.OKAY;
 	}
 
-	/** 释放Recorder **/
+	/** 释放Recorder */
 	private void releaseRecorder() {
 		try {
 			if (carRecorder != null) {

@@ -374,6 +374,31 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutWechat"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
+
+                <ImageView
+                    android:id="@+id/imageWechat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ui_main_wechat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_wechat"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/layoutWeme"
                 android:layout_width="@dimen/ui_main_hsv_item_width"
                 android:layout_height="@dimen/ui_main_hsv_item_height"
@@ -383,7 +408,7 @@
                     android:id="@+id/imageWeme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/ui_main_ximalaya" />
+                    android:background="@drawable/ui_main_weme" />
 
                 <TextView
                     android:layout_width="wrap_content"

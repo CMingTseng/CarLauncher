@@ -3,66 +3,66 @@ package com.tchip.carlauncher;
 import android.os.Environment;
 
 public interface Constant {
-	/** Debug：打印Log **/
+	/** Debug：打印Log */
 	public static final boolean isDebug = true;
 
-	/** 日志Tag **/
+	/** 日志Tag */
 	public static final String TAG = "ZMS";
 
-	/** SharedPreferences **/
+	/** SharedPreferences */
 	public static final class MySP {
-		/** 名称 **/
+		/** 名称 */
 		public static final String NAME = "CarLauncher";
 
-		/** 是否开机自动录像[boolean:true] **/
+		/** 是否开机自动录像[boolean:true] */
 		public static final String STR_AUTO_RECORD = "autoRecord";
 
-		/** 停车侦测是否打开[boolean:true] **/
+		/** 停车侦测是否打开[boolean:true] */
 		public static final String STR_PARKING_ON = "parkingOn";
 
-		/** 手动设置的亮度[int] **/
+		/** 手动设置的亮度[int] */
 		public static final String STR_MANUL_LIGHT_VALUE = "manulLightValue";
 	}
 
-	/** 广播 **/
+	/** 广播 */
 	public static final class Broadcast {
-		/** ACC上电 **/
+		/** ACC上电 */
 		public static final String ACC_ON = "com.tchip.ACC_ON";
 
-		/** ACC下电 **/
+		/** ACC下电 */
 		public static final String ACC_OFF = "com.tchip.ACC_OFF";
 
-		/** 进入休眠 **/
+		/** 进入休眠 */
 		public static final String SLEEP_ON = "com.tchip.SLEEP_ON";
 
-		/** 取消休眠 **/
+		/** 取消休眠 */
 		public static final String SLEEP_OFF = "com.tchip.SLEEP_OFF";
 
-		/** 停车守卫:发生碰撞 **/
+		/** 停车守卫:发生碰撞 */
 		public static final String GSENSOR_CRASH = "com.tchip.GSENSOR_CRASH";
 
-		/** 打开飞行模式 **/
+		/** 打开飞行模式 */
 		public static final String AIRPLANE_ON = "com.tchip.AIRPLANE_ON";
 
-		/** 关闭飞行模式 **/
+		/** 关闭飞行模式 */
 		public static final String AIRPLANE_OFF = "com.tchip.AIRPLANE_OFF";
 
-		/** 打开GPS **/
+		/** 打开GPS */
 		public static final String GPS_ON = "tchip.intent.action.ACTION_GPS_ON";
 
-		/** 关闭GPS **/
+		/** 关闭GPS */
 		public static final String GPS_OFF = "tchip.intent.action.ACTION_GPS_OFF";
 
-		/** 外置蓝牙连接 **/
+		/** 外置蓝牙连接 */
 		public static final String BT_CONNECTED = "com.tchip.BT_CONNECTED";
 
-		/** 外置蓝牙断开 **/
+		/** 外置蓝牙断开 */
 		public static final String BT_DISCONNECTED = "com.tchip.BT_DISCONNECTED";
 
-		/** 蓝牙音乐播放 **/
+		/** 蓝牙音乐播放 */
 		public static final String BT_MUSIC_PLAYING = "com.tchip.BT_MUSIC_PLAYING";
 
-		/** 蓝牙音乐停止 **/
+		/** 蓝牙音乐停止 */
 		public static final String BT_MUSIC_STOPED = "com.tchip.BT_MUSIC_STOPED";
 
 		/**
@@ -85,7 +85,7 @@ public interface Constant {
 		 */
 		public static final String SPEECH_COMMAND = "com.tchip.SPEECH_COMMAND";
 
-		/** 杀死语音 **/
+		/** 杀死语音 */
 		public static final String AISPEECH_OFF = "com.tchip.aiSpeechSleep"; // "com.tchip.AISPEECH_OFF";
 
 		/**
@@ -123,21 +123,21 @@ public interface Constant {
 
 	public static final class Setting {
 
-		/** 最大亮度 **/
+		/** 最大亮度 */
 		public static final int MAX_BRIGHTNESS = 196; // 255;
 
-		/** 默认亮度 **/
+		/** 默认亮度 */
 		public static final int DEFAULT_BRIGHTNESS = 180;
 
-		/** Camera自动调节亮度是否打开 **/
+		/** Camera自动调节亮度是否打开 */
 		public static final boolean AUTO_BRIGHT_DEFAULT_ON = false;
 	}
 
 	public static final class GravitySensor {
-		/** 碰撞侦测是否默认打开 **/
+		/** 碰撞侦测是否默认打开 */
 		public static final boolean DEFAULT_ON = true;
 
-		/** 碰撞侦测默认灵敏度Level **/
+		/** 碰撞侦测默认灵敏度Level */
 		public static final float VALUE = 9.8f;
 
 		public static final int SENSITIVE_LOW = 0;
@@ -153,41 +153,41 @@ public interface Constant {
 	}
 
 	public static final class Record {
-		/** 是否开机自动录像 **/
+		/** 是否开机自动录像 */
 		public static final boolean autoRecord = true;
 
-		/** 默认是否静音 **/
+		/** 默认是否静音 */
 		public static final boolean muteDefault = false;
 
-		/** 停车侦测录像是否加锁 **/
+		/** 停车侦测录像是否加锁 */
 		public static final boolean parkVideoLock = false;
 
-		/** 停车侦测录像时长(s) **/
+		/** 停车侦测录像时长(s) */
 		public static final int parkVideoLength = 60;
 
-		/** 停车侦测是否默认打开 **/
+		/** 停车侦测是否默认打开 */
 		public static final boolean parkDefaultOn = true;
 
-		/** 开机自动录像延时 **/
+		/** 开机自动录像延时 */
 		public static final int autoRecordDelay = 2500;
 
-		/** 循环录像保留空间(单位：字节B) **/
+		/** 循环录像保留空间(单位：字节B) */
 		public static final long SD_MIN_FREE_STORAGE = 500 * 1024 * 1024; // 500M
 
-		/** 比特率240P **/
+		/** 比特率240P */
 		public static final int BIT_RATE_240P = 120 * 1000;
 
-		/** 比特率720P **/
+		/** 比特率720P */
 		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000,
 																// MTK:9000 *
 																// 1000
 
-		/** 比特率1080P **/
+		/** 比特率1080P */
 		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000,
 																// MTK:17000 *
 																// 1000
 
-		/** 帧率 **/
+		/** 帧率 */
 		public static final int FRAME_RATE = 30; // 24
 
 		// 分辨率
@@ -220,7 +220,7 @@ public interface Constant {
 		public static final int STATE_MUTE = 0;
 		public static final int STATE_UNMUTE = 1;
 
-		/** 系统相机参数 **/
+		/** 系统相机参数 */
 		public static final String CAMERA_PARAMS = "zoom=0;fb-smooth-level-max=4;max-num-detected-faces-hw=15;"
 				+ "cap-mode=normal;whitebalance=auto;afeng-min-focus-step=0;"
 				+ "preview-format-values=yuv420sp,yuv420p,yuv420i-yyuvyy-3plane;"
@@ -270,45 +270,42 @@ public interface Constant {
 
 	public static final class Module {
 		/** 是否是公版软件 */
-		public static final boolean isPublic = false;
+		public static final boolean isPublic = true;
 
 		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;
 
-		/** 是否有拨号短信模块 **/
+		/** 是否有拨号短信模块 */
 		public static final boolean hasDialer = false;
 
-		/** 是否有微密 **/
+		/** 是否有微信助手 */
+		public static final boolean hasWechat = isPublic;
+
+		/** 是否有微密 */
 		public static final boolean hasWeme = isPublic;
 
 		/** 是否有网络电台 */
 		public static final boolean hasOnlineFM = isPublic;
 
-		/** 是否有行车轨迹 **/
+		/** 是否有行车轨迹 */
 		public static final boolean hasRoute = false;
 
 		/** 图标是否以块为单位移动 */
 		public static final boolean isIconAtom = false;
 	}
 
-	/**
-	 * FM发射
-	 */
+	/** FM发射 */
 	public static final class FMTransmit {
-		/** 系统设置：FM发射开关 **/
+		/** 系统设置：FM发射开关 */
 		public static final String SETTING_ENABLE = "fm_transmitter_enable";
 
-		/** 系统设置：FM发射频率 **/
+		/** 系统设置：FM发射频率 */
 		public static final String SETTING_CHANNEL = "fm_transmitter_channel";
 	}
 
-	/**
-	 * 路径
-	 */
+	/** 路径 */
 	public static final class Path {
-		/**
-		 * SDcard Path
-		 */
+		/** SDcard Path */
 		public static final String SD_CARD = Environment
 				.getExternalStorageDirectory().getPath();
 
@@ -316,15 +313,13 @@ public interface Constant {
 		public static final String SDCARD_1 = "/storage/sdcard1";
 		public static final String SDCARD_2 = "/storage/sdcard2";
 
-		/**
-		 * 字体目录
-		 */
+		/** 字体目录 */
 		public static final String FONT = "fonts/";
 
-		/** 百度离线地图子级目录 **/
+		/** 百度离线地图子级目录 */
 		public static final String BAIDU_OFFLINE_SUB = "/storage/sdcard0/BaiduMapSDK/vmp/l/";
 
-		/** 百度离线地图，存储卡位置 **/
+		/** 百度离线地图，存储卡位置 */
 		public static final String SD_CARD_MAP = "/storage/sdcard1";
 	}
 
