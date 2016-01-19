@@ -3,6 +3,7 @@ package com.tchip.carlauncher.ui.activity;
 import java.io.File;
 
 import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.Constant.Module;
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.MyApp.CameraState;
 import com.tchip.carlauncher.R;
@@ -724,11 +725,9 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void initialCameraSurface() {
-		if (Constant.Record.hasCamera) {
-			surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
-			surfaceCamera.setOnClickListener(new MyOnClickListener());
-			surfaceCamera.getHolder().addCallback(this);
-		}
+		surfaceCamera = (SurfaceView) findViewById(R.id.surfaceCamera);
+		surfaceCamera.setOnClickListener(new MyOnClickListener());
+		surfaceCamera.getHolder().addCallback(this);
 	}
 
 	/**
@@ -1759,14 +1758,14 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyLog.v("[Main]onDestroy");
 		release(); // 释放录像区域
 
+		videoDb.close();
+
 		super.onDestroy();
 	}
 
 	// *********** Record ***********
 
-	/**
-	 * 设置录制初始值
-	 */
+	/** 设置录制初始值 */
 	private void setupRecordDefaults() {
 		refreshRecordButton();
 
@@ -1785,10 +1784,11 @@ public class MainActivity extends Activity implements TachographCallback,
 	}
 
 	private void refreshRecordButton() {
-		// 视频尺寸，默认1080P
-		String videoSizeStr = sharedPreferences.getString("videoSize", "1080");
-		resolutionState = "720".equals(videoSizeStr) ? Constant.Record.STATE_RESOLUTION_720P
-				: Constant.Record.STATE_RESOLUTION_1080P;
+		// 视频尺寸：公版默认720P，善领默认1080P
+		String videoSizeStr = sharedPreferences.getString("videoSize",
+				Constant.Module.isPublic ? "720" : "1080");
+		resolutionState = "1080".equals(videoSizeStr) ? Constant.Record.STATE_RESOLUTION_1080P
+				: Constant.Record.STATE_RESOLUTION_720P;
 
 		// 视频分段
 		String videoTimeStr = sharedPreferences.getString("videoTime", "3");
@@ -1796,9 +1796,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				: Constant.Record.STATE_INTERVAL_3MIN;
 	}
 
-	/**
-	 * 绘制录像按钮
-	 */
+	/** 绘制录像按钮 */
 	private void setupRecordViews() {
 		HintUtil.setRecordHintFloatWindowVisible(MainActivity.this,
 				MyApp.isVideoReording);
