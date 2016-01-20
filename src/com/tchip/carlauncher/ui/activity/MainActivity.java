@@ -148,7 +148,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
 		initialLayout();
-		initialCameraButton();
 		SettingUtil.initialNodeState(MainActivity.this);
 		setupRecordDefaults();
 		setupRecordViews();
@@ -719,44 +718,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		textRecordTime.setTypeface(Typefaces.get(this, Constant.Path.FONT
 				+ "Font-Quartz-Regular.ttf"));
 
-		// 增大点击区域
-		layoutVideoSize = (LinearLayout) findViewById(R.id.layoutVideoSize);
-		layoutVideoSize.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoTime = (LinearLayout) findViewById(R.id.layoutVideoTime);
-		layoutVideoTime.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoLock = (LinearLayout) findViewById(R.id.layoutVideoLock);
-		layoutVideoLock.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoMute = (LinearLayout) findViewById(R.id.layoutVideoMute);
-		layoutVideoMute.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoRecord = (LinearLayout) findViewById(R.id.layoutVideoRecord);
-		layoutVideoRecord.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoCamera = (LinearLayout) findViewById(R.id.layoutVideoCamera);
-		layoutVideoCamera
-				.setVisibility(Constant.Module.hasCameraSwitch ? View.GONE
-						: View.VISIBLE);
-		layoutVideoCamera.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoRecordSmall = (LinearLayout) findViewById(R.id.layoutVideoRecordSmall);
-		layoutVideoRecordSmall.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoCameraSmall = (LinearLayout) findViewById(R.id.layoutVideoCameraSmall);
-		layoutVideoCameraSmall.setOnClickListener(new MyOnClickListener());
-
-		layoutVideoLockSmall = (LinearLayout) findViewById(R.id.layoutVideoLockSmall);
-		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
-
-		layoutCameraSwitch = (LinearLayout) findViewById(R.id.layoutCameraSwitch);
-		layoutCameraSwitch
-				.setVisibility(Constant.Module.hasCameraSwitch ? View.VISIBLE
-						: View.GONE);
-		layoutCameraSwitch.setOnClickListener(new MyOnClickListener());
-
-		// 天气预报和时钟,状态图标
+		// 时钟和状态图标
 		RelativeLayout layoutWeather = (RelativeLayout) findViewById(R.id.layoutWeather);
 		layoutWeather.setOnClickListener(new MyOnClickListener());
 		TextClock textClock = (TextClock) findViewById(R.id.textClock);
@@ -872,57 +834,71 @@ public class MainActivity extends Activity implements TachographCallback,
 
 				}
 			});
-
 		}
-	}
 
-	/** 初始化录像按钮 */
-	private void initialCameraButton() {
-		// ********** 小视图 **********
+		layoutLargeButton = (RelativeLayout) findViewById(R.id.layoutLargeButton);
+
 		// 录制
 		smallVideoRecord = (ImageView) findViewById(R.id.smallVideoRecord);
 		smallVideoRecord.setOnClickListener(new MyOnClickListener());
+		largeVideoRecord = (ImageView) findViewById(R.id.largeVideoRecord);
+		largeVideoRecord.setOnClickListener(new MyOnClickListener());
+		layoutVideoRecordSmall = (LinearLayout) findViewById(R.id.layoutVideoRecordSmall);
+		layoutVideoRecordSmall.setOnClickListener(new MyOnClickListener());
+		layoutVideoRecord = (LinearLayout) findViewById(R.id.layoutVideoRecord);
+		layoutVideoRecord.setOnClickListener(new MyOnClickListener());
 
 		// 锁定
 		smallVideoLock = (ImageView) findViewById(R.id.smallVideoLock);
 		smallVideoLock.setOnClickListener(new MyOnClickListener());
+		largeVideoLock = (ImageView) findViewById(R.id.largeVideoLock);
+		largeVideoLock.setOnClickListener(new MyOnClickListener());
+		layoutVideoLock = (LinearLayout) findViewById(R.id.layoutVideoLock);
+		layoutVideoLock.setOnClickListener(new MyOnClickListener());
+		layoutVideoLockSmall = (LinearLayout) findViewById(R.id.layoutVideoLockSmall);
+		layoutVideoLockSmall.setOnClickListener(new MyOnClickListener());
 
-		// 拍照
+		// 拍照/前后切换图标
 		smallVideoCamera = (ImageView) findViewById(R.id.smallVideoCamera);
 		smallVideoCamera.setOnClickListener(new MyOnClickListener());
-
-		// ********** 大视图 **********
-		layoutLargeButton = (RelativeLayout) findViewById(R.id.layoutLargeButton);
+		largeVideoCamera = (ImageView) findViewById(R.id.largeVideoCamera);
+		layoutVideoCameraSmall = (LinearLayout) findViewById(R.id.layoutVideoCameraSmall);
+		layoutVideoCameraSmall.setOnClickListener(new MyOnClickListener());
+		layoutVideoCamera = (LinearLayout) findViewById(R.id.layoutVideoCamera);
+		layoutCameraSwitch = (LinearLayout) findViewById(R.id.layoutCameraSwitch);
+		imageCameraSwitch = (ImageView) findViewById(R.id.imageCameraSwitch);
+		if (Constant.Module.hasCameraSwitch) {
+			layoutVideoCamera.setVisibility(View.GONE);
+			layoutCameraSwitch.setVisibility(View.VISIBLE);
+			layoutCameraSwitch.setOnClickListener(new MyOnClickListener());
+			imageCameraSwitch.setOnClickListener(new MyOnClickListener());
+		} else {
+			layoutVideoCamera.setVisibility(View.VISIBLE);
+			layoutVideoCamera.setOnClickListener(new MyOnClickListener());
+			largeVideoCamera.setOnClickListener(new MyOnClickListener());
+			layoutCameraSwitch.setVisibility(View.GONE);
+		}
 
 		// 视频尺寸
 		largeVideoSize = (ImageView) findViewById(R.id.largeVideoSize);
 		largeVideoSize.setOnClickListener(new MyOnClickListener());
+		layoutVideoSize = (LinearLayout) findViewById(R.id.layoutVideoSize);
+		layoutVideoSize.setOnClickListener(new MyOnClickListener());
 
 		// 视频分段长度
 		largeVideoTime = (ImageView) findViewById(R.id.largeVideoTime);
 		largeVideoTime.setOnClickListener(new MyOnClickListener());
-
-		// 锁定
-		largeVideoLock = (ImageView) findViewById(R.id.largeVideoLock);
-		largeVideoLock.setOnClickListener(new MyOnClickListener());
+		layoutVideoTime = (LinearLayout) findViewById(R.id.layoutVideoTime);
+		layoutVideoTime.setOnClickListener(new MyOnClickListener());
 
 		// 静音
 		largeVideoMute = (ImageView) findViewById(R.id.largeVideoMute);
 		largeVideoMute.setOnClickListener(new MyOnClickListener());
-
-		// 录制
-		largeVideoRecord = (ImageView) findViewById(R.id.largeVideoRecord);
-		largeVideoRecord.setOnClickListener(new MyOnClickListener());
-
-		// 拍照
-		largeVideoCamera = (ImageView) findViewById(R.id.largeVideoCamera);
-		largeVideoCamera.setOnClickListener(new MyOnClickListener());
-
-		// 切换前后图标
-		imageCameraSwitch = (ImageView) findViewById(R.id.imageCameraSwitch);
-		imageCameraSwitch.setOnClickListener(new MyOnClickListener());
+		layoutVideoMute = (LinearLayout) findViewById(R.id.layoutVideoMute);
+		layoutVideoMute.setOnClickListener(new MyOnClickListener());
 
 		updateButtonState(isSurfaceLarge());
+
 	}
 
 	/** 切换录像预览窗口的大小 */
@@ -956,11 +932,12 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @param isSurfaceLarge
 	 */
 	private void updateButtonState(boolean isLarge) {
-		smallVideoRecord.setVisibility(isLarge ? View.INVISIBLE : View.VISIBLE);
-		smallVideoLock.setVisibility(isLarge ? View.INVISIBLE : View.VISIBLE);
-		smallVideoCamera.setVisibility(isLarge ? View.INVISIBLE : View.VISIBLE);
-		layoutLargeButton
-				.setVisibility(isLarge ? View.VISIBLE : View.INVISIBLE);
+		smallVideoRecord.setVisibility(isLarge ? View.GONE : View.VISIBLE);
+		smallVideoLock.setVisibility(isLarge ? View.GONE : View.VISIBLE);
+		smallVideoCamera.setVisibility(isLarge ? View.GONE : View.VISIBLE);
+		layoutVideoCameraSmall
+				.setVisibility(isLarge ? View.GONE : View.VISIBLE);
+		layoutLargeButton.setVisibility(isLarge ? View.VISIBLE : View.GONE);
 	}
 
 	private boolean isSurfaceLarge() {
