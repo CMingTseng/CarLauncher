@@ -593,10 +593,12 @@ public class OpenUtil {
 		case XIMALAYA:
 			try {
 				Intent intent = new Intent();
-
+				// ComponentName comp = new ComponentName(
+				// "com.ximalaya.ting.android",
+				// "com.ximalaya.ting.android.activity.login.WelcomeActivity");
 				ComponentName comp = new ComponentName(
-						"com.ximalaya.ting.android",
-						"com.ximalaya.ting.android.activity.login.WelcomeActivity");
+						"com.ximalaya.ting.android.car",
+						"com.ximalaya.ting.android.car.activity.WelcomeActivity");
 				intent.setComponent(comp);
 				intent.setAction("android.intent.action.VIEW");
 				activity.startActivity(intent);

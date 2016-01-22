@@ -177,18 +177,24 @@ public interface Constant {
 		/** 比特率240P */
 		public static final int BIT_RATE_240P = 120 * 1000;
 
-		/** 比特率720P */
-		public static final int BIT_RATE_720P = 5500 * 1000; // 3500 * 1000,
-																// MTK:9000 *
-																// 1000
+		/**
+		 * 比特率720P:
+		 * 
+		 * MTK:9000 * 1000
+		 */
+		public static final int BIT_RATE_720P = Module.isPublic ? 3500 * 1000
+				: 5500 * 1000;
 
-		/** 比特率1080P */
-		public static final int BIT_RATE_1080P = 11000 * 1000; // 8500 * 1000,
-																// MTK:17000 *
-																// 1000
+		/**
+		 * 比特率1080P:
+		 * 
+		 * MTK:17000 * 1000
+		 */
+		public static final int BIT_RATE_1080P = Module.isPublic ? 8500 * 1000
+				: 11000 * 1000;
 
 		/** 帧率 */
-		public static final int FRAME_RATE = 30; // 24
+		public static final int FRAME_RATE = Module.isPublic ? 24 : 30;
 
 		// 分辨率
 		public static final int STATE_RESOLUTION_720P = 0;
@@ -288,7 +294,7 @@ public interface Constant {
 		public static final boolean hasOnlineFM = isPublic;
 
 		/** 是否有前后摄像切换图标 */
-		public static final boolean hasCameraSwitch = isPublic;
+		public static final boolean hasCameraSwitch = false; // isPublic;
 
 		/** 是否有行车轨迹 */
 		public static final boolean hasRoute = false;
