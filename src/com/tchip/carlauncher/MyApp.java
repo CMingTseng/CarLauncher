@@ -65,6 +65,9 @@ public class MyApp extends Application {
 	/** 存储更改视频分辨率前的录像状态 */
 	public static boolean shouldVideoRecordWhenChangeSize = false;
 
+	/** 存储更改静音前的录像状态 */
+	public static boolean shouldVideoRecordWhenChangeMute = false;
+
 	/** SD卡取出 */
 	public static boolean isVideoCardEject = false;
 

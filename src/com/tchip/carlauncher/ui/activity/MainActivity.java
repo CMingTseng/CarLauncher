@@ -1331,18 +1331,14 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutVideoMute:
 				if (!ClickUtil.isQuickClick(800)) {
 					// 切换录音/静音状态停止录像，需要重置时间
-					MyApp.shouldVideoRecordWhenChangeSize = MyApp.isVideoReording;
+					MyApp.shouldVideoRecordWhenChangeMute = MyApp.isVideoReording;
 
 					if (MyApp.isVideoReording) {
 						resetRecordTimeText();
 						textRecordTime.setVisibility(View.INVISIBLE);
 						MyApp.isVideoReording = false;
-
-						if (StorageUtil.isVideoCardExists()) {
-							startRecord();
-						} else {
-							noVideoSDHint();
-						}
+						
+						stopRecord();
 					}
 					if (muteState == Constant.Record.STATE_MUTE) {
 						if (setMute(false) == 0) {
@@ -1369,10 +1365,10 @@ public class MainActivity extends Activity implements TachographCallback,
 					setupRecordViews();
 
 					// 修改录音/静音后按需还原录像状态
-					if (MyApp.shouldVideoRecordWhenChangeSize) {
+					if (MyApp.shouldVideoRecordWhenChangeMute) {
 						new Thread(new StartRecordWhenChangeMuteThread())
 								.start();
-						MyApp.shouldVideoRecordWhenChangeSize = false;
+						MyApp.shouldVideoRecordWhenChangeMute = false;
 					}
 				}
 				break;
