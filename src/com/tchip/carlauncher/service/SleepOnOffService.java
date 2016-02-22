@@ -2,8 +2,6 @@ package com.tchip.carlauncher.service;
 
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
-import com.tchip.carlauncher.R;
-import com.tchip.carlauncher.util.HintUtil;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.SettingUtil;
 
@@ -403,11 +401,6 @@ public class SleepOnOffService extends Service {
 			MyLog.e("[SleepOnOffService]deviceSleep.");
 			MyApp.isSleeping = true; // 进入低功耗待机
 
-			if (Constant.Module.hasRoute) {
-				context.sendBroadcast(new Intent("com.tchip.KILL_APP")
-						.putExtra("value", "com.tchip.route")); // 退出轨迹
-			}
-
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceSleep");
 		} finally {
@@ -456,23 +449,13 @@ public class SleepOnOffService extends Service {
 	/**
 	 * 开启外部服务：
 	 * 
-	 * 1.轨迹记录
+	 * 1.天气播报(整点播报)
 	 * 
-	 * 2.天气播报
-	 * 
-	 * 3.碰撞侦测服务
+	 * 2.碰撞侦测服务
 	 */
 	private void startExternalService() {
 		try {
-			// 轨迹记录
-			if (Constant.Module.hasRoute) {
-				Intent intentRoute = new Intent();
-				intentRoute.setClassName("com.tchip.route",
-						"com.tchip.route.service.RouteRecordService");
-				startService(intentRoute);
-			}
-
-			// 天气播报
+			// 天气播报(整点报时)
 			Intent intentWeather = new Intent();
 			intentWeather.setClassName("com.tchip.weather",
 					"com.tchip.weather.service.TimeTickService");
@@ -503,25 +486,15 @@ public class SleepOnOffService extends Service {
 	/**
 	 * 关闭外部应用与服务：
 	 * 
-	 * 1.轨迹记录服务
+	 * 天气播报服务
 	 * 
-	 * 2.天气播报服务
+	 * 酷我音乐
 	 * 
-	 * 3.酷我音乐
-	 * 
-	 * 4.碰撞侦测服务
+	 * 碰撞侦测服务
 	 */
 	private void stopExternalService() {
 		try {
-			// 轨迹记录服务
-			if (Constant.Module.hasRoute) {
-				Intent intentRoute = new Intent();
-				intentRoute.setClassName("com.tchip.route",
-						"com.tchip.route.service.RouteRecordService");
-				stopService(intentRoute);
-			}
-
-			// 天气播报
+			// 天气播报(整点报时)
 			Intent intentWeather = new Intent();
 			intentWeather.setClassName("com.tchip.weather",
 					"com.tchip.weather.service.TimeTickService");

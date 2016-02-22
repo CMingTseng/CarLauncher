@@ -688,15 +688,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		Intent intentSensor = new Intent(this, SensorWatchService.class);
 		startService(intentSensor);
 
-		// 轨迹记录
-		if (Constant.Module.hasRoute) {
-			Intent intentRoute = new Intent();
-			intentRoute.setClassName("com.tchip.route",
-					"com.tchip.route.service.RouteRecordService");
-			startService(intentRoute);
-		}
-
-		// 天气播报
+		// 天气播报(整点报时)
 		Intent intentWeather = new Intent();
 		intentWeather.setClassName("com.tchip.weather",
 				"com.tchip.weather.service.TimeTickService");
@@ -780,13 +772,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageFileExplore = (ImageView) findViewById(R.id.imageFileExplore);
 		imageFileExplore.setOnClickListener(new MyOnClickListener());
 
-		// 行驶轨迹
-		ImageView imageRouteTrack = (ImageView) findViewById(R.id.imageRouteTrack);
-		imageRouteTrack.setOnClickListener(new MyOnClickListener());
-		RelativeLayout layoutRoute = (RelativeLayout) findViewById(R.id.layoutRoute);
-		layoutRoute.setVisibility(Constant.Module.hasRoute ? View.VISIBLE
-				: View.GONE);
-
 		// FM发射
 		ImageView imageFmTransmit = (ImageView) findViewById(R.id.imageFmTransmit);
 		imageFmTransmit.setOnClickListener(new MyOnClickListener());
@@ -794,12 +779,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		// 拨号
 		ImageView imageDialer = (ImageView) findViewById(R.id.imageDialer);
 		imageDialer.setOnClickListener(new MyOnClickListener());
-
-		if (Constant.Module.hasDialer) {
-			// 短信
-			ImageView imageMessage = (ImageView) findViewById(R.id.imageMessage);
-			imageMessage.setOnClickListener(new MyOnClickListener());
-		}
 
 		// 微信助手
 		RelativeLayout layoutWechat = (RelativeLayout) findViewById(R.id.layoutWechat);
@@ -810,8 +789,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 微密
 		RelativeLayout layoutWeme = (RelativeLayout) findViewById(R.id.layoutWeme);
-		layoutWeme.setVisibility(Constant.Module.hasWeme ? View.VISIBLE
-				: View.GONE);
 		ImageView imageWeme = (ImageView) findViewById(R.id.imageWeme);
 		imageWeme.setOnClickListener(new MyOnClickListener());
 
@@ -1337,7 +1314,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						resetRecordTimeText();
 						textRecordTime.setVisibility(View.INVISIBLE);
 						MyApp.isVideoReording = false;
-						
+
 						stopRecord();
 					}
 					if (muteState == Constant.Record.STATE_MUTE) {
@@ -1388,7 +1365,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.layoutWeather:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEATHER);
+				if (Constant.Module.hasWeather) {
+					OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEATHER);
+				}
 				break;
 
 			case R.id.imageNavi:
@@ -1411,10 +1390,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MULTIMEDIA);
 				break;
 
-			case R.id.imageRouteTrack:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.ROUTE);
-				break;
-
 			case R.id.imageFmTransmit:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.FMTRANSMIT);
 				break;
@@ -1426,10 +1401,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageDialer:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.DIALER);
-				break;
-
-			case R.id.imageMessage:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.MMS);
 				break;
 
 			case R.id.imageWeme:
@@ -2132,7 +2103,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				carRecorder.takePicture();
 
 				if (sharedPreferences.getBoolean(Constant.MySP.STR_PARKING_ON,
-						true)) {
+						true) && Constant.Module.hintParkingMonitor) {
 					HintUtil.speakVoice(
 							getApplicationContext(),
 							getResources().getString(

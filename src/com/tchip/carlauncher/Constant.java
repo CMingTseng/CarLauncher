@@ -281,23 +281,20 @@ public interface Constant {
 		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;
 
-		/** 是否有拨号短信模块 */
-		public static final boolean hasDialer = false;
-
 		/** 是否有微信助手 */
 		public static final boolean hasWechat = isPublic;
-
-		/** 是否有微密 */
-		public static final boolean hasWeme = isPublic;
 
 		/** 是否有网络电台 */
 		public static final boolean hasOnlineFM = isPublic;
 
+		/** 是否提示90s后启动停车守卫 */
+		public static final boolean hintParkingMonitor = !isPublic;
+
 		/** 是否有前后摄像切换图标 */
 		public static final boolean hasCameraSwitch = false; // isPublic;
 
-		/** 是否有行车轨迹 */
-		public static final boolean hasRoute = false;
+		/** 是否有天气预报 */
+		public static final boolean hasWeather = false;
 
 		/** 图标是否以块为单位移动 */
 		public static final boolean isIconAtom = false;

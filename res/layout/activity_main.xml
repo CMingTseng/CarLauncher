@@ -349,31 +349,6 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/layoutRoute"
-                android:layout_width="@dimen/ui_main_hsv_item_width"
-                android:layout_height="@dimen/ui_main_hsv_item_height"
-                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
-
-                <ImageView
-                    android:id="@+id/imageRouteTrack"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ui_main_route_track" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_drive_route"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/layoutWechat"
                 android:layout_width="@dimen/ui_main_hsv_item_width"
                 android:layout_height="@dimen/ui_main_hsv_item_height"
@@ -419,31 +394,6 @@
                     android:background="@drawable/ui_main_text_bg"
                     android:gravity="center"
                     android:text="@string/title_weme"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/ui_main_hsv_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/ui_main_hsv_item_width"
-                android:layout_height="@dimen/ui_main_hsv_item_height"
-                android:layout_marginRight="@dimen/ui_main_hsv_item_margin"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/imageMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ui_main_message" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
-                    android:background="@drawable/ui_main_text_bg"
-                    android:gravity="center"
-                    android:text="@string/title_message"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/ui_main_hsv_text_size" />
             </RelativeLayout>
