@@ -94,6 +94,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	private ImageView imageAirplane;
 	/** 外置蓝牙图标 */
 	private ImageView imageBluetooth;
+	/** 位置图标 */
+	private ImageView imageLocation;
 
 	private RelativeLayout layoutLargeButton;
 	private TextView textRecordTime;
@@ -245,6 +247,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	/** 设置位置图标 */
+	private void setLocationIcon(boolean isGpsOn) {
+		imageLocation.setBackground(getResources().getDrawable(
+				isGpsOn ? R.drawable.ic_qs_location_on
+						: R.drawable.ic_qs_location_off));
+	}
+
 	/**
 	 * 序列任务线程，分步执行：
 	 * 
@@ -348,6 +357,8 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (NetworkUtil.isWifiConnected(getApplicationContext())) {
 						updateWiFiState();
 					}
+					
+					setLocationIcon(MyApp.isAccOn);
 
 					if (MyApp.shouldWakeRecord) {
 						// 序列任务线程
@@ -744,6 +755,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		imageAirplane = (ImageView) findViewById(R.id.imageAirplane);
 		imageBluetooth = (ImageView) findViewById(R.id.imageBluetooth);
+		imageLocation = (ImageView) findViewById(R.id.imageLocation);
 
 		// 导航
 		ImageView imageNavi = (ImageView) findViewById(R.id.imageNavi);
@@ -1655,6 +1667,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					PhoneStateListener.LISTEN_SIGNAL_STRENGTHS); // 3G信号
 			registerReceiver(wifiIntentReceiver, wifiIntentFilter); // 注册wifi消息处理器
 			updateWiFiState(); // WiFi信号
+			setLocationIcon(MyApp.isAccOn);
 
 			networkStateReceiver = new NetworkStateReceiver();
 			IntentFilter networkFilter = new IntentFilter();
