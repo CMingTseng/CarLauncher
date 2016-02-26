@@ -559,7 +559,7 @@ public class OpenUtil {
 
 				Intent intent = new Intent();
 				ComponentName comp = new ComponentName("com.mirrtalk.app",
-						"com.mirrtalk.app.MainActivity");
+						"com.mirrtalk.app.MtLoginActivity");
 				intent.setComponent(comp);
 				intent.setAction("android.intent.action.VIEW");
 				activity.startActivity(intent);

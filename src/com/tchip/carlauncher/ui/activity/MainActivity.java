@@ -357,13 +357,22 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (NetworkUtil.isWifiConnected(getApplicationContext())) {
 						updateWiFiState();
 					}
-					
+
 					setLocationIcon(MyApp.isAccOn);
 
 					if (MyApp.shouldWakeRecord) {
 						// 序列任务线程
 						new Thread(new AutoThread()).start();
 						MyApp.shouldWakeRecord = false;
+					}
+
+					if (MyApp.shouldCloseRecordFullScreen) {
+						MyApp.shouldCloseRecordFullScreen = false;
+						setSurfaceLarge(false); // 小视图
+					}
+					if (MyApp.shouldOpenRecordFullScreen) {
+						MyApp.shouldOpenRecordFullScreen = false;
+						setSurfaceLarge(true); // 大视图
 					}
 				}
 
@@ -543,6 +552,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
+
 					setupRecordViews();
 					MyLog.v("[Record]isVideoReording:" + MyApp.isVideoReording);
 				} catch (Exception e) {
@@ -886,13 +896,13 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoMute = (LinearLayout) findViewById(R.id.layoutVideoMute);
 		layoutVideoMute.setOnClickListener(new MyOnClickListener());
 
-		updateButtonState(isSurfaceLarge());
+		updateButtonState(isSurfaceLarge);
 
 	}
 
 	/** 切换录像预览窗口的大小 */
-	private void updateSurfaceState() {
-		if (!isSurfaceLarge) {
+	private void setSurfaceLarge(boolean isLarge) {
+		if (isLarge) {
 			// 16/9 = 1.7778;854/480 = 1.7791
 			int widthFull = 854; // 854;
 			int heightFull = 480;
@@ -927,10 +937,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoCameraSmall
 				.setVisibility(isLarge ? View.GONE : View.VISIBLE);
 		layoutLargeButton.setVisibility(isLarge ? View.VISIBLE : View.GONE);
-	}
-
-	private boolean isSurfaceLarge() {
-		return isSurfaceLarge;
 	}
 
 	private int secondCount = -1;
@@ -1215,7 +1221,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.surfaceCamera:
-				updateSurfaceState();
+				setSurfaceLarge(!isSurfaceLarge);
 				break;
 
 			case R.id.smallVideoRecord:
@@ -1634,9 +1640,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						Settings.System.SOUND_EFFECTS_ENABLED, "1");
 			}
 
-			if (isSurfaceLarge()) { // 按HOME键将预览区域还原为小窗口
-				updateSurfaceState();
-			}
+			setSurfaceLarge(false); // 按HOME键将预览区域还原为小窗口
 
 			MyApp.isMainForeground = true;
 			if (!MyApp.isFirstLaunch) {
@@ -2390,7 +2394,7 @@ public class MainActivity extends Activity implements TachographCallback,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (isSurfaceLarge()) { // 如果视频全屏预览开启，返回关闭
+			if (isSurfaceLarge) { // 如果视频全屏预览开启，返回关闭
 				int widthSmall = 480;
 				int heightSmall = 270;
 				surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(

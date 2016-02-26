@@ -160,11 +160,16 @@ public class SleepOnOffService extends Service {
 					if (MyApp.isAccOn && !MyApp.isVideoReording) {
 						MyApp.shouldMountRecord = true;
 					}
+					sendKeyCode(KeyEvent.KEYCODE_HOME);
+					MyApp.shouldOpenRecordFullScreen = true;
+					MyApp.shouldCloseRecordFullScreen = false;
 
 				} else if ("close_dvr".equals(command)) {
 					if (MyApp.isVideoReording) {
 						MyApp.shouldStopRecordFromVoice = true;
 					}
+					MyApp.shouldCloseRecordFullScreen = true;
+					MyApp.shouldOpenRecordFullScreen = false;
 
 				}
 			} else if (action.equals(Constant.Broadcast.BT_MUSIC_PLAYING)) {

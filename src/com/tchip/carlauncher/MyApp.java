@@ -23,6 +23,12 @@ public class MyApp extends Application {
 	/** 插入录像卡：需要启动录像 */
 	public static boolean shouldMountRecord = false;
 
+	/** 需要开启录像大视图 */
+	public static boolean shouldOpenRecordFullScreen = false;
+	
+	/** 需要关闭录像大视图 */
+	public static boolean shouldCloseRecordFullScreen = false;
+
 	/** 休眠唤醒：需要启动录像 */
 	public static boolean shouldWakeRecord = false;
 
