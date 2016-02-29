@@ -156,6 +156,14 @@ public class SleepOnOffService extends Service {
 					if (!powerManager.isScreenOn()) { // 确保屏幕点亮
 						SettingUtil.lightScreen(getApplicationContext());
 					}
+				} else if ("take_photo_wenxin".equals(command)) {
+					MyApp.shouldTakeVoicePhoto = true; // 语音拍照
+					MyApp.shouldTakePhotoSlient = true; // 静音
+
+					sendKeyCode(KeyEvent.KEYCODE_HOME); // 发送Home键，回到主界面
+					if (!powerManager.isScreenOn()) { // 确保屏幕点亮
+						SettingUtil.lightScreen(getApplicationContext());
+					}
 				} else if ("open_dvr".equals(command)) {
 					if (MyApp.isAccOn && !MyApp.isVideoReording) {
 						MyApp.shouldMountRecord = true;
@@ -516,7 +524,13 @@ public class SleepOnOffService extends Service {
 					"value", "com.autonavi.minimap")); // 高德地图
 
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.autonavi.amapauto")); // 高德地图车机版
+
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.android.gallery3d")); // 图库
+
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.ximalaya.ting.android.car")); // 喜马拉雅
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -2139,7 +2139,12 @@ public class MainActivity extends Activity implements TachographCallback,
 			if (StorageUtil.isVideoCardExists()) { // 如果录像卡不存在，则会保存到内部存储
 				setDirectory(Constant.Path.SDCARD_2);
 			}
-			HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
+
+			if (MyApp.shouldTakePhotoSlient) {
+				MyApp.shouldTakePhotoSlient = false;
+			} else {
+				HintUtil.playAudio(getApplicationContext(), FILE_TYPE_IMAGE);
+			}
 			carRecorder.takePicture();
 		}
 	}
