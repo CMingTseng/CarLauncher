@@ -416,53 +416,60 @@
         </LinearLayout>
     </com.tchip.carlauncher.view.MyScrollView>
 
-    <LinearLayout
-        android:id="@+id/layoutVideoRecordSmall"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignBottom="@+id/surfaceCamera"
+    <RelativeLayout
+        android:id="@+id/layoutSmallButton"
+        android:layout_width="@dimen/ui_main_surface_width"
+        android:layout_height="@dimen/ui_main_surface_height"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="209dp"
-        android:padding="15dp" >
+        android:layout_alignParentTop="true" >
 
-        <ImageView
-            android:id="@+id/smallVideoRecord"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/ui_main_video_record" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutVideoRecordSmall"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:padding="15dp" >
 
-    <LinearLayout
-        android:id="@+id/layoutVideoCameraSmall"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignBottom="@+id/surfaceCamera"
-        android:layout_alignRight="@+id/surfaceCamera"
-        android:layout_marginRight="15dp"
-        android:padding="15dp" >
+            <ImageView
+                android:id="@+id/smallVideoRecord"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/ui_main_video_record" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/smallVideoCamera"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ui_camera_shoot" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutVideoCameraSmall"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:padding="15dp" >
 
-    <LinearLayout
-        android:id="@+id/layoutVideoLockSmall"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignBottom="@+id/surfaceCamera"
-        android:layout_alignLeft="@+id/surfaceCamera"
-        android:layout_marginLeft="30dp"
-        android:padding="15dp" >
+            <ImageView
+                android:id="@+id/smallVideoCamera"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ui_camera_shoot" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/smallVideoLock"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ui_main_video_unlock" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutVideoLockSmall"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:padding="15dp" >
+
+            <ImageView
+                android:id="@+id/smallVideoLock"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ui_main_video_unlock" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textRecordTime"

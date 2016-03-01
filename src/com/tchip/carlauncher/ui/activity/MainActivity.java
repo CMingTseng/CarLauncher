@@ -97,7 +97,10 @@ public class MainActivity extends Activity implements TachographCallback,
 	/** 位置图标 */
 	private ImageView imageLocation;
 
+	/** 大视图按钮布局 */
 	private RelativeLayout layoutLargeButton;
+	/** 小视图按钮布局 */
+	private RelativeLayout layoutSmallButton;
 	private TextView textRecordTime;
 
 	private MyScrollView hsvMain;
@@ -836,6 +839,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 		layoutLargeButton = (RelativeLayout) findViewById(R.id.layoutLargeButton);
+		layoutSmallButton = (RelativeLayout) findViewById(R.id.layoutSmallButton);
 
 		// 录制
 		smallVideoRecord = (ImageView) findViewById(R.id.smallVideoRecord);
@@ -931,12 +935,8 @@ public class MainActivity extends Activity implements TachographCallback,
 	 * @param isSurfaceLarge
 	 */
 	private void updateButtonState(boolean isLarge) {
-		smallVideoRecord.setVisibility(isLarge ? View.GONE : View.VISIBLE);
-		smallVideoLock.setVisibility(isLarge ? View.GONE : View.VISIBLE);
-		smallVideoCamera.setVisibility(isLarge ? View.GONE : View.VISIBLE);
-		layoutVideoCameraSmall
-				.setVisibility(isLarge ? View.GONE : View.VISIBLE);
 		layoutLargeButton.setVisibility(isLarge ? View.VISIBLE : View.GONE);
+		layoutSmallButton.setVisibility(isLarge ? View.GONE : View.VISIBLE);
 	}
 
 	private int secondCount = -1;
@@ -1385,6 +1385,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.layoutWeather:
 				if (Constant.Module.hasWeather) {
 					OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEATHER);
+				}else{
+					HintUtil.speakVoice(MainActivity.this, DateUtil.getTimeStr("HH点mm分"));
 				}
 				break;
 
