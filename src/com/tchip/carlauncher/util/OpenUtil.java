@@ -52,6 +52,9 @@ public class OpenUtil {
 		/** 导航:高德地图 */
 		NAVI_GAODE,
 
+		/** 导航:高德地图车机版 */
+		NAVI_GAODE_CAR,
+
 		/** 导航：图吧 */
 		NAVI_TUBA,
 
@@ -337,6 +340,28 @@ public class OpenUtil {
 					ComponentName componentGaode;
 					componentGaode = new ComponentName("com.autonavi.minimap",
 							"com.autonavi.map.activity.SplashActivity");
+					Intent intentGaode = new Intent();
+					intentGaode.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intentGaode.setComponent(componentGaode);
+					activity.startActivity(intentGaode);
+					activity.overridePendingTransition(
+							R.anim.zms_translate_up_out,
+							R.anim.zms_translate_up_in);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			break;
+
+		case NAVI_GAODE_CAR:
+			if (!ClickUtil.isQuickClick(800)) {
+				// 打开GPS
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON"));
+				try {
+					ComponentName componentGaode;
+					componentGaode = new ComponentName("com.autonavi.amapauto",
+							"com.autonavi.auto.MainMapActivity");
 					Intent intentGaode = new Intent();
 					intentGaode.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intentGaode.setComponent(componentGaode);

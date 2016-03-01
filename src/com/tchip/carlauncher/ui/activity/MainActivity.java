@@ -1389,7 +1389,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.imageNavi:
-				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.NAVI_GAODE);
+				OpenUtil.openModule(MainActivity.this,
+						Constant.Module.isPublic ? MODULE_TYPE.NAVI_GAODE_CAR
+								: MODULE_TYPE.NAVI_GAODE);
 				break;
 
 			case R.id.imageMusicOL:

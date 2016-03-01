@@ -157,7 +157,7 @@ public interface Constant {
 		public static final boolean autoRecord = true;
 
 		/** 默认是否静音 */
-		public static final boolean muteDefault = false;
+		public static final boolean muteDefault = Module.isPublic;
 
 		/** 停车侦测录像是否加锁 */
 		public static final boolean parkVideoLock = false;
