@@ -833,7 +833,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					if (!hsvMain.isScroll()) {
 						hsvMain.fancyScroll(hsvMain.getScrollX(), true);
 					}
-
 				}
 			});
 		}
@@ -871,7 +870,9 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutCameraSwitch = (LinearLayout) findViewById(R.id.layoutCameraSwitch);
 		imageCameraSwitch = (ImageView) findViewById(R.id.imageCameraSwitch);
 		if (Constant.Module.hasCameraSwitch) {
-			layoutVideoCamera.setVisibility(View.GONE);
+			layoutVideoCamera.setVisibility(View.VISIBLE);
+			layoutVideoCamera.setOnClickListener(new MyOnClickListener());
+
 			layoutCameraSwitch.setVisibility(View.VISIBLE);
 			layoutCameraSwitch.setOnClickListener(new MyOnClickListener());
 			imageCameraSwitch.setOnClickListener(new MyOnClickListener());
@@ -1383,10 +1384,11 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case R.id.layoutWeather:
-				if (Constant.Module.hasWeather) {
+				if (Constant.Module.isPublic) {
+					HintUtil.speakVoice(MainActivity.this,
+							DateUtil.getTimeStr("HH点mm分"));
+				} else {
 					OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WEATHER);
-				}else{
-					HintUtil.speakVoice(MainActivity.this, DateUtil.getTimeStr("HH点mm分"));
 				}
 				break;
 
@@ -1941,10 +1943,12 @@ public class MainActivity extends Activity implements TachographCallback,
 
 					if (MyApp.isVideoReording
 							&& MyApp.shouldStopWhenCrashVideoSave) {
-						MyLog.v("[CrashRecord]LCD:" + SettingUtil.getLCDValue());
-						if (powerManager.isScreenOn()) { // 发送PowerKey,将假熄屏更改为真熄屏
-							sendKeyCode(KeyEvent.KEYCODE_POWER);
-						}
+						// MyLog.v("[CrashRecord]LCD:" +
+						// SettingUtil.getLCDValue());
+						// if (powerManager.isScreenOn()) { //
+						// 发送PowerKey,将假熄屏更改为真熄屏
+						// sendKeyCode(KeyEvent.KEYCODE_POWER);
+						// }
 					}
 				} else {
 					MyLog.e("Start Record Failed");

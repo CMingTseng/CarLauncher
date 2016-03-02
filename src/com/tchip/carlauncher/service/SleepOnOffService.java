@@ -132,10 +132,6 @@ public class SleepOnOffService extends Service {
 							+ ",shouldStopWhenCrashVideoSave:"
 							+ MyApp.shouldStopWhenCrashVideoSave);
 
-					// context.sendBroadcast(new Intent("com.tchip.powerKey")
-					// .putExtra("value", "home")); // 发送Home键，回到主界面
-					// SettingUtil.lightScreen(context); // 点亮屏幕
-
 					if (MyApp.shouldCrashRecord
 							|| MyApp.shouldStopWhenCrashVideoSave) {
 						if (powerManager.isScreenOn()) {

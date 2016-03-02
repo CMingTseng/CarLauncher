@@ -182,16 +182,14 @@ public interface Constant {
 		 * 
 		 * MTK:9000 * 1000
 		 */
-		public static final int BIT_RATE_720P = Module.isPublic ? 3500 * 1000
-				: 5500 * 1000;
+		public static final int BIT_RATE_720P = 3500 * 1000;
 
 		/**
 		 * 比特率1080P:
 		 * 
 		 * MTK:17000 * 1000
 		 */
-		public static final int BIT_RATE_1080P = Module.isPublic ? 8500 * 1000
-				: 11000 * 1000;
+		public static final int BIT_RATE_1080P = 8500 * 1000;
 
 		/** 帧率 */
 		public static final int FRAME_RATE = Module.isPublic ? 24 : 30;
@@ -291,7 +289,7 @@ public interface Constant {
 		public static final boolean hintParkingMonitor = !isPublic;
 
 		/** 是否有前后摄像切换图标 */
-		public static final boolean hasCameraSwitch = false; // isPublic;
+		public static final boolean hasCameraSwitch = isPublic;
 
 		/** 是否有天气预报 */
 		public static final boolean hasWeather = false;

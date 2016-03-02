@@ -572,36 +572,40 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutVideoCamera"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:padding="15dp" >
+            android:orientation="horizontal" >
 
-            <ImageView
-                android:id="@+id/largeVideoCamera"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:background="@drawable/ui_camera_shoot" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layoutVideoCamera"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:padding="15dp" >
 
-        <LinearLayout
-            android:id="@+id/layoutCameraSwitch"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:padding="15dp"
-            android:visibility="gone" >
+                <ImageView
+                    android:id="@+id/largeVideoCamera"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ui_camera_shoot" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageCameraSwitch"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:background="@drawable/ui_camera_switch" />
+            <LinearLayout
+                android:id="@+id/layoutCameraSwitch"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="225dp"
+                android:padding="15dp" >
+
+                <ImageView
+                    android:id="@+id/imageCameraSwitch"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ui_camera_switch" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
