@@ -53,6 +53,9 @@ public interface Constant {
 		/** 关闭GPS */
 		public static final String GPS_OFF = "tchip.intent.action.ACTION_GPS_OFF";
 
+		/** 系统设置进入格式化界面 */
+		public static final String MEDIA_FORMAT = "tchip.intent.action.MEDIA_FORMAT";
+
 		/** 外置蓝牙连接 */
 		public static final String BT_CONNECTED = "com.tchip.BT_CONNECTED";
 
@@ -289,7 +292,7 @@ public interface Constant {
 		public static final boolean hintParkingMonitor = !isPublic;
 
 		/** 是否有前后摄像切换图标 */
-		public static final boolean hasCameraSwitch = isPublic;
+		public static final boolean hasCameraSwitch = true;
 
 		/** 是否有天气预报 */
 		public static final boolean hasWeather = false;

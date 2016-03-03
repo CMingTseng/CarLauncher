@@ -2,8 +2,11 @@ package com.tchip.carlauncher.model;
 
 import java.io.File;
 
+import cn.kuwo.autosdk.api.KWAPI;
+
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
+import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.StorageUtil;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import android.widget.Toast;
 
 public class CardEjectReceiver extends BroadcastReceiver {
 
@@ -27,8 +31,12 @@ public class CardEjectReceiver extends BroadcastReceiver {
 
 			// 规避播放音乐时拔SD,media-server died,从而导致主界面录像预览卡死问题
 			// 但会导致播放网络音乐拔SD卡,同样关掉酷我
+			KWAPI.createKWAPI(context, "auto").exitAPP(context);
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "music_kuwo"));
+
+		} else if (action.equals(Intent.ACTION_MEDIA_NOFS)) {
+			MyLog.e("CardEjectReceiver:ACTION_MEDIA_NOFS !!");
 
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			// 插入录像卡自动录像
@@ -39,6 +47,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 
 			if (StorageUtil.isVideoCardExists()) {
 				MyApp.isVideoCardEject = false;
+				MyApp.isVideoCardFormat = false;
 
 				SharedPreferences sharedPreferences = context
 						.getSharedPreferences(Constant.MySP.NAME,

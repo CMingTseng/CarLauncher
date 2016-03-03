@@ -980,6 +980,13 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						return;
+					}else if(MyApp.isVideoCardFormat){
+						MyApp.isVideoCardFormat = false;
+						MyLog.e("SD card is format, stop record!");
+						Message messageFormat = new Message();
+						messageFormat.what = 7;
+						updateRecordTimeHandler.sendMessage(messageFormat);
+						return;
 					} else if (!MyApp.isPowerConnect) { // 电源断开
 						MyLog.e("Stop Record:Power is unconnected");
 						Message messagePowerUnconnect = new Message();
@@ -1192,6 +1199,31 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 
+				break;
+				
+			case 7:
+				if (stopRecorder() == 0) {
+					recordState = Constant.Record.STATE_RECORD_STOPPED;
+					MyApp.isVideoReording = false;
+					setupRecordViews();
+					releaseCameraZone();
+				} else {
+					if (stopRecorder() == 0) {
+						recordState = Constant.Record.STATE_RECORD_STOPPED;
+						MyApp.isVideoReording = false;
+						setupRecordViews();
+						releaseCameraZone();
+					}
+				}
+
+				String strVideoCardFormat = getResources().getString(
+						R.string.hint_sd2_format);
+				HintUtil.showToast(MainActivity.this, strVideoCardFormat);
+
+				MyLog.e("CardEjectReceiver:Video SD Removed");
+				HintUtil.speakVoice(MainActivity.this, strVideoCardFormat);
+				audioRecordDialog.showErrorDialog(strVideoCardFormat);
+				new Thread(new dismissDialogThread()).start();
 				break;
 
 			default:

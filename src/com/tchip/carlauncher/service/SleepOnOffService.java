@@ -1,5 +1,7 @@
 package com.tchip.carlauncher.service;
 
+import cn.kuwo.autosdk.api.KWAPI;
+
 import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.util.MyLog;
@@ -20,6 +22,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 public class SleepOnOffService extends Service {
 	private Context context;
@@ -73,6 +76,7 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.BT_MUSIC_PLAYING);
 		filter.addAction(Constant.Broadcast.BT_MUSIC_STOPED);
 		filter.addAction(Constant.Broadcast.SETTING_SYNC);
+		filter.addAction(Constant.Broadcast.MEDIA_FORMAT);
 		registerReceiver(sleepOnOffReceiver, filter);
 
 	}
@@ -216,6 +220,13 @@ public class SleepOnOffService extends Service {
 					editor.commit();
 
 				}
+			} else if (action.equals(Constant.Broadcast.MEDIA_FORMAT)) {
+				String path = intent.getExtras().getString("path");
+				MyLog.e("SleepOnOffReceiver: MEDIA_FORMAT !! Path:" + path);
+				if ("/storage/sdcard2".equals(path)) {
+					MyApp.isVideoCardFormat = true;
+				}
+
 			}
 		}
 	}
@@ -513,6 +524,7 @@ public class SleepOnOffService extends Service {
 			Intent intentCrash = new Intent(context, SensorWatchService.class);
 			stopService(intentCrash);
 
+			KWAPI.createKWAPI(this, "auto").exitAPP(this);
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "cn.kuwo.kwmusiccar")); // 酷我音乐
 

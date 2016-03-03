@@ -79,6 +79,9 @@ public class MyApp extends Application {
 
 	/** SD卡取出 */
 	public static boolean isVideoCardEject = false;
+	
+	/** SD卡准备格式化 */
+	public static boolean isVideoCardFormat = false;
 
 	/** 蓝牙是否正在播放音乐 */
 	public static boolean isBTPlayMusic = false;
