@@ -157,6 +157,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		setupRecordDefaults();
 		setupRecordViews();
 
+		sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
 		// ACC上下电侦测服务
 		Intent intentSleepOnOff = new Intent(MainActivity.this,
 				SleepOnOffService.class);
@@ -166,7 +167,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		if (1 == SettingUtil.getAccStatus()) {
 			MyApp.isAccOn = true; // 同步ACC状态
 			sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
-			sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
 
 			new Thread(new AutoThread()).start(); // 序列任务线程
 		} else {
@@ -817,6 +817,30 @@ public class MainActivity extends Activity implements TachographCallback,
 		ImageView imageWeme = (ImageView) findViewById(R.id.imageWeme);
 		imageWeme.setOnClickListener(new MyOnClickListener());
 
+		// 云中心
+		RelativeLayout layoutCloudCenter = (RelativeLayout) findViewById(R.id.layoutCloudCenter);
+		layoutCloudCenter
+				.setVisibility(Constant.Module.hasCloudCenter ? View.VISIBLE
+						: View.GONE);
+		ImageView imageCloudCenter = (ImageView) findViewById(R.id.imageCloudCenter);
+		imageCloudCenter.setOnClickListener(new MyOnClickListener());
+
+		// 云中心-一键接人
+		RelativeLayout layoutCloudPick = (RelativeLayout) findViewById(R.id.layoutCloudPick);
+		layoutCloudPick
+				.setVisibility(Constant.Module.hasCloudCenter ? View.VISIBLE
+						: View.GONE);
+		ImageView imageCloudPick = (ImageView) findViewById(R.id.imageCloudPick);
+		imageCloudPick.setOnClickListener(new MyOnClickListener());
+
+		// 云中心-云电话
+		RelativeLayout layoutCloudDialer = (RelativeLayout) findViewById(R.id.layoutCloudDialer);
+		layoutCloudDialer
+				.setVisibility(Constant.Module.hasCloudCenter ? View.VISIBLE
+						: View.GONE);
+		ImageView imageCloudDialer = (ImageView) findViewById(R.id.imageCloudDialer);
+		imageCloudDialer.setOnClickListener(new MyOnClickListener());
+
 		hsvMain = (MyScrollView) findViewById(R.id.hsvMain);
 		hsvMain.setDrawingCacheEnabled(true);
 		if (Constant.Module.isIconAtom) {
@@ -980,7 +1004,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						messageEject.what = 2;
 						updateRecordTimeHandler.sendMessage(messageEject);
 						return;
-					}else if(MyApp.isVideoCardFormat){
+					} else if (MyApp.isVideoCardFormat) {
 						MyApp.isVideoCardFormat = false;
 						MyLog.e("SD card is format, stop record!");
 						Message messageFormat = new Message();
@@ -1200,7 +1224,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 
 				break;
-				
+
 			case 7:
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
@@ -1465,6 +1489,18 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.imageWechat:
 				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.WECHAT);
+				break;
+
+			case R.id.imageCloudCenter:
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.CLOUD_CENTER);
+				break;
+
+			case R.id.imageCloudDialer:
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.CLOUD_DIALER);
+				break;
+
+			case R.id.imageCloudPick:
+				OpenUtil.openModule(MainActivity.this, MODULE_TYPE.CLOUD_PICK);
 				break;
 
 			case R.id.layoutWiFi:

@@ -390,6 +390,81 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layoutCloudPick"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
+
+                <ImageView
+                    android:id="@+id/imageCloudPick"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ui_main_cloudpick" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_cloudpick"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutCloudCenter"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
+
+                <ImageView
+                    android:id="@+id/imageCloudCenter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ui_main_cloudcenter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_cloudcenter"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutCloudDialer"
+                android:layout_width="@dimen/ui_main_hsv_item_width"
+                android:layout_height="@dimen/ui_main_hsv_item_height"
+                android:layout_marginRight="@dimen/ui_main_hsv_item_margin" >
+
+                <ImageView
+                    android:id="@+id/imageCloudDialer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ui_main_clouddialer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/ui_main_hsv_text_margin_bottom"
+                    android:background="@drawable/ui_main_text_bg"
+                    android:gravity="center"
+                    android:text="@string/title_clouddialer"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/ui_main_hsv_text_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/layoutWeme"
                 android:layout_width="@dimen/ui_main_hsv_item_width"
                 android:layout_height="@dimen/ui_main_hsv_item_height"

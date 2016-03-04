@@ -539,6 +539,10 @@ public class SleepOnOffService extends Service {
 
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.ximalaya.ting.android.car")); // 喜马拉雅
+			
+			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
+					"value", "com.hdsc.monitor.heart.monitorvoice")); // 善领云中心
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

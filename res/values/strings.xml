@@ -6,6 +6,7 @@
     <!-- MainActivity -->
     <string name="unknown">未知</string>
     <string name="title_navigation">导航</string>
+    <string name="title_cloudpick">一键接人</string>
     <string name="title_music_online">在线音乐</string>
     <string name="title_edog">电子狗</string>
     <string name="title_ximalaya">网络电台</string>
@@ -15,9 +16,11 @@
     <string name="title_message">短信</string>
     <string name="title_fm_transmit">FM发射</string>
     <string name="title_phone">电话</string>
+    <string name="title_clouddialer">云电话</string>
     <string name="title_setting">设置</string>
     <string name="title_wechat">微信助手</string>
     <string name="title_weme">微密</string>
+    <string name="title_cloudcenter">云中心</string>
     <string name="picture">图片</string>
     <string name="video">视频</string>
     <string name="hint_video_lock">视频加锁</string>

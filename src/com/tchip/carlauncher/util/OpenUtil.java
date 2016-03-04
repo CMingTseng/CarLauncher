@@ -13,6 +13,15 @@ public class OpenUtil {
 		/** 语音助手 */
 		CHAT,
 
+		/** 云中心 */
+		CLOUD_CENTER,
+
+		/** 云中心-拨号 */
+		CLOUD_DIALER,
+
+		/** 云中心-一键接人 */
+		CLOUD_PICK,
+
 		/** 设备测试 */
 		DEVICE_TEST,
 
@@ -127,6 +136,51 @@ public class OpenUtil {
 		case CHAT:
 			break;
 
+		case CLOUD_CENTER:
+			try {
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON")); // 打开GPS
+				Intent intentCloudCenter = new Intent(Intent.ACTION_VIEW);
+				intentCloudCenter
+						.setClassName("com.hdsc.monitor.heart.monitorvoice",
+								"com.hdsc.monitor.heart.monitorvoice.CloudCenterActivity");
+				intentCloudCenter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				activity.startActivity(intentCloudCenter);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case CLOUD_DIALER:
+			try {
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON")); // 打开GPS
+				Intent intentCloudDialer = new Intent(Intent.ACTION_VIEW);
+				intentCloudDialer.setClassName(
+						"com.hdsc.monitor.heart.monitorvoice",
+						"com.hdsc.monitor.heart.monitorvoice.MainActivity");
+				intentCloudDialer.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				activity.startActivity(intentCloudDialer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case CLOUD_PICK:
+			try {
+				activity.sendBroadcast(new Intent(
+						"tchip.intent.action.ACTION_GPS_ON")); // 打开GPS
+				Intent intenCloudPick = new Intent(Intent.ACTION_VIEW);
+				intenCloudPick.setClassName(
+						"com.hdsc.monitor.heart.monitorvoice",
+						"com.hdsc.monitor.heart.monitorvoice.JJJRActivity");
+				intenCloudPick.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				activity.startActivity(intenCloudPick);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
 		case DEVICE_TEST:
 			try {
 				Intent intentDeviceTest = new Intent(Intent.ACTION_VIEW);
@@ -167,9 +221,8 @@ public class OpenUtil {
 
 		case EDOG:
 			if (!ClickUtil.isQuickClick(800)) {
-				// 打开GPS
 				activity.sendBroadcast(new Intent(
-						"tchip.intent.action.ACTION_GPS_ON"));
+						"tchip.intent.action.ACTION_GPS_ON")); // 打开GPS
 
 				// SettingUtil.setEDogEnable(true);
 				try {
