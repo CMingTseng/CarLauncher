@@ -265,13 +265,11 @@ public class StorageUtil {
 			if (file.isDirectory()) {
 				File[] childFile = file.listFiles();
 				if (childFile == null || childFile.length == 0) {
-					// file.delete();
 					return;
 				}
 				for (File f : childFile) {
 					RecursionCheckFile(context, f);
 				}
-				// file.delete();
 			}
 		} catch (Exception e) {
 			MyLog.e("[StorageUtil]RecursionCheckFile-Catch Exception:"

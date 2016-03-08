@@ -48,33 +48,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 			if (StorageUtil.isVideoCardExists()) {
 				MyApp.isVideoCardEject = false;
 				MyApp.isVideoCardFormat = false;
-
-				SharedPreferences sharedPreferences = context
-						.getSharedPreferences(Constant.MySP.NAME,
-								Context.MODE_PRIVATE);
-				Editor editor = sharedPreferences.edit();
-
-				if (sharedPreferences.getBoolean("isFirstLaunch", true)) {
-					new Thread(new DeleteVideoDirThread()).start();
-					Log.e(Constant.TAG, "Delete video directory:tachograph !!!");
-
-					editor.putBoolean("isFirstLaunch", false);
-					editor.commit();
-				} else {
-					Log.e(Constant.TAG, "App isn't first launch");
-				}
 			}
-		}
-	}
-
-	private class DeleteVideoDirThread implements Runnable {
-
-		@Override
-		public void run() {
-			// 初次启动清空录像文件夹
-			String sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
-			File file = new File(sdcardPath + "tachograph/");
-			StorageUtil.RecursionDeleteFile(file);
 		}
 	}
 

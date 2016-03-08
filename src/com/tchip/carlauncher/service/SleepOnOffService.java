@@ -1,5 +1,8 @@
 package com.tchip.carlauncher.service;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import cn.kuwo.autosdk.api.KWAPI;
 
 import com.tchip.carlauncher.Constant;
@@ -539,12 +542,31 @@ public class SleepOnOffService extends Service {
 
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.ximalaya.ting.android.car")); // 喜马拉雅
-			
+
 			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
 					"value", "com.hdsc.monitor.heart.monitorvoice")); // 善领云中心
-			
+			killProcess("com.hdsc.monitor.heart.monitorvoice");
 
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Process process;
+
+	private void killProcess(String packageName) {
+		if (process == null)
+			try {
+				process = Runtime.getRuntime().exec("su");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		OutputStream out = process.getOutputStream();
+		String cmd = "am force-stop " + packageName + " \n";
+		try {
+			out.write(cmd.getBytes());
+			out.flush();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

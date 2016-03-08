@@ -271,25 +271,10 @@ public class MainActivity extends Activity implements TachographCallback,
 		@Override
 		public void run() {
 			try {
-				// 初次启动清空录像文件夹
-				if (sharedPreferences.getBoolean("isFirstLaunch", true)
-						&& StorageUtil.isVideoCardExists()) {
-					String sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
-
-					// File file = new File(sdcardPath + "tachograph/");
-					// StorageUtil.RecursionDeleteFile(file);
-					// MyLog.e("Delete video directory:tachograph !!!");
-
-					editor.putBoolean("isFirstLaunch", false);
-					editor.commit();
-				} else {
-					MyLog.e("Video card not exist or isn't first launch");
-				}
-
+				initialService();
 				if (StorageUtil.isVideoCardExists()) {
 					CheckErrorFile(); // 检查并删除异常视频文件
 				}
-
 				// 自动录像:如果已经在录像则不处理
 				if (Constant.Record.autoRecord && !MyApp.isVideoReording) {
 					Thread.sleep(Constant.Record.autoRecordDelay);
@@ -297,8 +282,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					message.what = 1;
 					autoHandler.sendMessage(message);
 				}
-				Thread.sleep(1000);
-				initialService();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				MyLog.e("[Main]AutoThread: Catch Exception!");
@@ -524,7 +507,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						}
 
 						setInterval(3 * 60); // 防止在分段一分钟的时候，停车守卫录出1分和0秒两段视频
-
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 					setupRecordViews();
@@ -549,10 +531,9 @@ public class MainActivity extends Activity implements TachographCallback,
 				try {
 					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 
-						if (!MyApp.isMainForeground) { // 发送Home键，回到主界面
-							sendKeyCode(KeyEvent.KEYCODE_HOME);
+						if (!MyApp.isMainForeground) {
+							sendKeyCode(KeyEvent.KEYCODE_HOME); // 回到主界面
 						}
-
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 
@@ -694,8 +675,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		MyLog.v("[update3Gtype]NetworkType:" + networkType);
 
-		// image3GType.setBackground(getResources().getDrawable(
-		// NetworkUtil.get3GTypeImageByNetworkType(networkType)));
 	}
 
 	/**
@@ -727,8 +706,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	/** 初始化布局 */
 	private void initialLayout() {
-		// 录像窗口
-		initialCameraSurface();
+		initialCameraSurface(); // 录像窗口
 
 		textRecordTime = (TextView) findViewById(R.id.textRecordTime);
 		textRecordTime.setTypeface(Typefaces.get(this, Constant.Path.FONT
@@ -1608,24 +1586,22 @@ public class MainActivity extends Activity implements TachographCallback,
 	public class updateNetworkIconThread implements Runnable {
 		@Override
 		public void run() {
-			synchronized (updateNetworkIconHandler) {
-				int updateWifiTime = 1;
-				boolean shouldUpdateWifi = true;
-				while (shouldUpdateWifi) {
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					MyLog.v("[Main]updateWifiThread:Refresh Wifi! "
-							+ updateWifiTime);
-					Message messageWifi = new Message();
-					messageWifi.what = 1;
-					updateNetworkIconHandler.sendMessage(messageWifi);
-					updateWifiTime++;
-					if (updateWifiTime > 5) {
-						shouldUpdateWifi = false;
-					}
+			int updateWifiTime = 1;
+			boolean shouldUpdateWifi = true;
+			while (shouldUpdateWifi) {
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				MyLog.v("[Main]updateWifiThread:Refresh Wifi! "
+						+ updateWifiTime);
+				Message messageWifi = new Message();
+				messageWifi.what = 1;
+				updateNetworkIconHandler.sendMessage(messageWifi);
+				updateWifiTime++;
+				if (updateWifiTime > 3) {
+					shouldUpdateWifi = false;
 				}
 			}
 		}
@@ -1683,12 +1659,12 @@ public class MainActivity extends Activity implements TachographCallback,
 		telephonyManager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_NONE); // 3G信号
 
-		if (wifiIntentReceiver != null) { // 取消注册wifi消息处理器
-			unregisterReceiver(wifiIntentReceiver);
+		if (wifiIntentReceiver != null) {
+			unregisterReceiver(wifiIntentReceiver); // 取消注册wifi消息处理器
 		}
 
-		if (networkStateReceiver != null) { // 飞行模式
-			unregisterReceiver(networkStateReceiver);
+		if (networkStateReceiver != null) {
+			unregisterReceiver(networkStateReceiver); // 飞行模式
 		}
 
 		MyLog.v("[onPause]MyApplication.isVideoReording:"
@@ -1705,18 +1681,17 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	protected void onResume() {
+		MyLog.v("[Main]onResume");
+		MyApp.isMainForeground = true;
 		try {
-			MyLog.v("[Main]onResume");
-			hsvMain.smoothScrollTo(0, 0);
+			hsvMain.smoothScrollTo(0, 0); // 按HOME键返回第一个图标
 
-			if (!MyApp.isBTPlayMusic) { // 触摸声音
+			if (!MyApp.isBTPlayMusic) { // 蓝牙播放音乐时不设置触摸声音
 				Settings.System.putString(getContentResolver(),
 						Settings.System.SOUND_EFFECTS_ENABLED, "1");
 			}
-
 			setSurfaceLarge(false); // 按HOME键将预览区域还原为小窗口
 
-			MyApp.isMainForeground = true;
 			if (!MyApp.isFirstLaunch) {
 				if (!MyApp.isVideoReording || MyApp.shouldResetRecordWhenResume) {
 					MyApp.shouldResetRecordWhenResume = false;
@@ -2008,16 +1983,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					textRecordTime.setVisibility(View.VISIBLE);
 					new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
 					setupRecordViews();
-
-					if (MyApp.isVideoReording
-							&& MyApp.shouldStopWhenCrashVideoSave) {
-						// MyLog.v("[CrashRecord]LCD:" +
-						// SettingUtil.getLCDValue());
-						// if (powerManager.isScreenOn()) { //
-						// 发送PowerKey,将假熄屏更改为真熄屏
-						// sendKeyCode(KeyEvent.KEYCODE_POWER);
-						// }
-					}
 				} else {
 					MyLog.e("Start Record Failed");
 				}
@@ -2102,16 +2067,14 @@ public class MainActivity extends Activity implements TachographCallback,
 	public class dismissDialogThread implements Runnable {
 		@Override
 		public void run() {
-			synchronized (dismissDialogHandler) {
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				Message messageEject = new Message();
-				messageEject.what = 1;
-				dismissDialogHandler.sendMessage(messageEject);
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			Message messageEject = new Message();
+			messageEject.what = 1;
+			dismissDialogHandler.sendMessage(messageEject);
 		}
 	}
 
