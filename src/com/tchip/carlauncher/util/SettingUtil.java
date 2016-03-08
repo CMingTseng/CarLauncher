@@ -11,22 +11,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.List;
 
 import com.tchip.carlauncher.Constant;
 
+import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -35,7 +41,55 @@ import android.util.Log;
 
 public class SettingUtil {
 
-	/** 调整系统亮度 **/
+	/** 设置飞行模式 */
+	public static void setAirplaneMode(Context context, boolean setAirPlane) {
+		MyLog.v("[SettingUtil]setAirplaneMode:" + setAirPlane);
+		Settings.Global.putInt(context.getContentResolver(),
+				Settings.Global.AIRPLANE_MODE_ON, setAirPlane ? 1 : 0);
+		// 广播飞行模式的改变，让相应的程序可以处理。
+		Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		intent.putExtra("state", setAirPlane);
+		context.sendBroadcast(intent);
+	}
+
+	public static void setGpsState(final Context context, final boolean isGpsOn) {
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				ContentResolver resolver = context.getContentResolver();
+				boolean nowState = getGpsState(context);
+				if (isGpsOn != nowState) {
+					MyLog.v("[GPS]Set State:" + isGpsOn);
+					// Settings.Secure.setLocationProviderEnabled(resolver,
+					// LocationManager.GPS_PROVIDER, isGpsOn);
+					int mCurrentMode = (!isGpsOn) ? Settings.Secure.LOCATION_MODE_HIGH_ACCURACY
+							: Settings.Secure.LOCATION_MODE_OFF;
+					int mode = isGpsOn ? Settings.Secure.LOCATION_MODE_HIGH_ACCURACY
+							: Settings.Secure.LOCATION_MODE_OFF;
+					Intent intent = new Intent(
+							"com.android.settings.location.MODE_CHANGING");
+					intent.putExtra("CURRENT_MODE", mCurrentMode);
+					intent.putExtra("NEW_MODE", mode);
+					context.sendBroadcast(intent,
+							android.Manifest.permission.WRITE_SECURE_SETTINGS);
+					Settings.Secure.putInt(resolver,
+							Settings.Secure.LOCATION_MODE, mode);
+				}
+			}
+
+		}, 6000);
+	}
+
+	public static boolean getGpsState(Context context) {
+		ContentResolver resolver = context.getContentResolver();
+		boolean gpsState = Settings.Secure.isLocationProviderEnabled(resolver,
+				LocationManager.GPS_PROVIDER);
+		MyLog.v("[GPS]Now State:" + gpsState);
+		return gpsState;
+	}
+
+	/** 调整系统亮度 */
 	public static void setBrightness(Context context, int brightness) {
 		if (brightness <= Constant.Setting.MAX_BRIGHTNESS && brightness > -1) {
 			boolean setSuccess = Settings.System.putInt(
@@ -52,7 +106,7 @@ public class SettingUtil {
 		}
 	}
 
-	/** 获取系统亮度 **/
+	/** 获取系统亮度 */
 	public static int getBrightness(Context context) {
 		try {
 			int nowBrightness = Settings.System.getInt(
@@ -66,13 +120,13 @@ public class SettingUtil {
 		}
 	}
 
-	/** 设置熄屏时间 **/
+	/** 设置熄屏时间 */
 	public static void setScreenOffTime(Context context, int time) {
 		Settings.System.putInt(context.getContentResolver(),
 				android.provider.Settings.System.SCREEN_OFF_TIMEOUT, time);
 	}
 
-	/** 获取熄屏时间 **/
+	/** 获取熄屏时间 */
 	public static int getScreenOffTime(Context context) {
 		try {
 			return Settings.System.getInt(context.getContentResolver(),
@@ -83,11 +137,11 @@ public class SettingUtil {
 		}
 	}
 
-	/** FM发射开关节点,1：开 0：关 **/
+	/** FM发射开关节点,1：开 0：关 */
 	public static File nodeFmEnable = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/enable_qn8027");
 
-	/** FM发射频率节点，频率范围：7600~10800:8750-10800 **/
+	/** FM发射频率节点，频率范围：7600~10800:8750-10800 */
 	public static File nodeFmChannel = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-002c/setch_qn8027");
 
@@ -162,7 +216,7 @@ public class SettingUtil {
 		}
 	}
 
-	/** 点亮屏幕 **/
+	/** 点亮屏幕 */
 	public static void lightScreen(Context context) {
 		// 获取电源管理器对象
 		PowerManager pm = (PowerManager) context
@@ -185,17 +239,17 @@ public class SettingUtil {
 		kl.disableKeyguard();
 	}
 
-	/** Camera自动调节亮度节点，1：开 0：关;默认打开 **/
+	/** Camera自动调节亮度节点，1：开 0：关;默认打开 */
 	public static File fileAutoLightSwitch = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
 
-	/** 设置Camera自动调节亮度开关 **/
+	/** 设置Camera自动调节亮度开关 */
 	public static void setAutoLight(Context context, boolean isAutoLightOn) {
 		SaveFileToNode(fileAutoLightSwitch, isAutoLightOn ? "1" : "0");
 		MyLog.v("[SettingUtil]setAutoLight:" + isAutoLightOn);
 	}
 
-	/** 停车侦测开关节点，2：打开 3：关闭（默认） **/
+	/** 停车侦测开关节点，2：打开 3：关闭（默认） */
 	public static File fileParkingMonitor = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/back_car_status");
 
@@ -210,7 +264,7 @@ public class SettingUtil {
 		editor.commit();
 	}
 
-	/** ACC状态节点 **/
+	/** ACC状态节点 */
 	public static File fileAccStatus = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/acc_car_status");
 
@@ -241,7 +295,7 @@ public class SettingUtil {
 		return 0;
 	}
 
-	/** 获取背光亮度值 **/
+	/** 获取背光亮度值 */
 	public static int getLCDValue() {
 		File fileLCDValue = new File("/sys/class/leds/lcd-backlight/brightness"); // 背光值节点
 
@@ -268,7 +322,7 @@ public class SettingUtil {
 		return -5;
 	}
 
-	/** 电子狗电源开关节点，1-打开 0-关闭 **/
+	/** 电子狗电源开关节点，1-打开 0-关闭 */
 	public static File fileEDogPower = new File(
 			"/sys/devices/platform/mt-i2c.1/i2c-1/1-007f/edog_car_status");
 
@@ -282,7 +336,7 @@ public class SettingUtil {
 		SaveFileToNode(fileEDogPower, isEDogOn ? "1" : "0");
 	}
 
-	/** 初始化节点状态 **/
+	/** 初始化节点状态 */
 	public static void initialNodeState(Context context) {
 		SharedPreferences sharedPreferences = context.getSharedPreferences(
 				Constant.MySP.NAME, Context.MODE_PRIVATE);
@@ -328,7 +382,7 @@ public class SettingUtil {
 
 	}
 
-	/** 获取设备Mac地址 **/
+	/** 获取设备Mac地址 */
 	public String getLocalMacAddress(Context context) {
 		WifiManager wifi = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
@@ -336,14 +390,14 @@ public class SettingUtil {
 		return info.getMacAddress();
 	}
 
-	/** 获取设备IMEI **/
+	/** 获取设备IMEI */
 	public String getImei(Context context) {
 		TelephonyManager telephonyManager = (TelephonyManager) context
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		return telephonyManager.getDeviceId();
 	}
 
-	/** 获取设备IP地址 **/
+	/** 获取设备IP地址 */
 	public String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface
@@ -438,17 +492,62 @@ public class SettingUtil {
 		audioManager.setStreamVolume(type, 0, 0);
 	}
 
-	/** 静音 **/
+	/** 静音 */
 	public static void setMute(Context context) {
 		AudioManager audioManager = (AudioManager) context
 				.getSystemService(Context.AUDIO_SERVICE);
 		audioManager.setRingerMode(audioManager.RINGER_MODE_SILENT);
 	}
 
-	/** 关闭静音 **/
+	/** 关闭静音 */
 	public static void setUnmute(Context context, int type) {
 		AudioManager audioManager = (AudioManager) context
 				.getSystemService(Context.AUDIO_SERVICE);
 		audioManager.setStreamVolume(type, 8, 0);
+	}
+
+	public static void killApp(Context context, String app) {
+		ActivityManager myActivityManager = (ActivityManager) context
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningAppProcessInfo> mRunningPros = myActivityManager
+				.getRunningAppProcesses();
+		for (ActivityManager.RunningAppProcessInfo amPro : mRunningPros) {
+			if (amPro.processName.contains(app)) {
+				try {
+					Method forceStopPackage = myActivityManager
+							.getClass()
+							.getDeclaredMethod("forceStopPackage", String.class);
+					forceStopPackage.setAccessible(true);
+					forceStopPackage.invoke(myActivityManager,
+							amPro.processName);
+					MyLog.d("kill kuwo music ok...............");
+				} catch (Exception e) {
+					MyLog.d("kill kuwo music failed..............."
+							+ e.toString());
+				}
+			}
+		}
+	}
+
+	public static void killApp(Context context, String[] app) {
+		ActivityManager myActivityManager = (ActivityManager) context
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningAppProcessInfo> mRunningPros = myActivityManager
+				.getRunningAppProcesses();
+		for (ActivityManager.RunningAppProcessInfo amPro : mRunningPros) {
+			for (String strApp : app) {
+				if (amPro.processName.contains(strApp)) {
+					try {
+						Method forceStopPackage = myActivityManager.getClass()
+								.getDeclaredMethod("forceStopPackage",
+										String.class);
+						forceStopPackage.setAccessible(true);
+						forceStopPackage.invoke(myActivityManager,
+								amPro.processName);
+					} catch (Exception e) {
+					}
+				}
+			}
+		}
 	}
 }

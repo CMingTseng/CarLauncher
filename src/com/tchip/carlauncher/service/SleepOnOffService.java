@@ -400,7 +400,7 @@ public class SleepOnOffService extends Service {
 
 		stopExternalService();
 
-		context.sendBroadcast(new Intent(Constant.Broadcast.GPS_OFF)); // 关闭GPS
+		SettingUtil.setGpsState(context, false);
 		SettingUtil.setEDogEnable(false); // 关闭电子狗电源
 
 		// 关闭FM发射，并保存休眠前状态
@@ -423,14 +423,12 @@ public class SleepOnOffService extends Service {
 		try {
 			MyLog.e("[SleepOnOffService]deviceSleep.");
 			MyApp.isSleeping = true; // 进入低功耗待机
-
 		} catch (Exception e) {
 			MyLog.e("[SleepReceiver]Error when run deviceSleep");
 		} finally {
 			MyApp.isAccOffPhotoTaking = false; // 重置ACC下电拍照标志
-			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_ON)); // 打开飞行模式
+			SettingUtil.setAirplaneMode(context, true); // 打开飞行模式
 			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON)); // 通知其他应用进入休眠
-
 		}
 	}
 
@@ -448,11 +446,10 @@ public class SleepOnOffService extends Service {
 			MyApp.shouldWakeRecord = true;
 
 			sendKeyCode(KeyEvent.KEYCODE_HOME); // 发送Home键，回到主界面
-			context.sendBroadcast(new Intent(Constant.Broadcast.AIRPLANE_OFF)); // 关闭飞行模式
-			context.sendBroadcast(new Intent(Constant.Broadcast.GPS_ON)); // 打开GPS
-			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF)); // 通知其他应用取消休眠
-
+			SettingUtil.setAirplaneMode(context, false); // 关闭飞行模式
+			SettingUtil.setGpsState(context, true); // 打开GPS
 			// SettingUtil.setEDogEnable(true); // 打开电子狗电源
+			context.sendBroadcast(new Intent(Constant.Broadcast.SLEEP_OFF)); // 通知其他应用取消休眠
 
 			// 重置FM发射状态
 			boolean fmStateBeforeSleep = sharedPreferences.getBoolean(
@@ -528,23 +525,14 @@ public class SleepOnOffService extends Service {
 			stopService(intentCrash);
 
 			KWAPI.createKWAPI(this, "auto").exitAPP(this);
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "cn.kuwo.kwmusiccar")); // 酷我音乐
-
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.autonavi.minimap")); // 高德地图
-
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.autonavi.amapauto")); // 高德地图车机版
-
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.android.gallery3d")); // 图库
-
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.ximalaya.ting.android.car")); // 喜马拉雅
-
-			context.sendBroadcast(new Intent("com.tchip.KILL_APP").putExtra(
-					"value", "com.hdsc.monitor.heart.monitorvoice")); // 善领云中心
+			String[] arrayKillApp = { "cn.kuwo.kwmusiccar", // 酷我音乐
+					"com.android.gallery3d", // 图库
+					"com.autonavi.amapauto", // 高德地图（车机版）
+					"com.hdsc.monitor.heart.monitorvoice", // 善领云中心
+					"com.ximalaya.ting.android.car", // 喜马拉雅（车机版）
+					"com.autonavi.minimap" // 高德地图
+			};
+			SettingUtil.killApp(context, arrayKillApp);
 			killProcess("com.hdsc.monitor.heart.monitorvoice");
 
 		} catch (Exception e) {

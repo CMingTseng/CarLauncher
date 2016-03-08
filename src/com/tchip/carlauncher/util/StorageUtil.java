@@ -167,7 +167,7 @@ public class StorageUtil {
 						MyLog.d("[StorageUtil]Delete Old Unlock Video:"
 								+ f.getName());
 						int i = 0;
-						while (!f.delete() && i < 5) {
+						while (!f.delete() && i < 3) {
 							i++;
 							MyLog.d("[StorageUtil]Delete Old Unlock Video:"
 									+ f.getName() + " Filed!!! Try:" + i);
@@ -178,7 +178,6 @@ public class StorageUtil {
 				} else {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
-
 						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
 						intSdFree = (int) sdFree;
 						if (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
@@ -191,7 +190,6 @@ public class StorageUtil {
 											R.string.hint_storage_full_cause_by_other);
 
 							audioRecordDialog.showErrorDialog(strNoStorage);
-							// new Thread(new dismissDialogThread()).start();
 							HintUtil.speakVoice(context, strNoStorage);
 
 							return false;

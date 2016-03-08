@@ -41,18 +41,6 @@ public interface Constant {
 		/** 停车守卫:发生碰撞 */
 		public static final String GSENSOR_CRASH = "com.tchip.GSENSOR_CRASH";
 
-		/** 打开飞行模式 */
-		public static final String AIRPLANE_ON = "com.tchip.AIRPLANE_ON";
-
-		/** 关闭飞行模式 */
-		public static final String AIRPLANE_OFF = "com.tchip.AIRPLANE_OFF";
-
-		/** 打开GPS */
-		public static final String GPS_ON = "tchip.intent.action.ACTION_GPS_ON";
-
-		/** 关闭GPS */
-		public static final String GPS_OFF = "tchip.intent.action.ACTION_GPS_OFF";
-
 		/** 系统设置进入格式化界面 */
 		public static final String MEDIA_FORMAT = "tchip.intent.action.MEDIA_FORMAT";
 
