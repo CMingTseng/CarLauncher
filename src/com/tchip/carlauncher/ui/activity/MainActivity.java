@@ -797,6 +797,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		// 微密
 		RelativeLayout layoutWeme = (RelativeLayout) findViewById(R.id.layoutWeme);
+		layoutWeme.setVisibility(Module.hasWeme ? View.VISIBLE : View.GONE);
 		ImageView imageWeme = (ImageView) findViewById(R.id.imageWeme);
 		imageWeme.setOnClickListener(new MyOnClickListener());
 
