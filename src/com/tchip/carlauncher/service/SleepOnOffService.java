@@ -1,7 +1,10 @@
 package com.tchip.carlauncher.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.StringTokenizer;
 
 import cn.kuwo.autosdk.api.KWAPI;
 
@@ -533,7 +536,8 @@ public class SleepOnOffService extends Service {
 					"com.autonavi.minimap" // 高德地图
 			};
 			SettingUtil.killApp(context, arrayKillApp);
-			killProcess("com.hdsc.monitor.heart.monitorvoice");
+			// killProcess("com.hdsc.monitor.heart.monitorvoice");
+			killProcess1("com.hdsc.monitor.heart.monitorvoice");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -556,6 +560,52 @@ public class SleepOnOffService extends Service {
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void killProcess1(String packageName) {
+		MyLog.i("killProcess");
+		java.lang.Process process = null;
+		try {
+			String processId = "";
+			process = Runtime.getRuntime().exec("su");
+			OutputStream os = process.getOutputStream();
+			os.write("ps \n".getBytes());
+			os.flush();
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					process.getInputStream()));
+			String inline;
+			while ((inline = br.readLine()) != null) {
+				if (inline.contains(packageName)) {
+					MyLog.i("" + inline);
+					StringTokenizer processInfoTokenizer = new StringTokenizer(
+							inline);
+					int count = 0;
+					while (processInfoTokenizer.hasMoreTokens()) {
+						count++;
+						processId = processInfoTokenizer.nextToken();
+						if (count == 2) {
+							break;
+						}
+					}
+					MyLog.i("kill process : " + processId);
+					os.write(("kill " + processId).getBytes());
+					os.flush();
+					if (os != null) {
+						os.close();
+						os = null;
+					}
+					br.close();
+					return;
+				}
+			}
+		} catch (IOException ex) {
+			MyLog.e("" + ex.getStackTrace());
+		} finally {
+			if (process != null) {
+				process.destroy();
+				process = null;
+			}
 		}
 	}
 
