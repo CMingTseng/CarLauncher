@@ -276,6 +276,9 @@ public interface Constant {
 		/** 是否有善领云中心(云电话、一键接人) */
 		public static final boolean hasCloudCenter = !isPublic;
 
+		/** 是否有微密 */
+		public static final boolean hasWeme = isPublic;
+
 		/** 是否有网络电台 */
 		public static final boolean hasOnlineFM = isPublic;
 

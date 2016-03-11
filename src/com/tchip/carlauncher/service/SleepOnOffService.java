@@ -537,7 +537,7 @@ public class SleepOnOffService extends Service {
 			};
 			SettingUtil.killApp(context, arrayKillApp);
 			// killProcess("com.hdsc.monitor.heart.monitorvoice");
-			killProcess1("com.hdsc.monitor.heart.monitorvoice");
+			// killProcess1("com.hdsc.monitor.heart.monitorvoice");
 
 		} catch (Exception e) {
 			e.printStackTrace();
