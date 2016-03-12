@@ -2,33 +2,25 @@ package com.tchip.carlauncher.util;
 
 import java.util.List;
 
-import com.tchip.carlauncher.Constant;
-
 import android.content.Context;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.util.Log;
 
 public class WifiAdmin {
 	/**
 	 * 定义一个WifiManager对象,提供Wifi管理的各种主要API，主要包含wifi的扫描、建立连接、配置信息等
 	 */
-	private WifiManager mWifiManager;
+	private WifiManager wifiManager;
 
 	// WIFIConfiguration描述WIFI的链接信息，包括SSID、SSID隐藏、password等的设置
 	private List<WifiConfiguration> wifiConfigList;
 
-	// 定义一个WifiInfo对象
-	private WifiInfo mWifiInfo;
-
-	// 扫描出的网络连接列表
-	private List<ScanResult> mWifiList;
-
-	// 网络连接列表
-	private List<WifiConfiguration> mWifiConfigurations;
+	private WifiInfo mWifiInfo; // 定义一个WifiInfo对象
+	private List<ScanResult> mWifiList; // 扫描出的网络连接列表
+	private List<WifiConfiguration> mWifiConfigurations; // 网络连接列表
 
 	WifiLock mWifiLock;
 
@@ -37,29 +29,22 @@ public class WifiAdmin {
 	public static final int TYPE_WPA = 0x13;
 
 	public WifiAdmin(Context context) {
-		// 获得WifiManager对象
-		mWifiManager = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
-
-		// 取得WifiInfo对象
-		mWifiInfo = mWifiManager.getConnectionInfo();
+		wifiManager = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE); // 获得WifiManager对象
+		mWifiInfo = wifiManager.getConnectionInfo(); // 取得WifiInfo对象
 	}
 
-	/**
-	 * 打开wifi
-	 */
+	/** 打开wifi */
 	public void openWifi() {
-		if (!mWifiManager.isWifiEnabled()) {
-			mWifiManager.setWifiEnabled(true);
+		if (!wifiManager.isWifiEnabled()) {
+			wifiManager.setWifiEnabled(true);
 		}
 	}
 
-	/**
-	 * 关闭wifi
-	 */
+	/** 关闭wifi */
 	public void closeWifi() {
-		if (!mWifiManager.isWifiEnabled()) {
-			mWifiManager.setWifiEnabled(false);
+		if (!wifiManager.isWifiEnabled()) {
+			wifiManager.setWifiEnabled(false);
 		}
 	}
 
@@ -69,31 +54,24 @@ public class WifiAdmin {
 	 * @return
 	 */
 	public int checkState() {
-		return mWifiManager.getWifiState();
+		return wifiManager.getWifiState();
 	}
 
-	/**
-	 * 锁定wifiLock
-	 */
+	/** 锁定wifiLock */
 	public void acquireWifiLock() {
 		mWifiLock.acquire();
 	}
 
-	/**
-	 * 解锁wifiLock
-	 */
+	/** 解锁wifiLock */
 	public void releaseWifiLock() {
-		// 判断是否锁定
-		if (mWifiLock.isHeld()) {
+		if (mWifiLock.isHeld()) { // 判断是否锁定
 			mWifiLock.acquire();
 		}
 	}
 
-	/**
-	 * 创建一个wifiLock
-	 */
+	/** 创建一个wifiLock */
 	public void createWifiLock() {
-		mWifiLock = mWifiManager.createWifiLock("test");
+		mWifiLock = wifiManager.createWifiLock("test");
 	}
 
 	/**
@@ -115,14 +93,13 @@ public class WifiAdmin {
 			return;
 		}
 		// 连接配置好指定ID的网络
-		mWifiManager.enableNetwork(mWifiConfigurations.get(index).networkId,
+		wifiManager.enableNetwork(mWifiConfigurations.get(index).networkId,
 				true);
 	}
 
 	public void startScan() {
-		mWifiManager.startScan();
-		// 得到扫描结果
-		mWifiList = mWifiManager.getScanResults();
+		wifiManager.startScan();
+		mWifiList = wifiManager.getScanResults(); // 得到扫描结果
 
 		// 剔除只有BSSID最后两位不同的同名WiFi
 		int size = mWifiList.size();
@@ -140,8 +117,7 @@ public class WifiAdmin {
 				}
 			}
 		}
-		// 得到配置好的网络连接
-		mWifiConfigurations = mWifiManager.getConfiguredNetworks();
+		mWifiConfigurations = wifiManager.getConfiguredNetworks(); // 得到配置好的网络连接
 	}
 
 	/**
@@ -170,20 +146,12 @@ public class WifiAdmin {
 		return sb;
 	}
 
-	/**
-	 * 本机的Mac地址
-	 * 
-	 * @return
-	 */
+	/** 本机的Mac地址 */
 	public String getMacAddress() {
 		return (mWifiInfo == null) ? "NULL" : mWifiInfo.getMacAddress();
 	}
 
-	/**
-	 * 被连接网络的Mac地址
-	 * 
-	 * @return
-	 */
+	/** 被连接网络的Mac地址 */
 	public String getBSSID() {
 		return (mWifiInfo == null) ? "NULL" : mWifiInfo.getBSSID();
 	}
@@ -192,32 +160,20 @@ public class WifiAdmin {
 		return (mWifiInfo == null) ? 0 : mWifiInfo.getIpAddress();
 	}
 
-	/**
-	 * 得到连接的ID
-	 * 
-	 * @return
-	 */
+	/** 得到连接的ID */
 	public int getNetWordId() {
 		return (mWifiInfo == null) ? 0 : mWifiInfo.getNetworkId();
 	}
 
-	/**
-	 * 得到wifiInfo的所有信息
-	 * 
-	 * @return
-	 */
+	/** 得到wifiInfo的所有信息 */
 	public String getWifiInfo() {
 		return (mWifiInfo == null) ? "NULL" : mWifiInfo.toString();
 	}
 
-	/**
-	 * 添加一个网络并连接
-	 * 
-	 * @param configuration
-	 */
+	/** 添加一个网络并连接 */
 	public void addNetwork(WifiConfiguration configuration) {
-		int wcgId = mWifiManager.addNetwork(configuration);
-		mWifiManager.enableNetwork(wcgId, true);
+		int wcgId = wifiManager.addNetwork(configuration);
+		wifiManager.enableNetwork(wcgId, true);
 	}
 
 	public WifiConfiguration createWifiInfo(String SSID, String Password,
@@ -232,7 +188,7 @@ public class WifiAdmin {
 
 		WifiConfiguration tempConfig = this.isExsits(SSID);
 		if (tempConfig != null) {
-			mWifiManager.removeNetwork(tempConfig.networkId);
+			wifiManager.removeNetwork(tempConfig.networkId);
 		}
 
 		if (Type == 1) // WIFICIPHER_NOPASS
@@ -303,7 +259,7 @@ public class WifiAdmin {
 			}
 			if (tempId != -1) {
 				mWifiConfigurations.remove(tempId);
-				Log.e(Constant.TAG, "Remove Wifi Config:" + ssid);
+				MyLog.e("Remove Wifi Config:" + ssid);
 			}
 		}
 	}
@@ -314,8 +270,8 @@ public class WifiAdmin {
 	 * @param netId
 	 */
 	public void disConnectionWifi(int netId) {
-		mWifiManager.disableNetwork(netId);
-		mWifiManager.disconnect();
+		wifiManager.disableNetwork(netId);
+		wifiManager.disconnect();
 	}
 
 	// ============
@@ -329,10 +285,9 @@ public class WifiAdmin {
 		for (int i = 0; i < wifiConfigList.size(); i++) {
 			WifiConfiguration wifi = wifiConfigList.get(i);
 			if (wifi.networkId == wifiId) {
-				while (!(mWifiManager.enableNetwork(wifiId, true))) {// 激活该Id，建立连接
-					Log.i(Constant.TAG,
-							"ConnectWifi:"
-									+ String.valueOf(wifiConfigList.get(wifiId).status));// status:0--已经连接，1--不可连接，2--可以连接
+				while (!(wifiManager.enableNetwork(wifiId, true))) {// 激活该Id，建立连接
+					MyLog.i("ConnectWifi:"
+							+ String.valueOf(wifiConfigList.get(wifiId).status));// status:0--已经连接，1--不可连接，2--可以连接
 				}
 				return true;
 			}
@@ -344,7 +299,7 @@ public class WifiAdmin {
 	 * 得到Wifi配置好的信息
 	 */
 	public void getConfiguration() {
-		wifiConfigList = mWifiManager.getConfiguredNetworks();// 得到配置好的网络信息
+		wifiConfigList = wifiManager.getConfiguredNetworks();// 得到配置好的网络信息
 		// for (int i = 0; i < wifiConfigList.size(); i++) {
 		// Log.i(Constant.TAG,
 		// "getConfiguration,SSID:" + wifiConfigList.get(i).SSID
@@ -360,11 +315,10 @@ public class WifiAdmin {
 	 * @return
 	 */
 	public int IsConfiguration(String SSID) {
-		Log.i(Constant.TAG,
-				"IsConfiguration" + String.valueOf(wifiConfigList.size()));
+		MyLog.i("IsConfiguration" + String.valueOf(wifiConfigList.size()));
 		for (int i = 0; i < wifiConfigList.size(); i++) {
-			Log.i(wifiConfigList.get(i).SSID,
-					String.valueOf(wifiConfigList.get(i).networkId));
+			MyLog.i(wifiConfigList.get(i).SSID
+					+ String.valueOf(wifiConfigList.get(i).networkId));
 			if (wifiConfigList.get(i).SSID.equals(SSID)) {// 地址相同
 				return wifiConfigList.get(i).networkId;
 			}
@@ -385,13 +339,13 @@ public class WifiAdmin {
 		for (int i = 0; i < wifiList.size(); i++) {
 			ScanResult wifi = wifiList.get(i);
 			if (wifi.SSID.equals(ssid)) {
-				Log.i(Constant.TAG, "AddWifiConfig equals");
+				MyLog.i("AddWifiConfig equals");
 				WifiConfiguration wifiCong = new WifiConfiguration();
 				wifiCong.SSID = "\"" + wifi.SSID + "\"";// \"转义字符，代表"
 				wifiCong.preSharedKey = "\"" + pwd + "\"";// WPA-PSK密码
 				wifiCong.hiddenSSID = false;
 				wifiCong.status = WifiConfiguration.Status.ENABLED;
-				wifiId = mWifiManager.addNetwork(wifiCong);// 将配置好的特定WIFI密码信息添加,添加完成后默认是不激活状态，成功返回ID，否则为-1
+				wifiId = wifiManager.addNetwork(wifiCong);// 将配置好的特定WIFI密码信息添加,添加完成后默认是不激活状态，成功返回ID，否则为-1
 				if (wifiId != -1) {
 					return wifiId;
 				}

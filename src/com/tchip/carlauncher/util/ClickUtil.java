@@ -5,7 +5,6 @@ public class ClickUtil {
 	private static long lastClickTime;
 
 	/**
-	 * 
 	 * @param clickMinSpan
 	 *            两次点击至少间隔时间,单位:ms
 	 * @return

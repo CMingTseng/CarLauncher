@@ -1,10 +1,7 @@
 package com.tchip.carlauncher.model;
 
-import java.io.File;
-
 import cn.kuwo.autosdk.api.KWAPI;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.StorageUtil;
@@ -12,10 +9,6 @@ import com.tchip.carlauncher.util.StorageUtil;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.util.Log;
-import android.widget.Toast;
 
 public class CardEjectReceiver extends BroadcastReceiver {
 

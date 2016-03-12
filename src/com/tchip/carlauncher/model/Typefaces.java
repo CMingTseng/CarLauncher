@@ -2,11 +2,10 @@ package com.tchip.carlauncher.model;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 
 import java.util.Hashtable;
 
-import com.tchip.carlauncher.Constant;
+import com.tchip.carlauncher.util.MyLog;
 
 public class Typefaces {
 	private static final Hashtable<String, Typeface> cache = new Hashtable<String, Typeface>();
@@ -19,7 +18,7 @@ public class Typefaces {
 							assetPath);
 					cache.put(assetPath, t);
 				} catch (Exception e) {
-					Log.e(Constant.TAG, "Typefaces：Could not get typeface '" + assetPath
+					MyLog.e("Typefaces：Could not get typeface '" + assetPath
 							+ "' because " + e.getMessage());
 					return null;
 				}

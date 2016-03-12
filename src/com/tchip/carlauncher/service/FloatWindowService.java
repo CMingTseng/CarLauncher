@@ -17,18 +17,16 @@ import android.widget.LinearLayout;
 
 public class FloatWindowService extends Service {
 
-	// 定义浮动窗口布局
-	LinearLayout mFloatLayout;
-	WindowManager.LayoutParams wmParams;
-	// 创建浮动窗口设置布局参数的对象
-	WindowManager mWindowManager;
+	LinearLayout layoutFloat; // 定义浮动窗口布局
+	WindowManager.LayoutParams wmParams; // 创建浮动窗口设置布局参数的对象
+	WindowManager windowManager;
 
 	ImageView imageRecordingHint;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		MyLog.i("oncreat");
+		MyLog.i("onCreate");
 		createFloatView();
 	}
 
@@ -40,17 +38,15 @@ public class FloatWindowService extends Service {
 	private void createFloatView() {
 		wmParams = new WindowManager.LayoutParams();
 		// 获取的是WindowManagerImpl.CompatModeWrapper
-		mWindowManager = (WindowManager) getApplication().getSystemService(
+		windowManager = (WindowManager) getApplication().getSystemService(
 				getApplication().WINDOW_SERVICE);
-		MyLog.i("mWindowManager--->" + mWindowManager);
-		// 设置Window type
-		wmParams.type = LayoutParams.TYPE_PHONE;
-		// 设置图片格式，效果为背景透明
-		wmParams.format = PixelFormat.RGBA_8888;
+		MyLog.i("windowManager--->" + windowManager);
+
+		wmParams.type = LayoutParams.TYPE_PHONE; // 设置Window Type
+		wmParams.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
 		// 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
 		wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
-		// 调整悬浮窗显示的停靠位置为左侧置顶
-		wmParams.gravity = Gravity.CENTER | Gravity.TOP;
+		wmParams.gravity = Gravity.CENTER | Gravity.TOP; // 顶部中央
 		// 以屏幕左上角为原点，设置x、y初始值，相对于gravity
 		wmParams.x = 0;
 		wmParams.y = 0;
@@ -58,22 +54,18 @@ public class FloatWindowService extends Service {
 		// 设置悬浮窗口长宽数据
 		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-		/*
-		 * // 设置悬浮窗口长宽数据 wmParams.width = 200; wmParams.height = 80;
-		 */
+		// 设置悬浮窗口长宽数据 wmParams.width = 200; wmParams.height = 80;
 
 		LayoutInflater inflater = LayoutInflater.from(getApplication());
 		// 获取浮动窗口视图所在布局
-		mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_window,
+		layoutFloat = (LinearLayout) inflater.inflate(R.layout.float_window,
 				null);
-		// 添加mFloatLayout
-		mWindowManager.addView(mFloatLayout, wmParams);
+		windowManager.addView(layoutFloat, wmParams); // 添加mFloatLayout
 		// 浮动窗口按钮
-		imageRecordingHint = (ImageView) mFloatLayout
+		imageRecordingHint = (ImageView) layoutFloat
 				.findViewById(R.id.imageRecordingHint);
 
-		mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
+		layoutFloat.measure(View.MeasureSpec.makeMeasureSpec(0,
 				View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
 				.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 		MyLog.i("Width/2--->" + imageRecordingHint.getMeasuredWidth() / 2);
@@ -83,9 +75,8 @@ public class FloatWindowService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (mFloatLayout != null) {
-			// 移除悬浮窗口
-			mWindowManager.removeView(mFloatLayout);
+		if (layoutFloat != null) {
+			windowManager.removeView(layoutFloat); // 移除悬浮窗口
 		}
 	}
 

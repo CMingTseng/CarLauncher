@@ -232,10 +232,7 @@ public class SettingUtil {
 
 		KeyguardManager km = (KeyguardManager) context
 				.getSystemService(Context.KEYGUARD_SERVICE); // 得到键盘锁管理器对象
-
-		// 参数是LogCat里用的Tag
-		KeyguardLock kl = km.newKeyguardLock("ZMS");
-
+		KeyguardLock kl = km.newKeyguardLock("ZMS"); // 参数是LogCat里用的Tag
 		kl.disableKeyguard();
 	}
 
