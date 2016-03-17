@@ -1,7 +1,10 @@
 package com.tchip.carlauncher.model;
 
+import java.io.File;
+
 import cn.kuwo.autosdk.api.KWAPI;
 
+import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.StorageUtil;
@@ -33,9 +36,12 @@ public class CardEjectReceiver extends BroadcastReceiver {
 
 		} else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			// 插入录像卡自动录像
-			if ("/storage/sdcard2".equals(intent.getData().getPath())
-					&& MyApp.isAccOn) {
-				MyApp.shouldMountRecord = true;
+			if ("/storage/sdcard2".equals(intent.getData().getPath())) {
+				StorageUtil.createRecordDirectory();
+
+				if (MyApp.isAccOn) {
+					MyApp.shouldMountRecord = true;
+				}
 			}
 
 			if (StorageUtil.isVideoCardExists()) {

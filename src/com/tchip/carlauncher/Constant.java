@@ -1,5 +1,7 @@
 package com.tchip.carlauncher;
 
+import java.io.File;
+
 import android.os.Environment;
 
 public interface Constant {
@@ -163,7 +165,7 @@ public interface Constant {
 		public static final int autoRecordDelay = 2500;
 
 		/** 循环录像保留空间(单位：字节B) */
-		public static final long SD_MIN_FREE_STORAGE = 500 * 1024 * 1024; // 500M
+		public static final long SD_MIN_FREE_STORAGE = 300 * 1024 * 1024; // 300M
 
 		/** 比特率240P */
 		public static final int BIT_RATE_240P = 120 * 1000;
@@ -265,7 +267,7 @@ public interface Constant {
 
 	public static final class Module {
 		/** 是否是公版软件 */
-		public static final boolean isPublic = false;
+		public static final boolean isPublic = true;
 
 		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;
@@ -313,6 +315,17 @@ public interface Constant {
 		public static final String SDCARD_0 = "/storage/sdcard0";
 		public static final String SDCARD_1 = "/storage/sdcard1";
 		public static final String SDCARD_2 = "/storage/sdcard2";
+		
+		/** 录像存储卡路径 */
+		public static String RECORD_SDCARD = SDCARD_2 + File.separator;// "/storage/sdcard2/";
+
+		/** 前录存储路径 */
+		public static String RECORD_FRONT = RECORD_SDCARD + "tachograph"
+				+ File.separator;
+
+		/** 后录存储路径 */
+		public static String RECORD_BACK = RECORD_SDCARD + "tachograph_back"
+				+ File.separator;
 
 		/** 字体目录 */
 		public static final String FONT = "fonts/";

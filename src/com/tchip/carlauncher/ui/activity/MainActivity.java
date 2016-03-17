@@ -161,6 +161,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		initialLayout();
 		SettingUtil.initialNodeState(MainActivity.this);
+		StorageUtil.createRecordDirectory();
 		setupRecordDefaults();
 		setupRecordViews();
 
@@ -1507,7 +1508,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
-	/** 加锁或加锁视频 */
+	/** 加锁或解锁视频 */
 	private void lockOrUnlockVideo() {
 		if (!MyApp.isVideoLock) {
 			MyApp.isVideoLock = true;
@@ -1653,7 +1654,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		MyLog.v("[Main]onResume");
 		MyApp.isMainForeground = true;
 		try {
-			hsvMain.smoothScrollTo(0, 0); // 按HOME键返回第一个图标
+			hsvMain.scrollTo(0, 0); // 按HOME键返回第一个图标
 			setSurfaceLarge(false); // 按HOME键将预览区域还原为小窗口
 
 			if (!MyApp.isBTPlayMusic) { // 蓝牙播放音乐时不设置触摸声音

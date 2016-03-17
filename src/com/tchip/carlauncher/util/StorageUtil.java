@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.ExifInterface;
 import android.os.StatFs;
-import android.widget.Toast;
 
 public class StorageUtil {
 
@@ -52,10 +51,10 @@ public class StorageUtil {
 		return blockSize * availableBlocks;
 	}
 
-	/** 录像SD卡是否存在 **/
+	/** 录像SD卡是否存在 */
 	public static boolean isVideoCardExists() {
 		try {
-			String pathVideo = Constant.Path.SDCARD_2 + "/tachograph/";
+			String pathVideo = Constant.Path.RECORD_FRONT;
 			File fileVideo = new File(pathVideo);
 			fileVideo.mkdirs();
 			File file = new File(pathVideo);
@@ -69,7 +68,13 @@ public class StorageUtil {
 		return true;
 	}
 
-	/** 地图SD卡是否存在 **/
+	/** 创建前后录像存储卡目录 */
+	public static void createRecordDirectory() {
+		new File(Constant.Path.RECORD_FRONT).mkdirs();
+		new File(Constant.Path.RECORD_BACK).mkdirs();
+	}
+
+	/** 地图SD卡是否存在 */
 	public boolean isMapSDExists() {
 		try {
 			String pathVideo = Constant.Path.SD_CARD_MAP + "/BaiduMapSDK/";
@@ -118,8 +123,7 @@ public class StorageUtil {
 
 	/** 删除空视频文件夹 **/
 	public static void deleteEmptyVideoDirectory() {
-		File fileRoot = new File(Constant.Path.SDCARD_2 + File.separator
-				+ "tachograph/");
+		File fileRoot = new File(Constant.Path.RECORD_FRONT);
 		File[] listFileDate = fileRoot.listFiles();
 		for (File file : listFileDate) {
 			if (file.isDirectory()) {
@@ -131,6 +135,59 @@ public class StorageUtil {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 空间是否不足，需要删除旧视频
+	 * 
+	 * 前录路径：/storage/sdcard2/tachograph/ *.mp4
+	 * 
+	 * 后录路径：/storage/sdcard2/tachograph_back/DrivingRecord/unlock/
+	 * 
+	 */
+	@Deprecated
+	public static boolean isStorageLessOld2() {
+		float sdTotal = StorageUtil.getSDTotalSize(Constant.Path.RECORD_SDCARD); // SD卡总空间
+		float sdFree = StorageUtil
+				.getSDAvailableSize(Constant.Path.RECORD_SDCARD); // SD剩余空间
+		float frontUse = (float) FileUtil.getTotalSizeOfFilesInDir(new File(
+				Constant.Path.RECORD_FRONT)); // 前置已用空间
+		float frontFree = sdTotal * (2 / 3) - frontUse;
+		int intFrontFree = (int) frontFree;
+		int intSdFree = (int) sdFree;
+		if (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
+			return true;
+		} else {
+			return intFrontFree < Constant.Record.SD_MIN_FREE_STORAGE;
+		}
+	}
+
+	public static boolean isStorageLess() {
+		// float sdTotal =
+		// StorageUtil.getSDTotalSize(Constant.Path.RECORD_SDCARD); // SD卡总空间
+		float sdFree = StorageUtil
+				.getSDAvailableSize(Constant.Path.RECORD_SDCARD); // SD剩余空间
+		float frontUse = (float) FileUtil.getTotalSizeOfFilesInDir(new File(
+				Constant.Path.RECORD_FRONT)); // 前置已用空间
+
+		float backUse = (float) FileUtil.getTotalSizeOfFilesInDir(new File(
+				Constant.Path.RECORD_BACK)); // 后置已用空间
+		float frontTotal = (sdFree + frontUse + backUse) * 2 / 3; // 前置归属空间
+		float frontFree = frontTotal - frontUse; // 前置剩余空间
+		int intFrontFree = (int) frontFree;
+		MyLog.v("[isStroageLess]sdFree:" + sdFree + "\nfrontUse:" + frontUse
+				+ "\nfrontTotal:" + frontTotal + "\nfrontFree" + frontFree);
+		return intFrontFree < Constant.Record.SD_MIN_FREE_STORAGE;
+	}
+
+	@Deprecated
+	public static boolean isStorageLessOld() {
+		// float sdTotal = StorageUtil.getSDTotalSize(sdcardPath); // SD卡总空间
+		float sdFree = StorageUtil
+				.getSDAvailableSize(Constant.Path.RECORD_SDCARD);
+		int intSdFree = (int) sdFree;
+		MyLog.v("[StorageUtil]isStroageLess, sdFree:" + intSdFree);
+		return intSdFree < Constant.Record.SD_MIN_FREE_STORAGE;
 	}
 
 	/**
@@ -147,40 +204,31 @@ public class StorageUtil {
 			AudioRecordDialog audioRecordDialog = new AudioRecordDialog(context);
 
 			StorageUtil.deleteEmptyVideoDirectory();
-			String sdcardPath = Constant.Path.SDCARD_2 + File.separator;// "/storage/sdcard2/";
 
-			float sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-			// float sdTotal = StorageUtil.getSDTotalSize(sdcardPath);
-			int intSdFree = (int) sdFree;
-			MyLog.v("[StorageUtil]deleteOldestUnlockVideo, sdFree:" + intSdFree);
-			while (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
+			while (isStorageLess()) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
 				// 删除较旧未加锁视频文件
 				if (oldestUnlockVideoId != -1) {
 					String oldestUnlockVideoName = videoDb
 							.getVideNameById(oldestUnlockVideoId);
-					File f = new File(sdcardPath + "tachograph/"
+					File file = new File(Constant.Path.RECORD_FRONT
 							+ oldestUnlockVideoName.split("_")[0]
 							+ File.separator + oldestUnlockVideoName);
-					if (f.exists() && f.isFile()) {
+					if (file.exists() && file.isFile()) {
 						MyLog.d("[StorageUtil]Delete Old Unlock Video:"
-								+ f.getName());
+								+ file.getName());
 						int i = 0;
-						while (!f.delete() && i < 3) {
+						while (!file.delete() && i < 3) {
 							i++;
 							MyLog.d("[StorageUtil]Delete Old Unlock Video:"
-									+ f.getName() + " Filed!!! Try:" + i);
+									+ file.getName() + " Filed!!! Try:" + i);
 						}
 					}
-					// 删除数据库记录
-					videoDb.deleteDriveVideoById(oldestUnlockVideoId);
+					videoDb.deleteDriveVideoById(oldestUnlockVideoId); // 删除数据库记录
 				} else {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
-						sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-						intSdFree = (int) sdFree;
-						if (intSdFree < Constant.Record.SD_MIN_FREE_STORAGE) {
-							// 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
+						if (isStorageLess()) { // 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							MyLog.e("[StorageUtil]Storage is full...");
 
 							String strNoStorage = context
@@ -200,30 +248,26 @@ public class StorageUtil {
 								.getString(
 										R.string.hint_storage_full_and_delete_lock);
 						HintUtil.speakVoice(context, strStorageFull);
-						Toast.makeText(context, strStorageFull,
-								Toast.LENGTH_SHORT).show();
+						HintUtil.showToast(context, strStorageFull);
 
 						String oldestVideoName = videoDb
 								.getVideNameById(oldestVideoId);
-						File f = new File(sdcardPath + "tachograph/"
+						File file = new File(Constant.Path.RECORD_FRONT
 								+ oldestVideoName.split("_")[0]
 								+ File.separator + oldestVideoName);
-						if (f.exists() && f.isFile()) {
+						if (file.exists() && file.isFile()) {
 							MyLog.d("[StorageUtil]Delete Old lock Video:"
-									+ f.getName());
+									+ file.getName());
 							int i = 0;
-							while (!f.delete() && i < 5) {
+							while (!file.delete() && i < 5) {
 								i++;
 								MyLog.d("[StorageUtil]Delete Old lock Video:"
-										+ f.getName() + " Filed!!! Try:" + i);
+										+ file.getName() + " Filed!!! Try:" + i);
 							}
 						}
 						videoDb.deleteDriveVideoById(oldestVideoId); // 删除数据库记录
 					}
 				}
-				// 更新剩余空间
-				sdFree = StorageUtil.getSDAvailableSize(sdcardPath);
-				intSdFree = (int) sdFree;
 			}
 			return true;
 		} catch (Exception e) {
