@@ -162,7 +162,7 @@ public class StorageUtil {
 		}
 	}
 
-	public static boolean isStorageLess() {
+	public static boolean isStorageLessSingle() {
 		// float sdTotal =
 		// StorageUtil.getSDTotalSize(Constant.Path.RECORD_SDCARD); // SD卡总空间
 		float sdFree = StorageUtil
@@ -180,8 +180,7 @@ public class StorageUtil {
 		return intFrontFree < Constant.Record.SD_MIN_FREE_STORAGE;
 	}
 
-	@Deprecated
-	public static boolean isStorageLessOld() {
+	public static boolean isStorageLessDouble() {
 		// float sdTotal = StorageUtil.getSDTotalSize(sdcardPath); // SD卡总空间
 		float sdFree = StorageUtil
 				.getSDAvailableSize(Constant.Path.RECORD_SDCARD);
@@ -205,7 +204,8 @@ public class StorageUtil {
 
 			StorageUtil.deleteEmptyVideoDirectory();
 
-			while (isStorageLess()) {
+			while (Constant.Module.isRecordSingleCard ? isStorageLessSingle()
+					: isStorageLessDouble()) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
 				// 删除较旧未加锁视频文件
 				if (oldestUnlockVideoId != -1) {
@@ -228,7 +228,8 @@ public class StorageUtil {
 				} else {
 					int oldestVideoId = videoDb.getOldestVideoId();
 					if (oldestVideoId == -1) {
-						if (isStorageLess()) { // 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
+						if (Constant.Module.isRecordSingleCard ? isStorageLessSingle()
+								: isStorageLessDouble()) { // 此时若空间依然不足,提示用户清理存储（已不是行车视频的原因）
 							MyLog.e("[StorageUtil]Storage is full...");
 
 							String strNoStorage = context

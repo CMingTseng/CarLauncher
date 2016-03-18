@@ -1377,7 +1377,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoCamera:
 			case R.id.layoutVideoCamera:
 			case R.id.layoutVideoCameraSmall:
-				if (!ClickUtil.isQuickClick(500)) {
+				if (!ClickUtil.isQuickClick(1000)) {
 					takePhoto();
 				}
 				break;
@@ -2098,7 +2098,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	/** 拍照 */
 	public int takePhoto() {
-		if (!StorageUtil.isVideoCardExists()) {
+		if (!StorageUtil.isVideoCardExists()) { // 判断SD卡2是否存在，需要耗费一定时间
 			noVideoSDHint(); // SDCard不存在
 			return -1;
 		} else if (carRecorder != null) {
@@ -2320,7 +2320,6 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void onFileSave(int type, String path) {
 		try {
 			if (type == 1) { // 视频
-
 				StorageUtil.deleteOldestUnlockVideo(MainActivity.this);
 
 				String videoName = path.split("/")[5];
@@ -2341,6 +2340,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						videoResolution);
 				videoDb.addDriveVideo(driveVideo);
 
+				CheckErrorFile(); // 执行onFileSave时，此file已经不隐藏，下个正在录的为隐藏
 				MyLog.v("[onFileSave]videoLock:" + videoLock
 						+ ", isVideoLockSecond:" + MyApp.isVideoLockSecond);
 			} else { // 图片
@@ -2367,7 +2367,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						Constant.Broadcast.ACTION_IMAGE_SAVE);
 				intentImageSave.putExtra("path", path);
 				sendBroadcast(intentImageSave);
-
 			}
 
 			// 更新Media Database
@@ -2375,7 +2374,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					Uri.parse("file://" + path)));
 			MyLog.d("[onFileSave]Type=" + type + ",Save path:" + path);
 
-			CheckErrorFile(); // 执行onFileSave时，此file已经不隐藏，下个正在录的为隐藏
 		} catch (Exception e) {
 			e.printStackTrace();
 			MyLog.e("[Main]onFileSave catch Exception:" + e.toString());
