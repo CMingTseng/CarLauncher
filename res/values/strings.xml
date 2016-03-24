@@ -47,5 +47,7 @@
     <string name="hint_record_stop">停止录像</string>
     <string name="default_record_time">00 : 00</string>
     <string name="short_record">REC</string>
+    <string name="hint_save_video_error">视频保存失败</string>
+    <string name="hint_save_photo_error">图片保存失败</string>
 
 </resources>

@@ -270,7 +270,7 @@ public interface Constant {
 		public static final boolean isPublic = false;
 
 		/** 双录是否录制到单卡 */
-		public static final boolean isRecordSingleCard = false;
+		public static final boolean isRecordSingleCard = true;
 
 		/** 导航是否是百度:true-(自写百度SDK导航) false-图吧导航 **/
 		public static final boolean isNavigationBaidu = false;

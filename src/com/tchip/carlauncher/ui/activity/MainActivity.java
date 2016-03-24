@@ -179,7 +179,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		} else {
 			MyApp.isAccOn = false; // 同步ACC状态
 			MyApp.isSleeping = true; // ACC未连接,进入休眠
-			MyLog.v("[MainActivity]ACC Check:OFF, Send Broadcast:com.tchip.SLEEP_ON.");
+			MyLog.v("[Main]ACC Check:OFF, Send Broadcast:com.tchip.SLEEP_ON.");
 
 			sendBroadcast(new Intent(Constant.Broadcast.SLEEP_ON)); // 通知其他应用进入休眠
 			SettingUtil.setAirplaneMode(MainActivity.this, true); // 打开飞行模式
@@ -1044,6 +1044,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						intervalState = "1".equals(videoTimeStr) ? Constant.Record.STATE_INTERVAL_1MIN
 								: Constant.Record.STATE_INTERVAL_3MIN;
 
+						MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 1");
 						if (stopRecorder() == 0) { // 停止录像
 							recordState = Constant.Record.STATE_RECORD_STOPPED;
 							MyApp.isVideoReording = false;
@@ -1091,6 +1092,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 2: // SD卡异常移除：停止录像
+				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 2");
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1111,6 +1113,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 3: // 电源断开，停止录像
+				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 3");
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1148,6 +1151,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 5: // 进入休眠，停止录像
+				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 5");
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1166,6 +1170,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 6: // 语音命令：停止录像
+				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 6");
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1179,6 +1184,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				break;
 
 			case 7:
+				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 7");
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1247,6 +1253,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					} else if (recordState == Constant.Record.STATE_RECORD_STARTED) {
 						HintUtil.speakVoice(MainActivity.this, getResources()
 								.getString(R.string.hint_record_stop));
+						MyLog.v("[onClick]stopRecorder()");
 						stopRecord();
 					}
 
@@ -2264,11 +2271,15 @@ public class MainActivity extends Activity implements TachographCallback,
 	public void onError(int error) {
 		switch (error) {
 		case TachographCallback.ERROR_SAVE_VIDEO_FAIL:
-			HintUtil.showToast(MainActivity.this, "视频保存失败");
+			String strSaveVideoErr = getResources().getString(
+					R.string.hint_save_video_error);
+			HintUtil.showToast(MainActivity.this, strSaveVideoErr);
+			audioRecordDialog.showErrorDialog(strSaveVideoErr);
 			MyLog.e("Record Error : ERROR_SAVE_VIDEO_FAIL");
 
 			// 视频保存失败，原因：存储空间不足，清空文件夹，视频被删掉
 			resetRecordTimeText();
+			MyLog.v("[onError]stopRecorder()");
 			if (stopRecorder() == 0) {
 				recordState = Constant.Record.STATE_RECORD_STOPPED;
 				MyApp.isVideoReording = false;
@@ -2278,7 +2289,8 @@ public class MainActivity extends Activity implements TachographCallback,
 			break;
 
 		case TachographCallback.ERROR_SAVE_IMAGE_FAIL:
-			HintUtil.showToast(MainActivity.this, "图片保存失败");
+			HintUtil.showToast(MainActivity.this,
+					getResources().getString(R.string.hint_save_photo_error));
 			MyLog.e("Record Error : ERROR_SAVE_IMAGE_FAIL");
 
 			if (MyApp.shouldSendPathToDSA) {
