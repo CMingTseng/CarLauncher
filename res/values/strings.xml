@@ -45,6 +45,7 @@
     <string name="hint_storage_full_cause_by_other">空间不足，请清理存储卡2</string>
     <string name="hint_record_start">开始录像</string>
     <string name="hint_record_stop">停止录像</string>
+    <string name="hint_not_record">未录像</string>
     <string name="default_record_time">00 : 00</string>
     <string name="short_record">REC</string>
     <string name="hint_save_video_error">视频保存失败</string>

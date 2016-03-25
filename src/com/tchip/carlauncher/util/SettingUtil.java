@@ -78,7 +78,7 @@ public class SettingUtil {
 				}
 			}
 
-		}, 6000);
+		}, 3000);
 	}
 
 	public static boolean getGpsState(Context context) {

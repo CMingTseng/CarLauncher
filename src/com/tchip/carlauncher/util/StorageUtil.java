@@ -71,7 +71,9 @@ public class StorageUtil {
 	/** 创建前后录像存储卡目录 */
 	public static void createRecordDirectory() {
 		new File(Constant.Path.RECORD_FRONT).mkdirs();
-		new File(Constant.Path.RECORD_BACK).mkdirs();
+		if (Constant.Module.isRecordSingleCard) {
+			new File(Constant.Path.RECORD_BACK).mkdirs();
+		}
 	}
 
 	/** 地图SD卡是否存在 */
