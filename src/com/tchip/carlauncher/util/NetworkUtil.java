@@ -87,9 +87,7 @@ public class NetworkUtil {
 			btStatus = Settings.System.getString(context.getContentResolver(),
 					"bt_enable");
 		} catch (Exception e) {
-
 		}
-
 		if ("1".equals(btStatus)) {
 			return true;
 		} else {
@@ -108,7 +106,6 @@ public class NetworkUtil {
 					"bt_connect");
 		} catch (Exception e) {
 		}
-
 		if ("1".equals(btStatus)) {
 			return true;
 		} else {
@@ -121,7 +118,6 @@ public class NetworkUtil {
 	public static final int WIFI_RSSI_LEVELS = 5;
 
 	public static int getWifiImageBySignal(int signal) {
-
 		int wifiLevel = calculateWifiSignalLevel(signal, WIFI_RSSI_LEVELS);
 		switch (wifiLevel) {
 		case -1:
@@ -140,7 +136,6 @@ public class NetworkUtil {
 		default:
 			return R.drawable.ic_qs_wifi_no_network;
 		}
-
 	}
 
 	/**
@@ -171,7 +166,6 @@ public class NetworkUtil {
 				.getSystemService(Context.WIFI_SERVICE);
 		android.net.wifi.WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 		return wifiInfo.getBSSID();
-		// return wifiInfo.getSSID();
 	}
 
 	/**
@@ -198,7 +192,6 @@ public class NetworkUtil {
 			return R.drawable.ic_qs_signal_full_3;
 		case 4:
 			return R.drawable.ic_qs_signal_full_4;
-
 		default:
 			return R.drawable.ic_qs_signal_no_signal;
 		}

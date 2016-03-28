@@ -126,14 +126,16 @@ public class StorageUtil {
 	/** 删除空视频文件夹 **/
 	public static void deleteEmptyVideoDirectory() {
 		File fileRoot = new File(Constant.Path.RECORD_FRONT);
-		File[] listFileDate = fileRoot.listFiles();
-		for (File file : listFileDate) {
-			if (file.isDirectory()) {
-				int numberChild = file.listFiles().length;
-				if (numberChild == 0) {
-					file.delete();
-					MyLog.v("[StorageUtil]Delete Empty Video Directory:"
-							+ file.getName() + ",Length:" + numberChild);
+		if (fileRoot.exists()) {
+			File[] listFileDate = fileRoot.listFiles();
+			for (File file : listFileDate) {
+				if (file.isDirectory()) {
+					int numberChild = file.listFiles().length;
+					if (numberChild == 0) {
+						file.delete();
+						MyLog.v("[StorageUtil]Delete Empty Video Directory:"
+								+ file.getName() + ",Length:" + numberChild);
+					}
 				}
 			}
 		}
@@ -203,9 +205,7 @@ public class StorageUtil {
 			// 视频数据库
 			DriveVideoDbHelper videoDb = new DriveVideoDbHelper(context);
 			AudioRecordDialog audioRecordDialog = new AudioRecordDialog(context);
-
 			StorageUtil.deleteEmptyVideoDirectory();
-
 			while (Constant.Module.isRecordSingleCard ? isStorageLessSingle()
 					: isStorageLessDouble()) {
 				int oldestUnlockVideoId = videoDb.getOldestUnlockVideoId();
@@ -241,7 +241,6 @@ public class StorageUtil {
 
 							audioRecordDialog.showErrorDialog(strNoStorage);
 							HintUtil.speakVoice(context, strNoStorage);
-
 							return false;
 						}
 					} else {
@@ -252,7 +251,6 @@ public class StorageUtil {
 										R.string.hint_storage_full_and_delete_lock);
 						HintUtil.speakVoice(context, strStorageFull);
 						HintUtil.showToast(context, strStorageFull);
-
 						String oldestVideoName = videoDb
 								.getVideNameById(oldestVideoId);
 						File file = new File(Constant.Path.RECORD_FRONT
@@ -296,7 +294,6 @@ public class StorageUtil {
 			if (file.isFile() && !fileName.endsWith(".jpg")) {
 				if (MyApp.isVideoReording && fileName.startsWith(".")) {
 					// TODO:Delete file start with dot but not the recording one
-
 				} else {
 					if (!videoDb.isVideoExist(fileName)) {
 						file.delete();
@@ -334,26 +331,22 @@ public class StorageUtil {
 					Constant.MySP.NAME, Context.MODE_PRIVATE);
 
 			ExifInterface exif = new ExifInterface(imagePath);
-			// 经度
 			String strLongitude = sharedPreferences.getString("longitude",
-					"0.00");
+					"0.00"); // 经度
 			double intLongitude = Double.parseDouble(strLongitude);
 			exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strLongitude);
 			exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,
 					intLongitude > 0.0f ? "E" : "W");
-			// 纬度
 			String strLatitude = sharedPreferences
-					.getString("latitude", "0.00");
+					.getString("latitude", "0.00"); // 纬度
 			double intLatitude = Double.parseDouble(strLatitude);
 			exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strLongitude);
 			exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,
 					intLatitude > 0.0f ? "N" : "S");
 			exif.setAttribute(ExifInterface.TAG_ORIENTATION, ""
 					+ ExifInterface.ORIENTATION_NORMAL);
-
 			exif.setAttribute(ExifInterface.TAG_MAKE, "zenlane"); // 品牌
 			exif.setAttribute(ExifInterface.TAG_MODEL, "X755"); // 型号/机型
-
 			// exif.setAttribute(ExifInterface.TAG_FLASH, "1/30"); // 闪光灯
 			// exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, "5/1"); // 焦距
 			// exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE,
@@ -362,7 +355,6 @@ public class StorageUtil {
 			// // 曝光时间
 			// exif.setAttribute(ExifInterface.TAG_ISO, "100"); // 感光度
 			// exif.setAttribute(ExifInterface.TAG_APERTURE, "2/1"); // 光圈
-
 			exif.saveAttributes();
 		} catch (Exception e) {
 			MyLog.e("[Android]Set Attribute Catch Exception:" + e.toString());
@@ -373,7 +365,6 @@ public class StorageUtil {
 		try {
 			JpegHeaders jpegHeaders = new JpegHeaders(imagePath);
 			App1Header exifHeader = jpegHeaders.getApp1Header();
-
 			// 遍历显示EXIF
 			// SortedMap tags = exifHeader.getTags();
 			// for (Map.Entry entry : tags.entrySet()) {
@@ -395,12 +386,8 @@ public class StorageUtil {
 			exifHeader.setValue(Tag.METERINGMODE, "1"); // 测光模式：平均
 			exifHeader.setValue(Tag.SATURATION,
 					"" + (5 + new Random().nextInt(10))); // 饱和度：5-15
-
 			exifHeader.setValue(Tag.FLASH, "0"); // 闪光灯：未使用
-
-			// 保存,参数：是否保存原文件为.old
-			jpegHeaders.save(false);
-
+			jpegHeaders.save(false); // 保存,参数：是否保存原文件为.old
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			MyLog.e("[JpegHeaders]Set Attribute Error,FileNotFoundException:"
@@ -422,7 +409,6 @@ public class StorageUtil {
 			MyLog.e("[JpegHeaders]Set Attribute Error,JpegFormatException:"
 					+ e.toString());
 		}
-
 	}
 
 }

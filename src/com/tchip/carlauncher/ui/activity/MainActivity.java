@@ -458,6 +458,12 @@ public class MainActivity extends Activity implements TachographCallback,
 						MyApp.shouldOpenRecordFullScreen = false;
 						setSurfaceLarge(true); // 大视图
 					}
+					if (MyApp.shouldRecordNow && !MyApp.isVideoReording) {
+						// TODO:startRecord();
+						MyApp.shouldRecordNow = false;
+						new Thread(new RestartRecordThread()).start(); // 开始录像
+					}
+
 				}
 				if (MyApp.shouldMountRecord) {
 					MyApp.shouldMountRecord = false;
@@ -625,6 +631,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						if (!MyApp.isMainForeground) {
 							sendKeyCode(KeyEvent.KEYCODE_HOME); // 回到主界面
 						}
+						MyApp.shouldRecordNow = true;
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 					setupRecordViews();
@@ -907,7 +914,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				@Override
 				public void onScrollChanged(MyScrollView scrollView, int x,
 						int y, int oldx, int oldy) {
-
 					MyLog.v("x:" + x + ",oldx:" + oldx + ",isScroll:"
 							+ hsvMain.isScroll() + ",getScrollX:"
 							+ hsvMain.getScrollX());
@@ -984,7 +990,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		layoutVideoMute.setOnClickListener(new MyOnClickListener());
 
 		updateButtonState(isSurfaceLarge);
-
 	}
 
 	/** 切换录像预览窗口的大小 */
@@ -997,7 +1002,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				surfaceCamera.setLayoutParams(new RelativeLayout.LayoutParams(
 						widthFull, heightFull));
 				isSurfaceLarge = true;
-
 				updateButtonState(true);
 			}
 		} else {
@@ -1055,7 +1059,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					messageVideoLock.what = 4;
 					updateRecordTimeHandler.sendMessage(messageVideoLock);
 				}
-
 				if (MyApp.isVideoCardEject) { // 录像时视频SD卡拔出停止录像
 					MyLog.e("SD card remove badly or power unconnected, stop record!");
 					Message messageEject = new Message();
@@ -1102,7 +1105,6 @@ public class MainActivity extends Activity implements TachographCallback,
 					}
 				}
 			} while (MyApp.isVideoReording);
-
 		}
 	}
 
@@ -1164,6 +1166,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 2: // SD卡异常移除：停止录像
 				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 2");
+				MyApp.shouldRecordNow = false;
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1184,6 +1187,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 3: // 电源断开，停止录像
 				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 3");
+				MyApp.shouldRecordNow = false;
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1219,6 +1223,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 5: // 进入休眠，停止录像
 				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 5");
+				MyApp.shouldRecordNow = false;
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1237,6 +1242,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 6: // 语音命令：停止录像
 				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 6");
+				MyApp.shouldRecordNow = false;
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1249,6 +1255,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case 7:
 				MyLog.v("[UpdateRecordTimeHandler]stopRecorder() 7");
+				MyApp.shouldRecordNow = false;
 				if (stopRecorder() == 0) {
 					recordState = Constant.Record.STATE_RECORD_STOPPED;
 					MyApp.isVideoReording = false;
@@ -1307,6 +1314,7 @@ public class MainActivity extends Activity implements TachographCallback,
 									getResources().getString(
 											R.string.hint_record_start));
 							startRecord();
+							MyApp.shouldRecordNow = true;
 						} else {
 							noVideoSDHint();
 						}
@@ -1314,6 +1322,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						HintUtil.speakVoice(MainActivity.this, getResources()
 								.getString(R.string.hint_record_stop));
 						MyLog.v("[onClick]stopRecorder()");
+						MyApp.shouldRecordNow = false;
 						stopRecord();
 					}
 				}
@@ -1836,6 +1845,48 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 	}
 
+	private class RestartRecordThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(500);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Message messageRestart = new Message();
+			messageRestart.what = 1;
+			restartRecordHandler.sendMessage(messageRestart);
+		}
+
+	}
+
+	final Handler restartRecordHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				if (startRecordTask() == 0) {
+					MyApp.shouldRecordNow = true;
+					recordState = Constant.Record.STATE_RECORD_STARTED;
+					MyApp.isVideoReording = true;
+					textRecordTime.setVisibility(View.VISIBLE);
+					new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+					setupRecordViews();
+				} else {
+					MyLog.e("Start Record Failed");
+				}
+				break;
+
+			case 2:
+				noVideoSDHint(); // SDCard2不存在
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
 	/**
 	 * 录像线程， 调用此线程地方：
 	 * 
@@ -1969,9 +2020,11 @@ public class MainActivity extends Activity implements TachographCallback,
 			isVideoChecking = true;
 			String sdcardPath = Constant.Path.SDCARD_2 + File.separator; // "/storage/sdcard2/";
 			File file = new File(sdcardPath + "tachograph/");
-			StorageUtil.RecursionCheckFile(MainActivity.this, file);
-			MyLog.v("[CheckVideoThread]END:" + DateUtil.getTimeStr("mm:ss"));
-			isVideoChecking = false;
+			if (file.exists()) {
+				StorageUtil.RecursionCheckFile(MainActivity.this, file);
+				MyLog.v("[CheckVideoThread]END:" + DateUtil.getTimeStr("mm:ss"));
+				isVideoChecking = false;
+			}
 		}
 
 	}
@@ -2217,7 +2270,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			String strSaveVideoErr = getResources().getString(
 					R.string.hint_save_video_error);
 			HintUtil.showToast(MainActivity.this, strSaveVideoErr);
-			audioRecordDialog.showErrorDialog(strSaveVideoErr);
+			// audioRecordDialog.showErrorDialog(strSaveVideoErr);
 			MyLog.e("Record Error : ERROR_SAVE_VIDEO_FAIL");
 			// 视频保存失败，原因：存储空间不足，清空文件夹，视频被删掉
 			resetRecordTimeText();
@@ -2228,6 +2281,7 @@ public class MainActivity extends Activity implements TachographCallback,
 				setupRecordViews();
 				releaseCameraZone();
 			}
+			MyApp.shouldRecordNow = true;
 			break;
 
 		case TachographCallback.ERROR_SAVE_IMAGE_FAIL:
