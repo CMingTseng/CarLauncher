@@ -68,7 +68,6 @@ public class SleepOnOffService extends Service {
 		sharedPreferences = getSharedPreferences(Constant.MySP.NAME,
 				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
-
 		powerManager = (PowerManager) context
 				.getSystemService(Context.POWER_SERVICE);
 
@@ -84,7 +83,6 @@ public class SleepOnOffService extends Service {
 		filter.addAction(Constant.Broadcast.SETTING_SYNC);
 		filter.addAction(Constant.Broadcast.MEDIA_FORMAT);
 		registerReceiver(sleepOnOffReceiver, filter);
-
 	}
 
 	/**
@@ -111,7 +109,6 @@ public class SleepOnOffService extends Service {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-
 			String action = intent.getAction();
 			MyLog.v("[SleepOnOffReceiver]action:" + action);
 			if (action.equals(Constant.Broadcast.ACC_OFF)) {

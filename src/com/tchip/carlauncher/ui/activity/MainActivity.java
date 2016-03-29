@@ -459,7 +459,6 @@ public class MainActivity extends Activity implements TachographCallback,
 						setSurfaceLarge(true); // 大视图
 					}
 					if (MyApp.shouldRecordNow && !MyApp.isVideoReording) {
-						// TODO:startRecord();
 						MyApp.shouldRecordNow = false;
 						new Thread(new RestartRecordThread()).start(); // 开始录像
 					}
@@ -562,7 +561,7 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void run() {
 			MyLog.v("[Main]run RecordWhenMountThread");
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -572,6 +571,41 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 
 	}
+
+	/** 插入视频卡时录制视频 */
+	final Handler recordWhenMountHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				try {
+					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
+						if (!MyApp.isMainForeground) {
+							sendKeyCode(KeyEvent.KEYCODE_HOME); // 回到主界面
+						}
+						if (startRecordTask() == 0) {
+							MyApp.shouldRecordNow = true;
+							recordState = Constant.Record.STATE_RECORD_STARTED;
+							MyApp.isVideoReording = true;
+							textRecordTime.setVisibility(View.VISIBLE);
+							new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+							setupRecordViews();
+						} else {
+							MyLog.e("Start Record Failed");
+						}
+					}
+					MyLog.v("[Record]isVideoReording:" + MyApp.isVideoReording);
+				} catch (Exception e) {
+					MyLog.e("[EventRecord]recordWhenEventHappenHandler catch exception: "
+							+ e.toString());
+				}
+
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	/** 底层碰撞后录制一个视频线程 */
 	public class RecordWhenCrashThread implements Runnable {
@@ -605,33 +639,6 @@ public class MainActivity extends Activity implements TachographCallback,
 							sendKeyCode(KeyEvent.KEYCODE_HOME);
 						}
 						setInterval(3 * 60); // 防止在分段一分钟的时候，停车守卫录出1分和0秒两段视频
-						new Thread(new StartRecordThread()).start(); // 开始录像
-					}
-					setupRecordViews();
-					MyLog.v("[Record]isVideoReording:" + MyApp.isVideoReording);
-				} catch (Exception e) {
-					MyLog.e("[EventRecord]recordWhenEventHappenHandler catch exception: "
-							+ e.toString());
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
-
-	/** 插入视频卡时录制视频 */
-	final Handler recordWhenMountHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				try {
-					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
-						if (!MyApp.isMainForeground) {
-							sendKeyCode(KeyEvent.KEYCODE_HOME); // 回到主界面
-						}
-						MyApp.shouldRecordNow = true;
 						new Thread(new StartRecordThread()).start(); // 开始录像
 					}
 					setupRecordViews();
@@ -1592,27 +1599,6 @@ public class MainActivity extends Activity implements TachographCallback,
 		}
 		setupRecordViews();
 	}
-
-	/** WiFi状态Receiver */
-	/*
-	 * private BroadcastReceiver wifiIntentReceiver = new BroadcastReceiver() {
-	 * 
-	 * @Override public void onReceive(Context context, Intent intent) { int
-	 * wifi_state = intent.getIntExtra("wifi_state", 0); int level =
-	 * ((WifiManager) getSystemService(WIFI_SERVICE))
-	 * .getConnectionInfo().getRssi(); // Math.abs() updateWiFiState();
-	 * MyLog.v("wifiIntentReceiver, Wifi Level:" + level);
-	 * 
-	 * switch (wifi_state) { case WifiManager.WIFI_STATE_ENABLED:
-	 * updateWiFiState(); new Thread(new updateNetworkIconThread()).start();
-	 * break;
-	 * 
-	 * case WifiManager.WIFI_STATE_DISABLED: case
-	 * WifiManager.WIFI_STATE_UNKNOWN: updateWiFiState(); break;
-	 * 
-	 * case WifiManager.WIFI_STATE_ENABLING: case
-	 * WifiManager.WIFI_STATE_DISABLING: default: break; } } };
-	 */
 
 	/** 更新wifi图标和3G图标 */
 	public class updateNetworkIconThread implements Runnable {
