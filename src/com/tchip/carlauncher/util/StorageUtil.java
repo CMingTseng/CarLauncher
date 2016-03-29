@@ -201,6 +201,11 @@ public class StorageUtil {
 	 * 2.文件保存回调{@link MainActivity#onFileSave}
 	 */
 	public static boolean deleteOldestUnlockVideo(Context context) {
+
+		if (!StorageUtil.isVideoCardExists()) {
+			MyLog.e("[Storageutil]deleteOldestUnlockVideo:No Video Card");
+			return false;
+		}
 		try {
 			// 视频数据库
 			DriveVideoDbHelper videoDb = new DriveVideoDbHelper(context);
@@ -292,10 +297,16 @@ public class StorageUtil {
 		try {
 			String fileName = file.getName();
 			if (file.isFile() && !fileName.endsWith(".jpg")) {
-				if (MyApp.isVideoReording && fileName.startsWith(".")) {
-					// TODO:Delete file start with dot but not the recording one
+				if (fileName.startsWith(".")) {
+					// Delete file start with dot but not the recording one
+					if (!MyApp.isVideoReording) {
+						file.delete();
+						MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File start with DOT:"
+								+ fileName);
+					}
 				} else {
-					if (!videoDb.isVideoExist(fileName)) {
+					boolean isVideoExist = videoDb.isVideoExist(fileName);
+					if (!isVideoExist) {
 						file.delete();
 						MyLog.v("[StorageUtil]RecursionCheckFile-Delete Error File:"
 								+ fileName);

@@ -1902,7 +1902,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 		@Override
 		public void run() {
-
 			CheckErrorFile();
 			int i = 0;
 			while (i < 6) {
@@ -1933,7 +1932,6 @@ public class MainActivity extends Activity implements TachographCallback,
 				}
 			}
 		}
-
 	}
 
 	final Handler startRecordHandler = new Handler() {
@@ -1995,10 +1993,13 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	/** 视频SD卡不存在提示 */
 	private void noVideoSDHint() {
-		String strNoSD = getResources().getString(R.string.hint_sd2_not_exist);
-		audioRecordDialog.showErrorDialog(strNoSD);
-		new Thread(new dismissDialogThread()).start();
-		HintUtil.speakVoice(MainActivity.this, strNoSD);
+		if (MyApp.isAccOn) {
+			String strNoSD = getResources().getString(
+					R.string.hint_sd2_not_exist);
+			audioRecordDialog.showErrorDialog(strNoSD);
+			new Thread(new dismissDialogThread()).start();
+			HintUtil.speakVoice(MainActivity.this, strNoSD);
+		}
 	}
 
 	/** 检查并删除异常视频文件：SD存在但数据库中不存在的文件 */
@@ -2291,7 +2292,6 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			if (MyApp.shouldSendPathToDSA) {
 				MyApp.shouldSendPathToDSA = false;
-
 				MyApp.isAccOffPhotoTaking = false;
 			}
 			break;
@@ -2307,11 +2307,9 @@ public class MainActivity extends Activity implements TachographCallback,
 
 	@Override
 	public void onFileStart(int type, String path) {
-
 		if (type == 1) {
 			MyApp.nowRecordVideoName = path.split("/")[5];
 		}
-
 	}
 
 	/**

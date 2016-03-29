@@ -1,10 +1,7 @@
 package com.tchip.carlauncher.model;
 
-import java.io.File;
-
 import cn.kuwo.autosdk.api.KWAPI;
 
-import com.tchip.carlauncher.Constant;
 import com.tchip.carlauncher.MyApp;
 import com.tchip.carlauncher.util.MyLog;
 import com.tchip.carlauncher.util.StorageUtil;

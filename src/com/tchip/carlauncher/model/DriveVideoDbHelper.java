@@ -3,6 +3,8 @@ package com.tchip.carlauncher.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tchip.carlauncher.util.MyLog;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -104,21 +106,22 @@ public class DriveVideoDbHelper extends SQLiteOpenHelper {
 	}
 
 	public boolean isVideoExist(String name) {
+		boolean isVideoExist = false;
 		SQLiteDatabase db = this.getReadableDatabase();
-
 		Cursor cursor = db.query(VIDEO_TABLE_NAME, VIDEO_COL_PROJECTION,
 				VIDEO_COL_NAME + "=?", new String[] { name }, null, null, null,
 				null);
 
 		if (cursor.getCount() > 0) {
-			db.close();
-			cursor.close();
-			return true;
+			isVideoExist = true;
 		} else {
-			db.close();
-			cursor.close();
-			return false;
+			isVideoExist = false;
 		}
+		db.close();
+		cursor.close();
+		MyLog.v("[]isVideoExist:" + isVideoExist + ",Name:" + name);
+
+		return isVideoExist;
 	}
 
 	/**
