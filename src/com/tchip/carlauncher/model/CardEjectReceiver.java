@@ -36,7 +36,7 @@ public class CardEjectReceiver extends BroadcastReceiver {
 			if ("/storage/sdcard2".equals(intent.getData().getPath())) {
 				StorageUtil.createRecordDirectory();
 
-				if (MyApp.isAccOn) {
+				if (MyApp.isAccOn && !MyApp.isVideoReording) {
 					MyApp.shouldMountRecord = true;
 				}
 			}

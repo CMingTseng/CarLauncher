@@ -667,7 +667,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			Message message = new Message();
 			message.what = 1;
-			startRecordWhenChangeSize.sendMessage(message);
+			startRecordWhenChangeSizeOrMute.sendMessage(message);
 		}
 	}
 
@@ -682,15 +682,27 @@ public class MainActivity extends Activity implements TachographCallback,
 			}
 			Message message = new Message();
 			message.what = 1;
-			startRecordWhenChangeSize.sendMessage(message);
+			startRecordWhenChangeSizeOrMute.sendMessage(message);
 		}
 	}
 
-	final Handler startRecordWhenChangeSize = new Handler() {
+	final Handler startRecordWhenChangeSizeOrMute = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				startRecord();
+				// startRecord();
+				if (!MyApp.isVideoReording) {
+					if (startRecordTask() == 0) {
+						recordState = Constant.Record.STATE_RECORD_STARTED;
+						MyApp.isVideoReording = true;
+						textRecordTime.setVisibility(View.VISIBLE);
+						new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+						setupRecordViews();
+						MyApp.shouldRecordNow = true;
+					} else {
+						MyLog.e("Start Record Failed");
+					}
+				}
 				break;
 
 			default:
@@ -1313,7 +1325,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoRecord:
 			case R.id.layoutVideoRecord:
 			case R.id.layoutVideoRecordSmall:
-				if (!ClickUtil.isQuickClick(1000)) {
+				if (!ClickUtil.isQuickClick(2000)) {
 					if (recordState == Constant.Record.STATE_RECORD_STOPPED) {
 						if (StorageUtil.isVideoCardExists()) {
 							HintUtil.speakVoice(
@@ -1339,7 +1351,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoLock:
 			case R.id.layoutVideoLock:
 			case R.id.layoutVideoLockSmall:
-				if (!ClickUtil.isQuickClick(800)) {
+				if (!ClickUtil.isQuickClick(1000)) {
 					if (MyApp.isVideoReording) {
 						lockOrUnlockVideo();
 					} else {
@@ -1355,6 +1367,7 @@ public class MainActivity extends Activity implements TachographCallback,
 					// 切换分辨率录像停止，需要重置时间
 					MyApp.shouldVideoRecordWhenChangeSize = MyApp.isVideoReording;
 					MyApp.isVideoReording = false;
+					MyApp.shouldRecordNow = false;
 					resetRecordTimeText();
 					textRecordTime.setVisibility(View.INVISIBLE);
 					if (resolutionState == Constant.Record.STATE_RESOLUTION_1080P) {
@@ -1383,7 +1396,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.largeVideoTime:
 			case R.id.layoutVideoTime:
-				if (!ClickUtil.isQuickClick(800)) {
+				if (!ClickUtil.isQuickClick(1000)) {
 					if (intervalState == Constant.Record.STATE_INTERVAL_3MIN) {
 						if (setInterval(1 * 60) == 0) {
 							intervalState = Constant.Record.STATE_INTERVAL_1MIN;
@@ -1410,7 +1423,7 @@ public class MainActivity extends Activity implements TachographCallback,
 
 			case R.id.largeVideoMute:
 			case R.id.layoutVideoMute:
-				if (!ClickUtil.isQuickClick(800)) {
+				if (!ClickUtil.isQuickClick(1500)) {
 					// 切换录音/静音状态停止录像，需要重置时间
 					MyApp.shouldVideoRecordWhenChangeMute = MyApp.isVideoReording;
 
@@ -1418,6 +1431,7 @@ public class MainActivity extends Activity implements TachographCallback,
 						resetRecordTimeText();
 						textRecordTime.setVisibility(View.INVISIBLE);
 						MyApp.isVideoReording = false;
+						MyApp.shouldRecordNow = false;
 						stopRecord();
 					}
 					if (muteState == Constant.Record.STATE_MUTE) {
@@ -1455,7 +1469,7 @@ public class MainActivity extends Activity implements TachographCallback,
 			case R.id.largeVideoCamera:
 			case R.id.layoutVideoCamera:
 			case R.id.layoutVideoCameraSmall:
-				if (!ClickUtil.isQuickClick(1000)) {
+				if (!ClickUtil.isQuickClick(1500)) {
 					takePhoto();
 				}
 				break;
@@ -1851,15 +1865,17 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (startRecordTask() == 0) {
-					MyApp.shouldRecordNow = true;
-					recordState = Constant.Record.STATE_RECORD_STARTED;
-					MyApp.isVideoReording = true;
-					textRecordTime.setVisibility(View.VISIBLE);
-					new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
-					setupRecordViews();
-				} else {
-					MyLog.e("Start Record Failed");
+				if (!MyApp.isVideoReording) {
+					if (startRecordTask() == 0) {
+						MyApp.shouldRecordNow = true;
+						recordState = Constant.Record.STATE_RECORD_STARTED;
+						MyApp.isVideoReording = true;
+						textRecordTime.setVisibility(View.VISIBLE);
+						new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+						setupRecordViews();
+					} else {
+						MyLog.e("Start Record Failed");
+					}
 				}
 				break;
 
@@ -1924,14 +1940,16 @@ public class MainActivity extends Activity implements TachographCallback,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (startRecordTask() == 0) {
-					recordState = Constant.Record.STATE_RECORD_STARTED;
-					MyApp.isVideoReording = true;
-					textRecordTime.setVisibility(View.VISIBLE);
-					new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
-					setupRecordViews();
-				} else {
-					MyLog.e("Start Record Failed");
+				if (!MyApp.isVideoReording) {
+					if (startRecordTask() == 0) {
+						recordState = Constant.Record.STATE_RECORD_STARTED;
+						MyApp.isVideoReording = true;
+						textRecordTime.setVisibility(View.VISIBLE);
+						new Thread(new updateRecordTimeThread()).start(); // 更新录制时间
+						setupRecordViews();
+					} else {
+						MyLog.e("Start Record Failed");
+					}
 				}
 				break;
 
