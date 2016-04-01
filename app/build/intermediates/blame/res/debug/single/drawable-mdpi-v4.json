@@ -1,0 +1,890 @@
+[
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_2.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_2.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_setting_item_bg_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_setting_item_bg_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_wechat_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_wechat_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_musicol_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_musicol_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudpick_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudpick_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_setting_item_bg_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_setting_item_bg_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_location_on.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_location_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_4g.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_4g.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_dialer_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_dialer_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_text_bg.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_text_bg.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_daoke_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_daoke_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_route_track_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_route_track_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_location_off.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_location_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_4g.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_4g.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_airplane_off.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_airplane_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_daoke_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_daoke_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_switch_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_switch_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_weme_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_weme_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_hsv_shadow_right.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_hsv_shadow_right.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_4.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_4.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_route_track_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_route_track_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_recording_1.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_recording_1.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_shoot_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_shoot_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudpick_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudpick_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudcenter_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudcenter_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_weme_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_weme_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_4.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_4.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_musicol_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_musicol_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_clouddialer_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_clouddialer_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_3_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_3_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_gallery.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_gallery.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fm_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fm_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_1_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_1_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_message_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_message_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_lock.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_lock.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_1_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_1_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_1080_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_1080_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_weather_bg.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_weather_bg.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_no_network.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_no_network.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_image_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_image_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_record.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_record.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_null.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_null.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\dialog_background.9.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\dialog_background.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_multimedia_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_multimedia_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_location_on.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_location_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_switch_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_switch_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_0.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_0.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_3g.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_3g.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_3.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_3.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_g.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_g.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_setting_top_bar_bg.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_setting_top_bar_bg.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fmol_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fmol_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_navi_history_delete.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_navi_history_delete.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_3g.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_3g.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_near_search_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_near_search_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_0.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_0.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudpick_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudpick_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_g.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_g.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_dialer_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_dialer_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_edog_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_edog_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_clouddialer_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_clouddialer_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_filemanager_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_filemanager_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_edog_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_edog_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_media_search_frame.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_media_search_frame.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_route_track_shadow_vertical.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_route_track_shadow_vertical.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_multimedia_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_multimedia_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\input_background.9.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\input_background.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_video_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_video_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_musicol_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_musicol_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fmol_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fmol_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_pause.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_pause.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_lock_normal_small.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_lock_normal_small.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_r.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_r.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_not_connected.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_not_connected.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_message_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_message_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fm_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fm_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_1_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_1_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\icon_dialog_audio_record_bg.9.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\icon_dialog_audio_record_bg.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_switch_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_switch_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_no_network.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_no_network.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_message_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_message_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_musicol_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_musicol_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fmol_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fmol_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_video_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_video_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_e.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_e.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_switch_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_switch_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_daoke_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_daoke_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_lock.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_lock.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_clouddialer_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_clouddialer_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_1x.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_1x.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_1.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_1.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_off.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_daoke_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_daoke_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_recording.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_recording.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_h.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_h.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_recording.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_recording.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_wechat_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_wechat_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_720_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_720_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_off.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_720_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_720_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_navi_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_navi_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_no_signal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_no_signal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_dialog_warning.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_dialog_warning.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_edog_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_edog_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_gallery.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_gallery.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_weme_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_weme_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_720_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_720_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_message_bubble.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_message_bubble.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_unlock_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_unlock_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_multimedia_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_multimedia_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_navi_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_navi_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_2.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_2.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_route_track_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_route_track_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_media_search_frame.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_media_search_frame.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_setting_top_bar_bg.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_setting_top_bar_bg.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudcenter_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudcenter_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_dialer_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_dialer_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_image_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_image_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\icon_dialog_audio_record_bg.9.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\icon_dialog_audio_record_bg.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_h_plus.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_h_plus.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_image_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_image_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_1.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_1.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_recording_0.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_recording_0.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_near_search_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_near_search_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_off.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fm_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fm_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_multimedia_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_multimedia_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_weme_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_weme_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_3_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_3_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_airplane_off.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_airplane_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_setting_item_bg_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_setting_item_bg_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_1.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_1.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_unlock.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_unlock.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_hsv_shadow_left.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_hsv_shadow_left.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_shoot_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_shoot_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_4.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_4.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudcenter_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudcenter_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_unlock_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_unlock_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_filemanager_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_filemanager_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_weather_bg.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_weather_bg.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_filemanager_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_filemanager_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_location_off.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_location_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\icon_dialog_recording.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\icon_dialog_recording.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_4.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_4.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_sound_on.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_sound_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_3_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_3_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_720_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_720_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_unlock.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_unlock.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_airplane_on.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_airplane_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_1080_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_1080_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_hsv_shadow_left.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_hsv_shadow_left.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_3.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_3.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_navi_history_delete.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_navi_history_delete.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fm_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fm_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_2.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_2.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_1_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_1_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_fmol_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_fmol_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_not_connected.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_not_connected.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_clouddialer_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_clouddialer_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_3.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_3.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_video_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_video_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_lock_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_lock_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_on.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudcenter_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudcenter_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_off.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_dialer_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_dialer_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_time_3_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_time_3_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_message_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_message_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_hsv_shadow_right.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_hsv_shadow_right.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_setting_item_bg_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_setting_item_bg_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_recording_0.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_recording_0.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_lock_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_lock_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_dialog_warning.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_dialog_warning.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_recording_1.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_recording_1.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_shoot_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_shoot_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_lock_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_lock_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_record.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_record.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_near_search_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_near_search_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_video_pause.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_video_pause.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_cloudpick_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_cloudpick_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_1080_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_1080_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_null.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_null.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\icon_dialog_recording.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\icon_dialog_recording.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_unlock_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_unlock_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_navi_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_navi_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_h.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_h.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_disable.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_disable.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_lock_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_lock_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_unlock_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_unlock_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_h_plus.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_h_plus.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\dialog_background.9.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\dialog_background.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_1.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_1.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_video_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_video_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_lock_normal_small.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_lock_normal_small.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_e.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_e.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_1x.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_1x.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_size_1080_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_size_1080_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_3.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_3.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_wifi_full_2.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_wifi_full_2.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_route_track_shadow_vertical.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_route_track_shadow_vertical.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_navi_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_navi_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_on.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_shoot_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_shoot_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_wechat_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_wechat_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_multimedia_image_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_multimedia_image_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_sound_off.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_sound_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_route_track_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_route_track_pressed.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\input_background.9.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\input_background.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_wechat_normal.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_wechat_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_message_bubble.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_message_bubble.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_airplane_on.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_airplane_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_text_bg.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_text_bg.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_bluetooth_disable.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_bluetooth_disable.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_near_search_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_near_search_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_sound_on.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_sound_on.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_edog_normal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ui_main_edog_normal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_camera_video_sound_off.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_camera_video_sound_off.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_full_r.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_full_r.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_qs_signal_no_signal.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable-mdpi\\ic_qs_signal_no_signal.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ui_main_filemanager_pressed.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable-mdpi\\ui_main_filemanager_pressed.png"
+    }
+]

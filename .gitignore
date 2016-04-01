@@ -1,3 +1,6 @@
+.DS_Store
+/captures
+
 # Built application files
 *.apk
 *.ap_
@@ -7,6 +10,7 @@
 
 # Java class files
 *.class
+.idea
 
 # Generated files
 bin/
@@ -25,49 +29,5 @@ proguard/
 # Log Files
 *.log
 
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-# Windows
-# =========================
-
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
+# iml files
+*.iml

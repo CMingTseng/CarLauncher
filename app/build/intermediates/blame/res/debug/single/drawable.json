@@ -1,0 +1,370 @@
+[
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_checkbox.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\background_checkbox.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_file_manager_back_transparent.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\shape_file_manager_back_transparent.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_multimedia.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_multimedia.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_multimedia_image.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_multimedia_image.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_setting_volume_bg.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\shape_setting_volume_bg.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_black.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_black.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_fmol.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_fmol.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_grey.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_grey.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_user_center_blue_light.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\shape_user_center_blue_light.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_size_720.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_video_size_720.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_message.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_message.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_weme.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_weme.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_lock.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_video_lock.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\list_bg_color.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\list_bg_color.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\setting.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\setting.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_user_center_blue_light.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\shape_user_center_blue_light.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_wechat.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_wechat.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_switch.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_switch.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_multimedia_image.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_multimedia_image.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_checkbox.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\background_checkbox.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_musicol.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_musicol.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_unlock.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_video_unlock.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_message.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_message.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_navi.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_navi.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_fmol.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_fmol.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_time_1.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_video_time_1.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_filemanager.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_filemanager.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_dialer.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_dialer.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_transparent_white.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\background_transparent_white.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_edog.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_edog.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_route_plan_search_bg.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\shape_route_plan_search_bg.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_multimedia.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_multimedia.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_cloudcenter.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_cloudcenter.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_cloudpick.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_cloudpick.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_filemanager.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_filemanager.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_route_plan_search_bg.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\shape_route_plan_search_bg.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_daoke.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_daoke.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_lock.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_video_lock.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_setting_volume_bg.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\shape_setting_volume_bg.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_fm.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_fm.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_daoke.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_daoke.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\setting_p.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\setting_p.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_fm.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_fm.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\main_setting_btn_np.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\main_setting_btn_np.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_transparent.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\background_transparent.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_transparent_white.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\background_transparent_white.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\selector_bluelight_bluedark.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\selector_bluelight_bluedark.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_user_center_blue_dark.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\shape_user_center_blue_dark.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_transparent.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_transparent.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_blue.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_blue.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_time_1.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_video_time_1.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\setting_p.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\setting_p.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_multimedia_video.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_multimedia_video.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_shoot.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_shoot.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_clouddialer.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_clouddialer.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_navi.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_navi.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_size_1080.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_video_size_1080.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_clouddialer.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_clouddialer.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_grey.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_grey.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_multimedia_video.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_multimedia_video.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_switch_ball_uncheck.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\background_switch_ball_uncheck.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\selector_bluelight_bluedark.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\selector_bluelight_bluedark.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_unlock.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_video_unlock.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_dialer.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_dialer.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\list_bg_color.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\list_bg_color.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_button.9.png",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\background_button.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_shoot.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_shoot.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\main_setting_btn_np.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\main_setting_btn_np.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_weme.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_weme.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_button_rectangle.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\background_button_rectangle.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_cloudcenter.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_cloudcenter.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_transparent.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_transparent.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_file_manager_back_transparent.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\shape_file_manager_back_transparent.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_wechat.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_wechat.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_transparent.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\background_transparent.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_size_1080.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_video_size_1080.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\setting.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\setting.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_black.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_black.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_switch.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_switch.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_cloudpick.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_cloudpick.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_route_track.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_route_track.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_back_arrow_bg_blue.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_back_arrow_bg_blue.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_button_rectangle.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\background_button_rectangle.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_route_track.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_route_track.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_size_720.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_video_size_720.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_user_center_blue_dark.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\shape_user_center_blue_dark.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_time_3.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_camera_video_time_3.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_musicol.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_main_musicol.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_button.9.png",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\background_button.9.png"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_main_edog.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\ui_main_edog.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ui_camera_video_time_3.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\drawable\\ui_camera_video_time_3.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\background_switch_ball_uncheck.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\drawable\\background_switch_ball_uncheck.xml"
+    }
+]

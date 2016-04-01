@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\layout\\float_window.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\layout\\float_window.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_audio_record.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\layout\\dialog_audio_record.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_audio_record.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\layout\\dialog_audio_record.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\float_window.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\layout\\float_window.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_multimedia.xml",
+        "source": "D:\\GitHub\\CarLauncher\\app\\src\\main\\res\\layout\\activity_multimedia.xml"
+    },
+    {
+        "merged": "D:\\GitHub\\CarLauncher1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_multimedia.xml",
+        "source": "D:\\GitHub\\CarLauncher1\\app\\src\\main\\res\\layout\\activity_multimedia.xml"
+    }
+]
