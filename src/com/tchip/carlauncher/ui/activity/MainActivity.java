@@ -189,7 +189,6 @@ public class MainActivity extends Activity implements TachographCallback,
 			SettingUtil.setGpsState(MainActivity.this, false); // 关闭GPS
 			SettingUtil.setEDogEnable(false); // 关闭电子狗电源
 		}
-
 		new Thread(new BackThread()).start(); // 后台线程
 	}
 
